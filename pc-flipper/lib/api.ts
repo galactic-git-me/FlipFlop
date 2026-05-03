@@ -26,9 +26,12 @@ const BASE_URL =
     : "http://localhost:8088/api");
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  // Ensure trailing slash to avoid 307 redirect which breaks cross-origin requests
+  const url = `${BASE_URL}${path}`.replace(/([^/])(\?|$)/, "$1/$2");
+  const res = await fetch(url, {
     headers: { "Content-Type": "application/json", ...init?.headers },
     signal: AbortSignal.timeout(10_000),
+    redirect: "follow",
     ...init,
   });
   if (!res.ok) throw new Error(`API ${path} → ${res.status}`);
