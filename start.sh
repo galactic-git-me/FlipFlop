@@ -35,7 +35,7 @@ echo "[2/4] Starting backend  (port $BACKEND_PORT)..."
 if [ ! -d "$BACKEND_DIR/.venv" ]; then
     echo "  venv not found — installing dependencies..."
     python3 -m venv "$BACKEND_DIR/.venv"
-    "$BACKEND_DIR/.venv/bin/pip" install -r "$BACKEND_DIR/requirements.txt" -q
+    sudo "$BACKEND_DIR/.venv/bin/pip" install -r "$BACKEND_DIR/requirements.txt" -q
 fi
 
 if [ ! -f "$BACKEND_DIR/.env" ]; then
