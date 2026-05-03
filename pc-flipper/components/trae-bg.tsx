@@ -17,7 +17,7 @@ export function TraeBg() {
     >
       <ErrorBoundary>
         <GridDistortion
-          imageSrc="/space-bg.jpg"
+          imageSrc="/api/nasa-bg"
           grid={10}
           mouse={0.1}
           strength={0.15}
