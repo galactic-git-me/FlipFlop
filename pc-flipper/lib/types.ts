@@ -132,6 +132,108 @@ export interface SearchConfig {
   updated_at: string;
 }
 
+// ── Playbook types ─────────────────────────────────────────────────────────────
+
+export type PlaybookStatus = "candidate" | "active" | "deprecated";
+export type PlaybookUseCase = "gaming" | "office" | "workstation" | "budget" | "ai_workstation" | "htpc";
+export type ProposalAction = "CREATE" | "UPDATE" | "RETIRE";
+export type ProposalStatus = "pending" | "approved" | "rejected";
+
+export interface PlaybookRequirements {
+  gpu_required?: boolean;
+  cpu_min_tier?: string;
+  ram_min_gb?: number;
+  psu_required?: boolean;
+  form_factor?: string;
+  storage_min_gb?: number;
+  cooling?: string;
+}
+
+export interface PlaybookSearchStrategy {
+  keywords?: string[];
+  listing_types?: string[];
+  price_min?: number;
+  price_max?: number;
+  boost_terms?: string[];
+}
+
+export interface PlaybookUpgradeItem {
+  component: string;
+  target: string;
+  max_cost: number;
+}
+
+export interface PlaybookUpgradeStrategy {
+  required?: PlaybookUpgradeItem[];
+  optional?: PlaybookUpgradeItem[];
+}
+
+export interface PlaybookProfitStrategy {
+  target_margin_pct?: number;
+  target_profit_gbp?: number;
+  sell_platform?: string;
+  flip_structure?: "buy_upgrade_sell" | "buy_clean_sell" | "bulk_lot";
+  notes?: string;
+}
+
+export interface Playbook {
+  id: number;
+  name: string;
+  description?: string | null;
+  emoji?: string;
+  status: PlaybookStatus;
+  target_use_case: PlaybookUseCase;
+  requirements: PlaybookRequirements;
+  component_catalogue: Record<string, unknown>;
+  search_strategy: PlaybookSearchStrategy;
+  upgrade_strategy: PlaybookUpgradeStrategy;
+  profit_strategy: PlaybookProfitStrategy;
+  flip_count: number;
+  avg_profit_gbp: number | null;
+  avg_days_to_sell: number | null;
+  conversion_rate: number | null;
+  created_at: string;
+  updated_at: string;
+  activated_at: string | null;
+  deprecated_at: string | null;
+}
+
+export interface PlaybookProposal {
+  id: number;
+  action: ProposalAction;
+  playbook_id: number | null;
+  playbook_name?: string | null;
+  proposed_data: Partial<Playbook> & Record<string, unknown>;
+  reason: string;
+  demand_signals: Record<string, unknown>;
+  status: ProposalStatus;
+  rejection_reason: string | null;
+  proposed_at: string;
+  resolved_at: string | null;
+  resolved_by: string | null;
+}
+
+export const PLAYBOOK_STATUS_CONFIG: Record<PlaybookStatus, { label: string; color: string; bg: string; dot: string }> = {
+  active:     { label: "Active",     color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/30", dot: "bg-emerald-400" },
+  candidate:  { label: "Candidate",  color: "text-yellow-400",  bg: "bg-yellow-400/10 border-yellow-400/30",   dot: "bg-yellow-400"  },
+  deprecated: { label: "Retired",    color: "text-slate-400",   bg: "bg-slate-400/10 border-slate-400/30",     dot: "bg-slate-500"   },
+};
+
+export const PROPOSAL_ACTION_CONFIG: Record<ProposalAction, { label: string; color: string }> = {
+  CREATE: { label: "New Playbook",  color: "text-cyan-400"    },
+  UPDATE: { label: "Update",        color: "text-yellow-400"  },
+  RETIRE: { label: "Retire",        color: "text-red-400"     },
+};
+
+export const USE_CASE_CONFIG: Record<PlaybookUseCase, { label: string; emoji: string }> = {
+  gaming:        { label: "Gaming",         emoji: "🎮" },
+  office:        { label: "Office",         emoji: "💼" },
+  workstation:   { label: "Workstation",    emoji: "🖥️" },
+  budget:        { label: "Budget",         emoji: "💸" },
+  ai_workstation:{ label: "AI/ML",          emoji: "🤖" },
+  htpc:          { label: "HTPC",           emoji: "📺" },
+};
+
 export const CLASSIFICATION_CONFIG: Record<Classification, { label: string; emoji: string; color: string; bg: string }> = {
   amazing_gem: { label: "Amazing Gem", emoji: "💎", color: "text-cyan-400", bg: "bg-cyan-400/10 border-cyan-400/30" },
   gem: { label: "Gem", emoji: "✅", color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/30" },

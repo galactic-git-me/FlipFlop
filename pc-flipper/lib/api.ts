@@ -124,4 +124,31 @@ export const api = {
     trigger: (id: string) => request<unknown>(`/swarms/${id}/trigger`, { method: "POST" }),
     scanStatus: () => request<ScanStatus>("/swarms/scan/status"),
   },
+
+  playbooks: {
+    list: (status?: string) => request<import("./types").Playbook[]>(`/playbooks${status ? `?status=${status}` : ""}`),
+    get: (id: number) => request<import("./types").Playbook>(`/playbooks/${id}`),
+    create: (data: Record<string, unknown>) =>
+      request<import("./types").Playbook>("/playbooks", { method: "POST", body: JSON.stringify(data) }),
+    update: (id: number, data: Record<string, unknown>) =>
+      request<import("./types").Playbook>(`/playbooks/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    delete: (id: number) => request<void>(`/playbooks/${id}`, { method: "DELETE" }),
+    activeKeywords: () => request<string[]>("/playbooks/active-keywords"),
+    proposals: {
+      list: (status?: string) =>
+        request<import("./types").PlaybookProposal[]>(`/playbooks/proposals${status ? `?status=${status}` : ""}`),
+      create: (data: Record<string, unknown>) =>
+        request<import("./types").PlaybookProposal>("/playbooks/proposals", { method: "POST", body: JSON.stringify(data) }),
+      approve: (id: number, resolved_by?: string) =>
+        request<import("./types").Playbook>(`/playbooks/proposals/${id}/approve`, {
+          method: "POST",
+          body: JSON.stringify({ approved: true, resolved_by: resolved_by ?? "user" }),
+        }),
+      reject: (id: number, reason?: string) =>
+        request<import("./types").PlaybookProposal>(`/playbooks/proposals/${id}/reject`, {
+          method: "POST",
+          body: JSON.stringify({ approved: false, rejection_reason: reason }),
+        }),
+    },
+  },
 };

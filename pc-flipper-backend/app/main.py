@@ -1,5 +1,6 @@
 import structlog
 from contextlib import asynccontextmanager
+from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,7 +8,7 @@ from app.config import get_settings
 from app.database import engine, Base
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
-from app.api import intel, settings_router, debug, logs as logs_api
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks
 from app.api.logs import install_log_capture
 
 log = structlog.get_logger(__name__)
@@ -55,6 +56,7 @@ app.include_router(intel.router, prefix="/api")
 app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
+app.include_router(playbooks.router, prefix="/api")
 
 
 @app.get("/health")
@@ -82,6 +84,9 @@ async def _migrate_add_columns():
         ("listings", "seller_type",           "VARCHAR(20)"),
         ("listings", "seller_has_shop",       "BOOLEAN DEFAULT 0"),
         ("listings", "listed_at",             "DATETIME"),
+        # Playbook + demand fit (added with playbook system)
+        ("listings", "playbook_match",        "VARCHAR(200)"),
+        ("listings", "demand_fit",            "VARCHAR(20)"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:
@@ -333,5 +338,178 @@ async def _seed_default_data():
                 ollama_base_url=settings.ollama_base_url,
             ))
             log.info("seeded.app_settings", model=settings.ollama_model)
+
+        # ── Seed default playbooks ────────────────────────────────────────────
+        from app.models.playbook import Playbook
+        pb_count = await db.scalar(select(func.count()).select_from(Playbook))
+        if pb_count == 0:
+            _default_playbooks = [
+                Playbook(
+                    name="Budget Gaming PC",
+                    emoji="🎮",
+                    description="Buy no-GPU or untested gaming base units, add a mid-range GPU and flip on eBay.",
+                    status="active",
+                    target_use_case="gaming",
+                    activated_at=datetime.utcnow(),
+                    requirements={
+                        "gpu_required": False,
+                        "cpu_min_tier": "i5",
+                        "ram_min_gb": 8,
+                        "psu_required": True,
+                        "form_factor": "ATX",
+                    },
+                    search_strategy={
+                        "keywords": [
+                            "gaming pc no gpu", "gaming pc no graphics card",
+                            "pc tower no graphics", "desktop no gpu",
+                            "i5 tower", "i7 tower", "ryzen 5 desktop", "ryzen 7 desktop",
+                            "gaming pc untested", "gaming pc spares",
+                        ],
+                        "listing_types": ["buy_it_now", "auction"],
+                        "price_min": 60,
+                        "price_max": 280,
+                        "boost_terms": ["untested", "no gpu", "no graphics", "spares"],
+                    },
+                    upgrade_strategy={
+                        "required": [
+                            {"component": "GPU", "target": "RTX 3060 / RX 6600", "max_cost": 100},
+                        ],
+                        "optional": [
+                            {"component": "SSD", "target": "500GB NVMe", "max_cost": 25},
+                            {"component": "RAM", "target": "16GB DDR4", "max_cost": 20},
+                        ],
+                    },
+                    profit_strategy={
+                        "target_margin_pct": 40,
+                        "target_profit_gbp": 120,
+                        "sell_platform": "eBay",
+                        "flip_structure": "buy_upgrade_sell",
+                        "notes": "List at £350-400; local pickup adds 5-10%.",
+                    },
+                ),
+                Playbook(
+                    name="Office Workstation Flip",
+                    emoji="💼",
+                    description="IT clearance OptiPlex/EliteDesk units. Minimal upgrades, quick clean resell.",
+                    status="active",
+                    target_use_case="office",
+                    activated_at=datetime.utcnow(),
+                    requirements={
+                        "gpu_required": False,
+                        "cpu_min_tier": "i5",
+                        "ram_min_gb": 8,
+                        "psu_required": False,
+                        "form_factor": "any",
+                    },
+                    search_strategy={
+                        "keywords": [
+                            "Dell OptiPlex", "HP EliteDesk", "Lenovo ThinkCentre",
+                            "HP ProDesk", "Fujitsu Esprimo", "ex office pc",
+                            "office pc tower", "it clearance desktop",
+                            "office computers clearance", "pc job lot",
+                        ],
+                        "listing_types": ["buy_it_now", "auction"],
+                        "price_min": 20,
+                        "price_max": 150,
+                        "boost_terms": ["job lot", "clearance", "collection only", "no hdd"],
+                    },
+                    upgrade_strategy={
+                        "required": [],
+                        "optional": [
+                            {"component": "SSD", "target": "256GB SSD", "max_cost": 18},
+                            {"component": "RAM", "target": "16GB DDR4", "max_cost": 20},
+                        ],
+                    },
+                    profit_strategy={
+                        "target_margin_pct": 60,
+                        "target_profit_gbp": 60,
+                        "sell_platform": "eBay",
+                        "flip_structure": "buy_clean_sell",
+                        "notes": "Win on volume. Aim for 5+ units per batch at £60 profit each.",
+                    },
+                ),
+                Playbook(
+                    name="AI / ML Workstation",
+                    emoji="🤖",
+                    description="Xeon or Threadripper towers with lots of RAM. Add a used A4000/A5000 and sell to developers.",
+                    status="candidate",
+                    target_use_case="ai_workstation",
+                    requirements={
+                        "gpu_required": True,
+                        "cpu_min_tier": "Xeon",
+                        "ram_min_gb": 32,
+                        "psu_required": True,
+                        "form_factor": "ATX",
+                    },
+                    search_strategy={
+                        "keywords": [
+                            "xeon tower", "HP Z440", "HP Z640", "Dell Precision tower",
+                            "Lenovo ThinkStation", "dual xeon desktop",
+                            "workstation no gpu", "HP Z240",
+                        ],
+                        "listing_types": ["buy_it_now", "auction"],
+                        "price_min": 80,
+                        "price_max": 500,
+                        "boost_terms": ["no gpu", "no graphics", "xeon", "threadripper"],
+                    },
+                    upgrade_strategy={
+                        "required": [
+                            {"component": "GPU", "target": "Nvidia A4000 / RTX 3090", "max_cost": 250},
+                        ],
+                        "optional": [
+                            {"component": "RAM", "target": "64GB ECC DDR4", "max_cost": 60},
+                            {"component": "NVMe", "target": "1TB NVMe", "max_cost": 40},
+                        ],
+                    },
+                    profit_strategy={
+                        "target_margin_pct": 35,
+                        "target_profit_gbp": 250,
+                        "sell_platform": "eBay",
+                        "flip_structure": "buy_upgrade_sell",
+                        "notes": "Target ML/AI hobbyists and small studios. Market is thin but margins are fat.",
+                    },
+                ),
+                Playbook(
+                    name="Budget Builder (Sub-£100)",
+                    emoji="💸",
+                    description="Anything £20-60 that boots. Clean, list cheaply, volume play.",
+                    status="active",
+                    target_use_case="budget",
+                    activated_at=datetime.utcnow(),
+                    requirements={
+                        "gpu_required": False,
+                        "cpu_min_tier": "i3",
+                        "ram_min_gb": 4,
+                        "psu_required": False,
+                        "form_factor": "any",
+                    },
+                    search_strategy={
+                        "keywords": [
+                            "pc tower", "desktop pc", "computer tower",
+                            "old pc clearing out", "pc no longer needed",
+                            "pc quick sale", "son old pc", "pc free to good home",
+                        ],
+                        "listing_types": ["buy_it_now", "auction"],
+                        "price_min": 10,
+                        "price_max": 60,
+                        "boost_terms": ["quick sale", "need gone", "free", "clearing out"],
+                    },
+                    upgrade_strategy={
+                        "required": [],
+                        "optional": [
+                            {"component": "SSD", "target": "120GB SSD", "max_cost": 10},
+                        ],
+                    },
+                    profit_strategy={
+                        "target_margin_pct": 80,
+                        "target_profit_gbp": 35,
+                        "sell_platform": "eBay",
+                        "flip_structure": "buy_clean_sell",
+                        "notes": "Wipe, Windows reinstall, list at £70-90. Pure volume play.",
+                    },
+                ),
+            ]
+            db.add_all(_default_playbooks)
+            log.info("seeded.playbooks", count=len(_default_playbooks))
 
         await db.commit()
