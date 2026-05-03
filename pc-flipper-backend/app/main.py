@@ -9,6 +9,7 @@ from app.database import engine, Base
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit
+from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
 
 log = structlog.get_logger(__name__)
@@ -59,6 +60,7 @@ app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
+app.include_router(facebook_router, prefix="/api")
 
 
 @app.get("/health")
@@ -89,6 +91,8 @@ async def _migrate_add_columns():
         # Playbook + demand fit (added with playbook system)
         ("listings", "playbook_match",        "VARCHAR(200)"),
         ("listings", "demand_fit",            "VARCHAR(20)"),
+        # Playbook upsell strategy
+        ("playbooks", "upsell_strategy",      "JSON"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:
@@ -423,6 +427,10 @@ async def _seed_default_data():
                         "flip_structure": "buy_upgrade_sell",
                         "notes": "List at £350-400; local pickup adds 5-10%.",
                     },
+                    upsell_strategy={
+                        "accessories": ["gaming mouse", "gaming keyboard", "gaming headset", "gaming mousepad"],
+                        "note": "Bundle a basic RGB mouse+keyboard set — adds £20-30 to sale price.",
+                    },
                 ),
                 Playbook(
                     name="Office Workstation Flip",
@@ -463,6 +471,10 @@ async def _seed_default_data():
                         "sell_platform": "eBay",
                         "flip_structure": "buy_clean_sell",
                         "notes": "Win on volume. Aim for 5+ units per batch at £60 profit each.",
+                    },
+                    upsell_strategy={
+                        "accessories": ["optical mouse", "keyboard", "webcam"],
+                        "note": "Office buyers expect peripherals. A mouse+keyboard adds £10-15 and makes it feel complete.",
                     },
                 ),
                 Playbook(

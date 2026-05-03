@@ -79,6 +79,13 @@ class Playbook(Base):
     # }
     profit_strategy: Mapped[dict] = mapped_column(JSON, default=dict)
 
+    # ── Upsell strategy ───────────────────────────────────────────────────────
+    # {
+    #   accessories: ["gaming mouse", "gaming keyboard", ...],
+    #   note: "Bundle a basic RGB mouse+keyboard set — adds £20-30 to sale price.",
+    # }
+    upsell_strategy: Mapped[dict] = mapped_column(JSON, default=dict)
+
     # ── Performance metrics (updated by the evaluator) ────────────────────────
     flip_count: Mapped[int] = mapped_column(Integer, default=0)
     avg_profit_gbp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)

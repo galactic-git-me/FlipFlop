@@ -13,6 +13,7 @@ class PartCategory(str, enum.Enum):
     case = "case"
     cpu = "cpu"
     motherboard = "motherboard"
+    accessory = "accessory"
 
 
 class PartCondition(str, enum.Enum):
