@@ -50,6 +50,7 @@ const GridDistortion = ({
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
+    let mounted = true;
 
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({
@@ -127,6 +128,7 @@ const GridDistortion = ({
 
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(imageSrc, (texture) => {
+      if (!mounted) { texture.dispose(); return; }
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.wrapS = THREE.ClampToEdgeWrapping;
@@ -189,6 +191,7 @@ const GridDistortion = ({
     animate();
 
     return () => {
+      mounted = false;
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
       resizeObserverRef.current?.disconnect();
       window.removeEventListener("mousemove", handleMouseMove);
