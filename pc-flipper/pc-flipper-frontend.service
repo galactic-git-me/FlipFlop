@@ -1,0 +1,18 @@
+[Unit]
+Description=PC Flipper Frontend (Next.js)
+After=network.target pc-flipper-backend.service
+
+[Service]
+Type=simple
+User=mac
+WorkingDirectory=/home/mac/CODING/FlipFlop/pc-flipper
+Environment=PORT=3007
+Environment=NODE_ENV=production
+Environment=PATH=/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin
+ExecStartPre=/home/linuxbrew/.linuxbrew/bin/npm run build
+ExecStart=/home/linuxbrew/.linuxbrew/bin/npm start
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
