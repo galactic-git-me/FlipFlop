@@ -1,7 +1,8 @@
 """
 PC Cases Swarm — runs daily.
-Searches for PC cases (new and used) across eBay UK.
-Amazon, Temu and AliExpress block plain HTTP requests — eBay is the reliable source.
+Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, and AliExpress.
+eBay uses plain httpx. Amazon, Temu, AliExpress use a shared Playwright browser context
+with stealth mode to bypass bot detection — same approach as the Gumtree/Facebook scrapers.
 Cases are a key part of the flip — they transform a bare PC into a themed product.
 """
 import re
@@ -41,10 +42,11 @@ CASE_THEMES = [
 ]
 
 SOURCES = [
-    # eBay is the only reliably scrapable source — Amazon/Temu/AliExpress block httpx.
-    # eBay has excellent stock of new cases from UK/HK/CN sellers at all price points.
-    {"name": "eBay", "fn": "ebay"},
-    {"name": "eBay (Worldwide)", "fn": "ebay_worldwide"},  # international sellers, cheaper
+    {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
+    {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
+    {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
+    {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser
+    {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser
 ]
 
 
@@ -239,168 +241,342 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
     return cases
 
 
-async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
-    """Amazon UK — may be bot-blocked but worth trying."""
-    params = {"k": search, "i": "computers"}
-    headers = {
-        "User-Agent": ua.random,
-        "Accept-Language": "en-GB",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Encoding": "gzip, deflate, br",
-    }
-    cases = []
+# ── Shared Playwright browser factory for bot-protected sites ────────────────
+# Amazon, Temu and AliExpress are JS-rendered SPAs that block plain httpx.
+# We reuse a single browser context per swarm run to save on launch overhead.
+
+_STEALTH_ARGS = [
+    "--disable-blink-features=AutomationControlled",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    "--disable-infobars",
+    "--window-size=1366,768",
+    "--lang=en-GB",
+]
+_STEALTH_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/124.0.0.0 Safari/537.36"
+)
+_STEALTH_JS = """
+Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3]});
+Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
+"""
+
+
+async def _make_pw_context(playwright):
+    """Launch a stealthy Chromium context. Returns (browser, context)."""
+    browser = await playwright.chromium.launch(headless=True, args=_STEALTH_ARGS)
+    context = await browser.new_context(
+        user_agent=_STEALTH_UA,
+        viewport={"width": 1366, "height": 768},
+        locale="en-GB",
+        timezone_id="Europe/London",
+        java_script_enabled=True,
+    )
+    await context.add_init_script(_STEALTH_JS)
+    return browser, context
+
+
+async def _pw_get_page_html(page, url: str, wait_selector: str, timeout: int = 15000) -> str:
+    """Navigate to URL and return page HTML once wait_selector appears (or timeout)."""
+    await page.goto(url, wait_until="domcontentloaded", timeout=25000)
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get("https://www.amazon.co.uk/s", params=params, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 1000:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-        for item in soup.select('[data-component-type="s-search-result"]')[:6]:
-            try:
-                title_el = item.select_one("h2 span")
-                price_whole = item.select_one(".a-price-whole")
-                price_frac = item.select_one(".a-price-fraction")
-                url_el = item.select_one("h2 a")
-                img_el = item.select_one("img.s-image")
-                if not title_el or not url_el:
+        await page.wait_for_selector(wait_selector, timeout=timeout)
+    except Exception:
+        pass  # grab whatever rendered
+    await asyncio.sleep(random.uniform(0.8, 1.5))
+    return await page.content()
+
+
+import random
+
+
+# ── Amazon UK ─────────────────────────────────────────────────────────────────
+
+async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
+    """
+    Amazon UK — Playwright stealth browser.
+    Amazon aggressively bot-detects plain httpx but a headless Chromium with stealth
+    patches passes consistently.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    url = f"https://www.amazon.co.uk/s?k={search.replace(' ', '+')}&i=computers"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("amazon.cases.browser_error", error=str(exc))
+            return []
+
+        page = await context.new_page()
+        try:
+            html = await _pw_get_page_html(page, url, '[data-component-type="s-search-result"]')
+            soup = BeautifulSoup(html, "lxml")
+
+            for item in soup.select('[data-component-type="s-search-result"]')[:10]:
+                try:
+                    title_el = item.select_one("h2 span")
+                    price_whole = item.select_one(".a-price-whole")
+                    price_frac  = item.select_one(".a-price-fraction")
+                    url_el  = item.select_one("h2 a")
+                    img_el  = item.select_one("img.s-image")
+                    if not title_el or not url_el:
+                        continue
+                    price = 0.0
+                    if price_whole:
+                        frac = (price_frac.get_text(strip=True) if price_frac else "0").replace(".", "")
+                        whole = price_whole.get_text(strip=True).replace(",", "").rstrip(".")
+                        try:
+                            price = float(f"{whole}.{frac}")
+                        except ValueError:
+                            pass
+                    if price <= 0 or price > 350:
+                        continue
+                    href = url_el.get("href", "")
+                    if not href.startswith("http"):
+                        href = "https://www.amazon.co.uk" + href
+                    cases.append(RawCase(
+                        name=title_el.get_text(strip=True)[:200],
+                        price=price,
+                        source_site="Amazon",
+                        source_url=href,
+                        image_url=img_el.get("src", "") if img_el else "",
+                        theme=theme,
+                    ))
+                except Exception:
                     continue
-                price = 0.0
-                if price_whole:
-                    frac = price_frac.get_text(strip=True) if price_frac else "0"
-                    try:
-                        price = float(price_whole.get_text(strip=True).replace(",", "").replace(".", "") + "." + frac.replace(".", ""))
-                    except ValueError:
-                        pass
-                if price <= 0 or price > 350:
-                    continue
-                href = url_el.get("href", "")
-                if not href.startswith("http"):
-                    href = "https://www.amazon.co.uk" + href
-                cases.append(RawCase(
-                    name=title_el.get_text(strip=True)[:200],
-                    price=price,
-                    source_site="Amazon",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
-    except Exception as exc:
-        log.warning("amazon.cases.error", error=str(exc))
+        except Exception as exc:
+            log.warning("amazon.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("amazon.cases.done", search=search, found=len(cases))
     return cases
 
+
+# ── AliExpress ────────────────────────────────────────────────────────────────
 
 async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
-    """AliExpress — JS-heavy but occasionally returns server-rendered data."""
-    params = {"SearchText": search}
-    headers = {
-        "User-Agent": ua.random,
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    }
-    cases = []
+    """
+    AliExpress — Playwright stealth browser.
+    AliExpress is fully JS-rendered. Playwright renders the SPA and extracts
+    product cards from the DOM after the search results load.
+    """
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get("https://www.aliexpress.com/wholesale", params=params, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 2000:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-        # Try multiple AliExpress selectors
-        selectors = [
-            "[class*='product-snippet']",
-            "[class*='list--gallery']",
-            "a[href*='aliexpress.com/item']",
-        ]
-        items = []
-        for sel in selectors:
-            items = soup.select(sel)[:6]
-            if items:
-                break
-        for item in items:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    url = f"https://www.aliexpress.com/wholesale?SearchText={search.replace(' ', '+')}&g=y&SortType=price_asc"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("aliexpress.cases.browser_error", error=str(exc))
+            return []
+
+        page = await context.new_page()
+        try:
+            # AliExpress may show a region/language popup — dismiss it
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            for selector in ["button:has-text('Ship to')", ".close-btn", "[class*='close']", "button:has-text('OK')"]:
+                try:
+                    await page.click(selector, timeout=2000)
+                    await asyncio.sleep(0.3)
+                except Exception:
+                    pass
+
+            # Wait for product listing cards
             try:
-                title_el = item.select_one("h3, [class*='title']") or item
-                price_el = item.select_one("[class*='price']")
-                url_el = item if item.name == "a" else item.select_one("a[href]")
-                img_el = item.select_one("img")
-                title_text = title_el.get_text(strip=True)[:200] if title_el else ""
-                if not title_text or not url_el:
-                    continue
-                price_text = price_el.get_text(strip=True) if price_el else ""
-                price = _parse_price(price_text)
-                if price <= 0 or price > 200:
-                    continue
-                href = url_el.get("href", "")
-                if href.startswith("//"):
-                    href = "https:" + href
-                if not href.startswith("http"):
-                    continue
-                cases.append(RawCase(
-                    name=title_text,
-                    price=price,
-                    source_site="AliExpress",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
+                await page.wait_for_selector(
+                    "a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']",
+                    timeout=12000,
+                )
             except Exception:
-                continue
-    except Exception as exc:
-        log.warning("aliexpress.cases.error", error=str(exc))
+                pass
+
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+
+            # Scroll to load lazy images
+            await page.evaluate("window.scrollBy(0, 600)")
+            await asyncio.sleep(0.8)
+
+            html = await page.content()
+            soup = BeautifulSoup(html, "lxml")
+
+            # AliExpress uses hashed class names — rely on structural patterns
+            items = (
+                soup.select("[class*='search-item-card']") or
+                soup.select("[class*='product-snippet']") or
+                soup.select("a[href*='aliexpress.com/item']")
+            )
+
+            for item in items[:12]:
+                try:
+                    # Link
+                    link_el = item if item.name == "a" else item.select_one("a[href*='/item/']")
+                    if not link_el:
+                        continue
+                    href = link_el.get("href", "")
+                    if href.startswith("//"):
+                        href = "https:" + href
+                    if not href.startswith("http"):
+                        continue
+
+                    # Title
+                    title_el = item.select_one("h3, [class*='title'], [class*='name']") or link_el
+                    title = title_el.get_text(strip=True)[:200]
+                    if not title or len(title) < 5:
+                        continue
+
+                    # Price — look for a £ or $ amount
+                    price_el = item.select_one("[class*='price'], [class*='Price']")
+                    price_text = price_el.get_text(strip=True) if price_el else ""
+                    price = _parse_price(price_text)
+                    if price <= 0 or price > 200:
+                        continue
+
+                    img_el = item.select_one("img")
+                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
+
+                    cases.append(RawCase(
+                        name=title,
+                        price=price,
+                        source_site="AliExpress",
+                        source_url=href,
+                        image_url=img_src,
+                        theme=theme,
+                    ))
+                except Exception:
+                    continue
+
+        except Exception as exc:
+            log.warning("aliexpress.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("aliexpress.cases.done", search=search, found=len(cases))
     return cases
 
 
+# ── Temu ──────────────────────────────────────────────────────────────────────
+
 async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
-    """Temu — try their search page with browser-like headers."""
-    headers = {
-        "User-Agent": ua.random,
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Referer": "https://www.temu.com/",
-    }
-    cases = []
+    """
+    Temu — Playwright stealth browser.
+    Temu is a fully client-side React SPA with aggressive bot detection.
+    Playwright with stealth patches gets past the initial JS challenge.
+    """
     try:
-        search_slug = search.replace(" ", "-").lower()
-        url = f"https://www.temu.com/search_result.html?search_key={search.replace(' ', '+')}"
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 2000:
-            log.debug("temu.blocked", status=resp.status_code, length=len(resp.text))
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-        # Temu search results — try common selectors
-        items = (
-            soup.select("[class*='search-item']") or
-            soup.select("[data-type='goods']") or
-            soup.select("[class*='goods-item']")
-        )[:6]
-        for item in items:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    url = f"https://www.temu.com/search_result.html?search_key={search.replace(' ', '+')}&search_method=user"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("temu.cases.browser_error", error=str(exc))
+            return []
+
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Dismiss cookie/region modals
+            for selector in [
+                "button:has-text('Accept')", "button:has-text('OK')",
+                "[class*='modal'] button", "[class*='close']",
+            ]:
+                try:
+                    await page.click(selector, timeout=2000)
+                    await asyncio.sleep(0.3)
+                except Exception:
+                    pass
+
+            # Wait for product grid
             try:
-                title_el = item.select_one("[class*='title'], [class*='name'], h3")
-                price_el = item.select_one("[class*='price']")
-                url_el = item.select_one("a[href]")
-                img_el = item.select_one("img")
-                if not title_el or not url_el:
-                    continue
-                title_text = title_el.get_text(strip=True)[:200]
-                price = _parse_price(price_el.get_text(strip=True) if price_el else "")
-                if price <= 0 or price > 150:
-                    continue
-                href = url_el.get("href", "")
-                if not href.startswith("http"):
-                    href = "https://www.temu.com" + href
-                cases.append(RawCase(
-                    name=title_text,
-                    price=price,
-                    source_site="Temu",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
+                await page.wait_for_selector(
+                    "[class*='search-result'], [data-type='goods'], [class*='goods-item'], "
+                    "[class*='product-item'], [class*='SearchResult']",
+                    timeout=15000,
+                )
             except Exception:
-                continue
-    except Exception as exc:
-        log.warning("temu.cases.error", error=str(exc))
+                pass
+
+            # Scroll to trigger lazy loading
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+            await page.evaluate("window.scrollBy(0, 800)")
+            await asyncio.sleep(0.8)
+
+            html = await page.content()
+            soup = BeautifulSoup(html, "lxml")
+
+            # Temu hashes its class names — use structural/data attributes
+            items = (
+                soup.select("[data-type='goods']") or
+                soup.select("[class*='goods-item']") or
+                soup.select("[class*='product-item']") or
+                soup.select("[class*='SearchResult'] li") or
+                soup.select("a[href*='/goods.html']")
+            )
+
+            for item in items[:12]:
+                try:
+                    link_el = item if item.name == "a" else item.select_one("a[href]")
+                    if not link_el:
+                        continue
+                    href = link_el.get("href", "")
+                    if not href.startswith("http"):
+                        href = "https://www.temu.com" + href
+
+                    title_el = item.select_one("[class*='title'], [class*='name'], [class*='Title'], h3, p")
+                    title = title_el.get_text(strip=True)[:200] if title_el else ""
+                    if not title or len(title) < 5:
+                        continue
+
+                    price_el = item.select_one("[class*='price'], [class*='Price']")
+                    price = _parse_price(price_el.get_text(strip=True) if price_el else "")
+                    if price <= 0 or price > 150:
+                        continue
+
+                    img_el = item.select_one("img")
+                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
+
+                    cases.append(RawCase(
+                        name=title,
+                        price=price,
+                        source_site="Temu",
+                        source_url=href,
+                        image_url=img_src,
+                        theme=theme,
+                    ))
+                except Exception:
+                    continue
+
+        except Exception as exc:
+            log.warning("temu.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("temu.cases.done", search=search, found=len(cases))
     return cases
 
 
