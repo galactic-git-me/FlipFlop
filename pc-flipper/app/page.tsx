@@ -1506,3 +1506,408 @@ function NextScanCard({ swarm, intervalMinutes }: {
     </Card>
   );
 }
+
+// ── Build category types and helpers ─────────────────────────────────────────
+type TrendDir = "rising" | "stable" | "falling";
+type DemandStrength = "High" | "Medium" | "Low";
+
+interface BuildCategory {
+  name: string;
+  emoji: string;
+  count: number;
+  gemCount: number;
+  sparkline: number[];
+  trend: TrendDir;
+  strength: DemandStrength;
+  insight: string;
+}
+
+const CLEARANCE_SIGNALS = new Set([
+  "ex office", "office clearance", "it clearance", "job lot",
+  "quick sale", "need gone", "clearing out", "no longer needed",
+]);
+
+const WORKSTATION_SIGNALS = new Set([
+  "elitedesk", "optiplex", "thinkcentre", "thinkstation",
+  "hp workstation", "dell workstation", "hp z240", "hp z440",
+  "hp z640", "hp z420", "hp z620", "dell precision", "prodesk",
+]);
+
+function computeBuildCategories(listings: Listing[]): BuildCategory[] {
+  const now = Date.now();
+  const DAY = 86_400_000;
+  const dayBucket = (l: Listing) =>
+    Math.min(6, Math.floor((now - new Date(l.first_seen_at).getTime()) / DAY));
+
+  const defs = [
+    {
+      name: "Gaming PCs",
+      emoji: "🎮",
+      match: (l: Listing) => !!l.gpu,
+      insight: (gemCount: number, _count: number, avgP: number) =>
+        gemCount > 0 ? `${gemCount} gems · avg £${Math.round(avgP)} profit` : "Active category — run scan for gems",
+    },
+    {
+      name: "No-GPU Flips",
+      emoji: "⚡",
+      match: (l: Listing) =>
+        !l.gpu && !!l.cpu && /i5|i7|i9|ryzen/i.test(l.cpu),
+      insight: (gemCount: number, count: number, avgP: number) =>
+        gemCount > 0 ? `Add GPU → £${Math.round(avgP)} avg profit` : `${count} candidates — add RTX 3060 to flip`,
+    },
+    {
+      name: "Office Clearance",
+      emoji: "🏢",
+      match: (l: Listing) =>
+        (l.gem_signals ?? []).some(s => CLEARANCE_SIGNALS.has(s)) ||
+        /clearance|job.?lot|it.?clear/i.test(l.title),
+      insight: (_gemCount: number, count: number, avgP: number) =>
+        avgP > 50 ? `Bulk sourcing · £${Math.round(avgP)} avg profit` : `${count} clearance listings tracked`,
+    },
+    {
+      name: "Workstations",
+      emoji: "🔧",
+      match: (l: Listing) =>
+        (l.gem_signals ?? []).some(s => WORKSTATION_SIGNALS.has(s)) ||
+        /xeon|hp.?z\d{3}|precision|thinkstation/i.test(l.title),
+      insight: (_gemCount: number, _count: number, avgP: number) =>
+        avgP > 80 ? `High-margin tier · £${Math.round(avgP)} avg profit` : "Premium platform — strong resale",
+    },
+    {
+      name: "Budget Builders",
+      emoji: "💰",
+      match: (l: Listing) => l.price <= 60 && !l.gpu,
+      insight: (gemCount: number, count: number, _avgP: number) =>
+        gemCount > 0 ? `${gemCount}/${count} are gems — low buy-in` : `Low buy-in · ${count} sub-£60 units`,
+    },
+  ];
+
+  return defs.map(def => {
+    const items = listings.filter(def.match);
+    if (items.length === 0) return null;
+
+    const gems = items.filter(
+      l => l.classification === "gem" || l.classification === "amazing_gem",
+    );
+
+    // Build 7-day sparkline (index 0 = 6 days ago … index 6 = today)
+    const sparkline = Array.from({ length: 7 }, (_, i) => {
+      const targetBucket = 6 - i;
+      return items.filter(l => dayBucket(l) === targetBucket).length;
+    });
+
+    // Trend: compare most recent 3 days vs previous 3 days
+    const last3 = sparkline.slice(4).reduce((a, b) => a + b, 0);
+    const prev3 = sparkline.slice(1, 4).reduce((a, b) => a + b, 0);
+    const trend: TrendDir =
+      last3 > prev3 * 1.3 ? "rising" :
+      last3 < prev3 * 0.7 ? "falling" : "stable";
+
+    const gemRate = items.length > 0 ? gems.length / items.length : 0;
+    const strength: DemandStrength =
+      gemRate > 0.15 ? "High" : gemRate > 0.05 ? "Medium" : "Low";
+
+    const profitItems = gems.filter(l => l.estimated_profit != null);
+    const avgProfit =
+      profitItems.length > 0
+        ? profitItems.reduce((a, l) => a + (l.estimated_profit ?? 0), 0) / profitItems.length
+        : 0;
+
+    return {
+      name: def.name,
+      emoji: def.emoji,
+      count: items.length,
+      gemCount: gems.length,
+      sparkline,
+      trend,
+      strength,
+      insight: def.insight(gems.length, items.length, avgProfit),
+    };
+  }).filter((c): c is BuildCategory => c !== null && typeof c === "object");
+}
+
+// ── Inline sparkline ──────────────────────────────────────────────────────────
+function MiniSparkline({ data, trend }: { data: number[]; trend: TrendDir }) {
+  const max = Math.max(...data, 1);
+  const W = 64, H = 22;
+  const step = data.length > 1 ? W / (data.length - 1) : W;
+  const color = trend === "rising" ? "#00dc82" : trend === "falling" ? "#ef4444" : "#64748b";
+
+  const pts = data.map((v, i) => [i * step, H - 2 - ((v / max) * (H - 4))] as [number, number]);
+  const linePts = pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const first = pts[0], last = pts[pts.length - 1];
+  const areaPath = `M${first[0].toFixed(1)},${H} L${linePts.replace(/ /g, " L")} L${last[0].toFixed(1)},${H} Z`;
+
+  return (
+    <svg width={W} height={H} style={{ display: "block", overflow: "visible" }}>
+      <path d={areaPath} fill={color} fillOpacity={0.1} />
+      <polyline
+        points={linePts}
+        fill="none"
+        stroke={color}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Terminal dot */}
+      <circle cx={last[0].toFixed(1)} cy={last[1].toFixed(1)} r={2} fill={color} />
+    </svg>
+  );
+}
+
+// ── Trending Build Categories card ────────────────────────────────────────────
+function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
+  const categories = computeBuildCategories(listings);
+
+  const trendIcon = (t: TrendDir) =>
+    t === "rising" ? "↑" : t === "falling" ? "↓" : "→";
+  const trendColor = (t: TrendDir) =>
+    t === "rising" ? "text-[#00dc82]" : t === "falling" ? "text-red-400" : "text-slate-500";
+  const strengthColor = (s: DemandStrength) =>
+    s === "High" ? "text-[#00dc82]" : s === "Medium" ? "text-amber-400" : "text-slate-500";
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp className="w-3.5 h-3.5 text-[#00dc82]" />
+          Trending Build Categories
+          <span className="text-xs font-normal text-slate-500 ml-1">demand signals · last 7 days</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        {categories.length === 0 ? (
+          <div className="px-5 py-8 text-center text-slate-600 text-sm">
+            Run a scan to generate demand signals
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.04]">
+            {/* Column headers */}
+            <div className="flex items-center gap-4 px-5 py-1.5">
+              <span className="w-36 text-[10px] text-slate-600 uppercase tracking-wider">Category</span>
+              <span className="w-16 text-[10px] text-slate-600 uppercase tracking-wider">7-day trend</span>
+              <span className="w-16 text-[10px] text-slate-600 uppercase tracking-wider text-center">Demand</span>
+              <span className="w-8 text-[10px] text-slate-600 uppercase tracking-wider text-center">Dir.</span>
+              <span className="flex-1 text-[10px] text-slate-600 uppercase tracking-wider">Signal</span>
+            </div>
+            {categories.map(cat => (
+              <div key={cat.name} className="flex items-center gap-4 px-5 py-2.5 hover:bg-white/[0.02] transition-colors">
+                <div className="w-36 flex-shrink-0">
+                  <span className="text-sm font-medium text-slate-200">{cat.emoji} {cat.name}</span>
+                  <div className="text-[10px] text-slate-500 mt-0.5">
+                    {cat.count} listings
+                    {cat.gemCount > 0 && (
+                      <span className="text-[#00dc82]/70 ml-1.5">· {cat.gemCount} gem{cat.gemCount !== 1 ? "s" : ""}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="w-16 flex-shrink-0">
+                  <MiniSparkline data={cat.sparkline} trend={cat.trend} />
+                </div>
+                <div className="w-16 flex-shrink-0 text-center">
+                  <span className={`text-xs font-semibold ${strengthColor(cat.strength)}`}>{cat.strength}</span>
+                  <div className="text-[9px] text-slate-600 mt-0.5">demand</div>
+                </div>
+                <div className="w-8 flex-shrink-0 text-center">
+                  <span className={`text-sm font-bold ${trendColor(cat.trend)}`}>{trendIcon(cat.trend)}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs text-slate-400 truncate block">{cat.insight}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="px-5 py-2 border-t border-white/[0.06] flex items-center gap-3">
+          {(["rising", "stable", "falling"] as TrendDir[]).map(t => (
+            <div key={t} className="flex items-center gap-1">
+              <span className={`text-xs font-bold ${t === "rising" ? "text-[#00dc82]" : t === "falling" ? "text-red-400" : "text-slate-500"}`}>
+                {t === "rising" ? "↑" : t === "falling" ? "↓" : "→"}
+              </span>
+              <span className="text-[10px] text-slate-600 capitalize">{t}</span>
+            </div>
+          ))}
+          <span className="ml-auto text-[10px] text-slate-600">from {listings.length} listings</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ── Playbook Activity Feed ────────────────────────────────────────────────────
+type PlaybookTab = "additions" | "updates" | "retirements";
+
+function PlaybookActivityCard({
+  config,
+  sources,
+  listings,
+}: {
+  config: SearchConfig | null;
+  sources: DataSource[];
+  listings: Listing[];
+}) {
+  const [tab, setTab] = useState<PlaybookTab>("additions");
+
+  const categories = computeBuildCategories(listings);
+  const cutoff24h = new Date(Date.now() - 24 * 3600_000).toISOString();
+
+  // Recent Additions: rising categories + recently discovered gem categories
+  const additions = categories
+    .filter(c => c.trend === "rising" || c.gemCount > 0)
+    .map(c => ({
+      name: c.name,
+      date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+      reason: c.trend === "rising"
+        ? `↑ Rising volume · ${c.count} listings tracked`
+        : `${c.gemCount} gem${c.gemCount !== 1 ? "s" : ""} found · ${c.count} in category`,
+      positive: true,
+    }));
+
+  // Recent Updates: source scan activity
+  const updates = sources
+    .filter(s => s.enabled && s.last_scraped_at)
+    .sort((a, b) => (b.last_scraped_at ?? "").localeCompare(a.last_scraped_at ?? ""))
+    .map(src => {
+      const recentForSrc = listings.filter(
+        l => l.source_name === src.name && l.first_seen_at >= cutoff24h,
+      );
+      const gems = recentForSrc.filter(l => l.classification === "gem" || l.classification === "amazing_gem");
+      return {
+        name: src.name,
+        date: src.last_scraped_at
+          ? formatRelativeTime(new Date(src.last_scraped_at))
+          : "—",
+        reason: recentForSrc.length > 0
+          ? `+${recentForSrc.length} listings added · ${gems.length} gem${gems.length !== 1 ? "s" : ""}`
+          : `Scanned · ${src.listings_found_total ?? 0} total tracked`,
+        positive: recentForSrc.length > 0,
+      };
+    });
+
+  // Recent Retirements: disabled sources + falling/empty categories
+  const retirements = [
+    ...sources
+      .filter(s => !s.enabled)
+      .map(src => ({
+        name: src.name,
+        date: "Disabled",
+        reason: src.last_error ? `Error: ${src.last_error.slice(0, 60)}` : "Source is disabled",
+        positive: false,
+      })),
+    ...categories
+      .filter(c => c.trend === "falling" && c.count > 0)
+      .map(c => ({
+        name: c.name,
+        date: "↓ Declining",
+        reason: `Volume dropped · ${c.count} listings remain`,
+        positive: false,
+      })),
+  ];
+
+  const TAB_CONFIG: { key: PlaybookTab; label: string; count: number }[] = [
+    { key: "additions",   label: "Additions",   count: additions.length   },
+    { key: "updates",     label: "Updates",     count: updates.length     },
+    { key: "retirements", label: "Retired",     count: retirements.length },
+  ];
+
+  const rows =
+    tab === "additions" ? additions :
+    tab === "updates"   ? updates   : retirements;
+
+  // Strategy summary pill (always visible at top)
+  const strategyLabel = config?.intent?.replace(/_/g, " ") ?? "—";
+  const priceRange = config ? `£${config.min_price}–£${config.max_price}` : "—";
+
+  return (
+    <Card className="flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Activity className="w-3.5 h-3.5 text-yellow-400" />
+          Playbook
+        </CardTitle>
+        {/* Strategy summary pill */}
+        {config && (
+          <div className="flex items-center gap-2 mt-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.07]">
+            <span className="text-[10px] text-yellow-400 font-semibold capitalize">{strategyLabel}</span>
+            <span className="text-[10px] text-slate-600">·</span>
+            <span className="text-[10px] text-slate-400">{priceRange}</span>
+            {config.gem_keywords?.length > 0 && (
+              <>
+                <span className="text-[10px] text-slate-600">·</span>
+                <span className="text-[10px] text-[#00dc82]/60">{config.gem_keywords.length} gem signals</span>
+              </>
+            )}
+          </div>
+        )}
+        {/* Tabs */}
+        <div className="flex gap-1 mt-2">
+          {TAB_CONFIG.map(({ key, label, count }) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-colors
+                ${tab === key
+                  ? "bg-[#00dc82]/15 text-[#00dc82] border border-[#00dc82]/30"
+                  : "text-slate-500 hover:text-slate-300 border border-transparent"}`}
+            >
+              {label}
+              {count > 0 && (
+                <span className={`rounded-full px-1 text-[9px] font-bold
+                  ${tab === key ? "bg-[#00dc82]/20 text-[#00dc82]" : "bg-white/[0.06] text-slate-500"}`}>
+                  {count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        <div className="overflow-y-auto" style={{ maxHeight: 220 }}>
+        {rows.length === 0 ? (
+          <div className="text-xs text-slate-600 text-center py-6">
+            {tab === "additions" && "No rising categories yet — run a scan"}
+            {tab === "updates"   && "No source activity recorded yet"}
+            {tab === "retirements" && "Nothing retired — all systems active"}
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {rows.map((row, i) => (
+              <div key={i} className="flex items-start gap-2.5">
+                {/* Dot indicator */}
+                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0
+                  ${row.positive ? "bg-[#00dc82]" : tab === "retirements" ? "bg-red-400/60" : "bg-slate-500"}`}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-medium text-slate-200 truncate">{row.name}</span>
+                    <span className="text-[10px] text-slate-600 flex-shrink-0 whitespace-nowrap">{row.date}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">{row.reason}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        </div>
+      </CardContent>
+
+      {/* Current Strategy footer */}
+      {config && tab === "additions" && (
+        <div className="px-4 py-2.5 border-t border-white/[0.06]">
+          <div className="text-[10px] text-slate-600 mb-1.5 uppercase tracking-wider">Searching for</div>
+          <div className="flex flex-wrap gap-1">
+            {(config.gem_keywords ?? []).slice(0, 5).map(kw => (
+              <span key={kw} className="text-[10px] text-[#00dc82]/60 bg-[#00dc82]/[0.08] border border-[#00dc82]/15 rounded px-1.5 py-0.5 leading-none">
+                {kw}
+              </span>
+            ))}
+            {(config.gem_keywords?.length ?? 0) > 5 && (
+              <span className="text-[10px] text-slate-600">+{(config.gem_keywords?.length ?? 0) - 5} more</span>
+            )}
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
