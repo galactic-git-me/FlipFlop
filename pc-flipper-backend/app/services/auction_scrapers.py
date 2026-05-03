@@ -22,7 +22,11 @@ from datetime import datetime
 from typing import Optional
 
 import httpx
+from bs4 import BeautifulSoup
+from fake_useragent import UserAgent
 import structlog
+
+_ua = UserAgent()
 
 log = structlog.get_logger(__name__)
 
@@ -137,14 +141,175 @@ async def scrape_apex(
     **kwargs,
 ) -> list[AuctionLot]:
     """
-    Apex Auctions scraper stub.
-
-    Apex serves paginated HTML. Lot cards are in <div class="lot-item">.
-    No obvious bot detection in testing — httpx + BeautifulSoup should work.
-    TODO: Implement HTML parsing. Priority = HIGH (IT focus, no bot detection).
+    Apex Auctions scraper — UK IT/electronics liquidation specialist.
+    No bot detection observed. Paginated HTML, httpx + BeautifulSoup.
+    Status: ✅ READY
     """
-    log.info("auction_scraper.apex.stub", terms=len(search_terms))
-    return []
+    results: list[AuctionLot] = []
+    seen: set[str] = set()
+    headers = {
+        "User-Agent": _ua.random,
+        "Accept-Language": "en-GB,en;q=0.9",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Referer": "https://www.apexauctions.co.uk/",
+    }
+
+    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+        for term in search_terms[:8]:
+            for page in range(1, 4):  # up to 3 pages per term
+                try:
+                    resp = await client.get(
+                        APEX_SEARCH_URL,
+                        params={
+                            "q": term,
+                            "page": page,
+                            "sort": "date_asc",  # ending soonest first
+                        },
+                    )
+                    if resp.status_code != 200 or len(resp.text) < 500:
+                        break
+
+                    soup = BeautifulSoup(resp.text, "lxml")
+
+                    # Apex lot cards — try common selectors, fall back broadly
+                    cards = (
+                        soup.select("div.lot-item") or
+                        soup.select("div.lot-card") or
+                        soup.select("[class*='lot-item']") or
+                        soup.select("article.lot") or
+                        soup.select(".auction-lot")
+                    )
+                    if not cards:
+                        # Try to extract any lot-style links as a last resort
+                        cards = soup.select("a[href*='/lot/'], a[href*='/lots/']")
+
+                    if not cards:
+                        log.debug("apex.no_cards", term=term, page=page, url=str(resp.url))
+                        break  # No more results on this term
+
+                    found_on_page = 0
+                    for card in cards:
+                        try:
+                            # Title
+                            title_el = (
+                                card.select_one("h3, h2, .lot-title, .lot-name, [class*='title']") or
+                                (card if card.name == "a" else card.select_one("a"))
+                            )
+                            title = (title_el.get_text(strip=True) if title_el else "").strip()
+                            if not title or len(title) < 5:
+                                continue
+
+                            # Skip non-PC results
+                            t = title.lower()
+                            if not any(kw in t for kw in (
+                                "pc", "desktop", "tower", "computer", "workstation",
+                                "i3", "i5", "i7", "i9", "ryzen", "xeon",
+                                "optiplex", "elitedesk", "thinkcentre", "graphics", "gpu",
+                                "nvidia", "radeon", "rtx", "gtx", "rx ",
+                                "laptop", "monitor", "server", "ram", "ssd", "cpu",
+                            )):
+                                continue
+
+                            # URL
+                            link_el = card.select_one("a[href]") if card.name != "a" else card
+                            href = (link_el.get("href") or "") if link_el else ""
+                            if href and not href.startswith("http"):
+                                href = "https://www.apexauctions.co.uk" + href
+                            if not href:
+                                continue
+
+                            lot_id = href.rstrip("/").split("/")[-1].split("?")[0] or re.sub(r"\W+", "_", title[:30])
+                            external_id = f"apex_{lot_id}"
+                            if external_id in seen:
+                                continue
+                            seen.add(external_id)
+
+                            # Price / estimate
+                            price_el = card.select_one(
+                                ".lot-estimate, .estimate, .current-bid, "
+                                ".lot-price, [class*='price'], [class*='bid']"
+                            )
+                            price_text = price_el.get_text(strip=True) if price_el else ""
+                            price = _parse_apex_price(price_text)
+                            if price > max_price and max_price > 0:
+                                continue
+
+                            # Image
+                            img_el = card.select_one("img")
+                            img_url = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
+                            if img_url and not img_url.startswith("http"):
+                                img_url = "https://www.apexauctions.co.uk" + img_url
+
+                            # Auction end time
+                            ends_el = card.select_one(
+                                "[class*='ends'], [class*='closing'], time, [data-ends], [data-close]"
+                            )
+                            ends_at = _parse_apex_date(ends_el) if ends_el else None
+
+                            # Lot number
+                            lot_num_el = card.select_one("[class*='lot-num'], [class*='lot-number']")
+                            lot_number = lot_num_el.get_text(strip=True) if lot_num_el else None
+
+                            results.append(AuctionLot(
+                                external_id=external_id,
+                                title=title,
+                                current_bid=price,
+                                url=href,
+                                image_url=img_url,
+                                ends_at=ends_at,
+                                lot_number=lot_number,
+                                source_name="Apex Auctions",
+                                is_joblot=any(kw in t for kw in ("lot", "job lot", "bundle", "bulk", "pallet", "qty", "x ")),
+                            ))
+                            found_on_page += 1
+
+                        except Exception as exc:
+                            log.debug("apex.card_error", error=str(exc))
+                            continue
+
+                    log.info("apex.page_done", term=term, page=page, found=found_on_page, total=len(results))
+
+                    # If fewer results than expected, no more pages
+                    if found_on_page < 5:
+                        break
+
+                    await asyncio.sleep(0.8)  # polite delay
+
+                except Exception as exc:
+                    log.warning("apex.request_error", term=term, page=page, error=str(exc))
+                    break
+
+    log.info("auction_scraper.apex.done", total=len(results))
+    return results
+
+
+def _parse_apex_price(text: str) -> float:
+    """Parse price/estimate strings like '£120', 'Est: £50 - £150', 'Current bid: £75'."""
+    # Take the first number found (lower estimate or current bid)
+    m = re.search(r"[\d,]+\.?\d*", text.replace(",", ""))
+    return float(m.group(0)) if m else 0.0
+
+
+def _parse_apex_date(el) -> Optional[datetime]:
+    """Try to parse a closing date from a BeautifulSoup element."""
+    from datetime import timedelta
+    # Try datetime attribute first
+    dt_str = el.get("datetime") or el.get("data-ends") or el.get("data-close") or el.get_text(strip=True)
+    if not dt_str:
+        return None
+    try:
+        # ISO format
+        return datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+    except (ValueError, AttributeError):
+        pass
+    # Relative: "2 days", "3 hours"
+    m = re.search(r"(\d+)\s*(day|hour|minute|hr|min)", dt_str, re.I)
+    if m:
+        val = int(m.group(1))
+        unit = m.group(2).lower()
+        delta = timedelta(days=val) if "day" in unit else timedelta(hours=val) if "hour" in unit or "hr" in unit else timedelta(minutes=val)
+        return datetime.utcnow() + delta
+    return None
 
 
 # ── Wholesale Clearance UK ────────────────────────────────────────────────────
@@ -232,7 +397,7 @@ AUCTION_SCRAPERS: dict[str, object] = {
 }
 
 # Scrapers that are ready to use (not blocked, not stub-only)
-READY_AUCTION_SCRAPERS: list[str] = []   # None ready yet — all stubs
+READY_AUCTION_SCRAPERS: list[str] = ["Apex Auctions"]
 
 # Priority order for implementation
 IMPLEMENTATION_PRIORITY = [

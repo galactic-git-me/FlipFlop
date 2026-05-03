@@ -23,24 +23,66 @@ ua = UserAgent()
 
 
 TRACKED_PARTS = [
-    # GPUs
-    {"name": "GTX 1060 6GB", "category": PartCategory.gpu, "ebay_search": "GTX 1060 6GB", "bh_search": "gtx+1060+6gb"},
-    {"name": "GTX 1060 3GB", "category": PartCategory.gpu, "ebay_search": "GTX 1060 3GB", "bh_search": "gtx+1060+3gb"},
-    {"name": "RX 580 8GB",   "category": PartCategory.gpu, "ebay_search": "RX 580 8GB",   "bh_search": "rx+580+8gb"},
-    {"name": "GTX 1070 8GB", "category": PartCategory.gpu, "ebay_search": "GTX 1070 8GB", "bh_search": "gtx+1070"},
-    {"name": "RTX 2060 6GB", "category": PartCategory.gpu, "ebay_search": "RTX 2060 6GB", "bh_search": "rtx+2060"},
-    {"name": "RTX 2070 8GB", "category": PartCategory.gpu, "ebay_search": "RTX 2070 8GB", "bh_search": "rtx+2070"},
-    # RAM
-    {"name": "16GB DDR4 Kit", "category": PartCategory.ram, "ebay_search": "16GB DDR4 3200 used",   "bh_search": "16gb+ddr4"},
-    {"name": "8GB DDR4",      "category": PartCategory.ram, "ebay_search": "8GB DDR4 2666 used",    "bh_search": "8gb+ddr4"},
-    {"name": "32GB DDR4 Kit", "category": PartCategory.ram, "ebay_search": "32GB DDR4 3200 used",   "bh_search": "32gb+ddr4"},
-    # Storage
-    {"name": "480GB SATA SSD", "category": PartCategory.ssd, "ebay_search": "480GB SSD SATA used",  "bh_search": "480gb+ssd"},
-    {"name": "1TB NVMe SSD",   "category": PartCategory.ssd, "ebay_search": "1TB NVMe M.2 used",    "bh_search": "1tb+nvme"},
+    # ── GPUs — budget / mid tier (most common flip add-ons) ─────────────────
+    {"name": "GTX 1060 6GB",  "category": PartCategory.gpu, "ebay_search": "GTX 1060 6GB",  "bh_search": "gtx+1060+6gb"},
+    {"name": "GTX 1060 3GB",  "category": PartCategory.gpu, "ebay_search": "GTX 1060 3GB",  "bh_search": "gtx+1060+3gb"},
+    {"name": "GTX 1650 4GB",  "category": PartCategory.gpu, "ebay_search": "GTX 1650 4GB",  "bh_search": "gtx+1650"},
+    {"name": "GTX 1660 Super","category": PartCategory.gpu, "ebay_search": "GTX 1660 Super","bh_search": "gtx+1660+super"},
+    {"name": "GTX 1070 8GB",  "category": PartCategory.gpu, "ebay_search": "GTX 1070 8GB",  "bh_search": "gtx+1070"},
+    {"name": "RX 570 8GB",    "category": PartCategory.gpu, "ebay_search": "RX 570 8GB",    "bh_search": "rx+570+8gb"},
+    {"name": "RX 580 8GB",    "category": PartCategory.gpu, "ebay_search": "RX 580 8GB",    "bh_search": "rx+580+8gb"},
+    # ── GPUs — mid-high (RTX 20/30 series — main flip upgrade tier) ─────────
+    {"name": "RTX 2060 6GB",  "category": PartCategory.gpu, "ebay_search": "RTX 2060 6GB",  "bh_search": "rtx+2060"},
+    {"name": "RTX 2070 8GB",  "category": PartCategory.gpu, "ebay_search": "RTX 2070 8GB",  "bh_search": "rtx+2070"},
+    {"name": "RTX 2080 8GB",  "category": PartCategory.gpu, "ebay_search": "RTX 2080 8GB",  "bh_search": "rtx+2080"},
+    {"name": "RTX 3060 12GB", "category": PartCategory.gpu, "ebay_search": "RTX 3060 12GB", "bh_search": "rtx+3060"},
+    {"name": "RTX 3060 Ti",   "category": PartCategory.gpu, "ebay_search": "RTX 3060 Ti",   "bh_search": "rtx+3060+ti"},
+    {"name": "RTX 3070 8GB",  "category": PartCategory.gpu, "ebay_search": "RTX 3070 8GB",  "bh_search": "rtx+3070"},
+    {"name": "RTX 3080 10GB", "category": PartCategory.gpu, "ebay_search": "RTX 3080 10GB", "bh_search": "rtx+3080"},
+    {"name": "RX 6600 8GB",   "category": PartCategory.gpu, "ebay_search": "RX 6600 8GB",   "bh_search": "rx+6600"},
+    {"name": "RX 6650 XT",    "category": PartCategory.gpu, "ebay_search": "RX 6650 XT",    "bh_search": "rx+6650+xt"},
+    {"name": "RX 6700 XT",    "category": PartCategory.gpu, "ebay_search": "RX 6700 XT",    "bh_search": "rx+6700+xt"},
+    # ── GPUs — current gen budget (RTX 4060 / RX 7600) ──────────────────────
+    {"name": "RTX 4060 8GB",  "category": PartCategory.gpu, "ebay_search": "RTX 4060 8GB",  "bh_search": "rtx+4060"},
+    {"name": "RX 7600 8GB",   "category": PartCategory.gpu, "ebay_search": "RX 7600 8GB",   "bh_search": "rx+7600"},
+
+    # ── CPUs — Intel (LGA1200/LGA1700 drop-in upgrades) ─────────────────────
+    {"name": "Intel i5-10400",  "category": PartCategory.cpu, "ebay_search": "i5-10400 CPU", "bh_search": "i5+10400"},
+    {"name": "Intel i5-10600K", "category": PartCategory.cpu, "ebay_search": "i5-10600K CPU","bh_search": "i5+10600k"},
+    {"name": "Intel i7-10700",  "category": PartCategory.cpu, "ebay_search": "i7-10700 CPU", "bh_search": "i7+10700"},
+    {"name": "Intel i7-10700K", "category": PartCategory.cpu, "ebay_search": "i7-10700K CPU","bh_search": "i7+10700k"},
+    {"name": "Intel i9-10900K", "category": PartCategory.cpu, "ebay_search": "i9-10900K CPU","bh_search": "i9+10900k"},
+    {"name": "Intel i5-12400",  "category": PartCategory.cpu, "ebay_search": "i5-12400 CPU", "bh_search": "i5+12400"},
+    {"name": "Intel i7-12700",  "category": PartCategory.cpu, "ebay_search": "i7-12700 CPU", "bh_search": "i7+12700"},
+    # ── CPUs — AMD (AM4 — by far the most common flip-platform socket) ───────
+    {"name": "Ryzen 5 3600",  "category": PartCategory.cpu, "ebay_search": "Ryzen 5 3600",  "bh_search": "ryzen+5+3600"},
+    {"name": "Ryzen 5 5600",  "category": PartCategory.cpu, "ebay_search": "Ryzen 5 5600",  "bh_search": "ryzen+5+5600"},
+    {"name": "Ryzen 5 5600X", "category": PartCategory.cpu, "ebay_search": "Ryzen 5 5600X", "bh_search": "ryzen+5+5600x"},
+    {"name": "Ryzen 7 5700X", "category": PartCategory.cpu, "ebay_search": "Ryzen 7 5700X", "bh_search": "ryzen+7+5700x"},
+    {"name": "Ryzen 7 5800X", "category": PartCategory.cpu, "ebay_search": "Ryzen 7 5800X", "bh_search": "ryzen+7+5800x"},
+    {"name": "Ryzen 9 5900X", "category": PartCategory.cpu, "ebay_search": "Ryzen 9 5900X", "bh_search": "ryzen+9+5900x"},
+
+    # ── RAM ──────────────────────────────────────────────────────────────────
+    {"name": "8GB DDR4",       "category": PartCategory.ram, "ebay_search": "8GB DDR4 2666 used",  "bh_search": "8gb+ddr4"},
+    {"name": "16GB DDR4 Kit",  "category": PartCategory.ram, "ebay_search": "16GB DDR4 3200 used", "bh_search": "16gb+ddr4"},
+    {"name": "32GB DDR4 Kit",  "category": PartCategory.ram, "ebay_search": "32GB DDR4 3200 used", "bh_search": "32gb+ddr4"},
+    {"name": "16GB DDR5 Kit",  "category": PartCategory.ram, "ebay_search": "16GB DDR5 5200 used", "bh_search": "16gb+ddr5"},
+    {"name": "32GB DDR5 Kit",  "category": PartCategory.ram, "ebay_search": "32GB DDR5 5200 used", "bh_search": "32gb+ddr5"},
+
+    # ── Storage ──────────────────────────────────────────────────────────────
+    {"name": "256GB SATA SSD", "category": PartCategory.ssd, "ebay_search": "256GB SSD SATA used", "bh_search": "256gb+ssd"},
+    {"name": "480GB SATA SSD", "category": PartCategory.ssd, "ebay_search": "480GB SSD SATA used", "bh_search": "480gb+ssd"},
+    {"name": "1TB SATA SSD",   "category": PartCategory.ssd, "ebay_search": "1TB SSD SATA used",   "bh_search": "1tb+sata+ssd"},
+    {"name": "500GB NVMe SSD", "category": PartCategory.ssd, "ebay_search": "500GB NVMe M.2 used", "bh_search": "500gb+nvme"},
+    {"name": "1TB NVMe SSD",   "category": PartCategory.ssd, "ebay_search": "1TB NVMe M.2 used",   "bh_search": "1tb+nvme"},
+    {"name": "2TB NVMe SSD",   "category": PartCategory.ssd, "ebay_search": "2TB NVMe M.2 used",   "bh_search": "2tb+nvme"},
     {"name": "2TB HDD",        "category": PartCategory.ssd, "ebay_search": "2TB hard drive used",  "bh_search": "2tb+hdd"},
-    # PSU
-    {"name": "650W PSU 80+ Bronze", "category": PartCategory.psu, "ebay_search": "650W PSU 80 bronze used", "bh_search": "650w+psu"},
+
+    # ── PSU ───────────────────────────────────────────────────────────────────
     {"name": "550W PSU 80+ Bronze", "category": PartCategory.psu, "ebay_search": "550W PSU 80 bronze used", "bh_search": "550w+psu"},
+    {"name": "650W PSU 80+ Bronze", "category": PartCategory.psu, "ebay_search": "650W PSU 80 bronze used", "bh_search": "650w+psu"},
+    {"name": "750W PSU 80+ Gold",   "category": PartCategory.psu, "ebay_search": "750W PSU 80 gold used",   "bh_search": "750w+psu"},
+    {"name": "850W PSU 80+ Gold",   "category": PartCategory.psu, "ebay_search": "850W PSU 80 gold used",   "bh_search": "850w+psu"},
 ]
 
 

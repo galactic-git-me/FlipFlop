@@ -257,8 +257,8 @@ async def _seed_default_data():
         if count == 0:
             db.add_all([
                 DataSource(name="eBay UK", url="https://www.ebay.co.uk", source_type=SourceType.scrape, enabled=True),
-                DataSource(name="Gumtree", url="https://www.gumtree.com", source_type=SourceType.scrape, enabled=False),
-                DataSource(name="Facebook Marketplace", url="https://www.facebook.com/marketplace", source_type=SourceType.scrape, enabled=False),
+                DataSource(name="Gumtree", url="https://www.gumtree.com", source_type=SourceType.scrape, enabled=True),
+                DataSource(name="Facebook Marketplace", url="https://www.facebook.com/marketplace", source_type=SourceType.scrape, enabled=True),
                 DataSource(name="Preloved", url="https://www.preloved.co.uk", source_type=SourceType.scrape, enabled=True),
             ])
             log.info("seeded.sources")
@@ -325,23 +325,21 @@ async def _seed_default_data():
                 ))
                 log.info("seeded.auction_source", name=src_name)
 
-        # ── Disable Gumtree — blocked by Cloudflare (returns 589-byte challenge)
-        # Leaving it enabled just wastes 2+ minutes every scan run.
-        await db.execute(
-            _update(DataSource)
-            .where(DataSource.name == "Gumtree")
-            .values(enabled=False)
-        )
-
-        # ── Facebook Marketplace: enable only if fb_cookies.json exists ───────
-        fb_cookies = _Path(__file__).parent.parent / "fb_cookies.json"
-        if fb_cookies.exists():
+        # ── Ensure Gumtree + Facebook are enabled on existing installs ──────────
+        # Both use the Playwright scraper (headless browser with stealth mode).
+        # Gumtree: no login required, Playwright bypasses the JS challenge.
+        # Facebook: works without cookies (~20 items); add fb_cookies.json for full access.
+        for _src_name in ("Gumtree", "Facebook Marketplace"):
             await db.execute(
                 _update(DataSource)
-                .where(DataSource.name == "Facebook Marketplace")
+                .where(DataSource.name == _src_name)
                 .values(enabled=True)
             )
-            log.info("facebook.enabled", hint="fb_cookies.json found")
+        fb_cookies = _Path(__file__).parent.parent / "fb_cookies.json"
+        if fb_cookies.exists():
+            log.info("facebook.cookies_found", hint="fb_cookies.json found — full Marketplace access enabled")
+        else:
+            log.info("facebook.no_cookies", hint="Running without fb_cookies.json — up to ~20 items per scan. Export cookies from your browser for full access.")
 
         # Seed search config — keywords are the actual eBay search strings.
         # Cheap flip opportunities live in INCOMPLETE / UNTESTED / BARE listings,
