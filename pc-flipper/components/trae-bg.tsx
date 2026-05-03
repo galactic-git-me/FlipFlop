@@ -17,7 +17,7 @@ export function TraeBg() {
     >
       <ErrorBoundary>
         <GridDistortion
-          imageSrc="https://picsum.photos/1920/1080?grayscale"
+          imageSrc="/space-bg.jpg"
           grid={10}
           mouse={0.1}
           strength={0.15}
