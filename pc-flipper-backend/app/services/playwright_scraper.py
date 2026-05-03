@@ -505,98 +505,90 @@ async def scrape_preloved_playwright(
         except Exception:
             return []
 
+        # Navigate to Preloved once to establish session cookies.
+        # We use context.request for subsequent API calls — it automatically
+        # carries all cookies set during page navigation.
         page = await context.new_page()
+        await page.goto(
+            "https://www.preloved.co.uk/classifieds/computers/all/uk",
+            wait_until="domcontentloaded",
+            timeout=25000,
+        )
+        # Accept cookie banner if present
+        try:
+            await page.click(
+                "button:has-text('Accept'), button:has-text('OK'), "
+                "[class*='cookie'] button, #cookie-accept",
+                timeout=3000,
+            )
+        except Exception:
+            pass
+        await asyncio.sleep(1)
 
         for term in search_terms[:8]:
             try:
-                url = (
-                    "https://www.preloved.co.uk/classifieds/computers/all/uk"
-                    f"?keywords={term.replace(' ', '+')}"
-                    f"&price_max={int(max_price)}"
+                log.info("preloved.playwright.fetch", term=term)
+
+                # Preloved's HTML SPA ignores ?q= on initial page load and
+                # renders featured items. Call the internal JSON API directly
+                # via context.request so session cookies are included.
+                api_url = (
+                    "https://www.preloved.co.uk/account/api/classifieds"
+                    f"?q={term.replace(' ', '+')}"
+                    "&section=computers"
                     f"&price_min={int(min_price)}"
+                    f"&price_max={int(max_price)}"
+                    "&per_page=40"
                     "&sort=date_desc"
                 )
-                log.info("preloved.playwright.fetch", term=term)
-                await page.goto(url, wait_until="domcontentloaded", timeout=25000)
-
-                # Accept cookie banner if present
-                try:
-                    await page.click(
-                        "button:has-text('Accept'), button:has-text('OK'), "
-                        "[class*='cookie'] button, #cookie-accept",
-                        timeout=3000,
+                resp = await context.request.get(
+                    api_url,
+                    headers={
+                        "Accept": "application/json, text/plain, */*",
+                        "Referer": "https://www.preloved.co.uk/classifieds/computers/all/uk",
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                )
+                if not resp.ok:
+                    log.warning("preloved.playwright.api_error", status=resp.status, term=term)
+                    raw_listings = []
+                else:
+                    data = await resp.json()
+                    items = (
+                        data.get("adverts")
+                        or data.get("classifieds")
+                        or data.get("listings")
+                        or data.get("items")
+                        or data.get("results")
+                        or (data if isinstance(data, list) else [])
                     )
-                except Exception:
-                    pass
+                    def _extract(item: dict) -> dict:
+                        price_raw = item.get("price") or item.get("amount")
+                        if isinstance(price_raw, dict):
+                            price = str(price_raw.get("value") or price_raw.get("amount") or "")
+                        else:
+                            price = str(price_raw or "")
 
-                # Preloved is a React SPA — wait for JS to render listings.
-                # 5 seconds is enough; networkidle never fires (background polling).
-                await page.wait_for_timeout(5000)
+                        loc_raw = item.get("location") or item.get("area") or ""
+                        location = loc_raw.get("display", "") if isinstance(loc_raw, dict) else loc_raw
 
-                # Use page.evaluate to extract all listing data at once — far more
-                # reliable than per-element queries on a React SPA where the DOM
-                # layout varies by render. We look for £ in the nearest container.
-                # NOTE: £ = Unicode U+00A3; using String.fromCharCode(163) avoids
-                # any Python string encoding issues with the pound sign in the regex.
-                raw_listings = await page.evaluate("""
-                    () => {
-                        const POUND = String.fromCharCode(163);
-                        const priceRe = new RegExp(POUND + '\\\\s*([\\\\d,]+\\\\.?\\\\d*)');
-                        const results = [];
-                        const seen = new Set();
-                        const links = document.querySelectorAll('a[href*="/adverts/show/"]');
-                        for (const link of links) {
-                            const href = link.getAttribute('href') || '';
-                            if (!href || seen.has(href)) continue;
-                            seen.add(href);
+                        images = item.get("images") or []
+                        if images and isinstance(images[0], dict):
+                            img_src = images[0].get("url") or images[0].get("src") or ""
+                        elif images:
+                            img_src = images[0]
+                        else:
+                            img_src = item.get("image") or item.get("thumbnail") or ""
 
-                            // Walk up DOM tree until we find a node with non-empty text
-                            // containing a price — avoids empty-container issue
-                            let container = link;
-                            let node = link.parentElement;
-                            let depth = 0;
-                            while (node && depth < 12) {
-                                const txt = node.innerText || '';
-                                if (txt.length > 5 && priceRe.test(txt)) {
-                                    container = node;
-                                    break;
-                                }
-                                node = node.parentElement;
-                                depth++;
-                            }
-
-                            // Extract price — look for £ in the container text
-                            const containerText = (container.innerText || '');
-                            const priceMatch = priceRe.exec(containerText);
-                            const price = priceMatch ? priceMatch[1].replace(/,/g, '') : '';
-
-                            // Title: link text → fallback to heading → URL slug
-                            let title = (link.innerText || '').trim().split('\\n')[0].trim();
-                            if (!title || title.length < 5) {
-                                const h = container.querySelector('h1, h2, h3, h4');
-                                title = h ? h.innerText.trim() : '';
-                            }
-                            if (!title || title.length < 5) {
-                                const parts = href.split('/');
-                                const slug = parts[parts.length - 1] || parts[parts.length - 2] || '';
-                                title = slug.replace(/-/g, ' ').replace(/_/g, ' ');
-                            }
-
-                            // Image in container
-                            const img = container.querySelector('img');
-                            const imgSrc = img ? (img.getAttribute('src') || '') : '';
-
-                            // Location text
-                            const locEl = container.querySelector(
-                                '[class*="location"], [class*="area"], [class*="region"]'
-                            );
-                            const location = locEl ? locEl.innerText.trim() : '';
-
-                            results.push({ href, title, price, imgSrc, location });
+                        return {
+                            "href": item.get("url") or item.get("link") or f"/adverts/show/{item.get('id','')}",
+                            "title": item.get("title") or item.get("name") or "",
+                            "price": price,
+                            "imgSrc": img_src,
+                            "location": location,
+                            "id": str(item.get("id") or ""),
                         }
-                        return results;
-                    }
-                """)
+                    raw_listings = [_extract(item) for item in items]
 
                 log.info("preloved.playwright.raw", term=term, count=len(raw_listings))
 
@@ -614,19 +606,25 @@ async def scrape_preloved_playwright(
                         if _is_mini_pc(title) or not _is_pc_listing(title):
                             continue
 
-                        # External ID from the numeric segment of the URL
-                        parts = href.rstrip("/").split("/")
-                        # URL form: /adverts/show/<numeric-id>/<slug>
-                        numeric_id = next(
-                            (p for p in reversed(parts) if p.isdigit()), None
-                        ) or parts[-1]
+                        # Prefer the API-provided id field; fall back to URL parse
+                        api_id = item.get("id", "")
+                        if api_id:
+                            numeric_id = api_id
+                        else:
+                            parts = href.rstrip("/").split("/")
+                            numeric_id = next(
+                                (p for p in reversed(parts) if p.isdigit()), None
+                            ) or parts[-1]
                         external_id = "preloved_" + numeric_id
                         if external_id in seen:
                             continue
                         seen.add(external_id)
 
                         price_str = item.get("price", "")
-                        price = float(price_str) if price_str else 0.0
+                        try:
+                            price = float(str(price_str).replace(",", ""))
+                        except (ValueError, TypeError):
+                            price = 0.0
                         if price <= 0:
                             continue
 
