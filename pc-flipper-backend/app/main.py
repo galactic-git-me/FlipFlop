@@ -287,6 +287,34 @@ async def _seed_default_data():
                 ))
                 log.info("seeded.new_source", name=src_name)
 
+        # ── Auction platform stubs ────────────────────────────────────────────
+        _auction_sources = [
+            # IT-focused UK liquidation — no bot detection observed, high ROI for effort
+            ("Apex Auctions",          "https://www.apexauctions.co.uk",          False),
+            # Multi-vendor aggregator — JSON API, rate-limited
+            ("BidSpotter",             "https://www.bidspotter.co.uk",            False),
+            # UK's largest auctioneer — JSON API, high IT clearance volume
+            ("Wilsons Auctions",       "https://www.wilsonsauctions.com",         False),
+            # Multi-vendor HTML scrape — CF challenge manageable with Playwright
+            ("i-bidder",               "https://www.i-bidder.com",                False),
+            # B2B wholesale surplus — requires API key registration
+            ("Merkandi",               "https://merkandi.co.uk",                  False),
+            # B2B pallet lots — requires business account auth
+            ("Wholesale Clearance UK", "https://www.wholesaleclearance.co.uk",    False),
+            # Largest UK online auctioneer — CF Enterprise WAF blocks all bots
+            ("John Pye",               "https://www.johnpye.co.uk",               False),
+        ]
+        for src_name, src_url, src_enabled in _auction_sources:
+            exists = await db.scalar(
+                select(func.count()).select_from(DataSource).where(DataSource.name == src_name)
+            )
+            if not exists:
+                db.add(DataSource(
+                    name=src_name, url=src_url,
+                    source_type=SourceType.scrape, enabled=src_enabled,
+                ))
+                log.info("seeded.auction_source", name=src_name)
+
         # ── Disable Gumtree — blocked by Cloudflare (returns 589-byte challenge)
         # Leaving it enabled just wastes 2+ minutes every scan run.
         await db.execute(
