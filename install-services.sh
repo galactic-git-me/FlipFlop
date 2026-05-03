@@ -22,8 +22,13 @@ if [ ! -d "$BACKEND_DIR/.venv" ]; then
 fi
 
 if [ ! -f "$BACKEND_DIR/.env" ]; then
-    cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
-    echo "Created $BACKEND_DIR/.env — edit it to add API keys before starting the service."
+    if [ -f "$BACKEND_DIR/.env.example" ]; then
+        cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
+        echo "Created $BACKEND_DIR/.env — edit it to add API keys before starting the service."
+    else
+        echo "No .env found — creating empty one. Edit $BACKEND_DIR/.env before starting."
+        touch "$BACKEND_DIR/.env"
+    fi
 fi
 
 # --- Frontend build ---
