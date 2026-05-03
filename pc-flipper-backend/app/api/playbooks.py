@@ -28,6 +28,7 @@ import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.playbook import Playbook, PlaybookProposal
@@ -85,7 +86,11 @@ async def list_proposals(
     status: Optional[str] = Query(None, description="pending|approved|rejected"),
     db: AsyncSession = Depends(get_db),
 ):
-    q = select(PlaybookProposal).order_by(PlaybookProposal.proposed_at.desc())
+    q = (
+        select(PlaybookProposal)
+        .options(selectinload(PlaybookProposal.playbook))
+        .order_by(PlaybookProposal.proposed_at.desc())
+    )
     if status:
         q = q.where(PlaybookProposal.status == status)
     result = await db.execute(q)
@@ -239,7 +244,9 @@ async def _get_or_404(playbook_id: int, db: AsyncSession) -> Playbook:
 
 async def _get_proposal_or_404(proposal_id: int, db: AsyncSession) -> PlaybookProposal:
     result = await db.execute(
-        select(PlaybookProposal).where(PlaybookProposal.id == proposal_id)
+        select(PlaybookProposal)
+        .options(selectinload(PlaybookProposal.playbook))
+        .where(PlaybookProposal.id == proposal_id)
     )
     p = result.scalar_one_or_none()
     if not p:
