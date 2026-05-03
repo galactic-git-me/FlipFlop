@@ -8,7 +8,7 @@ from app.config import get_settings
 from app.database import engine, Base
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit
 from app.api.logs import install_log_capture
 
 log = structlog.get_logger(__name__)
@@ -58,6 +58,7 @@ app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
 app.include_router(demand.router, prefix="/api")
+app.include_router(manual_submit.router, prefix="/api")
 
 
 @app.get("/health")
@@ -286,6 +287,15 @@ async def _seed_default_data():
                     source_type=SourceType.scrape, enabled=src_enabled,
                 ))
                 log.info("seeded.new_source", name=src_name)
+
+        # ── Manual submission sources ─────────────────────────────────────────
+        for _ms_name in ["Manual Submission", "Manual Photo"]:
+            _ms_exists = await db.scalar(
+                select(func.count()).select_from(DataSource).where(DataSource.name == _ms_name)
+            )
+            if not _ms_exists:
+                db.add(DataSource(name=_ms_name, url="", source_type=SourceType.scrape, enabled=True))
+                log.info("seeded.manual_source", name=_ms_name)
 
         # ── Auction platform stubs ────────────────────────────────────────────
         _auction_sources = [

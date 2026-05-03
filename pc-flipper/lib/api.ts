@@ -125,6 +125,24 @@ export const api = {
     scanStatus: () => request<ScanStatus>("/swarms/scan/status"),
   },
 
+  manual: {
+    submitUrl: (url: string, price_override?: number) =>
+      request<import("./types").Listing>("/manual-submit/url", {
+        method: "POST",
+        body: JSON.stringify({ url, price_override: price_override ?? null }),
+      }),
+    submitImage: (file: File, title?: string, price?: number) => {
+      const form = new FormData();
+      form.append("file", file);
+      if (title) form.append("title", title);
+      if (price != null) form.append("price", String(price));
+      // Don't set Content-Type — browser sets multipart boundary automatically
+      const url = `${(typeof window !== "undefined" ? `http://${window.location.hostname}:8088/api` : "http://localhost:8088/api")}/manual-submit/image/`;
+      return fetch(url, { method: "POST", body: form, signal: AbortSignal.timeout(45_000) })
+        .then(r => { if (!r.ok) return r.json().then(d => { throw new Error(d.detail || `HTTP ${r.status}`); }); return r.json(); }) as Promise<import("./types").Listing>;
+    },
+  },
+
   demand: {
     categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
     auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),

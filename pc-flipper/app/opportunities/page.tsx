@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
   Gem, RefreshCw, ExternalLink, Zap, Search, SlidersHorizontal,
-  ChevronLeft, ChevronRight, ArrowUpDown, X,
+  ChevronLeft, ChevronRight, ArrowUpDown, X, PlusCircle,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { Listing, Classification, CLASSIFICATION_CONFIG } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
+import { ManualSubmitModal } from "@/components/manual-submit-modal";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -66,6 +67,7 @@ export default function OpportunitiesPage() {
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
   const [flippingId, setFlippingId] = useState<number | null>(null);
+  const [showManualSubmit, setShowManualSubmit] = useState(false);
 
   // Debounce search
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -143,6 +145,11 @@ export default function OpportunitiesPage() {
 
   return (
     <div className="p-6 space-y-5">
+      <ManualSubmitModal
+        open={showManualSubmit}
+        onClose={() => setShowManualSubmit(false)}
+        onSuccess={() => { setShowManualSubmit(false); load(); }}
+      />
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between">
         <div>
@@ -162,6 +169,10 @@ export default function OpportunitiesPage() {
             <SlidersHorizontal className="w-3.5 h-3.5" />
             Filters
             {hasAdvancedFilters && <Badge variant="success" className="ml-1 text-[9px] px-1 py-0">active</Badge>}
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setShowManualSubmit(true)}>
+            <PlusCircle className="w-3.5 h-3.5" />
+            Submit Manually
           </Button>
           <Button variant="secondary" size="sm" onClick={trigger} disabled={triggering}>
             <RefreshCw className={`w-3.5 h-3.5 ${triggering ? "animate-spin" : ""}`} />

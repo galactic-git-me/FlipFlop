@@ -9,7 +9,7 @@ import {
 import {
   TrendingUp, Gem, Zap, Clock, Bell, ArrowRight, RefreshCw,
   ChevronLeft, ChevronRight, Settings2, Check, SlidersHorizontal, Gavel, Activity,
-  BookOpen, Flame, Thermometer, Snowflake, Timer,
+  BookOpen, Flame, Thermometer, Snowflake, Timer, PlusCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +27,7 @@ import { ScanStatus, api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
 import CountUp from "@/components/CountUp";
+import { ManualSubmitModal } from "@/components/manual-submit-modal";
 
 // ── Column definitions ───────────────────────────────────────────────────────
 const ALL_COLS = [
@@ -66,6 +67,7 @@ export default function DashboardPage() {
   const [auctionIntel, setAuctionIntel] = useState<AuctionIntelItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
+  const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
   const [flippingId, setFlippingId] = useState<number | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -265,6 +267,11 @@ export default function DashboardPage() {
   return (
     <div className="p-6 space-y-6">
       <TraeBg />
+      <ManualSubmitModal
+        open={showManualSubmit}
+        onClose={() => setShowManualSubmit(false)}
+        onSuccess={() => { setShowManualSubmit(false); load(); }}
+      />
       {scanStatus && (scanStatus.running || (scanStatus.sites && scanStatus.sites.length > 0)) && (
         <ScanOverlay status={scanStatus} />
       )}
@@ -282,6 +289,10 @@ export default function DashboardPage() {
               <span className="text-xs font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
             </div>
           )}
+          <Button variant="secondary" size="sm" onClick={() => setShowManualSubmit(true)}>
+            <PlusCircle className="w-3.5 h-3.5" />
+            Submit Manually
+          </Button>
           <Button variant="secondary" size="sm" onClick={triggerScan} disabled={triggering}>
             <RefreshCw className={`w-3.5 h-3.5 ${triggering ? "animate-spin" : ""}`} />
             {triggering ? "Scanning…" : "Scan Now"}
