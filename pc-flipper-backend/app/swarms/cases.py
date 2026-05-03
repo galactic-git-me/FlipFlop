@@ -1,6 +1,7 @@
 """
 PC Cases Swarm — runs daily.
-Searches for sci-fi / themed PC cases (NEW only) across eBay, Amazon, Temu, AliExpress.
+Searches for PC cases (new and used) across eBay UK.
+Amazon, Temu and AliExpress block plain HTTP requests — eBay is the reliable source.
 Cases are a key part of the flip — they transform a bare PC into a themed product.
 """
 import re
@@ -40,10 +41,10 @@ CASE_THEMES = [
 ]
 
 SOURCES = [
+    # eBay is the only reliably scrapable source — Amazon/Temu/AliExpress block httpx.
+    # eBay has excellent stock of new cases from UK/HK/CN sellers at all price points.
     {"name": "eBay", "fn": "ebay"},
-    {"name": "Amazon", "fn": "amazon"},
-    {"name": "AliExpress", "fn": "aliexpress"},
-    {"name": "Temu", "fn": "temu"},
+    {"name": "eBay (Worldwide)", "fn": "ebay_worldwide"},  # international sellers, cheaper
 ]
 
 
@@ -65,15 +66,18 @@ async def run_cases_swarm() -> dict:
     async with AsyncSessionLocal() as db:
         for theme_def in CASE_THEMES:
             for source in SOURCES:
-                for term in theme_def["terms"][:1]:  # 1 term per source per theme
+                # Use up to 2 terms per source per theme for better coverage
+                for term in theme_def["terms"][:2]:
                     try:
-                        scrape_fn = globals().get(f"_scrape_{source['fn']}")
+                        fn_key = source["fn"].replace("-", "_").replace(" ", "_")
+                        scrape_fn = globals().get(f"_scrape_{fn_key}")
                         if not scrape_fn:
+                            log.warning("cases.no_scraper", source=source["name"])
                             continue
                         cases = await scrape_fn(term, theme_def["theme"])
                         stats["found"] += len(cases)
 
-                        for case in cases[:5]:  # Top 5 per search
+                        for case in cases[:8]:  # Top 8 per search (was 5)
                             await _upsert_case(db, case)
                             stats["upserted"] += 1
                     except Exception as exc:
@@ -156,6 +160,82 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
                 continue
     except Exception as exc:
         log.warning("ebay.cases.error", error=str(exc))
+    return cases
+
+
+async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
+    """
+    eBay UK with worldwide seller location — pulls in Chinese/HK sellers who list
+    new ATX cases at 40-60% of UK retail with free shipping. Excellent for finding
+    cheap themed cases to include in flips.
+    """
+    params = {
+        "_nkw": search,
+        "LH_BIN": "1",
+        "LH_ItemCondition": "1000",  # New only
+        "_sacat": "0",
+        "_sop": "15",     # Price + shipping lowest first
+        "LH_PrefLoc": "2",  # Worldwide
+        "_udhi": "200",   # Max £200 (international cases are cheaper)
+    }
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB"}
+    cases = []
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
+        if resp.status_code != 200:
+            return cases
+        soup = BeautifulSoup(resp.text, "lxml")
+
+        items = soup.select(".s-card[data-listingid]")
+        use_new = bool(items)
+        if not items:
+            items = soup.select(".s-item:not(.s-item--placeholder)")
+
+        for item in items[:10]:
+            try:
+                if use_new:
+                    title_el = (
+                        item.select_one("[class*='s-card__title']") or
+                        item.select_one(".s-item__title") or
+                        item.select_one("h3")
+                    )
+                    price_el = (
+                        item.select_one("[class*='s-card__price']") or
+                        item.select_one(".s-item__price") or
+                        item.select_one("[class*='price--']")
+                    )
+                    url_el = item.select_one("a[href*='/itm/']") or item.select_one("a[href]")
+                    img_el = item.select_one("img")
+                else:
+                    title_el = item.select_one(".s-item__title")
+                    price_el = item.select_one(".s-item__price")
+                    url_el = item.select_one("a.s-item__link")
+                    img_el = item.select_one("img.s-item__image-img")
+
+                if not all([title_el, price_el, url_el]):
+                    continue
+                title = title_el.get_text(strip=True)
+                if title.lower() in ("shop on ebay", ""):
+                    continue
+                price = _parse_price(price_el.get_text(strip=True))
+                if price <= 0 or price > 200:
+                    continue
+                url = url_el.get("href", "")
+                if not url.startswith("http"):
+                    continue
+                cases.append(RawCase(
+                    name=title[:200],
+                    price=price,
+                    source_site="eBay",
+                    source_url=url,
+                    image_url=img_el.get("src", "") if img_el else "",
+                    theme=theme,
+                ))
+            except Exception:
+                continue
+    except Exception as exc:
+        log.warning("ebay_worldwide.cases.error", error=str(exc))
     return cases
 
 

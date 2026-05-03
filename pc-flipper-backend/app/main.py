@@ -299,8 +299,8 @@ async def _seed_default_data():
 
         # ── Auction platform stubs ────────────────────────────────────────────
         _auction_sources = [
-            # IT-focused UK liquidation — no bot detection observed, high ROI for effort
-            ("Apex Auctions",          "https://www.apexauctions.co.uk",          False),
+            # IT-focused UK liquidation — no bot detection observed, scraper implemented
+            ("Apex Auctions",          "https://www.apexauctions.co.uk",          True),
             # Multi-vendor aggregator — JSON API, rate-limited
             ("BidSpotter",             "https://www.bidspotter.co.uk",            False),
             # UK's largest auctioneer — JSON API, high IT clearance volume
@@ -329,7 +329,7 @@ async def _seed_default_data():
         # Both use the Playwright scraper (headless browser with stealth mode).
         # Gumtree: no login required, Playwright bypasses the JS challenge.
         # Facebook: works without cookies (~20 items); add fb_cookies.json for full access.
-        for _src_name in ("Gumtree", "Facebook Marketplace"):
+        for _src_name in ("Gumtree", "Facebook Marketplace", "Apex Auctions"):
             await db.execute(
                 _update(DataSource)
                 .where(DataSource.name == _src_name)

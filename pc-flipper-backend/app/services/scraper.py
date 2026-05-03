@@ -1003,10 +1003,8 @@ async def fetch_listings(
         return await scrape_ebay(search_terms, min_price, max_price)
 
     if "gumtree" in name:
-        # Gumtree blocks headless browsers (Cloudflare, returns 589-byte challenge).
-        # Skip gracefully — wasting scan time otherwise.
-        print("[scraper] Gumtree is blocked by Cloudflare — skipping (requires residential proxy)")
-        return []
+        pl_results = await scrape_gumtree_playwright(_GUMTREE_FB_TERMS, min_price, max_price)
+        return [_convert(r) for r in pl_results]
 
     if "facebook" in name or "marketplace" in name:
         pl_results = await scrape_facebook_playwright(_GUMTREE_FB_TERMS, min_price, max_price)
@@ -1018,6 +1016,31 @@ async def fetch_listings(
 
     if "john pye" in name or "johnpye" in name:
         return await scrape_john_pye(min_price, max_price)
+
+    if "apex" in name:
+        from app.services.auction_scrapers import scrape_apex, AuctionLot
+
+        def _convert_apex(lot: AuctionLot) -> RawListing:
+            return RawListing(
+                external_id=lot.external_id,
+                title=lot.title,
+                price=lot.current_bid,
+                url=lot.url,
+                location=None,
+                condition="used",
+                description="",
+                image_urls=[lot.image_url] if lot.image_url else [],
+                source_name=lot.source_name,
+                listing_type="auction",
+                listing_ends_at=lot.ends_at,
+            )
+
+        apex_results = await scrape_apex(_EBAY_AUCTION_TERMS, min_price, max_price)
+        return [_convert_apex(lot) for lot in apex_results]
+
+    if any(k in name for k in ("bidspotter", "wilsons", "i-bidder", "ibidder", "merkandi")):
+        # These auction scrapers are stubs — return empty gracefully
+        return []
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")
     return []
