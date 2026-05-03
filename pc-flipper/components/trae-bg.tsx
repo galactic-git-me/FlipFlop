@@ -11,7 +11,6 @@ export function TraeBg() {
         position: "fixed",
         inset: 0,
         zIndex: -10,
-        pointerEvents: "none",
       }}
     >
       <GridDistortion

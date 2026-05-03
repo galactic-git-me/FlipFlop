@@ -153,13 +153,8 @@ const GridDistortion = ({
       Object.assign(mouseState, { x, y, prevX: x, prevY: y });
     };
 
-    const handleMouseLeave = () => {
-      dataTexture.needsUpdate = true;
-      Object.assign(mouseState, { x: 0, y: 0, prevX: 0, prevY: 0, vX: 0, vY: 0 });
-    };
-
-    container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", handleMouseLeave);
+    // Listen on window so pointer-events:none on parent doesn't block events
+    window.addEventListener("mousemove", handleMouseMove);
 
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
@@ -197,8 +192,7 @@ const GridDistortion = ({
     return () => {
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
       resizeObserverRef.current?.disconnect();
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("mousemove", handleMouseMove);
       renderer.dispose();
       renderer.forceContextLoss();
       if (container.contains(renderer.domElement)) {
