@@ -67,6 +67,7 @@ export const api = {
 
   parts: {
     list: (category?: string) => request<unknown[]>(`/parts${category ? `?category=${category}` : ""}`),
+    grouped: (category?: string) => request<unknown[]>(`/parts/grouped${category ? `?category=${category}` : ""}`),
     cases: (params?: Record<string, string>) => request<unknown[]>(`/parts/cases${qs(params)}`),
     themes: () => request<string[]>("/parts/themes"),
   },
@@ -147,6 +148,14 @@ export const api = {
     categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
     auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
     summary: () => request<import("./types").DemandSummary>("/demand/summary"),
+  },
+
+  facebook: {
+    status: () => request<{exists: boolean; valid: boolean; expired: boolean; expiry_warning: boolean; message: string; days_remaining?: number}>("/facebook/status"),
+    updateCookies: (cookies_json: string) => request<{ok: boolean; message: string}>("/facebook/cookies", {
+      method: "PUT",
+      body: JSON.stringify({ cookies_json }),
+    }),
   },
 
   playbooks: {

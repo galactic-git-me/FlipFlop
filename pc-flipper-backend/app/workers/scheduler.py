@@ -8,6 +8,7 @@ from app.config import get_settings
 from app.swarms.flip_opportunities import run_flip_opportunities_swarm
 from app.swarms.upgrade_parts import run_upgrade_parts_swarm
 from app.swarms.cases import run_cases_swarm
+from app.swarms.accessories import run_accessories_swarm
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -58,6 +59,16 @@ def start_scheduler():
         next_run_time=now,   # fire immediately on startup
     )
 
+    scheduler.add_job(
+        run_accessories_swarm,
+        trigger=IntervalTrigger(hours=24),
+        id="accessories",
+        name="Accessories Swarm",
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,   # fire immediately on startup
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -77,6 +88,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await run_upgrade_parts_swarm()
     if swarm_id == "cases":
         return await run_cases_swarm()
+    if swarm_id == "accessories":
+        return await run_accessories_swarm()
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 

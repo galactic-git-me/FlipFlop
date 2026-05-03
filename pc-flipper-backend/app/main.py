@@ -517,6 +517,10 @@ async def _seed_default_data():
                         "flip_structure": "buy_upgrade_sell",
                         "notes": "Target ML/AI hobbyists and small studios. Market is thin but margins are fat.",
                     },
+                    upsell_strategy={
+                        "accessories": ["monitor arm", "webcam 1080p"],
+                        "note": "Dev buyers want ergonomics. A monitor arm + decent webcam adds £30-40.",
+                    },
                 ),
                 Playbook(
                     name="Budget Builder (Sub-£100)",
@@ -556,9 +560,42 @@ async def _seed_default_data():
                         "flip_structure": "buy_clean_sell",
                         "notes": "Wipe, Windows reinstall, list at £70-90. Pure volume play.",
                     },
+                    upsell_strategy={
+                        "accessories": ["gaming mouse", "keyboard"],
+                        "note": "Basic peripherals make it feel like a full package. Adds £10-15.",
+                    },
                 ),
             ]
             db.add_all(_default_playbooks)
             log.info("seeded.playbooks", count=len(_default_playbooks))
+
+        # ── Migrate upsell_strategy into existing playbooks ───────────────────
+        import json as _json
+        _upsell_map = {
+            "Budget Gaming PC": {
+                "accessories": ["gaming mouse", "gaming keyboard", "gaming headset", "gaming mousepad"],
+                "note": "Bundle a basic RGB mouse+keyboard set — adds £20-30 to sale price.",
+            },
+            "Office Workstation Flip": {
+                "accessories": ["optical mouse", "keyboard", "webcam"],
+                "note": "Office buyers expect peripherals. A mouse+keyboard adds £10-15 and makes it feel complete.",
+            },
+            "AI / ML Workstation": {
+                "accessories": ["monitor arm", "webcam 1080p"],
+                "note": "Dev buyers want ergonomics. A monitor arm + decent webcam adds £30-40.",
+            },
+            "Budget Builder (Sub-£100)": {
+                "accessories": ["gaming mouse", "keyboard"],
+                "note": "Basic peripherals make it feel like a full package. Adds £10-15.",
+            },
+        }
+        for _pb_name, _upsell in _upsell_map.items():
+            existing_pb = await db.execute(
+                select(Playbook).where(Playbook.name == _pb_name)
+            )
+            _pb = existing_pb.scalar_one_or_none()
+            if _pb and not _pb.upsell_strategy:
+                _pb.upsell_strategy = _upsell
+                log.info("migrated.playbook.upsell_strategy", name=_pb_name)
 
         await db.commit()

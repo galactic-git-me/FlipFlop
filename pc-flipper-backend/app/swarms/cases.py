@@ -47,6 +47,10 @@ SOURCES = [
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser
+    {"name": "Scan",              "fn": "scan"},            # httpx
+    {"name": "Overclockers",      "fn": "overclockers"},    # httpx
+    {"name": "Box",               "fn": "box"},             # httpx
+    {"name": "Etsy",              "fn": "etsy"},            # Playwright — JS-rendered
 ]
 
 
@@ -577,6 +581,254 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
             await browser.close()
 
     log.info("temu.cases.done", search=search, found=len(cases))
+    return cases
+
+
+async def _scrape_scan(search: str, theme: str) -> list[RawCase]:
+    """Scan.co.uk — httpx + BeautifulSoup."""
+    url = f"https://www.scan.co.uk/search?q={search.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    cases = []
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return cases
+        soup = BeautifulSoup(resp.text, "lxml")
+
+        # Scan product cards
+        items = soup.select(".c-product, [class*='product-item'], li[class*='product']")
+        if not items:
+            items = soup.select("li.product, div.product")
+
+        for item in items[:8]:
+            try:
+                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
+                price_el = item.select_one(".c-product__price, [class*='price']")
+                url_el = item.select_one("a[href]")
+                img_el = item.select_one("img")
+
+                if not title_el or not price_el or not url_el:
+                    continue
+                title = title_el.get_text(strip=True)[:200]
+                if not title:
+                    continue
+                price = _parse_price(price_el.get_text(strip=True))
+                if price <= 0 or price > 350:
+                    continue
+                href = url_el.get("href", "")
+                if not href.startswith("http"):
+                    href = "https://www.scan.co.uk" + href
+                cases.append(RawCase(
+                    name=title,
+                    price=price,
+                    source_site="Scan",
+                    source_url=href,
+                    image_url=img_el.get("src", "") if img_el else "",
+                    theme=theme,
+                ))
+            except Exception:
+                continue
+    except Exception as exc:
+        log.warning("scan.cases.error", search=search, error=str(exc))
+    return cases
+
+
+async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
+    """Overclockers.co.uk — httpx + BeautifulSoup."""
+    url = f"https://www.overclockers.co.uk/search?q={search.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    cases = []
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return cases
+        soup = BeautifulSoup(resp.text, "lxml")
+
+        items = soup.select(".product-item, .product, [class*='product-card']")
+        if not items:
+            items = soup.select("li.item, div.item")
+
+        for item in items[:8]:
+            try:
+                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
+                price_el = item.select_one(".product-price, .price, [class*='price']")
+                url_el = item.select_one("a[href]")
+                img_el = item.select_one("img")
+
+                if not title_el or not price_el or not url_el:
+                    continue
+                title = title_el.get_text(strip=True)[:200]
+                if not title:
+                    continue
+                price = _parse_price(price_el.get_text(strip=True))
+                if price <= 0 or price > 350:
+                    continue
+                href = url_el.get("href", "")
+                if not href.startswith("http"):
+                    href = "https://www.overclockers.co.uk" + href
+                cases.append(RawCase(
+                    name=title,
+                    price=price,
+                    source_site="Overclockers",
+                    source_url=href,
+                    image_url=img_el.get("src", "") if img_el else "",
+                    theme=theme,
+                ))
+            except Exception:
+                continue
+    except Exception as exc:
+        log.warning("overclockers.cases.error", search=search, error=str(exc))
+    return cases
+
+
+async def _scrape_box(search: str, theme: str) -> list[RawCase]:
+    """Box.co.uk — httpx + BeautifulSoup."""
+    url = f"https://www.box.co.uk/search?search={search.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    cases = []
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return cases
+        soup = BeautifulSoup(resp.text, "lxml")
+
+        items = soup.select(".product, .product-item, [class*='product-card']")
+        if not items:
+            items = soup.select("li.item, div.product-list-item")
+
+        for item in items[:8]:
+            try:
+                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
+                price_el = item.select_one(".price, .product-price, [class*='price']")
+                url_el = item.select_one("a[href]")
+                img_el = item.select_one("img")
+
+                if not title_el or not price_el or not url_el:
+                    continue
+                title = title_el.get_text(strip=True)[:200]
+                if not title:
+                    continue
+                price = _parse_price(price_el.get_text(strip=True))
+                if price <= 0 or price > 350:
+                    continue
+                href = url_el.get("href", "")
+                if not href.startswith("http"):
+                    href = "https://www.box.co.uk" + href
+                cases.append(RawCase(
+                    name=title,
+                    price=price,
+                    source_site="Box",
+                    source_url=href,
+                    image_url=img_el.get("src", "") if img_el else "",
+                    theme=theme,
+                ))
+            except Exception:
+                continue
+    except Exception as exc:
+        log.warning("box.cases.error", search=search, error=str(exc))
+    return cases
+
+
+async def _scrape_etsy(search: str, theme: str) -> list[RawCase]:
+    """
+    Etsy UK — Playwright stealth browser (JS-rendered).
+    Etsy is a fully client-side SPA; Playwright renders the search results.
+    Price cap £200 (handmade cases tend to be pricier).
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    url = f"https://www.etsy.com/uk/search?q={search.replace(' ', '+')}&explicit=1"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("etsy.cases.browser_error", error=str(exc))
+            return []
+
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Dismiss cookie/consent dialogs
+            for selector in ["button:has-text('Accept')", "[data-gdpr-single-choice-accept]", "button:has-text('OK')"]:
+                try:
+                    await page.click(selector, timeout=2000)
+                    await asyncio.sleep(0.3)
+                except Exception:
+                    pass
+
+            # Wait for listing cards
+            try:
+                await page.wait_for_selector(
+                    "[data-search-results], .listing-link, [class*='listing'], [class*='v2-listing']",
+                    timeout=12000,
+                )
+            except Exception:
+                pass
+
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+            await page.evaluate("window.scrollBy(0, 600)")
+            await asyncio.sleep(0.8)
+
+            html = await page.content()
+            soup = BeautifulSoup(html, "lxml")
+
+            # Etsy listing cards
+            items = (
+                soup.select("[class*='listing-link']") or
+                soup.select("a[href*='/listing/']") or
+                soup.select("[class*='v2-listing-card']")
+            )
+
+            for item in items[:10]:
+                try:
+                    link_el = item if item.name == "a" else item.select_one("a[href*='/listing/']")
+                    if not link_el:
+                        continue
+                    href = link_el.get("href", "")
+                    if href.startswith("//"):
+                        href = "https:" + href
+                    if not href.startswith("http"):
+                        continue
+
+                    title_el = item.select_one("h3, [class*='title'], [class*='listing-title'], p")
+                    title = title_el.get_text(strip=True)[:200] if title_el else ""
+                    if not title or len(title) < 5:
+                        continue
+
+                    price_el = item.select_one("[class*='price'], [class*='currency-value']")
+                    price = _parse_price(price_el.get_text(strip=True) if price_el else "")
+                    if price <= 0 or price > 200:
+                        continue
+
+                    img_el = item.select_one("img")
+                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
+
+                    cases.append(RawCase(
+                        name=title,
+                        price=price,
+                        source_site="Etsy",
+                        source_url=href,
+                        image_url=img_src,
+                        theme=theme,
+                    ))
+                except Exception:
+                    continue
+        except Exception as exc:
+            log.warning("etsy.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("etsy.cases.done", search=search, found=len(cases))
     return cases
 
 

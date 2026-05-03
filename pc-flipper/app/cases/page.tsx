@@ -25,7 +25,7 @@ const THEME_ICONS: Record<string, string> = {
   "General Themed": "✨",
 };
 
-const SOURCES = ["All", "eBay", "Amazon", "AliExpress", "Temu"];
+const SOURCES = ["All", "eBay", "Amazon", "AliExpress", "Temu", "Scan", "Overclockers", "Box", "Etsy"];
 
 export default function CasesPage() {
   const [cases, setCases] = useState<Part[]>([]);
@@ -73,7 +73,7 @@ export default function CasesPage() {
             <Box className="w-5 h-5 text-purple-400" /> Cases Catalogue
           </h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Sci-fi & themed cases · new only · {cases.length} found · eBay · Amazon · AliExpress · Temu
+            Sci-fi & themed cases · new only · {cases.length} found · eBay · Amazon · AliExpress · Temu · Scan · Overclockers · Box · Etsy
           </p>
         </div>
         <Button variant="secondary" size="sm" onClick={refresh} disabled={refreshing}>
@@ -160,13 +160,58 @@ export default function CasesPage() {
           description='Click "Refresh Cases" to scan eBay, Amazon and AliExpress for sci-fi and themed PC cases (Star Trek, Star Wars, Cyberpunk, etc.).'
           action={{ label: "Scan for Cases", onClick: refresh }}
         />
-      ) : (
+      ) : activeTheme ? (
+        // Filtered by theme — flat grid
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {cases.map(c => (
             <CaseCard key={c.id} item={c} />
           ))}
         </div>
+      ) : (
+        // No theme filter — grouped by theme with section headers
+        <GroupedCasesView cases={cases} onThemeClick={setActiveTheme} />
       )}
+    </div>
+  );
+}
+
+function GroupedCasesView({ cases, onThemeClick }: { cases: Part[]; onThemeClick: (theme: string) => void }) {
+  // Group cases by theme
+  const grouped = cases.reduce<Record<string, Part[]>>((acc, c) => {
+    const theme = c.theme ?? "Other";
+    if (!acc[theme]) acc[theme] = [];
+    acc[theme].push(c);
+    return acc;
+  }, {});
+
+  const themes = Object.keys(grouped).sort();
+
+  return (
+    <div className="space-y-8">
+      {themes.map(theme => {
+        const icon = THEME_ICONS[theme] ?? "🎨";
+        const items = grouped[theme];
+        return (
+          <div key={theme}>
+            <div className="flex items-center gap-2 mb-3">
+              <button
+                onClick={() => onThemeClick(theme)}
+                className="flex items-center gap-2 text-sm font-semibold text-purple-300 hover:text-purple-200 transition-colors"
+              >
+                <span>{icon}</span>
+                <span>{theme}</span>
+              </button>
+              <span className="text-xs text-slate-600">· {items.length} item{items.length !== 1 ? "s" : ""}</span>
+              <div className="flex-1 h-px bg-[#1e2d45]" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {items.map(c => (
+                <CaseCard key={c.id} item={c} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

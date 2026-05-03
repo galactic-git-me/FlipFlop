@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Package, RefreshCw, ExternalLink, TrendingDown } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Package, RefreshCw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
-import { Part, PartCategory } from "@/lib/types";
+import { GroupedPart, PartCategory } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
@@ -17,16 +16,11 @@ const CATEGORIES: { value: PartCategory | "all"; label: string }[] = [
   { value: "ssd", label: "Storage" },
   { value: "psu", label: "PSU" },
   { value: "cpu", label: "CPU" },
+  { value: "accessory", label: "Accessories 🖱️" },
 ];
 
-const CONDITION_COLORS = {
-  new: "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/25",
-  used: "bg-yellow-400/10 text-yellow-400 border-yellow-400/25",
-  refurb: "bg-blue-400/10 text-blue-400 border-blue-400/25",
-};
-
 export default function PartsPage() {
-  const [parts, setParts] = useState<Part[]>([]);
+  const [parts, setParts] = useState<GroupedPart[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeCategory, setActiveCategory] = useState<PartCategory | "all">("all");
@@ -35,7 +29,7 @@ export default function PartsPage() {
     setLoading(true);
     try {
       const params = activeCategory !== "all" ? activeCategory : undefined;
-      const data = await api.parts.list(params) as Part[];
+      const data = await api.parts.grouped(params) as GroupedPart[];
       setParts(data);
     } catch {
       setParts([]);
@@ -48,7 +42,14 @@ export default function PartsPage() {
 
   const refresh = async () => {
     setRefreshing(true);
-    try { await api.swarms.trigger("upgrade_parts"); await load(); } catch { } finally { setRefreshing(false); }
+    try {
+      if (activeCategory === "accessory") {
+        await api.swarms.trigger("accessories");
+      } else {
+        await api.swarms.trigger("upgrade_parts");
+      }
+      await load();
+    } catch { } finally { setRefreshing(false); }
   };
 
   return (
@@ -98,8 +99,8 @@ export default function PartsPage() {
         />
       ) : (
         <div className="space-y-2">
-          {parts.map(part => (
-            <PartRow key={part.id} part={part} />
+          {parts.map((part, i) => (
+            <PartRow key={`${part.category}::${part.name}::${i}`} part={part} />
           ))}
         </div>
       )}
@@ -107,13 +108,13 @@ export default function PartsPage() {
   );
 }
 
-function PartRow({ part }: { part: Part }) {
-  const bestPrice = part.price_used ?? part.price_refurb ?? part.price_new ?? part.price ?? 0;
+function PartRow({ part }: { part: GroupedPart }) {
+  const bestPrice = part.cheapest_price ?? 0;
 
   return (
-    <div className="flex items-center gap-4 p-4 rounded-xl bg-[#0d1320] border border-[#1e2d45] hover:border-[#1e3a5a] transition-colors">
+    <div className="flex items-start gap-4 p-4 rounded-xl bg-[#0d1320] border border-[#1e2d45] hover:border-[#1e3a5a] transition-colors">
       {/* Image */}
-      <div className="w-12 h-12 rounded-lg bg-[#0a1119] border border-[#1e2d45] flex items-center justify-center flex-shrink-0 overflow-hidden">
+      <div className="w-12 h-12 rounded-lg bg-[#0a1119] border border-[#1e2d45] flex items-center justify-center flex-shrink-0 overflow-hidden mt-0.5">
         {part.image_url ? (
           <img src={part.image_url} alt="" className="w-full h-full object-cover opacity-70" />
         ) : (
@@ -121,20 +122,45 @@ function PartRow({ part }: { part: Part }) {
         )}
       </div>
 
-      {/* Name + specs */}
+      {/* Name + sources */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div className="flex items-center gap-2 mb-1">
           <span className="text-sm font-semibold text-slate-200">{part.name}</span>
-          {part.brand && <span className="text-xs text-slate-500">· {part.brand}</span>}
+          <span className="text-xs text-slate-600 capitalize">{part.category}</span>
         </div>
-        {part.specs && <p className="text-xs text-slate-500 font-mono">{part.specs}</p>}
-      </div>
 
-      {/* Condition badge */}
-      <div className="flex-shrink-0">
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border ${CONDITION_COLORS[part.condition ?? "used"]}`}>
-          {(part.condition ?? "used").toUpperCase()}
-        </span>
+        {/* All source badges */}
+        {part.all_sources.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-1">
+            <span className="text-[10px] text-slate-600 uppercase tracking-wider self-center">Sources:</span>
+            {part.all_sources.map((s, i) => (
+              s.url ? (
+                <a
+                  key={i}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0a1119] border border-[#1e2d45] hover:border-[#1e3a5a] text-[11px] text-slate-400 hover:text-slate-200 transition-colors"
+                >
+                  {s.source ?? "Unknown"}
+                  {s.price != null && (
+                    <span className="text-[#00dc82] font-semibold">{formatCurrency(s.price)}</span>
+                  )}
+                </a>
+              ) : (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0a1119] border border-[#1e2d45] text-[11px] text-slate-500"
+                >
+                  {s.source ?? "Unknown"}
+                  {s.price != null && (
+                    <span className="text-slate-400 font-semibold">{formatCurrency(s.price)}</span>
+                  )}
+                </span>
+              )
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Price breakdown */}
@@ -148,7 +174,7 @@ function PartRow({ part }: { part: Part }) {
         {part.price_used != null && (
           <div className="text-center">
             <div className="text-slate-600 uppercase tracking-wide mb-0.5">Used</div>
-            <div className="text-[#00dc82] font-bold">{formatCurrency(part.price_used)}</div>
+            <div className="text-yellow-400 font-semibold">{formatCurrency(part.price_used)}</div>
           </div>
         )}
         {part.price_refurb != null && (
@@ -157,11 +183,18 @@ function PartRow({ part }: { part: Part }) {
             <div className="text-blue-400 font-semibold">{formatCurrency(part.price_refurb)}</div>
           </div>
         )}
+        {/* Best Price — always shown */}
+        <div className="text-center">
+          <div className="text-slate-600 uppercase tracking-wide mb-0.5">Best Price</div>
+          <div className="text-[#00dc82] font-bold text-sm">{formatCurrency(bestPrice)}</div>
+        </div>
       </div>
 
-      {/* Source — prominent with link */}
+      {/* Primary source + date */}
       <div className="flex-shrink-0">
-        <SourceBadge sourceName={part.source_site ?? "Unknown"} url={part.source_url} />
+        {part.cheapest_source && (
+          <SourceBadge sourceName={part.cheapest_source} url={part.cheapest_url ?? undefined} />
+        )}
         {part.last_price_update && (
           <p className="text-[10px] text-slate-600 mt-1 text-right">
             {new Date(part.last_price_update).toLocaleDateString("en-GB")}
@@ -170,8 +203,8 @@ function PartRow({ part }: { part: Part }) {
       </div>
 
       {/* Link button */}
-      {part.source_url && (
-        <a href={part.source_url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+      {part.cheapest_url && (
+        <a href={part.cheapest_url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
           <Button variant="outline" size="sm">
             <ExternalLink className="w-3.5 h-3.5" /> View
           </Button>

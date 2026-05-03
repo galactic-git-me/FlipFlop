@@ -99,9 +99,9 @@ async def run_upgrade_parts_swarm() -> dict:
                 stats["errors"] += 1
                 log.error("part.price.error", part=part_def["name"], error=str(result))
                 continue
-            ebay_used, ebay_sold, bh_refurb = result
-            if any([ebay_used, ebay_sold, bh_refurb]):
-                await _upsert_part(db, part_def, ebay_used, ebay_sold, bh_refurb)
+            ebay_used, ebay_sold, bh_refurb, scan_new, overclockers_new, box_new = result
+            if any([ebay_used, ebay_sold, bh_refurb, scan_new, overclockers_new, box_new]):
+                await _upsert_part(db, part_def, ebay_used, ebay_sold, bh_refurb, scan_new, overclockers_new, box_new)
                 stats["updated"] += 1
         await db.commit()
 
@@ -111,10 +111,16 @@ async def run_upgrade_parts_swarm() -> dict:
 
 async def _process_part(part_def: dict) -> tuple:
     """Fetch prices from all sources concurrently."""
-    ebay_used_task = _fetch_ebay_buy_price(part_def["ebay_search"], condition="used")
-    ebay_sold_task = _fetch_ebay_sold_median(part_def["ebay_search"])
-    bh_task = _fetch_bargainhardware(part_def["bh_search"])
-    return await asyncio.gather(ebay_used_task, ebay_sold_task, bh_task, return_exceptions=False)
+    results = await asyncio.gather(
+        _fetch_ebay_buy_price(part_def["ebay_search"], condition="used"),
+        _fetch_ebay_sold_median(part_def["ebay_search"]),
+        _fetch_bargainhardware(part_def["bh_search"]),
+        _fetch_scan(part_def["ebay_search"]),
+        _fetch_overclockers(part_def["ebay_search"]),
+        _fetch_box(part_def["ebay_search"]),
+        return_exceptions=False,
+    )
+    return results  # (ebay_used, ebay_sold, bh_refurb, scan_new, overclockers_new, box_new)
 
 
 async def _fetch_ebay_buy_price(search: str, condition: str = "used") -> float | None:
@@ -195,6 +201,69 @@ async def _fetch_bargainhardware(search_term: str) -> float | None:
         return None
 
 
+async def _fetch_scan(search_term: str) -> float | None:
+    """Lowest price from scan.co.uk."""
+    url = f"https://www.scan.co.uk/search?q={search_term.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return None
+        soup = BeautifulSoup(resp.text, "lxml")
+        prices = []
+        for el in soup.select(".c-product__price, [class*='price']"):
+            text = el.get_text(strip=True)
+            p = _parse_price(text)
+            if 1 < p < 2000:
+                prices.append(p)
+        return round(sorted(prices)[0], 2) if prices else None
+    except Exception:
+        return None
+
+
+async def _fetch_overclockers(search_term: str) -> float | None:
+    """Lowest price from overclockers.co.uk."""
+    url = f"https://www.overclockers.co.uk/search?q={search_term.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return None
+        soup = BeautifulSoup(resp.text, "lxml")
+        prices = []
+        for el in soup.select(".product-price, .price, [class*='price']"):
+            text = el.get_text(strip=True)
+            p = _parse_price(text)
+            if 1 < p < 2000:
+                prices.append(p)
+        return round(sorted(prices)[0], 2) if prices else None
+    except Exception:
+        return None
+
+
+async def _fetch_box(search_term: str) -> float | None:
+    """Lowest price from box.co.uk."""
+    url = f"https://www.box.co.uk/search?search={search_term.replace(' ', '+')}"
+    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code != 200 or len(resp.text) < 500:
+            return None
+        soup = BeautifulSoup(resp.text, "lxml")
+        prices = []
+        for el in soup.select(".price, .product-price, [class*='price']"):
+            text = el.get_text(strip=True)
+            p = _parse_price(text)
+            if 1 < p < 2000:
+                prices.append(p)
+        return round(sorted(prices)[0], 2) if prices else None
+    except Exception:
+        return None
+
+
 def _extract_prices_from_soup(soup: BeautifulSoup) -> list[float]:
     """Try multiple eBay price selectors (handles layout changes)."""
     prices = []
@@ -220,37 +289,64 @@ async def _upsert_part(
     ebay_used: float | None,
     ebay_sold: float | None,
     bh_refurb: float | None,
+    scan_new: float | None = None,
+    overclockers_new: float | None = None,
+    box_new: float | None = None,
 ):
     result = await db.execute(select(Part).where(Part.name == part_def["name"]))
     part = result.scalar_one_or_none()
     now = datetime.utcnow()
 
-    # Best "buy" price: cheapest of ebay_used buy-it-now or BargainHardware
-    candidates = [p for p in [ebay_used, bh_refurb] if p]
+    # Find cheapest new price and its source
+    new_prices = {
+        "Scan": scan_new,
+        "Overclockers": overclockers_new,
+        "Box": box_new,
+    }
+    valid_new = {k: v for k, v in new_prices.items() if v}
+    cheapest_new_source = min(valid_new, key=lambda k: valid_new[k]) if valid_new else None
+    cheapest_new = valid_new[cheapest_new_source] if cheapest_new_source else None
+
+    # Best "buy" price: cheapest of ebay_used, BargainHardware refurb, or cheapest new
+    candidates = [p for p in [ebay_used, bh_refurb, cheapest_new] if p]
     best_buy = min(candidates) if candidates else None
+
+    # Determine primary source_site label
+    source_parts = []
+    if ebay_used:
+        source_parts.append("eBay UK")
+    if bh_refurb:
+        source_parts.append("BargainHardware")
+    if cheapest_new_source:
+        source_parts.append(cheapest_new_source)
+    source_label = " / ".join(source_parts) if source_parts else "eBay UK / BargainHardware"
 
     if part:
         if best_buy:
             part.price = best_buy
             part.price_used = ebay_used or part.price_used
             part.price_refurb = bh_refurb or part.price_refurb
+            part.price_new = cheapest_new or part.price_new
+        if source_parts:
+            part.source_site = source_label
         part.last_price_update = now
     else:
         part = Part(
             name=part_def["name"],
             category=part_def["category"],
             condition=PartCondition.used,
-            source_site="eBay UK / BargainHardware",
+            source_site=source_label,
             price=best_buy,
             price_used=ebay_used,
             price_refurb=bh_refurb,
+            price_new=cheapest_new,
             resale_value_add=0.0,
             last_price_update=now,
         )
         db.add(part)
         await db.flush()
 
-    # Price history entry
+    # Price history entries
     if ebay_sold:
         db.add(PriceHistory(
             entity_type=PriceHistoryType.part,
@@ -266,6 +362,14 @@ async def _upsert_part(
             price=bh_refurb,
             condition="refurb",
             source="bargainhardware",
+        ))
+    if cheapest_new and cheapest_new_source:
+        db.add(PriceHistory(
+            entity_type=PriceHistoryType.part,
+            entity_id=part.id,
+            price=cheapest_new,
+            condition="new",
+            source=cheapest_new_source.lower(),
         ))
 
 

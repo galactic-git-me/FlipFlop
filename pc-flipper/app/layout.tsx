@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { BackendStatus } from "@/components/backend-status";
 import { TraeBg } from "@/components/trae-bg";
+import { FacebookCookieBanner } from "@/components/facebook-cookie-banner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <TraeBg />
         <Sidebar />
         <main className="flex-1 overflow-y-auto relative">
+          <FacebookCookieBanner />
           {children}
         </main>
         <BackendStatus />

@@ -8,7 +8,7 @@ export type Classification =
 
 export type ListingStatus = "active" | "missing" | "removed" | "sold";
 export type FlipStage = "selected" | "building" | "ready_for_sale" | "sold";
-export type PartCategory = "ram" | "gpu" | "ssd" | "psu" | "case" | "cpu" | "motherboard";
+export type PartCategory = "ram" | "gpu" | "ssd" | "psu" | "case" | "cpu" | "motherboard" | "accessory";
 export type PartCondition = "new" | "used" | "refurb";
 
 export interface Listing {
@@ -73,6 +73,25 @@ export interface Part {
   is_active: boolean;
   last_price_update: string | null;
   created_at: string;
+}
+
+export interface GroupedPart {
+  name: string;
+  category: PartCategory;
+  image_url: string | null;
+  cheapest_price: number | null;
+  cheapest_source: string | null;
+  cheapest_url: string | null;
+  price_used: number | null;
+  price_refurb: number | null;
+  price_new: number | null;
+  last_price_update: string | null;
+  all_sources: {
+    source: string | null;
+    price: number | null;
+    url: string | null;
+    condition: string | null;
+  }[];
 }
 
 export interface Flip {
