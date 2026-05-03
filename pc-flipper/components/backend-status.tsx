@@ -10,7 +10,10 @@ export function BackendStatus() {
 
   const check = async () => {
     setChecking(true);
-    const url = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8088/api").replace(/\/api$/, "");
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL ??
+      `http://${window.location.hostname}:8088/api`;
+    const url = apiUrl.replace(/\/api$/, "");
     try {
       const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(3000) });
       setOffline(!res.ok);
