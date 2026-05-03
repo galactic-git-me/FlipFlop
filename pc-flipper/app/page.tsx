@@ -22,7 +22,7 @@ import { ScanOverlay } from "@/components/scan-overlay";
 import { TraeBg } from "@/components/trae-bg";
 import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
-import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem } from "@/lib/types";
+import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem, TrendDir, DemandStrength } from "@/lib/types";
 import { ScanStatus, api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
@@ -1921,6 +1921,242 @@ function PlaybookActivityCard({
               <span className="text-[10px] text-slate-600">+{(config.gem_keywords?.length ?? 0) - 5} more</span>
             )}
           </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+// ── Current Strategy card ─────────────────────────────────────────────────────
+// Shows active playbooks + top-line demand health from the real API.
+function CurrentStrategyCard({
+  playbooks,
+  demandSummary,
+}: {
+  playbooks: Playbook[];
+  demandSummary: DemandSummary | null;
+}) {
+  const health = demandSummary?.market_health ?? "warm";
+
+  const healthConfig = {
+    hot:  { label: "Hot Market",  color: "text-red-400",     bg: "bg-red-400/10 border-red-400/30",     Icon: Flame      },
+    warm: { label: "Warm Market", color: "text-amber-400",   bg: "bg-amber-400/10 border-amber-400/30", Icon: Thermometer },
+    cold: { label: "Cold Market", color: "text-blue-400",    bg: "bg-blue-400/10 border-blue-400/30",   Icon: Snowflake   },
+  } as const;
+
+  const hc = healthConfig[health];
+
+  const flipStructureLabel: Record<string, string> = {
+    buy_upgrade_sell: "Buy → Upgrade → Sell",
+    buy_clean_sell:   "Buy → Clean → Sell",
+    bulk_lot:         "Bulk Lot",
+  };
+
+  return (
+    <Card className="flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BookOpen className="w-3.5 h-3.5 text-violet-400" />
+          Current Strategy
+          <Link href="/playbooks" className="ml-auto text-[10px] text-slate-500 hover:text-[#00dc82] transition-colors flex items-center gap-1">
+            Manage <ArrowRight className="w-3 h-3" />
+          </Link>
+        </CardTitle>
+        {/* Market health pill */}
+        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-semibold w-fit mt-1 ${hc.bg} ${hc.color}`}>
+          <hc.Icon className="w-3.5 h-3.5" />
+          {hc.label}
+          {demandSummary && (
+            <span className="font-normal text-slate-400 ml-1">
+              · {demandSummary.gem_rate_pct}% gem rate · {demandSummary.total_listings} listings
+            </span>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        {playbooks.length === 0 ? (
+          <div className="text-center py-8 text-slate-600 text-sm">
+            <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
+            <p>No active playbooks</p>
+            <Link href="/playbooks" className="text-xs text-[#00dc82]/70 hover:text-[#00dc82] mt-1 inline-block">
+              Create your first playbook →
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {playbooks.slice(0, 4).map(pb => {
+              const ss = pb.search_strategy || {};
+              const ps = pb.profit_strategy || {};
+              const kwCount = (ss.keywords || []).length;
+              const structure = flipStructureLabel[ps.flip_structure || ""] || ps.flip_structure || "—";
+              const matchedCat = demandSummary?.categories.find(
+                c => c.use_case === pb.target_use_case
+              );
+              return (
+                <div key={pb.id} className="flex items-start gap-3 p-2.5 rounded-xl bg-[#111c2e] border border-[#1e2d45] hover:border-[#2a3d5c] transition-colors">
+                  <span className="text-xl flex-shrink-0 mt-0.5">{pb.emoji || "🖥️"}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-semibold text-slate-100 truncate">{pb.name}</span>
+                      {matchedCat && (
+                        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
+                          matchedCat.strength === "High"   ? "bg-[#00dc82]/10 border-[#00dc82]/30 text-[#00dc82]" :
+                          matchedCat.strength === "Medium" ? "bg-amber-400/10 border-amber-400/30 text-amber-400" :
+                                                             "bg-slate-400/10 border-slate-400/30 text-slate-400"
+                        }`}>
+                          {matchedCat.trend === "rising" ? "↑" : matchedCat.trend === "falling" ? "↓" : "→"} {matchedCat.strength}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-3 mt-1 flex-wrap">
+                      {ss.price_min != null && ss.price_max != null && (
+                        <span className="text-[10px] text-slate-500">£{ss.price_min}–£{ss.price_max}</span>
+                      )}
+                      {kwCount > 0 && (
+                        <span className="text-[10px] text-slate-500">{kwCount} keywords</span>
+                      )}
+                      {ps.target_profit_gbp != null && (
+                        <span className="text-[10px] text-[#00dc82]/70">£{ps.target_profit_gbp} target</span>
+                      )}
+                      <span className="text-[10px] text-slate-600">{structure}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            {playbooks.length > 4 && (
+              <Link href="/playbooks" className="block text-center text-xs text-slate-500 hover:text-[#00dc82] transition-colors py-1">
+                +{playbooks.length - 4} more active playbooks
+              </Link>
+            )}
+          </div>
+        )}
+      </CardContent>
+
+      {demandSummary && (
+        <div className="px-4 py-2.5 border-t border-white/[0.06] flex items-center gap-3 text-xs text-slate-500">
+          {demandSummary.rising_count > 0 && (
+            <span className="text-[#00dc82]">↑ {demandSummary.rising_count} rising</span>
+          )}
+          {demandSummary.falling_count > 0 && (
+            <span className="text-red-400">↓ {demandSummary.falling_count} falling</span>
+          )}
+          {demandSummary.hottest_category && (
+            <span className="ml-auto text-slate-600">🔥 {demandSummary.hottest_category.name}</span>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+// ── Auction Intelligence card ──────────────────────────────────────────────────
+function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
+  function fmtTime(secs: number | null): string {
+    if (secs == null) return "—";
+    if (secs < 60) return `${secs}s`;
+    if (secs < 3600) return `${Math.floor(secs / 60)}m`;
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    return `${h}h ${m}m`;
+  }
+
+  const endingSoon = auctions.filter(a => a.urgency === "ending_soon");
+  const today      = auctions.filter(a => a.urgency === "today");
+  const upcoming   = auctions.filter(a => a.urgency === "upcoming");
+  const ordered    = [...endingSoon, ...today, ...upcoming].slice(0, 8);
+
+  const classColor: Record<string, string> = {
+    amazing_gem: "text-cyan-400",
+    gem:         "text-[#00dc82]",
+    no_profit:   "text-red-400",
+    overpriced:  "text-orange-400",
+    unclassified:"text-slate-500",
+  };
+
+  return (
+    <Card className="flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Gavel className="w-3.5 h-3.5 text-amber-400" />
+          Auction Intelligence
+          {endingSoon.length > 0 && (
+            <span className="ml-1 text-xs font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-2 py-0.5 rounded-full animate-pulse">
+              {endingSoon.length} ending soon
+            </span>
+          )}
+        </CardTitle>
+        {auctions.length > 0 && (
+          <div className="flex gap-3 text-xs text-slate-500 mt-1">
+            {endingSoon.length > 0 && <span className="text-amber-400">🔴 {endingSoon.length} &lt;1h</span>}
+            {today.length > 0      && <span className="text-yellow-400">🟡 {today.length} today</span>}
+            {upcoming.length > 0   && <span className="text-slate-400">⚪ {upcoming.length} upcoming</span>}
+          </div>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        {ordered.length === 0 ? (
+          <div className="text-center py-8 text-slate-600 text-sm">
+            <Gavel className="w-8 h-8 mx-auto mb-2 opacity-30" />
+            <p>No live auctions tracked</p>
+            <p className="text-xs mt-1 text-slate-700">Auctions appear here when scraped from eBay</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {ordered.map(a => {
+              const isGem = a.classification === "gem" || a.classification === "amazing_gem";
+              const urgColor =
+                a.urgency === "ending_soon" ? "border-amber-400/40 bg-amber-400/5" :
+                a.urgency === "today"        ? "border-yellow-400/20 bg-transparent" :
+                                               "border-[#1e2d45] bg-transparent";
+              return (
+                <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer"
+                  className={`flex items-center gap-2.5 p-2.5 rounded-xl border hover:border-[#2a3d5c] transition-colors ${urgColor}`}>
+                  <div className="w-10 h-10 flex-shrink-0 rounded-lg overflow-hidden bg-[#0d1726]">
+                    {a.image_url
+                      ? <img src={a.image_url} alt="" className="w-full h-full object-cover" />
+                      : <div className="w-full h-full flex items-center justify-center"><Gavel className="w-4 h-4 text-slate-600" /></div>
+                    }
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-slate-200 truncate">{a.title}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {a.cpu && <span className="text-[10px] text-slate-500 truncate max-w-[90px]">{a.cpu}</span>}
+                      {a.gpu && <span className="text-[10px] text-slate-500 truncate max-w-[70px]">{a.gpu}</span>}
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 text-right">
+                    <div className={`flex items-center gap-1 justify-end text-[10px] font-bold ${
+                      a.urgency === "ending_soon" ? "text-amber-400" :
+                      a.urgency === "today"        ? "text-yellow-400" : "text-slate-500"
+                    }`}>
+                      <Clock className="w-2.5 h-2.5" />
+                      {fmtTime(a.time_left_secs)}
+                    </div>
+                    <div className="text-xs font-semibold text-slate-300">
+                      £{(a.expected_buy_price ?? a.price).toFixed(0)}
+                    </div>
+                    {a.estimated_profit != null && (
+                      <div className={`text-[10px] font-bold ${a.estimated_profit > 0 ? (classColor[a.classification] || "text-[#00dc82]") : "text-red-400"}`}>
+                        {a.estimated_profit > 0 ? "+" : ""}£{a.estimated_profit.toFixed(0)}
+                      </div>
+                    )}
+                    {isGem && <div className="text-[9px] text-[#00dc82]">💎</div>}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+
+      {auctions.length > 8 && (
+        <div className="px-4 py-2.5 border-t border-white/[0.06]">
+          <Link href="/opportunities" className="text-xs text-slate-500 hover:text-[#00dc82] transition-colors">
+            View all {auctions.length} auctions →
+          </Link>
         </div>
       )}
     </Card>
