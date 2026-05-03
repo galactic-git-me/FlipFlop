@@ -1,0 +1,70 @@
+"""
+Demand analysis API.
+
+GET /demand/categories   — category-level demand signals derived from listings
+GET /demand/auction-intel — live auction listings sorted by time-to-end
+GET /demand/summary      — top-line demand summary for the dashboard
+"""
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
+from app.services.demand_service import compute_demand, compute_auction_intel
+
+router = APIRouter(prefix="/demand", tags=["demand"])
+
+
+@router.get("/categories")
+async def get_demand_categories(db: AsyncSession = Depends(get_db)):
+    """
+    Returns all build categories with demand signals:
+    count, gem_count, sparkline (7 days), trend direction, strength, insight.
+    Sorted High → Medium → Low demand.
+    """
+    return await compute_demand(db)
+
+
+@router.get("/auction-intel")
+async def get_auction_intel(
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Active auction listings sorted by time-to-end (soonest first).
+    Includes urgency classification: ending_soon / today / upcoming.
+    """
+    return await compute_auction_intel(db, limit=limit)
+
+
+@router.get("/summary")
+async def get_demand_summary(db: AsyncSession = Depends(get_db)):
+    """
+    Compact top-line summary for the dashboard Current Strategy card.
+    Returns the hottest category + overall market health signal.
+    """
+    categories = await compute_demand(db)
+    auctions = await compute_auction_intel(db, limit=5)
+
+    total_listings = sum(c["count"] for c in categories)
+    total_gems = sum(c["gem_count"] for c in categories)
+    gem_rate = round(total_gems / total_listings * 100, 1) if total_listings else 0.0
+
+    hottest = next((c for c in categories if c["strength"] == "High"), None)
+    rising = [c for c in categories if c["trend"] == "rising"]
+    falling = [c for c in categories if c["trend"] == "falling"]
+
+    # Market health: proportion of High-demand categories
+    high_count = sum(1 for c in categories if c["strength"] == "High")
+    health = "hot" if high_count >= 3 else "warm" if high_count >= 1 else "cold"
+
+    return {
+        "total_listings": total_listings,
+        "total_gems": total_gems,
+        "gem_rate_pct": gem_rate,
+        "market_health": health,   # hot | warm | cold
+        "hottest_category": hottest,
+        "rising_count": len(rising),
+        "falling_count": len(falling),
+        "categories": categories,
+        "ending_soon_auctions": len([a for a in auctions if a["urgency"] == "ending_soon"]),
+    }

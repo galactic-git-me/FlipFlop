@@ -8,7 +8,7 @@ from app.config import get_settings
 from app.database import engine, Base
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand
 from app.api.logs import install_log_capture
 
 log = structlog.get_logger(__name__)
@@ -57,6 +57,7 @@ app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+app.include_router(demand.router, prefix="/api")
 
 
 @app.get("/health")

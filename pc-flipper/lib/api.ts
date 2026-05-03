@@ -125,6 +125,12 @@ export const api = {
     scanStatus: () => request<ScanStatus>("/swarms/scan/status"),
   },
 
+  demand: {
+    categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
+    auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
+    summary: () => request<import("./types").DemandSummary>("/demand/summary"),
+  },
+
   playbooks: {
     list: (status?: string) => request<import("./types").Playbook[]>(`/playbooks${status ? `?status=${status}` : ""}`),
     get: (id: number) => request<import("./types").Playbook>(`/playbooks/${id}`),

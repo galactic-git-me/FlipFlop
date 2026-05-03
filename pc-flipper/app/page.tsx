@@ -9,6 +9,7 @@ import {
 import {
   TrendingUp, Gem, Zap, Clock, Bell, ArrowRight, RefreshCw,
   ChevronLeft, ChevronRight, Settings2, Check, SlidersHorizontal, Gavel, Activity,
+  BookOpen, Flame, Thermometer, Snowflake, Timer,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +22,7 @@ import { ScanOverlay } from "@/components/scan-overlay";
 import { TraeBg } from "@/components/trae-bg";
 import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
-import { Listing, Flip, SearchConfig, DataSource } from "@/lib/types";
+import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem } from "@/lib/types";
 import { ScanStatus, api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
@@ -60,6 +61,9 @@ export default function DashboardPage() {
   const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
   const [searchConfig, setSearchConfig] = useState<SearchConfig | null>(null);
   const [sources, setSources] = useState<DataSource[]>([]);
+  const [activePlaybooks, setActivePlaybooks] = useState<Playbook[]>([]);
+  const [demandSummary, setDemandSummary] = useState<DemandSummary | null>(null);
+  const [auctionIntel, setAuctionIntel] = useState<AuctionIntelItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
@@ -91,7 +95,7 @@ export default function DashboardPage() {
       const todayISO  = todayMidnight.toISOString();
       const weekISO   = weekAgoMidnight.toISOString();
 
-      const [l, s, sw, fl, godResults, gowResults, cfg, srcs] = await Promise.all([
+      const [l, s, sw, fl, godResults, gowResults, cfg, srcs, pbs, demand, auctions] = await Promise.all([
         api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>,
         api.listings.stats(),
         api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>,
@@ -108,6 +112,9 @@ export default function DashboardPage() {
         }) as Promise<Listing[]>,
         api.config.get() as Promise<SearchConfig>,
         api.sources.list() as Promise<DataSource[]>,
+        api.playbooks.list("active").catch(() => [] as Playbook[]),
+        api.demand.summary().catch(() => null),
+        api.demand.auctionIntel(15).catch(() => [] as AuctionIntelItem[]),
       ]);
       setListings(l);
       setStats(s);
@@ -115,6 +122,9 @@ export default function DashboardPage() {
       setFlips(fl);
       setSearchConfig(cfg);
       setSources(srcs);
+      setActivePlaybooks(pbs as Playbook[]);
+      setDemandSummary(demand as DemandSummary | null);
+      setAuctionIntel(auctions as AuctionIntelItem[]);
       setGemOfDay(godResults[0] ?? null);
       // Only show week gem if it differs from day gem
       const gowListing = gowResults[0] ?? null;
@@ -302,6 +312,12 @@ export default function DashboardPage() {
               <TrendingCategoriesCard listings={listings} />
             </div>
             <PlaybookActivityCard config={searchConfig} sources={sources} listings={listings} />
+          </div>
+
+          {/* ── Current Strategy + Auction Intelligence ────────────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <CurrentStrategyCard playbooks={activePlaybooks} demandSummary={demandSummary} />
+            <AuctionIntelCard auctions={auctionIntel} />
           </div>
 
           {/* ── Gem of the Day / Gem of the Week ──────────────────────────────── */}
@@ -1508,8 +1524,7 @@ function NextScanCard({ swarm, intervalMinutes }: {
 }
 
 // ── Build category types and helpers ─────────────────────────────────────────
-type TrendDir = "rising" | "stable" | "falling";
-type DemandStrength = "High" | "Medium" | "Low";
+// TrendDir and DemandStrength are imported from @/lib/types
 
 interface BuildCategory {
   name: string;

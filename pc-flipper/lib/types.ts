@@ -213,6 +213,56 @@ export interface PlaybookProposal {
   resolved_by: string | null;
 }
 
+// ── Demand types ──────────────────────────────────────────────────────────────
+
+export type DemandStrength = "High" | "Medium" | "Low";
+export type TrendDir = "rising" | "stable" | "falling";
+export type MarketHealth = "hot" | "warm" | "cold";
+
+export interface DemandCategory {
+  name: string;
+  emoji: string;
+  use_case: string;
+  count: number;
+  gem_count: number;
+  sparkline: number[];   // 7-day counts, oldest → newest
+  trend: TrendDir;
+  strength: DemandStrength;
+  avg_profit: number | null;
+  avg_price: number | null;
+  insight: string;
+}
+
+export interface AuctionIntelItem {
+  id: number;
+  title: string;
+  url: string;
+  price: number;
+  expected_buy_price: number | null;
+  estimated_profit: number | null;
+  gem_score: number;
+  classification: string;
+  source_name: string;
+  listing_ends_at: string | null;
+  time_left_secs: number | null;
+  urgency: "ending_soon" | "today" | "upcoming";
+  image_url: string | null;
+  cpu: string | null;
+  gpu: string | null;
+}
+
+export interface DemandSummary {
+  total_listings: number;
+  total_gems: number;
+  gem_rate_pct: number;
+  market_health: MarketHealth;
+  hottest_category: DemandCategory | null;
+  rising_count: number;
+  falling_count: number;
+  categories: DemandCategory[];
+  ending_soon_auctions: number;
+}
+
 export const PLAYBOOK_STATUS_CONFIG: Record<PlaybookStatus, { label: string; color: string; bg: string; dot: string }> = {
   active:     { label: "Active",     color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/30", dot: "bg-emerald-400" },
   candidate:  { label: "Candidate",  color: "text-yellow-400",  bg: "bg-yellow-400/10 border-yellow-400/30",   dot: "bg-yellow-400"  },
