@@ -25,6 +25,7 @@ import { Listing, Flip } from "@/lib/types";
 import { ScanStatus, api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
+import CountUp from "@/components/CountUp";
 
 // ── Column definitions ───────────────────────────────────────────────────────
 const ALL_COLS = [
@@ -274,10 +275,10 @@ export default function DashboardPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Listings Tracked" value={stats.total_listings.toString()} sub="in database" icon={<Gem className="w-4 h-4" />} color="text-slate-400" />
-        <StatCard label="Gems Found" value={stats.gems_count.toString()} sub="buy signals" icon={<Gem className="w-4 h-4" />} color="text-[#00dc82]" accent />
-        <StatCard label="Avg Profit" value={formatCurrency(stats.avg_profit)} sub="per gem" icon={<TrendingUp className="w-4 h-4" />} color="text-[#00dc82]" accent />
-        <StatCard label="Next Scan" value={swarms[0]?.next_run ? new Date(swarms[0].next_run).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : "—"} sub="flip swarm" icon={<Zap className="w-4 h-4" />} color="text-yellow-400" />
+        <ListingsTrackedCard total={stats.total_listings} listings={listings} />
+        <GemsFoundCard total={stats.gems_count} listings={listings} />
+        <AvgProfitCard avg={stats.avg_profit} listings={listings} />
+        <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} />
       </div>
 
       {listings.length === 0 ? (
@@ -1319,18 +1320,174 @@ function RecentCard({ listing: l }: { listing: Listing }) {
   );
 }
 
-function StatCard({ label, value, sub, icon, color, accent }: {
-  label: string; value: string; sub: string; icon: React.ReactNode; color: string; accent?: boolean;
-}) {
+// ── Source logo helper ────────────────────────────────────────────────────────
+const SOURCE_DOMAIN: Record<string, string> = {
+  "eBay UK": "ebay.co.uk",
+  "eBay UK Auctions": "ebay.co.uk",
+  "Gumtree": "gumtree.com",
+  "Facebook Marketplace": "facebook.com",
+  "Amazon": "amazon.co.uk",
+};
+
+function SourceLogo({ source }: { source: string }) {
+  const domain = SOURCE_DOMAIN[source] ?? source.toLowerCase().replace(/\s+/g, "") + ".com";
   return (
-    <Card className={accent ? "border-[#00dc82]/20 shadow-[0_0_24px_rgba(0,220,130,0.06)]" : ""}>
+    <img
+      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=16`}
+      alt={source}
+      title={source}
+      className="w-4 h-4 rounded-sm"
+    />
+  );
+}
+
+// ── Listings Tracked ──────────────────────────────────────────────────────────
+function ListingsTrackedCard({ total, listings }: { total: number; listings: Listing[] }) {
+  const bySource = listings.reduce<Record<string, number>>((acc, l) => {
+    acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return (
+    <Card>
       <CardContent className="pt-5">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">{label}</span>
-          <div className={`${color} opacity-60`}>{icon}</div>
+          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Listings Tracked</span>
+          <Gem className="w-4 h-4 text-slate-400 opacity-60" />
         </div>
-        <div className={`text-2xl font-bold ${color}`}>{value}</div>
-        <div className="text-xs text-slate-600 mt-1">{sub}</div>
+        <div className="text-2xl font-bold text-slate-300">
+          <CountUp to={total} duration={1.5} separator="," />
+        </div>
+        <div className="mt-2 flex flex-col gap-1">
+          {Object.entries(bySource).map(([src, count]) => (
+            <div key={src} className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center gap-1.5">
+                <SourceLogo source={src} />
+                <span className="truncate max-w-[100px]">{src}</span>
+              </div>
+              <CountUp to={count} duration={1.2} className="text-slate-400 font-medium" />
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ── Gems Found ────────────────────────────────────────────────────────────────
+function GemsFoundCard({ total, listings }: { total: number; listings: Listing[] }) {
+  const gems = listings.filter((l) => l.classification === "gem");
+  const bySource = gems.reduce<Record<string, number>>((acc, l) => {
+    acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return (
+    <Card className="border-[#00dc82]/20 shadow-[0_0_24px_rgba(0,220,130,0.06)]">
+      <CardContent className="pt-5">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Gems Found</span>
+          <Gem className="w-4 h-4 text-[#00dc82] opacity-60" />
+        </div>
+        <div className="text-2xl font-bold text-[#00dc82]">
+          <CountUp to={total} duration={1.5} separator="," />
+        </div>
+        <div className="mt-2 flex flex-col gap-1">
+          {Object.entries(bySource).map(([src, count]) => (
+            <div key={src} className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center gap-1.5">
+                <SourceLogo source={src} />
+                <span className="truncate max-w-[100px]">{src}</span>
+              </div>
+              <CountUp to={count} duration={1.2} className="text-[#00dc82]/70 font-medium" />
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ── Avg Profit ────────────────────────────────────────────────────────────────
+function AvgProfitCard({ avg, listings }: { avg: number; listings: Listing[] }) {
+  const profits = listings.map((l) => l.estimated_profit ?? 0).filter((p) => p !== 0);
+  const minProfit = profits.length ? Math.min(...profits) : 0;
+  const maxProfit = profits.length ? Math.max(...profits) : 0;
+
+  return (
+    <Card className="border-[#00dc82]/20 shadow-[0_0_24px_rgba(0,220,130,0.06)]">
+      <CardContent className="pt-5">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Avg Profit</span>
+          <TrendingUp className="w-4 h-4 text-[#00dc82] opacity-60" />
+        </div>
+        <div className="text-2xl font-bold text-[#00dc82]">
+          £<CountUp to={avg} from={0} duration={1.5} />
+        </div>
+        {profits.length > 0 && (
+          <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
+            <span className="text-red-400/70">£<CountUp to={minProfit} duration={1.2} /></span>
+            <span className="text-slate-600">→</span>
+            <span className="text-[#00dc82]/70">£<CountUp to={maxProfit} duration={1.2} /></span>
+            <span className="text-slate-600 ml-0.5">range</span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ── Next Scan countdown ───────────────────────────────────────────────────────
+function NextScanCard({ swarm, intervalMinutes }: {
+  swarm: { id: string; name: string; next_run: string | null } | null;
+  intervalMinutes: number;
+}) {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (!swarm?.next_run) {
+    return (
+      <Card>
+        <CardContent className="pt-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
+            <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
+          </div>
+          <div className="text-2xl font-bold text-yellow-400">—</div>
+          <div className="text-xs text-slate-600 mt-1">flip swarm</div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const nextMs = new Date(swarm.next_run).getTime();
+  const nowMs = Date.now();
+  const remainMs = Math.max(0, nextMs - nowMs);
+  const intervalMs = intervalMinutes * 60 * 1000;
+  const progress = Math.min(1, Math.max(0, 1 - remainMs / intervalMs));
+
+  const mins = Math.floor(remainMs / 60000);
+  const secs = Math.floor((remainMs % 60000) / 1000);
+  const label = remainMs === 0 ? "Running…" : `${mins}m ${String(secs).padStart(2, "0")}s`;
+
+  return (
+    <Card>
+      <CardContent className="pt-5">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
+          <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
+        </div>
+        <div className="text-2xl font-bold text-yellow-400 tabular-nums">{label}</div>
+        <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-yellow-400/70 transition-all duration-1000"
+            style={{ width: `${progress * 100}%` }}
+          />
+        </div>
+        <div className="text-xs text-slate-600 mt-1.5">flip swarm · every {intervalMinutes}m</div>
       </CardContent>
     </Card>
   );
