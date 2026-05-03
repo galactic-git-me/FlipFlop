@@ -8,7 +8,7 @@ import {
 } from "recharts";
 import {
   TrendingUp, Gem, Zap, Clock, Bell, ArrowRight, RefreshCw,
-  ChevronLeft, ChevronRight, Settings2, Check, SlidersHorizontal, Gavel,
+  ChevronLeft, ChevronRight, Settings2, Check, SlidersHorizontal, Gavel, Activity,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +21,7 @@ import { ScanOverlay } from "@/components/scan-overlay";
 import { TraeBg } from "@/components/trae-bg";
 import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
-import { Listing, Flip } from "@/lib/types";
+import { Listing, Flip, SearchConfig, DataSource } from "@/lib/types";
 import { ScanStatus, api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
@@ -58,6 +58,8 @@ export default function DashboardPage() {
   const [swarms, setSwarms] = useState<{ id: string; name: string; next_run: string | null }[]>([]);
   const [gemOfDay, setGemOfDay] = useState<Listing | null>(null);
   const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
+  const [searchConfig, setSearchConfig] = useState<SearchConfig | null>(null);
+  const [sources, setSources] = useState<DataSource[]>([]);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
@@ -89,7 +91,7 @@ export default function DashboardPage() {
       const todayISO  = todayMidnight.toISOString();
       const weekISO   = weekAgoMidnight.toISOString();
 
-      const [l, s, sw, fl, godResults, gowResults] = await Promise.all([
+      const [l, s, sw, fl, godResults, gowResults, cfg, srcs] = await Promise.all([
         api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>,
         api.listings.stats(),
         api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>,
@@ -104,11 +106,15 @@ export default function DashboardPage() {
           sort_by: "estimated_profit", sort_desc: "true",
           limit: "1", min_profit: "0", first_seen_after: weekISO,
         }) as Promise<Listing[]>,
+        api.config.get() as Promise<SearchConfig>,
+        api.sources.list() as Promise<DataSource[]>,
       ]);
       setListings(l);
       setStats(s);
       setSwarms(sw);
       setFlips(fl);
+      setSearchConfig(cfg);
+      setSources(srcs);
       setGemOfDay(godResults[0] ?? null);
       // Only show week gem if it differs from day gem
       const gowListing = gowResults[0] ?? null;
@@ -290,6 +296,14 @@ export default function DashboardPage() {
         />
       ) : (
         <>
+          {/* ── Trending Categories + Playbook ────────────────────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+              <TrendingCategoriesCard listings={listings} />
+            </div>
+            <PlaybookActivityCard config={searchConfig} sources={sources} listings={listings} />
+          </div>
+
           {/* ── Gem of the Day / Gem of the Week ──────────────────────────────── */}
           {(gemOfDay || gemOfWeek) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
