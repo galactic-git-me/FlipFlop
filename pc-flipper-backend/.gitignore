@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Database
+*.db
+*.sqlite3
+
+# Secrets & session files
+fb_cookies.json
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

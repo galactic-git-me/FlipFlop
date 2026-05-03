@@ -1,0 +1,221 @@
+"""
+Classification Engine — scores listings and assigns gem classification.
+Uses rule-based heuristics. No ML needed at this stage.
+"""
+import re
+from dataclasses import dataclass, field
+from app.models.listing import Classification
+
+
+GEM_SIGNALS = {
+    # Title signals (high value)
+    "no hdd": 25,
+    "no hard drive": 25,
+    "no storage": 20,
+    "no gpu": 20,
+    "no graphics": 15,
+    "untested": 20,
+    "collection only": 15,
+    "for parts": 20,
+    "spares or repair": 20,
+    "poor condition": 10,
+    "no psu": 15,
+    "no power supply": 15,
+    "faulty": 10,
+    "as is": 10,
+    "no os": 5,
+    "no ram": 15,
+
+    # ── Brand workstations (office clearance gold) ────────────────────────────
+    # These are quality platforms that IT departments dump cheaply.
+    # Typically Xeon/i7/i9 + no GPU = easy profitable upgrade.
+    "elitedesk": 15,
+    "optiplex": 15,
+    "thinkcentre": 15,
+    "thinkstation": 20,
+    "hp workstation": 20,
+    "dell workstation": 20,
+    "hp z240": 20,
+    "hp z440": 25,
+    "hp z640": 25,
+    "hp z420": 20,
+    "hp z620": 25,
+    "dell precision": 20,
+    "prodesk": 12,
+    "esprimo": 12,
+    "veriton": 10,
+
+    # ── Clearance / distress source signals ──────────────────────────────────
+    "ex office": 15,
+    "office clearance": 20,
+    "it clearance": 20,
+    "job lot": 15,
+    "quick sale": 10,
+    "need gone": 15,
+    "clearing out": 10,
+    "no longer needed": 10,
+    "collect today": 15,
+}
+
+NEGATIVE_SIGNALS = {
+    "monitor included": -5,
+    "keyboard and mouse": -5,
+    "gaming setup": -10,
+    "high end": -15,
+    "mint condition": -5,
+    "boxed": -5,
+}
+
+POOR_TITLE_PATTERNS = [
+    r"^pc$",
+    r"^old pc$",
+    r"^computer$",
+    r"^desktop$",
+    r"^tower$",
+    r"^pc tower$",
+    r"selling pc",
+    r"unwanted pc",
+]
+
+
+@dataclass
+class ScoringResult:
+    score: float = 0.0
+    signals: list[str] = field(default_factory=list)
+    classification: Classification = Classification.unclassified
+
+
+def score_listing(
+    title: str,
+    price: float,
+    estimated_profit: float | None,
+    cpu: str | None,
+    ram_gb: int | None,
+    ram_type: str | None,
+    storage_gb: int | None,
+    gpu: str | None,
+    has_psu: bool,
+    location: str | None,
+    profit_low: float | None = None,   # conservative (25th-pct resale) profit
+    profit_high: float | None = None,  # optimistic  (75th-pct resale) profit
+) -> ScoringResult:
+    result = ScoringResult()
+    title_lower = title.lower()
+
+    # Gem signals from title
+    for signal, pts in GEM_SIGNALS.items():
+        if signal in title_lower:
+            result.score += pts
+            result.signals.append(signal)
+
+    # Negative signals
+    for signal, pts in NEGATIVE_SIGNALS.items():
+        if signal in title_lower:
+            result.score += pts
+
+    # Poor title bonus
+    for pattern in POOR_TITLE_PATTERNS:
+        if re.search(pattern, title_lower):
+            result.score += 15
+            result.signals.append("poor title")
+            break
+
+    # No storage present
+    if storage_gb is None or storage_gb == 0:
+        result.score += 20
+        result.signals.append("no storage")
+
+    # No GPU
+    if not gpu:
+        result.score += 10
+        result.signals.append("no gpu")
+
+    # No PSU
+    if not has_psu:
+        result.score += 10
+        result.signals.append("no psu")
+
+    # DDR4 bonus (better upgrade candidate)
+    if ram_type and "ddr4" in ram_type.lower():
+        result.score += 10
+
+    # Price band
+    if price <= 50:
+        result.score += 20
+    elif price <= 100:
+        result.score += 10
+    elif price <= 150:
+        result.score += 5
+    else:
+        result.score -= 10
+
+    # Collection-only location hints
+    if location and any(x in location.lower() for x in ["only", "local"]):
+        result.score += 5
+        result.signals.append("collection only")
+
+    # ── Estimated profit — dominant component ─────────────────────────────────
+    # Weighted at 1.5× so a £200 flip outscores any title-signal noise.
+    # Negative profit contributes nothing (clamped at 0).
+    if estimated_profit is not None and estimated_profit > 0:
+        profit_pts = estimated_profit * 1.5
+        result.score += profit_pts
+        result.signals.append(f"£{estimated_profit:.0f} profit")
+
+    # Profit consistency bonus: tight spread = reliable estimate
+    if (
+        profit_low is not None
+        and profit_high is not None
+        and profit_low > 0
+        and profit_high > 0
+    ):
+        spread_pct = (profit_high - profit_low) / max(profit_high, 1)
+        if spread_pct < 0.20:
+            result.score += 20
+            result.signals.append("tight profit spread")
+        elif spread_pct < 0.35:
+            result.score += 10
+
+    # Classify from profit estimate (median) + conservative low for safety gate
+    result.classification = _classify(result.score, estimated_profit, profit_low, price)
+    return result
+
+
+def _classify(
+    score: float,
+    estimated_profit: float | None,
+    profit_low: float | None,
+    price: float,
+) -> Classification:
+    # No estimate yet — fall back to signal score only
+    if estimated_profit is None:
+        if score >= 60:
+            return Classification.amazing_gem
+        if score >= 40:
+            return Classification.gem
+        return Classification.unclassified
+
+    profit = estimated_profit
+
+    # ── Safety gate (CRITICAL) ────────────────────────────────────────────────
+    # If the CONSERVATIVE (low / 25th-pct) resale scenario produces a loss,
+    # this deal must be rejected regardless of the median profit.
+    # A flip that relies on optimistic pricing to be profitable is not a flip —
+    # it is a gamble.
+    if profit_low is not None and profit_low < 0:
+        # Median is still positive → borderline / risky
+        if profit >= 0:
+            return Classification.no_profit
+        # Both low and median are losses
+        return Classification.overpriced
+
+    # ── Normal profit-based classification ───────────────────────────────────
+    if profit >= 200:
+        return Classification.amazing_gem
+    if profit >= 100:
+        return Classification.gem
+    if profit >= 0:
+        return Classification.already_flipped   # seller has priced it in
+    if profit >= -30:
+        return Classification.no_profit
+    return Classification.overpriced

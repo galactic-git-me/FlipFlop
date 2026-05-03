@@ -1,0 +1,31 @@
+# Dev requirements — no strict pins, resolves cleanly
+fastapi
+uvicorn[standard]
+python-dotenv
+
+# Database — SQLite for local dev, PostgreSQL for prod
+sqlalchemy
+aiosqlite
+asyncpg
+psycopg2-binary
+
+# HTTP / Scraping
+httpx
+beautifulsoup4
+fake-useragent
+lxml
+
+# AI
+anthropic
+openai
+
+# Scheduling
+apscheduler
+
+# Utils
+pydantic
+pydantic-settings
+python-multipart
+aiofiles
+tenacity
+structlog

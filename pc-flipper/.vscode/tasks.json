@@ -1,0 +1,16 @@
+﻿{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Update Timestamp",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "(Get-Item '`${file}').LastWriteTime = Get-Date"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}
