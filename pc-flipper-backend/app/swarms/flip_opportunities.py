@@ -4,9 +4,9 @@ Searches ALL enabled sources simultaneously (async parallel), classifies, scores
 """
 import asyncio
 import structlog
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 
 from app.database import AsyncSessionLocal
 from app.models.listing import Listing, ListingStatus, Classification
