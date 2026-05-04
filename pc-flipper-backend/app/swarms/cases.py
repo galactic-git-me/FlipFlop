@@ -1,7 +1,7 @@
 """
 PC Cases Swarm — runs daily.
-Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, and AliExpress.
-eBay uses plain httpx. Amazon, Temu, AliExpress use a shared Playwright browser context
+Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, AliExpress, and Etsy.
+eBay uses plain httpx. Amazon, Temu, AliExpress, and Etsy use a shared Playwright browser context
 with stealth mode to bypass bot detection — same approach as the Gumtree/Facebook scrapers.
 Cases are a key part of the flip — they transform a bare PC into a themed product.
 """
