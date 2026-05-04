@@ -731,43 +731,67 @@ async def scrape_apex_playwright(
             except Exception:
                 pass
 
-            # Find UK auction items in the rendered DOM
-            auction_els = await page.query_selector_all(".upcoming-auctions-item")
-            log.info("apex.playwright.auction_items", count=len(auction_els))
+            # Filter to UK auctions using the country dropdown
+            try:
+                await page.select_option("#countryFilter", "United Kingdom")
+                await asyncio.sleep(2)
+            except Exception:
+                pass
 
-            uk_auction_uuids: list[str] = []
-            for el in auction_els:
-                text = await el.inner_text()
-                loc_lower = text.lower()
-                if "united kingdom" in loc_lower or "england" in loc_lower or "scotland" in loc_lower or "wales" in loc_lower:
-                    link = await el.query_selector("a[href*='auction']")
-                    if link:
-                        href = await link.get_attribute("href") or ""
-                        # Extract UUID from hash href like #!/auctions/{uuid}
-                        import re as _re
-                        m = _re.search(r"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})", href)
-                        if m:
-                            uk_auction_uuids.append(m.group(1))
+            # Collect UK auction links (click-based navigation works; hash eval causes SPA errors)
+            auction_items = await page.query_selector_all(".upcoming-auctions-item")
+            log.info("apex.playwright.auction_items", count=len(auction_items))
 
-            log.info("apex.playwright.uk_auctions", count=len(uk_auction_uuids))
+            # Gather all auction links first, then navigate one by one
+            auction_links: list[str] = []
+            for el in auction_items:
+                link = await el.query_selector("a[href*='auction']")
+                if link:
+                    href = await link.get_attribute("href") or ""
+                    if href and href not in auction_links:
+                        auction_links.append(href)
 
-            # Navigate into each UK auction to load its lots
-            for auction_uuid in uk_auction_uuids[:6]:
+            log.info("apex.playwright.uk_auctions", count=len(auction_links))
+
+            # Navigate into each auction via click to let the SPA route properly
+            for auction_href in auction_links[:6]:
                 try:
-                    await page.evaluate(f"window.location.hash = '#!/auctions/{auction_uuid}'")
-                    await asyncio.sleep(4)
-
-                    # Scrape rendered lot cards
-                    lot_els = await page.query_selector_all(
-                        ".bidjs-lot, .lot-item, [class*='lot-item'], li.lot, "
-                        ".listing-item, [class*='listing-item']"
+                    # Go back to list and re-click to avoid SPA routing errors
+                    await page.goto(
+                        "https://www.apexauctions.co.uk/auction/",
+                        wait_until="domcontentloaded",
+                        timeout=20000,
                     )
-                    log.info("apex.playwright.lots", auction=auction_uuid, count=len(lot_els))
+                    await asyncio.sleep(2)
+                    await page.select_option("#countryFilter", "United Kingdom")
+                    await asyncio.sleep(1)
+
+                    link_el = await page.query_selector(f"a[href='{auction_href}']")
+                    if not link_el:
+                        continue
+                    await link_el.click()
+                    await asyncio.sleep(5)
+
+                    # BidJS renders lots as <li> elements inside the auction section
+                    lot_els = await page.query_selector_all(
+                        "section[aria-label='Auction Listings'] li, "
+                        "ul.timed-auction__lots li, "
+                        "#lot-list li, "
+                        ".bidjs-lot, [class*='timed-lot']"
+                    )
+                    log.info("apex.playwright.lots", href=auction_href, count=len(lot_els))
 
                     for lot_el in lot_els:
                         try:
-                            title_el = await lot_el.query_selector("h3, h2, .lot-title, .title, [class*='title']")
-                            title = (await title_el.inner_text()).strip() if title_el else ""
+                            title_el = await lot_el.query_selector("h3, h2, h4, .lot-title, .title, a[title]")
+                            title = ""
+                            if title_el:
+                                title = (await title_el.inner_text()).strip()
+                            if not title:
+                                # Fall back to link text
+                                a_el = await lot_el.query_selector("a[href]")
+                                if a_el:
+                                    title = (await a_el.inner_text()).strip()
                             if not title or len(title) < 5:
                                 continue
                             t = title.lower()
@@ -777,12 +801,13 @@ async def scrape_apex_playwright(
                                 continue
 
                             link_el = await lot_el.query_selector("a[href]")
-                            href = await link_el.get_attribute("href") if link_el else ""
-                            if href and not href.startswith("http"):
-                                href = "https://www.apexauctions.co.uk" + href
+                            href_val = await link_el.get_attribute("href") if link_el else ""
+                            if href_val and not href_val.startswith("http"):
+                                href_val = "https://www.apexauctions.co.uk/auction/" + href_val.lstrip("/")
 
                             price_el = await lot_el.query_selector(
-                                "[class*='price'], [class*='bid'], [class*='estimate'], [class*='amount']"
+                                "[class*='price'], [class*='bid'], [class*='estimate'], [class*='amount'], "
+                                ".timed-lot__bid, .current-bid, .lot-price"
                             )
                             price_text = (await price_el.inner_text()).strip() if price_el else ""
                             price = _parse_price(price_text)
@@ -794,7 +819,9 @@ async def scrape_apex_playwright(
                             if img_el:
                                 img_url = await img_el.get_attribute("src") or await img_el.get_attribute("data-src") or ""
 
-                            lot_id = href.rstrip("/").split("/")[-1].split("?")[0] if href else title[:20]
+                            import re as _re
+                            m = _re.search(r"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})", href_val)
+                            lot_id = m.group(1) if m else (href_val.rstrip("/").split("/")[-1] if href_val else title[:20])
                             external_id = f"apex_{lot_id}"
                             if external_id in seen:
                                 continue
@@ -804,7 +831,7 @@ async def scrape_apex_playwright(
                                 external_id=external_id,
                                 title=title,
                                 price=price,
-                                url=href or f"https://www.apexauctions.co.uk/auction/#!/auctions/{auction_uuid}",
+                                url=href_val or f"https://www.apexauctions.co.uk/auction/{auction_href}",
                                 location="UK",
                                 condition="used",
                                 description="",
@@ -816,7 +843,7 @@ async def scrape_apex_playwright(
                             continue
 
                 except Exception as exc:
-                    log.warning("apex.playwright.auction_error", auction=auction_uuid, error=str(exc))
+                    log.warning("apex.playwright.auction_error", href=auction_href, error=str(exc))
                     continue
 
         except Exception as exc:
