@@ -703,178 +703,132 @@ export default function DashboardPage() {
               {colPickerOpen && (
                 <div className="fixed inset-0 z-40" onClick={() => setColPickerOpen(false)} />
               )}
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-white/[0.06]">
-                      {visibleCols.has("score")    && <Th>Score</Th>}
-                      {visibleCols.has("listing")  && <Th>Listing</Th>}
-                      {visibleCols.has("source")   && <Th>Source</Th>}
-                      {visibleCols.has("cpu")      && <Th>CPU</Th>}
-                      {visibleCols.has("ram")      && <Th>RAM</Th>}
-                      {visibleCols.has("storage")  && <Th>Storage</Th>}
-                      {visibleCols.has("gpu")      && <Th>GPU</Th>}
-                      {visibleCols.has("buy")      && <Th>Buy</Th>}
-                      {visibleCols.has("upgrade")  && <Th>Upgrade</Th>}
-                      {visibleCols.has("resale")   && <Th>Resale</Th>}
-                      {visibleCols.has("profit")   && <Th>Profit</Th>}
-                      {visibleCols.has("roi")      && <Th>ROI%</Th>}
-                      {visibleCols.has("class")    && <Th>Class.</Th>}
-                      {visibleCols.has("location") && <Th>Location</Th>}
-                      {visibleCols.has("seen")     && <Th>Seen</Th>}
-                      {visibleCols.has("seller")   && <Th>Seller</Th>}
-                      <Th>Action</Th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
-                    {pagedListings.map(l => {
-                      const roi = (l.price + (l.estimated_upgrade_cost ?? 0)) > 0
-                        ? ((l.estimated_profit ?? 0) / (l.price + (l.estimated_upgrade_cost ?? 0))) * 100
-                        : 0;
-                      return (
-                        <tr key={l.id} className="hover:bg-white/[0.02] transition-colors group">
-                          {visibleCols.has("score") && (
-                            <td className="px-4 py-3 pl-5">
-                              <FlippabilityScore score={l.gem_score} size="sm" />
-                            </td>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
+                {pagedListings.map(l => {
+                  const roi = (l.price + (l.estimated_upgrade_cost ?? 0)) > 0
+                    ? ((l.estimated_profit ?? 0) / (l.price + (l.estimated_upgrade_cost ?? 0))) * 100
+                    : 0;
+                  const profitPositive = (l.estimated_profit ?? 0) > 0;
+                  return (
+                    <div key={l.id} className="bg-[#0a1628] border border-white/[0.06] rounded-xl overflow-hidden flex flex-col hover:border-white/[0.12] transition-colors">
+                      {/* Thumbnail + score overlay */}
+                      <div className="relative w-full h-36 bg-[#060e1c] flex-shrink-0">
+                        {l.image_urls[0] ? (
+                          <img src={l.image_urls[0]} alt="" className="w-full h-full object-contain" loading="lazy" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center opacity-10">
+                            <Gem className="w-8 h-8 text-slate-400" />
+                          </div>
+                        )}
+                        {/* Score badge top-left */}
+                        <div className="absolute top-2 left-2">
+                          <FlippabilityScore score={l.gem_score} size="sm" />
+                        </div>
+                        {/* ROI badge top-right */}
+                        <div className={`absolute top-2 right-2 text-[10px] font-bold px-1.5 py-0.5 rounded-md ${roi >= 30 ? "bg-[#00dc82]/20 text-[#00dc82]" : roi >= 0 ? "bg-yellow-400/20 text-yellow-400" : "bg-red-400/20 text-red-400"}`}>
+                          {roi >= 0 ? "+" : ""}{roi.toFixed(0)}% ROI
+                        </div>
+                      </div>
+
+                      {/* Body */}
+                      <div className="flex flex-col gap-2 p-3 flex-1">
+                        {/* Title + badges */}
+                        <div>
+                          <a href={l.url} target="_blank" rel="noopener noreferrer"
+                            className="text-xs font-semibold text-slate-200 line-clamp-2 hover:text-[#00dc82] transition-colors leading-snug">
+                            {l.title}
+                          </a>
+                          <div className="flex flex-wrap items-center gap-1 mt-1.5">
+                            <SourceBadge sourceName={l.source_name} url={l.url} />
+                            <ClassificationBadge classification={l.classification} />
+                            <AuctionBadge listing={l} />
+                          </div>
+                        </div>
+
+                        {/* Specs */}
+                        <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px]">
+                          {l.cpu && (
+                            <div className="col-span-2 flex items-center gap-1 text-slate-400 min-w-0">
+                              <span className="text-slate-600 flex-shrink-0">CPU</span>
+                              <span className="font-mono truncate">{l.cpu}</span>
+                            </div>
                           )}
-                          {visibleCols.has("listing") && (
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-[#080f1a]">
-                                  {l.image_urls[0] ? (
-                                    <img src={l.image_urls[0]} alt="" className="w-full h-full object-contain" loading="lazy" />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center opacity-20">
-                                      <Gem className="w-4 h-4 text-slate-400" />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="min-w-0">
-                                  <a href={l.url} target="_blank" rel="noopener noreferrer"
-                                    className="text-xs text-slate-200 font-medium line-clamp-1 max-w-44 hover:text-[#00dc82] transition-colors">
-                                    {l.title}
-                                  </a>
-                                  <p className="text-[10px] text-slate-500 mt-0.5">
-                                    {l.listed_at
-                                      ? <>Listed {formatRelativeTime(new Date(l.listed_at))}</>
-                                      : <>Seen {formatRelativeTime(new Date(l.first_seen_at))}</>
-                                    }
-                                  </p>
-                                  <div className="flex flex-wrap items-center gap-1 mt-0.5">
-                                    <AuctionBadge listing={l} />
-                                    <SellerBadge listing={l} />
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
+                          {l.gpu && (
+                            <div className="col-span-2 flex items-center gap-1 text-slate-400 min-w-0">
+                              <span className="text-slate-600 flex-shrink-0">GPU</span>
+                              <span className="truncate">{l.gpu}</span>
+                            </div>
                           )}
-                          {visibleCols.has("source") && (
-                            <td className="px-4 py-3">
-                              <SourceBadge sourceName={l.source_name} url={l.url} />
-                            </td>
+                          {l.ram_gb && (
+                            <div className="flex items-center gap-1 text-slate-400">
+                              <span className="text-slate-600">RAM</span>
+                              <span>{l.ram_gb}GB {l.ram_type ?? ""}</span>
+                            </div>
                           )}
-                          {visibleCols.has("cpu") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-400 font-mono">{l.cpu ?? <span className="text-slate-700">—</span>}</span>
-                            </td>
+                          {l.storage_gb && (
+                            <div className="flex items-center gap-1 text-slate-400">
+                              <span className="text-slate-600">SSD</span>
+                              <span>{l.storage_gb}GB {l.storage_type?.toUpperCase() ?? ""}</span>
+                            </div>
                           )}
-                          {visibleCols.has("ram") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-400">{l.ram_gb ? `${l.ram_gb}GB ${l.ram_type ?? ""}` : <span className="text-slate-700">—</span>}</span>
-                            </td>
-                          )}
-                          {visibleCols.has("storage") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-400">{l.storage_gb ? `${l.storage_gb}GB ${l.storage_type?.toUpperCase() ?? ""}` : <span className="text-slate-700">—</span>}</span>
-                            </td>
-                          )}
-                          {visibleCols.has("gpu") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-400">{l.gpu ?? <span className="text-slate-700 italic text-[10px]">No GPU</span>}</span>
-                            </td>
-                          )}
-                          {visibleCols.has("buy") && (
-                            <td className="px-4 py-3">
-                              <AuctionPriceDisplay listing={l} />
-                            </td>
-                          )}
-                          {visibleCols.has("upgrade") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-400">{l.estimated_upgrade_cost != null ? formatCurrency(l.estimated_upgrade_cost) : <span className="text-slate-700">—</span>}</span>
-                            </td>
-                          )}
-                          {visibleCols.has("resale") && (
-                            <td className="px-4 py-3">
-                              <span className="text-sm text-slate-300">{formatCurrency(l.estimated_resale ?? 0)}</span>
-                              {l.resale_low != null && l.resale_high != null && l.resale_low !== l.resale_high && (
-                                <div className="text-[10px] text-slate-600 mt-0.5">{formatCurrency(l.resale_low)}–{formatCurrency(l.resale_high)}</div>
-                              )}
-                              {(l.resale_comp_count ?? 0) > 0
-                                ? <div className="text-[9px] text-[#00dc82]/60 mt-0.5">{l.resale_comp_count} comps</div>
-                                : <div className="text-[9px] text-slate-700 mt-0.5">est.</div>
+                        </div>
+
+                        {/* Financials */}
+                        <div className="grid grid-cols-4 gap-1 mt-auto pt-2 border-t border-white/[0.05]">
+                          <div className="flex flex-col items-center">
+                            <span className="text-[9px] text-slate-600 uppercase tracking-wide">Buy</span>
+                            <AuctionPriceDisplay listing={l} />
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <span className="text-[9px] text-slate-600 uppercase tracking-wide">Upgrade</span>
+                            <span className="text-[10px] text-slate-400">{l.estimated_upgrade_cost != null ? formatCurrency(l.estimated_upgrade_cost) : "—"}</span>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <span className="text-[9px] text-slate-600 uppercase tracking-wide">Resale</span>
+                            <span className="text-[10px] text-slate-300">{formatCurrency(l.estimated_resale ?? 0)}</span>
+                            {(l.resale_comp_count ?? 0) > 0
+                              ? <span className="text-[8px] text-[#00dc82]/50">{l.resale_comp_count} comps</span>
+                              : <span className="text-[8px] text-slate-700">est.</span>
+                            }
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <span className="text-[9px] text-slate-600 uppercase tracking-wide">Profit</span>
+                            <span className={`text-[11px] font-bold ${profitPositive ? "text-[#00dc82]" : "text-red-400"}`}>
+                              {profitPositive ? "+" : ""}{formatCurrency(l.estimated_profit ?? 0)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Footer: seller + location + flip */}
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex flex-col gap-0.5 min-w-0">
+                            <SellerBadge listing={l} />
+                            {l.location && (
+                              <span className="text-[9px] text-slate-600 truncate">{l.location}</span>
+                            )}
+                            <span className="text-[9px] text-slate-700">
+                              {l.listed_at
+                                ? formatRelativeTime(new Date(l.listed_at))
+                                : formatRelativeTime(new Date(l.first_seen_at))
                               }
-                            </td>
-                          )}
-                          {visibleCols.has("profit") && (
-                            <td className="px-4 py-3">
-                              <span className={`text-sm font-bold ${(l.estimated_profit ?? 0) > 0 ? "text-[#00dc82]" : "text-red-400"}`}>
-                                {(l.estimated_profit ?? 0) > 0 ? "+" : ""}{formatCurrency(l.estimated_profit ?? 0)}
-                              </span>
-                            </td>
-                          )}
-                          {visibleCols.has("roi") && (
-                            <td className="px-4 py-3">
-                              <span className={`text-xs font-semibold ${roi >= 30 ? "text-[#00dc82]" : roi >= 0 ? "text-yellow-400" : "text-red-400"}`}>
-                                {roi >= 0 ? "+" : ""}{roi.toFixed(1)}%
-                              </span>
-                            </td>
-                          )}
-                          {visibleCols.has("class") && (
-                            <td className="px-4 py-3"><ClassificationBadge classification={l.classification} /></td>
-                          )}
-                          {visibleCols.has("location") && (
-                            <td className="px-4 py-3">
-                              <span className="text-xs text-slate-500">{l.location ?? <span className="text-slate-700">—</span>}</span>
-                            </td>
-                          )}
-                          {visibleCols.has("seen") && (
-                            <td className="px-4 py-3">
-                              <div className="text-[10px] text-slate-500">
-                                {l.listed_at
-                                  ? <><span className="text-slate-600">Listed</span><br />{formatRelativeTime(new Date(l.listed_at))}</>
-                                  : <><span className="text-slate-600">Seen</span><br />{formatRelativeTime(new Date(l.first_seen_at))}</>
-                                }
-                              </div>
-                            </td>
-                          )}
-                          {visibleCols.has("seller") && (
-                            <td className="px-4 py-3">
-                              {l.seller_name && (
-                                <div className="text-[10px] text-slate-400 font-medium truncate max-w-24" title={l.seller_name}>
-                                  {l.seller_name}
-                                </div>
-                              )}
-                              <SellerBadge listing={l} />
-                            </td>
-                          )}
-                          <td className="px-4 py-3 pr-5">
-                            <Button
-                              variant="primary" size="sm"
-                              disabled={flippingId === l.id}
-                              onClick={() => handleFlip(l)}
-                            >
-                              {flippingId === l.id
-                                ? <RefreshCw className="w-3 h-3 animate-spin" />
-                                : <Zap className="w-3 h-3" />}
-                              Flip
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                            </span>
+                          </div>
+                          <Button
+                            variant="primary" size="sm"
+                            disabled={flippingId === l.id}
+                            onClick={() => handleFlip(l)}
+                            className="flex-shrink-0"
+                          >
+                            {flippingId === l.id
+                              ? <RefreshCw className="w-3 h-3 animate-spin" />
+                              : <Zap className="w-3 h-3" />}
+                            Flip
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Pagination bar */}
