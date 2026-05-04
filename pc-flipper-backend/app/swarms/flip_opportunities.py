@@ -76,9 +76,9 @@ async def run_flip_opportunities_swarm() -> dict:
             delete(Listing).where(
                 Listing.status == ListingStatus.active,
                 Listing.last_seen_at < cutoff,
-            ).returning(Listing.id)
+            )
         )
-        purged = len(result.fetchall())
+        purged = result.rowcount
         await db.commit()
     if purged:
         log.info("ghost_cleanup.purged", count=purged, cutoff_days=3)
