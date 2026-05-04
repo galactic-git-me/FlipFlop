@@ -26,7 +26,7 @@ export function FlippabilityScore({ score, size = "md", showLabel = true }: Prop
         {tier.label}
       </div>
       {showLabel && (
-        <div className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider">{score.toFixed(0)}</div>
+        <div className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider">{score.toFixed(0)}<span className="opacity-50">/100</span></div>
       )}
     </div>
   );

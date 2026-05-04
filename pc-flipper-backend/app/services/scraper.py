@@ -927,6 +927,22 @@ _PRELOVED_TERMS = [
 
 # Auction-focused terms — sorted by most likely to yield cheap deals.
 # Results sort ending-soonest so this list turns over every few hours naturally.
+# Terms for auction platforms (Wilsons, i-bidder, BidSpotter, Apex)
+_AUCTION_TERMS = [
+    "desktop pc",
+    "gaming pc",
+    "computer tower",
+    "HP EliteDesk",
+    "Dell OptiPlex",
+    "workstation",
+    "Lenovo ThinkCentre",
+    "gaming computer",
+    "i7 desktop",
+    "i5 desktop",
+    "office pc",
+    "refurbished pc",
+]
+
 _EBAY_AUCTION_TERMS = [
     # ── Job lots & clearance (best value — sellers pricing per-unit to move volume)
     "pc job lot",
@@ -973,9 +989,11 @@ async def fetch_listings(
     max_price: float,
 ) -> list[RawListing]:
     from app.services.playwright_scraper import (
-        scrape_gumtree_playwright,
         scrape_facebook_playwright,
         scrape_preloved_playwright,
+        scrape_wilsons_playwright,
+        scrape_ibidder_playwright,
+        scrape_bidspotter_playwright,
         RawListing as PlRawListing,
     )
 
@@ -990,21 +1008,20 @@ async def fetch_listings(
             description=pl.description,
             image_urls=pl.image_urls,
             source_name=pl.source_name,
+            listing_type=getattr(pl, "listing_type", "classified"),
         )
 
     name = source_name.lower()
 
     if "ebay" in name and "auction" in name:
-        # eBay auctions — ending soonest, liquidation/clearance focus
         return await scrape_ebay(_EBAY_AUCTION_TERMS, min_price, max_price, auction_mode=True)
 
     if "ebay" in name:
-        # eBay BIN — full 80+ term list, newest listed
         return await scrape_ebay(search_terms, min_price, max_price)
 
     if "gumtree" in name:
-        pl_results = await scrape_gumtree_playwright(_GUMTREE_FB_TERMS, min_price, max_price)
-        return [_convert(r) for r in pl_results]
+        # Gumtree is blocked by Reblaze WAF — disabled
+        return []
 
     if "facebook" in name or "marketplace" in name:
         pl_results = await scrape_facebook_playwright(_GUMTREE_FB_TERMS, min_price, max_price)
@@ -1018,12 +1035,23 @@ async def fetch_listings(
         return await scrape_john_pye(min_price, max_price)
 
     if "apex" in name:
-        from app.services.playwright_scraper import scrape_apex_playwright, RawListing as PlRawListing
+        from app.services.playwright_scraper import scrape_apex_playwright
         pl_results = await scrape_apex_playwright(_EBAY_AUCTION_TERMS, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
-    if any(k in name for k in ("bidspotter", "wilsons", "i-bidder", "ibidder", "merkandi")):
-        # These auction scrapers are stubs — return empty gracefully
+    if "wilsons" in name:
+        pl_results = await scrape_wilsons_playwright(_AUCTION_TERMS, min_price, max_price)
+        return [_convert(r) for r in pl_results]
+
+    if "i-bidder" in name or "ibidder" in name:
+        pl_results = await scrape_ibidder_playwright(_AUCTION_TERMS, min_price, max_price)
+        return [_convert(r) for r in pl_results]
+
+    if "bidspotter" in name:
+        pl_results = await scrape_bidspotter_playwright(_AUCTION_TERMS, min_price, max_price)
+        return [_convert(r) for r in pl_results]
+
+    if any(k in name for k in ("merkandi", "wholesale clearance")):
         return []
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")

@@ -344,7 +344,7 @@ async def scrape_facebook_playwright(
 
         page = await context.new_page()
 
-        for term in search_terms[:3]:
+        for term in search_terms[:8]:
             try:
                 url = (
                     "https://www.facebook.com/marketplace/search"
@@ -352,7 +352,6 @@ async def scrape_facebook_playwright(
                     f"&minPrice={int(min_price)}"
                     f"&maxPrice={int(max_price)}"
                     "&exact=false"
-                    "&deliveryMethod=local_pick_up"
                 )
                 log.info("facebook.playwright.fetch", url=url)
                 await page.goto(url, wait_until="domcontentloaded", timeout=25000)
@@ -897,17 +896,371 @@ async def scrape_apex_playwright(
     return results
 
 
+# ── Shared auction-search Playwright helper ───────────────────────────────────
+
+_AUCTION_PC_KW = {
+    "pc", "computer", "desktop", "tower", "workstation", "server",
+    "i3", "i5", "i7", "i9", "ryzen", "xeon",
+    "optiplex", "elitedesk", "thinkcentre", "prodesk", "thinkstation",
+    "nvidia", "radeon", "rtx", "gtx", "gpu", "graphics",
+    "z240", "z440", "z640",
+}
+
+_AUCTION_SEARCH_TERMS = [
+    "desktop pc",
+    "gaming pc",
+    "computer tower",
+    "HP EliteDesk",
+    "Dell OptiPlex",
+    "workstation",
+    "Lenovo ThinkCentre",
+    "gaming computer",
+]
+
+
+async def _scrape_auction_site(
+    p,
+    site_name: str,
+    search_url_fn,
+    lot_selectors: list[str],
+    title_selectors: list[str],
+    price_selectors: list[str],
+    link_selectors: list[str],
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+    wait_selector: str | None = None,
+    base_url: str = "",
+) -> list[RawListing]:
+    """
+    Generic Playwright scraper for auction lot search pages.
+    Each site provides selector lists; this handles browser lifecycle, scrolling,
+    dedup, and PC keyword filtering.
+    """
+    results: list[RawListing] = []
+    seen: set[str] = set()
+
+    try:
+        browser, context = await _launch_browser(p)
+    except Exception:
+        return []
+
+    page = await context.new_page()
+
+    for term in search_terms:
+        try:
+            url = search_url_fn(term, min_price, max_price)
+            log.info(f"{site_name}.playwright.fetch", url=url)
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Dismiss cookie/consent banners
+            for btn in [
+                "button:has-text('Accept all')",
+                "button:has-text('Accept All')",
+                "button:has-text('Accept cookies')",
+                "button:has-text('Accept')",
+                "button:has-text('OK')",
+                "button:has-text('I agree')",
+                "[id*='cookie'] button",
+                "[class*='cookie-accept']",
+                "#onetrust-accept-btn-handler",
+                ".cc-allow",
+            ]:
+                try:
+                    await page.click(btn, timeout=2000)
+                    await asyncio.sleep(0.3)
+                    break
+                except Exception:
+                    pass
+
+            if wait_selector:
+                try:
+                    await page.wait_for_selector(wait_selector, timeout=12000)
+                except Exception:
+                    log.warning(f"{site_name}.playwright.no_results", term=term)
+                    continue
+
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+            await page.evaluate("window.scrollBy(0, 600)")
+            await asyncio.sleep(0.8)
+
+            # Try lot selectors in priority order
+            cards = []
+            for sel in lot_selectors:
+                cards = await page.query_selector_all(sel)
+                if cards:
+                    break
+
+            log.info(f"{site_name}.playwright.cards", term=term, count=len(cards))
+
+            for card in cards:
+                try:
+                    # Title
+                    title = ""
+                    for sel in title_selectors:
+                        el = await card.query_selector(sel)
+                        if el:
+                            title = (await el.inner_text()).strip()
+                            if title:
+                                break
+                    if not title or len(title) < 5:
+                        continue
+                    t = title.lower()
+                    if not any(kw in t for kw in _AUCTION_PC_KW):
+                        continue
+                    if _is_mini_pc(title):
+                        continue
+
+                    # URL
+                    href = ""
+                    for sel in link_selectors:
+                        el = await card.query_selector(sel)
+                        if el:
+                            href = await el.get_attribute("href") or ""
+                            if href:
+                                break
+                    if not href:
+                        continue
+                    if not href.startswith("http"):
+                        href = base_url + href
+
+                    slug = href.rstrip("/").split("/")[-1].split("?")[0]
+                    external_id = f"{site_name.lower().replace(' ', '_')}_{slug}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+
+                    # Price
+                    price = 0.0
+                    for sel in price_selectors:
+                        el = await card.query_selector(sel)
+                        if el:
+                            price = _parse_price((await el.inner_text()).strip())
+                            if price > 0:
+                                break
+
+                    if max_price > 0 and price > max_price:
+                        continue
+
+                    img_el = await card.query_selector("img")
+                    img_url = ""
+                    if img_el:
+                        img_url = await img_el.get_attribute("src") or await img_el.get_attribute("data-src") or ""
+
+                    results.append(RawListing(
+                        external_id=external_id,
+                        title=title,
+                        price=price if price >= min_price else min_price,
+                        url=href,
+                        location="UK",
+                        condition="used",
+                        description="",
+                        image_urls=[img_url] if img_url else [],
+                        source_name=site_name,
+                        listing_type="auction",
+                    ))
+                except Exception:
+                    continue
+
+        except Exception as exc:
+            log.error(f"{site_name}.playwright.error", term=term, error=str(exc))
+            continue
+
+        await asyncio.sleep(random.uniform(1.5, 2.5))
+
+    await browser.close()
+    log.info(f"{site_name}.playwright.done", total=len(results))
+    return results
+
+
+# ── Wilsons Auctions ──────────────────────────────────────────────────────────
+
+async def scrape_wilsons_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    Wilsons Auctions — UK's largest independent auction house.
+    IT and office equipment lots appear under their Technology category.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        return []
+
+    def url_fn(term, lo, hi):
+        return (
+            f"https://www.wilsonsauctions.com/lots"
+            f"?query={term.replace(' ', '+')}"
+            f"&priceMin={int(lo)}&priceMax={int(hi)}"
+            f"&categoryId=65"  # IT / Technology category
+        )
+
+    async with async_playwright() as p:
+        return await _scrape_auction_site(
+            p,
+            site_name="Wilsons Auctions",
+            search_url_fn=url_fn,
+            lot_selectors=[
+                ".lot-card",
+                ".auction-lot",
+                "[class*='lot-item']",
+                "article.lot",
+                ".search-result-item",
+                "[class*='search-result']",
+                "li[class*='lot']",
+                "div[class*='lot']",
+            ],
+            title_selectors=["h3", "h2", ".lot-title", ".title", "[class*='title']", "a"],
+            price_selectors=[
+                ".current-bid", ".estimate", "[class*='price']",
+                "[class*='bid']", "[class*='estimate']", "strong"
+            ],
+            link_selectors=["a[href*='/lot/']", "a[href*='/lots/']", "a[href]"],
+            search_terms=search_terms[:6],
+            min_price=min_price,
+            max_price=max_price,
+            wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
+            base_url="https://www.wilsonsauctions.com",
+        )
+
+
+# ── i-bidder ─────────────────────────────────────────────────────────────────
+
+async def scrape_ibidder_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    i-bidder — major UK multi-vendor auction aggregator.
+    Aggregates lots from hundreds of UK auctioneers.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        return []
+
+    def url_fn(term, lo, hi):
+        return (
+            f"https://www.i-bidder.com/en-gb/auction-catalogues/all/search"
+            f"?q={term.replace(' ', '+')}"
+            f"&country=gb"
+            f"&priceFrom={int(lo)}&priceTo={int(hi)}"
+        )
+
+    async with async_playwright() as p:
+        return await _scrape_auction_site(
+            p,
+            site_name="i-bidder",
+            search_url_fn=url_fn,
+            lot_selectors=[
+                ".lot-card",
+                "[class*='lot-card']",
+                ".search-result",
+                "[class*='search-result']",
+                "article.lot",
+                ".auction-lot",
+                "li.lot",
+                "[data-lot-id]",
+            ],
+            title_selectors=[
+                ".lot-card__title", ".lot-title", "h3", "h2",
+                "[class*='title']", "a[title]", "a"
+            ],
+            price_selectors=[
+                ".lot-card__estimate", ".current-bid", ".estimate",
+                "[class*='estimate']", "[class*='price']", "[class*='bid']"
+            ],
+            link_selectors=[
+                "a[href*='/lot/']", "a[href*='/catalogue/']",
+                "a[href*='/auction/']", "a[href]"
+            ],
+            search_terms=search_terms[:6],
+            min_price=min_price,
+            max_price=max_price,
+            wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
+            base_url="https://www.i-bidder.com",
+        )
+
+
+# ── BidSpotter ────────────────────────────────────────────────────────────────
+
+async def scrape_bidspotter_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    BidSpotter UK — international auction platform with a large UK catalogue.
+    Strong coverage of IT/office equipment lots.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        return []
+
+    def url_fn(term, lo, hi):
+        return (
+            f"https://www.bidspotter.co.uk/en-us/auction-catalogues"
+            f"?search={term.replace(' ', '+')}"
+            f"&country=gb"
+        )
+
+    async with async_playwright() as p:
+        return await _scrape_auction_site(
+            p,
+            site_name="BidSpotter",
+            search_url_fn=url_fn,
+            lot_selectors=[
+                ".bsp-lot-card",
+                "[class*='lot-card']",
+                ".item-card",
+                "[class*='item-card']",
+                ".auction-item",
+                "[class*='auction-item']",
+                "li[class*='lot']",
+                "article",
+            ],
+            title_selectors=[
+                ".bsp-lot-card__title", ".lot-title", ".item-title",
+                "h3", "h2", "[class*='title']", "a"
+            ],
+            price_selectors=[
+                ".bsp-lot-card__estimate", ".estimate", ".current-bid",
+                "[class*='estimate']", "[class*='price']", "[class*='bid']"
+            ],
+            link_selectors=[
+                "a[href*='/lot/']", "a[href*='/lots/']",
+                "a[href*='/auction-catalogues/']", "a[href]"
+            ],
+            search_terms=search_terms[:6],
+            min_price=min_price,
+            max_price=max_price,
+            wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
+            base_url="https://www.bidspotter.co.uk",
+        )
+
+
 def _load_fb_cookies() -> list | None:
     """Load Facebook session cookies from fb_cookies.json if it exists."""
     if not FB_COOKIES_PATH.exists():
         return None
     try:
         raw = json.loads(FB_COOKIES_PATH.read_text())
-        # Cookie Editor exports as a list of dicts with 'name','value','domain',etc.
-        # Playwright wants: name, value, domain, path
+        # Cookie Editor exports sameSite as "no_restriction" / "lax" / "strict".
+        # Playwright requires the W3C values: "None" / "Lax" / "Strict".
+        _ss_map = {
+            "no_restriction": "None",
+            "lax": "Lax",
+            "strict": "Strict",
+            "unspecified": "None",
+        }
         cookies = []
         for c in raw:
             if "facebook.com" in c.get("domain", ""):
+                ss_raw = str(c.get("sameSite", "no_restriction")).lower()
                 cookies.append({
                     "name": c["name"],
                     "value": c["value"],
@@ -915,7 +1268,7 @@ def _load_fb_cookies() -> list | None:
                     "path": c.get("path", "/"),
                     "secure": c.get("secure", True),
                     "httpOnly": c.get("httpOnly", False),
-                    "sameSite": c.get("sameSite", "None"),
+                    "sameSite": _ss_map.get(ss_raw, "None"),
                 })
         return cookies if cookies else None
     except Exception as exc:

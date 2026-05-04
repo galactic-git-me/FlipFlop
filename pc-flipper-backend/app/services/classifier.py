@@ -176,6 +176,11 @@ def score_listing(
         elif spread_pct < 0.35:
             result.score += 10
 
+    # Normalise raw score to 0–100.
+    # Raw score without profit tops out at ~150; with £200+ profit it hits ~450.
+    # Dividing by 4 maps £200-profit deals to ~90-100 and signal-only deals to 0-40.
+    result.score = round(min(100.0, max(0.0, result.score / 4.0)), 1)
+
     # Classify from profit estimate (median) + conservative low for safety gate
     result.classification = _classify(result.score, estimated_profit, profit_low, price)
     return result
@@ -187,11 +192,11 @@ def _classify(
     profit_low: float | None,
     price: float,
 ) -> Classification:
-    # No estimate yet — fall back to signal score only
+    # No estimate yet — fall back to signal score only (score is now 0–100)
     if estimated_profit is None:
-        if score >= 60:
+        if score >= 15:
             return Classification.amazing_gem
-        if score >= 40:
+        if score >= 10:
             return Classification.gem
         return Classification.unclassified
 
