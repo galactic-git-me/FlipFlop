@@ -65,6 +65,24 @@ async def run_flip_opportunities_swarm() -> dict:
             stats["new_gems"] += r["gems"]
 
     log.info("flip_opportunities_swarm.done", **stats)
+
+    # Ghost cleanup — remove active listings not seen in the last 3 days.
+    # If a listing hasn't been re-encountered across 3 full scan cycles it's
+    # almost certainly gone (sold, removed, or expired by the seller).
+    # Listings already flipped (status=sold) are kept for history.
+    cutoff = datetime.utcnow() - timedelta(days=3)
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            delete(Listing).where(
+                Listing.status == ListingStatus.active,
+                Listing.last_seen_at < cutoff,
+            ).returning(Listing.id)
+        )
+        purged = len(result.fetchall())
+        await db.commit()
+    if purged:
+        log.info("ghost_cleanup.purged", count=purged, cutoff_days=3)
+
     return stats
 
 
