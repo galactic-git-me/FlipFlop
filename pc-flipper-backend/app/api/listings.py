@@ -58,7 +58,10 @@ async def get_listing_stats(db: AsyncSession = Depends(get_db)):
         )
     )
     avg_profit = await db.scalar(
-        select(func.avg(Listing.estimated_profit)).where(Listing.estimated_profit > 0)
+        select(func.avg(Listing.estimated_profit)).where(
+            Listing.classification.in_([Classification.amazing_gem, Classification.gem]),
+            Listing.estimated_profit > 0,
+        )
     )
     return {
         "total_listings": total,
