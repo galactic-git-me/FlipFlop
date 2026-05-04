@@ -3,6 +3,7 @@ Playwright-based scrapers for sites that require a real browser:
   - Gumtree  (JS SPA, no login needed)
   - Facebook Marketplace (JS SPA, works without login for ~20 items;
     works fully with saved login cookies)
+  - Apex Auctions (Gatsby + BidJS SPA, UK IT/electronics liquidation)
 
 REQUIREMENT — run once after pip install:
     playwright install chromium
@@ -655,6 +656,217 @@ async def scrape_preloved_playwright(
         await browser.close()
 
     log.info("preloved.playwright.done", total=len(results))
+    return results
+
+
+# ── Apex Auctions ─────────────────────────────────────────────────────────────
+
+_APEX_IT_KW = {
+    "pc", "computer", "desktop", "tower", "workstation", "server",
+    "laptop", "notebook", "monitor", "gpu", "graphics", "nvidia", "amd",
+    "radeon", "rtx", "gtx", "rx ", "i3", "i5", "i7", "i9", "xeon", "ryzen",
+    "optiplex", "elitedesk", "thinkcentre", "prodesk", "thinkstation",
+    "ssd", "ram", "memory", "cpu", "processor",
+    "it equipment", "it lot", "computer equipment", "tech", "electronics",
+}
+
+
+async def scrape_apex_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    Apex Auctions — UK IT/electronics liquidation via BidJS SPA.
+    Uses Playwright to render the page, intercepts BidJS REST API responses
+    to extract lot data without needing to manage session cookies manually.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    intercepted: list[dict] = []
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _launch_browser(p)
+        except Exception:
+            return []
+
+        # Intercept BidJS API responses to extract lot data
+        async def on_response(response):
+            url = response.url
+            if "bidjs.com" in url and "/api/" in url and response.status == 200:
+                ct = response.headers.get("content-type", "")
+                if "json" in ct:
+                    try:
+                        body = await response.json()
+                        intercepted.append({"url": url, "data": body})
+                    except Exception:
+                        pass
+
+        context.on("response", on_response)
+        page = await context.new_page()
+
+        try:
+            # Load the main auction list — BidJS will make API calls on load
+            await page.goto(
+                "https://www.apexauctions.co.uk/auction/",
+                wait_until="networkidle",
+                timeout=40000,
+            )
+            await asyncio.sleep(4)
+
+            # Accept cookies if present
+            try:
+                await page.click(
+                    "button:has-text('Accept'), button:has-text('accept cookies')",
+                    timeout=3000,
+                )
+                await asyncio.sleep(1)
+            except Exception:
+                pass
+
+            # Find UK auction items in the rendered DOM
+            auction_els = await page.query_selector_all(".upcoming-auctions-item")
+            log.info("apex.playwright.auction_items", count=len(auction_els))
+
+            uk_auction_uuids: list[str] = []
+            for el in auction_els:
+                text = await el.inner_text()
+                loc_lower = text.lower()
+                if "united kingdom" in loc_lower or "england" in loc_lower or "scotland" in loc_lower or "wales" in loc_lower:
+                    link = await el.query_selector("a[href*='auction']")
+                    if link:
+                        href = await link.get_attribute("href") or ""
+                        # Extract UUID from hash href like #!/auctions/{uuid}
+                        import re as _re
+                        m = _re.search(r"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})", href)
+                        if m:
+                            uk_auction_uuids.append(m.group(1))
+
+            log.info("apex.playwright.uk_auctions", count=len(uk_auction_uuids))
+
+            # Navigate into each UK auction to load its lots
+            for auction_uuid in uk_auction_uuids[:6]:
+                try:
+                    await page.evaluate(f"window.location.hash = '#!/auctions/{auction_uuid}'")
+                    await asyncio.sleep(4)
+
+                    # Scrape rendered lot cards
+                    lot_els = await page.query_selector_all(
+                        ".bidjs-lot, .lot-item, [class*='lot-item'], li.lot, "
+                        ".listing-item, [class*='listing-item']"
+                    )
+                    log.info("apex.playwright.lots", auction=auction_uuid, count=len(lot_els))
+
+                    for lot_el in lot_els:
+                        try:
+                            title_el = await lot_el.query_selector("h3, h2, .lot-title, .title, [class*='title']")
+                            title = (await title_el.inner_text()).strip() if title_el else ""
+                            if not title or len(title) < 5:
+                                continue
+                            t = title.lower()
+                            if not any(kw in t for kw in _APEX_IT_KW):
+                                continue
+                            if _is_mini_pc(title):
+                                continue
+
+                            link_el = await lot_el.query_selector("a[href]")
+                            href = await link_el.get_attribute("href") if link_el else ""
+                            if href and not href.startswith("http"):
+                                href = "https://www.apexauctions.co.uk" + href
+
+                            price_el = await lot_el.query_selector(
+                                "[class*='price'], [class*='bid'], [class*='estimate'], [class*='amount']"
+                            )
+                            price_text = (await price_el.inner_text()).strip() if price_el else ""
+                            price = _parse_price(price_text)
+                            if max_price > 0 and price > max_price:
+                                continue
+
+                            img_el = await lot_el.query_selector("img")
+                            img_url = ""
+                            if img_el:
+                                img_url = await img_el.get_attribute("src") or await img_el.get_attribute("data-src") or ""
+
+                            lot_id = href.rstrip("/").split("/")[-1].split("?")[0] if href else title[:20]
+                            external_id = f"apex_{lot_id}"
+                            if external_id in seen:
+                                continue
+                            seen.add(external_id)
+
+                            results.append(RawListing(
+                                external_id=external_id,
+                                title=title,
+                                price=price,
+                                url=href or f"https://www.apexauctions.co.uk/auction/#!/auctions/{auction_uuid}",
+                                location="UK",
+                                condition="used",
+                                description="",
+                                image_urls=[img_url] if img_url else [],
+                                source_name="Apex Auctions",
+                                listing_type="auction",
+                            ))
+                        except Exception:
+                            continue
+
+                except Exception as exc:
+                    log.warning("apex.playwright.auction_error", auction=auction_uuid, error=str(exc))
+                    continue
+
+        except Exception as exc:
+            log.error("apex.playwright.error", error=str(exc))
+        finally:
+            await browser.close()
+
+    # Also parse any intercepted BidJS API responses for extra coverage
+    for intercepted_call in intercepted:
+        try:
+            data = intercepted_call.get("data", {})
+            models = data.get("models", {})
+            # BidJS lots come in various model shapes
+            for key in ("LotModel", "AuctionLotModel", "lots", "listings"):
+                lots = models.get(key, [])
+                if isinstance(lots, list):
+                    for lot in lots:
+                        title = lot.get("lotTitle") or lot.get("title") or lot.get("name") or ""
+                        t = title.lower()
+                        if not title or not any(kw in t for kw in _APEX_IT_KW):
+                            continue
+                        price = lot.get("currentBid") or lot.get("estimateFrom") or lot.get("startingBid") or 0
+                        if isinstance(price, str):
+                            price = _parse_price(price)
+                        lot_uuid = lot.get("uuid") or lot.get("lotUuid") or ""
+                        external_id = f"apex_api_{lot_uuid or title[:20]}"
+                        if external_id in seen:
+                            continue
+                        seen.add(external_id)
+                        url = (
+                            f"https://www.apexauctions.co.uk/auction/#!/"
+                            f"auctions/{lot.get('auctionUuid','')}/listings/{lot_uuid}"
+                            if lot_uuid else "https://www.apexauctions.co.uk/auction/"
+                        )
+                        results.append(RawListing(
+                            external_id=external_id,
+                            title=title,
+                            price=float(price),
+                            url=url,
+                            location=lot.get("locationName") or "UK",
+                            condition="used",
+                            description=lot.get("description") or "",
+                            image_urls=[],
+                            source_name="Apex Auctions",
+                            listing_type="auction",
+                        ))
+        except Exception:
+            continue
+
+    log.info("apex.playwright.done", total=len(results))
     return results
 
 

@@ -1018,25 +1018,9 @@ async def fetch_listings(
         return await scrape_john_pye(min_price, max_price)
 
     if "apex" in name:
-        from app.services.auction_scrapers import scrape_apex, AuctionLot
-
-        def _convert_apex(lot: AuctionLot) -> RawListing:
-            return RawListing(
-                external_id=lot.external_id,
-                title=lot.title,
-                price=lot.current_bid,
-                url=lot.url,
-                location=None,
-                condition="used",
-                description="",
-                image_urls=[lot.image_url] if lot.image_url else [],
-                source_name=lot.source_name,
-                listing_type="auction",
-                listing_ends_at=lot.ends_at,
-            )
-
-        apex_results = await scrape_apex(_EBAY_AUCTION_TERMS, min_price, max_price)
-        return [_convert_apex(lot) for lot in apex_results]
+        from app.services.playwright_scraper import scrape_apex_playwright, RawListing as PlRawListing
+        pl_results = await scrape_apex_playwright(_EBAY_AUCTION_TERMS, min_price, max_price)
+        return [_convert(r) for r in pl_results]
 
     if any(k in name for k in ("bidspotter", "wilsons", "i-bidder", "ibidder", "merkandi")):
         # These auction scrapers are stubs — return empty gracefully

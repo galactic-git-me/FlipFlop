@@ -1,15 +1,33 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import event
 from app.config import get_settings
 
 settings = get_settings()
 
 _is_sqlite = settings.database_url.startswith("sqlite")
-engine = create_async_engine(
-    settings.database_url,
-    echo=False,
-    **({} if _is_sqlite else {"pool_size": 10, "max_overflow": 20}),
-)
+
+if _is_sqlite:
+    # WAL mode + busy timeout prevent "database is locked" errors when
+    # multiple scrapers write concurrently to the same SQLite file.
+    engine = create_async_engine(
+        settings.database_url,
+        echo=False,
+        connect_args={"timeout": 30},  # wait up to 30s for lock
+    )
+
+    @event.listens_for(engine.sync_engine, "connect")
+    def _set_sqlite_pragma(conn, _):
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=30000")
+        conn.execute("PRAGMA synchronous=NORMAL")
+else:
+    engine = create_async_engine(
+        settings.database_url,
+        echo=False,
+        pool_size=10,
+        max_overflow=20,
+    )
 
 AsyncSessionLocal = async_sessionmaker(
     engine,
