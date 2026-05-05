@@ -42,15 +42,11 @@ CASE_THEMES = [
 ]
 
 SOURCES = [
-    {"name": "Google Shopping",   "fn": "google_shopping"}, # Playwright — aggregates all retailers
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser
-    {"name": "Scan",              "fn": "scan"},            # httpx
-    {"name": "Overclockers",      "fn": "overclockers"},    # httpx
-    {"name": "Box",               "fn": "box"},             # httpx
     {"name": "Etsy",              "fn": "etsy"},            # Playwright — JS-rendered
 ]
 
@@ -159,9 +155,15 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
         "LH_PrefLoc": "2",  # Worldwide (many cases ship from China/HK)
         "_udhi": "350",   # Max £350
     }
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB"}
+    headers = {
+        "User-Agent": ua.random,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-GB,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate",
+    }
     cases = []
     try:
+        await asyncio.sleep(random.uniform(1.0, 2.5))
         async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
             resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
         if resp.status_code != 200:
@@ -236,9 +238,15 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
         "LH_PrefLoc": "2",  # Worldwide
         "_udhi": "200",   # Max £200 (international cases are cheaper)
     }
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB"}
+    headers = {
+        "User-Agent": ua.random,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-GB,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate",
+    }
     cases = []
     try:
+        await asyncio.sleep(random.uniform(1.0, 2.5))
         async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
             resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
         if resp.status_code != 200:
@@ -630,50 +638,71 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
             await page.evaluate("window.scrollBy(0, 600)")
             await asyncio.sleep(0.8)
 
-            html = await page.content()
-            soup = BeautifulSoup(html, "lxml")
+            # Use JS evaluation — AliExpress hashes its class names so selectors break
+            raw = await page.evaluate("""() => {
+                const out = [];
+                const priceRe = /[£$€]\\s*([\\d,]+\\.?\\d*)/;
+                const seen = new Set();
 
-            # AliExpress uses hashed class names — rely on structural patterns
-            items = (
-                soup.select("[class*='search-item-card']") or
-                soup.select("[class*='product-snippet']") or
-                soup.select("a[href*='aliexpress.com/item']")
-            )
+                document.querySelectorAll("a[href*='/item/']").forEach(link => {
+                    try {
+                        let href = link.href || "";
+                        if (!href.startsWith("http")) return;
+                        // Deduplicate by URL
+                        const key = href.split("?")[0];
+                        if (seen.has(key)) return;
+                        seen.add(key);
 
-            for item in items[:12]:
+                        // Title: prefer aria-label, then h1/h3/p inside card
+                        let title = link.getAttribute("aria-label") || "";
+                        if (!title) {
+                            const h = link.querySelector("h1, h3, h4, p");
+                            title = h ? h.textContent.trim() : link.textContent.trim();
+                        }
+                        title = title.replace(/\\s+/g, " ").trim().slice(0, 200);
+                        if (!title || title.length < 5) return;
+
+                        // Price: walk up to find a price element
+                        let price = 0;
+                        let node = link.parentElement;
+                        for (let i = 0; i < 6 && node && price === 0; i++, node = node.parentElement) {
+                            node.querySelectorAll("*").forEach(el => {
+                                if (price > 0) return;
+                                const txt = el.textContent.trim();
+                                if ((txt.includes("$") || txt.includes("£") || txt.includes("€")) && txt.length < 30) {
+                                    const m = priceRe.exec(txt);
+                                    if (m) price = parseFloat(m[1].replace(",", ""));
+                                }
+                            });
+                        }
+                        if (price <= 0 || price > 200) return;
+
+                        const img = link.querySelector("img");
+                        const imgSrc = img ? (img.src || img.getAttribute("data-src") || "") : "";
+
+                        out.push({title, price, href, img: imgSrc});
+                    } catch (e) {}
+                });
+                return out.slice(0, 12);
+            }""")
+
+            for item in raw:
                 try:
-                    # Link
-                    link_el = item if item.name == "a" else item.select_one("a[href*='/item/']")
-                    if not link_el:
-                        continue
-                    href = link_el.get("href", "")
-                    if href.startswith("//"):
-                        href = "https:" + href
-                    if not href.startswith("http"):
-                        continue
-
-                    # Title
-                    title_el = item.select_one("h3, [class*='title'], [class*='name']") or link_el
-                    title = title_el.get_text(strip=True)[:200]
+                    title = str(item.get("title", "")).strip()[:200]
                     if not title or len(title) < 5:
                         continue
-
-                    # Price — look for a £ or $ amount
-                    price_el = item.select_one("[class*='price'], [class*='Price']")
-                    price_text = price_el.get_text(strip=True) if price_el else ""
-                    price = _parse_price(price_text)
+                    price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 200:
                         continue
-
-                    img_el = item.select_one("img")
-                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
-
+                    href = str(item.get("href", ""))
+                    if not href.startswith("http"):
+                        continue
                     cases.append(RawCase(
                         name=title,
                         price=price,
                         source_site="AliExpress",
                         source_url=href,
-                        image_url=img_src,
+                        image_url=str(item.get("img", "")),
                         theme=theme,
                     ))
                 except Exception:
@@ -742,46 +771,72 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
             await page.evaluate("window.scrollBy(0, 800)")
             await asyncio.sleep(0.8)
 
-            html = await page.content()
-            soup = BeautifulSoup(html, "lxml")
+            # Use JS evaluation — Temu rotates hashed class names so selectors break
+            raw = await page.evaluate("""() => {
+                const out = [];
+                const priceRe = /[£$€]\\s*([\\d,]+\\.?\\d*)/;
+                const seen = new Set();
 
-            # Temu hashes its class names — use structural/data attributes
-            items = (
-                soup.select("[data-type='goods']") or
-                soup.select("[class*='goods-item']") or
-                soup.select("[class*='product-item']") or
-                soup.select("[class*='SearchResult'] li") or
-                soup.select("a[href*='/goods.html']")
-            )
+                document.querySelectorAll("a[href*='/goods']").forEach(link => {
+                    try {
+                        let href = link.href || "";
+                        if (!href.startsWith("http")) {
+                            href = "https://www.temu.com" + (href.startsWith("/") ? href : "/" + href);
+                        }
+                        const key = href.split("?")[0];
+                        if (seen.has(key)) return;
+                        seen.add(key);
 
-            for item in items[:12]:
+                        // Title: aria-label first, then text children
+                        let title = link.getAttribute("aria-label") || "";
+                        if (!title) {
+                            const h = link.querySelector("h3, h4, p, span");
+                            title = h ? h.textContent.trim() : link.textContent.trim();
+                        }
+                        title = title.replace(/\\s+/g, " ").trim().slice(0, 200);
+                        if (!title || title.length < 5) return;
+
+                        // Price: walk up the tree to find price text
+                        let price = 0;
+                        let node = link.parentElement;
+                        for (let i = 0; i < 6 && node && price === 0; i++, node = node.parentElement) {
+                            node.querySelectorAll("*").forEach(el => {
+                                if (price > 0) return;
+                                const txt = el.textContent.trim();
+                                if ((txt.includes("$") || txt.includes("£") || txt.includes("€")) && txt.length < 30) {
+                                    const m = priceRe.exec(txt);
+                                    if (m) price = parseFloat(m[1].replace(",", ""));
+                                }
+                            });
+                        }
+                        if (price <= 0 || price > 150) return;
+
+                        const img = link.querySelector("img");
+                        const imgSrc = img ? (img.src || img.getAttribute("data-src") || "") : "";
+
+                        out.push({title, price, href, img: imgSrc});
+                    } catch (e) {}
+                });
+                return out.slice(0, 12);
+            }""")
+
+            for item in raw:
                 try:
-                    link_el = item if item.name == "a" else item.select_one("a[href]")
-                    if not link_el:
-                        continue
-                    href = link_el.get("href", "")
-                    if not href.startswith("http"):
-                        href = "https://www.temu.com" + href
-
-                    title_el = item.select_one("[class*='title'], [class*='name'], [class*='Title'], h3, p")
-                    title = title_el.get_text(strip=True)[:200] if title_el else ""
+                    title = str(item.get("title", "")).strip()[:200]
                     if not title or len(title) < 5:
                         continue
-
-                    price_el = item.select_one("[class*='price'], [class*='Price']")
-                    price = _parse_price(price_el.get_text(strip=True) if price_el else "")
+                    price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 150:
                         continue
-
-                    img_el = item.select_one("img")
-                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
-
+                    href = str(item.get("href", ""))
+                    if not href.startswith("http"):
+                        continue
                     cases.append(RawCase(
                         name=title,
                         price=price,
                         source_site="Temu",
                         source_url=href,
-                        image_url=img_src,
+                        image_url=str(item.get("img", "")),
                         theme=theme,
                     ))
                 except Exception:
@@ -793,154 +848,6 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
             await browser.close()
 
     log.info("temu.cases.done", search=search, found=len(cases))
-    return cases
-
-
-async def _scrape_scan(search: str, theme: str) -> list[RawCase]:
-    """Scan.co.uk — httpx + BeautifulSoup."""
-    url = f"https://www.scan.co.uk/search?q={search.replace(' ', '+')}"
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
-    cases = []
-    try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 500:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        # Scan product cards
-        items = soup.select(".c-product, [class*='product-item'], li[class*='product']")
-        if not items:
-            items = soup.select("li.product, div.product")
-
-        for item in items[:8]:
-            try:
-                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
-                price_el = item.select_one(".c-product__price, [class*='price']")
-                url_el = item.select_one("a[href]")
-                img_el = item.select_one("img")
-
-                if not title_el or not price_el or not url_el:
-                    continue
-                title = title_el.get_text(strip=True)[:200]
-                if not title:
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > 350:
-                    continue
-                href = url_el.get("href", "")
-                if not href.startswith("http"):
-                    href = "https://www.scan.co.uk" + href
-                cases.append(RawCase(
-                    name=title,
-                    price=price,
-                    source_site="Scan",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
-    except Exception as exc:
-        log.warning("scan.cases.error", search=search, error=str(exc))
-    return cases
-
-
-async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
-    """Overclockers.co.uk — httpx + BeautifulSoup."""
-    url = f"https://www.overclockers.co.uk/search?q={search.replace(' ', '+')}"
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
-    cases = []
-    try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 500:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        items = soup.select(".product-item, .product, [class*='product-card']")
-        if not items:
-            items = soup.select("li.item, div.item")
-
-        for item in items[:8]:
-            try:
-                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
-                price_el = item.select_one(".product-price, .price, [class*='price']")
-                url_el = item.select_one("a[href]")
-                img_el = item.select_one("img")
-
-                if not title_el or not price_el or not url_el:
-                    continue
-                title = title_el.get_text(strip=True)[:200]
-                if not title:
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > 350:
-                    continue
-                href = url_el.get("href", "")
-                if not href.startswith("http"):
-                    href = "https://www.overclockers.co.uk" + href
-                cases.append(RawCase(
-                    name=title,
-                    price=price,
-                    source_site="Overclockers",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
-    except Exception as exc:
-        log.warning("overclockers.cases.error", search=search, error=str(exc))
-    return cases
-
-
-async def _scrape_box(search: str, theme: str) -> list[RawCase]:
-    """Box.co.uk — httpx + BeautifulSoup."""
-    url = f"https://www.box.co.uk/search?search={search.replace(' ', '+')}"
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
-    cases = []
-    try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
-        if resp.status_code != 200 or len(resp.text) < 500:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        items = soup.select(".product, .product-item, [class*='product-card']")
-        if not items:
-            items = soup.select("li.item, div.product-list-item")
-
-        for item in items[:8]:
-            try:
-                title_el = item.select_one("a[class*='title'], h2, h3, .product-title, [class*='name']")
-                price_el = item.select_one(".price, .product-price, [class*='price']")
-                url_el = item.select_one("a[href]")
-                img_el = item.select_one("img")
-
-                if not title_el or not price_el or not url_el:
-                    continue
-                title = title_el.get_text(strip=True)[:200]
-                if not title:
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > 350:
-                    continue
-                href = url_el.get("href", "")
-                if not href.startswith("http"):
-                    href = "https://www.box.co.uk" + href
-                cases.append(RawCase(
-                    name=title,
-                    price=price,
-                    source_site="Box",
-                    source_url=href,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
-    except Exception as exc:
-        log.warning("box.cases.error", search=search, error=str(exc))
     return cases
 
 
@@ -978,59 +885,95 @@ async def _scrape_etsy(search: str, theme: str) -> list[RawCase]:
                 except Exception:
                     pass
 
-            # Wait for listing cards
-            try:
-                await page.wait_for_selector(
-                    "[data-search-results], .listing-link, [class*='listing'], [class*='v2-listing']",
-                    timeout=12000,
-                )
-            except Exception:
-                pass
-
-            await asyncio.sleep(random.uniform(1.0, 2.0))
+            # Wait longer for Etsy's JS-rendered listing grid (5-6s)
+            await asyncio.sleep(random.uniform(5.0, 6.0))
             await page.evaluate("window.scrollBy(0, 600)")
-            await asyncio.sleep(0.8)
+            await asyncio.sleep(1.0)
 
-            html = await page.content()
-            soup = BeautifulSoup(html, "lxml")
+            # Use JS evaluation — Etsy's DOM selectors frequently change;
+            # a[href*='/listing/'] links are always present regardless of class names.
+            raw = await page.evaluate("""() => {
+                const out = [];
+                const priceRe = /[£$€]\\s*([\\d,]+\\.?\\d*)/;
+                const seen = new Set();
 
-            # Etsy listing cards
-            items = (
-                soup.select("[class*='listing-link']") or
-                soup.select("a[href*='/listing/']") or
-                soup.select("[class*='v2-listing-card']")
-            )
+                document.querySelectorAll("a[href*='/listing/']").forEach(link => {
+                    try {
+                        let href = link.href || "";
+                        if (href.startsWith("//")) href = "https:" + href;
+                        if (!href.startsWith("http")) return;
+                        const key = href.split("?")[0];
+                        if (seen.has(key)) return;
+                        seen.add(key);
 
-            for item in items[:10]:
+                        // Title: aria-label first, then nearest h3/p inside the card
+                        let title = link.getAttribute("aria-label") || "";
+                        if (!title) {
+                            const h = link.querySelector("h3, h2, p");
+                            title = h ? h.textContent.trim() : link.textContent.trim();
+                        }
+                        // If still empty, walk up to find a heading near this link
+                        if (!title || title.length < 5) {
+                            let node = link.parentElement;
+                            for (let i = 0; i < 4 && node; i++, node = node.parentElement) {
+                                const h = node.querySelector("h3, h2, p");
+                                if (h) { title = h.textContent.trim(); break; }
+                            }
+                        }
+                        title = title.replace(/\\s+/g, " ").trim().slice(0, 200);
+                        if (!title || title.length < 5) return;
+
+                        // Price: .currency-value spans are Etsy's standard price element
+                        let price = 0;
+                        let node = link.parentElement;
+                        for (let i = 0; i < 6 && node && price === 0; i++, node = node.parentElement) {
+                            const priceEl = node.querySelector(
+                                ".currency-value, [class*='currency-value'], [class*='price']"
+                            );
+                            if (priceEl) {
+                                const m = priceRe.exec(priceEl.textContent.trim());
+                                if (m) price = parseFloat(m[1].replace(",", ""));
+                            }
+                            // Fallback: look for any text matching price pattern
+                            if (price === 0) {
+                                node.querySelectorAll("span, p").forEach(el => {
+                                    if (price > 0) return;
+                                    const txt = el.textContent.trim();
+                                    if (txt.length < 20 && (txt.includes("£") || txt.includes("$"))) {
+                                        const m = priceRe.exec(txt);
+                                        if (m) price = parseFloat(m[1].replace(",", ""));
+                                    }
+                                });
+                            }
+                        }
+                        if (price <= 0 || price > 200) return;
+
+                        const img = link.querySelector("img");
+                        const imgSrc = img ? (img.src || img.getAttribute("data-src") || "") : "";
+
+                        out.push({title, price, href, img: imgSrc});
+                    } catch (e) {}
+                });
+                return out.slice(0, 10);
+            }""")
+
+            for item in raw:
                 try:
-                    link_el = item if item.name == "a" else item.select_one("a[href*='/listing/']")
-                    if not link_el:
-                        continue
-                    href = link_el.get("href", "")
-                    if href.startswith("//"):
-                        href = "https:" + href
-                    if not href.startswith("http"):
-                        continue
-
-                    title_el = item.select_one("h3, [class*='title'], [class*='listing-title'], p")
-                    title = title_el.get_text(strip=True)[:200] if title_el else ""
+                    title = str(item.get("title", "")).strip()[:200]
                     if not title or len(title) < 5:
                         continue
-
-                    price_el = item.select_one("[class*='price'], [class*='currency-value']")
-                    price = _parse_price(price_el.get_text(strip=True) if price_el else "")
+                    price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 200:
                         continue
-
-                    img_el = item.select_one("img")
-                    img_src = img_el.get("src") or img_el.get("data-src") or "" if img_el else ""
-
+                    href = str(item.get("href", ""))
+                    if not href.startswith("http"):
+                        continue
                     cases.append(RawCase(
                         name=title,
                         price=price,
                         source_site="Etsy",
                         source_url=href,
-                        image_url=img_src,
+                        image_url=str(item.get("img", "")),
                         theme=theme,
                     ))
                 except Exception:
