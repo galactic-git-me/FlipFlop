@@ -42,6 +42,7 @@ CASE_THEMES = [
 ]
 
 SOURCES = [
+    {"name": "Google Shopping",   "fn": "google_shopping"}, # Playwright — aggregates all retailers
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
@@ -65,12 +66,63 @@ class RawCase:
     specs: str = "ATX Mid Tower · New"
 
 
+async def _playbook_extra_themes() -> list[dict]:
+    """
+    Read active playbooks and return extra case themes derived from their
+    component_catalogue.preferred_cases and target_use_case.
+    Deduplicates against the global CASE_THEMES search terms.
+    """
+    from sqlalchemy import select as sa_select
+    from app.models.playbook import Playbook
+
+    _use_case_terms: dict[str, list[str]] = {
+        "gaming":        ["gaming atx case rgb", "gaming pc case mid tower"],
+        "office":        ["slim micro atx case office", "mini tower desktop case"],
+        "workstation":   ["full tower workstation case atx", "fractal define case atx"],
+        "htpc":          ["mini itx htpc case", "slim htpc case living room"],
+        "budget":        ["cheap atx pc case", "budget gaming case atx"],
+        "ai_workstation": ["full tower atx case workstation", "server tower case atx"],
+    }
+
+    extra: list[dict] = []
+    existing_terms: set[str] = {t for td in CASE_THEMES for t in td["terms"]}
+
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(sa_select(Playbook).where(Playbook.status == "active"))
+            for pb in result.scalars().all():
+                cat = pb.component_catalogue or {}
+                preferred = cat.get("preferred_cases", [])
+
+                # Explicit preferred case names → direct Google Shopping searches
+                for case_name in preferred:
+                    term = f"{case_name} pc case"
+                    if term not in existing_terms:
+                        extra.append({"theme": f"{pb.name} Case", "terms": [term]})
+                        existing_terms.add(term)
+
+                # Fallback: map target_use_case to generic search terms
+                use_case = (pb.target_use_case or "gaming").lower()
+                for term in _use_case_terms.get(use_case, []):
+                    if term not in existing_terms:
+                        extra.append({"theme": f"{pb.name} Case", "terms": [term]})
+                        existing_terms.add(term)
+    except Exception as exc:
+        log.warning("playbook_extra_themes.error", error=str(exc))
+
+    return extra
+
+
 async def run_cases_swarm() -> dict:
     log.info("cases_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
 
+    playbook_themes = await _playbook_extra_themes()
+    all_themes = CASE_THEMES + playbook_themes
+    log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
+
     async with AsyncSessionLocal() as db:
-        for theme_def in CASE_THEMES:
+        for theme_def in all_themes:
             for source in SOURCES:
                 # Use up to 2 terms per source per theme for better coverage
                 for term in theme_def["terms"][:2]:
@@ -242,6 +294,166 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
                 continue
     except Exception as exc:
         log.warning("ebay_worldwide.cases.error", error=str(exc))
+    return cases
+
+
+# ── Google Shopping (UK) ──────────────────────────────────────────────────────
+
+async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
+    """
+    Google Shopping UK — Playwright stealth browser.
+    Pre-sets the SOCS=CAI cookie to bypass Google's GDPR consent page.
+    Uses JS evaluation against the live DOM for resilience against
+    Google's frequently-rotating CSS class names.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    query = search.replace(" ", "+")
+    url = f"https://www.google.co.uk/search?q={query}&tbm=shop&hl=en-GB&gl=gb&num=20"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("google_shopping.cases.browser_error", error=str(exc))
+            return []
+
+        # Pre-set Google's consent cookie — bypasses the EU/UK consent gate entirely
+        await context.add_cookies([
+            {"name": "SOCS", "value": "CAI", "domain": ".google.co.uk", "path": "/"},
+            {"name": "SOCS", "value": "CAI", "domain": ".google.com",   "path": "/"},
+        ])
+
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Belt-and-braces consent click in case cookie wasn't sufficient
+            for selector in [
+                "#L2AGLb", "button:has-text('Accept all')", "[aria-label='Accept all']",
+            ]:
+                try:
+                    await page.click(selector, timeout=1500)
+                    await asyncio.sleep(0.5)
+                    break
+                except Exception:
+                    pass
+
+            await asyncio.sleep(random.uniform(2.0, 3.0))
+            await page.evaluate("window.scrollBy(0, 500)")
+            await asyncio.sleep(1.0)
+
+            # Extract products using JS against the live DOM — far more resilient
+            # than HTML parsing because it sees the rendered element tree.
+            raw = await page.evaluate("""() => {
+                const seen = new Set();
+                const out  = [];
+                const priceRe = /[£$]\\s*([\\d,]+\\.?\\d*)/;
+
+                function getCleanTitle(el) {
+                    // Clone node and remove price/retailer child elements
+                    const clone = el.cloneNode(true);
+                    clone.querySelectorAll(".VbBaOe,.a8Pemb,.T14wmb,.CsnLnf,.UsGWMe," +
+                                          "[class*='price'],[class*='Price'],[class*='store'],[class*='Store']")
+                         .forEach(n => n.remove());
+                    let t = clone.textContent.trim();
+                    // Strip trailing price/retailer text: "£49 SomeSite + £3.99 delivery"
+                    t = t.replace(/£[\\s\\S]*/g, "").trim();
+                    // Strip trailing store suffixes left as raw text
+                    t = t.replace(/[-–|·•]?\\s*[A-Z][a-z]+[\\s.]+(?:co\\.uk|UK|de|com)[\\s\\S]*/i, "").trim();
+                    // Remove leftover trailing punctuation
+                    t = t.replace(/[+\\-\\u2013\\u00B7\\u2022|,\\s]+$/, "").trim();
+                    return t;
+                }
+
+                function addItem(title, price, href, img) {
+                    if (!title || !href || price <= 0) return;
+                    // Deduplicate on normalised title (Google repeats the same item in multiple containers)
+                    const key = title.toLowerCase().replace(/\\s+/g, " ").slice(0, 80);
+                    if (seen.has(key)) return;
+                    seen.add(key);
+                    out.push({title, price, href, img});
+                }
+
+                // Strategy 1: use explicit product containers
+                const containers = document.querySelectorAll(
+                    ".pla-unit-container, .sh-dgr__grid-result, [data-sh-sr], .g.sh-np"
+                );
+
+                containers.forEach(el => {
+                    // .orXoSd is Google Shopping's clean product-title div (no price/retailer)
+                    const titleEl = el.querySelector("h3, h4, .ropLT, .orXoSd, .rwVHAc");
+                    const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb");
+                    const linkEl  = el.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
+                    const imgEl   = el.querySelector("img");
+
+                    const title = titleEl ? getCleanTitle(titleEl) : "";
+                    const priceText = priceEl?.textContent?.trim() || "";
+                    const pm = priceRe.exec(priceText);
+                    const price = pm ? parseFloat(pm[1].replace(",","")) : 0;
+                    addItem(title, price, linkEl?.href || "", imgEl?.src || "");
+                });
+
+                // Strategy 2: work backwards from price spans if strategy 1 found nothing
+                if (out.length === 0) {
+                    document.querySelectorAll(".VbBaOe, .a8Pemb").forEach(priceEl => {
+                        const pm = priceRe.exec(priceEl.textContent.trim());
+                        if (!pm) return;
+                        const price = parseFloat(pm[1].replace(",",""));
+                        let node = priceEl.parentElement;
+                        for (let i = 0; i < 8 && node; i++, node = node.parentElement) {
+                            const titleEl = node.querySelector("h3, h4, .ropLT, .orXoSd, .rwVHAc");
+                            const linkEl  = node.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
+                            if (titleEl && linkEl) {
+                                addItem(getCleanTitle(titleEl), price,
+                                        linkEl.href, node.querySelector("img")?.src || "");
+                                break;
+                            }
+                        }
+                    });
+                }
+
+                return out.slice(0, 20);
+            }""")
+
+            for item in raw:
+                try:
+                    title = str(item.get("title", "")).strip()[:200]
+                    if not title or len(title) < 5:
+                        continue
+                    price = float(item.get("price", 0) or 0)
+                    if price <= 0 or price > 350:
+                        continue
+                    href = str(item.get("href", ""))
+                    if not href.startswith("http"):
+                        continue
+                    img_src = str(item.get("img", ""))
+                    # Skip tiny data URIs (Google's lazy-load placeholders)
+                    if img_src.startswith("data:") and len(img_src) < 300:
+                        img_src = ""
+
+                    cases.append(RawCase(
+                        name=title,
+                        price=price,
+                        source_site="Google Shopping",
+                        source_url=href,
+                        image_url=img_src,
+                        theme=theme,
+                    ))
+                except Exception:
+                    continue
+
+        except Exception as exc:
+            log.warning("google_shopping.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("google_shopping.cases.done", search=search, found=len(cases))
     return cases
 
 
