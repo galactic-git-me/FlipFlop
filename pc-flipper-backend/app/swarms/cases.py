@@ -42,6 +42,7 @@ CASE_THEMES = [
 ]
 
 SOURCES = [
+    {"name": "Google Shopping",   "fn": "google_shopping"}, # Playwright — aggregates all retailers
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
@@ -65,12 +66,63 @@ class RawCase:
     specs: str = "ATX Mid Tower · New"
 
 
+async def _playbook_extra_themes() -> list[dict]:
+    """
+    Read active playbooks and return extra case themes derived from their
+    component_catalogue.preferred_cases and target_use_case.
+    Deduplicates against the global CASE_THEMES search terms.
+    """
+    from sqlalchemy import select as sa_select
+    from app.models.playbook import Playbook
+
+    _use_case_terms: dict[str, list[str]] = {
+        "gaming":        ["gaming atx case rgb", "gaming pc case mid tower"],
+        "office":        ["slim micro atx case office", "mini tower desktop case"],
+        "workstation":   ["full tower workstation case atx", "fractal define case atx"],
+        "htpc":          ["mini itx htpc case", "slim htpc case living room"],
+        "budget":        ["cheap atx pc case", "budget gaming case atx"],
+        "ai_workstation": ["full tower atx case workstation", "server tower case atx"],
+    }
+
+    extra: list[dict] = []
+    existing_terms: set[str] = {t for td in CASE_THEMES for t in td["terms"]}
+
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(sa_select(Playbook).where(Playbook.status == "active"))
+            for pb in result.scalars().all():
+                cat = pb.component_catalogue or {}
+                preferred = cat.get("preferred_cases", [])
+
+                # Explicit preferred case names → direct Google Shopping searches
+                for case_name in preferred:
+                    term = f"{case_name} pc case"
+                    if term not in existing_terms:
+                        extra.append({"theme": f"{pb.name} Case", "terms": [term]})
+                        existing_terms.add(term)
+
+                # Fallback: map target_use_case to generic search terms
+                use_case = (pb.target_use_case or "gaming").lower()
+                for term in _use_case_terms.get(use_case, []):
+                    if term not in existing_terms:
+                        extra.append({"theme": f"{pb.name} Case", "terms": [term]})
+                        existing_terms.add(term)
+    except Exception as exc:
+        log.warning("playbook_extra_themes.error", error=str(exc))
+
+    return extra
+
+
 async def run_cases_swarm() -> dict:
     log.info("cases_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
 
+    playbook_themes = await _playbook_extra_themes()
+    all_themes = CASE_THEMES + playbook_themes
+    log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
+
     async with AsyncSessionLocal() as db:
-        for theme_def in CASE_THEMES:
+        for theme_def in all_themes:
             for source in SOURCES:
                 # Use up to 2 terms per source per theme for better coverage
                 for term in theme_def["terms"][:2]:
@@ -242,6 +294,152 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
                 continue
     except Exception as exc:
         log.warning("ebay_worldwide.cases.error", error=str(exc))
+    return cases
+
+
+# ── Google Shopping (UK) ──────────────────────────────────────────────────────
+
+async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
+    """
+    Google Shopping UK — Playwright stealth browser.
+    Navigates to the Shopping tab (tbm=shop) and extracts product cards.
+    Tries multiple selector strategies since Google's class names rotate frequently.
+    Extracts the merchant's direct URL from Google's aclk redirect where possible.
+    """
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
+        return []
+
+    cases = []
+    query = search.replace(" ", "+")
+    url = f"https://www.google.co.uk/search?q={query}&tbm=shop&hl=en-GB&gl=gb&num=20"
+
+    async with async_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("google_shopping.cases.browser_error", error=str(exc))
+            return []
+
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Accept Google's cookie consent (EU/UK requirement)
+            for selector in [
+                "#L2AGLb",                          # "Accept all" button ID
+                "button:has-text('Accept all')",
+                "[aria-label='Accept all']",
+                "button:has-text('Reject all')",    # Rejecting still lets us through
+            ]:
+                try:
+                    await page.click(selector, timeout=2500)
+                    await asyncio.sleep(0.6)
+                    break
+                except Exception:
+                    pass
+
+            # Wait for shopping result grid
+            try:
+                await page.wait_for_selector(
+                    ".sh-dgr__grid-result, .sh-pr__product-results-grid, "
+                    "[data-sh-sr], .g.sh-np, [jsaction*='productcard']",
+                    timeout=15000,
+                )
+            except Exception:
+                pass  # grab whatever rendered
+
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+            await page.evaluate("window.scrollBy(0, 600)")
+            await asyncio.sleep(0.8)
+
+            html = await page.content()
+            soup = BeautifulSoup(html, "lxml")
+
+            # Google Shopping uses several possible container selectors
+            items = (
+                soup.select(".sh-dgr__grid-result") or
+                soup.select("[data-sh-sr]") or
+                soup.select(".g.sh-np") or
+                soup.select(".sh-pr__product-results-grid > div > div > div") or
+                soup.select("[jsaction*='productcard']")
+            )
+
+            for item in items[:20]:
+                try:
+                    # Title — Google Shopping uses h3 or rotating class names
+                    title_el = (
+                        item.select_one("h3") or
+                        item.select_one(".Lq5OHe") or
+                        item.select_one(".tAxDx") or
+                        item.select_one("[class*='product-title']") or
+                        item.select_one("h4")
+                    )
+                    if not title_el:
+                        continue
+                    title = title_el.get_text(strip=True)[:200]
+                    if not title or len(title) < 5:
+                        continue
+
+                    # Price — look for £ amounts in known price elements
+                    price_el = (
+                        item.select_one(".a8Pemb") or
+                        item.select_one(".T14wmb") or
+                        item.select_one("[class*='price']") or
+                        item.select_one("[aria-label*='£']")
+                    )
+                    if price_el:
+                        price = _parse_price(price_el.get_text(strip=True))
+                    else:
+                        # Fallback: scan all text for first £X.XX pattern
+                        m = re.search(r"£\s*([\d,]+\.?\d*)", item.get_text())
+                        price = float(m.group(1).replace(",", "")) if m else 0.0
+
+                    if price <= 0 or price > 350:
+                        continue
+
+                    # URL — Google Shopping links use /aclk redirect or /shopping/product/
+                    link_el = (
+                        item.select_one("a[href*='/aclk']") or
+                        item.select_one("a[href*='/shopping/product/']") or
+                        item.select_one("a[href]")
+                    )
+                    if not link_el:
+                        continue
+                    href = link_el.get("href", "")
+                    if href.startswith("/"):
+                        href = "https://www.google.co.uk" + href
+                    if not href.startswith("http"):
+                        continue
+
+                    # Image
+                    img_el = item.select_one("img")
+                    img_src = ""
+                    if img_el:
+                        img_src = img_el.get("src") or img_el.get("data-src") or ""
+                    # Skip Google's 1px placeholder data URIs
+                    if img_src.startswith("data:") and len(img_src) < 200:
+                        img_src = ""
+
+                    cases.append(RawCase(
+                        name=title,
+                        price=price,
+                        source_site="Google Shopping",
+                        source_url=href,
+                        image_url=img_src,
+                        theme=theme,
+                    ))
+                except Exception:
+                    continue
+
+        except Exception as exc:
+            log.warning("google_shopping.cases.scrape_error", error=str(exc))
+        finally:
+            await browser.close()
+
+    log.info("google_shopping.cases.done", search=search, found=len(cases))
     return cases
 
 
