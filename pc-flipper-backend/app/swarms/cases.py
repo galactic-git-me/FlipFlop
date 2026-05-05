@@ -302,9 +302,9 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
 async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
     """
     Google Shopping UK — Playwright stealth browser.
-    Navigates to the Shopping tab (tbm=shop) and extracts product cards.
-    Tries multiple selector strategies since Google's class names rotate frequently.
-    Extracts the merchant's direct URL from Google's aclk redirect where possible.
+    Pre-sets the SOCS=CAI cookie to bypass Google's GDPR consent page.
+    Uses JS evaluation against the live DOM for resilience against
+    Google's frequently-rotating CSS class names.
     """
     try:
         from playwright.async_api import async_playwright
@@ -323,104 +323,106 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
             log.warning("google_shopping.cases.browser_error", error=str(exc))
             return []
 
+        # Pre-set Google's consent cookie — bypasses the EU/UK consent gate entirely
+        await context.add_cookies([
+            {"name": "SOCS", "value": "CAI", "domain": ".google.co.uk", "path": "/"},
+            {"name": "SOCS", "value": "CAI", "domain": ".google.com",   "path": "/"},
+        ])
+
         page = await context.new_page()
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=30000)
 
-            # Accept Google's cookie consent (EU/UK requirement)
+            # Belt-and-braces consent click in case cookie wasn't sufficient
             for selector in [
-                "#L2AGLb",                          # "Accept all" button ID
-                "button:has-text('Accept all')",
-                "[aria-label='Accept all']",
-                "button:has-text('Reject all')",    # Rejecting still lets us through
+                "#L2AGLb", "button:has-text('Accept all')", "[aria-label='Accept all']",
             ]:
                 try:
-                    await page.click(selector, timeout=2500)
-                    await asyncio.sleep(0.6)
+                    await page.click(selector, timeout=1500)
+                    await asyncio.sleep(0.5)
                     break
                 except Exception:
                     pass
 
-            # Wait for shopping result grid
-            try:
-                await page.wait_for_selector(
-                    ".sh-dgr__grid-result, .sh-pr__product-results-grid, "
-                    "[data-sh-sr], .g.sh-np, [jsaction*='productcard']",
-                    timeout=15000,
-                )
-            except Exception:
-                pass  # grab whatever rendered
+            await asyncio.sleep(random.uniform(2.0, 3.0))
+            await page.evaluate("window.scrollBy(0, 500)")
+            await asyncio.sleep(1.0)
 
-            await asyncio.sleep(random.uniform(1.0, 2.0))
-            await page.evaluate("window.scrollBy(0, 600)")
-            await asyncio.sleep(0.8)
+            # Extract products using JS against the live DOM — far more resilient
+            # than HTML parsing because it sees the rendered element tree.
+            raw = await page.evaluate("""() => {
+                const out = [];
+                const priceRe = /[£$]\\s*([\\d,]+\\.?\\d*)/;
 
-            html = await page.content()
-            soup = BeautifulSoup(html, "lxml")
+                // Strategy 1: containers that wrap a title + price
+                const containers = document.querySelectorAll(
+                    ".pla-unit-container, .sh-dgr__grid-result, [data-sh-sr], " +
+                    ".g.sh-np, [jsaction*='productcard'], [data-docid], " +
+                    "li[class*='sh-'], div[class*='pla']"
+                );
 
-            # Google Shopping uses several possible container selectors
-            items = (
-                soup.select(".sh-dgr__grid-result") or
-                soup.select("[data-sh-sr]") or
-                soup.select(".g.sh-np") or
-                soup.select(".sh-pr__product-results-grid > div > div > div") or
-                soup.select("[jsaction*='productcard']")
-            )
+                containers.forEach(el => {
+                    const titleEl = el.querySelector("h3, h4, [class*='title'], [class*='name'], .ropLT, .rwVHAc");
+                    const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb, [class*='price']");
+                    const linkEl  = el.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
+                    const imgEl   = el.querySelector("img");
 
-            for item in items[:20]:
+                    const title = titleEl?.textContent?.trim();
+                    const priceText = priceEl?.textContent?.trim() || "";
+                    const pm = priceRe.exec(priceText);
+                    const price = pm ? parseFloat(pm[1].replace(",","")) : 0;
+                    const href  = linkEl?.href || "";
+                    const img   = imgEl?.src || "";
+
+                    if (title && price > 0 && href) {
+                        out.push({title, price, href, img});
+                    }
+                });
+
+                // Strategy 2: work backwards from price spans if strategy 1 fails
+                if (out.length === 0) {
+                    document.querySelectorAll(".VbBaOe, .a8Pemb").forEach(priceEl => {
+                        const priceText = priceEl.textContent.trim();
+                        const pm = priceRe.exec(priceText);
+                        if (!pm) return;
+                        const price = parseFloat(pm[1].replace(",",""));
+                        if (price <= 0) return;
+
+                        // Walk up to find a container with title + link
+                        let node = priceEl.parentElement;
+                        for (let i = 0; i < 8 && node; i++, node = node.parentElement) {
+                            const titleEl = node.querySelector("h3, h4, .ropLT, .rwVHAc, [class*='title']");
+                            const linkEl  = node.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
+                            if (titleEl && linkEl) {
+                                out.push({
+                                    title: titleEl.textContent.trim(),
+                                    price,
+                                    href: linkEl.href,
+                                    img: node.querySelector("img")?.src || ""
+                                });
+                                break;
+                            }
+                        }
+                    });
+                }
+
+                return out.slice(0, 20);
+            }""")
+
+            for item in raw:
                 try:
-                    # Title — Google Shopping uses h3 or rotating class names
-                    title_el = (
-                        item.select_one("h3") or
-                        item.select_one(".Lq5OHe") or
-                        item.select_one(".tAxDx") or
-                        item.select_one("[class*='product-title']") or
-                        item.select_one("h4")
-                    )
-                    if not title_el:
-                        continue
-                    title = title_el.get_text(strip=True)[:200]
+                    title = str(item.get("title", "")).strip()[:200]
                     if not title or len(title) < 5:
                         continue
-
-                    # Price — look for £ amounts in known price elements
-                    price_el = (
-                        item.select_one(".a8Pemb") or
-                        item.select_one(".T14wmb") or
-                        item.select_one("[class*='price']") or
-                        item.select_one("[aria-label*='£']")
-                    )
-                    if price_el:
-                        price = _parse_price(price_el.get_text(strip=True))
-                    else:
-                        # Fallback: scan all text for first £X.XX pattern
-                        m = re.search(r"£\s*([\d,]+\.?\d*)", item.get_text())
-                        price = float(m.group(1).replace(",", "")) if m else 0.0
-
+                    price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 350:
                         continue
-
-                    # URL — Google Shopping links use /aclk redirect or /shopping/product/
-                    link_el = (
-                        item.select_one("a[href*='/aclk']") or
-                        item.select_one("a[href*='/shopping/product/']") or
-                        item.select_one("a[href]")
-                    )
-                    if not link_el:
-                        continue
-                    href = link_el.get("href", "")
-                    if href.startswith("/"):
-                        href = "https://www.google.co.uk" + href
+                    href = str(item.get("href", ""))
                     if not href.startswith("http"):
                         continue
-
-                    # Image
-                    img_el = item.select_one("img")
-                    img_src = ""
-                    if img_el:
-                        img_src = img_el.get("src") or img_el.get("data-src") or ""
-                    # Skip Google's 1px placeholder data URIs
-                    if img_src.startswith("data:") and len(img_src) < 200:
+                    img_src = str(item.get("img", ""))
+                    # Skip tiny data URIs (Google's lazy-load placeholders)
+                    if img_src.startswith("data:") and len(img_src) < 300:
                         img_src = ""
 
                     cases.append(RawCase(
