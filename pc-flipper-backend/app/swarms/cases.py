@@ -378,7 +378,8 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                 );
 
                 containers.forEach(el => {
-                    const titleEl = el.querySelector("h3, h4, .ropLT, .rwVHAc");
+                    // Prefer h3/h4 (usually just the product name) over class-based selectors
+                    const titleEl = el.querySelector("h3, h4, .ropLT");
                     const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb");
                     const linkEl  = el.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                     const imgEl   = el.querySelector("img");
@@ -398,7 +399,7 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                         const price = parseFloat(pm[1].replace(",",""));
                         let node = priceEl.parentElement;
                         for (let i = 0; i < 8 && node; i++, node = node.parentElement) {
-                            const titleEl = node.querySelector("h3, h4, .ropLT, .rwVHAc");
+                            const titleEl = node.querySelector("h3, h4, .ropLT");
                             const linkEl  = node.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                             if (titleEl && linkEl) {
                                 addItem(getCleanTitle(titleEl), price,
