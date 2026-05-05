@@ -351,55 +351,58 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
             # Extract products using JS against the live DOM — far more resilient
             # than HTML parsing because it sees the rendered element tree.
             raw = await page.evaluate("""() => {
-                const out = [];
+                const seen = new Set();
+                const out  = [];
                 const priceRe = /[£$]\\s*([\\d,]+\\.?\\d*)/;
 
-                // Strategy 1: containers that wrap a title + price
+                function getCleanTitle(el) {
+                    // Clone node and remove price children before reading text
+                    const clone = el.cloneNode(true);
+                    clone.querySelectorAll(".VbBaOe,.a8Pemb,.T14wmb,[class*='price'],[class*='Price']")
+                         .forEach(n => n.remove());
+                    return clone.textContent.trim();
+                }
+
+                function addItem(title, price, href, img) {
+                    if (!title || !href || price <= 0) return;
+                    // Deduplicate on normalised title (Google repeats the same item in multiple containers)
+                    const key = title.toLowerCase().replace(/\\s+/g, " ").slice(0, 80);
+                    if (seen.has(key)) return;
+                    seen.add(key);
+                    out.push({title, price, href, img});
+                }
+
+                // Strategy 1: use explicit product containers
                 const containers = document.querySelectorAll(
-                    ".pla-unit-container, .sh-dgr__grid-result, [data-sh-sr], " +
-                    ".g.sh-np, [jsaction*='productcard'], [data-docid], " +
-                    "li[class*='sh-'], div[class*='pla']"
+                    ".pla-unit-container, .sh-dgr__grid-result, [data-sh-sr], .g.sh-np"
                 );
 
                 containers.forEach(el => {
-                    const titleEl = el.querySelector("h3, h4, [class*='title'], [class*='name'], .ropLT, .rwVHAc");
-                    const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb, [class*='price']");
+                    const titleEl = el.querySelector("h3, h4, .ropLT, .rwVHAc");
+                    const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb");
                     const linkEl  = el.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                     const imgEl   = el.querySelector("img");
 
-                    const title = titleEl?.textContent?.trim();
+                    const title = titleEl ? getCleanTitle(titleEl) : "";
                     const priceText = priceEl?.textContent?.trim() || "";
                     const pm = priceRe.exec(priceText);
                     const price = pm ? parseFloat(pm[1].replace(",","")) : 0;
-                    const href  = linkEl?.href || "";
-                    const img   = imgEl?.src || "";
-
-                    if (title && price > 0 && href) {
-                        out.push({title, price, href, img});
-                    }
+                    addItem(title, price, linkEl?.href || "", imgEl?.src || "");
                 });
 
-                // Strategy 2: work backwards from price spans if strategy 1 fails
+                // Strategy 2: work backwards from price spans if strategy 1 found nothing
                 if (out.length === 0) {
                     document.querySelectorAll(".VbBaOe, .a8Pemb").forEach(priceEl => {
-                        const priceText = priceEl.textContent.trim();
-                        const pm = priceRe.exec(priceText);
+                        const pm = priceRe.exec(priceEl.textContent.trim());
                         if (!pm) return;
                         const price = parseFloat(pm[1].replace(",",""));
-                        if (price <= 0) return;
-
-                        // Walk up to find a container with title + link
                         let node = priceEl.parentElement;
                         for (let i = 0; i < 8 && node; i++, node = node.parentElement) {
-                            const titleEl = node.querySelector("h3, h4, .ropLT, .rwVHAc, [class*='title']");
+                            const titleEl = node.querySelector("h3, h4, .ropLT, .rwVHAc");
                             const linkEl  = node.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                             if (titleEl && linkEl) {
-                                out.push({
-                                    title: titleEl.textContent.trim(),
-                                    price,
-                                    href: linkEl.href,
-                                    img: node.querySelector("img")?.src || ""
-                                });
+                                addItem(getCleanTitle(titleEl), price,
+                                        linkEl.href, node.querySelector("img")?.src || "");
                                 break;
                             }
                         }
