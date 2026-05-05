@@ -356,11 +356,17 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                 const priceRe = /[£$]\\s*([\\d,]+\\.?\\d*)/;
 
                 function getCleanTitle(el) {
-                    // Clone node and remove price children before reading text
+                    // Clone node and remove price/retailer child elements
                     const clone = el.cloneNode(true);
-                    clone.querySelectorAll(".VbBaOe,.a8Pemb,.T14wmb,[class*='price'],[class*='Price']")
+                    clone.querySelectorAll(".VbBaOe,.a8Pemb,.T14wmb,.CsnLnf,.UsGWMe," +
+                                          "[class*='price'],[class*='Price'],[class*='store'],[class*='Store']")
                          .forEach(n => n.remove());
-                    return clone.textContent.trim();
+                    let t = clone.textContent.trim();
+                    // Strip trailing price/retailer text: "£49 SomeSite + £3.99 delivery"
+                    t = t.replace(/£[\\s\\S]*/g, "").trim();
+                    // Strip trailing store suffixes left as raw text
+                    t = t.replace(/[-–|·•]?\\s*[A-Z][a-z]+[\\s.]+(?:co\\.uk|UK|de|com)[\\s\\S]*/i, "").trim();
+                    return t;
                 }
 
                 function addItem(title, price, href, img) {
@@ -378,8 +384,8 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                 );
 
                 containers.forEach(el => {
-                    // Prefer h3/h4 (usually just the product name) over class-based selectors
-                    const titleEl = el.querySelector("h3, h4, .ropLT");
+                    // .orXoSd is Google Shopping's clean product-title div (no price/retailer)
+                    const titleEl = el.querySelector("h3, h4, .ropLT, .orXoSd, .rwVHAc");
                     const priceEl = el.querySelector(".VbBaOe, .a8Pemb, .T14wmb");
                     const linkEl  = el.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                     const imgEl   = el.querySelector("img");
@@ -399,7 +405,7 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                         const price = parseFloat(pm[1].replace(",",""));
                         let node = priceEl.parentElement;
                         for (let i = 0; i < 8 && node; i++, node = node.parentElement) {
-                            const titleEl = node.querySelector("h3, h4, .ropLT");
+                            const titleEl = node.querySelector("h3, h4, .ropLT, .orXoSd, .rwVHAc");
                             const linkEl  = node.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/'], a[href]");
                             if (titleEl && linkEl) {
                                 addItem(getCleanTitle(titleEl), price,
