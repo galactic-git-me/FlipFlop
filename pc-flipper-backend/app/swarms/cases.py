@@ -366,6 +366,8 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                     t = t.replace(/£[\\s\\S]*/g, "").trim();
                     // Strip trailing store suffixes left as raw text
                     t = t.replace(/[-–|·•]?\\s*[A-Z][a-z]+[\\s.]+(?:co\\.uk|UK|de|com)[\\s\\S]*/i, "").trim();
+                    // Remove leftover trailing punctuation
+                    t = t.replace(/[+\\-\\u2013\\u00B7\\u2022|,\\s]+$/, "").trim();
                     return t;
                 }
 
