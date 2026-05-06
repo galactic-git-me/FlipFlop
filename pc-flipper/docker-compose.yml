@@ -8,6 +8,6 @@ services:
     container_name: pc-flipper-web
     restart: always
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:${FRONTEND_CONTAINER_PORT}"
     environment:
       - NODE_ENV=production
