@@ -66,7 +66,7 @@ function PlaybookPicker({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {playbooks.map(p => {
           const isSelected = selected?.id === p.id;
-          const target = (p.profit_strategy as Record<string,unknown>)?.target_profit_gbp;
+          const target = (p.profit_strategy as Record<string, number | string | undefined>)?.target_profit_gbp;
           return (
             <button
               key={p.id}
