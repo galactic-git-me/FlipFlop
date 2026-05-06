@@ -9,6 +9,7 @@ from app.database import engine, Base
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit
+from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
 
@@ -95,6 +96,7 @@ app.include_router(playbooks.router, prefix="/api")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
+app.include_router(build_wizard_router, prefix="/api")
 
 
 @app.get("/health")

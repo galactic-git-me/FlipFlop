@@ -1,0 +1,514 @@
+"""
+Multi-agent Build Wizard.
+
+Agents run in sequence:
+  1. Wizard   — turns playbook + freetext intent into a RefinedIntent struct
+  2. Composer — generates 5 candidate builds grounded in real parts prices
+  3. Validator — checks compatibility / completeness / feasibility (hard rules first,
+                 AI double-check second); rejects failures; scores survivors
+  4. Ranker   — sorts by composite score (profit × demand × inverse-risk)
+  5. Planner  — produces a step-by-step purchase plan for the user's chosen build
+
+The orchestration loop retries Composer up to 3× if fewer than 3 valid builds
+survive Validator.  After 3 attempts the best available set is returned.
+"""
+from __future__ import annotations
+
+import json
+import re
+import asyncio
+from dataclasses import dataclass, field, asdict
+from typing import Literal
+
+import structlog
+
+log = structlog.get_logger(__name__)
+
+# ─── Data structures ──────────────────────────────────────────────────────────
+
+@dataclass
+class RefinedIntent:
+    playbook_name: str
+    playbook_emoji: str
+    budget_max: float
+    target_use_case: str
+    priorities: list[str]           # e.g. ["max profit", "low risk"]
+    constraints: list[str]          # e.g. ["must have PSU", "ATX only"]
+    user_notes: str
+
+
+@dataclass
+class BuildUpgrade:
+    role: str                       # "gpu" | "storage" | "ram" | "psu" | "os"
+    item: str                       # e.g. "RTX 3060 12GB"
+    cost_estimate: float
+    source: str                     # "eBay used" | "Amazon" | "included"
+    required: bool
+
+
+@dataclass
+class Build:
+    id: str
+    name: str
+    base_spec: str                  # what listing to look for ("Dell OptiPlex i7-8700…")
+    base_cost: float                # expected purchase price
+    upgrades: list[BuildUpgrade]
+    total_cost: float
+    estimated_resale: float
+    estimated_profit: float
+    profit_margin_pct: float
+    risk: Literal["low", "medium", "high"]
+    demand_fit: Literal["excellent", "good", "moderate", "poor"]
+    why: str                        # one-line rationale
+    sell_platform: str
+    sell_price_target: float
+    # Validation fields — filled by ValidatorAgent
+    valid: bool = True
+    validation_score: float = 0.0   # 0–100
+    rejection_reason: str = ""
+    rank: int = 0
+
+
+@dataclass
+class PurchasePlan:
+    build: Build
+    steps: list[dict]               # ordered action items
+    ebay_searches: list[str]        # copy-paste search strings
+    facebook_searches: list[str]
+    total_budget: float
+    contingency_buffer: float       # 10% of total_cost
+    expected_net_profit: float
+    expected_roi_pct: float
+    timeline_days: int
+    tips: list[str]
+
+
+# ─── Market context (injected into prompts) ───────────────────────────────────
+
+_MARKET_CONTEXT = """
+Current UK used-parts market (May 2026):
+GPU: GTX 1060 6GB ~£75 | RX 580 8GB ~£65 | RTX 3060 ~£170 | RTX 3070 ~£230 | RX 6600 ~£145
+Storage: 256GB SSD ~£18 | 480GB SSD ~£28 | 1TB SSD ~£55 | 1TB HDD ~£20
+RAM: 8GB DDR4 ~£12 | 16GB DDR4 ~£22 | 32GB DDR4 ~£40
+OS: Windows 11 Home key ~£6 (OEM)
+eBay fees: ~12.7% | PayPal: included | Postage: £15 avg tower
+Facebook/Gumtree: 0% fees, local pickup preferred
+Typical resale ranges:
+  Budget gaming PC (i5+GTX1060): £220–280
+  Mid gaming PC (i7+RTX3060): £380–450
+  Office workstation clean: £100–180
+  AI workstation (Xeon+A4000): £800–1200
+"""
+
+
+# ─── Agent 1: Wizard ──────────────────────────────────────────────────────────
+
+async def wizard_agent(
+    playbook: dict,
+    budget: float,
+    user_notes: str,
+    priorities: list[str],
+    constraints: list[str],
+) -> RefinedIntent:
+    """Turns raw user input + playbook into a clean RefinedIntent."""
+    return RefinedIntent(
+        playbook_name=playbook.get("name", "Unknown"),
+        playbook_emoji=playbook.get("emoji", "🔧"),
+        budget_max=budget,
+        target_use_case=playbook.get("target_use_case", "general"),
+        priorities=priorities or ["max profit", "low risk"],
+        constraints=constraints or [],
+        user_notes=user_notes or "",
+    )
+
+
+# ─── Agent 2: Composer ────────────────────────────────────────────────────────
+
+async def composer_agent(intent: RefinedIntent, playbook: dict, attempt: int = 1) -> list[Build]:
+    """
+    Generates 5 candidate builds.
+    Uses AI to ground builds in real parts prices and market conditions.
+    """
+    from app.services.ai_service import chat as ai_chat
+
+    upgrade_strategy = playbook.get("upgrade_strategy", {})
+    profit_strategy  = playbook.get("profit_strategy", {})
+
+    prompt = f"""You are the Composer agent in a PC-flipping build wizard.
+
+PLAYBOOK: {intent.playbook_name} {intent.playbook_emoji}
+Use case: {intent.target_use_case}
+Budget: £{intent.budget_max}
+User priorities: {', '.join(intent.priorities)}
+Constraints: {', '.join(intent.constraints) if intent.constraints else 'none'}
+User notes: {intent.user_notes or 'none'}
+
+Playbook upgrade requirements: {json.dumps(upgrade_strategy)}
+Playbook profit strategy: {json.dumps(profit_strategy)}
+
+{_MARKET_CONTEXT}
+
+Generate EXACTLY 5 distinct PC-flip builds that fit this playbook and budget.
+Each build must be a real, practical flip — not theoretical.
+Make them DIFFERENT from each other: vary the base PC, GPU tier, risk level.
+
+{"This is attempt " + str(attempt) + " of 3 — make builds more conservative and achievable." if attempt > 1 else ""}
+
+Respond with ONLY valid JSON. No explanation outside the JSON.
+
+{{
+  "builds": [
+    {{
+      "id": "build_1",
+      "name": "Short punchy name",
+      "base_spec": "Exact eBay search target e.g. Dell OptiPlex 7060 i7-8700 16GB no GPU",
+      "base_cost": 85,
+      "upgrades": [
+        {{"role": "gpu", "item": "RTX 3060 12GB", "cost_estimate": 170, "source": "eBay used", "required": true}},
+        {{"role": "storage", "item": "500GB NVMe SSD", "cost_estimate": 25, "source": "Amazon", "required": false}}
+      ],
+      "total_cost": 280,
+      "estimated_resale": 420,
+      "estimated_profit": 140,
+      "profit_margin_pct": 33,
+      "risk": "low",
+      "demand_fit": "excellent",
+      "why": "One sentence on why this is a good flip",
+      "sell_platform": "eBay",
+      "sell_price_target": 420
+    }}
+  ]
+}}"""
+
+    try:
+        response, model = await ai_chat(prompt, [], None)
+        log.info("composer.ai_response", model=model, attempt=attempt)
+        builds = _parse_builds_json(response)
+        log.info("composer.builds_parsed", count=len(builds))
+        return builds
+    except Exception as exc:
+        log.error("composer.failed", error=str(exc))
+        return []
+
+
+def _parse_builds_json(response: str) -> list[Build]:
+    """Extract and parse the builds JSON from an AI response."""
+    # Strip markdown fences
+    clean = re.sub(r"```(?:json)?", "", response).strip()
+    # Find the outermost JSON object
+    m = re.search(r'\{[\s\S]*\}', clean)
+    if not m:
+        raise ValueError("No JSON object found in response")
+    data = json.loads(m.group())
+    builds = []
+    for i, b in enumerate(data.get("builds", []), 1):
+        upgrades = [
+            BuildUpgrade(
+                role=u.get("role", ""),
+                item=u.get("item", ""),
+                cost_estimate=float(u.get("cost_estimate", 0)),
+                source=u.get("source", "eBay"),
+                required=bool(u.get("required", True)),
+            )
+            for u in b.get("upgrades", [])
+        ]
+        builds.append(Build(
+            id=b.get("id", f"build_{i}"),
+            name=b.get("name", f"Build {i}"),
+            base_spec=b.get("base_spec", ""),
+            base_cost=float(b.get("base_cost", 0)),
+            upgrades=upgrades,
+            total_cost=float(b.get("total_cost", 0)),
+            estimated_resale=float(b.get("estimated_resale", 0)),
+            estimated_profit=float(b.get("estimated_profit", 0)),
+            profit_margin_pct=float(b.get("profit_margin_pct", 0)),
+            risk=b.get("risk", "medium"),
+            demand_fit=b.get("demand_fit", "good"),
+            why=b.get("why", ""),
+            sell_platform=b.get("sell_platform", "eBay"),
+            sell_price_target=float(b.get("sell_price_target", 0)),
+        ))
+    return builds
+
+
+# ─── Agent 3: Validator ───────────────────────────────────────────────────────
+
+_DEMAND_SCORE = {"excellent": 4, "good": 3, "moderate": 2, "poor": 1}
+_RISK_SCORE   = {"low": 1, "medium": 2, "high": 3}
+
+
+def _hard_validate(build: Build, intent: RefinedIntent) -> tuple[bool, str]:
+    """
+    Hard rule checks — no AI needed.
+    Returns (passed, rejection_reason).
+    """
+    # Budget check
+    if build.total_cost > intent.budget_max * 1.05:   # 5% tolerance
+        return False, f"Total cost £{build.total_cost:.0f} exceeds budget £{intent.budget_max:.0f}"
+
+    # Must be profitable
+    if build.estimated_profit <= 0:
+        return False, f"Negative or zero profit (£{build.estimated_profit:.0f})"
+
+    # Sanity: resale > total_cost
+    if build.estimated_resale <= build.total_cost:
+        return False, "Estimated resale does not cover total cost"
+
+    # Minimum profit margin
+    if build.profit_margin_pct < 10:
+        return False, f"Profit margin {build.profit_margin_pct:.0f}% is below 10% minimum"
+
+    # Base cost must be positive
+    if build.base_cost <= 0:
+        return False, "Base cost is zero — build is not grounded"
+
+    return True, ""
+
+
+def _score_build(build: Build) -> float:
+    """
+    Composite score 0–100 used for ranking.
+    Weights: profit 50%, demand 30%, risk 20%.
+    """
+    profit_score  = min(100, (build.estimated_profit / 300) * 100) * 0.50
+    demand_score  = (_DEMAND_SCORE.get(build.demand_fit, 2) / 4) * 100 * 0.30
+    risk_score    = ((4 - _RISK_SCORE.get(build.risk, 2)) / 3) * 100 * 0.20
+    return round(profit_score + demand_score + risk_score, 1)
+
+
+async def validator_agent(builds: list[Build], intent: RefinedIntent) -> list[Build]:
+    """
+    Validates each build.  Hard rules first, then scores survivors.
+    Returns only valid builds, scored and sorted.
+    """
+    valid_builds: list[Build] = []
+
+    for build in builds:
+        passed, reason = _hard_validate(build, intent)
+        if not passed:
+            build.valid = False
+            build.rejection_reason = reason
+            log.info("validator.rejected", build=build.name, reason=reason)
+            continue
+
+        build.valid = True
+        build.validation_score = _score_build(build)
+        valid_builds.append(build)
+        log.info("validator.passed", build=build.name, score=build.validation_score)
+
+    return valid_builds
+
+
+# ─── Agent 4: Ranker ─────────────────────────────────────────────────────────
+
+def ranker_agent(builds: list[Build]) -> list[Build]:
+    """Sorts valid builds by validation_score descending, assigns rank."""
+    ranked = sorted(builds, key=lambda b: b.validation_score, reverse=True)
+    for i, b in enumerate(ranked, 1):
+        b.rank = i
+    return ranked
+
+
+# ─── Agent 5: Planner ────────────────────────────────────────────────────────
+
+async def planner_agent(build: Build, intent: RefinedIntent) -> PurchasePlan:
+    """Generates a step-by-step purchase plan for the selected build."""
+    from app.services.ai_service import chat as ai_chat
+
+    upgrade_list = "\n".join(
+        f"  - {u.item} ({u.role}): ~£{u.cost_estimate:.0f} via {u.source}"
+        for u in build.upgrades
+    )
+
+    prompt = f"""You are the Planner agent in a PC-flipping build wizard.
+
+The user has selected this build:
+Name: {build.name}
+Base PC to find: {build.base_spec}
+Base cost target: £{build.base_cost:.0f}
+Upgrades needed:
+{upgrade_list}
+Total cost: £{build.total_cost:.0f}
+Target sell price: £{build.sell_price_target:.0f} on {build.sell_platform}
+Estimated profit: £{build.estimated_profit:.0f}
+
+{_MARKET_CONTEXT}
+
+Generate a practical, step-by-step purchase and flip plan.
+
+Respond with ONLY valid JSON:
+{{
+  "steps": [
+    {{"step": 1, "action": "Search eBay for base PC", "detail": "Use search: ...", "estimated_time": "1-2 days"}},
+    {{"step": 2, "action": "Inspect and test", "detail": "Check POST, RAM slots, PCIe slot", "estimated_time": "1 hour"}},
+    ...
+  ],
+  "ebay_searches": ["Dell OptiPlex 7060 i7 no GPU", "HP EliteDesk 800 G4 no graphics"],
+  "facebook_searches": ["Dell OptiPlex i7 Birmingham", "gaming pc base unit no gpu"],
+  "tips": [
+    "Buy on a Sunday evening — more auctions end, less competition",
+    "Check the PSU rating — 300W won't run an RTX 3060"
+  ],
+  "timeline_days": 14
+}}"""
+
+    contingency = round(build.total_cost * 0.10, 2)
+    ebay_searches = [build.base_spec]
+    facebook_searches = [build.base_spec.split(" ")[:4].__str__().strip("[]'\"").replace("', '", " ")]
+    steps = [
+        {"step": 1, "action": "Source base PC", "detail": f"Search for: {build.base_spec}", "estimated_time": "1-3 days"},
+        {"step": 2, "action": "Test on arrival", "detail": "POST test, check all slots, run memtest", "estimated_time": "1 hour"},
+    ]
+    for i, u in enumerate(build.upgrades, 3):
+        steps.append({"step": i, "action": f"Source {u.item}", "detail": f"Buy via {u.source} for ~£{u.cost_estimate:.0f}", "estimated_time": "1-2 days"})
+    steps.append({"step": len(steps) + 1, "action": "Build and test", "detail": "Install upgrades, run benchmarks, clean thoroughly", "estimated_time": "2-3 hours"})
+    steps.append({"step": len(steps) + 1, "action": "List on " + build.sell_platform, "detail": f"Target price £{build.sell_price_target:.0f} — use keyword-rich title", "estimated_time": "30 minutes"})
+    tips = [
+        "Buy base unit on Sunday evenings — more auctions end, fewer bidders",
+        f"Keep a £{contingency:.0f} contingency buffer (10%) for unexpected costs",
+        f"Price at £{build.sell_price_target:.0f} — don't undercut, demand is there",
+    ]
+    timeline_days = 14
+
+    try:
+        response, _ = await ai_chat(prompt, [], None)
+        m = re.search(r'\{[\s\S]*\}', re.sub(r"```(?:json)?", "", response).strip())
+        if m:
+            data = json.loads(m.group())
+            steps = data.get("steps", steps)
+            ebay_searches = data.get("ebay_searches", ebay_searches)
+            facebook_searches = data.get("facebook_searches", facebook_searches)
+            tips = data.get("tips", tips)
+            timeline_days = data.get("timeline_days", timeline_days)
+    except Exception as exc:
+        log.warning("planner.ai_failed_using_template", error=str(exc))
+
+    return PurchasePlan(
+        build=build,
+        steps=steps,
+        ebay_searches=ebay_searches,
+        facebook_searches=facebook_searches,
+        total_budget=build.total_cost + contingency,
+        contingency_buffer=contingency,
+        expected_net_profit=build.estimated_profit,
+        expected_roi_pct=round((build.estimated_profit / build.total_cost) * 100, 1),
+        timeline_days=timeline_days,
+        tips=tips,
+    )
+
+
+# ─── Orchestrator ─────────────────────────────────────────────────────────────
+
+async def run_build_wizard(
+    playbook: dict,
+    budget: float,
+    user_notes: str,
+    priorities: list[str],
+    constraints: list[str],
+) -> dict:
+    """
+    Main entry point.  Runs the full Wizard → Composer → Validator loop.
+    Returns a dict ready for JSON serialisation.
+    """
+    # Phase 1: Wizard
+    intent = await wizard_agent(playbook, budget, user_notes, priorities, constraints)
+    log.info("wizard.intent", playbook=intent.playbook_name, budget=intent.budget_max)
+
+    # Phase 2+3: Composer → Validator loop (max 3 attempts)
+    all_valid: list[Build] = []
+    all_rejected: list[Build] = []
+
+    for attempt in range(1, 4):
+        log.info("composer.attempt", n=attempt)
+        candidates = await composer_agent(intent, playbook, attempt)
+
+        valid = await validator_agent(candidates, intent)
+        rejected = [b for b in candidates if not b.valid]
+        all_valid.extend(valid)
+        all_rejected.extend(rejected)
+
+        # Deduplicate by name
+        seen_names: set[str] = set()
+        unique_valid: list[Build] = []
+        for b in all_valid:
+            if b.name not in seen_names:
+                seen_names.add(b.name)
+                unique_valid.append(b)
+        all_valid = unique_valid
+
+        log.info("validator.result", valid=len(all_valid), rejected=len(rejected), attempt=attempt)
+        if len(all_valid) >= 3:
+            break
+
+        if attempt < 3:
+            log.info("composer.regenerating", reason=f"only {len(all_valid)} valid builds")
+            await asyncio.sleep(0.5)
+
+    # Phase 4: Rank
+    ranked = ranker_agent(all_valid[:5])  # cap at 5
+    log.info("ranker.done", builds=len(ranked))
+
+    return {
+        "intent": asdict(intent),
+        "builds": [_build_to_dict(b) for b in ranked],
+        "rejected_count": len(all_rejected),
+        "attempts": attempt,
+    }
+
+
+async def run_planner(build_data: dict, intent_data: dict) -> dict:
+    """Entry point for the Planner phase after user selects a build."""
+    build = _dict_to_build(build_data)
+    intent = RefinedIntent(**intent_data)
+    plan = await planner_agent(build, intent)
+    return {
+        "build": _build_to_dict(plan.build),
+        "steps": plan.steps,
+        "ebay_searches": plan.ebay_searches,
+        "facebook_searches": plan.facebook_searches,
+        "total_budget": plan.total_budget,
+        "contingency_buffer": plan.contingency_buffer,
+        "expected_net_profit": plan.expected_net_profit,
+        "expected_roi_pct": plan.expected_roi_pct,
+        "timeline_days": plan.timeline_days,
+        "tips": plan.tips,
+    }
+
+
+# ─── Serialisation helpers ────────────────────────────────────────────────────
+
+def _build_to_dict(b: Build) -> dict:
+    return {
+        "id": b.id,
+        "name": b.name,
+        "base_spec": b.base_spec,
+        "base_cost": b.base_cost,
+        "upgrades": [asdict(u) for u in b.upgrades],
+        "total_cost": b.total_cost,
+        "estimated_resale": b.estimated_resale,
+        "estimated_profit": b.estimated_profit,
+        "profit_margin_pct": b.profit_margin_pct,
+        "risk": b.risk,
+        "demand_fit": b.demand_fit,
+        "why": b.why,
+        "sell_platform": b.sell_platform,
+        "sell_price_target": b.sell_price_target,
+        "valid": b.valid,
+        "validation_score": b.validation_score,
+        "rejection_reason": b.rejection_reason,
+        "rank": b.rank,
+    }
+
+
+def _dict_to_build(d: dict) -> Build:
+    upgrades = [BuildUpgrade(**u) for u in d.get("upgrades", [])]
+    return Build(
+        id=d["id"], name=d["name"], base_spec=d["base_spec"],
+        base_cost=d["base_cost"], upgrades=upgrades,
+        total_cost=d["total_cost"], estimated_resale=d["estimated_resale"],
+        estimated_profit=d["estimated_profit"], profit_margin_pct=d["profit_margin_pct"],
+        risk=d["risk"], demand_fit=d["demand_fit"], why=d["why"],
+        sell_platform=d["sell_platform"], sell_price_target=d["sell_price_target"],
+        valid=d.get("valid", True), validation_score=d.get("validation_score", 0),
+        rejection_reason=d.get("rejection_reason", ""), rank=d.get("rank", 0),
+    )

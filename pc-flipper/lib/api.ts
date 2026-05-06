@@ -1,3 +1,91 @@
+// ── Build Wizard types ────────────────────────────────────────────────────────
+
+export interface WizardPlaybook {
+  id: number;
+  name: string;
+  emoji: string;
+  description: string;
+  target_use_case: string;
+  status: string;
+  profit_strategy: Record<string, unknown>;
+}
+
+export interface RefinedIntent {
+  playbook_name: string;
+  playbook_emoji: string;
+  budget_max: number;
+  target_use_case: string;
+  priorities: string[];
+  constraints: string[];
+  user_notes: string;
+}
+
+export interface BuildUpgrade {
+  role: string;
+  item: string;
+  cost_estimate: number;
+  source: string;
+  required: boolean;
+}
+
+export interface WizardBuild {
+  id: string;
+  name: string;
+  base_spec: string;
+  base_cost: number;
+  upgrades: BuildUpgrade[];
+  total_cost: number;
+  estimated_resale: number;
+  estimated_profit: number;
+  profit_margin_pct: number;
+  risk: "low" | "medium" | "high";
+  demand_fit: "excellent" | "good" | "moderate" | "poor";
+  why: string;
+  sell_platform: string;
+  sell_price_target: number;
+  valid: boolean;
+  validation_score: number;
+  rejection_reason: string;
+  rank: number;
+}
+
+export interface GenerateRequest {
+  playbook_id: number;
+  budget: number;
+  user_notes: string;
+  priorities: string[];
+  constraints: string[];
+}
+
+export interface GenerateResult {
+  intent: RefinedIntent;
+  builds: WizardBuild[];
+  rejected_count: number;
+  attempts: number;
+}
+
+export interface PlanStep {
+  step: number;
+  action: string;
+  detail: string;
+  estimated_time: string;
+}
+
+export interface PurchasePlan {
+  build: WizardBuild;
+  steps: PlanStep[];
+  ebay_searches: string[];
+  facebook_searches: string[];
+  total_budget: number;
+  contingency_buffer: number;
+  expected_net_profit: number;
+  expected_roi_pct: number;
+  timeline_days: number;
+  tips: string[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface ScanSite {
   name: string;
   url: string;
@@ -156,6 +244,20 @@ export const api = {
       method: "PUT",
       body: JSON.stringify({ cookies_json }),
     }),
+  },
+
+  buildWizard: {
+    playbooks: () => request<WizardPlaybook[]>("/build-wizard/playbooks"),
+    generate: (body: GenerateRequest) =>
+      request<GenerateResult>("/build-wizard/generate", {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    plan: (body: { build: WizardBuild; intent: RefinedIntent }) =>
+      request<PurchasePlan>("/build-wizard/plan", {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
   },
 
   playbooks: {
