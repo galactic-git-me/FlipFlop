@@ -44,10 +44,9 @@ CASE_THEMES = [
 SOURCES = [
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
-    {"name": "Amazon",            "fn": "amazon"},          # Playwright — stealth browser
-    {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser
-    {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser
-    {"name": "Etsy",              "fn": "etsy"},            # Playwright — JS-rendered
+    {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
+    {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
+    {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
 ]
 
 
@@ -522,9 +521,9 @@ import random
 
 async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
     """
-    Amazon UK — Playwright stealth browser.
-    Amazon aggressively bot-detects plain httpx but a headless Chromium with stealth
-    patches passes consistently.
+    Amazon UK — Playwright stealth browser with JS evaluation.
+    BeautifulSoup on page.content() misses h2 links because Amazon renders
+    them client-side. JS evaluation against the live DOM works reliably.
     """
     try:
         from playwright.async_api import async_playwright
@@ -544,37 +543,67 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
 
         page = await context.new_page()
         try:
-            html = await _pw_get_page_html(page, url, '[data-component-type="s-search-result"]')
-            soup = BeautifulSoup(html, "lxml")
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            try:
+                await page.wait_for_selector('[data-component-type="s-search-result"]', timeout=12000)
+            except Exception:
+                pass
+            await asyncio.sleep(random.uniform(1.5, 2.5))
 
-            for item in soup.select('[data-component-type="s-search-result"]')[:10]:
+            raw = await page.evaluate("""() => {
+                const out = [];
+                const seen = new Set();
+                document.querySelectorAll('[data-component-type="s-search-result"]').forEach(item => {
+                    try {
+                        const titleEl = item.querySelector('h2 span') || item.querySelector('h2');
+                        const linkEl  = item.querySelector('h2 a') || item.querySelector('a.a-link-normal[href*="/dp/"]');
+                        const priceW  = item.querySelector('.a-price-whole');
+                        const priceF  = item.querySelector('.a-price-fraction');
+                        const imgEl   = item.querySelector('img.s-image');
+                        if (!titleEl || !linkEl) return;
+
+                        const title = titleEl.textContent.trim().slice(0, 200);
+                        if (!title) return;
+
+                        let href = linkEl.href || linkEl.getAttribute('href') || '';
+                        if (href.startsWith('/')) href = 'https://www.amazon.co.uk' + href;
+                        if (!href.startsWith('http')) return;
+
+                        const key = href.split('?')[0];
+                        if (seen.has(key)) return;
+                        seen.add(key);
+
+                        let price = 0;
+                        if (priceW) {
+                            const whole = priceW.textContent.replace(/[^0-9]/g, '');
+                            const frac  = priceF ? priceF.textContent.replace(/[^0-9]/g, '').padEnd(2,'0') : '00';
+                            price = parseFloat(whole + '.' + frac.slice(0,2));
+                        }
+                        if (price <= 0 || price > 350) return;
+
+                        out.push({title, price, href, img: imgEl ? imgEl.src : ''});
+                    } catch (e) {}
+                });
+                return out.slice(0, 10);
+            }""")
+
+            for item in raw:
                 try:
-                    title_el = item.select_one("h2 span")
-                    price_whole = item.select_one(".a-price-whole")
-                    price_frac  = item.select_one(".a-price-fraction")
-                    url_el  = item.select_one("h2 a")
-                    img_el  = item.select_one("img.s-image")
-                    if not title_el or not url_el:
+                    title = str(item.get("title", "")).strip()[:200]
+                    if not title:
                         continue
-                    price = 0.0
-                    if price_whole:
-                        frac = (price_frac.get_text(strip=True) if price_frac else "0").replace(".", "")
-                        whole = price_whole.get_text(strip=True).replace(",", "").rstrip(".")
-                        try:
-                            price = float(f"{whole}.{frac}")
-                        except ValueError:
-                            pass
+                    price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 350:
                         continue
-                    href = url_el.get("href", "")
+                    href = str(item.get("href", ""))
                     if not href.startswith("http"):
-                        href = "https://www.amazon.co.uk" + href
+                        continue
                     cases.append(RawCase(
-                        name=title_el.get_text(strip=True)[:200],
+                        name=title,
                         price=price,
                         source_site="Amazon",
                         source_url=href,
-                        image_url=img_el.get("src", "") if img_el else "",
+                        image_url=str(item.get("img", "")),
                         theme=theme,
                     ))
                 except Exception:
