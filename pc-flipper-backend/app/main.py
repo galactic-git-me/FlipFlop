@@ -24,11 +24,45 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     await _migrate_add_columns()
     await _seed_default_data()
+    await _load_db_settings_into_config()
     start_scheduler()
     yield
     stop_scheduler()
     await engine.dispose()
     log.info("app.shutdown")
+
+
+async def _load_db_settings_into_config():
+    """
+    Push DB-stored API keys and model config into the live Settings cache
+    so ai_service.py picks them up immediately on startup without requiring
+    a server restart after the user saves a key in the Settings UI.
+    """
+    from app.database import AsyncSessionLocal
+    from app.models.app_settings import AppSettings
+    from sqlalchemy import select
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
+            db_settings = result.scalar_one_or_none()
+            if not db_settings:
+                return
+            cfg = get_settings()
+            if db_settings.openrouter_api_key:
+                cfg.openrouter_api_key = db_settings.openrouter_api_key
+            if db_settings.openrouter_primary_model:
+                cfg.openrouter_primary_model = db_settings.openrouter_primary_model
+            if db_settings.ollama_model:
+                cfg.ollama_model = db_settings.ollama_model
+            if db_settings.ollama_base_url:
+                cfg.ollama_base_url = db_settings.ollama_base_url
+            log.info(
+                "config.loaded_from_db",
+                has_openrouter_key=bool(db_settings.openrouter_api_key),
+                model=cfg.openrouter_primary_model,
+            )
+    except Exception as exc:
+        log.warning("config.db_load_failed", error=str(exc))
 
 
 app = FastAPI(
@@ -329,11 +363,9 @@ async def _seed_default_data():
                 ))
                 log.info("seeded.auction_source", name=src_name)
 
-        # ── Ensure Gumtree + Facebook are enabled on existing installs ──────────
-        # Both use the Playwright scraper (headless browser with stealth mode).
-        # Gumtree: no login required, Playwright bypasses the JS challenge.
-        # Facebook: works without cookies (~20 items); add fb_cookies.json for full access.
-        for _src_name in ("Gumtree", "Facebook Marketplace", "Apex Auctions"):
+        # ── Ensure Facebook + Apex are enabled on existing installs ─────────────
+        # Gumtree is intentionally excluded — Reblaze WAF blocks all automation.
+        for _src_name in ("Facebook Marketplace", "Apex Auctions"):
             await db.execute(
                 _update(DataSource)
                 .where(DataSource.name == _src_name)

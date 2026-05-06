@@ -37,16 +37,17 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     await db.flush()
     await db.refresh(settings)
 
-    # Propagate model settings to live config cache
-    if body.ollama_model or body.ollama_base_url or body.openrouter_primary_model:
-        from app.config import get_settings as get_cfg
-        cfg = get_cfg()
-        if body.ollama_model:
-            cfg.ollama_model = body.ollama_model
-        if body.ollama_base_url:
-            cfg.ollama_base_url = body.ollama_base_url
-        if body.openrouter_primary_model:
-            cfg.openrouter_primary_model = body.openrouter_primary_model
+    # Propagate to live config cache so ai_service picks up changes without restart
+    from app.config import get_settings as get_cfg
+    cfg = get_cfg()
+    if body.openrouter_api_key:
+        cfg.openrouter_api_key = body.openrouter_api_key
+    if body.ollama_model:
+        cfg.ollama_model = body.ollama_model
+    if body.ollama_base_url:
+        cfg.ollama_base_url = body.ollama_base_url
+    if body.openrouter_primary_model:
+        cfg.openrouter_primary_model = body.openrouter_primary_model
 
     return _to_dict(settings)
 
