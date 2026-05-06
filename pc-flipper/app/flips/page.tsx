@@ -9,7 +9,7 @@ import { FlippabilityScore } from "@/components/flippability-score";
 import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
 import { Listing, Part, Flip, FlipStage } from "@/lib/types";
-import { api } from "@/lib/api";
+import { api, apiUrl } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
 type Stage = 1 | 2 | 3;
@@ -310,7 +310,7 @@ function ActiveFlipRow({ flip }: { flip: Flip }) {
     setGeneratingImages(true);
     setShowImages(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/flips/${flip.id}/generate-images`, {
+      const res = await fetch(apiUrl(`/flips/${flip.id}/generate-images`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ case_theme: caseTheme || null }),

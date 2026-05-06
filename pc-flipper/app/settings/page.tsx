@@ -24,7 +24,7 @@ const DEFAULTS: AppSettings = {
   max_concurrent_flips: 1,
   auto_buy_autonomous: false,
   auto_buy_daily_limit: 3,
-  ollama_base_url: "http://localhost:11434",
+  ollama_base_url: process.env.NEXT_PUBLIC_OLLAMA_BASE_URL ?? "",
   ollama_model: "gemma3:4b",
   openrouter_api_key: "",
   openrouter_primary_model: "google/gemma-4-31b-it:free",
@@ -198,7 +198,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.ollama_base_url}
                   onChange={e => set("ollama_base_url", e.target.value)}
-                  placeholder="http://localhost:11434"
+                  placeholder="Ollama base URL"
                   className="w-1/2 px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-cyan-400/50"
                 />
                 <input

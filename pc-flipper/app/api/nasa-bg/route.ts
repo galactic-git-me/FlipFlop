@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const NASA_KEY = process.env.NASA_API_KEY ?? "DEMO_KEY";
 const APOD_API = `https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&count=1`;
 
 // Pick a random APOD and proxy the image back so Three.js can load it same-origin
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const meta = await fetch(APOD_API, { next: { revalidate: 0 } });
     if (!meta.ok) throw new Error("APOD API failed");
@@ -13,7 +15,7 @@ export async function GET() {
 
     // Some APODs are YouTube videos — skip those and fall back to local image
     if (entry.media_type !== "image") {
-      return NextResponse.redirect(new URL("/space-bg.jpg", "http://localhost"));
+      return NextResponse.redirect(new URL("/space-bg.jpg", request.url));
     }
 
     const imgUrl = entry.hdurl ?? entry.url;
@@ -31,13 +33,9 @@ export async function GET() {
     });
   } catch {
     // Fall back to bundled space image
-    const fallback = await fetch(new URL("/space-bg.jpg", "http://localhost:3007"));
-    if (fallback.ok) {
-      const buffer = await fallback.arrayBuffer();
-      return new NextResponse(buffer, {
-        headers: { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=3600" },
-      });
-    }
-    return NextResponse.json({ error: "unavailable" }, { status: 503 });
+    const buffer = await readFile(join(process.cwd(), "public", "space-bg.jpg"));
+    return new NextResponse(buffer, {
+      headers: { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=3600" },
+    });
   }
 }

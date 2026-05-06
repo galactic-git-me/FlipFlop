@@ -23,7 +23,7 @@ import { TraeBg } from "@/components/trae-bg";
 import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
 import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem, TrendDir, DemandStrength } from "@/lib/types";
-import { ScanStatus, api } from "@/lib/api";
+import { ScanStatus, api, apiUrl } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
 import CountUp from "@/components/CountUp";
@@ -1189,7 +1189,7 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: { pay
   if (d.storage_gb)   params.set("storage_gb", String(d.storage_gb));
   if (d.storage_type) params.set("storage_type", d.storage_type);
   params.set("buy_price", String(d.price));
-  const auditUrl = `http://localhost:8000/api/debug/resale?${params.toString()}`;
+  const auditUrl = apiUrl(`/debug/resale?${params.toString()}`);
   const fmt = (v: number) => `${v >= 0 ? "+" : ""}${formatCurrency(v)}`;
 
   return (

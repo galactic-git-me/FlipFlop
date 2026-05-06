@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { WifiOff, RefreshCw, X } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 export function BackendStatus() {
   const [offline, setOffline] = useState(false);
@@ -10,10 +11,7 @@ export function BackendStatus() {
 
   const check = async () => {
     setChecking(true);
-    const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL ??
-      `http://${window.location.hostname}:8088/api`;
-    const url = apiUrl.replace(/\/api$/, "");
+    const url = API_BASE_URL.replace(/\/api$/, "");
     try {
       const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(3000) });
       setOffline(!res.ok);
@@ -38,7 +36,7 @@ export function BackendStatus() {
       <WifiOff className="w-4 h-4 text-red-400 flex-shrink-0" />
       <div>
         <span className="font-semibold text-red-300">Backend offline</span>
-        <span className="text-red-400/80 ml-2">— start the API server on port 8088</span>
+        <span className="text-red-400/80 ml-2">— check the configured API server</span>
       </div>
       <button
         onClick={check}

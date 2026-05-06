@@ -1,4 +1,4 @@
-// Types only — all data comes from the live API at http://localhost:8000/api
+// Types only — all data comes from the configured live API.
 // See lib/api.ts and lib/types.ts for type definitions
 
 export {}

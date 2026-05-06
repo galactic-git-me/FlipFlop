@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Terminal, Pause, Play, Trash2, Download, Circle } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 interface LogEntry {
   ts: string;
@@ -11,7 +12,7 @@ interface LogEntry {
 }
 type LevelFilter = "ALL" | "info" | "warning" | "error" | "debug";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8088/api";
+const BASE_URL = API_BASE_URL;
 
 function levelColor(level: string) {
   switch (level.toLowerCase()) {

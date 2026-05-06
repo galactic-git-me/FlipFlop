@@ -107,15 +107,15 @@ export interface ScanStatus {
   total_gems: number;
 }
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ??
-  (typeof window !== "undefined"
-    ? `http://${window.location.hostname}:8088/api`
-    : "http://localhost:8088/api");
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+
+export function apiUrl(path: string): string {
+  return `${API_BASE_URL}${path}`;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Ensure trailing slash to avoid 307 redirect which breaks cross-origin requests
-  const url = `${BASE_URL}${path}`.replace(/([^/])(\?|$)/, "$1/$2");
+  const url = apiUrl(path).replace(/([^/])(\?|$)/, "$1/$2");
   const res = await fetch(url, {
     headers: { "Content-Type": "application/json", ...init?.headers },
     signal: AbortSignal.timeout(10_000),
@@ -226,7 +226,7 @@ export const api = {
       if (title) form.append("title", title);
       if (price != null) form.append("price", String(price));
       // Don't set Content-Type — browser sets multipart boundary automatically
-      const url = `${(typeof window !== "undefined" ? `http://${window.location.hostname}:8088/api` : "http://localhost:8088/api")}/manual-submit/image/`;
+      const url = apiUrl("/manual-submit/image/");
       return fetch(url, { method: "POST", body: form, signal: AbortSignal.timeout(45_000) })
         .then(r => { if (!r.ok) return r.json().then(d => { throw new Error(d.detail || `HTTP ${r.status}`); }); return r.json(); }) as Promise<import("./types").Listing>;
     },
