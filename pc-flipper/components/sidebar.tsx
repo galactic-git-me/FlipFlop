@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   { href: "/selling", icon: Tag, label: "Selling Toolkit", color: "" },
   { href: "/intel", icon: Brain, label: "Intelligence", color: "text-cyan-400" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks", color: "text-violet-400" },
-  { href: "/chat", icon: MessageSquare, label: "Hermes AI", color: "" },
+  { href: "/chat", icon: MessageSquare, label: "Build Wizard", color: "text-[#00dc82]" },
 ];
 
 const CONFIG_ITEMS = [

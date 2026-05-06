@@ -1,245 +1,867 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Cpu, TrendingUp, Lightbulb, Wifi, WifiOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { useState, useEffect, useCallback } from "react";
+import {
+  Wand2, Cpu, ShieldCheck, Trophy, ClipboardList,
+  ChevronRight, ChevronLeft, RotateCcw, Search,
+  AlertTriangle, TrendingUp, Zap, Package,
+  CheckCircle2, Circle, Loader2, ExternalLink,
+  Star, ShoppingCart, Clock, Copy, Check,
+} from "lucide-react";
+import { api, WizardPlaybook, WizardBuild, RefinedIntent, PurchasePlan, PlanStep } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  model?: string;
-  timestamp: Date;
-}
+// ─── Phase definitions ────────────────────────────────────────────────────────
 
-const SUGGESTIONS = [
-  "What are today's best gems and why?",
-  "Evaluate listing: i5-8400 16GB DDR4 no GPU no HDD £45 Birmingham",
-  "What upgrades maximise profit on an i7-7700 base unit?",
-  "Which selling platform gives the best net profit right now?",
-  "Is a Star Trek themed case worth the premium on resale?",
+type Phase = "playbook" | "intent" | "generating" | "builds" | "plan";
+
+const PHASES: { id: Phase; label: string; icon: React.ElementType }[] = [
+  { id: "playbook",    label: "Playbook",  icon: Wand2        },
+  { id: "intent",      label: "Intent",    icon: Cpu          },
+  { id: "generating",  label: "Agents",    icon: Zap          },
+  { id: "builds",      label: "Builds",    icon: Trophy       },
+  { id: "plan",        label: "Plan",      icon: ClipboardList },
 ];
 
-function formatContent(content: string) {
-  const lines = content.split("\n");
-  return lines.map((line, i) => {
-    if (line.startsWith("**") && line.endsWith("**")) {
-      return <p key={i} className="font-semibold text-slate-200 mt-2">{line.replace(/\*\*/g, "")}</p>;
-    }
-    if (line.startsWith("- ") || line.startsWith("* ")) {
-      return <li key={i} className="text-slate-300 ml-4 list-disc">{formatInline(line.slice(2))}</li>;
-    }
-    if (/^\d+\.\s/.test(line)) {
-      return <li key={i} className="text-slate-300 ml-4 list-decimal">{formatInline(line.replace(/^\d+\.\s/, ""))}</li>;
-    }
-    if (line.startsWith("# ")) {
-      return <p key={i} className="font-bold text-slate-100 text-base mt-3">{line.slice(2)}</p>;
-    }
-    if (line.startsWith("## ")) {
-      return <p key={i} className="font-semibold text-slate-200 mt-2">{line.slice(3)}</p>;
-    }
-    if (line === "") return <div key={i} className="h-1" />;
-    return <p key={i} className="text-slate-300">{formatInline(line)}</p>;
-  });
+// ─── Colour helpers ───────────────────────────────────────────────────────────
+
+const RISK_STYLE = {
+  low:    { badge: "bg-emerald-400/15 text-emerald-400 border-emerald-400/30", dot: "bg-emerald-400" },
+  medium: { badge: "bg-yellow-400/15 text-yellow-400 border-yellow-400/30",   dot: "bg-yellow-400"  },
+  high:   { badge: "bg-red-400/15 text-red-400 border-red-400/30",             dot: "bg-red-400"     },
+};
+const DEMAND_STYLE = {
+  excellent: "text-cyan-400",
+  good:      "text-emerald-400",
+  moderate:  "text-yellow-400",
+  poor:      "text-red-400",
+};
+
+// ─── Agent status while generating ───────────────────────────────────────────
+
+interface AgentStatus {
+  id: string;
+  label: string;
+  status: "waiting" | "running" | "done" | "retrying";
+  detail?: string;
 }
 
-function formatInline(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*|`.*?`)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("**")) return <strong key={i} className="text-slate-200 font-semibold">{part.replace(/\*\*/g, "")}</strong>;
-    if (part.startsWith("`")) return <code key={i} className="bg-[#1e2d45] text-[#00dc82] px-1 rounded text-xs font-mono">{part.replace(/`/g, "")}</code>;
-    return part;
-  });
-}
+// ─── Phase 1: Playbook picker ─────────────────────────────────────────────────
 
-function ModelBadge({ model }: { model?: string }) {
-  if (!model || model === "none") return null;
-  const isOllama = model.includes("gemma") || model.includes("llama") || model.includes("mistral") || model === "local";
-  const isClaude = model.includes("claude");
-  const color = isOllama ? "text-cyan-400 border-cyan-400/30 bg-cyan-400/8" : isClaude ? "text-purple-400 border-purple-400/30 bg-purple-400/8" : "text-slate-400 border-slate-700/50 bg-slate-800/50";
+function PlaybookPicker({
+  playbooks, selected, onSelect,
+}: {
+  playbooks: WizardPlaybook[];
+  selected: WizardPlaybook | null;
+  onSelect: (p: WizardPlaybook) => void;
+}) {
   return (
-    <span className={`text-[10px] px-1.5 py-0.5 rounded border font-mono ${color}`}>{model}</span>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold text-slate-100">Choose a Playbook</h2>
+        <p className="text-sm text-slate-500 mt-1">
+          Playbooks define your flip strategy — the type of PC you&apos;re building and who you&apos;re selling to.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {playbooks.map(p => {
+          const isSelected = selected?.id === p.id;
+          const target = (p.profit_strategy as Record<string,unknown>)?.target_profit_gbp;
+          return (
+            <button
+              key={p.id}
+              onClick={() => onSelect(p)}
+              className={cn(
+                "text-left p-4 rounded-xl border transition-all",
+                isSelected
+                  ? "border-[#00dc82]/60 bg-[#00dc82]/8 ring-1 ring-[#00dc82]/30"
+                  : "border-[#1e2d45] bg-[#0d1320] hover:border-[#1e2d45]/80 hover:bg-[#0d1320]/80"
+              )}
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl leading-none mt-0.5">{p.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-slate-200 text-sm">{p.name}</span>
+                    {p.status === "candidate" && (
+                      <span className="text-[9px] px-1.5 py-0.5 bg-yellow-400/15 text-yellow-400 border border-yellow-400/30 rounded font-mono">BETA</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">{p.description}</p>
+                  {target && (
+                    <div className="mt-2 text-xs text-[#00dc82] font-mono">
+                      Target profit: £{String(target)}
+                    </div>
+                  )}
+                </div>
+                {isSelected && (
+                  <CheckCircle2 className="w-4 h-4 text-[#00dc82] flex-shrink-0 mt-0.5" />
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
-export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "0",
-      role: "assistant",
-      content: "Hermes online. I've already scanned today's listings — there's a few things worth your attention.\n\nWhat do you need? Listing evaluation, upgrade recommendations, profit analysis, or just here to watch the numbers?",
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [modelUsed, setModelUsed] = useState<string | null>(null);
-  const [offline, setOffline] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+// ─── Phase 2: Intent form ─────────────────────────────────────────────────────
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+const PRIORITY_OPTIONS = [
+  "Maximum profit",
+  "Minimum risk",
+  "Quick turnaround",
+  "Low upfront cost",
+  "High demand builds",
+];
 
-  const send = async (text?: string) => {
-    const msg = (text ?? input).trim();
-    if (!msg || loading) return;
-    setInput("");
+const CONSTRAINT_OPTIONS = [
+  "ATX cases only",
+  "Must include PSU",
+  "No untested listings",
+  "Delivery only (no collection)",
+  "GPU required",
+];
 
-    const userMsg: Message = { id: Date.now().toString(), role: "user", content: msg, timestamp: new Date() };
-    const history = messages
-      .filter(m => m.id !== "0")
-      .map(m => ({ role: m.role, content: m.content }));
-
-    setMessages(prev => [...prev, userMsg]);
-    setLoading(true);
-
-    try {
-      const { response, model_used } = await api.chat.send(msg, history);
-      setModelUsed(model_used);
-      setOffline(model_used === "none");
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: response,
-        model: model_used,
-        timestamp: new Date(),
-      }]);
-    } catch {
-      setOffline(true);
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: "API unreachable. Is the backend running on port 8000?",
-        timestamp: new Date(),
-      }]);
-    } finally {
-      setLoading(false);
-    }
-  };
+function IntentForm({
+  playbook, budget, setBudget,
+  notes, setNotes,
+  priorities, setPriorities,
+  constraints, setConstraints,
+}: {
+  playbook: WizardPlaybook;
+  budget: number; setBudget: (n: number) => void;
+  notes: string; setNotes: (s: string) => void;
+  priorities: string[]; setPriorities: (a: string[]) => void;
+  constraints: string[]; setConstraints: (a: string[]) => void;
+}) {
+  const toggle = (arr: string[], val: string, set: (a: string[]) => void) =>
+    set(arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val]);
 
   return (
-    <div className="h-full flex flex-col" style={{ height: "calc(100vh - 0px)" }}>
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-[#1e2d45] flex items-center justify-between flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#00dc82]/15 border border-[#00dc82]/25 flex items-center justify-center">
-            <Bot className="w-5 h-5 text-[#00dc82]" />
-          </div>
-          <div>
-            <h1 className="text-sm font-bold text-slate-100">Hermes</h1>
-            <div className="flex items-center gap-2 text-xs">
-              {offline ? (
-                <span className="flex items-center gap-1 text-red-400">
-                  <WifiOff className="w-3 h-3" /> Offline — check backend
-                </span>
-              ) : (
-                <span className="flex items-center gap-1 text-[#00dc82]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00dc82] animate-pulse" />
-                  Online
-                  {modelUsed && <ModelBadge model={modelUsed} />}
-                  {!modelUsed && <ModelBadge model="gemma3:4b" />}
-                </span>
+    <div className="space-y-6">
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-lg">{playbook.emoji}</span>
+          <h2 className="text-xl font-bold text-slate-100">Refine Your Intent</h2>
+        </div>
+        <p className="text-sm text-slate-500">Tell the Wizard what you&apos;re optimising for.</p>
+      </div>
+
+      {/* Budget */}
+      <div>
+        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          Total Budget
+        </label>
+        <div className="mt-2 flex items-center gap-3">
+          <span className="text-2xl font-black text-[#00dc82]">£{budget}</span>
+          <input
+            type="range" min={50} max={1000} step={25} value={budget}
+            onChange={e => setBudget(Number(e.target.value))}
+            className="flex-1 accent-[#00dc82]"
+          />
+        </div>
+        <div className="flex justify-between text-xs text-slate-600 mt-1">
+          <span>£50</span><span>£1,000</span>
+        </div>
+      </div>
+
+      {/* Priorities */}
+      <div>
+        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          Priorities (pick any)
+        </label>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {PRIORITY_OPTIONS.map(p => (
+            <button
+              key={p}
+              onClick={() => toggle(priorities, p, setPriorities)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg border text-xs font-medium transition-all",
+                priorities.includes(p)
+                  ? "border-[#00dc82]/50 bg-[#00dc82]/10 text-[#00dc82]"
+                  : "border-[#1e2d45] bg-[#0d1320] text-slate-500 hover:text-slate-400"
+              )}
+            >{p}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Constraints */}
+      <div>
+        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          Constraints (optional)
+        </label>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {CONSTRAINT_OPTIONS.map(c => (
+            <button
+              key={c}
+              onClick={() => toggle(constraints, c, setConstraints)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg border text-xs font-medium transition-all",
+                constraints.includes(c)
+                  ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
+                  : "border-[#1e2d45] bg-[#0d1320] text-slate-500 hover:text-slate-400"
+              )}
+            >{c}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div>
+        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          Additional Notes (optional)
+        </label>
+        <textarea
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          placeholder="e.g. I have an RTX 3060 already. Prefer i7 base units. Want to flip within 2 weeks."
+          rows={3}
+          className="mt-2 w-full px-4 py-3 bg-[#0d1320] border border-[#1e2d45] rounded-xl text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50 resize-none transition-colors"
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Phase 3: Agent activity ──────────────────────────────────────────────────
+
+function AgentPipeline({ agents }: { agents: AgentStatus[] }) {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold text-slate-100">Agents Working…</h2>
+        <p className="text-sm text-slate-500 mt-1">The multi-agent pipeline is generating and validating your builds.</p>
+      </div>
+      <div className="space-y-3">
+        {agents.map((agent, i) => (
+          <div key={agent.id} className={cn(
+            "flex items-start gap-4 p-4 rounded-xl border transition-all",
+            agent.status === "running"  ? "border-[#00dc82]/40 bg-[#00dc82]/5"   : "",
+            agent.status === "done"     ? "border-emerald-400/20 bg-emerald-400/3" : "",
+            agent.status === "retrying" ? "border-yellow-400/40 bg-yellow-400/5"  : "",
+            agent.status === "waiting"  ? "border-[#1e2d45]/50 bg-[#0d1320]/50 opacity-50" : "",
+          )}>
+            <div className={cn(
+              "w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+              agent.status === "running"  ? "bg-[#00dc82]/20"     : "",
+              agent.status === "done"     ? "bg-emerald-400/15"    : "",
+              agent.status === "retrying" ? "bg-yellow-400/15"     : "",
+              agent.status === "waiting"  ? "bg-[#1e2d45]"         : "",
+            )}>
+              {agent.status === "running"  && <Loader2 className="w-4 h-4 text-[#00dc82] animate-spin" />}
+              {agent.status === "done"     && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+              {agent.status === "retrying" && <RotateCcw className="w-4 h-4 text-yellow-400 animate-spin" />}
+              {agent.status === "waiting"  && <Circle className="w-4 h-4 text-slate-600" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "text-sm font-semibold",
+                  agent.status === "running"  ? "text-[#00dc82]"   : "",
+                  agent.status === "done"     ? "text-emerald-400" : "",
+                  agent.status === "retrying" ? "text-yellow-400"  : "",
+                  agent.status === "waiting"  ? "text-slate-600"   : "",
+                )}>{agent.label}</span>
+                {agent.status === "retrying" && (
+                  <span className="text-[10px] px-1.5 py-0.5 bg-yellow-400/15 text-yellow-400 border border-yellow-400/30 rounded font-mono">RETRYING</span>
+                )}
+              </div>
+              {agent.detail && (
+                <p className="text-xs text-slate-500 mt-0.5">{agent.detail}</p>
               )}
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Phase 4: Build cards ─────────────────────────────────────────────────────
+
+function BuildCard({
+  build, selected, onSelect,
+}: {
+  build: WizardBuild;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  const risk = RISK_STYLE[build.risk] ?? RISK_STYLE.medium;
+  const demandColor = DEMAND_STYLE[build.demand_fit] ?? DEMAND_STYLE.good;
+
+  return (
+    <button
+      onClick={onSelect}
+      className={cn(
+        "w-full text-left p-5 rounded-xl border transition-all",
+        selected
+          ? "border-[#00dc82]/60 bg-[#00dc82]/6 ring-1 ring-[#00dc82]/25"
+          : "border-[#1e2d45] bg-[#0d1320] hover:border-[#1e2d45]/80"
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-center gap-2">
+          <div className={cn(
+            "w-6 h-6 rounded-full border flex items-center justify-center text-xs font-black flex-shrink-0",
+            build.rank === 1 ? "border-yellow-400/60 bg-yellow-400/15 text-yellow-400" : "border-[#1e2d45] text-slate-500"
+          )}>
+            {build.rank === 1 ? "★" : build.rank}
+          </div>
+          <span className="font-bold text-slate-200 text-sm">{build.name}</span>
         </div>
-        <div className="flex gap-2">
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0d1320] border border-[#1e2d45] rounded-lg text-xs text-slate-400">
-            <Cpu className="w-3 h-3" /> Swarms coordinated
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0d1320] border border-[#1e2d45] rounded-lg text-xs text-slate-400">
-            <TrendingUp className="w-3 h-3" /> Live market data
-          </div>
+        <span className={cn("text-[10px] px-2 py-0.5 rounded border font-mono", risk.badge)}>
+          {build.risk.toUpperCase()} RISK
+        </span>
+      </div>
+
+      {/* Spec */}
+      <p className="text-xs text-slate-500 mb-3 font-mono leading-relaxed">
+        {build.base_spec}
+      </p>
+
+      {/* Metrics */}
+      <div className="grid grid-cols-3 gap-3 mb-3">
+        <div className="bg-[#0a0f1a] rounded-lg p-2.5">
+          <div className="text-[10px] text-slate-600 uppercase tracking-wider">Total Cost</div>
+          <div className="text-sm font-bold text-slate-200 mt-0.5">£{build.total_cost.toFixed(0)}</div>
+        </div>
+        <div className="bg-[#0a0f1a] rounded-lg p-2.5">
+          <div className="text-[10px] text-slate-600 uppercase tracking-wider">Profit</div>
+          <div className="text-sm font-bold text-[#00dc82] mt-0.5">£{build.estimated_profit.toFixed(0)}</div>
+        </div>
+        <div className="bg-[#0a0f1a] rounded-lg p-2.5">
+          <div className="text-[10px] text-slate-600 uppercase tracking-wider">Demand</div>
+          <div className={cn("text-sm font-bold mt-0.5 capitalize", demandColor)}>{build.demand_fit}</div>
         </div>
       </div>
 
-      {/* Quick prompts */}
-      <div className="px-6 py-3 border-b border-[#1e2d45] flex gap-2 overflow-x-auto flex-shrink-0 scrollbar-hide">
-        {SUGGESTIONS.map((s, i) => (
-          <button
-            key={i}
-            onClick={() => send(s)}
-            disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0d1320] border border-[#1e2d45] hover:border-[#00dc82]/40 rounded-lg text-xs text-slate-400 hover:text-slate-300 whitespace-nowrap transition-colors flex-shrink-0 disabled:opacity-40"
-          >
-            <Lightbulb className="w-3 h-3 text-yellow-400/60" />
-            {s.length > 52 ? s.slice(0, 50) + "…" : s}
-          </button>
+      {/* Upgrades chips */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {build.upgrades.map((u, i) => (
+          <span key={i} className={cn(
+            "text-[10px] px-2 py-0.5 rounded border font-mono",
+            u.required
+              ? "border-slate-600/40 bg-slate-800/50 text-slate-400"
+              : "border-slate-700/30 bg-slate-900/50 text-slate-600"
+          )}>
+            {u.item} · £{u.cost_estimate.toFixed(0)}
+          </span>
         ))}
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-        {messages.map(msg => (
-          <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-            {msg.role === "assistant" && (
-              <div className="w-7 h-7 rounded-lg bg-[#00dc82]/15 border border-[#00dc82]/25 flex items-center justify-center flex-shrink-0 mt-1">
-                <Bot className="w-3.5 h-3.5 text-[#00dc82]" />
+      {/* Why */}
+      <p className="text-xs text-slate-500 italic leading-relaxed">"{build.why}"</p>
+
+      {/* Score bar */}
+      <div className="mt-3">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] text-slate-600 uppercase tracking-wider">Validation score</span>
+          <span className="text-[10px] font-mono text-slate-500">{build.validation_score.toFixed(0)}/100</span>
+        </div>
+        <div className="h-1 bg-[#1e2d45] rounded-full overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-[#00dc82] to-cyan-400 rounded-full transition-all"
+            style={{ width: `${Math.min(100, build.validation_score)}%` }}
+          />
+        </div>
+      </div>
+    </button>
+  );
+}
+
+// ─── Phase 5: Purchase plan ───────────────────────────────────────────────────
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <button onClick={copy} className="p-1 rounded hover:bg-[#1e2d45] transition-colors">
+      {copied ? <Check className="w-3 h-3 text-[#00dc82]" /> : <Copy className="w-3 h-3 text-slate-500" />}
+    </button>
+  );
+}
+
+function PurchasePlanView({ plan, intent }: { plan: PurchasePlan; intent: RefinedIntent }) {
+  const b = plan.build;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-[#00dc82]/15 border border-[#00dc82]/30 flex items-center justify-center">
+          <ClipboardList className="w-5 h-5 text-[#00dc82]" />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-100">{b.name}</h2>
+          <p className="text-sm text-slate-500">Your purchase plan · {plan.timeline_days}-day flip</p>
+        </div>
+      </div>
+
+      {/* Budget summary */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Total Budget",    value: `£${plan.total_budget.toFixed(0)}`,          color: "text-slate-200"  },
+          { label: "Expected Profit", value: `£${plan.expected_net_profit.toFixed(0)}`,   color: "text-[#00dc82]" },
+          { label: "ROI",             value: `${plan.expected_roi_pct.toFixed(0)}%`,       color: "text-cyan-400"   },
+          { label: "Contingency",     value: `£${plan.contingency_buffer.toFixed(0)}`,     color: "text-yellow-400" },
+        ].map(m => (
+          <div key={m.label} className="bg-[#0d1320] border border-[#1e2d45] rounded-xl p-3">
+            <div className="text-[10px] text-slate-600 uppercase tracking-wider">{m.label}</div>
+            <div className={cn("text-lg font-black mt-0.5", m.color)}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Steps */}
+      <div>
+        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Action Plan</h3>
+        <div className="space-y-2">
+          {plan.steps.map((step: PlanStep) => (
+            <div key={step.step} className="flex gap-3 p-3 bg-[#0d1320] border border-[#1e2d45] rounded-xl">
+              <div className="w-6 h-6 rounded-full bg-[#00dc82]/15 border border-[#00dc82]/30 flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-black text-[#00dc82]">{step.step}</span>
               </div>
-            )}
-            <div className="max-w-2xl space-y-1">
-              <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                msg.role === "user"
-                  ? "bg-[#1e2d45] text-slate-200"
-                  : "bg-[#0d1320] border border-[#1e2d45] text-slate-300"
-              }`}>
-                {msg.role === "assistant"
-                  ? <div className="space-y-0.5">{formatContent(msg.content)}</div>
-                  : msg.content}
-              </div>
-              {msg.role === "assistant" && msg.model && msg.id !== "0" && (
-                <div className="flex items-center gap-1.5 pl-1">
-                  <ModelBadge model={msg.model} />
-                  <span className="text-[10px] text-slate-700">
-                    {msg.timestamp.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-slate-200">{step.action}</span>
+                  <span className="text-[10px] text-slate-600 flex-shrink-0 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />{step.estimated_time}
                   </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">{step.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Search strings */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Search className="w-3 h-3" /> eBay Searches
+          </h3>
+          <div className="space-y-1.5">
+            {plan.ebay_searches.map((s, i) => (
+              <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded-lg">
+                <span className="text-xs text-slate-400 font-mono flex-1 truncate">{s}</span>
+                <CopyButton text={s} />
+                <a
+                  href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(s)}&LH_ItemCondition=3000`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-slate-600 hover:text-[#00dc82] transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Search className="w-3 h-3" /> Facebook Searches
+          </h3>
+          <div className="space-y-1.5">
+            {plan.facebook_searches.map((s, i) => (
+              <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded-lg">
+                <span className="text-xs text-slate-400 font-mono flex-1 truncate">{s}</span>
+                <CopyButton text={s} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Pro tips */}
+      {plan.tips.length > 0 && (
+        <div>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Pro Tips</h3>
+          <div className="space-y-2">
+            {plan.tips.map((tip, i) => (
+              <div key={i} className="flex gap-2 p-3 bg-yellow-400/5 border border-yellow-400/20 rounded-xl">
+                <Zap className="w-3.5 h-3.5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-slate-300">{tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Cost breakdown */}
+      <div>
+        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cost Breakdown</h3>
+        <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl overflow-hidden">
+          <div className="divide-y divide-[#1e2d45]">
+            <div className="flex justify-between px-4 py-2.5 text-xs">
+              <span className="text-slate-500">Base PC ({b.base_spec.slice(0, 40)}…)</span>
+              <span className="text-slate-300 font-mono">£{b.base_cost.toFixed(0)}</span>
+            </div>
+            {b.upgrades.map((u, i) => (
+              <div key={i} className="flex justify-between px-4 py-2.5 text-xs">
+                <span className="text-slate-500">{u.item} <span className="text-slate-700">({u.source})</span></span>
+                <span className="text-slate-300 font-mono">£{u.cost_estimate.toFixed(0)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between px-4 py-2.5 text-xs border-t border-[#1e2d45]">
+              <span className="text-slate-400">Contingency (10%)</span>
+              <span className="text-yellow-400 font-mono">£{plan.contingency_buffer.toFixed(0)}</span>
+            </div>
+            <div className="flex justify-between px-4 py-2.5 text-sm font-bold bg-[#0a0f1a]">
+              <span className="text-slate-200">Total Budget Required</span>
+              <span className="text-[#00dc82] font-mono">£{plan.total_budget.toFixed(0)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Progress bar ─────────────────────────────────────────────────────────────
+
+function WizardProgress({ phase }: { phase: Phase }) {
+  const idx = PHASES.findIndex(p => p.id === phase);
+  return (
+    <div className="flex items-center gap-0 mb-8">
+      {PHASES.map((p, i) => {
+        const Icon = p.icon;
+        const done    = i < idx;
+        const current = i === idx;
+        return (
+          <div key={p.id} className="flex items-center flex-1">
+            <div className={cn(
+              "flex flex-col items-center gap-1 flex-shrink-0",
+            )}>
+              <div className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center border transition-all",
+                done    ? "border-emerald-400/50 bg-emerald-400/15 text-emerald-400" : "",
+                current ? "border-[#00dc82]/60 bg-[#00dc82]/15 text-[#00dc82] ring-2 ring-[#00dc82]/20" : "",
+                !done && !current ? "border-[#1e2d45] bg-[#0d1320] text-slate-600" : "",
+              )}>
+                {done ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+              </div>
+              <span className={cn(
+                "text-[9px] uppercase tracking-wider font-semibold",
+                current ? "text-[#00dc82]" : done ? "text-emerald-400" : "text-slate-700",
+              )}>{p.label}</span>
+            </div>
+            {i < PHASES.length - 1 && (
+              <div className={cn(
+                "flex-1 h-px mx-2 mb-4 transition-all",
+                i < idx ? "bg-emerald-400/40" : "bg-[#1e2d45]",
+              )} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Main wizard ──────────────────────────────────────────────────────────────
+
+export default function BuildWizardPage() {
+  const [phase, setPhase] = useState<Phase>("playbook");
+
+  // Playbooks
+  const [playbooks, setPlaybooks]     = useState<WizardPlaybook[]>([]);
+  const [loadingPbs, setLoadingPbs]   = useState(true);
+  const [selectedPb, setSelectedPb]   = useState<WizardPlaybook | null>(null);
+
+  // Intent form
+  const [budget, setBudget]           = useState(300);
+  const [notes, setNotes]             = useState("");
+  const [priorities, setPriorities]   = useState<string[]>(["Maximum profit"]);
+  const [constraints, setConstraints] = useState<string[]>([]);
+
+  // Generation
+  const [agents, setAgents]           = useState<AgentStatus[]>([]);
+  const [genError, setGenError]       = useState<string | null>(null);
+
+  // Results
+  const [result, setResult]           = useState<import("@/lib/api").GenerateResult | null>(null);
+  const [intent, setIntent]           = useState<RefinedIntent | null>(null);
+  const [selectedBuild, setSelectedBuild] = useState<WizardBuild | null>(null);
+  const [plan, setPlan]               = useState<PurchasePlan | null>(null);
+  const [loadingPlan, setLoadingPlan] = useState(false);
+
+  // Load playbooks on mount
+  useEffect(() => {
+    api.buildWizard.playbooks()
+      .then(setPlaybooks)
+      .catch(() => setPlaybooks([]))
+      .finally(() => setLoadingPbs(false));
+  }, []);
+
+  // ── Run generation ──────────────────────────────────────────────────────────
+  const runGeneration = useCallback(async () => {
+    if (!selectedPb) return;
+    setPhase("generating");
+    setGenError(null);
+    setResult(null);
+
+    const AGENTS: AgentStatus[] = [
+      { id: "wizard",    label: "Wizard Agent",    status: "waiting", detail: "Extracting intent from your inputs" },
+      { id: "composer",  label: "Composer Agent",  status: "waiting", detail: "Generating 5 candidate builds" },
+      { id: "validator", label: "Validator Agent", status: "waiting", detail: "Checking compatibility & feasibility" },
+      { id: "ranker",    label: "Ranker Agent",    status: "waiting", detail: "Sorting by profit · demand · risk" },
+    ];
+    setAgents(AGENTS);
+
+    const update = (id: string, patch: Partial<AgentStatus>) =>
+      setAgents(prev => prev.map(a => a.id === id ? { ...a, ...patch } : a));
+
+    try {
+      update("wizard", { status: "running" });
+      await new Promise(r => setTimeout(r, 600));
+      update("wizard", { status: "done" });
+
+      update("composer", { status: "running" });
+      await new Promise(r => setTimeout(r, 400));
+
+      const data = await api.buildWizard.generate({
+        playbook_id: selectedPb.id,
+        budget,
+        user_notes: notes,
+        priorities,
+        constraints,
+      });
+
+      if (data.attempts > 1) {
+        update("composer", { status: "retrying", detail: `Retried ${data.attempts}× to find valid builds` });
+        await new Promise(r => setTimeout(r, 500));
+      }
+      update("composer", { status: "done", detail: `Generated ${(data.builds.length + data.rejected_count)} candidates` });
+
+      update("validator", { status: "running" });
+      await new Promise(r => setTimeout(r, 500));
+      update("validator", {
+        status: "done",
+        detail: `${data.builds.length} valid · ${data.rejected_count} rejected`,
+      });
+
+      update("ranker", { status: "running" });
+      await new Promise(r => setTimeout(r, 300));
+      update("ranker", { status: "done", detail: `Ranked ${data.builds.length} builds` });
+
+      setResult(data);
+      setIntent(data.intent);
+      await new Promise(r => setTimeout(r, 600));
+      setPhase("builds");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setGenError(msg || "Generation failed — is the backend running?");
+      setPhase("intent");
+    }
+  }, [selectedPb, budget, notes, priorities, constraints]);
+
+  // ── Generate plan ───────────────────────────────────────────────────────────
+  const generatePlan = useCallback(async () => {
+    if (!selectedBuild || !intent) return;
+    setLoadingPlan(true);
+    try {
+      const planData = await api.buildWizard.plan({ build: selectedBuild, intent });
+      setPlan(planData);
+      setPhase("plan");
+    } catch {
+      alert("Failed to generate plan — check backend");
+    } finally {
+      setLoadingPlan(false);
+    }
+  }, [selectedBuild, intent]);
+
+  const reset = () => {
+    setPhase("playbook");
+    setSelectedPb(null);
+    setResult(null);
+    setIntent(null);
+    setSelectedBuild(null);
+    setPlan(null);
+    setGenError(null);
+  };
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  return (
+    <div className="h-full overflow-y-auto">
+      <div className="max-w-3xl mx-auto px-6 py-8">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#00dc82]/15 border border-[#00dc82]/30 flex items-center justify-center">
+              <Wand2 className="w-5 h-5 text-[#00dc82]" />
+            </div>
+            <div>
+              <h1 className="text-base font-black text-slate-100 tracking-tight">Build Wizard</h1>
+              <p className="text-xs text-slate-500">Multi-agent · Wizard · Composer · Validator · Planner</p>
+            </div>
+          </div>
+          {phase !== "playbook" && phase !== "generating" && (
+            <button
+              onClick={reset}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-lg text-xs text-slate-500 hover:text-slate-400 transition-colors"
+            >
+              <RotateCcw className="w-3 h-3" /> Start over
+            </button>
+          )}
+        </div>
+
+        {/* Progress */}
+        {phase !== "generating" && <WizardProgress phase={phase} />}
+
+        {/* Error banner */}
+        {genError && (
+          <div className="mb-4 flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
+            <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-red-300">{genError}</p>
+          </div>
+        )}
+
+        {/* Phase content */}
+        <div className="bg-[#0a0f1a] border border-[#1e2d45] rounded-2xl p-6">
+          {/* ── Phase 1: Playbook ── */}
+          {phase === "playbook" && (
+            <>
+              {loadingPbs ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-5 h-5 text-[#00dc82] animate-spin" />
+                </div>
+              ) : (
+                <PlaybookPicker playbooks={playbooks} selected={selectedPb} onSelect={setSelectedPb} />
+              )}
+            </>
+          )}
+
+          {/* ── Phase 2: Intent ── */}
+          {phase === "intent" && selectedPb && (
+            <IntentForm
+              playbook={selectedPb}
+              budget={budget} setBudget={setBudget}
+              notes={notes} setNotes={setNotes}
+              priorities={priorities} setPriorities={setPriorities}
+              constraints={constraints} setConstraints={setConstraints}
+            />
+          )}
+
+          {/* ── Phase 3: Generating ── */}
+          {phase === "generating" && <AgentPipeline agents={agents} />}
+
+          {/* ── Phase 4: Builds ── */}
+          {phase === "builds" && result && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-100">
+                    {result.builds.length} Validated Builds
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-0.5">
+                    {result.rejected_count > 0 && `${result.rejected_count} rejected · `}
+                    Ranked by profit · demand · risk
+                  </p>
+                </div>
+                <span className="text-xs text-slate-600 font-mono">
+                  Budget: £{budget}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {result.builds.map(b => (
+                  <BuildCard
+                    key={b.id}
+                    build={b}
+                    selected={selectedBuild?.id === b.id}
+                    onSelect={() => setSelectedBuild(b)}
+                  />
+                ))}
+              </div>
+              {result.builds.length === 0 && (
+                <div className="py-8 text-center">
+                  <AlertTriangle className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                  <p className="text-sm text-slate-400">No valid builds found for this budget and playbook.</p>
+                  <p className="text-xs text-slate-600 mt-1">Try increasing the budget or choosing a different playbook.</p>
                 </div>
               )}
             </div>
-            {msg.role === "user" && (
-              <div className="w-7 h-7 rounded-lg bg-[#1e2d45] flex items-center justify-center flex-shrink-0 mt-1">
-                <User className="w-3.5 h-3.5 text-slate-400" />
-              </div>
+          )}
+
+          {/* ── Phase 5: Plan ── */}
+          {phase === "plan" && plan && intent && (
+            <PurchasePlanView plan={plan} intent={intent} />
+          )}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mt-4">
+          <div>
+            {phase === "intent" && (
+              <button
+                onClick={() => setPhase("playbook")}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Back
+              </button>
+            )}
+            {phase === "builds" && (
+              <button
+                onClick={() => setPhase("intent")}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Change intent
+              </button>
+            )}
+            {phase === "plan" && (
+              <button
+                onClick={() => setPhase("builds")}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Back to builds
+              </button>
             )}
           </div>
-        ))}
 
-        {loading && (
-          <div className="flex gap-3">
-            <div className="w-7 h-7 rounded-lg bg-[#00dc82]/15 border border-[#00dc82]/25 flex items-center justify-center flex-shrink-0">
-              <Bot className="w-3.5 h-3.5 text-[#00dc82]" />
-            </div>
-            <div className="bg-[#0d1320] border border-[#1e2d45] rounded-2xl px-4 py-3">
-              <div className="flex gap-1.5 items-center">
-                {[0, 1, 2].map(i => (
-                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#00dc82] animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
-                ))}
-                <span className="text-xs text-slate-600 ml-2">Hermes thinking…</span>
-              </div>
-            </div>
+          <div>
+            {phase === "playbook" && (
+              <button
+                onClick={() => selectedPb && setPhase("intent")}
+                disabled={!selectedPb}
+                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+              >
+                Next <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+            {phase === "intent" && (
+              <button
+                onClick={runGeneration}
+                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+              >
+                <Zap className="w-4 h-4" /> Generate Builds
+              </button>
+            )}
+            {phase === "builds" && (
+              <button
+                onClick={generatePlan}
+                disabled={!selectedBuild || loadingPlan}
+                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+              >
+                {loadingPlan ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Generating plan…</>
+                ) : (
+                  <><ClipboardList className="w-4 h-4" /> Get Purchase Plan</>
+                )}
+              </button>
+            )}
           </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Input */}
-      <div className="px-6 py-4 border-t border-[#1e2d45] flex-shrink-0">
-        <div className="flex gap-3">
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-            placeholder="Ask Hermes — evaluate a listing, plan an upgrade, analyse a flip…"
-            className="flex-1 px-4 py-3 bg-[#0d1320] border border-[#1e2d45] rounded-xl text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50 transition-colors"
-          />
-          <Button variant="primary" onClick={() => send()} disabled={loading || !input.trim()}>
-            <Send className="w-4 h-4" />
-          </Button>
         </div>
-        <p className="text-xs text-slate-700 mt-2 text-center">
-          Powered by Gemma3:4b via Ollama · OpenRouter free models as fallback · Sarcasm is a feature, not a bug
+
+        {/* Footer hint */}
+        <p className="text-[10px] text-slate-700 text-center mt-4">
+          Wizard · Composer · Validator · Ranker · Planner — 5 agents · powered by Hermes AI
         </p>
       </div>
     </div>
