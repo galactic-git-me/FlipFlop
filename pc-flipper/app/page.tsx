@@ -86,13 +86,19 @@ export default function DashboardPage() {
 
   // Scatter chart top-N filter (0 = show all)
   const [topN, setTopN] = useState(50);
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const load = async () => {
     setLoading(true);
     try {
       // Today midnight and 7-days-ago midnight in ISO format
       const todayMidnight  = new Date(); todayMidnight.setHours(0,0,0,0);
-      const weekAgoMidnight = new Date(Date.now() - 7 * 86_400_000); weekAgoMidnight.setHours(0,0,0,0);
+      const weekAgoMidnight = new Date(todayMidnight); weekAgoMidnight.setDate(weekAgoMidnight.getDate() - 7);
       const todayISO  = todayMidnight.toISOString();
       const weekISO   = weekAgoMidnight.toISOString();
 
@@ -157,8 +163,11 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    load();
-    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => {
+      clearTimeout(id);
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
   }, []);
 
   const triggerScan = async () => {
@@ -193,7 +202,7 @@ export default function DashboardPage() {
   const gems = listings.filter(l => l.classification === "amazing_gem" || l.classification === "gem");
 
   // Recent gems: only amazing_gem / gem found in last 24 h, sorted newest first
-  const cutoff24h = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const cutoff24h = new Date(nowMs - 24 * 3600_000).toISOString();
   const recentGems = listings
     .filter(l =>
       (l.classification === "amazing_gem" || l.classification === "gem") &&
@@ -317,7 +326,7 @@ export default function DashboardPage() {
             <div className="lg:col-span-2">
               <TrendingCategoriesCard listings={listings} />
             </div>
-            <PlaybookActivityCard config={searchConfig} sources={sources} listings={listings} />
+            <PlaybookActivityCard config={searchConfig} sources={sources} listings={listings} nowMs={nowMs} />
           </div>
 
           {/* ── Current Strategy + Auction Intelligence ────────────────────────── */}
@@ -1432,9 +1441,9 @@ function NextScanCard({ swarm, intervalMinutes }: {
   swarm: { id: string; name: string; next_run: string | null } | null;
   intervalMinutes: number;
 }) {
-  const [, setTick] = useState(0);
+  const [nowMs, setNowMs] = useState(() => Date.now());
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -1454,7 +1463,6 @@ function NextScanCard({ swarm, intervalMinutes }: {
   }
 
   const nextMs = new Date(swarm.next_run).getTime();
-  const nowMs = Date.now();
   const remainMs = Math.max(0, nextMs - nowMs);
   const intervalMs = intervalMinutes * 60 * 1000;
   const progress = Math.min(1, Math.max(0, 1 - remainMs / intervalMs));
@@ -1508,11 +1516,10 @@ const WORKSTATION_SIGNALS = new Set([
   "hp z640", "hp z420", "hp z620", "dell precision", "prodesk",
 ]);
 
-function computeBuildCategories(listings: Listing[]): BuildCategory[] {
-  const now = Date.now();
+function computeBuildCategories(listings: Listing[], nowMs: number): BuildCategory[] {
   const DAY = 86_400_000;
   const dayBucket = (l: Listing) =>
-    Math.min(6, Math.floor((now - new Date(l.first_seen_at).getTime()) / DAY));
+    Math.min(6, Math.floor((nowMs - new Date(l.first_seen_at).getTime()) / DAY));
 
   const defs = [
     {
@@ -1716,15 +1723,17 @@ function PlaybookActivityCard({
   config,
   sources,
   listings,
+  nowMs,
 }: {
   config: SearchConfig | null;
   sources: DataSource[];
   listings: Listing[];
+  nowMs: number;
 }) {
   const [tab, setTab] = useState<PlaybookTab>("additions");
 
-  const categories = computeBuildCategories(listings);
-  const cutoff24h = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const categories = computeBuildCategories(listings, nowMs);
+  const cutoff24h = new Date(nowMs - 24 * 3600_000).toISOString();
 
   // Recent Additions: rising categories + recently discovered gem categories
   const additions = categories

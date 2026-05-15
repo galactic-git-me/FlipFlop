@@ -280,7 +280,7 @@ export default function SellingPage() {
                 <CardContent className="space-y-4 pt-0">
                   {titles.length === 0 && !generatingContent && (
                     <div className="py-6 text-center text-slate-600 text-sm">
-                      Click "Generate with Hermes" to create optimised listing titles and description using the PC specs.
+                      Click &quot;Generate with Hermes&quot; to create optimised listing titles and description using the PC specs.
                     </div>
                   )}
                   {titles.length > 0 && (

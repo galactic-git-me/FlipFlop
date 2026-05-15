@@ -82,7 +82,10 @@ export default function OpportunitiesPage() {
   }, [search]);
 
   // Reset page when filters change
-  useEffect(() => { setPage(1); }, [classFilter, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy]);
+  useEffect(() => {
+    const id = setTimeout(() => setPage(1), 0);
+    return () => clearTimeout(id);
+  }, [classFilter, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -124,7 +127,10 @@ export default function OpportunitiesPage() {
     }
   }, [classFilter, debouncedSearch, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy, page, pageSize]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, [load]);
 
   const trigger = async () => {
     setTriggering(true);

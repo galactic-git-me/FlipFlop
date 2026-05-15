@@ -109,7 +109,10 @@ export default function IntelPage() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, []);
 
   if (loading) {
     return (

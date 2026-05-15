@@ -347,8 +347,9 @@ async def _seed_default_data():
             # UK's largest auctioneer — JSON API, high IT clearance volume.
             # Promoted to enabled: broad inventory + stable scraper path.
             ("Wilsons Auctions",       "https://www.wilsonsauctions.com",         True),
-            # Multi-vendor HTML scrape — CF challenge manageable with Playwright
-            ("i-bidder",               "https://www.i-bidder.com",                False),
+            # Multi-vendor HTML scrape — CF challenge manageable with Playwright.
+            # Promoted to enabled: broad UK catalogue + stable Playwright selector path.
+            ("i-bidder",               "https://www.i-bidder.com",                True),
             # B2B wholesale surplus — requires API key registration
             ("Merkandi",               "https://merkandi.co.uk",                  False),
             # B2B pallet lots — requires business account auth
@@ -369,7 +370,7 @@ async def _seed_default_data():
 
         # ── Ensure selected proven sources are enabled on existing installs ──────
         # Gumtree is intentionally excluded — Reblaze WAF blocks all automation.
-        for _src_name in ("Facebook Marketplace", "Apex Auctions", "Wilsons Auctions"):
+        for _src_name in ("Facebook Marketplace", "Apex Auctions", "Wilsons Auctions", "i-bidder"):
             await db.execute(
                 _update(DataSource)
                 .where(DataSource.name == _src_name)

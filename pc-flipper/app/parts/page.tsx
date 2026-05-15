@@ -38,7 +38,10 @@ export default function PartsPage() {
     }
   };
 
-  useEffect(() => { load(); }, [activeCategory]);
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, [activeCategory]);
 
   const refresh = async () => {
     setRefreshing(true);

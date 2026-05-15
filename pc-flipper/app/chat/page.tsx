@@ -354,7 +354,7 @@ function BuildCard({
       </div>
 
       {/* Why */}
-      <p className="text-xs text-slate-500 italic leading-relaxed">"{build.why}"</p>
+      <p className="text-xs text-slate-500 italic leading-relaxed">&quot;{build.why}&quot;</p>
 
       {/* Score bar */}
       <div className="mt-3">

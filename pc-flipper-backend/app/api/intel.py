@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc
 from app.database import get_db
 from app.models.flip_intelligence import FlipIntelligence
+from app.models.flip import Flip
 from app.services import ai_service
 
 router = APIRouter(prefix="/intel", tags=["intel"])
@@ -191,6 +192,48 @@ async def recommendations(db: AsyncSession = Depends(get_db)):
             "action": "Use Hermes to regenerate listing titles and price 5% below current suggested resale",
             "confidence": 0.7,
         })
+
+    # Learning loop: compare realized profits to original forecast at flip selection.
+    flip_ids = [r.flip_id for r in records if r.flip_id]
+    if flip_ids:
+        flips_result = await db.execute(
+            select(Flip.id, Flip.initial_estimated_profit, Flip.actual_profit)
+            .where(Flip.id.in_(flip_ids), Flip.actual_profit.is_not(None))
+        )
+        deltas = []
+        abs_pct_errors = []
+        for row in flips_result.all():
+            if row.initial_estimated_profit is None:
+                continue
+            actual = float(row.actual_profit or 0)
+            forecast = float(row.initial_estimated_profit)
+            delta = actual - forecast
+            deltas.append(delta)
+            if abs(actual) > 1:
+                abs_pct_errors.append(abs(delta) / abs(actual))
+
+        if len(deltas) >= 3:
+            avg_delta = sum(deltas) / len(deltas)
+            mean_abs_pct_error = (sum(abs_pct_errors) / len(abs_pct_errors)) if abs_pct_errors else 0.0
+            if avg_delta < -40:
+                recs.append({
+                    "insight": f"Recent flips are averaging £{abs(avg_delta):.0f} below forecasted profit",
+                    "action": "Tighten sourcing guardrails: require higher gem score or +£50 profit buffer before committing.",
+                    "confidence": min(0.85, 0.55 + len(deltas) * 0.04),
+                })
+            elif avg_delta > 40:
+                recs.append({
+                    "insight": f"Recent flips are averaging £{avg_delta:.0f} above initial forecasts",
+                    "action": "You can safely widen search criteria slightly to capture more volume.",
+                    "confidence": min(0.85, 0.55 + len(deltas) * 0.04),
+                })
+
+            if mean_abs_pct_error > 0.35:
+                recs.append({
+                    "insight": f"Forecast variance is high ({mean_abs_pct_error * 100:.0f}% average absolute error)",
+                    "action": "Prioritise listings with stronger sold-comp depth and avoid sparse-spec auctions.",
+                    "confidence": 0.7,
+                })
 
     if not recs:
         recs.append({

@@ -57,7 +57,10 @@ export default function CasesPage() {
     }
   };
 
-  useEffect(() => { load(); }, [activeTheme, activeSource, maxPrice]);
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, [activeTheme, activeSource, maxPrice]);
 
   const refresh = async () => {
     setRefreshing(true);

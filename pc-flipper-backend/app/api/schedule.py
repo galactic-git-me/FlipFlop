@@ -15,9 +15,18 @@ router = APIRouter(prefix="/schedule", tags=["schedule"])
 
 
 def _job_category(job_id: str) -> str:
-    if job_id in {"flip_opportunities", "upgrade_parts", "cases", "accessories"}:
+    if job_id == "flip_opportunities":
+        return "sourcing"
+    if job_id in {"upgrade_parts", "cases", "accessories"}:
         return "scraping"
     return "maintenance"
+
+_JOB_DESCRIPTIONS: dict[str, str] = {
+    "flip_opportunities": "Scans enabled marketplaces and auctions for profitable PCs, scores gems, and updates listing lifecycle.",
+    "upgrade_parts": "Refreshes component pricing from sold comps and retail references for build-cost accuracy.",
+    "cases": "Updates themed case catalogue pricing and availability from supported sources.",
+    "accessories": "Updates accessory pricing and inventory candidates used for upsell opportunities.",
+}
 
 
 def _interval_label(trigger: IntervalTrigger | object) -> tuple[str, str]:
@@ -51,7 +60,7 @@ async def list_schedule_jobs():
             {
                 "id": job.id,
                 "name": job.name,
-                "description": f"Scheduled worker: {job.id.replace('_', ' ')}",
+                "description": _JOB_DESCRIPTIONS.get(job.id, f"Scheduled worker: {job.id.replace('_', ' ')}"),
                 "cron": cron_raw,
                 "cron_label": cron_label,
                 "enabled": job.next_run_time is not None,

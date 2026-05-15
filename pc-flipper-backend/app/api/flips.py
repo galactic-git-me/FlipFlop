@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
 from app.models.flip import Flip, FlipStage
-from app.models.listing import Listing
+from app.models.listing import Listing, ListingStatus, Classification
 from app.models.part import Part
 from app.models.flip_intelligence import FlipIntelligence
 from app.schemas.flip import FlipOut, FlipCreate, FlipUpdate
@@ -107,15 +107,20 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
         raise HTTPException(404, "Flip not found")
 
     listing = await db.get(Listing, flip.listing_id)
+    sold_at = datetime.utcnow()
 
     flip.stage = FlipStage.sold
-    flip.sold_at = datetime.utcnow()
+    flip.sold_at = sold_at
     flip.actual_sale_price = body.actual_sale_price
     flip.sale_platform = body.sale_platform
     flip.actual_profit = body.actual_sale_price - flip.total_cost - (body.actual_sale_price * flip.platform_fee_pct)
+    if listing:
+        listing.status = ListingStatus.sold
+        listing.sold_at = sold_at
+        listing.classification = Classification.already_flipped
 
     # Write intelligence record
-    days = (datetime.utcnow() - flip.created_at).days if flip.created_at else 0
+    days = (sold_at - flip.created_at).days if flip.created_at else 0
     roi = (flip.actual_profit / flip.total_cost * 100) if flip.total_cost else 0
     cpu_tier = _extract_cpu_tier(listing.cpu if listing else None)
 

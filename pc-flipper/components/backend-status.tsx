@@ -24,9 +24,12 @@ export function BackendStatus() {
   };
 
   useEffect(() => {
-    check();
+    const boot = setTimeout(() => { void check(); }, 0);
     const interval = setInterval(check, 30_000);
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(boot);
+      clearInterval(interval);
+    };
   }, []);
 
   if (!offline || dismissed) return null;

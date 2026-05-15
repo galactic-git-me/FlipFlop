@@ -145,7 +145,9 @@ function PlaybookFormModal({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (open) setForm(initialData || BLANK_FORM);
+    if (!open) return;
+    const id = setTimeout(() => setForm(initialData || BLANK_FORM), 0);
+    return () => clearTimeout(id);
   }, [open, initialData]);
 
   const set = (k: keyof PlaybookFormData, v: string | boolean) =>
@@ -619,7 +621,10 @@ export default function PlaybooksPage() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, [load]);
 
   const handleCreate = async (data: Record<string, unknown>) => {
     await api.playbooks.create(data);
