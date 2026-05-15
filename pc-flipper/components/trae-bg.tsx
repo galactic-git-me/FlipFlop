@@ -9,20 +9,30 @@ const modulePromise = import("./GridDistortion");
 const GridDistortion = dynamic(() => modulePromise, { ssr: false });
 
 export function TraeBg() {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [imageSrc, setImageSrc] = useState<string>("/space-bg.jpg");
 
   useEffect(() => {
     let blobUrl: string | null = null;
+    let cancelled = false;
 
     fetch("/api/nasa-bg")
-      .then((r) => r.blob())
+      .then((r) => {
+        if (!r.ok) throw new Error(`NASA bg route failed: ${r.status}`);
+        const ct = r.headers.get("content-type") ?? "";
+        if (!ct.startsWith("image/")) throw new Error(`Unexpected content-type: ${ct}`);
+        return r.blob();
+      })
       .then((blob) => {
+        if (cancelled) return;
         blobUrl = URL.createObjectURL(blob);
         setImageSrc(blobUrl);
       })
-      .catch(() => setImageSrc("/space-bg.jpg"));
+      .catch(() => {
+        if (!cancelled) setImageSrc("/space-bg.jpg");
+      });
 
     return () => {
+      cancelled = true;
       if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
   }, []);
@@ -32,20 +42,19 @@ export function TraeBg() {
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: -10,
+        zIndex: 0,
+        pointerEvents: "none",
         background: "#080c14",
       }}
     >
       <ErrorBoundary>
-        {imageSrc && (
-          <GridDistortion
-            imageSrc={imageSrc}
-            grid={10}
-            mouse={0.1}
-            strength={0.15}
-            relaxation={0.9}
-          />
-        )}
+        <GridDistortion
+          imageSrc={imageSrc}
+          grid={10}
+          mouse={0.1}
+          strength={0.15}
+          relaxation={0.9}
+        />
       </ErrorBoundary>
     </div>
   );

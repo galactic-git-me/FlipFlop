@@ -51,6 +51,22 @@ const ALL_COLS = [
 type ColKey = (typeof ALL_COLS)[number]["key"];
 const DEFAULT_COLS: ColKey[] = ["score", "listing", "source", "cpu", "gpu", "buy", "resale", "profit", "class"];
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`timeout after ${timeoutMs}ms`)), timeoutMs);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
+
 // ── Dashboard page ────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const router = useRouter();
@@ -66,6 +82,7 @@ export default function DashboardPage() {
   const [demandSummary, setDemandSummary] = useState<DemandSummary | null>(null);
   const [auctionIntel, setAuctionIntel] = useState<AuctionIntelItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(6);
   const [triggering, setTriggering] = useState(false);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
@@ -96,6 +113,14 @@ export default function DashboardPage() {
 
   const load = async () => {
     setLoading(true);
+    setLoadProgress(6);
+    const startedAt = Date.now();
+    const expectedMs = 14_000;
+    const progressTick = setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      const pct = Math.min(92, 6 + Math.floor((elapsed / expectedMs) * 86));
+      setLoadProgress((prev) => (pct > prev ? pct : prev));
+    }, 250);
     try {
       // Today midnight and 7-days-ago midnight in ISO format
       const todayMidnight  = new Date(); todayMidnight.setHours(0,0,0,0);
@@ -103,36 +128,54 @@ export default function DashboardPage() {
       const todayISO  = todayMidnight.toISOString();
       const weekISO   = weekAgoMidnight.toISOString();
 
-      const [l, s, sw, fl, godResults, gowResults, cfg, srcs, pbs, demand, auctions] = await Promise.all([
-        api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>,
-        api.listings.stats(),
-        api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>,
-        api.flips.list() as Promise<Flip[]>,
+      const results = await Promise.allSettled([
+        withTimeout(api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>, 15000),
+        withTimeout(api.listings.stats(), 12000),
+        withTimeout(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
+        withTimeout(api.flips.list() as Promise<Flip[]>, 12000),
         // Gem of Day: top estimated_profit from today, profit > 0
-        api.listings.list({
+        withTimeout(api.listings.list({
           sort_by: "estimated_profit", sort_desc: "true",
           limit: "1", min_profit: "0", first_seen_after: todayISO,
-        }) as Promise<Listing[]>,
+        }) as Promise<Listing[]>, 12000),
         // Gem of Week: top estimated_profit from last 7 days, profit > 0
-        api.listings.list({
+        withTimeout(api.listings.list({
           sort_by: "estimated_profit", sort_desc: "true",
           limit: "1", min_profit: "0", first_seen_after: weekISO,
-        }) as Promise<Listing[]>,
-        api.config.get() as Promise<SearchConfig>,
-        api.sources.list() as Promise<DataSource[]>,
-        api.playbooks.list("active").catch(() => [] as Playbook[]),
-        api.demand.summary().catch(() => null),
-        api.demand.auctionIntel(15).catch(() => [] as AuctionIntelItem[]),
+        }) as Promise<Listing[]>, 12000),
+        withTimeout(api.config.get() as Promise<SearchConfig>, 12000),
+        withTimeout(api.sources.list() as Promise<DataSource[]>, 12000),
+        withTimeout(api.playbooks.list("active").catch(() => [] as Playbook[]), 12000),
+        withTimeout(api.demand.summary().catch(() => null), 12000),
+        withTimeout(api.demand.auctionIntel(15).catch(() => [] as AuctionIntelItem[]), 12000),
       ]);
+
+      const getValue = <T,>(idx: number, fallback: T): T => {
+        const r = results[idx];
+        return r.status === "fulfilled" ? (r.value as T) : fallback;
+      };
+
+      const l = getValue<Listing[]>(0, []);
+      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0 });
+      const sw = getValue<{ id: string; name: string; next_run: string | null }[]>(2, []);
+      const fl = getValue<Flip[]>(3, []);
+      const godResults = getValue<Listing[]>(4, []);
+      const gowResults = getValue<Listing[]>(5, []);
+      const cfg = getValue<SearchConfig | null>(6, null);
+      const srcs = getValue<DataSource[]>(7, []);
+      const pbs = getValue<Playbook[]>(8, []);
+      const demand = getValue<DemandSummary | null>(9, null);
+      const auctions = getValue<AuctionIntelItem[]>(10, []);
+
       setListings(l);
       setStats(s);
       setSwarms(sw);
       setFlips(fl);
       setSearchConfig(cfg);
       setSources(srcs);
-      setActivePlaybooks(pbs as Playbook[]);
-      setDemandSummary(demand as DemandSummary | null);
-      setAuctionIntel(auctions as AuctionIntelItem[]);
+      setActivePlaybooks(pbs);
+      setDemandSummary(demand);
+      setAuctionIntel(auctions);
       setGemOfDay(godResults[0] ?? null);
       // Only show week gem if it differs from day gem
       const gowListing = gowResults[0] ?? null;
@@ -144,6 +187,9 @@ export default function DashboardPage() {
     } catch {
       // API offline — show empty state
     } finally {
+      clearInterval(progressTick);
+      setLoadProgress(100);
+      setTimeout(() => setLoadProgress(0), 200);
       setLoading(false);
     }
   };
@@ -261,10 +307,28 @@ export default function DashboardPage() {
 
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) {
+    const remainingSecs = loadProgress > 0 ? Math.max(0, Math.ceil(((100 - loadProgress) / 100) * 14)) : null;
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="flex items-center gap-3 text-slate-500 text-sm">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading live data…
+      <div className="h-full flex items-center justify-center p-6">
+        <div className="w-full max-w-xl rounded-2xl border border-[#1e2d45] bg-[#0d1320]/90 p-5">
+          <div className="flex items-center justify-between text-sm mb-2">
+            <div className="flex items-center gap-2 text-slate-300">
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              Retrieving live market data…
+            </div>
+            <span className="text-slate-500 tabular-nums">{Math.max(0, Math.min(100, loadProgress))}%</span>
+          </div>
+          <div className="h-2 rounded-full bg-[#111c2e] overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-400 to-[#00dc82] transition-all duration-300"
+              style={{ width: `${Math.max(2, Math.min(100, loadProgress))}%` }}
+            />
+          </div>
+          <div className="mt-2 text-xs text-slate-500">
+            {remainingSecs !== null && remainingSecs > 0
+              ? `Estimated time left: ~${remainingSecs}s`
+              : "Finalizing data..."}
+          </div>
         </div>
       </div>
     );
