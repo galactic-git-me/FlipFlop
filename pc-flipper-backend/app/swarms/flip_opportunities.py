@@ -21,6 +21,7 @@ from app.services.component_pricer import clear_component_cache
 from app.services import scan_state
 
 log = structlog.get_logger(__name__)
+SOURCE_FAILURE_THRESHOLD = 3
 
 
 async def run_flip_opportunities_swarm() -> dict:
@@ -127,6 +128,10 @@ async def _scan_source(source, search_terms: list, config) -> dict:
             gems = await _upsert_listings(db, raw_listings, source.id, config)
             result["gems"] = gems
 
+            source_row = await db.get(DataSource, source.id)
+            src_cfg = dict((source_row.config or {})) if source_row else {}
+            src_cfg["consecutive_failures"] = 0
+
             await db.execute(
                 update(DataSource)
                 .where(DataSource.id == source.id)
@@ -135,6 +140,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                     listings_found_last_run=len(raw_listings),
                     listings_found_total=DataSource.listings_found_total + len(raw_listings),
                     last_error=None,
+                    config=src_cfg,
                 )
             )
             await db.commit()
@@ -147,12 +153,33 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         log.error("source.error", source=source.name, error=str(exc))
 
         async with AsyncSessionLocal() as db:
+            source_row = await db.get(DataSource, source.id)
+            src_cfg = dict((source_row.config or {})) if source_row else {}
+            failures = int(src_cfg.get("consecutive_failures", 0)) + 1
+            src_cfg["consecutive_failures"] = failures
+            auto_disabled = failures >= SOURCE_FAILURE_THRESHOLD
+            err_msg = str(exc)
+            if auto_disabled:
+                err_msg = (
+                    f"[auto-disabled after {failures} consecutive failures] {err_msg}"
+                )
             await db.execute(
                 update(DataSource)
                 .where(DataSource.id == source.id)
-                .values(last_error=str(exc))
+                .values(
+                    last_error=err_msg,
+                    config=src_cfg,
+                    enabled=False if auto_disabled else DataSource.enabled,
+                )
             )
             await db.commit()
+            if auto_disabled:
+                log.warning(
+                    "source.auto_disabled",
+                    source=source.name,
+                    consecutive_failures=failures,
+                    threshold=SOURCE_FAILURE_THRESHOLD,
+                )
 
     return result
 
