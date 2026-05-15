@@ -344,8 +344,9 @@ async def _seed_default_data():
             ("Apex Auctions",          "https://www.apexauctions.co.uk",          True),
             # Multi-vendor aggregator — JSON API, rate-limited
             ("BidSpotter",             "https://www.bidspotter.co.uk",            False),
-            # UK's largest auctioneer — JSON API, high IT clearance volume
-            ("Wilsons Auctions",       "https://www.wilsonsauctions.com",         False),
+            # UK's largest auctioneer — JSON API, high IT clearance volume.
+            # Promoted to enabled: broad inventory + stable scraper path.
+            ("Wilsons Auctions",       "https://www.wilsonsauctions.com",         True),
             # Multi-vendor HTML scrape — CF challenge manageable with Playwright
             ("i-bidder",               "https://www.i-bidder.com",                False),
             # B2B wholesale surplus — requires API key registration
@@ -366,9 +367,9 @@ async def _seed_default_data():
                 ))
                 log.info("seeded.auction_source", name=src_name)
 
-        # ── Ensure Facebook + Apex are enabled on existing installs ─────────────
+        # ── Ensure selected proven sources are enabled on existing installs ──────
         # Gumtree is intentionally excluded — Reblaze WAF blocks all automation.
-        for _src_name in ("Facebook Marketplace", "Apex Auctions"):
+        for _src_name in ("Facebook Marketplace", "Apex Auctions", "Wilsons Auctions"):
             await db.execute(
                 _update(DataSource)
                 .where(DataSource.name == _src_name)
