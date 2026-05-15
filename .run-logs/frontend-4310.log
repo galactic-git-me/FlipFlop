@@ -6,7 +6,7 @@
 - Local:         http://localhost:4310
 - Network:       http://185.249.73.114:4310
 - Environments: .env.local
-✓ Ready in 534ms
+✓ Ready in 409ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -15,4 +15,18 @@
    * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
 
 
-[?25h
+ GET / 200 in 801ms (next.js: 233ms, application-code: 568ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "andromeda-ts".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['andromeda-ts'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 72ms (next.js: 5ms, application-code: 67ms)
+ GET / 200 in 84ms (next.js: 3ms, application-code: 81ms)
+ GET / 200 in 56ms (next.js: 4ms, application-code: 52ms)

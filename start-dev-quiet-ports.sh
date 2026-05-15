@@ -9,8 +9,10 @@ LOG_DIR="$ROOT_DIR/.run-logs"
 # Quieter dev ports (override with env if needed)
 FRONTEND_PORT="${FRONTEND_PORT:-4310}"
 BACKEND_PORT="${BACKEND_PORT:-4311}"
-BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-127.0.0.1}"
+FRONTEND_BIND_HOST="${FRONTEND_BIND_HOST:-0.0.0.0}"
+BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-0.0.0.0}"
 PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
+TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 
 mkdir -p "$LOG_DIR"
 
@@ -67,9 +69,31 @@ BACKEND_PID=$!
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 (
   cd "$FRONTEND_DIR"
-  NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT"
+  NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
 ) >"$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!
+
+sleep 1
+
+open_tmux_logs() {
+  if ! command -v tmux >/dev/null 2>&1; then
+    echo "tmux not found; skipping split-log view. Install tmux to enable auto split panes."
+    return 0
+  fi
+
+  if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+    tmux kill-session -t "$TMUX_SESSION"
+  fi
+
+  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend logs: $BACKEND_LOG; echo; tail -n 120 -f \"$BACKEND_LOG\"'"
+  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; tail -n 120 -f \"$FRONTEND_LOG\"'"
+  tmux select-layout -t "$TMUX_SESSION" even-horizontal
+
+  echo
+  echo "Opening tmux session '$TMUX_SESSION' with split panes (backend | frontend logs)."
+  echo "Detach with Ctrl+b then d to return."
+  tmux attach -t "$TMUX_SESSION"
+}
 
 cleanup() {
   echo
@@ -78,6 +102,9 @@ cleanup() {
   kill "$BACKEND_PID" >/dev/null 2>&1 || true
   wait "$FRONTEND_PID" >/dev/null 2>&1 || true
   wait "$BACKEND_PID" >/dev/null 2>&1 || true
+  if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+    tmux kill-session -t "$TMUX_SESSION" >/dev/null 2>&1 || true
+  fi
 }
 
 trap cleanup INT TERM EXIT
@@ -92,5 +119,7 @@ echo "  $FRONTEND_LOG"
 echo "  $BACKEND_LOG"
 echo
 echo "Press Ctrl+C to stop both."
+
+open_tmux_logs
 
 wait "$FRONTEND_PID" "$BACKEND_PID"

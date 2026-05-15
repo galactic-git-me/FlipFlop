@@ -1,25 +1,26 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://127.0.0.1:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [892269] using WatchFiles
-INFO:     Started server process [892359]
+INFO:     Started reloader process [1040378] using WatchFiles
+INFO:     Started server process [1040451]
 INFO:     Waiting for application startup.
-2026-05-15 21:04:00 [info     ] app.startup
-2026-05-15 21:04:00 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-15 21:04:00 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-15 21:04:00 [info     ] scheduler.started              jobs=4
+2026-05-15 21:56:14 [info     ] app.startup
+2026-05-15 21:56:14 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-15 21:56:14 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-15 21:56:14 [info     ] scheduler.started              jobs=4
 INFO:     Application startup complete.
-2026-05-15 21:04:00 [info     ] accessories_swarm.start
-2026-05-15 21:04:00 [info     ] cases_swarm.start
-2026-05-15 21:04:00 [info     ] flip_opportunities_swarm.start
-2026-05-15 21:04:00 [info     ] upgrade_parts_swarm.start      total_parts=48
-2026-05-15 21:04:00 [info     ] cases_swarm.themes             base=11 playbook_extra=8
-2026-05-15 21:04:00 [info     ] facebook.playwright.cookies_loaded count=7
+2026-05-15 21:56:14 [info     ] accessories_swarm.start
+2026-05-15 21:56:14 [info     ] cases_swarm.start
+2026-05-15 21:56:14 [info     ] flip_opportunities_swarm.start
+2026-05-15 21:56:14 [info     ] upgrade_parts_swarm.start      total_parts=48
+2026-05-15 21:56:14 [info     ] facebook.playwright.cookies_loaded count=7
 [scraper] No adapter for source 'Manual Submission', skipping
 [scraper] No adapter for source 'Manual Photo', skipping
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Gumtree
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Manual Photo
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Manual Submission
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+2026-05-15 21:56:14 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
 ╔════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright was just installed or updated.       ║
 ║ Please run the following command to download new browsers: ║
@@ -28,8 +29,7 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
 ╔════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright was just installed or updated.       ║
 ║ Please run the following command to download new browsers: ║
@@ -38,7 +38,7 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
 ╔════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright was just installed or updated.       ║
 ║ Please run the following command to download new browsers: ║
@@ -47,11 +47,7 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Preloved
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
-2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=BidSpotter
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
 ╔════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright was just installed or updated.       ║
 ║ Please run the following command to download new browsers: ║
@@ -60,7 +56,7 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
-2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+2026-05-15 21:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
 ╔════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright was just installed or updated.       ║
 ║ Please run the following command to download new browsers: ║
@@ -69,79 +65,1524 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
-2026-05-15 21:04:01 [info     ] source.done                    found=0 gems=0 source=i-bidder
-[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Preloved
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-15 21:56:15 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
 [scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-2026-05-15 21:04:01 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
-[scraper] eBay 'desktop pcs lot': 16 found, 13 new (total 13)
-[scraper] eBay 'desktop pc': 47 found, 47 new (total 47)
+2026-05-15 21:56:16 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-15 21:56:17 [info     ] auction_scraper.apex.done      total=0
+2026-05-15 21:56:17 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+[scraper] eBay 'desktop pc': 60 found, 60 new (total 60)
+[scraper] eBay 'desktop pcs lot': 13 found, 13 new (total 13)
 [scraper] John Pye error for 'desktop pc': All connection attempts failed
-2026-05-15 21:04:05 [info     ] auction_scraper.apex.done      total=0
-2026-05-15 21:04:05 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
-[scraper] eBay 'office computers clearance': 39 found, 38 new (total 51)
-2026-05-15 21:04:07 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-[scraper] eBay 'gaming pc': 50 found, 20 new (total 67)
-2026-05-15 21:04:07 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-2026-05-15 21:04:07 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=None
-2026-05-15 21:04:08 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-2026-05-15 21:04:08 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-[scraper] eBay 'it clearance desktop': 6 found, 0 new (total 51)
-2026-05-15 21:04:08 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-2026-05-15 21:04:08 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
+[scraper] eBay 'gaming pc': 50 found, 19 new (total 79)
+[scraper] eBay 'office computers clearance': 45 found, 44 new (total 57)
+2026-05-15 21:56:22 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=None
+[scraper] eBay 'computer tower': 50 found, 10 new (total 89)
+[scraper] eBay 'it clearance desktop': 8 found, 8 new (total 65)
 [scraper] John Pye error for 'gaming pc': All connection attempts failed
-[scraper] eBay 'computer tower': 60 found, 18 new (total 85)
-2026-05-15 21:04:10 [info     ] scheduler.stopped
-2026-05-15 21:04:10 [info     ] app.shutdown
-INFO:     Application shutdown complete.
-INFO:     Finished server process [892359]
-INFO:     Stopping reloader process [892269]
+2026-05-15 21:56:24 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:25 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:25 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:25 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:26 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 65)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 89)
+2026-05-15 21:56:26 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:26 [debug    ] upgrade_parts.ebay             buy=62.7 part=GTX 1060 3GB sold=None
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 65)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 89)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 65)
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 89)
+2026-05-15 21:56:30 [debug    ] upgrade_parts.ebay             buy=75.1 part=GTX 1650 4GB sold=None
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 65)
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 89)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 65)
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 89)
+2026-05-15 21:56:34 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:34 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:34 [debug    ] upgrade_parts.ebay             buy=118.5 part=GTX 1660 Super sold=None
+2026-05-15 21:56:34 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 65)
+2026-05-15 21:56:35 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:35 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 89)
+2026-05-15 21:56:35 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-15 21:56:36 [info     ] source.done                    found=0 gems=0 source=John Pye
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 65)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 89)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 65)
+2026-05-15 21:56:38 [debug    ] upgrade_parts.ebay             buy=99.99 part=GTX 1070 8GB sold=None
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 89)
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 65)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 89)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 65)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 65)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 89)
+2026-05-15 21:56:43 [debug    ] upgrade_parts.ebay             buy=49.99 part=RX 570 8GB sold=None
+2026-05-15 21:56:44 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:44 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:45 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 65)
+2026-05-15 21:56:45 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 89)
+2026-05-15 21:56:45 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:46 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 65)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 89)
+2026-05-15 21:56:47 [debug    ] upgrade_parts.ebay             buy=87.5 part=RX 580 8GB sold=None
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 89)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 65)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 89)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 65)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 65)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 89)
+2026-05-15 21:56:52 [debug    ] upgrade_parts.ebay             buy=145.59 part=RTX 2060 6GB sold=None
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 89)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 65)
+2026-05-15 21:56:54 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:54 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:54 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:55 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 89)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 65)
+2026-05-15 21:56:55 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:56:55 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 89)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 65)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 89)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 65)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 89)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 65)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 89)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 65)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 89)
+2026-05-15 21:57:03 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:03 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:04 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 65)
+2026-05-15 21:57:04 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 89)
+2026-05-15 21:57:04 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:05 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 89)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 65)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 89)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 65)
+2026-05-15 21:57:08 [info     ] auction_price.fallback         current_bid=20.0 fallback=27.0 query=pc tower
+2026-05-15 21:57:08 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:08 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:08 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 89)
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:09 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:10 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:10 [info     ] auction_price.fallback         current_bid=465.7 fallback=628.7 query=ryzen 5 3600x pc tower
+2026-05-15 21:57:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-15 21:57:11 [info     ] resale_scraper.fallback_buy_price buy_price=628.7 median=1246.44 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 89)
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:11 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:11 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:11 [info     ] auction_price.fallback         current_bid=29.99 fallback=40.49 query=i5-6400 pc tower
+2026-05-15 21:57:11 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-6400 rtx 3060 status=403
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-6400 rtx 3060 status=403
+2026-05-15 21:57:11 [info     ] resale_scraper.fallback_buy_price buy_price=40.49 median=456.59 query=gaming PC i5-6400 rtx 3060
+2026-05-15 21:57:11 [info     ] auction_price.fallback         current_bid=99.99 fallback=134.99 query=i7-8700 pc tower
+2026-05-15 21:57:11 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-8700 rtx 3060 status=403
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-8700 rtx 3060 status=403
+2026-05-15 21:57:12 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=653.99 query=gaming PC i7-8700 rtx 3060
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:12 [info     ] auction_price.fallback         current_bid=12.31 fallback=16.62 query=i5-3330 pc tower
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-3330 rtx 3060 status=403
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-3330 rtx 3060 status=403
+2026-05-15 21:57:12 [info     ] resale_scraper.fallback_buy_price buy_price=16.62 median=427.94 query=gaming PC i5-3330 rtx 3060
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:12 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+[scraper] eBay 'pc untested': 0 found, 0 new (total 89)
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:13 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:13 [info     ] auction_price.fallback         current_bid=149.99 fallback=202.49 query=i9-9900k pc tower
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i9-9900k rtx 3060 status=403
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i9-9900k rtx 3060 status=403
+2026-05-15 21:57:13 [info     ] resale_scraper.fallback_buy_price buy_price=202.49 median=734.99 query=gaming PC i9-9900k rtx 3060
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:13 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:13 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:13 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:13 [info     ] auction_price.fallback         current_bid=63.1 fallback=85.19 query=i5-8400 pc tower
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:57:14 [info     ] resale_scraper.fallback_buy_price buy_price=85.19 median=510.23 query=gaming PC i5-8400 rtx 3060
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 89)
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:14 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:14 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:14 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:14 [info     ] auction_price.fallback         current_bid=83.9 fallback=113.27 query=i7-8700t pc tower
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i7-8700t rtx 3060 status=403
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-8700t rtx 3060 status=403
+2026-05-15 21:57:15 [info     ] resale_scraper.fallback_buy_price buy_price=113.27 median=543.92 query=gaming PC i7-8700t rtx 3060
+2026-05-15 21:57:15 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:15 [info     ] auction_price.fallback         current_bid=21.0 fallback=28.35 query=gaming pc
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC status=403
+2026-05-15 21:57:15 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC status=403
+2026-05-15 21:57:15 [info     ] resale_scraper.fallback_buy_price buy_price=28.35 median=154.02 query=gaming PC
+2026-05-15 21:57:15 [info     ] auction_price.fallback         current_bid=69.86 fallback=94.31 query=i3 9100t pc tower
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i3 9100t rtx 3060 status=403
+2026-05-15 21:57:15 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i3 9100t rtx 3060 status=403
+2026-05-15 21:57:15 [info     ] resale_scraper.fallback_buy_price buy_price=94.31 median=521.17 query=gaming PC i3 9100t rtx 3060
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:16 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:16 [info     ] auction_price.fallback         current_bid=49.0 fallback=66.15 query=i7-6700 pc tower
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 89)
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+2026-05-15 21:57:16 [info     ] resale_scraper.fallback_buy_price buy_price=66.15 median=487.38 query=gaming PC i7-6700 rtx 3060
+2026-05-15 21:57:16 [info     ] auction_price.fallback         current_bid=1.2 fallback=1.62 query=xeon e3-1245 pc tower
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC xeon e3-1245 rtx 3060 status=403
+2026-05-15 21:57:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC xeon e3-1245 rtx 3060 status=403
+2026-05-15 21:57:16 [info     ] resale_scraper.fallback_buy_price buy_price=1.62 median=409.94 query=gaming PC xeon e3-1245 rtx 3060
+2026-05-15 21:57:16 [info     ] auction_price.fallback         current_bid=160.0 fallback=216.0 query=i5-10600t pc tower
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-10600t rtx 3060 status=403
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5-10600t rtx 3060 status=403
+2026-05-15 21:57:17 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=667.2 query=gaming PC i5-10600t rtx 3060
+2026-05-15 21:57:17 [info     ] auction_price.fallback         current_bid=84.99 fallback=114.74 query=i5-9500 pc tower
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-9500 rtx 3060 status=403
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-9500 rtx 3060 status=403
+2026-05-15 21:57:17 [info     ] resale_scraper.fallback_buy_price buy_price=114.74 median=545.69 query=gaming PC i5-9500 rtx 3060
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:17 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:17 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:17 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:17 [info     ] auction_price.fallback         current_bid=73.5 fallback=99.23 query=i3 8100t pc tower
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i3 8100t rtx 3060 status=403
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 89)
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i3 8100t rtx 3060 status=403
+2026-05-15 21:57:18 [info     ] resale_scraper.fallback_buy_price buy_price=99.23 median=527.08 query=gaming PC i3 8100t rtx 3060
+2026-05-15 21:57:18 [info     ] auction_price.fallback         current_bid=79.99 fallback=107.99 query=i3-7100t pc tower
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i3-7100t rtx 3060 status=403
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i3-7100t rtx 3060 status=403
+2026-05-15 21:57:18 [info     ] resale_scraper.fallback_buy_price buy_price=107.99 median=537.59 query=gaming PC i3-7100t rtx 3060
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:18 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:18 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:18 [info     ] auction_price.fallback         current_bid=199.99 fallback=269.99 query=i7-9700k gaming pc
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-9700k status=403
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i7-9700k status=403
+2026-05-15 21:57:19 [info     ] resale_scraper.fallback_buy_price buy_price=269.99 median=443.99 query=gaming PC i7-9700k
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:19 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 89)
+2026-05-15 21:57:19 [info     ] auction_price.fallback         current_bid=2.2 fallback=2.97 query=xeon e5-1630v3 pc tower
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC xeon e5-1630v3 rtx 3060 status=403
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC xeon e5-1630v3 rtx 3060 status=403
+2026-05-15 21:57:19 [info     ] resale_scraper.fallback_buy_price buy_price=2.97 median=411.56 query=gaming PC xeon e5-1630v3 rtx 3060
+2026-05-15 21:57:19 [info     ] auction_price.fallback         current_bid=83.9 fallback=113.27 query=i5-7500t pc tower
+2026-05-15 21:57:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-7500t rtx 3060 status=403
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-7500t rtx 3060 status=403
+2026-05-15 21:57:20 [info     ] resale_scraper.fallback_buy_price buy_price=113.27 median=543.92 query=gaming PC i5-7500t rtx 3060
+2026-05-15 21:57:20 [info     ] auction_price.fallback         current_bid=44.99 fallback=60.74 query=ryzen 3 2200g pc tower
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 3 2200g rtx 3060 status=403
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC ryzen 3 2200g rtx 3060 status=403
+2026-05-15 21:57:20 [info     ] resale_scraper.fallback_buy_price buy_price=60.74 median=480.89 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:20 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:20 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:20 [info     ] auction_price.fallback         current_bid=127.0 fallback=171.45 query=i9-10980xe pc tower
+2026-05-15 21:57:20 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i9-10980xe rtx 3060 status=403
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i9-10980xe rtx 3060 status=403
+2026-05-15 21:57:21 [info     ] resale_scraper.fallback_buy_price buy_price=171.45 median=613.74 query=gaming PC i9-10980xe rtx 3060
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:21 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-6400 rtx 3060 status=403
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-6400 rtx 3060 status=403
+2026-05-15 21:57:21 [info     ] resale_scraper.fallback_buy_price buy_price=40.49 median=540.59 query=gaming PC i5-6400 rtx 3060
+2026-05-15 21:57:21 [info     ] auction_price.fallback         current_bid=260.0 fallback=351.0 query=xeon e5 pc tower
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC xeon e5 rtx 3060 status=403
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC xeon e5 rtx 3060 status=403
+2026-05-15 21:57:21 [info     ] resale_scraper.fallback_buy_price buy_price=351.0 median=829.2 query=gaming PC xeon e5 rtx 3060
+[scraper] eBay 'pc no display': 0 found, 0 new (total 89)
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:21 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:21 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:21 [info     ] auction_price.fallback         current_bid=98.98 fallback=133.62 query=i5 9400t pc tower
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5 9400t rtx 3060 status=403
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5 9400t rtx 3060 status=403
+2026-05-15 21:57:22 [info     ] resale_scraper.fallback_buy_price buy_price=133.62 median=568.34 query=gaming PC i5 9400t rtx 3060
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+2026-05-15 21:57:22 [info     ] resale_scraper.fallback_buy_price buy_price=66.15 median=487.38 query=gaming PC i7-6700 rtx 3060
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:22 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=440.4 query=gaming PC rtx 3060
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:57:22 [info     ] resale_scraper.fallback_buy_price buy_price=85.19 median=594.23 query=gaming PC i5-8400 rtx 3060
+2026-05-15 21:57:22 [info     ] auction_price.fallback         current_bid=70.0 fallback=94.5 query=i7-9700 pc tower
+2026-05-15 21:57:22 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i7-9700 rtx 3060 status=403
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-9700 rtx 3060 status=403
+2026-05-15 21:57:23 [info     ] resale_scraper.fallback_buy_price buy_price=94.5 median=605.4 query=gaming PC i7-9700 rtx 3060
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 89)
+2026-05-15 21:57:23 [info     ] auction_price.fallback         current_bid=45.0 fallback=60.75 query=i5-9400 pc tower
+2026-05-15 21:57:23 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i5-9400 rtx 3060 status=403
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5-9400 rtx 3060 status=403
+2026-05-15 21:57:23 [info     ] resale_scraper.fallback_buy_price buy_price=60.75 median=564.9 query=gaming PC i5-9400 rtx 3060
+2026-05-15 21:57:23 [info     ] auction_price.fallback         current_bid=160.0 fallback=216.0 query=i7-7700 gaming pc
+2026-05-15 21:57:23 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-7700 gtx 1050ti status=403
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-7700 gtx 1050ti status=403
+2026-05-15 21:57:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=379.2 query=gaming PC i7-7700 gtx 1050ti
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-8700 rtx 3060 status=403
+2026-05-15 21:57:23 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-8700 rtx 3060 status=403
+2026-05-15 21:57:23 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=653.99 query=gaming PC i7-8700 rtx 3060
+2026-05-15 21:57:23 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:24 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:24 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:24 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:24 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:24 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:57:24 [info     ] resale_scraper.fallback_buy_price buy_price=27.0 median=524.4 query=gaming PC rtx 3060
+2026-05-15 21:57:24 [info     ] source.done                    found=65 gems=0 source=eBay UK Auctions
+2026-05-15 21:57:24 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:24 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 89)
+2026-05-15 21:57:24 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 89)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 89)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 89)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 89)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 89)
+2026-05-15 21:57:33 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:33 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:34 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:34 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:34 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:34 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 89)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 89)
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 89)
+[scraper] eBay 'i5 tower': 50 found, 31 new (total 120)
+2026-05-15 21:57:42 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:43 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:43 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 120)
+2026-05-15 21:57:43 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:44 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:44 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 120)
+2026-05-15 21:57:46 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 120)
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 120)
+2026-05-15 21:57:52 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:52 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 120)
+2026-05-15 21:57:53 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:53 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:53 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:57:54 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 120)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 120)
+2026-05-15 21:58:02 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:02 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:03 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 120)
+2026-05-15 21:58:03 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:03 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:03 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 120)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 120)
+2026-05-15 21:58:07 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:08 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:08 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 120)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 120)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 120)
+2026-05-15 21:58:12 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:12 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 120)
+2026-05-15 21:58:13 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 120)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 120)
+2026-05-15 21:58:17 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:17 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 120)
+2026-05-15 21:58:17 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 120)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 120)
+2026-05-15 21:58:22 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:22 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-15 21:58:22 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:22 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 120)
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 120)
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 120)
+2026-05-15 21:58:26 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:27 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:27 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'compter tower': 0 found, 0 new (total 120)
+[scraper] eBay 'pc towre': 0 found, 0 new (total 120)
+2026-05-15 21:58:31 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:31 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:31 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'destop pc': 0 found, 0 new (total 120)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 120)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 120)
+2026-05-15 21:58:35 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:35 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:36 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'computre tower': 0 found, 0 new (total 120)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 120)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 120)
+2026-05-15 21:58:40 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:40 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:40 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:58:40 [info     ] cases_swarm.done               errors=0 found=0 upserted=0
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 120)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 120)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 120)
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 120)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 120)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 120)
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 120)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 120)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 120)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 120)
+2026-05-15 21:58:57 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 120)
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 120)
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=286.7 median=836.04 query=gaming PC rtx 3060
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=395.0 median=966.0 query=gaming PC rtx 3060
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=274.99 median=821.99 query=gaming PC rtx 3060
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-15 21:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:01 [debug    ] resale_scraper.pass            cat=0 found=0 query=gaming PC rtx 3060
+2026-05-15 21:59:01 [info     ] resale_scraper.fallback_buy_price buy_price=149.5 median=671.4 query=gaming PC rtx 3060
+2026-05-15 21:59:01 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:01 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:01 [info     ] resale_scraper.fallback_buy_price buy_price=93.7 median=604.44 query=gaming PC rtx 3060
+2026-05-15 21:59:01 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:01 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:01 [info     ] resale_scraper.fallback_buy_price buy_price=42.3 median=542.76 query=gaming PC rtx 3060
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=1032.0 query=gaming PC rtx 3060
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [info     ] resale_scraper.fallback_buy_price buy_price=334.99 median=893.99 query=gaming PC rtx 3060
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [info     ] resale_scraper.fallback_buy_price buy_price=260.69 median=804.83 query=gaming PC rtx 3060
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:02 [info     ] resale_scraper.fallback_buy_price buy_price=164.95 median=689.94 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=409.6 median=983.52 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=314.74 median=869.69 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=928.44 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=129.95 median=647.94 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=124.95 median=641.94 query=gaming PC rtx 3060
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:03 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [info     ] resale_scraper.fallback_buy_price buy_price=161.24 median=685.49 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [info     ] resale_scraper.fallback_buy_price buy_price=193.19 median=723.83 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [info     ] resale_scraper.fallback_buy_price buy_price=353.5 median=916.2 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:04 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-15 21:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=394.3 median=965.16 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=177.77 median=705.32 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1091.99 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=415.0 median=990.0 query=gaming PC rtx 3060
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=72.0 median=578.4 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=207.66 median=741.19 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=169.95 median=695.94 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=435.1 median=1014.12 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=409.6 median=983.52 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:06 [info     ] resale_scraper.fallback_buy_price buy_price=349.0 median=910.8 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=33.95 median=532.74 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=66.0 median=571.2 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=107.99 median=621.59 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=56.5 median=559.8 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=707.99 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:07 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=707.99 query=gaming PC rtx 3060
+2026-05-15 21:59:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=269.99 median=815.99 query=gaming PC rtx 3060
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=119.99 median=635.99 query=gaming PC rtx 3060
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=209.99 median=743.99 query=gaming PC rtx 3060
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=423.99 median=1000.79 query=gaming PC rtx 3060
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=923.99 query=gaming PC rtx 3060
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=882.0 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=369.95 median=935.94 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=47.56 median=549.07 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=69.99 median=575.99 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=71.99 median=578.39 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=928.44 query=gaming PC rtx 3060
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=119.99 median=635.99 query=gaming PC rtx 3060
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=851.99 query=gaming PC rtx 3060
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=105.97 median=619.16 query=gaming PC rtx 3060
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=179.95 median=707.94 query=gaming PC rtx 3060
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=99.0 median=610.8 query=gaming PC rtx 3060
+2026-05-15 21:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-9400f rtx 2060 status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-9400f rtx 2060 status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=496.3 median=799.56 query=gaming PC i5-9400f rtx 2060
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 2070 super status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 2070 super status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=333.1 median=603.72 query=gaming PC rtx 2070 super
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=291.9 median=842.28 query=gaming PC rtx 3060
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC ryzen 5 3600 rx 5600 xt status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 3600 rx 5600 xt status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC ryzen 5 3600 rx 5600 xt
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 2060 status=403
+2026-05-15 21:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 2060 status=403
+2026-05-15 21:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=630.0 query=gaming PC rtx 2060
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC ryzen 7 5800x rx5500xt status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 5800x rx5500xt status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=424.89 median=713.87 query=gaming PC ryzen 7 5800x rx5500xt
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3050 status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3050 status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=435.1 median=642.12 query=gaming PC rtx 3050
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-9700f rtx 3070 status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-9700f rtx 3070 status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=475.9 median=691.08 query=gaming PC i7-9700f rtx 3070
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=499.0 median=1090.8 query=gaming PC rtx 3060
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC gtx 1050ti status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC gtx 1050ti status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=199.99 median=359.99 query=gaming PC gtx 1050ti
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=720.84 query=gaming PC rtx 3060
+2026-05-15 21:59:12 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=720.84 query=gaming PC rtx 3060
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC gtx 1060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC gtx 1060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=149.95 median=299.94 query=gaming PC gtx 1060
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 5 3600 rtx 2060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 3600 rtx 2060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=455.5 median=666.6 query=gaming PC ryzen 5 3600 rtx 2060
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-3570 gtx 1050 ti status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-3570 gtx 1050 ti status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=156.7 median=392.04 query=gaming PC i5-3570 gtx 1050 ti
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i5-10600k rtx 3060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-10600k rtx 3060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=707.99 query=gaming PC i5-10600k rtx 3060
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:13 [info     ] resale_scraper.fallback_buy_price buy_price=112.3 median=542.76 query=gaming PC rtx 3060
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC xeon e5-2630 rtx 3060 status=403
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC xeon e5-2630 rtx 3060 status=403
+2026-05-15 21:59:14 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC xeon e5-2630 rtx 3060
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:14 [info     ] resale_scraper.fallback_buy_price buy_price=39.99 median=539.99 query=gaming PC rtx 3060
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:14 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=552.0 query=gaming PC rtx 3060
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC xeon e5-2609 rtx 3060 status=403
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC xeon e5-2609 rtx 3060 status=403
+2026-05-15 21:59:14 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=623.99 query=gaming PC xeon e5-2609 rtx 3060
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC xeon e5-1603 status=403
+2026-05-15 21:59:14 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC xeon e5-1603 status=403
+2026-05-15 21:59:14 [info     ] resale_scraper.fallback_buy_price buy_price=102.99 median=243.59 query=gaming PC xeon e5-1603
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:15 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i7-4790 status=403
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-4790 status=403
+2026-05-15 21:59:15 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=354.0 query=gaming PC i7-4790
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-9400f gtx 1660 status=403
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-9400f gtx 1660 status=403
+2026-05-15 21:59:15 [info     ] resale_scraper.fallback_buy_price buy_price=260.69 median=516.83 query=gaming PC i5-9400f gtx 1660
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5-8400 rtx 3060 status=403
+2026-05-15 21:59:15 [info     ] resale_scraper.fallback_buy_price buy_price=269.0 median=730.8 query=gaming PC i5-8400 rtx 3060
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC intel i5 2500k gtx 750ti status=403
+2026-05-15 21:59:15 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC intel i5 2500k gtx 750ti status=403
+2026-05-15 21:59:15 [info     ] resale_scraper.fallback_buy_price buy_price=137.1 median=284.52 query=gaming PC intel i5 2500k gtx 750ti
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=79.99 median=503.99 query=gaming PC rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=143.94 median=580.73 query=gaming PC rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=109.99 median=539.99 query=gaming PC rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-11400 rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5-11400 rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=696.0 query=gaming PC i5-11400 rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-8500 rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-8500 rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=146.3 median=583.56 query=gaming PC i5-8500 rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-12400 rtx 3060 status=403
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-12400 rtx 3060 status=403
+2026-05-15 21:59:16 [info     ] resale_scraper.fallback_buy_price buy_price=259.95 median=719.94 query=gaming PC i5-12400 rtx 3060
+2026-05-15 21:59:16 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5 7500 rtx 3060 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5 7500 rtx 3060 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=169.95 median=611.94 query=gaming PC i5 7500 rtx 3060
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5 10400f rtx 3070 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5 10400f rtx 3070 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=491.2 median=709.44 query=gaming PC i5 10400f rtx 3070
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC gtx 1660 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC gtx 1660 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=298.14 median=477.77 query=gaming PC gtx 1660
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-4690k rtx 3060 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-4690k rtx 3060 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=155.88 median=595.06 query=gaming PC i5-4690k rtx 3060
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-7400 gtx 1060 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5-7400 gtx 1060 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=384.0 query=gaming PC i5-7400 gtx 1060
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5 6500 rtx 3060 status=403
+2026-05-15 21:59:17 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC i5 6500 rtx 3060 status=403
+2026-05-15 21:59:17 [info     ] resale_scraper.fallback_buy_price buy_price=198.29 median=645.95 query=gaming PC i5 6500 rtx 3060
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i5 7500 rtx 3060 status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5 7500 rtx 3060 status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=89.95 median=515.94 query=gaming PC i5 7500 rtx 3060
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC gtx 1660 status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC gtx 1660 status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=291.9 median=554.28 query=gaming PC gtx 1660
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-2500k rtx 3060 status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-2500k rtx 3060 status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=119.1 median=634.92 query=gaming PC i5-2500k rtx 3060
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC gtx 1660ti status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=552 query=gaming PC gtx 1660ti status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=719.99 query=gaming PC gtx 1660ti
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-6500 rtx 3060 status=403
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-6500 rtx 3060 status=403
+2026-05-15 21:59:18 [info     ] resale_scraper.fallback_buy_price buy_price=119.99 median=635.99 query=gaming PC i5-6500 rtx 3060
+2026-05-15 21:59:18 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-8500 rtx 3060 status=403
+2026-05-15 21:59:19 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-8500 rtx 3060 status=403
+2026-05-15 21:59:19 [info     ] resale_scraper.fallback_buy_price buy_price=161.9 median=686.28 query=gaming PC i5-8500 rtx 3060
+2026-05-15 21:59:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:19 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-15 21:59:19 [info     ] resale_scraper.fallback_buy_price buy_price=151.5 median=589.8 query=gaming PC rtx 3060
+2026-05-15 21:59:19 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-4590s rtx 3060 status=403
+2026-05-15 21:59:19 [debug    ] resale_scraper.pass            cat=0 found=0 query=gaming PC i5-4590s rtx 3060
+2026-05-15 21:59:20 [info     ] resale_scraper.fallback_buy_price buy_price=35.99 median=535.19 query=gaming PC i5-4590s rtx 3060
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i5-9400 rtx 3060 status=403
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-9400 rtx 3060 status=403
+2026-05-15 21:59:20 [info     ] resale_scraper.fallback_buy_price buy_price=132.0 median=566.4 query=gaming PC i5-9400 rtx 3060
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=179 length=552 query=gaming PC i5-4590s rtx 3060 status=403
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-4590s rtx 3060 status=403
+2026-05-15 21:59:20 [info     ] resale_scraper.fallback_buy_price buy_price=50.29 median=468.35 query=gaming PC i5-4590s rtx 3060
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-9400f rtx 2060 status=403
+2026-05-15 21:59:20 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-9400f rtx 2060 status=403
+2026-05-15 21:59:20 [info     ] resale_scraper.fallback_buy_price buy_price=333.1 median=603.72 query=gaming PC i5-9400f rtx 2060
+2026-05-15 21:59:20 [info     ] source.done                    found=120 gems=0 source=eBay UK
+2026-05-15 21:59:20 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=185 new_gems=0 sources_scanned=12
+2026-05-15 21:59:32 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-15 22:00:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
