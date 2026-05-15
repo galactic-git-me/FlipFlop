@@ -84,6 +84,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(6);
   const [loadingStartedAt, setLoadingStartedAt] = useState<number>(Date.now());
+  const [feedsDone, setFeedsDone] = useState(0);
+  const [elapsedSecs, setElapsedSecs] = useState(0);
   const [triggering, setTriggering] = useState(false);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
@@ -116,6 +118,8 @@ export default function DashboardPage() {
     setLoading(true);
     setLoadProgress(6);
     setLoadingStartedAt(Date.now());
+    setFeedsDone(0);
+    setElapsedSecs(0);
     try {
       // Today midnight and 7-days-ago midnight in ISO format
       const todayMidnight  = new Date(); todayMidnight.setHours(0,0,0,0);
@@ -130,6 +134,7 @@ export default function DashboardPage() {
           return await withTimeout(p, timeoutMs);
         } finally {
           doneCalls += 1;
+          setFeedsDone(doneCalls);
           const pct = Math.min(96, 6 + Math.floor((doneCalls / totalCalls) * 90));
           setLoadProgress((prev) => (pct > prev ? pct : prev));
         }
@@ -202,10 +207,16 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!loading) return;
+    const tick = setInterval(() => {
+      setElapsedSecs(Math.floor((Date.now() - loadingStartedAt) / 1000));
+    }, 1000);
     const timeoutId = setTimeout(() => {
       setLoading(false);
-    }, 45_000);
-    return () => clearTimeout(timeoutId);
+    }, 12_000);
+    return () => {
+      clearInterval(tick);
+      clearTimeout(timeoutId);
+    };
   }, [loading, loadingStartedAt]);
 
   const startScanPolling = () => {
@@ -321,7 +332,6 @@ export default function DashboardPage() {
 
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) {
-    const elapsedSecs = Math.max(0, Math.floor((Date.now() - loadingStartedAt) / 1000));
     return (
       <div className="h-full flex items-center justify-center p-6">
         <div className="w-full max-w-xl rounded-2xl border border-[#1e2d45] bg-[#0d1320]/90 p-5">
@@ -340,8 +350,16 @@ export default function DashboardPage() {
           </div>
           <div className="mt-2 text-xs text-slate-500">
             {loadProgress < 100
-              ? `Fetched ${Math.max(0, Math.round((loadProgress / 100) * 11))}/11 dashboard feeds • ${elapsedSecs}s elapsed`
+              ? `Fetched ${feedsDone}/11 dashboard feeds • ${elapsedSecs}s elapsed`
               : "Finalizing data..."}
+          </div>
+          <div className="mt-3">
+            <button
+              onClick={() => setLoading(false)}
+              className="text-xs px-3 py-1.5 rounded-md border border-[#2a3d5c] text-slate-300 hover:text-white hover:border-[#4b648f] transition-colors"
+            >
+              Open dashboard now
+            </button>
           </div>
         </div>
       </div>

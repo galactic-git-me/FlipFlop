@@ -56,3 +56,8 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  GET / 200 in 52ms (next.js: 2ms, application-code: 50ms)
  GET / 200 in 66ms (next.js: 5ms, application-code: 60ms)
  GET / 200 in 52ms (next.js: 2ms, application-code: 49ms)
+ GET / 200 in 54ms (next.js: 2ms, application-code: 51ms)
+ GET / 200 in 56ms (next.js: 3ms, application-code: 53ms)
+ GET /styles.css.map 404 in 789ms (next.js: 720ms, application-code: 68ms)
+ GET / 200 in 79ms (next.js: 5ms, application-code: 74ms)
+ GET / 200 in 63ms (next.js: 3ms, application-code: 60ms)

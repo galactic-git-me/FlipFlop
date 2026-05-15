@@ -1670,3 +1670,127 @@ INFO:     Application startup complete.
 2026-05-15 22:19:39 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
 2026-05-15 22:19:39 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
 2026-05-15 22:19:39 [info     ] upgrade_parts_swarm.done       bh=0 box=0 ebay_buy=8 ebay_sold=0 errors=0 overclockers=0 scan=0 updated=8
+2026-05-15 22:56:14 [info     ] flip_opportunities_swarm.start
+2026-05-15 22:56:14 [info     ] facebook.playwright.cookies_loaded count=7
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Preloved
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 22:56:15 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-15 22:56:15 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-15 22:56:16 [info     ] auction_scraper.apex.done      total=0
+2026-05-15 22:56:16 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-15 22:56:34 [info     ] source.done                    found=0 gems=0 source=John Pye
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-15 22:57:04 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions

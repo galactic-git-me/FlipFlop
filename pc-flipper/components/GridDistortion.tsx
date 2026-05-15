@@ -22,8 +22,9 @@ varying vec2 vUv;
 
 void main() {
   vec2 uv = vUv;
-  vec4 offset = texture2D(uDataTexture, vUv);
-  gl_FragColor = texture2D(uTexture, uv - 0.02 * offset.rg);
+  // Data texture is stored in 0..1 range with neutral center at 0.5
+  vec2 offset = texture2D(uDataTexture, vUv).rg - vec2(0.5);
+  gl_FragColor = texture2D(uTexture, uv - 0.06 * offset);
 }`;
 
 interface GridDistortionProps {
@@ -33,6 +34,7 @@ interface GridDistortionProps {
   relaxation?: number;
   imageSrc: string;
   className?: string;
+  onTextureReady?: (ready: boolean) => void;
 }
 
 const GridDistortion = ({
@@ -42,6 +44,7 @@ const GridDistortion = ({
   relaxation = 0.9,
   imageSrc,
   className = "",
+  onTextureReady,
 }: GridDistortionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationIdRef = useRef<number | null>(null);
@@ -77,10 +80,14 @@ const GridDistortion = ({
     let imageAspect = 1;
 
     const size = grid;
-    const data = new Float32Array(4 * size * size);
+    // Use Uint8 texture for broad compatibility (works without float texture extensions)
+    const data = new Uint8Array(4 * size * size);
     for (let i = 0; i < size * size; i++) {
-      data[i * 4] = Math.random() * 255 - 125;
-      data[i * 4 + 1] = Math.random() * 255 - 125;
+      // Neutral center (128, 128) means zero distortion at rest
+      data[i * 4] = 128;
+      data[i * 4 + 1] = 128;
+      data[i * 4 + 2] = 0;
+      data[i * 4 + 3] = 255;
     }
 
     const dataTexture = new THREE.DataTexture(
@@ -88,8 +95,12 @@ const GridDistortion = ({
       size,
       size,
       THREE.RGBAFormat,
-      THREE.FloatType
+      THREE.UnsignedByteType
     );
+    dataTexture.minFilter = THREE.LinearFilter;
+    dataTexture.magFilter = THREE.LinearFilter;
+    dataTexture.wrapS = THREE.ClampToEdgeWrapping;
+    dataTexture.wrapT = THREE.ClampToEdgeWrapping;
     dataTexture.needsUpdate = true;
     uniforms.uDataTexture.value = dataTexture;
 
@@ -127,17 +138,25 @@ const GridDistortion = ({
     };
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(imageSrc, (texture) => {
-      if (!mounted) { texture.dispose(); return; }
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      imageAspect = texture.image.width / texture.image.height;
-      void imageAspect;
-      uniforms.uTexture.value = texture;
-      handleResize();
-    });
+    textureLoader.load(
+      imageSrc,
+      (texture) => {
+        if (!mounted) { texture.dispose(); return; }
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        imageAspect = texture.image.width / texture.image.height;
+        void imageAspect;
+        uniforms.uTexture.value = texture;
+        handleResize();
+        onTextureReady?.(true);
+      },
+      undefined,
+      () => {
+        onTextureReady?.(false);
+      }
+    );
 
     resizeObserverRef.current = new ResizeObserver(handleResize);
     resizeObserverRef.current.observe(container);
@@ -161,10 +180,13 @@ const GridDistortion = ({
       animationIdRef.current = requestAnimationFrame(animate);
       uniforms.time.value += 0.05;
 
-      const texData = dataTexture.image.data as Float32Array;
+      const texData = dataTexture.image.data as Uint8Array;
       for (let i = 0; i < size * size; i++) {
-        texData[i * 4] *= relaxation;
-        texData[i * 4 + 1] *= relaxation;
+        const rIdx = i * 4;
+        const gIdx = rIdx + 1;
+        // Relax back toward neutral center (128)
+        texData[rIdx] = Math.max(0, Math.min(255, Math.round(128 + (texData[rIdx] - 128) * relaxation)));
+        texData[gIdx] = Math.max(0, Math.min(255, Math.round(128 + (texData[gIdx] - 128) * relaxation)));
       }
 
       const gridMouseX = size * mouseState.x;
@@ -178,8 +200,10 @@ const GridDistortion = ({
           if (distSq < maxDist * maxDist) {
             const index = 4 * (i + size * j);
             const power = Math.min(maxDist / Math.sqrt(distSq), 10);
-            texData[index] += strength * 100 * mouseState.vX * power;
-            texData[index + 1] -= strength * 100 * mouseState.vY * power;
+            const dx = strength * 180 * mouseState.vX * power;
+            const dy = strength * 180 * mouseState.vY * power;
+            texData[index] = Math.max(0, Math.min(255, texData[index] + dx));
+            texData[index + 1] = Math.max(0, Math.min(255, texData[index + 1] - dy));
           }
         }
       }
@@ -204,8 +228,9 @@ const GridDistortion = ({
       material.dispose();
       dataTexture.dispose();
       if (uniforms.uTexture.value) uniforms.uTexture.value.dispose();
+      onTextureReady?.(false);
     };
-  }, [grid, mouse, strength, relaxation, imageSrc]);
+  }, [grid, mouse, strength, relaxation, imageSrc, onTextureReady]);
 
   return (
     <div

@@ -58,9 +58,12 @@ body {
   display: flex;
   min-height: 100vh;
   overflow: hidden;
+  position: relative;
 }
 
 .node-sidebar {
+  position: relative;
+  z-index: 10;
   width: 260px;
   min-width: 260px;
   border-right: 1px solid var(--nf-border);
@@ -182,6 +185,8 @@ body {
 }
 
 .node-main-wrap {
+  position: relative;
+  z-index: 10;
   flex: 1;
   min-width: 0;
   display: flex;

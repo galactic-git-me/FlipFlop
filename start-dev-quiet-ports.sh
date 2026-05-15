@@ -13,6 +13,7 @@ FRONTEND_BIND_HOST="${FRONTEND_BIND_HOST:-0.0.0.0}"
 BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-0.0.0.0}"
 PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
+FRONTEND_MODE="${FRONTEND_MODE:-prod}" # prod | dev
 
 mkdir -p "$LOG_DIR"
 
@@ -59,6 +60,11 @@ fi
 BACKEND_LOG="$LOG_DIR/backend-$BACKEND_PORT.log"
 FRONTEND_LOG="$LOG_DIR/frontend-$FRONTEND_PORT.log"
 
+if ! getent hosts "$PUBLIC_HOST" >/dev/null 2>&1; then
+  echo "Warning: '$PUBLIC_HOST' does not resolve on this machine right now."
+  echo "You can still run locally, but remote/Tailscale hostname links may fail."
+fi
+
 echo "Starting backend on http://$PUBLIC_HOST:$BACKEND_PORT ..."
 (
   cd "$BACKEND_DIR"
@@ -69,7 +75,12 @@ BACKEND_PID=$!
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 (
   cd "$FRONTEND_DIR"
-  NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
+  if [[ "$FRONTEND_MODE" == "dev" ]]; then
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
+  else
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build >/dev/null 2>&1
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
+  fi
 ) >"$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!
 
@@ -113,6 +124,7 @@ echo
 echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
 echo "Backend : http://$PUBLIC_HOST:$BACKEND_PORT"
 echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
+echo "Mode    : $FRONTEND_MODE"
 echo
 echo "Logs:"
 echo "  $FRONTEND_LOG"
