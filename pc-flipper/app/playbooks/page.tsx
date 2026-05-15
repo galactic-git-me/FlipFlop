@@ -6,9 +6,8 @@ import {
   TrendingUp, Zap, Target, Search, AlertTriangle, RefreshCw,
   BarChart2, Pencil, Trash2, ChevronDown, ChevronUp, Tag,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
 import {
   Playbook, PlaybookProposal,

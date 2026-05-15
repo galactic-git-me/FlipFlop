@@ -1,8 +1,9 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
-import { Zap, Gem, Package, Box, ChevronRight, CheckCircle, ExternalLink, Plus, RefreshCw, Sparkles, ImageIcon, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Zap, Gem, Package, Box, ChevronRight, CheckCircle, Plus, RefreshCw, Sparkles, ImageIcon } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClassificationBadge } from "@/components/classification-badge";
 import { FlippabilityScore } from "@/components/flippability-score";
@@ -39,9 +40,8 @@ export default function FlipsPage() {
     const init = async () => {
       setLoading(true);
       try {
-        const [f, l, p, c] = await Promise.all([
+        const [f, p, c] = await Promise.all([
           api.flips.list() as Promise<Flip[]>,
-          api.listings.list({ sort_by: "gem_score", sort_desc: "true", limit: "30", status: "active", classification: "amazing_gem" }) as Promise<Listing[]>,
           api.parts.list() as Promise<Part[]>,
           api.parts.cases({}) as Promise<Part[]>,
         ]);

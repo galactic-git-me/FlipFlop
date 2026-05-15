@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Save, RotateCcw, Target, DollarSign, Cpu, HardDrive, Monitor, Bot, ShoppingCart, RefreshCw } from "lucide-react";
+import { Search, Save, RotateCcw, Target, DollarSign, Cpu, HardDrive, Monitor, Bot, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";

@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  Wand2, Cpu, ShieldCheck, Trophy, ClipboardList,
+  Wand2, Cpu, Trophy, ClipboardList,
   ChevronRight, ChevronLeft, RotateCcw, Search,
-  AlertTriangle, TrendingUp, Zap, Package,
+  AlertTriangle, Zap,
   CheckCircle2, Circle, Loader2, ExternalLink,
-  Star, ShoppingCart, Clock, Copy, Check,
+  Clock, Copy, Check,
 } from "lucide-react";
 import { api, WizardPlaybook, WizardBuild, RefinedIntent, PurchasePlan, PlanStep } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -236,7 +236,7 @@ function AgentPipeline({ agents }: { agents: AgentStatus[] }) {
         <p className="text-sm text-slate-500 mt-1">The multi-agent pipeline is generating and validating your builds.</p>
       </div>
       <div className="space-y-3">
-        {agents.map((agent, i) => (
+        {agents.map((agent) => (
           <div key={agent.id} className={cn(
             "flex items-start gap-4 p-4 rounded-xl border transition-all",
             agent.status === "running"  ? "border-[#00dc82]/40 bg-[#00dc82]/5"   : "",
@@ -389,7 +389,7 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function PurchasePlanView({ plan, intent }: { plan: PurchasePlan; intent: RefinedIntent }) {
+function PurchasePlanView({ plan }: { plan: PurchasePlan; intent: RefinedIntent }) {
   const b = plan.build;
 
   return (

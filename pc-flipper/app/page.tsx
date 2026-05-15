@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -9,7 +10,7 @@ import {
 import {
   TrendingUp, Gem, Zap, Clock, Bell, ArrowRight, RefreshCw,
   ChevronLeft, ChevronRight, Settings2, Check, SlidersHorizontal, Gavel, Activity,
-  BookOpen, Flame, Thermometer, Snowflake, Timer, PlusCircle,
+  BookOpen, Flame, Thermometer, Snowflake, PlusCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +20,7 @@ import { FlippabilityScore } from "@/components/flippability-score";
 import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
 import { ScanOverlay } from "@/components/scan-overlay";
-import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
+import { SellerBadge } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
 import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem, TrendDir, DemandStrength } from "@/lib/types";
 import { ScanStatus, api, apiUrl } from "@/lib/api";
@@ -1009,16 +1010,8 @@ function GemOfPeriod({
 }
 
 // ── Helper components ─────────────────────────────────────────────────────────
-function Th({ children }: { children: React.ReactNode }) {
-  return (
-    <th className="px-4 py-2.5 text-left text-xs font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap first:pl-5 last:pr-5">
-      {children}
-    </th>
-  );
-}
-
 // ── PnL Tooltip ───────────────────────────────────────────────────────────────
-function PnlTooltip({ active, payload, label }: { active?: boolean; payload?: { payload: { date: string; profit: number; cumulative: number; label: string } }[]; label?: string }) {
+function PnlTooltip({ active, payload }: { active?: boolean; payload?: { payload: { date: string; profit: number; cumulative: number; label: string } }[]; label?: string }) {
   if (!active || !payload?.[0]) return null;
   const d = payload[0].payload;
   return (
@@ -1238,21 +1231,6 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: { pay
           onClick={() => window.open(auditUrl, "_blank", "noopener,noreferrer")}
           className="text-[9px] text-slate-400 hover:text-[#00dc82] transition-colors underline underline-offset-2 cursor-pointer font-medium"
         >Full audit →</button>
-      </div>
-    </div>
-  );
-}
-
-function RoiTooltip({ active, payload }: { active?: boolean; payload?: { payload: Listing & { y: number; profit: number } }[] }) {
-  if (!active || !payload?.[0]) return null;
-  const d = payload[0].payload;
-  return (
-    <div className="glass-card rounded-xl p-3 text-xs shadow-2xl max-w-52">
-      <p className="text-slate-300 font-medium mb-2 line-clamp-2">{d.title}</p>
-      <div className="space-y-1">
-        <div className="flex justify-between gap-4"><span className="text-slate-500">Score</span><span className="text-slate-200">{d.gem_score.toFixed(0)}</span></div>
-        <div className="flex justify-between gap-4"><span className="text-slate-500">ROI</span><span className={d.y >= 30 ? "text-[#00dc82] font-semibold" : d.y >= 0 ? "text-yellow-400" : "text-red-400"}>{d.y >= 0 ? "+" : ""}{d.y.toFixed(1)}%</span></div>
-        <div className="flex justify-between gap-4"><span className="text-slate-500">Profit</span><span className={d.profit > 0 ? "text-[#00dc82] font-semibold" : "text-red-400"}>{formatCurrency(d.profit)}</span></div>
       </div>
     </div>
   );
@@ -1559,7 +1537,7 @@ function computeBuildCategories(listings: Listing[], nowMs: number): BuildCatego
       name: "Budget Builders",
       emoji: "💰",
       match: (l: Listing) => l.price <= 60 && !l.gpu,
-      insight: (gemCount: number, count: number, _avgP: number) =>
+      insight: (gemCount: number, count: number) =>
         gemCount > 0 ? `${gemCount}/${count} are gems — low buy-in` : `Low buy-in · ${count} sub-£60 units`,
     },
   ];

@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
@@ -17,7 +18,6 @@ import { AuctionBadge, AuctionPriceDisplay } from "@/components/auction-display"
 import { Listing, Classification, CLASSIFICATION_CONFIG } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
-import Link from "next/link";
 import { ManualSubmitModal } from "@/components/manual-submit-modal";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ export default function OpportunitiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [classFilter, debouncedSearch, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy, page, pageSize]);
+  }, [classFilter, debouncedSearch, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy, page, pageSize, sources.length]);
 
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);

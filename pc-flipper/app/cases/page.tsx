@@ -1,7 +1,8 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
-import { Box, RefreshCw, ExternalLink, Sparkles, Filter } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { Box, RefreshCw, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SourceBadge } from "@/components/source-badge";
@@ -36,7 +37,7 @@ export default function CasesPage() {
   const [activeSource, setActiveSource] = useState("All");
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const params: Record<string, string> = {};
@@ -55,12 +56,12 @@ export default function CasesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTheme, activeSource, maxPrice]);
 
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
     return () => clearTimeout(id);
-  }, [activeTheme, activeSource, maxPrice]);
+  }, [load]);
 
   const refresh = async () => {
     setRefreshing(true);

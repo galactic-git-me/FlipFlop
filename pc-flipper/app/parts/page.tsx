@@ -1,6 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Package, RefreshCw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SourceBadge } from "@/components/source-badge";
@@ -25,7 +26,7 @@ export default function PartsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [activeCategory, setActiveCategory] = useState<PartCategory | "all">("all");
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const params = activeCategory !== "all" ? activeCategory : undefined;
@@ -36,12 +37,12 @@ export default function PartsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeCategory]);
 
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
     return () => clearTimeout(id);
-  }, [activeCategory]);
+  }, [load]);
 
   const refresh = async () => {
     setRefreshing(true);

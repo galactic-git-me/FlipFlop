@@ -1,11 +1,11 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
-import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, FileText, Image as ImageIcon, ExternalLink, PackageCheck, Zap } from "lucide-react";
+import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FlippabilityScore } from "@/components/flippability-score";
-import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
 import { Flip } from "@/lib/types";
 import { api } from "@/lib/api";
@@ -38,7 +38,7 @@ export default function SellingPage() {
         setSelected(activeFlips[0]);
       }
     }).catch(() => setFlips([])).finally(() => setLoading(false));
-  }, []);
+  }, [selected]);
 
   const generateContent = async () => {
     if (!selected) return;
