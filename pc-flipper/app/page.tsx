@@ -19,7 +19,6 @@ import { FlippabilityScore } from "@/components/flippability-score";
 import { SourceBadge } from "@/components/source-badge";
 import { EmptyState } from "@/components/empty-state";
 import { ScanOverlay } from "@/components/scan-overlay";
-import { TraeBg } from "@/components/trae-bg";
 import { SellerBadge, SELLER_TYPE_CONFIG } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
 import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem, TrendDir, DemandStrength } from "@/lib/types";
@@ -253,20 +252,16 @@ export default function DashboardPage() {
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <>
-        <TraeBg />
-        <div className="flex items-center justify-center h-full">
-          <div className="flex items-center gap-3 text-slate-500 text-sm">
-            <RefreshCw className="w-4 h-4 animate-spin" /> Loading live data…
-          </div>
+      <div className="flex items-center justify-center h-full">
+        <div className="flex items-center gap-3 text-slate-500 text-sm">
+          <RefreshCw className="w-4 h-4 animate-spin" /> Loading live data…
         </div>
-      </>
+      </div>
     );
   }
 
   return (
     <div className="p-6 space-y-6">
-      <TraeBg />
       <ManualSubmitModal
         open={showManualSubmit}
         onClose={() => setShowManualSubmit(false)}
@@ -279,8 +274,8 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100">Dashboard</h1>
-          <p className="text-sm text-slate-500 mt-0.5">Live market intelligence</p>
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase">Command_Deck</h1>
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
         </div>
         <div className="flex items-center gap-3">
           {gems.length > 0 && (

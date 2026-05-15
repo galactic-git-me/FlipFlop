@@ -689,13 +689,13 @@ export default function PlaybooksPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-[#00dc82]/15 border border-[#00dc82]/25 flex items-center justify-center">
-              <BookOpen className="w-4 h-4 text-[#00dc82]" />
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2.5">
+            <span className="w-8 h-8 border border-[var(--nf-border)] bg-[rgba(164,230,255,0.08)] flex items-center justify-center">
+              <BookOpen className="w-4 h-4 text-[var(--nf-primary)]" />
             </span>
-            Playbooks
+            Strategy_Library
           </h1>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-[var(--nf-text-muted)] text-sm mt-1 font-mono">
             Strategy templates that drive search, filtering, and evaluation.
             All status changes require approval.
           </p>
@@ -720,7 +720,7 @@ export default function PlaybooksPage() {
           { label: "Pending approvals", value: pending.length, color: "text-orange-400", icon: <AlertTriangle className="w-4 h-4" /> },
           { label: "Total keywords", value: active.reduce((s, p) => s + (p.search_strategy?.keywords?.length || 0), 0), color: "text-slate-200", icon: <Search className="w-4 h-4" /> },
         ].map(item => (
-          <Card key={item.label} className="glass-card border-[#1e2d45]">
+          <Card key={item.label} className="glass-card">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-slate-500 mb-1">
                 {item.icon}
@@ -748,7 +748,7 @@ export default function PlaybooksPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-[#0d1726] border border-[#1e2d45] rounded-xl p-1 w-fit">
+      <div className="flex gap-1 bg-[rgba(15,18,24,0.78)] border border-[var(--nf-border)] rounded-md p-1 w-fit">
         {tabList.map(t => (
           <button
             key={t.key}

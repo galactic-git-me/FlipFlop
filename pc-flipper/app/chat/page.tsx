@@ -689,18 +689,18 @@ export default function BuildWizardPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="p-6">
+      <div className="max-w-5xl mx-auto">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#00dc82]/15 border border-[#00dc82]/30 flex items-center justify-center">
-              <Wand2 className="w-5 h-5 text-[#00dc82]" />
+            <div className="w-10 h-10 border border-[var(--nf-border)] bg-[rgba(164,230,255,0.08)] flex items-center justify-center">
+              <Wand2 className="w-5 h-5 text-[var(--nf-primary)]" />
             </div>
             <div>
-              <h1 className="text-base font-black text-slate-100 tracking-tight">Build Wizard</h1>
-              <p className="text-xs text-slate-500">Multi-agent · Wizard · Composer · Validator · Planner</p>
+              <h1 className="text-2xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase">Build_Wizard</h1>
+              <p className="text-xs text-[var(--nf-text-muted)] font-mono">Multi-agent · Wizard · Composer · Validator · Planner</p>
             </div>
           </div>
           {phase !== "playbook" && phase !== "generating" && (
@@ -725,7 +725,7 @@ export default function BuildWizardPage() {
         )}
 
         {/* Phase content */}
-        <div className="bg-[#0a0f1a] border border-[#1e2d45] rounded-2xl p-6">
+        <div className="glass-card rounded-md p-6">
           {/* ── Phase 1: Playbook ── */}
           {phase === "playbook" && (
             <>

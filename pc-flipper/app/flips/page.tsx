@@ -94,14 +94,14 @@ export default function FlipsPage() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-          <Zap className="w-5 h-5 text-yellow-400" /> Flip Builder
+        <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+          <Zap className="w-5 h-5 text-[var(--nf-primary)]" /> Inventory_Command
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">3 stages: pick a base unit → add upgrades → choose a case</p>
+        <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">3 stages: pick a base unit → add upgrades → choose a case</p>
       </div>
 
       {/* 3-Stage Wizard */}
-      <Card className="border-[#1e3a5a]">
+      <Card className="glass-card">
         {/* Stage progress bar */}
         <div className="flex items-center px-5 pt-5 pb-0 gap-2">
           {([1, 2, 3] as Stage[]).map((s, i) => {
