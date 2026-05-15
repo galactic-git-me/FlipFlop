@@ -53,3 +53,6 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  GET / 200 in 73ms (next.js: 5ms, application-code: 68ms)
  GET / 200 in 55ms (next.js: 4ms, application-code: 51ms)
  GET / 200 in 51ms (next.js: 3ms, application-code: 48ms)
+ GET / 200 in 52ms (next.js: 2ms, application-code: 50ms)
+ GET / 200 in 66ms (next.js: 5ms, application-code: 60ms)
+ GET / 200 in 52ms (next.js: 2ms, application-code: 49ms)
