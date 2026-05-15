@@ -30,7 +30,10 @@ export default function SourcesPage() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    const t = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   const toggle = async (source: DataSource) => {
     try {
@@ -75,7 +78,7 @@ export default function SourcesPage() {
   };
 
   const enabledCount = sources.filter(s => s.enabled).length;
-  const totalListings = sources.reduce((sum, s) => sum + (s.listings_found ?? 0), 0);
+  const totalListings = sources.reduce((sum, s) => sum + (s.listings_found_total ?? 0), 0);
 
   return (
     <div className="p-6 space-y-6">
@@ -154,13 +157,27 @@ export default function SourcesPage() {
                 {sources.map(source => (
                   <tr key={source.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="px-5 py-4">
+                      {(() => {
+                        const failures = source.config?.consecutive_failures ?? 0;
+                        const autoDisabled = !source.enabled && failures >= 3 && !!source.last_error?.includes("auto-disabled");
+                        return (
                       <div className="flex items-center gap-2">
                         <Globe className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
                         <div>
                           <div className="font-medium text-slate-200">{source.name}</div>
                           <div className="text-xs text-slate-500 mt-0.5">{source.url}</div>
+                          {failures > 0 && (
+                            <div className={`text-[11px] mt-1 ${autoDisabled ? "text-red-400" : "text-amber-400"}`}>
+                              {autoDisabled ? "Auto-disabled" : "Backoff active"} · {failures} consecutive failure{failures === 1 ? "" : "s"}
+                            </div>
+                          )}
+                          {autoDisabled && source.last_error && (
+                            <div className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{source.last_error}</div>
+                          )}
                         </div>
                       </div>
+                        );
+                      })()}
                     </td>
                     <td className="px-5 py-4">
                       <Badge variant={source.source_type === "api" ? "info" : "muted"}>

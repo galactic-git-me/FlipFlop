@@ -123,7 +123,10 @@ export interface DataSource {
   url: string;
   source_type: "api" | "scrape";
   enabled: boolean;
-  config?: Record<string, unknown>;
+  config?: {
+    consecutive_failures?: number;
+    [key: string]: unknown;
+  };
   listings_found?: number;
   listings_found_total?: number;
   listings_found_last_run?: number;
