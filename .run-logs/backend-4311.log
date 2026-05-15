@@ -1607,3 +1607,6 @@ INFO:     Application startup complete.
 2026-05-15 22:10:51 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
 2026-05-15 22:11:26 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
 2026-05-15 22:12:01 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-15 22:12:36 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+2026-05-15 22:13:11 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+2026-05-15 22:13:46 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
