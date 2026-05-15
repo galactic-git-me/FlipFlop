@@ -123,10 +123,10 @@ export default function SearchConfigPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Search className="w-5 h-5 text-slate-400" /> Search Config
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <Search className="w-5 h-5 text-[var(--nf-primary)]" /> Search_Config
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">Define your target listing criteria — drives all swarm searches</p>
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">Define your target listing criteria — drives all swarm searches</p>
         </div>
         <div className="flex gap-2">
           <Button variant="ghost" size="sm" onClick={() => setConfig(DEFAULT_CONFIG)}>

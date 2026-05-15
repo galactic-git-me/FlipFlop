@@ -56,10 +56,10 @@ export default function PartsPage() {
     <div className="p-6 space-y-5">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Package className="w-5 h-5 text-blue-400" /> Upgrade Parts
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <Package className="w-5 h-5 text-[var(--nf-primary)]" /> Marketplace
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
             Refurbed & used parts for flipping · {parts.length} tracked · prices updated daily
           </p>
         </div>
@@ -112,7 +112,7 @@ function PartRow({ part }: { part: GroupedPart }) {
   const bestPrice = part.cheapest_price ?? 0;
 
   return (
-    <div className="flex items-start gap-4 p-4 rounded-xl bg-[#0d1320] border border-[#1e2d45] hover:border-[#1e3a5a] transition-colors">
+    <div className="flex items-start gap-4 p-4 rounded-md glass-card hover:border-[var(--nf-border-strong)] transition-colors">
       {/* Image */}
       <div className="w-12 h-12 rounded-lg bg-[#0a1119] border border-[#1e2d45] flex items-center justify-center flex-shrink-0 overflow-hidden mt-0.5">
         {part.image_url ? (

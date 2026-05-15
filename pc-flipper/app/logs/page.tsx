@@ -117,12 +117,12 @@ export default function LogsPage() {
   });
 
   return (
-    <div className="h-full flex flex-col bg-[#080c14] p-4 gap-3">
+    <div className="h-full flex flex-col bg-transparent p-4 gap-3">
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3 flex-wrap">
-        <h1 className="flex items-center gap-2 text-base font-bold text-emerald-400 font-mono shrink-0">
-          <Terminal className="w-4 h-4" /> System Logs
+        <h1 className="flex items-center gap-2 text-2xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase shrink-0">
+          <Terminal className="w-5 h-5" /> AI_Insights
         </h1>
         <div className="flex items-center gap-1.5 text-[11px] font-mono">
           <Circle className={`w-2 h-2 fill-current ${connected ? "text-emerald-500 animate-pulse" : "text-red-500"}`} />
@@ -133,11 +133,6 @@ export default function LogsPage() {
         <span className="text-[11px] font-mono text-slate-600">
           {total.toLocaleString()} events &middot; {visible.length} shown
         </span>
-        {paused && pendingRef.current.length > 0 && (
-          <span className="text-[11px] font-mono text-yellow-400 animate-pulse">
-            +{pendingRef.current.length} buffered
-          </span>
-        )}
 
         {/* Level filter pills */}
         <div className="flex gap-1 ml-auto">

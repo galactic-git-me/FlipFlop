@@ -81,10 +81,10 @@ export default function SourcesPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Database className="w-5 h-5 text-purple-400" /> Data Sources
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <Database className="w-5 h-5 text-[var(--nf-primary)]" /> Source_Control
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
             {enabledCount} of {sources.length} sources active · {totalListings.toLocaleString()} total listings
           </p>
         </div>

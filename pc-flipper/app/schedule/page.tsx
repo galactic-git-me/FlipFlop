@@ -282,10 +282,10 @@ export default function SchedulePage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <CalendarClock className="w-5 h-5 text-[#00dc82]" /> Job Scheduler
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <CalendarClock className="w-5 h-5 text-[var(--nf-primary)]" /> Scheduler
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
             {active} of {jobs.length} jobs active
             {lastFailed && <span className="text-red-400 ml-2">· {lastFailed.name} last failed</span>}
           </p>

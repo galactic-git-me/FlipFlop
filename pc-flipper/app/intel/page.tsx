@@ -125,10 +125,10 @@ export default function IntelPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Brain className="w-5 h-5 text-cyan-400" /> Intelligence
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <Brain className="w-5 h-5 text-[var(--nf-primary)]" /> Analytics
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
             Learn from every flip — profit patterns, best sources, timing, and AI-driven recommendations
           </p>
         </div>

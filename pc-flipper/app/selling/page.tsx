@@ -111,10 +111,10 @@ export default function SellingPage() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-          <Tag className="w-5 h-5 text-yellow-400" /> Selling Toolkit
+        <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+          <Tag className="w-5 h-5 text-[var(--nf-primary)]" /> Sold_Builds
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">AI-generated listings · product image generation · profit tracking</p>
+        <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">AI-generated listings · product image generation · profit tracking</p>
       </div>
 
       {flips.length === 0 ? (

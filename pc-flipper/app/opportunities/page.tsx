@@ -153,10 +153,10 @@ export default function OpportunitiesPage() {
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Gem className="w-5 h-5 text-[#00dc82]" /> Opportunities
+          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+            <Gem className="w-5 h-5 text-[var(--nf-primary)]" /> Sourcing
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
             {listings.length} listings shown · sorted by {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
           </p>
         </div>
