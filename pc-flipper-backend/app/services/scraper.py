@@ -996,6 +996,11 @@ async def fetch_listings(
         scrape_bidspotter_playwright,
         RawListing as PlRawListing,
     )
+    from app.services.auction_scrapers import (
+        scrape_apex as scrape_apex_http,
+        scrape_wholesale_clearance,
+        scrape_merkandi,
+    )
 
     def _convert(pl: PlRawListing) -> RawListing:
         return RawListing(
@@ -1009,6 +1014,22 @@ async def fetch_listings(
             image_urls=pl.image_urls,
             source_name=pl.source_name,
             listing_type=getattr(pl, "listing_type", "classified"),
+        )
+
+    def _convert_auction_lot(lot) -> RawListing:
+        imgs = [lot.image_url] if getattr(lot, "image_url", None) else []
+        return RawListing(
+            external_id=lot.external_id,
+            title=lot.title,
+            price=lot.current_bid,
+            url=lot.url,
+            location=lot.location,
+            condition=lot.condition,
+            description=lot.description or "",
+            image_urls=imgs,
+            source_name=lot.source_name or source_name,
+            listing_type="auction",
+            listing_ends_at=getattr(lot, "ends_at", None),
         )
 
     name = source_name.lower()
@@ -1037,7 +1058,11 @@ async def fetch_listings(
     if "apex" in name:
         from app.services.playwright_scraper import scrape_apex_playwright
         pl_results = await scrape_apex_playwright(_EBAY_AUCTION_TERMS, min_price, max_price)
-        return [_convert(r) for r in pl_results]
+        if pl_results:
+            return [_convert(r) for r in pl_results]
+        # Fallback path: lightweight HTTP scraper when Playwright is unavailable/blocked.
+        lots = await scrape_apex_http(_EBAY_AUCTION_TERMS, min_price=min_price, max_price=max_price)
+        return [_convert_auction_lot(l) for l in lots]
 
     if "wilsons" in name:
         pl_results = await scrape_wilsons_playwright(_AUCTION_TERMS, min_price, max_price)
@@ -1052,6 +1077,11 @@ async def fetch_listings(
         return [_convert(r) for r in pl_results]
 
     if any(k in name for k in ("merkandi", "wholesale clearance")):
+        # Explicit stub calls for observability — logs reason and keeps pipeline healthy.
+        if "merkandi" in name:
+            await scrape_merkandi(_AUCTION_TERMS, min_price=min_price, max_price=max_price)
+        else:
+            await scrape_wholesale_clearance(_AUCTION_TERMS, min_price=min_price, max_price=max_price)
         return []
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")
