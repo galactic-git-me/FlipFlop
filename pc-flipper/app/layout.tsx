@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { BackendStatus } from "@/components/backend-status";
 import { TraeBg } from "@/components/trae-bg";
 import { FacebookCookieBanner } from "@/components/facebook-cookie-banner";
+import { TopCommandBar } from "@/components/top-command-bar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const rajdhani = Rajdhani({
+  variable: "--font-rajdhani",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,15 +32,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${rajdhani.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="h-full flex overflow-hidden bg-[#080c14]">
+      <body className="h-full node-body">
         <TraeBg />
         <Sidebar />
-        <main className="flex-1 overflow-y-auto relative">
-          <FacebookCookieBanner />
-          {children}
-        </main>
+
+        <div className="node-main-wrap">
+          <TopCommandBar />
+          <main className="node-content">
+            <FacebookCookieBanner />
+            {children}
+          </main>
+        </div>
+
         <BackendStatus />
       </body>
     </html>
