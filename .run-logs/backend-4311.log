@@ -1595,3 +1595,6 @@ INFO:     Application startup complete.
 2026-05-15 22:04:13 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
 2026-05-15 22:04:48 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
 2026-05-15 22:05:23 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+2026-05-15 22:05:58 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
+2026-05-15 22:06:33 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-12400 sold=None
+2026-05-15 22:06:53 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-12700 sold=None
