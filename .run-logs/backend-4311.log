@@ -1586,3 +1586,6 @@ INFO:     Application startup complete.
 2026-05-15 21:59:20 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=185 new_gems=0 sources_scanned=12
 2026-05-15 21:59:32 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
 2026-05-15 22:00:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-15 22:00:43 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-15 22:01:18 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-15 22:01:53 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
