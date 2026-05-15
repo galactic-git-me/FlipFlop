@@ -1610,3 +1610,7 @@ INFO:     Application startup complete.
 2026-05-15 22:12:36 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
 2026-05-15 22:13:11 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
 2026-05-15 22:13:46 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
+2026-05-15 22:14:21 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
+2026-05-15 22:14:56 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
+2026-05-15 22:15:31 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+2026-05-15 22:16:06 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
