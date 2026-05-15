@@ -1589,3 +1589,6 @@ INFO:     Application startup complete.
 2026-05-15 22:00:43 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
 2026-05-15 22:01:18 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
 2026-05-15 22:01:53 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-15 22:02:28 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-15 22:03:03 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-15 22:03:38 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
