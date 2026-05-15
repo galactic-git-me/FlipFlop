@@ -1601,3 +1601,6 @@ INFO:     Application startup complete.
 2026-05-15 22:07:28 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 3600 sold=None
 2026-05-15 22:08:03 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
 2026-05-15 22:08:38 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600X sold=None
+2026-05-15 22:09:13 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5700X sold=None
+2026-05-15 22:09:48 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5800X sold=None
+2026-05-15 22:10:23 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=None
