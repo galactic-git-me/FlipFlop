@@ -9,7 +9,8 @@ LOG_DIR="$ROOT_DIR/.run-logs"
 # Quieter dev ports (override with env if needed)
 FRONTEND_PORT="${FRONTEND_PORT:-4310}"
 BACKEND_PORT="${BACKEND_PORT:-4311}"
-BACKEND_HOST="${BACKEND_HOST:-127.0.0.1}"
+BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-127.0.0.1}"
+PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 
 mkdir -p "$LOG_DIR"
 
@@ -56,17 +57,17 @@ fi
 BACKEND_LOG="$LOG_DIR/backend-$BACKEND_PORT.log"
 FRONTEND_LOG="$LOG_DIR/frontend-$FRONTEND_PORT.log"
 
-echo "Starting backend on http://$BACKEND_HOST:$BACKEND_PORT ..."
+echo "Starting backend on http://$PUBLIC_HOST:$BACKEND_PORT ..."
 (
   cd "$BACKEND_DIR"
-  "$UVICORN_BIN" app.main:app --host "$BACKEND_HOST" --port "$BACKEND_PORT" --reload
+  "$UVICORN_BIN" app.main:app --host "$BACKEND_BIND_HOST" --port "$BACKEND_PORT" --reload
 ) >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 
-echo "Starting frontend on http://127.0.0.1:$FRONTEND_PORT ..."
+echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 (
   cd "$FRONTEND_DIR"
-  NEXT_PUBLIC_API_URL="http://$BACKEND_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT"
+  NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT"
 ) >"$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!
 
@@ -82,9 +83,9 @@ cleanup() {
 trap cleanup INT TERM EXIT
 
 echo
-echo "Frontend: http://127.0.0.1:$FRONTEND_PORT"
-echo "Backend : http://$BACKEND_HOST:$BACKEND_PORT"
-echo "API base: http://$BACKEND_HOST:$BACKEND_PORT/api"
+echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
+echo "Backend : http://$PUBLIC_HOST:$BACKEND_PORT"
+echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
 echo
 echo "Logs:"
 echo "  $FRONTEND_LOG"

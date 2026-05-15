@@ -1,0 +1,147 @@
+INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
+INFO:     Uvicorn running on http://127.0.0.1:4311 (Press CTRL+C to quit)
+INFO:     Started reloader process [892269] using WatchFiles
+INFO:     Started server process [892359]
+INFO:     Waiting for application startup.
+2026-05-15 21:04:00 [info     ] app.startup
+2026-05-15 21:04:00 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-15 21:04:00 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-15 21:04:00 [info     ] scheduler.started              jobs=4
+INFO:     Application startup complete.
+2026-05-15 21:04:00 [info     ] accessories_swarm.start
+2026-05-15 21:04:00 [info     ] cases_swarm.start
+2026-05-15 21:04:00 [info     ] flip_opportunities_swarm.start
+2026-05-15 21:04:00 [info     ] upgrade_parts_swarm.start      total_parts=48
+2026-05-15 21:04:00 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+2026-05-15 21:04:00 [info     ] facebook.playwright.cookies_loaded count=7
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Preloved
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-15 21:04:00 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 21:04:00 [error    ] playwright.chromium_not_installed error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝ fix=Run this command once: playwright install chromium
+2026-05-15 21:04:01 [info     ] source.done                    found=0 gems=0 source=i-bidder
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-15 21:04:01 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+[scraper] eBay 'desktop pcs lot': 16 found, 13 new (total 13)
+[scraper] eBay 'desktop pc': 47 found, 47 new (total 47)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-15 21:04:05 [info     ] auction_scraper.apex.done      total=0
+2026-05-15 21:04:05 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+[scraper] eBay 'office computers clearance': 39 found, 38 new (total 51)
+2026-05-15 21:04:07 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'gaming pc': 50 found, 20 new (total 67)
+2026-05-15 21:04:07 [warning  ] amazon.cases.browser_error     error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:04:07 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=None
+2026-05-15 21:04:08 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:04:08 [warning  ] temu.cases.browser_error       error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'it clearance desktop': 6 found, 0 new (total 51)
+2026-05-15 21:04:08 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-15 21:04:08 [warning  ] aliexpress.cases.browser_error error=BrowserType.launch: Executable doesn't exist at /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'computer tower': 60 found, 18 new (total 85)
+2026-05-15 21:04:10 [info     ] scheduler.stopped
+2026-05-15 21:04:10 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [892359]
+INFO:     Stopping reloader process [892269]

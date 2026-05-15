@@ -1,0 +1,18 @@
+
+> pc-flipper@0.1.0 dev
+> next dev -p 4310
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:4310
+- Network:       http://185.249.73.114:4310
+- Environments: .env.local
+✓ Ready in 534ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
+
+
+[?25h
