@@ -9,35 +9,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { api } from "@/lib/api";
+import { api, ScheduleJob, ScheduleRun } from "@/lib/api";
 import { formatRelativeTime } from "@/lib/utils";
 
 /* ── Types ──────────────────────────────────────────────────────────────── */
 
 type RunStatus = "success" | "running" | "failed" | "skipped";
 
-interface JobRun {
-  id: string;
-  started_at: string;
-  finished_at: string | null;
-  status: RunStatus;
-  message: string;
-  duration_ms: number | null;
-}
-
-interface ScheduledJob {
-  id: string;
-  name: string;
-  description: string;
-  cron: string;
-  cron_label: string;
-  enabled: boolean;
-  last_run_at: string | null;
-  last_status: RunStatus | null;
-  next_run_at: string | null;
-  category: "scraping" | "analysis" | "selling" | "maintenance";
-  runs?: JobRun[];
-}
+type JobRun = ScheduleRun;
+type ScheduledJob = ScheduleJob;
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
 
@@ -189,7 +169,7 @@ const DEFAULT_JOBS: ScheduledJob[] = [
 /* ── Main component ──────────────────────────────────────────────────────── */
 
 export default function SchedulePage() {
-  const [jobs, setJobs] = useState<ScheduledJob[]>(DEFAULT_JOBS);
+  const [jobs, setJobs] = useState<ScheduledJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [runningIds, setRunningIds] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -199,24 +179,25 @@ export default function SchedulePage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await (api as unknown as {
-        schedule?: { list: () => Promise<ScheduledJob[]> }
-      }).schedule?.list?.();
-      if (data && Array.isArray(data) && data.length > 0) setJobs(data);
-    } catch { /* use defaults */ } finally {
+      const data = await api.schedule.list();
+      setJobs(data);
+    } catch {
+      setJobs(DEFAULT_JOBS);
+    } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    const t = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(t);
+  }, [load]);
 
   /* toggle enabled */
   const toggleJob = async (id: string) => {
     setJobs(prev => prev.map(j => j.id === id ? { ...j, enabled: !j.enabled } : j));
     try {
-      await (api as unknown as {
-        schedule?: { toggle: (id: string) => Promise<void> }
-      }).schedule?.toggle?.(id);
+      await api.schedule.toggle(id);
     } catch { /* optimistic — ignore */ }
   };
 
@@ -225,9 +206,7 @@ export default function SchedulePage() {
     setRunningIds(prev => new Set(prev).add(id));
     setJobs(prev => prev.map(j => j.id === id ? { ...j, last_status: "running" } : j));
     try {
-      await (api as unknown as {
-        schedule?: { run: (id: string) => Promise<{ status: RunStatus; duration_ms: number }> }
-      }).schedule?.run?.(id);
+      await api.schedule.run(id);
       setJobs(prev => prev.map(j =>
         j.id === id
           ? { ...j, last_status: "success", last_run_at: new Date().toISOString() }
@@ -248,9 +227,7 @@ export default function SchedulePage() {
     setExpanded(id);
     if (!runHistory[id]) {
       try {
-        const runs = await (api as unknown as {
-          schedule?: { runs: (id: string) => Promise<JobRun[]> }
-        }).schedule?.runs?.(id) ?? [];
+        const runs = await api.schedule.runs(id);
         setRunHistory(prev => ({ ...prev, [id]: runs }));
       } catch {
         setRunHistory(prev => ({ ...prev, [id]: [] }));

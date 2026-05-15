@@ -107,6 +107,28 @@ export interface ScanStatus {
   total_gems: number;
 }
 
+export interface ScheduleRun {
+  id: string;
+  started_at: string;
+  finished_at: string | null;
+  status: "success" | "running" | "failed" | "skipped";
+  message: string;
+  duration_ms: number | null;
+}
+
+export interface ScheduleJob {
+  id: string;
+  name: string;
+  description: string;
+  cron: string;
+  cron_label: string;
+  enabled: boolean;
+  last_run_at: string | null;
+  last_status: "success" | "running" | "failed" | "skipped" | null;
+  next_run_at: string | null;
+  category: "scraping" | "analysis" | "selling" | "maintenance";
+}
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 export function apiUrl(path: string): string {
@@ -212,6 +234,13 @@ export const api = {
     list: () => request<unknown[]>("/swarms"),
     trigger: (id: string) => request<unknown>(`/swarms/${id}/trigger`, { method: "POST" }),
     scanStatus: () => request<ScanStatus>("/swarms/scan/status"),
+  },
+
+  schedule: {
+    list: () => request<ScheduleJob[]>("/schedule"),
+    toggle: (id: string) => request<{ ok: boolean; enabled: boolean }>(`/schedule/${id}/toggle`, { method: "POST" }),
+    run: (id: string) => request<{ ok: boolean; status: "success" | "failed"; duration_ms: number }>(`/schedule/${id}/run`, { method: "POST" }),
+    runs: (id: string) => request<ScheduleRun[]>(`/schedule/${id}/runs`),
   },
 
   manual: {
