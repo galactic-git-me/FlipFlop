@@ -24,7 +24,12 @@ void main() {
   vec2 uv = vUv;
   // Data texture is stored in 0..1 range with neutral center at 0.5
   vec2 offset = texture2D(uDataTexture, vUv).rg - vec2(0.5);
-  gl_FragColor = texture2D(uTexture, uv - 0.06 * offset);
+  // Add subtle autonomous wave so effect is visible even without pointer events
+  vec2 wave = vec2(
+    sin(vUv.y * 22.0 + time * 0.9),
+    cos(vUv.x * 18.0 + time * 0.8)
+  ) * 0.003;
+  gl_FragColor = texture2D(uTexture, uv - 0.06 * offset + wave);
 }`;
 
 interface GridDistortionProps {

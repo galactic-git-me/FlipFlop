@@ -10,7 +10,6 @@ const GridDistortion = dynamic(() => modulePromise, { ssr: false });
 
 export function TraeBg() {
   const [imageSrc, setImageSrc] = useState<string>("/space-bg.jpg");
-  const [distortionReady, setDistortionReady] = useState(false);
 
   useEffect(() => {
     let blobUrl: string | null = null;
@@ -26,12 +25,10 @@ export function TraeBg() {
       .then((blob) => {
         if (cancelled) return;
         blobUrl = URL.createObjectURL(blob);
-        setDistortionReady(false);
         setImageSrc(blobUrl);
       })
       .catch(() => {
         if (!cancelled) {
-          setDistortionReady(false);
           setImageSrc("/space-bg.jpg");
         }
       });
@@ -56,16 +53,13 @@ export function TraeBg() {
       }}
     >
       <ErrorBoundary>
-        <div style={{ opacity: distortionReady ? 1 : 0, transition: "opacity 260ms ease" }}>
-          <GridDistortion
-            imageSrc={imageSrc}
-            grid={10}
-            mouse={0.1}
-            strength={0.15}
-            relaxation={0.9}
-            onTextureReady={setDistortionReady}
-          />
-        </div>
+        <GridDistortion
+          imageSrc={imageSrc}
+          grid={10}
+          mouse={0.1}
+          strength={0.15}
+          relaxation={0.9}
+        />
       </ErrorBoundary>
     </div>
   );
