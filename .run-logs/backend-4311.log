@@ -207,3 +207,10 @@ INFO:     Application startup complete.
 ║                                                            ║
 ║ <3 Playwright Team                                         ║
 ╚════════════════════════════════════════════════════════════╝
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-15 23:03:00 [info     ] source.done                    found=0 gems=0 source=John Pye
+INFO:     Shutting down
+INFO:     Finished server process [1304114]
+INFO:     Stopping reloader process [1304083]

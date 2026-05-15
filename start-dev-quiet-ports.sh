@@ -103,10 +103,20 @@ open_tmux_logs() {
   echo
   echo "Opening tmux session '$TMUX_SESSION' with split panes (backend | frontend logs)."
   echo "Detach with Ctrl+b then d to return."
-  tmux attach -t "$TMUX_SESSION"
+  if [[ -t 1 ]]; then
+    tmux attach -t "$TMUX_SESSION" || true
+  else
+    echo "No interactive TTY detected; skipping auto-attach."
+    echo "Attach manually with: tmux attach -t $TMUX_SESSION"
+  fi
 }
 
+_cleaned_up=0
 cleanup() {
+  if [[ "$_cleaned_up" -eq 1 ]]; then
+    return 0
+  fi
+  _cleaned_up=1
   echo
   echo "Stopping services..."
   kill "$FRONTEND_PID" >/dev/null 2>&1 || true
@@ -118,7 +128,7 @@ cleanup() {
   fi
 }
 
-trap cleanup INT TERM EXIT
+trap cleanup INT TERM
 
 echo
 echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
@@ -134,4 +144,17 @@ echo "Press Ctrl+C to stop both."
 
 open_tmux_logs
 
-wait "$FRONTEND_PID" "$BACKEND_PID"
+set +e
+wait -n "$FRONTEND_PID" "$BACKEND_PID"
+EXIT_CODE=$?
+set -e
+
+if [[ $EXIT_CODE -ne 0 ]]; then
+  echo
+  echo "One of the services exited unexpectedly."
+  echo "Check logs:"
+  echo "  $FRONTEND_LOG"
+  echo "  $BACKEND_LOG"
+fi
+
+cleanup
