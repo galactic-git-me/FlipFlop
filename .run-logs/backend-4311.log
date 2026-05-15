@@ -1614,3 +1614,8 @@ INFO:     Application startup complete.
 2026-05-15 22:14:56 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
 2026-05-15 22:15:31 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
 2026-05-15 22:16:06 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+2026-05-15 22:16:41 [debug    ] upgrade_parts.ebay             buy=None part=2TB NVMe SSD sold=None
+2026-05-15 22:17:16 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
+2026-05-15 22:17:51 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
+2026-05-15 22:18:26 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-15 22:19:01 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
