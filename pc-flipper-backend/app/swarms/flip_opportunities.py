@@ -6,7 +6,7 @@ import asyncio
 import structlog
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update
 
 from app.database import AsyncSessionLocal
 from app.models.listing import Listing, ListingStatus, Classification
@@ -66,22 +66,43 @@ async def run_flip_opportunities_swarm() -> dict:
 
     log.info("flip_opportunities_swarm.done", **stats)
 
-    # Ghost cleanup — remove active listings not seen in the last 3 days.
-    # If a listing hasn't been re-encountered across 3 full scan cycles it's
-    # almost certainly gone (sold, removed, or expired by the seller).
-    # Listings already flipped (status=sold) are kept for history.
-    cutoff = datetime.utcnow() - timedelta(days=3)
+    # Ghost lifecycle transitions — NEVER delete listing history.
+    # 3+ days unseen  -> missing
+    # 14+ days unseen -> removed
+    # Listings marked sold are excluded from these transitions.
+    missing_cutoff = datetime.utcnow() - timedelta(days=3)
+    removed_cutoff = datetime.utcnow() - timedelta(days=14)
     async with AsyncSessionLocal() as db:
-        result = await db.execute(
-            delete(Listing).where(
+        missing_result = await db.execute(
+            update(Listing)
+            .where(
                 Listing.status == ListingStatus.active,
-                Listing.last_seen_at < cutoff,
+                Listing.last_seen_at < missing_cutoff,
             )
+            .values(status=ListingStatus.missing)
         )
-        purged = result.rowcount
+
+        removed_result = await db.execute(
+            update(Listing)
+            .where(
+                Listing.status == ListingStatus.missing,
+                Listing.last_seen_at < removed_cutoff,
+            )
+            .values(status=ListingStatus.removed)
+        )
+
         await db.commit()
-    if purged:
-        log.info("ghost_cleanup.purged", count=purged, cutoff_days=3)
+
+    moved_missing = missing_result.rowcount or 0
+    moved_removed = removed_result.rowcount or 0
+    if moved_missing or moved_removed:
+        log.info(
+            "ghost_lifecycle.updated",
+            moved_to_missing=moved_missing,
+            moved_to_removed=moved_removed,
+            missing_cutoff_days=3,
+            removed_cutoff_days=14,
+        )
 
     return stats
 
