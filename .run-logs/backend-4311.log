@@ -6832,3 +6832,10 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 12:08:19 [info     ] temu.cases.done                found=0 search=desktop gaming case compact atx
 2026-05-16 12:08:33 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
 2026-05-16 12:08:44 [info     ] temu.cases.done                found=0 search=slim gaming pc case
+2026-05-16 12:09:07 [info     ] aliexpress.cases.done          found=0 search=desktop gaming case compact atx
+2026-05-16 12:09:08 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+2026-05-16 12:09:30 [info     ] aliexpress.cases.done          found=0 search=slim gaming pc case
+2026-05-16 12:09:38 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-16 12:09:44 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-16 12:10:03 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-16 12:10:19 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
