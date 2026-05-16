@@ -5712,3 +5712,22 @@ INFO:     Application startup complete.
 INFO:     127.0.0.1:42952 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
 2026-05-16 11:35:20 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
 2026-05-16 11:35:35 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+WARNING:  WatchFiles detected changes in 'app/workers/scheduler.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+2026-05-16 11:35:49 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
+2026-05-16 11:35:53 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
+2026-05-16 11:35:55 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+2026-05-16 11:36:10 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:35:40.915326', None, 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
+2026-05-16 11:36:18 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-16 11:36:29 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-16 11:36:40 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:36:10.958325', None, 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
+2026-05-16 11:36:42 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+2026-05-16 11:37:04 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-16 11:37:06 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case

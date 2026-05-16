@@ -24,6 +24,7 @@ _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
     "accessories": deque(maxlen=50),
 }
+_running_jobs: set[str] = set()
 
 
 def _push_history(job_id: str, status: str, started_at: datetime, finished_at: datetime | None, message: str):
@@ -43,6 +44,13 @@ def _push_history(job_id: str, status: str, started_at: datetime, finished_at: d
 
 
 async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) -> dict:
+    if job_id in _running_jobs:
+        now = datetime.now(timezone.utc)
+        _push_history(job_id, "skipped", now, now, "Skipped: previous run still in progress")
+        log.warning("job.skipped.already_running", job_id=job_id)
+        return {"ok": False, "skipped": True, "reason": "already_running"}
+
+    _running_jobs.add(job_id)
     started = datetime.now(timezone.utc)
     t0 = perf_counter()
     _push_history(job_id, "running", started, None, "Job started")
@@ -57,6 +65,8 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         finished = datetime.now(timezone.utc)
         _push_history(job_id, "failed", started, finished, str(exc))
         raise
+    finally:
+        _running_jobs.discard(job_id)
 
 
 def get_scheduler() -> AsyncIOScheduler:

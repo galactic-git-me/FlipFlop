@@ -344,7 +344,7 @@ async def scrape_facebook_playwright(
 
         page = await context.new_page()
 
-        for term in search_terms[:8]:
+        for term in search_terms[:20]:
             try:
                 url = (
                     "https://www.facebook.com/marketplace/search"
@@ -404,6 +404,22 @@ async def scrape_facebook_playwright(
                     "a[href*='/marketplace/item/']"
                 )
                 log.info("facebook.playwright.items", term=term, count=len(items))
+
+                if not items:
+                    try:
+                        page_title = await page.title()
+                    except Exception:
+                        page_title = ""
+                    link_count = len(await page.query_selector_all("a[href*='/marketplace/item/']"))
+                    log.warning(
+                        "facebook.playwright.no_cards",
+                        term=term,
+                        title=page_title,
+                        current_url=page.url,
+                        item_links=link_count,
+                    )
+                    # Fallback: parse direct marketplace item anchors if card selectors failed.
+                    items = await page.query_selector_all("a[href*='/marketplace/item/']")
 
                 for item in items:
                     try:
@@ -1127,7 +1143,7 @@ async def scrape_wilsons_playwright(
                 "[class*='bid']", "[class*='estimate']", "strong"
             ],
             link_selectors=["a[href*='/lot/']", "a[href*='/lots/']", "a[href]"],
-            search_terms=search_terms[:6],
+            search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
             wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
@@ -1186,7 +1202,7 @@ async def scrape_ibidder_playwright(
                 "a[href*='/lot/']", "a[href*='/catalogue/']",
                 "a[href*='/auction/']", "a[href]"
             ],
-            search_terms=search_terms[:6],
+            search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
             wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
@@ -1244,7 +1260,7 @@ async def scrape_bidspotter_playwright(
                 "a[href*='/lot/']", "a[href*='/lots/']",
                 "a[href*='/auction-catalogues/']", "a[href]"
             ],
-            search_terms=search_terms[:6],
+            search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
             wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
