@@ -1388,3 +1388,11 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 07:18:49 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
 2026-05-16 07:19:07 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
 2026-05-16 07:19:16 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+2026-05-16 07:19:39 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-16 07:19:42 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
+2026-05-16 07:19:48 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-16 07:20:14 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-16 07:20:17 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+2026-05-16 07:20:36 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-16 07:20:46 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-16 07:20:52 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
