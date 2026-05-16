@@ -1161,3 +1161,32 @@ Call log:
 2026-05-16 06:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=660.0 query=gaming PC i7-7700k gtx 1080
 2026-05-16 06:59:05 [warning  ] Wilsons Auctions.playwright.no_results term=Dell OptiPlex
 2026-05-16 06:59:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 06:59:16 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+2026-05-16 06:59:23 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+2026-05-16 06:59:25 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:58:55.771828', None, 8)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
+2026-05-16 06:59:35 [error    ] source.error                   error=(raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: INSERT INTO listings (external_id, source_id, source_name, title, description, price, url, image_urls, location, condition, cpu, ram_gb, ram_type, storage_gb, storage_type, gpu, has_psu, raw_specs, gem_score, classification, gem_signals, estimated_resale, resale_low, resale_high, resale_comp_count, estimated_profit, estimated_upgrade_cost, initial_estimated_profit, listing_type, listing_ends_at, expected_buy_price, seller_name, seller_feedback_count, seller_feedback_pct, seller_type, seller_has_shop, listed_at, status, first_seen_at, last_seen_at, sold_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('ebay_147206179253', 1, 'eBay UK', 'Pc Bandel i7-7700K / GTX 1080 / 16GB RAM / 1TB HDD + LG 24” Collection only', '', 450.0, 'https://www.ebay.co.uk/itm/147206179253?_skw=pc+collect+today&itmmeta=01KRQS98JAKBB308CNHV0RM5FK&hash=item22462c09b5%3Ag%3AGM8AAeSwoONptypr&itmprp=en ... (217 characters truncated) ... U0AjjpEAkD947rF44ZWhOAtBruV381hg3g8%2BCvEw4YNFNlRJN2v2njQ1KA%2F9Y0DO%2FVQAhfWli9%2FvGd6IsMNY%3D%7Ctkp%3ABk9SR6KJpfnFZw&LH_BIN=1&LH_ItemCondition=3000', '["https://i.ebayimg.com/images/g/GM8AAeSwoONptypr/s-l1600.jpg"]', None, 'used', 'I7-7700K', 16, None, 1024, 'hdd', 'GTX 1080', 1, '{}', 1.2, 'overpriced', '["collection only"]', 660.0, 580.8, 739.2, 0, -8.82, 135.0, -8.82, 'buy_it_now', None, None, None, None, None, 'private', 0, None, 'active', '2026-05-16 06:59:05.012164', '2026-05-16 06:59:05.012166', None)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
+2026-05-16 06:59:36 [warning  ] i-bidder.playwright.no_results term=workstation
+2026-05-16 06:59:37 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 06:59:38 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
+2026-05-16 06:59:38 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 06:59:46 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+2026-05-16 06:59:51 [debug    ] upgrade_parts.ebay             buy=None part=RX 570 8GB sold=None
+2026-05-16 07:00:07 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:59:37.040044', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 07:00:08 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:59:38.636410', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 07:00:10 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+2026-05-16 07:00:22 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+2026-05-16 07:00:27 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
+2026-05-16 07:00:27 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
