@@ -6681,3 +6681,11 @@ INFO:     127.0.0.1:35594 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1"
 [SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
 [parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:59:56.384241', None, 9)]
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 12:00:29 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+2026-05-16 12:00:33 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+2026-05-16 12:00:56 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-16 12:00:57 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+2026-05-16 12:01:21 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-16 12:01:26 [info     ] flip_opportunities_swarm.done  errors=9 listings_found=0 new_gems=0 sources_scanned=3
+2026-05-16 12:01:31 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-16 12:01:44 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
