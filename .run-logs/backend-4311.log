@@ -292,3 +292,32 @@ INFO:     Application startup complete.
 2026-05-16 06:20:18 [debug    ] resale_scraper.empty_response  cat=179 length=542 query=gaming PC ryzen 5 2600 gtx 1660 status=403
 2026-05-16 06:20:18 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 2600 gtx 1660 status=403
 2026-05-16 06:20:18 [info     ] resale_scraper.fallback_buy_price buy_price=395.0 median=594.0 query=gaming PC ryzen 5 2600 gtx 1660
+2026-05-16 06:20:24 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-16 06:20:33 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:20:02.971813', None, 8)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
+2026-05-16 06:20:34 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+2026-05-16 06:20:40 [warning  ] i-bidder.playwright.no_results term=workstation
+2026-05-16 06:20:40 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 06:20:42 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
+2026-05-16 06:20:42 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 06:20:48 [error    ] source.error                   error=(raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE listings SET gem_score=?, gem_signals=?, estimated_resale=?, resale_low=?, resale_high=?, resale_comp_count=?, estimated_profit=?, estimated_upgrade_cost=?, last_seen_at=? WHERE listings.id = ?]
+[parameters: (0.0, '[]', 594.0, 522.72, 665.28, 0, -11.44, 135.0, '2026-05-16 06:20:18.631180', 6628)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
+2026-05-16 06:20:57 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+2026-05-16 06:20:58 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-16 06:21:10 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:20:40.829238', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 06:21:12 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:20:42.438387', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 06:21:20 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+2026-05-16 06:21:32 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+2026-05-16 06:21:33 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-16 06:21:36 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
