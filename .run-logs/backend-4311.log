@@ -7895,3 +7895,23 @@ INFO:     Application startup complete.
 2026-05-16 12:59:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
 2026-05-16 12:59:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=power+supply&country=gb
 2026-05-16 12:59:24 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-16 12:59:31 [info     ] temu.cases.done                found=0 search=astronaut pc case
+2026-05-16 12:59:47 [info     ] BidSpotter.playwright.cards    count=60 term=power supply
+2026-05-16 12:59:49 [warning  ] i-bidder.playwright.no_results term=graphics card
+2026-05-16 12:59:49 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=ddr4+ram&country=gb&priceFrom=0&priceTo=500
+2026-05-16 12:59:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+case&country=gb
+2026-05-16 12:59:54 [warning  ] Wilsons Auctions.playwright.no_results term=graphics card
+2026-05-16 12:59:54 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=ddr4+ram&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 12:59:56 [info     ] temu.cases.done                found=0 search=space gaming case
+2026-05-16 13:00:00 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-16 13:00:15 [info     ] BidSpotter.playwright.cards    count=60 term=pc case
+2026-05-16 13:00:18 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=7700x+b650&country=gb
+2026-05-16 13:00:19 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+2026-05-16 13:00:21 [warning  ] i-bidder.playwright.no_results term=ddr4 ram
+2026-05-16 13:00:21 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=nvme+ssd&country=gb&priceFrom=0&priceTo=500
+2026-05-16 13:00:26 [warning  ] Wilsons Auctions.playwright.no_results term=ddr4 ram
+2026-05-16 13:00:26 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=nvme+ssd&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 13:00:35 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-16 13:00:42 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-16 13:00:42 [info     ] BidSpotter.playwright.cards    count=60 term=7700x b650
+2026-05-16 13:00:46 [info     ] BidSpotter.playwright.done     total=0
