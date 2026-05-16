@@ -332,3 +332,104 @@ INFO:     Application startup complete.
 [scraper] eBay 'i9 desktop': 0 found, 0 new (total 0)
 [scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
 2026-05-16 16:15:37 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-16 16:15:38 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-16 16:15:38 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
+2026-05-16 16:15:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 1 found, 1 new (total 1)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 1)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 1)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
+2026-05-16 16:15:42 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 1)
+2026-05-16 16:15:44 [warning  ] i-bidder.playwright.no_results term=computer tower
+2026-05-16 16:15:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-16 16:15:45 [warning  ] Wilsons Auctions.playwright.no_results term=computer tower
+2026-05-16 16:15:45 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
+2026-05-16 16:15:46 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+2026-05-16 16:15:49 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
+2026-05-16 16:15:49 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
+2026-05-16 16:15:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+2026-05-16 16:15:51 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1650 4GB sold=None
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+2026-05-16 16:15:58 [info     ] amazon.cases.done              found=0 search=tempered glass gaming case atx
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-16 16:16:00 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
+2026-05-16 16:16:00 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
+2026-05-16 16:16:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+2026-05-16 16:16:02 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 0)
+2026-05-16 16:16:10 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+2026-05-16 16:16:11 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-16 16:16:11 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-16 16:16:11 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 0)
+2026-05-16 16:16:14 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+2026-05-16 16:16:17 [warning  ] i-bidder.playwright.no_results term=HP EliteDesk
+2026-05-16 16:16:17 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:16:18 [warning  ] Wilsons Auctions.playwright.no_results term=HP EliteDesk
+2026-05-16 16:16:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 0)
+2026-05-16 16:16:22 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-16 16:16:22 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-16 16:16:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 0)
+2026-05-16 16:16:26 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1660 Super sold=None
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+2026-05-16 16:16:27 [info     ] temu.cases.done                found=0 search=tempered glass gaming case atx
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 0)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 0)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 0)
+2026-05-16 16:16:33 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+[scraper] eBay 'unused pc': 0 found, 0 new (total 0)
+2026-05-16 16:16:33 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-16 16:16:33 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-16 16:16:34 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 15:16:04.723391', None, 7)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Apex Auctions
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 0)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 0)
+2026-05-16 16:16:37 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
+2026-05-16 16:16:41 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 0)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 0)
+2026-05-16 16:16:43 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-16 16:16:43 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-16 16:16:43 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 0)
+2026-05-16 16:16:49 [warning  ] i-bidder.playwright.no_results term=Dell OptiPlex
+2026-05-16 16:16:49 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:16:50 [warning  ] Wilsons Auctions.playwright.no_results term=Dell OptiPlex
+2026-05-16 16:16:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:16:51 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+2026-05-16 16:16:54 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-16 16:16:54 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-16 16:16:54 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-16 16:17:00 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
