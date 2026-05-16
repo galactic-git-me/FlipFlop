@@ -556,3 +556,121 @@ Call log:
 2026-05-16 06:44:04 [info     ] temu.cases.done                found=0 search=budget gaming case atx
 2026-05-16 06:44:27 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
 2026-05-16 06:44:35 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-16 06:45:03 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-16 06:45:27 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=(raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) part=GTX 1060 3GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=GTX 1650 4GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=GTX 1660 Super
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=GTX 1070 8GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RX 570 8GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RX 580 8GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RTX 2060 6GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RTX 2070 8GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RTX 2080 8GB
+2026-05-16 06:45:34 [error    ] part.upsert.error              error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a) part=RTX 3060 12GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RTX 4060 8GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-16 06:45:34 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-17 06:17:24 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 50, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 208, in run_upgrade_parts_swarm
+    await db.commit()
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 1009, in commit
+    await greenlet_spawn(self.sync_session.commit)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 190, in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2028, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 973, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE parts SET last_price_update=? WHERE parts.id = ?]
+[parameters: ('2026-05-16 06:45:04.008888', 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2026-05-16 06:45:36 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+2026-05-16 06:46:02 [info     ] temu.cases.done                found=0 search=slim htpc case living room
