@@ -5742,3 +5742,23 @@ INFO:     Waiting for connections to close. (CTRL+C to force quit)
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
 2026-05-16 11:38:14 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
 2026-05-16 11:38:33 [info     ] temu.cases.done                found=0 search=space gaming case
+2026-05-16 11:38:41 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:38:11.129309', None, 8)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
+2026-05-16 11:38:49 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-16 11:38:56 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+2026-05-16 11:39:10 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=178.99
+2026-05-16 11:39:11 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:38:41.172168', None, 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
+2026-05-16 11:39:18 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-16 11:39:30 [info     ] amazon.cases.done              found=10 search=star wars pc case
+2026-05-16 11:39:34 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+2026-05-16 11:39:41 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:39:11.213300', None, 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
+2026-05-16 11:39:45 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-16 11:39:59 [info     ] temu.cases.done                found=0 search=star wars pc case
