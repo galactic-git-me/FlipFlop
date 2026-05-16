@@ -1410,3 +1410,19 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 07:23:31 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
 2026-05-16 07:23:38 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
 2026-05-16 07:23:48 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+2026-05-16 07:24:04 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-16 07:24:24 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+2026-05-16 07:24:27 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-16 07:24:35 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+2026-05-16 07:24:39 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+2026-05-16 07:24:53 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
+2026-05-16 07:25:00 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-16 07:25:01 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
+2026-05-16 07:25:17 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
+2026-05-16 07:25:23 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-16 07:25:23 [info     ] cases_swarm.done               errors=0 found=288 upserted=232
+2026-05-16 07:25:31 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
+2026-05-16 07:25:45 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-16 07:25:59 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
+2026-05-16 07:26:18 [debug    ] upgrade_parts.bh               part=RTX 2060 6GB price_gbp=117.85
+2026-05-16 07:26:32 [debug    ] upgrade_parts.bh               part=RTX 2070 8GB price_gbp=117.85
