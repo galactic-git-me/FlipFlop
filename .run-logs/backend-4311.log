@@ -536,3 +536,16 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gtx+1650", waiting until "domcontentloaded"
  search=gtx+1650
 2026-05-16 06:41:40 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-16 06:42:00 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gtx+1660+super", waiting until "domcontentloaded"
+ search=gtx+1660+super
+2026-05-16 06:42:05 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-16 06:42:20 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
+2026-05-16 06:42:28 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+2026-05-16 06:42:34 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-16 06:42:39 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+2026-05-16 06:42:47 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
+2026-05-16 06:42:59 [debug    ] upgrade_parts.bh               part=RTX 2060 6GB price_gbp=117.85
+2026-05-16 06:43:05 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-16 06:43:10 [debug    ] upgrade_parts.bh               part=RTX 2070 8GB price_gbp=117.85
