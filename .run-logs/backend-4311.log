@@ -1402,3 +1402,11 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 07:21:44 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
 2026-05-16 07:22:02 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
 2026-05-16 07:22:10 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-16 07:22:33 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+2026-05-16 07:22:38 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
+2026-05-16 07:22:42 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+2026-05-16 07:23:08 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+2026-05-16 07:23:13 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-16 07:23:31 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-16 07:23:38 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-16 07:23:48 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
