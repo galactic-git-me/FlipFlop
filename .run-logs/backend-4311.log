@@ -511,3 +511,29 @@ INFO:     Application startup complete.
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
 2026-05-16 16:19:38 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
 2026-05-16 16:19:43 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
+2026-05-16 16:19:48 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-16 16:19:52 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+2026-05-16 16:19:56 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+2026-05-16 16:20:02 [warning  ] i-bidder.playwright.no_results term=office pc
+2026-05-16 16:20:02 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:20:05 [warning  ] Wilsons Auctions.playwright.no_results term=office pc
+2026-05-16 16:20:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:20:07 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-16 16:20:15 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-16 16:20:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-16 16:20:31 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-16 16:20:32 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+2026-05-16 16:20:34 [warning  ] i-bidder.playwright.no_results term=refurbished pc
+2026-05-16 16:20:34 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:20:37 [warning  ] Wilsons Auctions.playwright.no_results term=refurbished pc
+2026-05-16 16:20:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+INFO:     127.0.0.1:53472 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-16 16:20:42 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-16 16:20:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=ddr4+ram&country=gb
+2026-05-16 16:20:54 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+2026-05-16 16:21:06 [warning  ] i-bidder.playwright.no_results term=motherboard
+2026-05-16 16:21:06 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:21:06 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-16 16:21:09 [info     ] BidSpotter.playwright.cards    count=60 term=ddr4 ram
+2026-05-16 16:21:09 [warning  ] Wilsons Auctions.playwright.no_results term=motherboard
+2026-05-16 16:21:09 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
