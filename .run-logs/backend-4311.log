@@ -5762,3 +5762,22 @@ INFO:     Waiting for connections to close. (CTRL+C to force quit)
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
 2026-05-16 11:39:45 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
 2026-05-16 11:39:59 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-16 11:40:11 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:39:41.252764', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 11:40:20 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-16 11:40:24 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-16 11:40:41 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:40:11.292545', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 11:40:47 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+2026-05-16 11:40:55 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-16 11:41:10 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+2026-05-16 11:41:11 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:40:41.333134', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 11:41:21 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+2026-05-16 11:41:25 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
