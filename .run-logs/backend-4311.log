@@ -1078,3 +1078,86 @@ Call log:
 [scraper] eBay 'i5 tower': 0 found, 0 new (total 0)
 [scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
 2026-05-16 06:57:48 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+2026-05-16 06:57:55 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-16 06:57:55 [info     ] facebook.playwright.done       total=0
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
+2026-05-16 06:57:57 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 0)
+2026-05-16 06:57:58 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:57:28.475662', None, 7)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Apex Auctions
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-16 06:58:00 [warning  ] i-bidder.playwright.no_results term=computer tower
+2026-05-16 06:58:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-16 06:58:00 [warning  ] Wilsons Auctions.playwright.no_results term=computer tower
+2026-05-16 06:58:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 06:58:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+2026-05-16 06:58:06 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1650 4GB sold=None
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-16 06:58:10 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 0)
+2026-05-16 06:58:25 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 06:57:55.253170', None, 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
+2026-05-16 06:58:25 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 0)
+2026-05-16 06:58:25 [info     ] amazon.cases.done              found=10 search=tempered glass gaming case atx
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+2026-05-16 06:58:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 0)
+2026-05-16 06:58:32 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+2026-05-16 06:58:32 [warning  ] i-bidder.playwright.no_results term=HP EliteDesk
+2026-05-16 06:58:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+2026-05-16 06:58:32 [warning  ] Wilsons Auctions.playwright.no_results term=HP EliteDesk
+2026-05-16 06:58:32 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 0)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 0)
+2026-05-16 06:58:41 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1660 Super sold=None
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 0)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 0)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 0)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc collect today': 26 found, 26 new (total 26)
+2026-05-16 06:58:52 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 26)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 26)
+2026-05-16 06:58:55 [info     ] BidSpotter.playwright.done     total=0
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 26)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 26)
+2026-05-16 06:58:58 [info     ] temu.cases.done                found=0 search=tempered glass gaming case atx
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 26)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 26)
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 26)
+2026-05-16 06:59:04 [warning  ] i-bidder.playwright.no_results term=Dell OptiPlex
+2026-05-16 06:59:04 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 26)
+2026-05-16 06:59:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC i7-7700k gtx 1080 status=403
+2026-05-16 06:59:05 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC i7-7700k gtx 1080 status=403
+2026-05-16 06:59:05 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=660.0 query=gaming PC i7-7700k gtx 1080
+2026-05-16 06:59:05 [warning  ] Wilsons Auctions.playwright.no_results term=Dell OptiPlex
+2026-05-16 06:59:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
