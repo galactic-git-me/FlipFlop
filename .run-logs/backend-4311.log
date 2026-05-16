@@ -7944,3 +7944,21 @@ Call log:
 2026-05-16 13:02:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=7700x+b650&priceMin=0&priceMax=500&categoryId=65
 2026-05-16 13:02:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
 2026-05-16 13:02:08 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+2026-05-16 13:02:19 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+2026-05-16 13:02:23 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+2026-05-16 13:02:30 [warning  ] i-bidder.playwright.no_results term=7700x b650
+2026-05-16 13:02:30 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 13:02:36 [warning  ] Wilsons Auctions.playwright.no_results term=7700x b650
+2026-05-16 13:02:36 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 13:02:42 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-16 13:02:47 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+2026-05-16 13:03:00 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 13:02:30.146770', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 13:03:12 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-16 13:03:17 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-16 13:03:30 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 13:03:00.187686', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
