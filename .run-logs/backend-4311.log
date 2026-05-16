@@ -6839,3 +6839,10 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 12:09:44 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
 2026-05-16 12:10:03 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
 2026-05-16 12:10:19 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+2026-05-16 12:10:27 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-16 12:10:34 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-16 12:10:54 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+2026-05-16 12:10:58 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+2026-05-16 12:11:22 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-16 12:11:29 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-16 12:11:29 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
