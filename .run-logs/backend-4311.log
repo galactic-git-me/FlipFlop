@@ -2325,3 +2325,88 @@ Call log:
 [scraper] eBay 'compter tower': 0 found, 0 new (total 103)
 2026-05-16 08:58:35 [warning  ] i-bidder.playwright.no_results term=HP EliteDesk
 2026-05-16 08:58:35 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc towre': 0 found, 0 new (total 103)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 103)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 103)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 103)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 103)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 103)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 103)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 103)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 103)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 103)
+2026-05-16 08:58:53 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 103)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 103)
+2026-05-16 08:58:56 [info     ] BidSpotter.playwright.done     total=0
+2026-05-16 08:58:56 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 103)
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 103)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 103)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 103)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 103)
+2026-05-16 08:59:05 [warning  ] Wilsons Auctions.playwright.no_results term=Dell OptiPlex
+2026-05-16 08:59:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 103)
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 103)
+2026-05-16 08:59:08 [debug    ] resale_scraper.empty_response  cat=179 length=542 query=gaming PC rtx 2060 status=403
+2026-05-16 08:59:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 2060 status=403
+2026-05-16 08:59:08 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=630.0 query=gaming PC rtx 2060
+2026-05-16 08:59:09 [warning  ] i-bidder.playwright.no_results term=Dell OptiPlex
+2026-05-16 08:59:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC ryzen 7 5800x rx5500xt status=403
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC ryzen 7 5800x rx5500xt status=403
+2026-05-16 08:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=424.89 median=713.87 query=gaming PC ryzen 7 5800x rx5500xt
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3050 status=403
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=542 query=gaming PC rtx 3050 status=403
+2026-05-16 08:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=435.1 median=642.12 query=gaming PC rtx 3050
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=540 query=gaming PC i7-9700f rtx 3070 status=403
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC i7-9700f rtx 3070 status=403
+2026-05-16 08:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=475.9 median=691.08 query=gaming PC i7-9700f rtx 3070
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC gtx 1050ti status=403
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC gtx 1050ti status=403
+2026-05-16 08:59:09 [info     ] resale_scraper.fallback_buy_price buy_price=199.99 median=359.99 query=gaming PC gtx 1050ti
+2026-05-16 08:59:09 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=720.84 query=gaming PC rtx 3060
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=720.84 query=gaming PC rtx 3060
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC gtx 1060 status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC gtx 1060 status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=149.95 median=299.94 query=gaming PC gtx 1060
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=540 query=gaming PC ryzen 5 3600 rtx 2060 status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC ryzen 5 3600 rtx 2060 status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=394.3 median=593.16 query=gaming PC ryzen 5 3600 rtx 2060
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC i5-3570 gtx 1050 ti status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-3570 gtx 1050 ti status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=156.7 median=392.04 query=gaming PC i5-3570 gtx 1050 ti
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 08:59:10 [info     ] resale_scraper.fallback_buy_price buy_price=496.3 median=1003.56 query=gaming PC rtx 3060
+2026-05-16 08:59:10 [debug    ] resale_scraper.empty_response  cat=179 length=540 query=gaming PC gtx 1660 status=403
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC gtx 1660 status=403
+2026-05-16 08:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=404.5 median=689.4 query=gaming PC gtx 1660
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=542 query=gaming PC ryzen 5 3600 gtx 1660 status=403
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 3600 gtx 1660 status=403
+2026-05-16 08:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=617.64 query=gaming PC ryzen 5 3600 gtx 1660
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC ryzen 5 2600 gtx 1070 status=403
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC ryzen 5 2600 gtx 1070 status=403
+2026-05-16 08:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=611.99 query=gaming PC ryzen 5 2600 gtx 1070
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC i5-11400 rtx 3060 status=403
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC i5-11400 rtx 3060 status=403
+2026-05-16 08:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=696.0 query=gaming PC i5-11400 rtx 3060
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC ryzen 5 2600 rtx 2060 status=403
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC ryzen 5 2600 rtx 2060 status=403
+2026-05-16 08:59:11 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=600.0 query=gaming PC ryzen 5 2600 rtx 2060
+2026-05-16 08:59:11 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-16 08:59:12 [debug    ] resale_scraper.empty_response  cat=0 length=540 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-16 08:59:12 [info     ] resale_scraper.fallback_buy_price buy_price=404.5 median=893.4 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-16 08:59:12 [info     ] source.done                    found=103 gems=0 source=eBay UK
+2026-05-16 08:59:37 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
+2026-05-16 08:59:37 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 08:59:37 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-16 08:59:42 [warning  ] i-bidder.playwright.no_results term=workstation
+2026-05-16 08:59:42 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 08:59:42 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-16 08:59:42 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=205 new_gems=0 sources_scanned=12
