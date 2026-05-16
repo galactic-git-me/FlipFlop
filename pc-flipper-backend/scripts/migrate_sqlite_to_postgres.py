@@ -3,7 +3,7 @@ import os
 import sqlite3
 from urllib.parse import urlparse
 import psycopg2
-from psycopg2.extras import execute_values
+from psycopg2.extras import execute_values, Json
 
 SQLITE_PATH = os.environ.get('SQLITE_PATH', 'pcflipper.db')
 PG_URL = os.environ.get('SYNC_DATABASE_URL', 'postgresql://flipper:flipper@127.0.0.1:5432/pcflipper')
@@ -94,6 +94,50 @@ def get_varchar_limits_pg(pcur, table):
     return {r[0]: int(r[1]) for r in pcur.fetchall()}
 
 
+def get_column_meta_pg(pcur, table):
+    pcur.execute(
+        """
+        SELECT
+          column_name,
+          is_nullable,
+          data_type,
+          udt_name,
+          column_default
+        FROM information_schema.columns
+        WHERE table_schema='public' AND table_name=%s
+        ORDER BY ordinal_position
+        """,
+        (table,),
+    )
+    out = {}
+    for name, is_nullable, data_type, udt_name, column_default in pcur.fetchall():
+        out[name] = {
+            "nullable": (str(is_nullable).upper() == "YES"),
+            "data_type": data_type,
+            "udt_name": udt_name,
+            "default": column_default,
+        }
+    return out
+
+
+def fallback_value(col_meta: dict):
+    dt = (col_meta.get("data_type") or "").lower()
+    udt = (col_meta.get("udt_name") or "").lower()
+    if dt in {"boolean"}:
+        return False
+    if dt in {"json", "jsonb"}:
+        return {}
+    if dt in {"smallint", "integer", "bigint", "real", "double precision", "numeric", "decimal"}:
+        return 0
+    if "timestamp" in dt or dt == "date":
+        return None
+    if dt in {"character varying", "character", "text"}:
+        return ""
+    if udt.endswith("enum"):
+        return None
+    return None
+
+
 def reset_sequence_if_needed(pcur, table):
     # For standard serial PK 'id'
     pcur.execute(
@@ -154,7 +198,16 @@ def main():
                 p_cols = get_columns_pg(pcur, table)
                 bool_cols = get_boolean_columns_pg(pcur, table)
                 varchar_limits = get_varchar_limits_pg(pcur, table)
-                cols = [c for c in s_cols if c in p_cols]
+                meta = get_column_meta_pg(pcur, table)
+
+                common_cols = [c for c in s_cols if c in p_cols]
+                required_missing = [
+                    c for c in p_cols
+                    if c not in common_cols
+                    and not meta[c]["nullable"]
+                    and meta[c]["default"] is None
+                ]
+                cols = common_cols + required_missing
                 if not cols:
                     print(f'[skip] {table}: no common columns')
                     continue
@@ -174,7 +227,10 @@ def main():
                     for row in rows:
                         record = []
                         for c in cols:
-                            v = row[c]
+                            if c in row.keys():
+                                v = row[c]
+                            else:
+                                v = fallback_value(meta.get(c, {}))
                             if c in bool_cols and v is not None:
                                 if isinstance(v, (int, float)):
                                     v = bool(v)
@@ -184,10 +240,14 @@ def main():
                                         v = True
                                     elif vv in {"0", "f", "false", "no", "n"}:
                                         v = False
+                            if v is None and c in meta and not meta[c]["nullable"]:
+                                v = fallback_value(meta[c])
                             if isinstance(v, str) and c in varchar_limits:
                                 max_len = varchar_limits[c]
                                 if len(v) > max_len:
                                     v = v[:max_len]
+                            if isinstance(v, (dict, list)):
+                                v = Json(v)
                             record.append(v)
                         values.append(tuple(record))
                     execute_values(
