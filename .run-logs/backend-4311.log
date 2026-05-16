@@ -6879,3 +6879,47 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 12:17:52 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
 2026-05-16 12:18:03 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
 2026-05-16 12:18:16 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
+2026-05-16 12:18:27 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-16 12:18:38 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
+2026-05-16 12:18:52 [debug    ] upgrade_parts.bh               part=RTX 2060 6GB price_gbp=117.85
+2026-05-16 12:19:04 [debug    ] upgrade_parts.bh               part=RTX 2070 8GB price_gbp=117.85
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 2080 8GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 3060 12GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RTX 4060 8GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-16 12:20:42 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-16 12:20:42 [info     ] upgrade_parts_swarm.done       bh=9 box=0 ebay_buy=0 ebay_sold=0 errors=0 overclockers=0 scan=0 updated=9
