@@ -1763,3 +1763,59 @@ Call log:
 2026-05-16 07:58:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
 [scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
 2026-05-16 07:58:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 0)
+2026-05-16 07:58:25 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+2026-05-16 07:58:27 [warning  ] i-bidder.playwright.no_results term=computer tower
+2026-05-16 07:58:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 0)
+2026-05-16 07:58:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+2026-05-16 07:58:33 [warning  ] Wilsons Auctions.playwright.no_results term=HP EliteDesk
+2026-05-16 07:58:33 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 0)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 0)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 0)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 0)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 0)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 0)
+2026-05-16 07:58:53 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
+2026-05-16 07:58:57 [info     ] BidSpotter.playwright.done     total=0
+2026-05-16 07:58:57 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 0)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 0)
+2026-05-16 07:59:00 [warning  ] i-bidder.playwright.no_results term=HP EliteDesk
+2026-05-16 07:59:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 0)
+2026-05-16 07:59:03 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-16 07:59:05 [warning  ] Wilsons Auctions.playwright.no_results term=Dell OptiPlex
+2026-05-16 07:59:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 07:59:33 [warning  ] i-bidder.playwright.no_results term=Dell OptiPlex
+2026-05-16 07:59:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-16 07:59:38 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
+2026-05-16 07:59:38 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 07:59:38 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
