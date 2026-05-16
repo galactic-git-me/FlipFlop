@@ -8113,3 +8113,11 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 13:11:26 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
 2026-05-16 13:11:32 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
 2026-05-16 13:11:51 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-16 13:12:08 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-16 13:12:14 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-16 13:12:23 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-16 13:12:43 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+2026-05-16 13:12:47 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+2026-05-16 13:13:11 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-16 13:13:18 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+2026-05-16 13:13:20 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
