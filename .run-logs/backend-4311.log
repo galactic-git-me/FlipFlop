@@ -674,3 +674,5 @@ sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled 
 (Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
 2026-05-16 06:45:36 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
 2026-05-16 06:46:02 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-16 06:46:25 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-16 06:46:25 [info     ] cases_swarm.done               errors=0 found=292 upserted=234
