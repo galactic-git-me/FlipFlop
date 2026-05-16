@@ -5791,3 +5791,11 @@ INFO:     Waiting for connections to close. (CTRL+C to force quit)
 2026-05-16 11:42:14 [info     ] temu.cases.done                found=0 search=xenomorph pc case
 2026-05-16 11:42:39 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
 2026-05-16 11:42:40 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+2026-05-16 11:43:02 [info     ] aliexpress.cases.done          found=0 search=xenomorph pc case
+2026-05-16 11:43:14 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
+2026-05-16 11:43:15 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+2026-05-16 11:43:18 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
+2026-05-16 11:43:42 [info     ] temu.cases.done                found=0 search=anime gaming pc case
+2026-05-16 11:43:49 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
+2026-05-16 11:44:06 [info     ] temu.cases.done                found=0 search=gaming pc case custom art
+2026-05-16 11:44:24 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-12400 sold=None
