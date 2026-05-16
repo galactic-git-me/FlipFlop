@@ -7962,3 +7962,11 @@ Call log:
 [SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
 [parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 13:03:00.187686', None, 9)]
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 13:03:36 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+2026-05-16 13:03:53 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-16 13:03:59 [info     ] aliexpress.cases.done          found=0 search=xenomorph pc case
+2026-05-16 13:04:11 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
+2026-05-16 13:04:15 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
+2026-05-16 13:04:29 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+2026-05-16 13:04:30 [info     ] flip_opportunities_swarm.done  errors=9 listings_found=0 new_gems=0 sources_scanned=3
+2026-05-16 13:04:39 [info     ] temu.cases.done                found=0 search=anime gaming pc case
