@@ -549,3 +549,10 @@ Call log:
 2026-05-16 06:42:59 [debug    ] upgrade_parts.bh               part=RTX 2060 6GB price_gbp=117.85
 2026-05-16 06:43:05 [info     ] temu.cases.done                found=0 search=cheap atx pc case
 2026-05-16 06:43:10 [debug    ] upgrade_parts.bh               part=RTX 2070 8GB price_gbp=117.85
+2026-05-16 06:43:21 [debug    ] upgrade_parts.bh               part=RTX 2080 8GB price_gbp=117.85
+2026-05-16 06:43:29 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+2026-05-16 06:43:32 [debug    ] upgrade_parts.bh               part=RTX 3060 12GB price_gbp=7.17
+2026-05-16 06:43:38 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+2026-05-16 06:44:04 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+2026-05-16 06:44:27 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-16 06:44:35 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
