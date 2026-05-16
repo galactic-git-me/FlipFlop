@@ -1819,3 +1819,7 @@ Call log:
 2026-05-16 07:59:38 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
 2026-05-16 07:59:38 [info     ] Wilsons Auctions.playwright.done total=0
 2026-05-16 07:59:38 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-16 08:00:06 [warning  ] i-bidder.playwright.no_results term=workstation
+2026-05-16 08:00:06 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 08:00:06 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-16 08:00:06 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=40 new_gems=0 sources_scanned=12
