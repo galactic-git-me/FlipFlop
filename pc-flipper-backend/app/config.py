@@ -3,8 +3,8 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    database_url: str = "sqlite+aiosqlite:///./pcflipper.db"
-    sync_database_url: str = "sqlite:///./pcflipper.db"
+    database_url: str = "postgresql+asyncpg://flipper:flipper@127.0.0.1:5432/pcflipper"
+    sync_database_url: str = "postgresql://flipper:flipper@127.0.0.1:5432/pcflipper"
     redis_url: str = ""  # empty = Redis disabled
 
     anthropic_api_key: str = ""

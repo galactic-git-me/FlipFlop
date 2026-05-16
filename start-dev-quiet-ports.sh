@@ -15,6 +15,11 @@ PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-prod}" # prod | dev
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
+DB_HOST="${DB_HOST:-127.0.0.1}"
+DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-pcflipper}"
+DB_USER="${DB_USER:-flipper}"
+DB_PASSWORD="${DB_PASSWORD:-flipper}"
 
 mkdir -p "$LOG_DIR"
 
@@ -82,6 +87,34 @@ fi
 free_port "$FRONTEND_PORT"
 free_port "$BACKEND_PORT"
 
+start_postgres() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker is required for local Postgres. Install Docker or set DATABASE_URL to an external Postgres."
+    exit 1
+  fi
+
+  echo "Ensuring local Postgres container is running..."
+  (
+    cd "$BACKEND_DIR"
+    docker compose up -d db >/dev/null
+  )
+
+  # Wait for port to open (up to ~60s)
+  local attempts=60
+  while (( attempts > 0 )); do
+    if lsof -nP -iTCP:"$DB_PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+    attempts=$((attempts-1))
+  done
+
+  echo "Postgres did not become ready on port $DB_PORT."
+  exit 1
+}
+
+start_postgres
+
 PYTHON_BIN="python3"
 if [[ -x "$BACKEND_DIR/.venv/bin/python" ]]; then
   PYTHON_BIN="$BACKEND_DIR/.venv/bin/python"
@@ -103,6 +136,8 @@ fi
 echo "Starting backend on http://$PUBLIC_HOST:$BACKEND_PORT ..."
 (
   cd "$BACKEND_DIR"
+  export DATABASE_URL="postgresql+asyncpg://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+  export SYNC_DATABASE_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
   TZ="$BACKEND_TZ" "$UVICORN_BIN" app.main:app --host "$BACKEND_BIND_HOST" --port "$BACKEND_PORT" --reload
 ) >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
