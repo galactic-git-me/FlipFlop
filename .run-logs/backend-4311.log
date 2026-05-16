@@ -1355,3 +1355,10 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 07:12:06 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 3600 sold=None
 2026-05-16 07:12:06 [info     ] amazon.cases.done              found=10 search=skull pc case gaming
 2026-05-16 07:12:11 [info     ] amazon.cases.done              found=10 search=dark gaming case skull
+2026-05-16 07:12:37 [info     ] temu.cases.done                found=0 search=skull pc case gaming
+2026-05-16 07:12:41 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
+2026-05-16 07:13:03 [info     ] temu.cases.done                found=0 search=dark gaming case skull
+2026-05-16 07:13:16 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600X sold=None
+2026-05-16 07:13:26 [info     ] aliexpress.cases.done          found=0 search=skull pc case gaming
+2026-05-16 07:13:50 [info     ] aliexpress.cases.done          found=0 search=dark gaming case skull
+2026-05-16 07:13:51 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5700X sold=None
