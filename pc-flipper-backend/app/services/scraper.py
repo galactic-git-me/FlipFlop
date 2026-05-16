@@ -914,6 +914,12 @@ _GUMTREE_FB_TERMS = [
     "i7 tower", "i7 desktop", "ryzen 7 desktop",
     # liquid cooled (often underpriced)
     "pc liquid cooler",
+    # component lanes (build-from-parts)
+    "motherboard bundle", "motherboard lga1700", "motherboard am4",
+    "cpu bundle", "intel i7 cpu", "ryzen 7 cpu",
+    "graphics card", "rtx 3060", "gtx 1660",
+    "ddr4 ram", "ddr5 ram", "nvme ssd", "power supply psu",
+    "pc case atx", "mid tower case",
 ]
 
 _PRELOVED_TERMS = [
@@ -923,6 +929,9 @@ _PRELOVED_TERMS = [
     "pc untested", "pc spares or repair",
     "i7 tower", "i7 desktop", "ryzen 7 desktop",
     "office pc tower", "ex office pc",
+    # component lanes
+    "motherboard", "cpu", "graphics card", "ddr4 ram", "ddr5 ram",
+    "nvme ssd", "psu", "pc case",
 ]
 
 # Auction-focused terms — sorted by most likely to yield cheap deals.
@@ -941,6 +950,14 @@ _AUCTION_TERMS = [
     "i5 desktop",
     "office pc",
     "refurbished pc",
+    # components and enclosures
+    "motherboard",
+    "cpu bundle",
+    "graphics card",
+    "ddr4 ram",
+    "nvme ssd",
+    "power supply",
+    "pc case",
 ]
 
 _EBAY_AUCTION_TERMS = [
@@ -978,6 +995,19 @@ _EBAY_AUCTION_TERMS = [
     "ryzen desktop",
     "xeon tower",
     "i7 desktop",
+    # ── Individual components and cases ─────────────────────────────────────
+    "motherboard bundle",
+    "lga1700 motherboard",
+    "am4 motherboard",
+    "intel i7 cpu",
+    "ryzen 7 cpu",
+    "rtx 3060",
+    "gtx 1660",
+    "ddr4 ram lot",
+    "ddr5 ram lot",
+    "nvme ssd",
+    "pc power supply",
+    "atx pc case",
 ]
 
 

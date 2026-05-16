@@ -904,6 +904,9 @@ _AUCTION_PC_KW = {
     "optiplex", "elitedesk", "thinkcentre", "prodesk", "thinkstation",
     "nvidia", "radeon", "rtx", "gtx", "gpu", "graphics",
     "z240", "z440", "z640",
+    # component and chassis lanes
+    "motherboard", "mainboard", "cpu", "processor", "ram", "ddr4", "ddr5",
+    "ssd", "nvme", "psu", "power supply", "case", "chassis", "mid tower", "atx",
 }
 
 _AUCTION_SEARCH_TERMS = [
@@ -915,6 +918,12 @@ _AUCTION_SEARCH_TERMS = [
     "workstation",
     "Lenovo ThinkCentre",
     "gaming computer",
+    "motherboard",
+    "cpu bundle",
+    "graphics card",
+    "ddr4 ram",
+    "nvme ssd",
+    "pc case",
 ]
 
 

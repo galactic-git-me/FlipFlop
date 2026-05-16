@@ -22,6 +22,7 @@ from app.services import scan_state
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
+_DB_WRITE_LOCK = asyncio.Lock()
 
 
 async def run_flip_opportunities_swarm() -> dict:
@@ -124,26 +125,28 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         result["scanned"] = 1
         result["found"] = len(raw_listings)
 
-        async with AsyncSessionLocal() as db:
-            gems = await _upsert_listings(db, raw_listings, source.id, config)
-            result["gems"] = gems
+        # Scrapes can run in parallel, but SQLite writes must be serialized.
+        async with _DB_WRITE_LOCK:
+            async with AsyncSessionLocal() as db:
+                gems = await _upsert_listings(db, raw_listings, source.id, config)
+                result["gems"] = gems
 
-            source_row = await db.get(DataSource, source.id)
-            src_cfg = dict((source_row.config or {})) if source_row else {}
-            src_cfg["consecutive_failures"] = 0
+                source_row = await db.get(DataSource, source.id)
+                src_cfg = dict((source_row.config or {})) if source_row else {}
+                src_cfg["consecutive_failures"] = 0
 
-            await db.execute(
-                update(DataSource)
-                .where(DataSource.id == source.id)
-                .values(
-                    last_scraped_at=datetime.utcnow(),
-                    listings_found_last_run=len(raw_listings),
-                    listings_found_total=DataSource.listings_found_total + len(raw_listings),
-                    last_error=None,
-                    config=src_cfg,
+                await db.execute(
+                    update(DataSource)
+                    .where(DataSource.id == source.id)
+                    .values(
+                        last_scraped_at=datetime.utcnow(),
+                        listings_found_last_run=len(raw_listings),
+                        listings_found_total=DataSource.listings_found_total + len(raw_listings),
+                        last_error=None,
+                        config=src_cfg,
+                    )
                 )
-            )
-            await db.commit()
+                await db.commit()
 
         scan_state.site_done(source.name, result["found"], result["gems"])
         log.info("source.done", source=source.name, found=result["found"], gems=result["gems"])
@@ -152,34 +155,35 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         scan_state.site_error(source.name, str(exc))
         log.error("source.error", source=source.name, error=str(exc))
 
-        async with AsyncSessionLocal() as db:
-            source_row = await db.get(DataSource, source.id)
-            src_cfg = dict((source_row.config or {})) if source_row else {}
-            failures = int(src_cfg.get("consecutive_failures", 0)) + 1
-            src_cfg["consecutive_failures"] = failures
-            auto_disabled = failures >= SOURCE_FAILURE_THRESHOLD
-            err_msg = str(exc)
-            if auto_disabled:
-                err_msg = (
-                    f"[auto-disabled after {failures} consecutive failures] {err_msg}"
+        async with _DB_WRITE_LOCK:
+            async with AsyncSessionLocal() as db:
+                source_row = await db.get(DataSource, source.id)
+                src_cfg = dict((source_row.config or {})) if source_row else {}
+                failures = int(src_cfg.get("consecutive_failures", 0)) + 1
+                src_cfg["consecutive_failures"] = failures
+                auto_disabled = failures >= SOURCE_FAILURE_THRESHOLD
+                err_msg = str(exc)
+                if auto_disabled:
+                    err_msg = (
+                        f"[auto-disabled after {failures} consecutive failures] {err_msg}"
+                    )
+                await db.execute(
+                    update(DataSource)
+                    .where(DataSource.id == source.id)
+                    .values(
+                        last_error=err_msg,
+                        config=src_cfg,
+                        enabled=False if auto_disabled else DataSource.enabled,
+                    )
                 )
-            await db.execute(
-                update(DataSource)
-                .where(DataSource.id == source.id)
-                .values(
-                    last_error=err_msg,
-                    config=src_cfg,
-                    enabled=False if auto_disabled else DataSource.enabled,
-                )
-            )
-            await db.commit()
-            if auto_disabled:
-                log.warning(
-                    "source.auto_disabled",
-                    source=source.name,
-                    consecutive_failures=failures,
-                    threshold=SOURCE_FAILURE_THRESHOLD,
-                )
+                await db.commit()
+                if auto_disabled:
+                    log.warning(
+                        "source.auto_disabled",
+                        source=source.name,
+                        consecutive_failures=failures,
+                        threshold=SOURCE_FAILURE_THRESHOLD,
+                    )
 
     return result
 
@@ -193,10 +197,11 @@ async def _upsert_listings(
     new_gems = 0
 
     for raw in raw_listings:
-        existing = await db.execute(
-            select(Listing).where(Listing.external_id == raw.external_id)
-        )
-        listing = existing.scalar_one_or_none()
+        with db.no_autoflush:
+            existing = await db.execute(
+                select(Listing).where(Listing.external_id == raw.external_id)
+            )
+            listing = existing.scalar_one_or_none()
 
         specs = parse_specs(raw.title, raw.description)
 
