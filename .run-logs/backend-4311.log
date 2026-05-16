@@ -1319,3 +1319,10 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 07:04:23 [info     ] amazon.cases.done              found=10 search=space gaming case
 2026-05-16 07:04:32 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
 2026-05-16 07:04:49 [info     ] temu.cases.done                found=0 search=astronaut pc case
+2026-05-16 07:05:07 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-16 07:05:15 [info     ] temu.cases.done                found=0 search=space gaming case
+2026-05-16 07:05:38 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+2026-05-16 07:05:42 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-16 07:06:01 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-16 07:06:15 [info     ] amazon.cases.done              found=10 search=star wars pc case
+2026-05-16 07:06:16 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
