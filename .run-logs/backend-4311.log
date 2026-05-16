@@ -519,3 +519,20 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 06:39:43 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
 2026-05-16 06:40:09 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
 2026-05-16 06:40:17 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+2026-05-16 06:40:32 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-16 06:40:41 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-16 06:40:43 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gtx+1060+6gb", waiting until "domcontentloaded"
+ search=gtx+1060+6gb
+2026-05-16 06:41:07 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-16 06:41:09 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gtx+1060+3gb", waiting until "domcontentloaded"
+ search=gtx+1060+3gb
+2026-05-16 06:41:30 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-16 06:41:35 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gtx+1650", waiting until "domcontentloaded"
+ search=gtx+1650
+2026-05-16 06:41:40 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
