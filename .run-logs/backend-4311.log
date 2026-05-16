@@ -6866,3 +6866,16 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 12:15:12 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
 2026-05-16 12:15:35 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
 2026-05-16 12:15:37 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-16 12:15:59 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-16 12:16:07 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+2026-05-16 12:16:10 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-16 12:16:32 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-16 12:16:44 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+2026-05-16 12:16:55 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-16 12:16:55 [info     ] cases_swarm.done               errors=0 found=292 upserted=234
+2026-05-16 12:17:20 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+2026-05-16 12:17:32 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+2026-05-16 12:17:45 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
+2026-05-16 12:17:52 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
+2026-05-16 12:18:03 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
+2026-05-16 12:18:16 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
