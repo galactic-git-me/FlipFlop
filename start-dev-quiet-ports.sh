@@ -30,6 +30,47 @@ port_in_use() {
   lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1
 }
 
+port_pids() {
+  local port="$1"
+  lsof -t -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | sort -u
+}
+
+free_port() {
+  local port="$1"
+  if ! port_in_use "$port"; then
+    return 0
+  fi
+
+  local pids
+  pids="$(port_pids "$port" || true)"
+  if [[ -z "$pids" ]]; then
+    return 0
+  fi
+
+  echo "Port $port is in use. Stopping process(es): $pids"
+  for pid in $pids; do
+    kill "$pid" >/dev/null 2>&1 || true
+  done
+
+  sleep 1
+
+  if port_in_use "$port"; then
+    pids="$(port_pids "$port" || true)"
+    if [[ -n "$pids" ]]; then
+      echo "Port $port still busy. Force killing: $pids"
+      for pid in $pids; do
+        kill -9 "$pid" >/dev/null 2>&1 || true
+      done
+      sleep 1
+    fi
+  fi
+
+  if port_in_use "$port"; then
+    echo "Failed to free port $port automatically."
+    exit 1
+  fi
+}
+
 require_cmd npm
 require_cmd lsof
 
@@ -38,15 +79,8 @@ if ! command -v python3 >/dev/null 2>&1 && ! command -v python >/dev/null 2>&1; 
   exit 1
 fi
 
-if port_in_use "$FRONTEND_PORT"; then
-  echo "Frontend port $FRONTEND_PORT is already in use. Set FRONTEND_PORT to another value."
-  exit 1
-fi
-
-if port_in_use "$BACKEND_PORT"; then
-  echo "Backend port $BACKEND_PORT is already in use. Set BACKEND_PORT to another value."
-  exit 1
-fi
+free_port "$FRONTEND_PORT"
+free_port "$BACKEND_PORT"
 
 PYTHON_BIN="python3"
 if [[ -x "$BACKEND_DIR/.venv/bin/python" ]]; then
