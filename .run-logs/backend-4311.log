@@ -8135,3 +8135,17 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 13:15:59 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
 2026-05-16 13:16:07 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
 2026-05-16 13:16:16 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+2026-05-16 13:16:31 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+2026-05-16 13:16:44 [debug    ] upgrade_parts.ebay             buy=161.9 part=2TB NVMe SSD sold=None
+2026-05-16 13:16:50 [debug    ] upgrade_parts.ebay             buy=19.99 part=2TB HDD sold=29.22
+2026-05-16 13:16:53 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-16 13:16:54 [debug    ] upgrade_parts.ebay             buy=20.0 part=550W PSU 80+ Bronze sold=29.67
+2026-05-16 13:16:59 [debug    ] upgrade_parts.ebay             buy=27.41 part=650W PSU 80+ Bronze sold=37.9
+2026-05-16 13:17:01 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-16 13:17:04 [debug    ] upgrade_parts.ebay             buy=37.49 part=750W PSU 80+ Gold sold=54.7
+2026-05-16 13:17:10 [debug    ] upgrade_parts.ebay             buy=50.3 part=850W PSU 80+ Gold sold=62.7
+2026-05-16 13:17:22 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+2026-05-16 13:17:27 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-16 13:17:32 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
+2026-05-16 13:17:36 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
+2026-05-16 13:17:47 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
