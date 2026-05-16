@@ -4761,3 +4761,9 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 11:21:13 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
 2026-05-16 11:21:18 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
 2026-05-16 11:21:22 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-16 11:21:42 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-16 11:21:57 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-16 11:22:07 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+2026-05-16 11:22:31 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+2026-05-16 11:22:32 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-16 11:22:54 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
