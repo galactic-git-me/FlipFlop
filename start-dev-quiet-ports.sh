@@ -14,6 +14,7 @@ BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-0.0.0.0}"
 PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-prod}" # prod | dev
+BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 
 mkdir -p "$LOG_DIR"
 
@@ -68,7 +69,7 @@ fi
 echo "Starting backend on http://$PUBLIC_HOST:$BACKEND_PORT ..."
 (
   cd "$BACKEND_DIR"
-  "$UVICORN_BIN" app.main:app --host "$BACKEND_BIND_HOST" --port "$BACKEND_PORT" --reload
+  TZ="$BACKEND_TZ" "$UVICORN_BIN" app.main:app --host "$BACKEND_BIND_HOST" --port "$BACKEND_PORT" --reload
 ) >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 

@@ -13,7 +13,8 @@ from __future__ import annotations
 import asyncio
 import json
 from collections import deque
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import structlog
 from fastapi import APIRouter
@@ -22,6 +23,7 @@ from fastapi.responses import StreamingResponse
 # ── Shared state ───────────────────────────────────────────────────────────────
 _LOG_BUFFER: deque[dict] = deque(maxlen=2000)
 _WAITERS: list[asyncio.Queue] = []
+_LONDON_TZ = ZoneInfo("Europe/London")
 
 _INSTALLED = False
 
@@ -53,7 +55,7 @@ def install_log_capture() -> None:
 
     def _capture(logger, method: str, event_dict: dict) -> dict:
         _push({
-            "ts":    datetime.now(timezone.utc).isoformat(),
+            "ts":    datetime.now(_LONDON_TZ).isoformat(),
             "level": method,
             "msg":   str(event_dict.get("event", "")),
             "extra": {k: str(v) for k, v in event_dict.items() if k not in ("event",)},

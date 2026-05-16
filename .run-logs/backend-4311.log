@@ -4316,3 +4316,216 @@ Call log:
 2026-05-16 10:59:40 [info     ] source.done                    found=0 gems=0 source=i-bidder
 2026-05-16 10:59:40 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=298 new_gems=0 sources_scanned=12
 INFO:     127.0.0.1:35466 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59624 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59636 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49746 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/api/logs.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-16 11:15:51 [info     ] scheduler.stopped
+2026-05-16 11:15:51 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2630433]
+INFO:     Started server process [3404733]
+INFO:     Waiting for application startup.
+2026-05-16 11:15:52 [info     ] app.startup
+2026-05-16 11:15:52 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-16 11:15:53 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-16 11:15:53 [info     ] scheduler.started              jobs=4
+INFO:     Application startup complete.
+2026-05-16 11:15:53 [info     ] accessories_swarm.start
+2026-05-16 11:15:53 [info     ] cases_swarm.start
+2026-05-16 11:15:53 [info     ] flip_opportunities_swarm.start
+2026-05-16 11:15:53 [info     ] upgrade_parts_swarm.start      total_parts=48
+2026-05-16 11:15:53 [info     ] facebook.playwright.cookies_loaded count=7
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+2026-05-16 11:15:53 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+2026-05-16 11:15:53 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-16 11:15:53 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-16 11:15:53 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-16 11:15:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:15:53 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-16 11:15:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 11:15:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-16 11:15:54 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-16 11:15:56 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-16 11:15:56 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-16 11:15:56 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-16 11:15:58 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-16 11:15:58 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-16 11:15:58 [info     ] preloved.playwright.term_done  running_total=28 term=gaming pc
+[scraper] eBay 'office computers clearance': 55 found, 55 new (total 55)
+[scraper] eBay 'gaming pc': 60 found, 60 new (total 60)
+2026-05-16 11:16:00 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-16 11:16:00 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-16 11:16:00 [info     ] preloved.playwright.term_done  running_total=31 term=desktop pc
+[scraper] eBay 'it clearance desktop': 8 found, 8 new (total 63)
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-16 11:16:02 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-16 11:16:02 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-16 11:16:02 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-16 11:16:02 [info     ] preloved.playwright.term_done  running_total=31 term=HP EliteDesk
+[scraper] eBay 'office pc lot': 39 found, 26 new (total 89)
+[scraper] eBay 'computer tower': 50 found, 17 new (total 77)
+2026-05-16 11:16:04 [info     ] apex.playwright.auction_items  count=23
+2026-05-16 11:16:04 [info     ] amazon.cases.done              found=10 search=rgb gaming pc case atx
+2026-05-16 11:16:04 [info     ] apex.playwright.uk_auctions    count=23
+2026-05-16 11:16:05 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 89)
+2026-05-16 11:16:05 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
+2026-05-16 11:16:05 [info     ] preloved.playwright.term_done  running_total=32 term=Dell OptiPlex
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] eBay 'HP EliteDesk': 34 found, 33 new (total 110)
+2026-05-16 11:16:06 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=59.47
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 89)
+2026-05-16 11:16:06 [info     ] facebook.playwright.items      count=0 term=pc tower
+2026-05-16 11:16:06 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:16:06 [info     ] preloved.playwright.fetch      term=Lenovo ThinkCentre
+2026-05-16 11:16:06 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-16 11:16:06 [info     ] preloved.playwright.raw        count=1 term=Lenovo ThinkCentre
+2026-05-16 11:16:06 [info     ] preloved.playwright.term_done  running_total=33 term=Lenovo ThinkCentre
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 110)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 89)
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-16 11:16:08 [info     ] preloved.playwright.fetch      term=gaming pc no gpu
+2026-05-16 11:16:08 [info     ] preloved.playwright.raw        count=3 term=gaming pc no gpu
+2026-05-16 11:16:08 [info     ] preloved.playwright.term_done  running_total=34 term=gaming pc no gpu
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 110)
+2026-05-16 11:16:10 [info     ] amazon.cases.done              found=10 search=gaming pc case rgb mid tower
+[scraper] eBay 'pc untested': 0 found, 0 new (total 89)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 110)
+2026-05-16 11:16:11 [info     ] preloved.playwright.fetch      term=pc no hard drive
+2026-05-16 11:16:11 [info     ] preloved.playwright.raw        count=20 term=pc no hard drive
+2026-05-16 11:16:11 [info     ] preloved.playwright.term_done  running_total=39 term=pc no hard drive
+2026-05-16 11:16:11 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-16 11:16:11 [debug    ] upgrade_parts.ebay             buy=62.7 part=GTX 1060 3GB sold=47.57
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 89)
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 110)
+2026-05-16 11:16:13 [info     ] apex.playwright.lots           count=0 href=#!/auctions/7453a638-5583-4add-9b02-9b9b84c4c33c
+2026-05-16 11:16:13 [info     ] preloved.playwright.done       total=39
+2026-05-16 11:16:13 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 11:16:13 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 11:16:13 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 89)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 110)
+[scraper] John Pye error for 'workstation': All connection attempts failed
+[scraper] eBay 'pc no display': 0 found, 0 new (total 89)
+2026-05-16 11:16:16 [debug    ] upgrade_parts.ebay             buy=79.99 part=GTX 1650 4GB sold=63.1
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 110)
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 89)
+2026-05-16 11:16:18 [info     ] facebook.playwright.items      count=0 term=gaming pc
+2026-05-16 11:16:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 110)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 110)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 89)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 89)
+2026-05-16 11:16:21 [debug    ] upgrade_parts.ebay             buy=118.5 part=GTX 1660 Super sold=99.9
+2026-05-16 11:16:21 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 110)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 89)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 110)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 89)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 110)
+2026-05-16 11:16:26 [warning  ] i-bidder.playwright.no_results term=desktop pc
+2026-05-16 11:16:26 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 11:16:26 [debug    ] upgrade_parts.ebay             buy=99.99 part=GTX 1070 8GB sold=82.12
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 89)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 110)
+2026-05-16 11:16:27 [warning  ] Wilsons Auctions.playwright.no_results term=desktop pc
+2026-05-16 11:16:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 11:16:28 [info     ] facebook.playwright.items      count=0 term=desktop pc
+2026-05-16 11:16:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 110)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 89)
+2026-05-16 11:16:30 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 89)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 110)
+2026-05-16 11:16:31 [debug    ] upgrade_parts.ebay             buy=59.99 part=RX 570 8GB sold=51.04
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 89)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 110)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 89)
+2026-05-16 11:16:34 [info     ] temu.cases.done                found=0 search=rgb gaming pc case atx
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 110)
+2026-05-16 11:16:35 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-16 11:16:35 [debug    ] upgrade_parts.ebay             buy=87.5 part=RX 580 8GB sold=62.7
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 89)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 110)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 89)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 110)
+2026-05-16 11:16:38 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+2026-05-16 11:16:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-16 11:16:39 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-16 11:16:39 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 89)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 110)
+2026-05-16 11:16:40 [debug    ] upgrade_parts.ebay             buy=145.59 part=RTX 2060 6GB sold=119.99
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 89)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 110)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 89)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 110)
+2026-05-16 11:16:43 [error    ] source.error                   error=(raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE listings SET last_seen_at=? WHERE listings.id = ?]
+[parameters: ('2026-05-16 11:16:13.810262', 6572)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Preloved
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 89)
+2026-05-16 11:16:45 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:16:15.494027', None, 6)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=John Pye
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 110)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 89)
+2026-05-16 11:16:46 [info     ] auction_price.fallback         current_bid=350.0 fallback=472.5 query=pc tower
+2026-05-16 11:16:46 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 11:16:46 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-16 11:16:46 [info     ] resale_scraper.fallback_buy_price buy_price=472.5 median=1059.0 query=gaming PC rtx 3060
+2026-05-16 11:16:47 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 110)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 110)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 110)
+2026-05-16 11:16:51 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-16 11:16:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 110)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 110)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 110)
+2026-05-16 11:16:55 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+2026-05-16 11:16:56 [info     ] apex.playwright.done           total=0
+2026-05-16 11:16:56 [info     ] auction_scraper.apex.done      total=0
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 110)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 110)
+2026-05-16 11:16:58 [warning  ] i-bidder.playwright.no_results term=gaming pc
+2026-05-16 11:16:58 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-16 11:16:59 [info     ] temu.cases.done                found=0 search=gaming pc case rgb mid tower
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 110)
+2026-05-16 11:17:00 [warning  ] Wilsons Auctions.playwright.no_results term=gaming pc
+2026-05-16 11:17:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc no display': 0 found, 0 new (total 110)
+2026-05-16 11:17:02 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-16 11:17:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:17:02 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 110)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 110)
+2026-05-16 11:17:06 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 110)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 110)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 110)
+2026-05-16 11:17:10 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 110)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 110)
+2026-05-16 11:17:13 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-16 11:17:13 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 110)
+2026-05-16 11:17:15 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 110)
+2026-05-16 11:17:16 [error    ] source.error                   error=(raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(sqlite3.OperationalError) database is locked
+[SQL: UPDATE listings SET gem_score=?, classification=?, gem_signals=?, estimated_resale=?, resale_low=?, resale_high=?, estimated_profit=?, estimated_upgrade_cost=?, last_seen_at=? WHERE listings.id = ?]
+[parameters: (30.1, 'no_profit', '["no storage", "no gpu", "\\u00a367 profit"]', 1059.0, 931.92, 1186.08, 67.01, 385.0, '2026-05-16 11:16:46.630955', 6410)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK Auctions
