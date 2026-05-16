@@ -7915,3 +7915,32 @@ INFO:     Application startup complete.
 2026-05-16 13:00:42 [info     ] aliexpress.cases.done          found=0 search=space gaming case
 2026-05-16 13:00:42 [info     ] BidSpotter.playwright.cards    count=60 term=7700x b650
 2026-05-16 13:00:46 [info     ] BidSpotter.playwright.done     total=0
+2026-05-16 13:00:53 [info     ] amazon.cases.done              found=10 search=star wars pc case
+2026-05-16 13:00:53 [warning  ] i-bidder.playwright.no_results term=nvme ssd
+2026-05-16 13:00:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=power+supply&country=gb&priceFrom=0&priceTo=500
+2026-05-16 13:00:57 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+2026-05-16 13:00:59 [warning  ] Wilsons Auctions.playwright.no_results term=nvme ssd
+2026-05-16 13:00:59 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=power+supply&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 13:01:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-16 13:01:16 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 13:00:46.911936', None, 8)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
+2026-05-16 13:01:21 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-16 13:01:22 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_NETWORK_CHANGED at https://www.temu.com/search_result.html?search_key=darth+vader+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=darth+vader+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-16 13:01:22 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-16 13:01:25 [warning  ] i-bidder.playwright.no_results term=power supply
+2026-05-16 13:01:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+case&country=gb&priceFrom=0&priceTo=500
+2026-05-16 13:01:31 [warning  ] Wilsons Auctions.playwright.no_results term=power supply
+2026-05-16 13:01:31 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+case&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 13:01:31 [debug    ] upgrade_parts.ebay             buy=156.7 part=RX 6700 XT sold=None
+2026-05-16 13:01:45 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+2026-05-16 13:01:57 [warning  ] i-bidder.playwright.no_results term=pc case
+2026-05-16 13:01:57 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=7700x+b650&country=gb&priceFrom=0&priceTo=500
+2026-05-16 13:02:04 [warning  ] Wilsons Auctions.playwright.no_results term=pc case
+2026-05-16 13:02:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=7700x+b650&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 13:02:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-16 13:02:08 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
