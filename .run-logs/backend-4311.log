@@ -5781,3 +5781,13 @@ INFO:     Waiting for connections to close. (CTRL+C to force quit)
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
 2026-05-16 11:41:21 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
 2026-05-16 11:41:25 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+2026-05-16 11:41:30 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-16 11:41:41 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:41:11.372603', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
+2026-05-16 11:41:50 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+2026-05-16 11:42:04 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-16 11:42:14 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-16 11:42:39 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+2026-05-16 11:42:40 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
