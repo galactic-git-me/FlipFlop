@@ -1017,6 +1017,9 @@ async def _scrape_auction_site(
                     break
 
             log.info(f"{site_name}.playwright.cards", term=term, count=len(cards))
+            kept = 0
+            skipped_no_title = 0
+            skipped_keyword = 0
 
             for card in cards:
                 try:
@@ -1029,10 +1032,15 @@ async def _scrape_auction_site(
                             if title:
                                 break
                     if not title or len(title) < 5:
+                        skipped_no_title += 1
                         continue
                     t = title.lower()
                     if not any(kw in t for kw in _AUCTION_PC_KW):
-                        continue
+                        # Some auction search pages are catalogue cards with sparse titles.
+                        # If search term itself is target-like, keep the card as a lead.
+                        if not any(kw in term.lower() for kw in _AUCTION_PC_KW):
+                            skipped_keyword += 1
+                            continue
                     if _is_mini_pc(title):
                         continue
 
@@ -1084,8 +1092,18 @@ async def _scrape_auction_site(
                         source_name=site_name,
                         listing_type="auction",
                     ))
+                    kept += 1
                 except Exception:
                     continue
+
+            log.info(
+                f"{site_name}.playwright.term_summary",
+                term=term,
+                cards=len(cards),
+                kept=kept,
+                skipped_no_title=skipped_no_title,
+                skipped_keyword=skipped_keyword,
+            )
 
         except Exception as exc:
             log.error(f"{site_name}.playwright.error", term=term, error=str(exc))

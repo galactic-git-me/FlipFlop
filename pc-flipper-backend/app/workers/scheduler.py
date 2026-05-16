@@ -2,7 +2,7 @@
 APScheduler wrapper — manages all swarm cron jobs.
 """
 from collections import deque
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from time import perf_counter
 from typing import Awaitable, Callable
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -80,6 +80,10 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
+    flip_now = now
+    upgrade_start = now + timedelta(minutes=5)
+    cases_start = now + timedelta(minutes=10)
+    accessories_start = now + timedelta(minutes=15)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -89,7 +93,7 @@ def start_scheduler():
         kwargs={"job_id": "flip_opportunities", "fn": run_flip_opportunities_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=now,   # fire immediately on startup
+        next_run_time=flip_now,   # primary sourcing starts immediately
     )
 
     scheduler.add_job(
@@ -100,7 +104,7 @@ def start_scheduler():
         kwargs={"job_id": "upgrade_parts", "fn": run_upgrade_parts_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=now,   # fire immediately on startup
+        next_run_time=upgrade_start,   # stagger writes to avoid SQLite contention
     )
 
     scheduler.add_job(
@@ -111,7 +115,7 @@ def start_scheduler():
         kwargs={"job_id": "cases", "fn": run_cases_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=now,   # fire immediately on startup
+        next_run_time=cases_start,   # stagger writes to avoid SQLite contention
     )
 
     scheduler.add_job(
@@ -122,7 +126,7 @@ def start_scheduler():
         kwargs={"job_id": "accessories", "fn": run_accessories_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=now,   # fire immediately on startup
+        next_run_time=accessories_start,   # stagger writes to avoid SQLite contention
     )
 
     scheduler.start()

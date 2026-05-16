@@ -537,3 +537,151 @@ INFO:     127.0.0.1:53472 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-16 16:21:09 [info     ] BidSpotter.playwright.cards    count=60 term=ddr4 ram
 2026-05-16 16:21:09 [warning  ] Wilsons Auctions.playwright.no_results term=motherboard
 2026-05-16 16:21:09 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:21:13 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=nvme+ssd&country=gb
+2026-05-16 16:21:18 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+WARNING:  WatchFiles detected changes in 'app/workers/scheduler.py'. Reloading...
+2026-05-16 16:21:29 [info     ] amazon.cases.done              found=10 search=astronaut pc case
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-16 16:21:30 [info     ] scheduler.stopped
+2026-05-16 16:21:30 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [114111]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
+INFO:     Started server process [166795]
+INFO:     Waiting for application startup.
+2026-05-16 16:21:31 [info     ] app.startup
+2026-05-16 16:21:31 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-16 16:21:31 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-16 16:21:31 [info     ] scheduler.started              jobs=4
+INFO:     Application startup complete.
+2026-05-16 16:21:31 [info     ] flip_opportunities_swarm.start
+2026-05-16 16:21:31 [info     ] facebook.playwright.cookies_loaded count=7
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+2026-05-16 16:21:31 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-16 16:21:31 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-16 16:21:31 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-16 16:21:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:21:31 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:21:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-16 16:21:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-16 16:21:34 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-16 16:21:34 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-16 16:21:34 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-16 16:21:37 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-16 16:21:37 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-16 16:21:37 [info     ] preloved.playwright.term_done  running_total=28 term=gaming pc
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+2026-05-16 16:21:39 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-16 16:21:39 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-16 16:21:39 [info     ] preloved.playwright.term_done  running_total=31 term=desktop pc
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+2026-05-16 16:21:40 [info     ] scheduler.stopped
+2026-05-16 16:21:40 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [166795]
+INFO:     Started server process [171968]
+INFO:     Waiting for application startup.
+2026-05-16 16:21:41 [info     ] app.startup
+2026-05-16 16:21:41 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-16 16:21:41 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-16 16:21:41 [info     ] scheduler.started              jobs=4
+INFO:     Application startup complete.
+2026-05-16 16:21:41 [info     ] flip_opportunities_swarm.start
+2026-05-16 16:21:41 [info     ] facebook.playwright.cookies_loaded count=7
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+2026-05-16 16:21:42 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-16 16:21:42 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-16 16:21:42 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-16 16:21:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-16 16:21:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:21:42 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-16 16:21:42 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-16 16:21:45 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-16 16:21:45 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-16 16:21:45 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-16 16:21:47 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-16 16:21:47 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-16 16:21:47 [info     ] preloved.playwright.term_done  running_total=28 term=gaming pc
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+2026-05-16 16:21:49 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-16 16:21:49 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-16 16:21:49 [info     ] preloved.playwright.term_done  running_total=31 term=desktop pc
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+2026-05-16 16:21:52 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-16 16:21:52 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-16 16:21:52 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-16 16:21:52 [info     ] preloved.playwright.term_done  running_total=31 term=HP EliteDesk
+2026-05-16 16:21:53 [info     ] apex.playwright.auction_items  count=23
+2026-05-16 16:21:53 [info     ] apex.playwright.uk_auctions    count=23
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-16 16:21:53 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
+2026-05-16 16:21:53 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
+2026-05-16 16:21:53 [info     ] preloved.playwright.term_done  running_total=32 term=Dell OptiPlex
+2026-05-16 16:21:53 [info     ] facebook.playwright.items      count=0 term=pc tower
+2026-05-16 16:21:53 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower title=Facebook
+2026-05-16 16:21:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+INFO:     127.0.0.1:46140 - "GET /api/facebook/status HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-16 16:21:55 [info     ] scheduler.stopped
+2026-05-16 16:21:55 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [171968]
+INFO:     Stopping reloader process [114089]
