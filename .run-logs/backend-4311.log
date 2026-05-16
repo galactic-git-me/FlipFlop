@@ -5731,3 +5731,14 @@ INFO:     Waiting for connections to close. (CTRL+C to force quit)
 2026-05-16 11:36:42 [info     ] temu.cases.done                found=0 search=neon pc case rgb
 2026-05-16 11:37:04 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
 2026-05-16 11:37:06 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+2026-05-16 11:37:28 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+2026-05-16 11:37:39 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-16 11:37:40 [info     ] amazon.cases.done              found=10 search=astronaut pc case
+2026-05-16 11:37:44 [info     ] amazon.cases.done              found=10 search=space gaming case
+2026-05-16 11:38:09 [info     ] temu.cases.done                found=0 search=astronaut pc case
+2026-05-16 11:38:11 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:37:41.087931', None, 8)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=BidSpotter
+2026-05-16 11:38:14 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-16 11:38:33 [info     ] temu.cases.done                found=0 search=space gaming case
