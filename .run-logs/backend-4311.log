@@ -7845,3 +7845,27 @@ INFO:     Application startup complete.
 2026-05-16 12:56:35 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
 2026-05-16 12:56:39 [warning  ] Wilsons Auctions.playwright.no_results term=i7 desktop
 2026-05-16 12:56:39 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 12:56:56 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+2026-05-16 12:56:58 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-16 12:57:01 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
+2026-05-16 12:57:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-16 12:57:07 [warning  ] i-bidder.playwright.no_results term=i5 desktop
+2026-05-16 12:57:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 12:57:08 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
+2026-05-16 12:57:11 [warning  ] Wilsons Auctions.playwright.no_results term=i5 desktop
+2026-05-16 12:57:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 12:57:13 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 12:56:42.970168', None, 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
+2026-05-16 12:57:13 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
+2026-05-16 12:57:26 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-16 12:57:30 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+2026-05-16 12:57:37 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+2026-05-16 12:57:38 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-16 12:57:40 [warning  ] i-bidder.playwright.no_results term=office pc
+2026-05-16 12:57:40 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 12:57:44 [warning  ] Wilsons Auctions.playwright.no_results term=office pc
+2026-05-16 12:57:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 12:57:53 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-16 12:57:59 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
