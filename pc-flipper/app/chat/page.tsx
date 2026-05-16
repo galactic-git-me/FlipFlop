@@ -356,6 +356,24 @@ function BuildCard({
       {/* Why */}
       <p className="text-xs text-slate-500 italic leading-relaxed">&quot;{build.why}&quot;</p>
 
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        {build.playbook_name && (
+          <span className="text-[10px] px-2 py-0.5 rounded border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 font-mono">
+            {build.playbook_name}
+          </span>
+        )}
+        {build.sourcing_lane && (
+          <span className="text-[10px] px-2 py-0.5 rounded border border-slate-600/40 bg-slate-800/50 text-slate-300 font-mono">
+            {build.sourcing_lane.replaceAll("_", " ")}
+          </span>
+        )}
+        {build.seller_label && (
+          <span className="text-[10px] px-2 py-0.5 rounded border border-yellow-400/25 bg-yellow-400/10 text-yellow-300 font-mono">
+            {build.seller_label.replaceAll("_", " ")}
+          </span>
+        )}
+      </div>
+
       {/* Score bar */}
       <div className="mt-3">
         <div className="flex items-center justify-between mb-1">
@@ -369,6 +387,19 @@ function BuildCard({
           />
         </div>
       </div>
+      {build.listing_url && (
+        <div className="mt-2">
+          <a
+            href={build.listing_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[11px] text-cyan-300 hover:text-cyan-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            View source listing <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+      )}
     </button>
   );
 }
@@ -595,14 +626,16 @@ export default function BuildWizardPage() {
   // Load playbooks on mount
   useEffect(() => {
     api.buildWizard.playbooks()
-      .then(setPlaybooks)
+      .then((pbs) => {
+        setPlaybooks(pbs);
+        setSelectedPb((prev) => prev ?? pbs[0] ?? null);
+      })
       .catch(() => setPlaybooks([]))
       .finally(() => setLoadingPbs(false));
   }, []);
 
   // ── Run generation ──────────────────────────────────────────────────────────
   const runGeneration = useCallback(async () => {
-    if (!selectedPb) return;
     setPhase("generating");
     setGenError(null);
     setResult(null);
@@ -623,15 +656,16 @@ export default function BuildWizardPage() {
       await new Promise(r => setTimeout(r, 600));
       update("wizard", { status: "done" });
 
-      update("composer", { status: "running" });
+      update("composer", { status: "running", detail: "Building Gem × Playbook recommendations" });
       await new Promise(r => setTimeout(r, 400));
 
-      const data = await api.buildWizard.generate({
-        playbook_id: selectedPb.id,
+      const data = await api.buildWizard.generateGemMatrix({
         budget,
         user_notes: notes,
         priorities,
         constraints,
+        gem_limit: 5,
+        playbook_limit: 6,
       });
 
       if (data.attempts > 1) {
@@ -660,7 +694,7 @@ export default function BuildWizardPage() {
       setGenError(msg || "Generation failed — is the backend running?");
       setPhase("intent");
     }
-  }, [selectedPb, budget, notes, priorities, constraints]);
+  }, [budget, notes, priorities, constraints]);
 
   // ── Generate plan ───────────────────────────────────────────────────────────
   const generatePlan = useCallback(async () => {
@@ -762,8 +796,9 @@ export default function BuildWizardPage() {
                     {result.builds.length} Validated Builds
                   </h2>
                   <p className="text-sm text-slate-500 mt-0.5">
-                    {result.rejected_count > 0 && `${result.rejected_count} rejected · `}
-                    Ranked by profit · demand · risk
+                    {result.matrix_meta
+                      ? `${result.matrix_meta.gem_count} gems × ${result.matrix_meta.playbook_count} playbooks · ranked by profit`
+                      : "Ranked by profit · demand · risk"}
                   </p>
                 </div>
                 <span className="text-xs text-slate-600 font-mono">
@@ -828,8 +863,7 @@ export default function BuildWizardPage() {
           <div>
             {phase === "playbook" && (
               <button
-                onClick={() => selectedPb && setPhase("intent")}
-                disabled={!selectedPb}
+                onClick={() => setPhase("intent")}
                 className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
               >
                 Next <ChevronRight className="w-4 h-4" />

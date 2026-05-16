@@ -47,6 +47,13 @@ export interface WizardBuild {
   validation_score: number;
   rejection_reason: string;
   rank: number;
+  gem_id?: number;
+  playbook_id?: number;
+  playbook_name?: string;
+  seller_type?: "shop" | "refurb_shop" | "flipper" | "private" | null;
+  seller_label?: string;
+  sourcing_lane?: string;
+  listing_url?: string;
 }
 
 export interface GenerateRequest {
@@ -62,6 +69,11 @@ export interface GenerateResult {
   builds: WizardBuild[];
   rejected_count: number;
   attempts: number;
+  matrix_meta?: {
+    gem_count: number;
+    playbook_count: number;
+    coverage: string;
+  };
 }
 
 export interface PlanStep {
@@ -279,6 +291,11 @@ export const api = {
     playbooks: () => request<WizardPlaybook[]>("/build-wizard/playbooks"),
     generate: (body: GenerateRequest) =>
       request<GenerateResult>("/build-wizard/generate", {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    generateGemMatrix: (body: Omit<GenerateRequest, "playbook_id"> & { gem_limit?: number; playbook_limit?: number }) =>
+      request<GenerateResult>("/build-wizard/generate-gem-matrix", {
         method: "POST",
         body: JSON.stringify(body),
       }),

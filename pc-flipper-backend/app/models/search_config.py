@@ -19,7 +19,18 @@ class SearchConfig(Base):
     ram_types: Mapped[list] = mapped_column(JSON, default=lambda: ["DDR4"])
     require_storage: Mapped[bool] = mapped_column(Boolean, default=False)
     require_gpu: Mapped[bool] = mapped_column(Boolean, default=False)
-    keywords: Mapped[list] = mapped_column(JSON, default=list)
+    keywords: Mapped[list] = mapped_column(JSON, default=lambda: [
+        "desktop pc",
+        "preowned desktop",
+        "pre owned workstation",
+        "refurbished workstation",
+        "refurbished desktop pc",
+        "gaming pc tower",
+        "motherboard bundle",
+        "used cpu",
+        "used gpu",
+        "ddr4 ram lot",
+    ])
     exclude_keywords: Mapped[list] = mapped_column(JSON, default=list)
     gem_keywords: Mapped[list] = mapped_column(JSON, default=lambda: [
         "no hdd", "untested", "collection only", "for parts",
