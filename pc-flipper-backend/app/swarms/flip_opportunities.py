@@ -342,6 +342,15 @@ _MINI_PC_EXCLUDE: set[str] = {
     "nano pc", "pico pc", "mele quieter",
 }
 
+_AM5_TARGET_KW: set[str] = {
+    "am5", "b650", "x670", "ryzen 7700", "ryzen 7700x", "ryzen 9700x", "ryzen 7900",
+}
+
+_AM5_RED_FLAGS: set[str] = {
+    "for parts", "boots sometimes", "boots some times", "untested because no psu",
+    "needs bios update maybe", "collection only cash no testing",
+}
+
 
 def _passes_filter(price: float, specs, config: SearchConfig, title: str = "") -> bool:
     if price < config.min_price or price > config.max_price:
@@ -356,5 +365,12 @@ def _passes_filter(price: float, specs, config: SearchConfig, title: str = "") -
     if title:
         t = title.lower()
         if any(kw in t for kw in _MINI_PC_EXCLUDE):
+            return False
+        # AM5 quality gate: we still scan broadly, but reject clearly risky AM5 listings.
+        is_am5_candidate = any(kw in t for kw in _AM5_TARGET_KW)
+        if is_am5_candidate and any(flag in t for flag in _AM5_RED_FLAGS):
+            return False
+        # A620 is acceptable only when very cheap.
+        if "a620" in t and price > 80:
             return False
     return True

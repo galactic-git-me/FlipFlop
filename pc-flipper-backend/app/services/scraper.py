@@ -920,6 +920,11 @@ _GUMTREE_FB_TERMS = [
     "graphics card", "rtx 3060", "gtx 1660",
     "ddr4 ram", "ddr5 ram", "nvme ssd", "power supply psu",
     "pc case atx", "mid tower case",
+    # AM5 sweet-spot bundles (high-priority 2026 targets)
+    "7700x b650", "7700 motherboard bundle", "am5 bundle", "ryzen bundle",
+    "ddr5 bundle", "b650 tomahawk", "proart am5", "7900 bundle",
+    "ryzen 7700", "ryzen 7700x", "ryzen 9700x", "ryzen 7900",
+    "asus tuf b650", "gigabyte aorus elite b650", "msi gaming plus b650",
 ]
 
 _PRELOVED_TERMS = [
@@ -932,6 +937,9 @@ _PRELOVED_TERMS = [
     # component lanes
     "motherboard", "cpu", "graphics card", "ddr4 ram", "ddr5 ram",
     "nvme ssd", "psu", "pc case",
+    # AM5 combo strategy
+    "7700x b650", "am5 bundle", "ryzen bundle", "ddr5 bundle",
+    "b650 tomahawk", "proart am5", "7900 bundle",
 ]
 
 # Auction-focused terms — sorted by most likely to yield cheap deals.
@@ -958,6 +966,14 @@ _AUCTION_TERMS = [
     "nvme ssd",
     "power supply",
     "pc case",
+    # AM5 bundle watchlist
+    "7700x b650",
+    "am5 bundle",
+    "ryzen bundle",
+    "ddr5 bundle",
+    "b650 tomahawk",
+    "proart am5",
+    "7900 bundle",
 ]
 
 _EBAY_AUCTION_TERMS = [
@@ -1008,6 +1024,22 @@ _EBAY_AUCTION_TERMS = [
     "nvme ssd",
     "pc power supply",
     "atx pc case",
+    # ── AM5 combo and board targets ─────────────────────────────────────────
+    "7700x b650",
+    "7700 motherboard bundle",
+    "am5 bundle",
+    "ryzen bundle",
+    "ddr5 bundle",
+    "b650 tomahawk",
+    "proart am5",
+    "7900 bundle",
+    "ryzen 7700",
+    "ryzen 7700x",
+    "ryzen 9700x",
+    "ryzen 7900",
+    "asus tuf b650",
+    "gigabyte aorus elite b650",
+    "msi gaming plus b650",
 ]
 
 
