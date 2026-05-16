@@ -435,3 +435,10 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 06:22:28 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
 2026-05-16 06:22:44 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
 2026-05-16 06:22:51 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+2026-05-16 06:23:14 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+2026-05-16 06:23:19 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-16 06:23:26 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
+2026-05-16 06:23:30 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
+2026-05-16 06:23:54 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-16 06:23:57 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-16 06:24:23 [info     ] temu.cases.done                found=0 search=neon pc case rgb
