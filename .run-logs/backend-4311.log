@@ -5697,3 +5697,18 @@ INFO:     Application startup complete.
 [parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:33:40.749930', None, 5)]
 (Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK Auctions
 2026-05-16 11:34:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
+2026-05-16 11:34:25 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
+2026-05-16 11:34:40 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:34:10.794737', None, 7)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Apex Auctions
+2026-05-16 11:34:45 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2060 6GB sold=None
+2026-05-16 11:34:50 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
+2026-05-16 11:35:10 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:34:40.833477', None, 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK Auctions
+2026-05-16 11:35:13 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+INFO:     127.0.0.1:42952 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-16 11:35:20 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
+2026-05-16 11:35:35 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
