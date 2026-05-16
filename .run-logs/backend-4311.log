@@ -6518,3 +6518,44 @@ INFO:     127.0.0.1:35594 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1"
 2026-05-16 11:52:03 [info     ] facebook.playwright.items      count=0 term=pc need gone
 2026-05-16 11:52:03 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
 2026-05-16 11:52:03 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:52:09 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+2026-05-16 11:52:10 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+2026-05-16 11:52:10 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-16 11:52:11 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:51:41.905536', None, 5)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK Auctions
+2026-05-16 11:52:14 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-16 11:52:14 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-16 11:52:15 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-16 11:52:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=i7%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:52:25 [info     ] facebook.playwright.items      count=0 term=i7 tower
+2026-05-16 11:52:25 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Di7%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 tower title=Facebook
+2026-05-16 11:52:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=i7%20desktop&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:52:28 [warning  ] i-bidder.playwright.no_results term=workstation
+2026-05-16 11:52:28 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-16 11:52:30 [warning  ] Wilsons Auctions.playwright.no_results term=workstation
+2026-05-16 11:52:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 11:52:32 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+2026-05-16 11:52:36 [info     ] facebook.playwright.items      count=0 term=i7 desktop
+2026-05-16 11:52:36 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Di7%2Bdesktop%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 desktop title=Facebook
+2026-05-16 11:52:36 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=ryzen%207%20desktop&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:52:37 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-16 11:52:42 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-16 11:52:45 [debug    ] upgrade_parts.ebay             buy=None part=RX 570 8GB sold=None
+2026-05-16 11:52:48 [info     ] facebook.playwright.items      count=0 term=ryzen 7 desktop
+2026-05-16 11:52:48 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dryzen%2B7%2Bdesktop%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=ryzen 7 desktop title=Facebook
+2026-05-16 11:52:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/search?query=pc%20liquid%20cooler&minPrice=0&maxPrice=500&exact=false
+2026-05-16 11:52:55 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+2026-05-16 11:52:58 [info     ] facebook.playwright.items      count=0 term=pc liquid cooler
+2026-05-16 11:52:59 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fsanfrancisco%2Fsearch%2F%3Fquery%3Dpc%2Bliquid%2Bcooler%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc liquid cooler title=Facebook
+2026-05-16 11:52:59 [info     ] facebook.playwright.done       total=0
+2026-05-16 11:53:00 [warning  ] i-bidder.playwright.no_results term=Lenovo ThinkCentre
+2026-05-16 11:53:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-16 11:53:02 [warning  ] Wilsons Auctions.playwright.no_results term=Lenovo ThinkCentre
+2026-05-16 11:53:02 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 11:53:05 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+2026-05-16 11:53:05 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-16 11:53:09 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
+2026-05-16 11:53:09 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-16 11:53:20 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
