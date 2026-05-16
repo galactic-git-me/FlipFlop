@@ -8149,3 +8149,11 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
 2026-05-16 13:17:32 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
 2026-05-16 13:17:36 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
 2026-05-16 13:17:47 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
+2026-05-16 13:17:49 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-16 13:17:57 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+2026-05-16 13:17:59 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
+2026-05-16 13:18:11 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-16 13:18:21 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-16 13:18:22 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
+2026-05-16 13:18:44 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-16 13:18:44 [info     ] cases_swarm.done               errors=0 found=292 upserted=234
