@@ -6662,3 +6662,22 @@ INFO:     127.0.0.1:35594 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1"
 2026-05-16 11:58:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+case&country=gb&priceFrom=0&priceTo=500
 2026-05-16 11:58:59 [warning  ] Wilsons Auctions.playwright.no_results term=power supply
 2026-05-16 11:58:59 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+case&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 11:59:08 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-16 11:59:12 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-16 11:59:26 [warning  ] i-bidder.playwright.no_results term=pc case
+2026-05-16 11:59:26 [info     ] i-bidder.playwright.done       total=0
+2026-05-16 11:59:31 [warning  ] Wilsons Auctions.playwright.no_results term=pc case
+2026-05-16 11:59:31 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-16 11:59:32 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-16 11:59:47 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-16 11:59:55 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+2026-05-16 11:59:56 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:59:26.342525', None, 10)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=i-bidder
+2026-05-16 12:00:18 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+2026-05-16 12:00:22 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-16 12:00:26 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 11:59:56.384241', None, 9)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Wilsons Auctions
