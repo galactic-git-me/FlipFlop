@@ -478,3 +478,36 @@ INFO:     Application startup complete.
 2026-05-16 16:18:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
 2026-05-16 16:18:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
 2026-05-16 16:18:16 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
+2026-05-16 16:18:25 [warning  ] i-bidder.playwright.no_results term=gaming computer
+2026-05-16 16:18:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:18:27 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-16 16:18:27 [warning  ] Wilsons Auctions.playwright.no_results term=gaming computer
+2026-05-16 16:18:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:18:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+2026-05-16 16:18:35 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 15:18:05.191023', None, 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=eBay UK
+2026-05-16 16:18:41 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
+2026-05-16 16:18:46 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2060 6GB sold=None
+2026-05-16 16:18:54 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+2026-05-16 16:18:58 [warning  ] i-bidder.playwright.no_results term=i7 desktop
+2026-05-16 16:18:58 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:18:58 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-16 16:19:00 [warning  ] Wilsons Auctions.playwright.no_results term=i7 desktop
+2026-05-16 16:19:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:19:03 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+2026-05-16 16:19:21 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-16 16:19:21 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
+2026-05-16 16:19:25 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-16 16:19:26 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+2026-05-16 16:19:30 [warning  ] i-bidder.playwright.no_results term=i5 desktop
+2026-05-16 16:19:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-16 16:19:32 [warning  ] Wilsons Auctions.playwright.no_results term=i5 desktop
+2026-05-16 16:19:32 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-16 16:19:35 [error    ] source.error                   error=(sqlite3.OperationalError) database is locked
+[SQL: UPDATE data_sources SET config=?, listings_found_total=(data_sources.listings_found_total + ?), listings_found_last_run=?, last_scraped_at=?, last_error=? WHERE data_sources.id = ?]
+[parameters: ('{"consecutive_failures": 0}', 0, 0, '2026-05-16 15:19:05.269806', None, 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) source=Facebook Marketplace
+2026-05-16 16:19:38 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
+2026-05-16 16:19:43 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
