@@ -108,6 +108,42 @@ async def list_proposals(
     return out
 
 
+@router.get("/experiments/summary")
+async def experiment_summary(db: AsyncSession = Depends(get_db)):
+    """
+    A/B experiment snapshot from proposal metadata.
+    Reports variant counts and approval rates for playbook evolution proposals.
+    """
+    result = await db.execute(
+        select(PlaybookProposal).where(
+            PlaybookProposal.action == "UPDATE"
+        ).order_by(PlaybookProposal.proposed_at.desc())
+    )
+    rows = result.scalars().all()
+
+    by_variant: dict[str, dict[str, int]] = {}
+    for p in rows:
+        ds = p.demand_signals or {}
+        if ds.get("source") != "playbook_evolution_v1":
+            continue
+        variant = str(ds.get("ab_variant") or "unknown")
+        d = by_variant.setdefault(variant, {"total": 0, "pending": 0, "approved": 0, "rejected": 0})
+        d["total"] += 1
+        if p.status in d:
+            d[p.status] += 1
+
+    summary = {}
+    for variant, stats in by_variant.items():
+        total = stats["total"]
+        approved = stats["approved"]
+        summary[variant] = {
+            **stats,
+            "approval_rate": round((approved / total) * 100, 1) if total else 0.0,
+        }
+
+    return {"variants": summary}
+
+
 @router.get("/{playbook_id}", response_model=PlaybookOut)
 async def get_playbook(playbook_id: int, db: AsyncSession = Depends(get_db)):
     pb = await _get_or_404(playbook_id, db)
@@ -184,6 +220,23 @@ async def approve_proposal(
 
     elif proposal.action == "UPDATE":
         pb = await _get_or_404(proposal.playbook_id, db)
+        # Capture a rollback snapshot before applying update.
+        rollback_snapshot = {
+            "name": pb.name,
+            "description": pb.description,
+            "emoji": pb.emoji,
+            "status": pb.status,
+            "target_use_case": pb.target_use_case,
+            "requirements": pb.requirements,
+            "component_catalogue": pb.component_catalogue,
+            "search_strategy": pb.search_strategy,
+            "upgrade_strategy": pb.upgrade_strategy,
+            "profit_strategy": pb.profit_strategy,
+            "upsell_strategy": pb.upsell_strategy,
+        }
+        ds = dict(proposal.demand_signals or {})
+        ds["rollback_snapshot"] = rollback_snapshot
+        proposal.demand_signals = ds
         for k, v in (proposal.proposed_data or {}).items():
             setattr(pb, k, v)
         await db.flush()
@@ -206,6 +259,53 @@ async def approve_proposal(
 
     log.info("proposal.approved", id=proposal_id, action=proposal.action, playbook_id=pb.id)
     return pb
+
+
+@router.post("/{playbook_id}/rollback-last-update", response_model=ProposalOut, status_code=201)
+async def rollback_last_update(playbook_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Create a pending UPDATE proposal that restores the most recent approved
+    rollback snapshot for this playbook. Human approval is still required.
+    """
+    await _get_or_404(playbook_id, db)
+
+    result = await db.execute(
+        select(PlaybookProposal)
+        .where(
+            PlaybookProposal.playbook_id == playbook_id,
+            PlaybookProposal.action == "UPDATE",
+            PlaybookProposal.status == "approved",
+        )
+        .order_by(PlaybookProposal.resolved_at.desc().nullslast(), PlaybookProposal.id.desc())
+    )
+    proposals = result.scalars().all()
+    snapshot = None
+    for p in proposals:
+        ds = p.demand_signals or {}
+        snap = ds.get("rollback_snapshot")
+        if isinstance(snap, dict) and snap:
+            snapshot = snap
+            break
+
+    if snapshot is None:
+        raise HTTPException(404, detail="No rollback snapshot found for this playbook")
+
+    proposal = PlaybookProposal(
+        action="UPDATE",
+        playbook_id=playbook_id,
+        proposed_data=snapshot,
+        reason="Rollback to last approved playbook snapshot",
+        demand_signals={"source": "manual_rollback"},
+        status="pending",
+    )
+    db.add(proposal)
+    await db.flush()
+    await db.refresh(proposal)
+
+    out = ProposalOut.model_validate(proposal)
+    pb = await _get_or_404(playbook_id, db)
+    out.playbook_name = pb.name
+    return out
 
 
 @router.post("/proposals/{proposal_id}/reject", response_model=ProposalOut)

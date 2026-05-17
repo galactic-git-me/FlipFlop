@@ -8,6 +8,7 @@ from sqlalchemy import select, func, desc
 from app.database import get_db
 from app.models.flip_intelligence import FlipIntelligence
 from app.models.flip import Flip
+from app.models.outcome_event import RetrainCheckpoint
 from app.services import ai_service
 
 router = APIRouter(prefix="/intel", tags=["intel"])
@@ -255,3 +256,26 @@ async def _best_by(db: AsyncSession, column) -> str | None:
     )
     row = result.one_or_none()
     return str(row[0]) if row else None
+
+
+@router.get("/retrain-status")
+async def retrain_status(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(RetrainCheckpoint).where(RetrainCheckpoint.name == "policy")
+    )
+    row = result.scalar_one_or_none()
+    if row is None:
+        return {
+            "checkpoint": "policy",
+            "sold_flips_since": 0,
+            "retrain_ready": False,
+            "last_flip_id": 0,
+            "updated_at": None,
+        }
+    return {
+        "checkpoint": row.name,
+        "sold_flips_since": row.sold_flips_since,
+        "retrain_ready": row.ready,
+        "last_flip_id": row.last_flip_id,
+        "updated_at": row.updated_at.isoformat() if row.updated_at else None,
+    }

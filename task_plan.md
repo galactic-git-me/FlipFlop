@@ -17,11 +17,11 @@
 
 ## Phase 4: Autonomous playbook evolution
 - [x] Nightly playbook proposal generation from sold-flip outcomes
-- [ ] Human-approval lane with rollback + A/B scoring
+- [x] Human-approval lane with rollback + A/B experiment tagging/summary
 
 ## Phase 5: Closed-loop orchestration
 - [x] End-to-end autonomous loop orchestration with checkpoints
-- [ ] Outcome capture + retraining triggers
+- [x] Outcome capture + retraining triggers
 
 ## Current deliverables (this session)
 - Backend telemetry API:

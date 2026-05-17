@@ -73,11 +73,15 @@ async def run_playbook_evolution() -> dict:
                 continue
 
             if delta > 0:
-                suggested = round(target_profit * 1.10, 0)
                 reason = "Sold-flip outcomes are outperforming current target; propose higher target to capture upside."
             else:
-                suggested = round(target_profit * 0.90, 0)
                 reason = "Sold-flip outcomes are underperforming current target; propose conservative recalibration."
+
+            variant = "A" if (pb.id % 2 == 0) else "B"
+            if delta > 0:
+                suggested = round(target_profit * (1.10 if variant == "A" else 1.07), 0)
+            else:
+                suggested = round(target_profit * (0.90 if variant == "A" else 0.93), 0)
 
             new_strategy = dict(strategy)
             new_strategy["target_profit_gbp"] = max(20.0, float(suggested))
@@ -94,6 +98,8 @@ async def run_playbook_evolution() -> dict:
                     "old_target_profit": target_profit,
                     "suggested_target_profit": float(new_strategy["target_profit_gbp"]),
                     "source": "playbook_evolution_v1",
+                    "ab_variant": variant,
+                    "ab_hypothesis": "Variant A applies stronger target shift than Variant B.",
                 },
                 status="pending",
                 proposed_at=datetime.utcnow(),
