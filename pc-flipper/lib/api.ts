@@ -383,7 +383,7 @@ export const api = {
       request<import("./types").PlaybookProposal>(`/playbooks/${id}/rollback-last-update`, { method: "POST" }),
     experimentSummary: () => request<{ variants: Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }> }>("/playbooks/experiments/summary"),
     experimentAttribution: (window_days?: number) =>
-      request<{ window_days: number; variants: Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number }> }>(
+      request<{ window_days: number; variants: Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number; sample_quality: "low" | "medium" | "high" }> }>(
         `/playbooks/experiments/attribution${window_days ? `?window_days=${window_days}` : ""}`,
       ),
   },

@@ -607,7 +607,7 @@ export default function PlaybooksPage() {
   const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [proposals, setProposals] = useState<PlaybookProposal[]>([]);
   const [experimentSummary, setExperimentSummary] = useState<Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }>>({});
-  const [experimentAttribution, setExperimentAttribution] = useState<Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number }>>({});
+  const [experimentAttribution, setExperimentAttribution] = useState<Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number; sample_quality: "low" | "medium" | "high" }>>({});
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("active");
   const [showCreate, setShowCreate] = useState(false);
@@ -799,6 +799,13 @@ export default function PlaybooksPage() {
                   </div>
                   <div className="text-xs text-emerald-300 mt-1">
                     avg profit £{v.avg_profit.toFixed(0)} · ROI {v.avg_roi_pct.toFixed(1)}%
+                  </div>
+                  <div className={`text-[11px] mt-1 ${
+                    v.sample_quality === "high" ? "text-emerald-300"
+                      : v.sample_quality === "medium" ? "text-yellow-300"
+                        : "text-slate-500"
+                  }`}>
+                    sample quality: {v.sample_quality}
                   </div>
                 </div>
               ))}

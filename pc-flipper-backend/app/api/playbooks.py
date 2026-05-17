@@ -200,11 +200,20 @@ async def experiment_attribution(window_days: int = Query(14, ge=7, le=60), db: 
     summary = {}
     for variant, d in by_variant.items():
         flips = max(1.0, d["flip_count"])
+        flip_count = int(d["flip_count"])
+        proposal_windows = int(d["proposal_count"])
+        if flip_count >= 30 and proposal_windows >= 5:
+            quality = "high"
+        elif flip_count >= 10 and proposal_windows >= 2:
+            quality = "medium"
+        else:
+            quality = "low"
         summary[variant] = {
-            "proposal_windows": int(d["proposal_count"]),
-            "attributed_flips": int(d["flip_count"]),
+            "proposal_windows": proposal_windows,
+            "attributed_flips": flip_count,
             "avg_profit": round(d["profit_sum"] / flips, 2),
             "avg_roi_pct": round(d["roi_sum"] / flips, 2),
+            "sample_quality": quality,
         }
 
     return {"window_days": window_days, "variants": summary}
