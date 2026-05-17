@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/empty-state";
 import { DataSource } from "@/lib/types";
-import { api } from "@/lib/api";
+import { api, SearchTelemetryItem, SearchTelemetrySourceSummary } from "@/lib/api";
 import { formatRelativeTime } from "@/lib/utils";
 
 export default function SourcesPage() {
@@ -16,6 +16,9 @@ export default function SourcesPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
   const [scrapingId, setScrapingId] = useState<number | null>(null);
+  const [telemetrySummary, setTelemetrySummary] = useState<Record<string, SearchTelemetrySourceSummary>>({});
+  const [telemetryItems, setTelemetryItems] = useState<Record<string, SearchTelemetryItem[]>>({});
+  const [telemetryLoading, setTelemetryLoading] = useState(true);
   const [newSource, setNewSource] = useState({ name: "", url: "", type: "scrape" as "api" | "scrape" });
 
   const load = async () => {
@@ -32,6 +35,25 @@ export default function SourcesPage() {
 
   useEffect(() => {
     const t = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(t);
+  }, []);
+
+  const loadTelemetry = async () => {
+    setTelemetryLoading(true);
+    try {
+      const data = await api.searchTelemetry.bySource(1200);
+      setTelemetrySummary(data.summary || {});
+      setTelemetryItems(data.items || {});
+    } catch {
+      setTelemetrySummary({});
+      setTelemetryItems({});
+    } finally {
+      setTelemetryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const t = setTimeout(() => { void loadTelemetry(); }, 0);
     return () => clearTimeout(t);
   }, []);
 
@@ -72,6 +94,7 @@ export default function SourcesPage() {
     try {
       await api.sources.trigger(id);
       await load();
+      await loadTelemetry();
     } finally {
       setScrapingId(null);
     }
@@ -130,6 +153,53 @@ export default function SourcesPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardContent className="pt-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm uppercase tracking-wider text-[var(--nf-primary)] font-mono">Search Telemetry</h2>
+            <Button variant="ghost" size="sm" onClick={loadTelemetry} disabled={telemetryLoading}>
+              <RefreshCw className={`w-3.5 h-3.5 ${telemetryLoading ? "animate-spin" : ""}`} />
+              {telemetryLoading ? "Refreshing…" : "Refresh"}
+            </Button>
+          </div>
+          {telemetryLoading ? (
+            <div className="text-xs text-slate-500">Loading telemetry…</div>
+          ) : Object.keys(telemetrySummary).length === 0 ? (
+            <div className="text-xs text-slate-500">No telemetry yet. Run a source scrape first.</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#1e2d45]">
+                    {["Source", "Terms", "Found", "New", "Errors", "Recent Error Terms"].map(h => (
+                      <th key={h} className="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1e2d45]">
+                  {Object.entries(telemetrySummary).map(([source, summary]) => {
+                    const rows = telemetryItems[source] || [];
+                    const recentErrorTerms = rows.filter(r => r.error).slice(-3).map(r => r.term);
+                    return (
+                      <tr key={source} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-3 py-2 text-slate-200 font-medium">{source}</td>
+                        <td className="px-3 py-2 text-slate-300">{summary.terms}</td>
+                        <td className="px-3 py-2 text-slate-300">{summary.found_total}</td>
+                        <td className="px-3 py-2 text-[#00dc82]">{summary.new_total}</td>
+                        <td className={`px-3 py-2 ${summary.errors > 0 ? "text-amber-400" : "text-slate-400"}`}>{summary.errors}</td>
+                        <td className="px-3 py-2 text-xs text-slate-400">
+                          {recentErrorTerms.length > 0 ? recentErrorTerms.join(" · ") : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {loading ? (
         <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">

@@ -141,6 +141,23 @@ export interface ScheduleJob {
   category: "scraping" | "analysis" | "selling" | "maintenance";
 }
 
+export interface SearchTelemetryItem {
+  ts: string;
+  run_id: string | null;
+  source: string | null;
+  term: string;
+  found: number;
+  new: number;
+  error: string | null;
+}
+
+export interface SearchTelemetrySourceSummary {
+  terms: number;
+  found_total: number;
+  new_total: number;
+  errors: number;
+}
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 export function apiUrl(path: string): string {
@@ -202,6 +219,14 @@ export const api = {
       request<unknown>(`/sources/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
     delete: (id: number) => request<void>(`/sources/${id}`, { method: "DELETE" }),
     trigger: (id: number) => request<unknown>(`/sources/${id}/scrape`, { method: "POST" }),
+  },
+
+  searchTelemetry: {
+    recent: (limit?: number) => request<{ items: SearchTelemetryItem[] }>(`/search-telemetry/recent${limit ? `?limit=${limit}` : ""}`),
+    bySource: (limit?: number) =>
+      request<{ summary: Record<string, SearchTelemetrySourceSummary>; items: Record<string, SearchTelemetryItem[]> }>(
+        `/search-telemetry/by-source${limit ? `?limit=${limit}` : ""}`,
+      ),
   },
 
   config: {
