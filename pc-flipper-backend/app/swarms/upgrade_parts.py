@@ -9,6 +9,7 @@ Scrapes current prices for tracked upgrade components from:
     enterprise workstations, not consumer components.  BH will return None until
     the backend runs from a UK IP or behind a UK proxy.)
   - Scan / Overclockers / Box → new retail prices via httpx
+  - Amazon / Temu / AliExpress → additional new retail lanes via Playwright
 
 Architecture:
   - All eBay requests run through a single persistent httpx session sequentially
@@ -124,7 +125,12 @@ TRACKED_PARTS = [
 
 async def run_upgrade_parts_swarm() -> dict:
     log.info("upgrade_parts_swarm.start", total_parts=len(TRACKED_PARTS))
-    stats = {"updated": 0, "errors": 0, "ebay_sold": 0, "ebay_buy": 0, "bh": 0, "scan": 0, "overclockers": 0, "box": 0}
+    stats = {
+        "updated": 0, "errors": 0,
+        "ebay_sold": 0, "ebay_buy": 0, "bh": 0,
+        "scan": 0, "overclockers": 0, "box": 0,
+        "amazon": 0, "temu": 0, "aliexpress": 0,
+    }
 
     # ── Phase 1: eBay — single persistent session, sequential with delays ────
     ebay_sold_map:  dict[str, float | None] = {}
@@ -185,6 +191,20 @@ async def run_upgrade_parts_swarm() -> dict:
         if v and not isinstance(v, Exception):
             stats["box"] += 1
 
+    # ── Phase 3b: Amazon / Temu / AliExpress — concurrent Playwright ─────────
+    amz_r = await asyncio.gather(*[_fetch_amazon(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
+    temu_r = await asyncio.gather(*[_fetch_temu(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
+    ali_r = await asyncio.gather(*[_fetch_aliexpress(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
+    for v in amz_r:
+        if v and not isinstance(v, Exception):
+            stats["amazon"] += 1
+    for v in temu_r:
+        if v and not isinstance(v, Exception):
+            stats["temu"] += 1
+    for v in ali_r:
+        if v and not isinstance(v, Exception):
+            stats["aliexpress"] += 1
+
     # ── Phase 4: Persist ──────────────────────────────────────────────────────
     async with AsyncSessionLocal() as db:
         for i, part_def in enumerate(TRACKED_PARTS):
@@ -197,8 +217,15 @@ async def run_upgrade_parts_swarm() -> dict:
                 oc_new    = oc_r[i]   if not isinstance(oc_r[i], Exception)   else None
                 box_new   = box_r[i]  if not isinstance(box_r[i], Exception)  else None
 
-                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new]):
-                    await _upsert_part(db, part_def, ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new)
+                amz_new   = amz_r[i]  if not isinstance(amz_r[i], Exception)  else None
+                temu_new  = temu_r[i] if not isinstance(temu_r[i], Exception) else None
+                ali_new   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
+
+                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new]):
+                    await _upsert_part(
+                        db, part_def, ebay_used, ebay_sold, bh_refurb,
+                        scan_new, oc_new, box_new, amz_new, temu_new, ali_new,
+                    )
                     stats["updated"] += 1
                 else:
                     log.debug("upgrade_parts.no_price", part=name)
@@ -373,6 +400,122 @@ async def _fetch_box(search_term: str) -> float | None:
         return None
 
 
+# ── Amazon / Temu / AliExpress (Playwright) ──────────────────────────────────
+
+async def _fetch_amazon(search_term: str) -> float | None:
+    return await _fetch_playwright_lowest_price(
+        url=f"https://www.amazon.co.uk/s?k={search_term.replace(' ', '+')}&i=computers",
+        item_selector='[data-component-type="s-search-result"]',
+        title_selector='h2 span, h2',
+        link_selector='h2 a, a.a-link-normal[href*="/dp/"]',
+        price_selector='.a-price-whole',
+        source_name="amazon",
+        max_price=2500.0,
+    )
+
+
+async def _fetch_temu(search_term: str) -> float | None:
+    return await _fetch_playwright_lowest_price(
+        url=f"https://www.temu.com/search_result.html?search_key={search_term.replace(' ', '+')}&search_method=user",
+        item_selector='a[href*="/goods"]',
+        title_selector='h3, h4, p, span',
+        link_selector='a[href*="/goods"]',
+        price_selector='*',
+        source_name="temu",
+        max_price=2500.0,
+    )
+
+
+async def _fetch_aliexpress(search_term: str) -> float | None:
+    return await _fetch_playwright_lowest_price(
+        url=f"https://www.aliexpress.com/wholesale?SearchText={search_term.replace(' ', '+')}&g=y&SortType=price_asc",
+        item_selector='a[href*="/item/"]',
+        title_selector='h1, h2, h3, h4, p, span',
+        link_selector='a[href*="/item/"]',
+        price_selector='*',
+        source_name="aliexpress",
+        max_price=2500.0,
+    )
+
+
+async def _fetch_playwright_lowest_price(
+    *,
+    url: str,
+    item_selector: str,
+    title_selector: str,
+    link_selector: str,
+    price_selector: str,
+    source_name: str,
+    max_price: float,
+) -> float | None:
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        return None
+
+    prices: list[float] = []
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True, args=_STEALTH_ARGS)
+            ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
+            await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+            page = await ctx.new_page()
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            try:
+                await page.wait_for_selector(item_selector, timeout=10000)
+            except Exception:
+                pass
+            await asyncio.sleep(random.uniform(0.8, 1.8))
+            await page.evaluate("window.scrollBy(0, 700)")
+            await asyncio.sleep(0.5)
+            raw = await page.evaluate(
+                """({itemSelector, titleSelector, linkSelector, priceSelector}) => {
+                    const out = [];
+                    const seen = new Set();
+                    const re = /[£$€]\\s*([\\d,]+\\.?\\d*)/;
+                    const nodes = document.querySelectorAll(itemSelector);
+                    nodes.forEach((node) => {
+                        try {
+                            const titleEl = node.matches('a') ? (node.querySelector(titleSelector) || node) : node.querySelector(titleSelector);
+                            const linkEl = node.matches('a') ? node : node.querySelector(linkSelector);
+                            if (!linkEl) return;
+                            let href = linkEl.href || linkEl.getAttribute('href') || '';
+                            if (!href) return;
+                            if (href.startsWith('/')) href = location.origin + href;
+                            const key = href.split('?')[0];
+                            if (seen.has(key)) return;
+                            seen.add(key);
+                            const title = (titleEl ? titleEl.textContent : node.textContent || '').replace(/\\s+/g, ' ').trim();
+                            if (!title || title.length < 4) return;
+                            let price = 0;
+                            const scope = node.matches('a') ? (node.parentElement || node) : node;
+                            scope.querySelectorAll(priceSelector).forEach(el => {
+                                if (price > 0) return;
+                                const txt = (el.textContent || '').trim();
+                                const m = re.exec(txt);
+                                if (m) price = parseFloat(m[1].replace(',', ''));
+                            });
+                            if (price > 0) out.push(price);
+                        } catch (e) {}
+                    });
+                    return out;
+                }""",
+                {
+                    "itemSelector": item_selector,
+                    "titleSelector": title_selector,
+                    "linkSelector": link_selector,
+                    "priceSelector": price_selector,
+                },
+            )
+            await browser.close()
+            prices = [float(p) for p in raw if 1 < float(p) < max_price]
+    except Exception as exc:
+        log.debug("upgrade_parts.playwright_fetch.error", source=source_name, error=str(exc))
+        return None
+
+    return round(sorted(prices)[0], 2) if prices else None
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_price(text: str) -> float:
@@ -389,12 +532,22 @@ async def _upsert_part(
     scan_new: float | None = None,
     overclockers_new: float | None = None,
     box_new: float | None = None,
+    amazon_new: float | None = None,
+    temu_new: float | None = None,
+    aliexpress_new: float | None = None,
 ):
     result = await db.execute(select(Part).where(Part.name == part_def["name"]))
     part = result.scalar_one_or_none()
     now = datetime.utcnow()
 
-    new_prices = {"Scan": scan_new, "Overclockers": overclockers_new, "Box": box_new}
+    new_prices = {
+        "Scan": scan_new,
+        "Overclockers": overclockers_new,
+        "Box": box_new,
+        "Amazon": amazon_new,
+        "Temu": temu_new,
+        "AliExpress": aliexpress_new,
+    }
     valid_new = {k: v for k, v in new_prices.items() if v}
     cheapest_new_source = min(valid_new, key=lambda k: valid_new[k]) if valid_new else None
     cheapest_new = valid_new[cheapest_new_source] if cheapest_new_source else None
