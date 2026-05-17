@@ -171,7 +171,7 @@ async def _run_pipeline(raw, db: AsyncSession) -> Listing:
         src_result = await db.execute(
             select(DataSource).where(DataSource.name.in_(["Manual Submission", "Manual Photo"]))
         )
-        src = src_result.scalar_one_or_none()
+        src = src_result.scalars().first()
         source_id = src.id if src else 0
 
         listing = Listing(
