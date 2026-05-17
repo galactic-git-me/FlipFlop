@@ -15,6 +15,7 @@ from fake_useragent import UserAgent
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
+from app.services.search_telemetry import record_term_result
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -81,10 +82,12 @@ async def _scrape_ebay_accessories(term: str, theme: str, condition_code: str) -
             return items_out
         soup = BeautifulSoup(resp.text, "lxml")
 
-        items = soup.select(".s-card[data-listingid]")
+        items = (
+            soup.select(".s-card[data-listingid]")
+            or soup.select("li.s-item[data-view]")
+            or soup.select(".s-item:not(.s-item--placeholder)")
+        )
         use_new = bool(items)
-        if not items:
-            items = soup.select(".s-item:not(.s-item--placeholder)")
 
         for item in items[:8]:
             try:
@@ -116,7 +119,7 @@ async def _scrape_ebay_accessories(term: str, theme: str, condition_code: str) -
                 if price <= 0 or price > MAX_PRICE:
                     continue
                 url = url_el.get("href", "")
-                if not url.startswith("http"):
+                if not url or "javascript:void(0)" in url:
                     continue
                 items_out.append(RawAccessory(
                     name=title[:200],
@@ -195,11 +198,22 @@ async def run_accessories_swarm() -> dict:
                     search_def["condition"],
                 )
                 stats["found"] += len(results)
+                record_term_result(
+                    source_name="Accessories:eBay",
+                    term=search_def["term"],
+                    found=len(results),
+                    new=0,
+                )
                 for acc in results[:8]:
                     await _upsert_accessory(db, acc)
                     stats["upserted"] += 1
             except Exception as exc:
                 stats["errors"] += 1
+                record_term_result(
+                    source_name="Accessories:eBay",
+                    term=search_def["term"],
+                    error=str(exc),
+                )
                 log.error("accessories.scrape.error", term=search_def["term"], error=str(exc))
 
         await db.commit()

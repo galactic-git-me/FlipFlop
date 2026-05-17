@@ -16,6 +16,7 @@ from fake_useragent import UserAgent
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
+from app.services.search_telemetry import record_term_result
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -129,12 +130,23 @@ async def run_cases_swarm() -> dict:
                             continue
                         cases = await scrape_fn(term, theme_def["theme"])
                         stats["found"] += len(cases)
+                        record_term_result(
+                            source_name=f"Cases:{source['name']}",
+                            term=term,
+                            found=len(cases),
+                            new=0,
+                        )
 
                         for case in cases[:8]:  # Top 8 per search (was 5)
                             await _upsert_case(db, case)
                             stats["upserted"] += 1
                     except Exception as exc:
                         stats["errors"] += 1
+                        record_term_result(
+                            source_name=f"Cases:{source['name']}",
+                            term=term,
+                            error=str(exc),
+                        )
                         log.error("cases.scrape.error", source=source["name"], term=term, error=str(exc))
 
         await db.commit()

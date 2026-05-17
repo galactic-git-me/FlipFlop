@@ -8,6 +8,8 @@ from sqlalchemy import and_, select
 from app.database import AsyncSessionLocal
 from app.models.flip import Flip, FlipStage
 from app.models.playbook import Playbook, PlaybookProposal
+from app.services.demand_service import compute_demand
+from app.services.external_demand import latest_external_signal_snapshot
 
 log = structlog.get_logger(__name__)
 
@@ -42,11 +44,75 @@ async def run_playbook_evolution() -> dict:
         playbooks_result = await db.execute(select(Playbook).where(Playbook.status == "active"))
         playbooks = list(playbooks_result.scalars().all())
 
+        demand_categories = await compute_demand(db)
+        external = await latest_external_signal_snapshot(limit_per_source=15)
+        proposals_created = 0
+
+        # Demand-driven CREATE proposals for missing high-demand archetypes.
+        active_use_cases = {str(pb.target_use_case or "").lower() for pb in playbooks}
+        demand_map = {
+            "Gaming PCs": "gaming",
+            "Workstations": "workstation",
+            "Office Clearance": "office",
+            "HTPC / SFF": "htpc",
+            "Budget Builders": "budget",
+            "No-GPU Flips": "gaming",
+        }
+        for cat in demand_categories:
+            if cat.get("strength") != "High":
+                continue
+            use_case = demand_map.get(cat.get("name", ""))
+            if not use_case or use_case in active_use_cases:
+                continue
+            existing_pending_create = await db.execute(
+                select(PlaybookProposal).where(
+                    and_(
+                        PlaybookProposal.action == "CREATE",
+                        PlaybookProposal.status == "pending",
+                    )
+                )
+            )
+            pending = list(existing_pending_create.scalars().all())
+            if any((p.proposed_data or {}).get("target_use_case") == use_case for p in pending):
+                continue
+
+            proposal = PlaybookProposal(
+                action="CREATE",
+                playbook_id=None,
+                proposed_data={
+                    "name": f"{cat['name']} Auto Playbook",
+                    "emoji": "🧠",
+                    "description": f"Auto-proposed from sustained {cat['strength']} demand in {cat['name']}.",
+                    "status": "candidate",
+                    "target_use_case": use_case,
+                    "requirements": {},
+                    "search_strategy": {"keywords": [], "listing_types": ["buy_it_now", "auction"]},
+                    "upgrade_strategy": {"required": [], "optional": []},
+                    "profit_strategy": {"target_margin_pct": 25, "target_profit_gbp": 90, "sell_platform": "eBay"},
+                    "upsell_strategy": {"accessories": []},
+                },
+                reason=f"Demand engine detected sustained high demand in {cat['name']}; propose candidate playbook.",
+                demand_signals={
+                    "source": "demand_engine_v1",
+                    "category": cat.get("name"),
+                    "count": cat.get("count"),
+                    "gem_count": cat.get("gem_count"),
+                    "trend": cat.get("trend"),
+                    "strength": cat.get("strength"),
+                    "external_summary": external.get("summary", {}),
+                },
+                status="pending",
+                proposed_at=datetime.utcnow(),
+            )
+            db.add(proposal)
+            proposals_created += 1
+            active_use_cases.add(use_case)
+
         if not sold_flips or not playbooks:
-            return {"ok": True, "proposals_created": 0, "reason": "insufficient_data"}
+            await db.commit()
+            return {"ok": True, "proposals_created": proposals_created, "reason": "insufficient_sold_flip_data"}
 
         avg_profit = sum(float(f.actual_profit or 0.0) for f in sold_flips) / max(1, len(sold_flips))
-        proposals_created = 0
 
         for pb in playbooks:
             strategy = dict(pb.profit_strategy or {})

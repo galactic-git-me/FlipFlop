@@ -31,6 +31,7 @@ from sqlalchemy import select
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
+from app.services.search_telemetry import record_term_result
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -151,6 +152,12 @@ async def run_upgrade_parts_swarm() -> dict:
             await asyncio.sleep(random.uniform(1.0, 1.5))
 
             log.debug("upgrade_parts.ebay", part=name, sold=sold, buy=buy)
+            record_term_result(
+                source_name="UpgradeParts:eBay",
+                term=part_def["ebay_search"],
+                found=1 if (sold or buy) else 0,
+                new=0,
+            )
 
     # ── Phase 2: BargainHardware.co.uk via Playwright ────────────────────────
     bh_map: dict[str, float | None] = {}
@@ -169,6 +176,12 @@ async def run_upgrade_parts_swarm() -> dict:
                     stats["bh"] += 1
                     log.debug("upgrade_parts.bh", part=name, price_gbp=price)
                 await asyncio.sleep(random.uniform(0.6, 1.0))
+                record_term_result(
+                    source_name="UpgradeParts:BargainHardware",
+                    term=part_def["bh_search"],
+                    found=1 if price else 0,
+                    new=0,
+                )
             await browser.close()
     except ImportError:
         log.warning("upgrade_parts.playwright_missing")
