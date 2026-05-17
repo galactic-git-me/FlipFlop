@@ -49,6 +49,14 @@ interface HistoryEntry {
   created_at: string;
 }
 
+interface RetrainStatus {
+  checkpoint: string;
+  sold_flips_since: number;
+  retrain_ready: boolean;
+  last_flip_id: number;
+  updated_at: string | null;
+}
+
 const CHART_COLORS = ["#00dc82", "#22d3ee", "#a78bfa", "#f59e0b", "#f43f5e", "#10b981"];
 
 function StatCard({ label, value, sub, icon, color }: { label: string; value: string; sub: string; icon: React.ReactNode; color: string }) {
@@ -83,18 +91,24 @@ export default function IntelPage() {
   const [byPlatform, setByPlatform] = useState<BreakdownRow[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [retrain, setRetrain] = useState<RetrainStatus | null>(null);
+  const [externalDemand, setExternalDemand] = useState<Record<string, { count: number; avg_score: number; avg_confidence: number }>>({});
+  const [multipliers, setMultipliers] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     setLoading(true);
     try {
-      const [sum, src, cpu, plat, recs, hist] = await Promise.all([
+      const [sum, src, cpu, plat, recs, hist, retrainStatus, ext, mult] = await Promise.all([
         api.intel.summary(),
         api.intel.bySource(),
         api.intel.byCpuTier(),
         api.intel.byPlatform(),
         api.intel.recommendations(),
         api.intel.history({ limit: "20" }),
+        api.intel.retrainStatus(),
+        api.demand.externalSignals(12),
+        api.demand.pricingMultipliers(),
       ]);
       setSummary(sum);
       setBySource(src as BreakdownRow[]);
@@ -102,6 +116,9 @@ export default function IntelPage() {
       setByPlatform(plat as BreakdownRow[]);
       setRecommendations(recs as Recommendation[]);
       setHistory(hist as HistoryEntry[]);
+      setRetrain(retrainStatus as RetrainStatus);
+      setExternalDemand((ext as { summary: Record<string, { count: number; avg_score: number; avg_confidence: number }> }).summary || {});
+      setMultipliers((mult as { multipliers: Record<string, number> }).multipliers || {});
     } catch {
       setSummary(null);
     } finally {
@@ -149,7 +166,7 @@ export default function IntelPage() {
       ) : (
         <>
           {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4">
             <StatCard label="Total Flips" value={(summary?.total_flips ?? 0).toString()} sub="completed" icon={<Gem className="w-4 h-4" />} color="text-slate-300" />
             <StatCard label="Total Profit" value={formatCurrency(summary?.total_profit ?? 0)} sub="all time" icon={<TrendingUp className="w-4 h-4" />} color="text-[#00dc82]" />
             <StatCard label="Avg Profit" value={formatCurrency(summary?.avg_profit ?? 0)} sub="per flip" icon={<Award className="w-4 h-4" />} color="text-[#00dc82]" />
@@ -162,7 +179,45 @@ export default function IntelPage() {
               icon={<Zap className="w-4 h-4" />}
               color="text-purple-400"
             />
+            <StatCard
+              label="Retrain Status"
+              value={retrain?.retrain_ready ? "READY" : "Collecting"}
+              sub={`${retrain?.sold_flips_since ?? 0} sold since checkpoint`}
+              icon={<Brain className="w-4 h-4" />}
+              color={retrain?.retrain_ready ? "text-emerald-400" : "text-slate-300"}
+            />
+            <StatCard
+              label="AM5 Multiplier"
+              value={`${((multipliers.motherboard_am5 ?? 1) * 100).toFixed(0)}%`}
+              sub="demand-adjusted pricing"
+              icon={<TrendingUp className="w-4 h-4" />}
+              color="text-cyan-400"
+            />
           </div>
+
+          {/* External signal pulse */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-3.5 h-3.5 text-cyan-400" /> External Demand Signals
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {Object.entries(externalDemand).length === 0 ? (
+                  <div className="text-xs text-slate-600">No external signals yet.</div>
+                ) : (
+                  Object.entries(externalDemand).map(([source, s]) => (
+                    <div key={source} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
+                      <div className="text-xs uppercase tracking-wider text-slate-500">{source.replace("_", " ")}</div>
+                      <div className="text-lg font-semibold text-slate-200 mt-1">{s.count} signals</div>
+                      <div className="text-xs text-slate-500 mt-1">score {s.avg_score.toFixed(1)} · conf {(s.avg_confidence * 100).toFixed(0)}%</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Charts row */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">

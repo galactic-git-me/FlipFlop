@@ -259,6 +259,14 @@ export const api = {
     byPlatform: () => request<{ platform: string; count: number; avg_profit: number }[]>("/intel/by-platform"),
     history: (params?: Record<string, string>) => request<unknown[]>(`/intel/history${qs(params)}`),
     recommendations: () => request<{ insight: string; action: string; confidence: number }[]>("/intel/recommendations"),
+    retrainStatus: () =>
+      request<{
+        checkpoint: string;
+        sold_flips_since: number;
+        retrain_ready: boolean;
+        last_flip_id: number;
+        updated_at: string | null;
+      }>("/intel/retrain-status"),
   },
 
   chat: {
@@ -304,6 +312,19 @@ export const api = {
     categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
     auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
     summary: () => request<import("./types").DemandSummary>("/demand/summary"),
+    externalSignals: (limit_per_source?: number) =>
+      request<{ summary: Record<string, { count: number; avg_score: number; avg_confidence: number }>; items: Record<string, unknown[]> }>(
+        `/demand/external-signals${limit_per_source ? `?limit_per_source=${limit_per_source}` : ""}`,
+      ),
+    refreshExternalSignals: () => request<{ ok: boolean; inserted: number; topics: number; signals: number }>("/demand/external-signals/refresh", { method: "POST" }),
+    pricingMultipliers: () =>
+      request<{
+        window_days: number;
+        external_window_days: number;
+        internal_counts: Record<string, number>;
+        external_topic_strength: Record<string, number>;
+        multipliers: Record<string, number>;
+      }>("/demand/pricing-multipliers"),
   },
 
   facebook: {
@@ -358,5 +379,8 @@ export const api = {
           body: JSON.stringify({ approved: false, rejection_reason: reason }),
         }),
     },
+    rollbackLastUpdate: (id: number) =>
+      request<import("./types").PlaybookProposal>(`/playbooks/${id}/rollback-last-update`, { method: "POST" }),
+    experimentSummary: () => request<{ variants: Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }> }>("/playbooks/experiments/summary"),
   },
 };
