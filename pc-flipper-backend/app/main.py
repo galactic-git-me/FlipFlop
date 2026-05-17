@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.database import engine, Base
+from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry

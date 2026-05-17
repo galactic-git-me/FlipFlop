@@ -3,8 +3,8 @@
 ## Phase 1: Data reliability + observability (in progress)
 - [x] Add per-term search telemetry capture during scrape runs
 - [x] Add API endpoints to inspect telemetry by source and term
-- [ ] Add frontend diagnostics panel for source/term result quality
-- [ ] Add persistent telemetry storage (DB table + retention policy)
+- [x] Add frontend diagnostics panel for source/term result quality
+- [x] Add persistent telemetry storage (DB table + retention policy)
 - [ ] Add source health scoring + auto backoff policy
 
 ## Phase 2: Demand intelligence

@@ -6,6 +6,7 @@ from app.models.search_config import SearchConfig
 from app.models.price_history import PriceHistory
 from app.models.flip_intelligence import FlipIntelligence
 from app.models.app_settings import AppSettings
+from app.models.search_telemetry import SearchTelemetry
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -16,4 +17,5 @@ __all__ = [
     "PriceHistory",
     "FlipIntelligence",
     "AppSettings",
+    "SearchTelemetry",
 ]
