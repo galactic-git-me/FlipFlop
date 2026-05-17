@@ -4,6 +4,7 @@ Searches ALL enabled sources simultaneously (async parallel), classifies, scores
 """
 import asyncio
 import structlog
+import re
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
@@ -29,6 +30,13 @@ from app.services.source_health import (
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
 _DB_WRITE_LOCK = asyncio.Lock()
+
+
+def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
+    t = re.sub(r"[^a-z0-9]+", " ", (title or "").lower()).strip()
+    t = " ".join(t.split()[:8])
+    p = int(round(float(price or 0)))
+    return f"{t}|{cpu or ''}|{gpu or ''}|{p}"
 
 
 async def run_flip_opportunities_swarm() -> dict:
@@ -213,13 +221,16 @@ async def _upsert_listings(
     new_gems = 0
 
     for raw in raw_listings:
+        specs = parse_specs(raw.title, raw.description)
         with db.no_autoflush:
+            fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu)
             existing = await db.execute(
-                select(Listing).where(Listing.external_id == raw.external_id)
+                select(Listing).where(
+                    (Listing.external_id == raw.external_id) |
+                    (Listing.dedupe_fingerprint == fp)
+                )
             )
             listing = existing.scalar_one_or_none()
-
-        specs = parse_specs(raw.title, raw.description)
 
         if not _passes_filter(raw.price, specs, config, title=raw.title):
             continue
@@ -307,6 +318,7 @@ async def _upsert_listings(
         else:
             listing = Listing(
                 external_id=raw.external_id,
+                dedupe_fingerprint=fp,
                 source_id=source_id,
                 source_name=raw.source_name,
                 title=raw.title,
@@ -344,6 +356,8 @@ async def _upsert_listings(
                 listed_at=raw.listed_at,
             )
             db.add(listing)
+        if listing and not listing.dedupe_fingerprint:
+            listing.dedupe_fingerprint = fp
             if score_result.classification in (Classification.amazing_gem, Classification.gem):
                 new_gems += 1
 

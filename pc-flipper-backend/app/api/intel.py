@@ -17,6 +17,7 @@ from app.services.retraining_pipeline import (
     rollback_to_previous_active,
     run_retraining_if_ready,
 )
+from app.api.deps import require_operator
 
 router = APIRouter(prefix="/intel", tags=["intel"])
 
@@ -289,7 +290,7 @@ async def retrain_status(db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/models/retrain")
-async def retrain_now():
+async def retrain_now(_: None = Depends(require_operator)):
     return await run_retraining_if_ready(triggered_by="manual")
 
 
@@ -304,10 +305,10 @@ async def model_runs(limit: int = 30):
 
 
 @router.post("/models/{version}/promote")
-async def promote(version: str):
+async def promote(version: str, _: None = Depends(require_operator)):
     return await promote_model_version(version)
 
 
 @router.post("/models/rollback")
-async def rollback():
+async def rollback(_: None = Depends(require_operator)):
     return await rollback_to_previous_active()

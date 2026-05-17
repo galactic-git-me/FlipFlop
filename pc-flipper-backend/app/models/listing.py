@@ -27,6 +27,7 @@ class Listing(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     external_id: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    dedupe_fingerprint: Mapped[str | None] = mapped_column(String(255), index=True)
     source_id: Mapped[int] = mapped_column(Integer, index=True)
     source_name: Mapped[str] = mapped_column(String(100))
 

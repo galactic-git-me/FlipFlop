@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     auto_buy_daily_limit: int = 3
 
     frontend_url: str = "http://localhost:3000"
+    admin_api_key: str = ""
 
     class Config:
         env_file = ".env"

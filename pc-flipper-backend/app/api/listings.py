@@ -9,6 +9,20 @@ from app.schemas.listing import ListingOut, ListingFilter
 router = APIRouter(prefix="/listings", tags=["listings"])
 
 
+def _build_gem_explainer(listing: Listing) -> str:
+    signals = listing.gem_signals or []
+    top = ", ".join(signals[:3]) if signals else "baseline value opportunity"
+    risks = []
+    if listing.seller_type in {"private", None}:
+        risks.append("private seller risk")
+    if listing.listing_type == "auction":
+        risks.append("auction final price can drift")
+    if listing.resale_comp_count is not None and listing.resale_comp_count < 3:
+        risks.append("limited sold comps")
+    risk_text = f" Risks: {', '.join(risks)}." if risks else ""
+    return f"Flagged for {top}.{risk_text}"
+
+
 @router.get("/", response_model=list[ListingOut])
 async def get_listings(
     classification: Classification | None = Query(None),
@@ -46,7 +60,13 @@ async def get_listings(
     q = q.offset(offset).limit(limit)
 
     result = await db.execute(q)
-    return result.scalars().all()
+    rows = result.scalars().all()
+    out = []
+    for r in rows:
+        item = ListingOut.model_validate(r).model_dump()
+        item["gem_explainer"] = _build_gem_explainer(r)
+        out.append(item)
+    return out
 
 
 @router.get("/stats")
@@ -75,7 +95,9 @@ async def get_listing(listing_id: int, db: AsyncSession = Depends(get_db)):
     listing = await db.get(Listing, listing_id)
     if not listing:
         raise HTTPException(404, "Listing not found")
-    return listing
+    item = ListingOut.model_validate(listing).model_dump()
+    item["gem_explainer"] = _build_gem_explainer(listing)
+    return item
 
 
 @router.patch("/{listing_id}/status")

@@ -56,6 +56,8 @@ interface RetrainStatus {
   last_flip_id: number;
   updated_at: string | null;
 }
+interface ModelVersionRow { version: string; status: string; score_profit_mae?: number; score_roi_mae?: number; trained_on_samples?: number; created_at?: string }
+interface TrainingRunRow { status: string; started_at?: string; finished_at?: string; message?: string; version_produced?: string }
 
 const CHART_COLORS = ["#00dc82", "#22d3ee", "#a78bfa", "#f59e0b", "#f43f5e", "#10b981"];
 
@@ -94,12 +96,14 @@ export default function IntelPage() {
   const [retrain, setRetrain] = useState<RetrainStatus | null>(null);
   const [externalDemand, setExternalDemand] = useState<Record<string, { count: number; avg_score: number; avg_confidence: number }>>({});
   const [multipliers, setMultipliers] = useState<Record<string, number>>({});
+  const [modelVersions, setModelVersions] = useState<ModelVersionRow[]>([]);
+  const [trainingRuns, setTrainingRuns] = useState<TrainingRunRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     setLoading(true);
     try {
-      const [sum, src, cpu, plat, recs, hist, retrainStatus, ext, mult] = await Promise.all([
+      const [sum, src, cpu, plat, recs, hist, retrainStatus, ext, mult, versions, runs] = await Promise.all([
         api.intel.summary(),
         api.intel.bySource(),
         api.intel.byCpuTier(),
@@ -109,6 +113,8 @@ export default function IntelPage() {
         api.intel.retrainStatus(),
         api.demand.externalSignals(12),
         api.demand.pricingMultipliers(),
+        api.intel.modelVersions(6),
+        api.intel.modelRuns(6),
       ]);
       setSummary(sum);
       setBySource(src as BreakdownRow[]);
@@ -119,6 +125,8 @@ export default function IntelPage() {
       setRetrain(retrainStatus as RetrainStatus);
       setExternalDemand((ext as { summary: Record<string, { count: number; avg_score: number; avg_confidence: number }> }).summary || {});
       setMultipliers((mult as { multipliers: Record<string, number> }).multipliers || {});
+      setModelVersions(((versions as { items: ModelVersionRow[] }).items || []));
+      setTrainingRuns(((runs as { items: TrainingRunRow[] }).items || []));
     } catch {
       setSummary(null);
     } finally {
@@ -215,6 +223,36 @@ export default function IntelPage() {
                     </div>
                   ))
                 )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-3.5 h-3.5 text-emerald-400" /> Model Registry
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
+                  <div className="text-xs uppercase tracking-wider text-slate-500 mb-2">Recent Versions</div>
+                  {modelVersions.length === 0 ? <div className="text-xs text-slate-600">No versions yet</div> : modelVersions.map((v) => (
+                    <div key={v.version} className="text-xs text-slate-300 flex items-center justify-between py-1 border-b border-[#142033] last:border-0">
+                      <span>{v.version} · {v.status}</span>
+                      <span className="text-slate-500">MAE £{(v.score_profit_mae ?? 0).toFixed(1)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
+                  <div className="text-xs uppercase tracking-wider text-slate-500 mb-2">Recent Training Runs</div>
+                  {trainingRuns.length === 0 ? <div className="text-xs text-slate-600">No runs yet</div> : trainingRuns.map((r, idx) => (
+                    <div key={`${r.started_at ?? "run"}-${idx}`} className="text-xs text-slate-300 py-1 border-b border-[#142033] last:border-0">
+                      <div>{r.status} {r.version_produced ? `· ${r.version_produced}` : ""}</div>
+                      <div className="text-slate-500">{r.message || "—"}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>

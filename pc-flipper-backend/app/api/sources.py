@@ -4,6 +4,7 @@ from sqlalchemy import select
 from app.database import get_db, AsyncSessionLocal
 from app.models.source import DataSource
 from app.schemas.source import DataSourceOut, DataSourceCreate, DataSourceUpdate
+from app.services.source_health import compute_health_score
 
 router = APIRouter(prefix="/sources", tags=["sources"])
 
@@ -12,6 +13,30 @@ router = APIRouter(prefix="/sources", tags=["sources"])
 async def get_sources(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(DataSource).order_by(DataSource.name))
     return result.scalars().all()
+
+
+@router.get("/health")
+async def source_health(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(DataSource).order_by(DataSource.name))
+    rows = result.scalars().all()
+    items = []
+    for s in rows:
+        cfg = dict(s.config or {})
+        score = int(cfg.get("health_score") or compute_health_score(cfg))
+        items.append(
+            {
+                "id": s.id,
+                "name": s.name,
+                "enabled": s.enabled,
+                "health_score": score,
+                "consecutive_failures": int(cfg.get("consecutive_failures", 0) or 0),
+                "zero_results_streak": int(cfg.get("zero_results_streak", 0) or 0),
+                "cooldown_until": cfg.get("cooldown_until"),
+                "last_error": s.last_error,
+            }
+        )
+    avg = round(sum(i["health_score"] for i in items) / len(items), 1) if items else 0.0
+    return {"avg_health_score": avg, "items": items}
 
 
 @router.post("/", response_model=DataSourceOut, status_code=201)

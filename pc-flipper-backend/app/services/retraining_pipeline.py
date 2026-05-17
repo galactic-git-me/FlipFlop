@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 import json
+import statistics
 
 import structlog
 from sqlalchemy import desc, select
@@ -10,6 +11,7 @@ from app.database import AsyncSessionLocal
 from app.models.flip_intelligence import FlipIntelligence
 from app.models.model_registry import ModelVersion, TrainingRun
 from app.models.outcome_event import RetrainCheckpoint
+from app.services.alerts import emit_alert
 
 log = structlog.get_logger(__name__)
 
@@ -45,8 +47,16 @@ async def run_retraining_if_ready(triggered_by: str = "scheduler") -> dict:
             await db.commit()
             return {"ok": False, "reason": "insufficient_samples", "samples": len(samples), "run_id": run.id}
 
-        mae_profit = sum(abs(float(s.profit or 0.0)) for s in samples) / len(samples) * 0.18
-        mae_roi = sum(abs(float(s.roi_pct or 0.0)) for s in samples) / len(samples) * 0.12
+        split = max(5, int(len(samples) * 0.2))
+        holdout = samples[:split]
+        train = samples[split:]
+        train_profit_values = [float(s.profit or 0.0) for s in train] or [0.0]
+        train_roi_values = [float(s.roi_pct or 0.0) for s in train] or [0.0]
+        baseline_profit = statistics.median(train_profit_values)
+        baseline_roi = statistics.median(train_roi_values)
+
+        mae_profit = sum(abs(float(s.profit or 0.0) - baseline_profit) for s in holdout) / max(1, len(holdout))
+        mae_roi = sum(abs(float(s.roi_pct or 0.0) - baseline_roi) for s in holdout) / max(1, len(holdout))
 
         version = _mk_version()
         artifact = f"/tmp/flipflop-models/policy-{version}.json"
@@ -58,7 +68,13 @@ async def run_retraining_if_ready(triggered_by: str = "scheduler") -> dict:
             score_roi_mae=round(mae_roi, 4),
             trained_on_samples=len(samples),
             artifact_path=artifact,
-            notes=json.dumps({"triggered_by": triggered_by}),
+            notes=json.dumps(
+                {
+                    "triggered_by": triggered_by,
+                    "validation": "holdout_median_baseline",
+                    "holdout_size": len(holdout),
+                }
+            ),
         )
         db.add(model)
 
@@ -74,6 +90,12 @@ async def run_retraining_if_ready(triggered_by: str = "scheduler") -> dict:
         await db.commit()
 
     log.info("retraining.run.done", version=version, samples=len(samples))
+    await emit_alert(
+        code="model_ready_to_promote",
+        source="retraining",
+        severity="info",
+        message=f"New model candidate {version} trained on {len(samples)} samples and is ready for promotion.",
+    )
     return {"ok": True, "version": version, "samples": len(samples), "run_id": run.id}
 
 

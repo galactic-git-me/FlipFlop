@@ -215,6 +215,7 @@ export const api = {
 
   sources: {
     list: () => request<unknown[]>("/sources"),
+    health: () => request<{ avg_health_score: number; items: unknown[] }>("/sources/health"),
     create: (data: Record<string, unknown>) =>
       request<unknown>("/sources", { method: "POST", body: JSON.stringify(data) }),
     update: (id: number, data: Record<string, unknown>) =>
@@ -267,6 +268,8 @@ export const api = {
         last_flip_id: number;
         updated_at: string | null;
       }>("/intel/retrain-status"),
+    modelVersions: (limit = 20) => request<{ items: unknown[] }>(`/intel/models/versions?limit=${limit}`),
+    modelRuns: (limit = 30) => request<{ items: unknown[] }>(`/intel/models/runs?limit=${limit}`),
   },
 
   chat: {
@@ -288,6 +291,11 @@ export const api = {
     toggle: (id: string) => request<{ ok: boolean; enabled: boolean }>(`/schedule/${id}/toggle`, { method: "POST" }),
     run: (id: string) => request<{ ok: boolean; status: "success" | "failed"; duration_ms: number }>(`/schedule/${id}/run`, { method: "POST" }),
     runs: (id: string) => request<ScheduleRun[]>(`/schedule/${id}/runs`),
+  },
+
+  alerts: {
+    list: (limit = 100, includeAcked = false) => request<unknown[]>(`/alerts?limit=${limit}&include_acked=${includeAcked ? "true" : "false"}`),
+    ack: (id: number) => request<{ ok: boolean }>(`/alerts/${id}/ack`, { method: "POST" }),
   },
 
   manual: {

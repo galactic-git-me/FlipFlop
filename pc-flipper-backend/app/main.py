@@ -10,6 +10,7 @@ from app import models as _models  # noqa: F401  Ensures all ORM models are regi
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry
+from app.api import alerts
 from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
@@ -100,6 +101,7 @@ app.include_router(schedule.router, prefix="/api")
 app.include_router(search_telemetry.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
+app.include_router(alerts.router, prefix="/api")
 
 
 @app.get("/health")
@@ -130,6 +132,7 @@ async def _migrate_add_columns():
         # Playbook + demand fit (added with playbook system)
         ("listings", "playbook_match",        "VARCHAR(200)"),
         ("listings", "demand_fit",            "VARCHAR(20)"),
+        ("listings", "dedupe_fingerprint",    "VARCHAR(255)"),
         # Playbook upsell strategy
         ("playbooks", "upsell_strategy",      "JSON"),
     ]

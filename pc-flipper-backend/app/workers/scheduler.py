@@ -17,6 +17,7 @@ from app.services.playbook_evolution import run_playbook_evolution
 from app.services.autonomous_loop import run_autonomous_cycle
 from app.services.outcome_capture import capture_outcomes_and_check_retrain
 from app.services.retraining_pipeline import run_retraining_if_ready
+from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -74,6 +75,15 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
     except Exception as exc:
         finished = datetime.now(timezone.utc)
         _push_history(job_id, "failed", started, finished, str(exc))
+        try:
+            await emit_alert(
+                code="job_failed",
+                source=job_id,
+                severity="critical",
+                message=f"Scheduled job '{job_id}' failed: {exc}",
+            )
+        except Exception:
+            pass
         raise
     finally:
         _running_jobs.discard(job_id)
@@ -194,6 +204,16 @@ def start_scheduler():
         id="model_retraining",
         name="Model Retraining",
         kwargs={"job_id": "model_retraining", "fn": run_retraining_if_ready},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=model_retraining_start,
+    )
+
+    scheduler.add_job(
+        check_stale_retrain_checkpoint,
+        trigger=IntervalTrigger(hours=6),
+        id="retrain_checkpoint_watchdog",
+        name="Retrain Checkpoint Watchdog",
         replace_existing=True,
         max_instances=1,
         next_run_time=model_retraining_start,

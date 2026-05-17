@@ -10,6 +10,7 @@ from app.models.search_telemetry import SearchTelemetry
 from app.models.external_demand_signal import ExternalDemandSignal
 from app.models.outcome_event import OutcomeEvent, RetrainCheckpoint
 from app.models.model_registry import ModelVersion, TrainingRun
+from app.models.alert_event import AlertEvent
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -26,4 +27,5 @@ __all__ = [
     "RetrainCheckpoint",
     "ModelVersion",
     "TrainingRun",
+    "AlertEvent",
 ]

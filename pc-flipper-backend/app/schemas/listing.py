@@ -7,6 +7,7 @@ from app.models.listing import Classification, ListingStatus
 class ListingOut(BaseModel):
     id: int
     external_id: str
+    dedupe_fingerprint: Optional[str] = None
     source_name: str
     title: str
     price: float
@@ -24,6 +25,7 @@ class ListingOut(BaseModel):
     gem_score: float
     classification: Classification
     gem_signals: list[str]
+    gem_explainer: Optional[str] = None
     # Resale range (market price low / median / high)
     estimated_resale: Optional[float]    # median — the anchor
     resale_low: Optional[float]          # 25th-pct or −12 %

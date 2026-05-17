@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from apscheduler.triggers.interval import IntervalTrigger
 
 from app.workers.scheduler import (
@@ -10,6 +10,7 @@ from app.workers.scheduler import (
     set_job_enabled,
     trigger_swarm,
 )
+from app.api.deps import require_operator
 
 router = APIRouter(prefix="/schedule", tags=["schedule"])
 
@@ -27,6 +28,8 @@ def _job_category(job_id: str) -> str:
         return "analysis"
     if job_id == "model_retraining":
         return "analysis"
+    if job_id == "retrain_checkpoint_watchdog":
+        return "maintenance"
     return "maintenance"
 
 _JOB_DESCRIPTIONS: dict[str, str] = {
@@ -39,6 +42,7 @@ _JOB_DESCRIPTIONS: dict[str, str] = {
     "autonomous_cycle": "Runs end-to-end autonomous loop (sourcing, external demand ingestion, playbook evolution).",
     "outcome_capture": "Captures sold outcomes and raises retrain-ready checkpoints once enough new results accumulate.",
     "model_retraining": "Trains candidate model versions when checkpoint thresholds are met, with promote/rollback support.",
+    "retrain_checkpoint_watchdog": "Raises alerts when retrain checkpoints stay ready too long without training/promotion.",
 }
 
 
@@ -88,7 +92,7 @@ async def list_schedule_jobs():
 
 
 @router.post("/{job_id}/toggle")
-async def toggle_schedule_job(job_id: str):
+async def toggle_schedule_job(job_id: str, _: None = Depends(require_operator)):
     scheduler = get_scheduler()
     job = scheduler.get_job(job_id)
     if not job:
@@ -100,7 +104,7 @@ async def toggle_schedule_job(job_id: str):
 
 
 @router.post("/{job_id}/run")
-async def run_schedule_job(job_id: str):
+async def run_schedule_job(job_id: str, _: None = Depends(require_operator)):
     started = datetime.utcnow()
     await trigger_swarm(job_id)
     finished = datetime.utcnow()
