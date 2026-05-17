@@ -7,6 +7,7 @@ from app.models.price_history import PriceHistory
 from app.models.flip_intelligence import FlipIntelligence
 from app.models.app_settings import AppSettings
 from app.models.search_telemetry import SearchTelemetry
+from app.models.external_demand_signal import ExternalDemandSignal
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -18,4 +19,5 @@ __all__ = [
     "FlipIntelligence",
     "AppSettings",
     "SearchTelemetry",
+    "ExternalDemandSignal",
 ]

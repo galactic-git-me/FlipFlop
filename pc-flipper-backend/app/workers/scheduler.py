@@ -12,6 +12,7 @@ from app.swarms.flip_opportunities import run_flip_opportunities_swarm
 from app.swarms.upgrade_parts import run_upgrade_parts_swarm
 from app.swarms.cases import run_cases_swarm
 from app.swarms.accessories import run_accessories_swarm
+from app.services.external_demand import ingest_external_demand_signals
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -23,6 +24,7 @@ _job_history: dict[str, deque[dict]] = {
     "upgrade_parts": deque(maxlen=50),
     "cases": deque(maxlen=50),
     "accessories": deque(maxlen=50),
+    "external_demand": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 
@@ -84,6 +86,7 @@ def start_scheduler():
     upgrade_start = now + timedelta(minutes=5)
     cases_start = now + timedelta(minutes=10)
     accessories_start = now + timedelta(minutes=15)
+    external_demand_start = now + timedelta(minutes=20)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -129,6 +132,17 @@ def start_scheduler():
         next_run_time=accessories_start,   # stagger writes to avoid SQLite contention
     )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=2),
+        id="external_demand",
+        name="External Demand Signals",
+        kwargs={"job_id": "external_demand", "fn": ingest_external_demand_signals},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=external_demand_start,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -150,6 +164,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("cases", run_cases_swarm)
     if swarm_id == "accessories":
         return await _run_job_with_history("accessories", run_accessories_swarm)
+    if swarm_id == "external_demand":
+        return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 

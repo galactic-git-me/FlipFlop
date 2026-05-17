@@ -10,6 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.services.demand_service import compute_demand, compute_auction_intel
+from app.services.external_demand import latest_external_signal_snapshot, ingest_external_demand_signals
+from app.services.demand_pricing import compute_demand_pricing_multipliers
 
 router = APIRouter(prefix="/demand", tags=["demand"])
 
@@ -68,3 +70,18 @@ async def get_demand_summary(db: AsyncSession = Depends(get_db)):
         "categories": categories,
         "ending_soon_auctions": len([a for a in auctions if a["urgency"] == "ending_soon"]),
     }
+
+
+@router.get("/external-signals")
+async def get_external_signals(limit_per_source: int = Query(25, ge=1, le=100)):
+    return await latest_external_signal_snapshot(limit_per_source=limit_per_source)
+
+
+@router.post("/external-signals/refresh")
+async def refresh_external_signals():
+    return await ingest_external_demand_signals()
+
+
+@router.get("/pricing-multipliers")
+async def get_pricing_multipliers(db: AsyncSession = Depends(get_db)):
+    return await compute_demand_pricing_multipliers(db)

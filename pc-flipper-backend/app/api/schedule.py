@@ -17,7 +17,7 @@ router = APIRouter(prefix="/schedule", tags=["schedule"])
 def _job_category(job_id: str) -> str:
     if job_id == "flip_opportunities":
         return "sourcing"
-    if job_id in {"upgrade_parts", "cases", "accessories"}:
+    if job_id in {"upgrade_parts", "cases", "accessories", "external_demand"}:
         return "scraping"
     return "maintenance"
 
@@ -26,6 +26,7 @@ _JOB_DESCRIPTIONS: dict[str, str] = {
     "upgrade_parts": "Refreshes component pricing from sold comps and retail references for build-cost accuracy.",
     "cases": "Updates themed case catalogue pricing and availability from supported sources.",
     "accessories": "Updates accessory pricing and inventory candidates used for upsell opportunities.",
+    "external_demand": "Collects external demand signals (Reddit + scaffolded Google Trends/Steam) for playbook intelligence.",
 }
 
 

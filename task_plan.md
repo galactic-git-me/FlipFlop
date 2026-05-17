@@ -5,11 +5,11 @@
 - [x] Add API endpoints to inspect telemetry by source and term
 - [x] Add frontend diagnostics panel for source/term result quality
 - [x] Add persistent telemetry storage (DB table + retention policy)
-- [ ] Add source health scoring + auto backoff policy
+- [x] Add source health scoring + auto backoff policy
 
 ## Phase 2: Demand intelligence
-- [ ] Integrate external demand signals (Google Trends, Reddit, Steam)
-- [ ] Build demand-normalized pricing multipliers per component tier
+- [x] Integrate external demand signals scaffold (Reddit live + Google Trends/Steam adapters stubbed)
+- [x] Build demand-normalized pricing multipliers per component tier
 
 ## Phase 3: Compatibility intelligence
 - [ ] Explicit compatibility graph (socket/chipset/memory/PSU/headroom)

@@ -20,6 +20,11 @@ from app.services.resale_scraper import get_resale_range, clear_cache, get_expec
 from app.services.component_pricer import clear_component_cache
 from app.services import scan_state
 from app.services.search_telemetry import begin_source_run, end_source_run
+from app.services.source_health import (
+    apply_error,
+    apply_success,
+    should_skip_due_to_cooldown,
+)
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
@@ -116,6 +121,13 @@ async def _scan_source(source, search_terms: list, config) -> dict:
     result = {"scanned": 0, "found": 0, "gems": 0}
 
     try:
+        src_cfg_pre = dict((source.config or {}))
+        skip, reason = should_skip_due_to_cooldown(src_cfg_pre)
+        if skip:
+            scan_state.site_done(source.name, 0, 0)
+            log.info("source.skipped", source=source.name, reason=reason)
+            return result
+
         begin_source_run(source.name)
         raw_listings = await fetch_listings(
             source_name=source.name,
@@ -135,7 +147,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
 
                 source_row = await db.get(DataSource, source.id)
                 src_cfg = dict((source_row.config or {})) if source_row else {}
-                src_cfg["consecutive_failures"] = 0
+                src_cfg = apply_success(src_cfg, len(raw_listings))
 
                 await db.execute(
                     update(DataSource)
@@ -162,7 +174,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                 source_row = await db.get(DataSource, source.id)
                 src_cfg = dict((source_row.config or {})) if source_row else {}
                 failures = int(src_cfg.get("consecutive_failures", 0)) + 1
-                src_cfg["consecutive_failures"] = failures
+                src_cfg = apply_error(src_cfg, failures)
                 auto_disabled = failures >= SOURCE_FAILURE_THRESHOLD
                 err_msg = str(exc)
                 if auto_disabled:
