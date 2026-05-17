@@ -1043,16 +1043,21 @@ async def _scrape_auction_site(
                             title = (await el.inner_text()).strip()
                             if title:
                                 break
+                    if not title:
+                        # Anchor-style fallback cards (from link_selectors) often only expose
+                        # title/aria-label attributes rather than visible text.
+                        title = (
+                            (await card.get_attribute("title"))
+                            or (await card.get_attribute("aria-label"))
+                            or ""
+                        ).strip()
                     if not title or len(title) < 5:
                         skipped_no_title += 1
                         continue
                     t = title.lower()
                     if not any(kw in t for kw in _AUCTION_PC_KW):
-                        # Some auction search pages are catalogue cards with sparse titles.
-                        # If search term itself is target-like, keep the card as a lead.
-                        if not any(kw in term.lower() for kw in _AUCTION_PC_KW):
-                            skipped_keyword += 1
-                            continue
+                        skipped_keyword += 1
+                        continue
                     if _is_mini_pc(title):
                         continue
 
