@@ -77,8 +77,11 @@ def _schedule_db_persist(entry: dict[str, Any]) -> None:
         loop = asyncio.get_running_loop()
         loop.create_task(_persist_entry(entry))
     except RuntimeError:
-        # Called without a running event loop (tests / scripts): keep in-memory only.
-        return
+        # Called without a running event loop (tests / scripts): persist synchronously.
+        try:
+            asyncio.run(_persist_entry(entry))
+        except Exception:
+            return
 
 
 async def _persist_entry(entry: dict[str, Any]) -> None:
