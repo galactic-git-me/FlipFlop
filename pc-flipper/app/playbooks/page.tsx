@@ -413,13 +413,14 @@ function ProposalCard({
 // ─── Playbook card ─────────────────────────────────────────────────────────────
 
 function PlaybookCard({
-  playbook, onEdit, onDelete, onActivate, onRetire,
+  playbook, onEdit, onDelete, onActivate, onRetire, onRollback,
 }: {
   playbook: Playbook;
   onEdit: (pb: Playbook) => void;
   onDelete: (id: number) => void;
   onActivate: (id: number) => void;
   onRetire: (id: number) => void;
+  onRollback: (id: number) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const ss = playbook.search_strategy || {};
@@ -459,6 +460,12 @@ function PlaybookCard({
               <button onClick={() => onRetire(playbook.id)}
                 className="text-xs bg-slate-500/10 border border-slate-500/20 text-slate-500 px-2 py-1 rounded-lg hover:bg-slate-500/20 transition-colors">
                 Retire
+              </button>
+            )}
+            {playbook.status === "active" && (
+              <button onClick={() => onRollback(playbook.id)}
+                className="text-xs bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 px-2 py-1 rounded-lg hover:bg-cyan-500/20 transition-colors">
+                Rollback Proposal
               </button>
             )}
             <button onClick={() => onEdit(playbook)}
@@ -599,6 +606,7 @@ type Tab = "active" | "candidates" | "retired" | "proposals";
 export default function PlaybooksPage() {
   const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [proposals, setProposals] = useState<PlaybookProposal[]>([]);
+  const [experimentSummary, setExperimentSummary] = useState<Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }>>({});
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("active");
   const [showCreate, setShowCreate] = useState(false);
@@ -613,8 +621,15 @@ export default function PlaybooksPage() {
       ]);
       setPlaybooks(pbs);
       setProposals(props);
+      try {
+        const exp = await api.playbooks.experimentSummary();
+        setExperimentSummary(exp.variants || {});
+      } catch {
+        setExperimentSummary({});
+      }
     } catch {
       setPlaybooks([]); setProposals([]);
+      setExperimentSummary({});
     } finally {
       setLoading(false);
     }
@@ -666,6 +681,12 @@ export default function PlaybooksPage() {
   const handleReject = async (proposalId: number) => {
     await api.playbooks.proposals.reject(proposalId, "Rejected by user");
     await load();
+  };
+
+  const handleRollback = async (id: number) => {
+    await api.playbooks.rollbackLastUpdate(id);
+    await load();
+    setTab("proposals");
   };
 
   const active = playbooks.filter(p => p.status === "active");
@@ -735,6 +756,27 @@ export default function PlaybooksPage() {
           </Card>
         ))}
       </div>
+
+      <Card className="glass-card">
+        <CardContent className="p-4">
+          <div className="text-xs uppercase tracking-widest text-slate-500 mb-3">Evolution Experiments</div>
+          {Object.keys(experimentSummary).length === 0 ? (
+            <p className="text-xs text-slate-600">No A/B experiment proposals yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {Object.entries(experimentSummary).map(([variant, v]) => (
+                <div key={variant} className="rounded-lg border border-[#1e2d45] bg-[#111c2e] p-3">
+                  <div className="text-sm text-slate-200 font-semibold">Variant {variant}</div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    {v.total} total · {v.approved} approved · {v.rejected} rejected · {v.pending} pending
+                  </div>
+                  <div className="text-xs text-cyan-300 mt-1">Approval rate: {v.approval_rate.toFixed(1)}%</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Pending approval banner */}
       {pending.length > 0 && tab !== "proposals" && (
@@ -820,6 +862,7 @@ export default function PlaybooksPage() {
                 onDelete={handleDelete}
                 onActivate={handleActivate}
                 onRetire={handleRetire}
+                onRollback={handleRollback}
               />
             ))
           )}
