@@ -1005,8 +1005,7 @@ async def _scrape_auction_site(
                 try:
                     await page.wait_for_selector(wait_selector, timeout=12000)
                 except Exception:
-                    log.warning(f"{site_name}.playwright.no_results", term=term)
-                    continue
+                    log.warning(f"{site_name}.playwright.no_results", term=term, mode="fallback_parse")
 
             await asyncio.sleep(random.uniform(1.0, 2.0))
             await page.evaluate("window.scrollBy(0, 600)")
@@ -1018,6 +1017,16 @@ async def _scrape_auction_site(
                 cards = await page.query_selector_all(sel)
                 if cards:
                     break
+
+            # Fallback: treat matching anchors as cards when site card selectors drift.
+            if not cards:
+                fallback_cards = []
+                for sel in link_selectors:
+                    anchors = await page.query_selector_all(sel)
+                    if anchors:
+                        fallback_cards = anchors
+                        break
+                cards = fallback_cards
 
             log.info(f"{site_name}.playwright.cards", term=term, count=len(cards))
             kept = 0
