@@ -178,6 +178,8 @@ export default function SchedulePage() {
   const [externalDemandSummary, setExternalDemandSummary] = useState<Record<string, { count: number; avg_score: number; avg_confidence: number }>>({});
   const [pricingMultipliers, setPricingMultipliers] = useState<Record<string, number>>({});
   const [autonomousLastRun, setAutonomousLastRun] = useState<JobRun | null>(null);
+  const [triggeringAutoCycle, setTriggeringAutoCycle] = useState(false);
+  const [autoCycleMessage, setAutoCycleMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   /* fetch jobs from backend (non-fatal) */
   const load = useCallback(async () => {
@@ -242,6 +244,21 @@ export default function SchedulePage() {
     }
   };
 
+  const runAutonomousCycle = async () => {
+    setTriggeringAutoCycle(true);
+    try {
+      await api.schedule.run("autonomous_cycle");
+      await load();
+      setAutoCycleMessage({ type: "success", text: "Autonomous cycle completed successfully." });
+      setTimeout(() => setAutoCycleMessage(null), 2500);
+    } catch {
+      setAutoCycleMessage({ type: "error", text: "Autonomous cycle failed. Check run history/logs." });
+      setTimeout(() => setAutoCycleMessage(null), 3000);
+    } finally {
+      setTriggeringAutoCycle(false);
+    }
+  };
+
   /* expand / fetch run history */
   const toggleExpand = async (id: string) => {
     if (expanded === id) { setExpanded(null); return; }
@@ -292,6 +309,15 @@ export default function SchedulePage() {
           <RefreshCw className="w-3.5 h-3.5" /> Refresh
         </Button>
       </div>
+      {autoCycleMessage && (
+        <div className={`rounded-xl px-3 py-2 text-sm border ${
+          autoCycleMessage.type === "success"
+            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+            : "bg-red-500/10 border-red-500/30 text-red-300"
+        }`}>
+          {autoCycleMessage.text}
+        </div>
+      )}
 
       {/* Stat pills */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -344,6 +370,17 @@ export default function SchedulePage() {
               </div>
               <div className="text-xs text-slate-600 mt-1">
                 {autonomousLastRun?.started_at ? `Last run ${formatRelativeTime(new Date(autonomousLastRun.started_at))}` : "Waiting for first cycle"}
+              </div>
+              <div className="mt-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={runAutonomousCycle}
+                  disabled={triggeringAutoCycle}
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${triggeringAutoCycle ? "animate-spin" : ""}`} />
+                  {triggeringAutoCycle ? "Running…" : "Run Auto Cycle"}
+                </Button>
               </div>
             </div>
           </div>

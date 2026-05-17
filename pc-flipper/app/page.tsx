@@ -88,11 +88,13 @@ export default function DashboardPage() {
   const [elapsedSecs, setElapsedSecs] = useState(0);
   const [triggering, setTriggering] = useState(false);
   const [triggeringAutoCycle, setTriggeringAutoCycle] = useState(false);
+  const [autoCycleMessage, setAutoCycleMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
   const [retrainReady, setRetrainReady] = useState<boolean | null>(null);
   const [soldSinceCheckpoint, setSoldSinceCheckpoint] = useState<number>(0);
   const [autonomousCycleHealthy, setAutonomousCycleHealthy] = useState<boolean | null>(null);
+  const [autonomousLastRunAt, setAutonomousLastRunAt] = useState<string | null>(null);
   const [flippingId, setFlippingId] = useState<number | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -219,10 +221,12 @@ export default function DashboardPage() {
       setSoldSinceCheckpoint(Number(retrain.sold_flips_since || 0));
       const last = runs && runs.length > 0 ? runs[0] : null;
       setAutonomousCycleHealthy(last ? last.status === "success" : null);
+      setAutonomousLastRunAt(last?.started_at ?? null);
     } catch {
       setRetrainReady(null);
       setSoldSinceCheckpoint(0);
       setAutonomousCycleHealthy(null);
+      setAutonomousLastRunAt(null);
     }
   };
 
@@ -288,8 +292,11 @@ export default function DashboardPage() {
     try {
       await api.schedule.run("autonomous_cycle");
       await loadAutonomousHealth();
+      setAutoCycleMessage({ type: "success", text: "Autonomous cycle completed successfully." });
+      setTimeout(() => setAutoCycleMessage(null), 2500);
     } catch {
-      // ignore
+      setAutoCycleMessage({ type: "error", text: "Autonomous cycle failed. Check Scheduler runs/logs." });
+      setTimeout(() => setAutoCycleMessage(null), 3000);
     } finally {
       setTriggeringAutoCycle(false);
     }
@@ -429,6 +436,11 @@ export default function DashboardPage() {
               <span className={`text-xs font-semibold ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`}>
                 Auto Loop {autonomousCycleHealthy ? "Healthy" : "Attention"} · Retrain {retrainReady ? "Ready" : "Collecting"} ({soldSinceCheckpoint})
               </span>
+              {autonomousLastRunAt && (
+                <span className="text-[10px] text-slate-500">
+                  last {formatRelativeTime(new Date(autonomousLastRunAt))}
+                </span>
+              )}
               <Button
                 variant="secondary"
                 size="sm"
@@ -456,6 +468,15 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+      {autoCycleMessage && (
+        <div className={`rounded-xl px-3 py-2 text-sm border ${
+          autoCycleMessage.type === "success"
+            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+            : "bg-red-500/10 border-red-500/30 text-red-300"
+        }`}>
+          {autoCycleMessage.text}
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
