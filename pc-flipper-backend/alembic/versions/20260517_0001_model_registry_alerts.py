@@ -42,7 +42,7 @@ def upgrade() -> None:
         sa.Column("version_produced", sa.String(length=64), nullable=True),
         sa.Column("message", sa.Text(), nullable=True),
         sa.Column("triggered_by", sa.String(length=64), nullable=True),
-        sa.Column("consumed_checkpoint_ready", sa.Boolean(), nullable=False, server_default=sa.text("0")),
+        sa.Column("consumed_checkpoint_ready", sa.Boolean(), nullable=False, server_default=sa.text("false")),
     )
     op.create_index("ix_training_runs_model_name", "training_runs", ["model_name"])
 
@@ -53,7 +53,7 @@ def upgrade() -> None:
         sa.Column("severity", sa.String(length=20), nullable=False),
         sa.Column("source", sa.String(length=100), nullable=False),
         sa.Column("message", sa.Text(), nullable=False),
-        sa.Column("acked", sa.Boolean(), nullable=False, server_default=sa.text("0")),
+        sa.Column("acked", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.Column("acked_at", sa.DateTime(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=True),
     )
