@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
 from app.config import get_settings
+from app.services.search_telemetry import record_term_result
 from app.services.spec_parser import parse_specs
 
 settings = get_settings()
@@ -247,8 +248,10 @@ async def scrape_ebay(
                         seen_ids.add(listing.external_id)
                         results.append(listing)
                 added = len(results) - before
+                record_term_result(term=term, found=len(new_listings), new=added)
                 print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
             except Exception as exc:
+                record_term_result(term=term, error=str(exc))
                 print(f"[scraper] eBay error for {term!r}: {exc}")
     return results
 
@@ -639,8 +642,10 @@ async def scrape_preloved(search_terms: list[str], min_price: float, max_price: 
                         seen.add(l.external_id)
                         results.append(l)
                         added += 1
+                record_term_result(term=term, found=len(listings), new=added)
                 print(f"[scraper] Preloved '{term}': {len(listings)} parsed, {added} new (total {len(results)})")
             except Exception as exc:
+                record_term_result(term=term, error=str(exc))
                 print(f"[scraper] Preloved error for {term!r}: {exc}")
 
     return results
@@ -792,12 +797,15 @@ async def scrape_john_pye(min_price: float, max_price: float) -> list[RawListing
                     print(f"[scraper] John Pye: unexpected {resp.status_code} for {term!r}")
                     continue
                 new = _parse_john_pye_html(resp.text, min_price, max_price)
+                before = len(results)
                 for l in new:
                     if l.external_id not in seen:
                         seen.add(l.external_id)
                         results.append(l)
+                record_term_result(term=term, found=len(new), new=len(results) - before)
                 print(f"[scraper] John Pye '{term}': {len(new)} parsed, total {len(results)}")
             except Exception as exc:
+                record_term_result(term=term, error=str(exc))
                 print(f"[scraper] John Pye error for {term!r}: {exc}")
 
     return results

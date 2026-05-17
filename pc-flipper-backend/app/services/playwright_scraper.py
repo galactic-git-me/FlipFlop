@@ -25,6 +25,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import structlog
+from app.services.search_telemetry import record_term_result
 
 log = structlog.get_logger(__name__)
 
@@ -1104,9 +1105,11 @@ async def _scrape_auction_site(
                 skipped_no_title=skipped_no_title,
                 skipped_keyword=skipped_keyword,
             )
+            record_term_result(term=term, found=len(cards), new=kept)
 
         except Exception as exc:
             log.error(f"{site_name}.playwright.error", term=term, error=str(exc))
+            record_term_result(term=term, error=str(exc))
             continue
 
         await asyncio.sleep(random.uniform(1.5, 2.5))

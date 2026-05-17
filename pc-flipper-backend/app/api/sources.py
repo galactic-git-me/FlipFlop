@@ -68,6 +68,7 @@ async def _scrape_source_bg(source_id: int):
     from app.services.resale_scraper import get_resale_range, clear_cache
     from app.models.listing import Listing, ListingStatus, Classification
     from app.services import scan_state
+    from app.services.search_telemetry import begin_source_run, end_source_run
 
     log = structlog.get_logger(__name__)
 
@@ -88,6 +89,7 @@ async def _scrape_source_bg(source_id: int):
     clear_cache()
 
     try:
+        begin_source_run(source.name)
         raw_listings = await fetch_listings(
             source_name=source.name,
             source_url=source.url,
@@ -182,5 +184,7 @@ async def _scrape_source_bg(source_id: int):
             )
             await db.commit()
         log.error("source.scrape.error", source=source.name, error=str(exc))
+    finally:
+        end_source_run()
 
     scan_state.scan_finished()

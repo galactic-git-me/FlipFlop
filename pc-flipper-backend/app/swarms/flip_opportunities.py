@@ -19,6 +19,7 @@ from app.services.estimator import estimate_upgrade_cost, estimate_profit
 from app.services.resale_scraper import get_resale_range, clear_cache, get_expected_auction_price, clear_auction_cache
 from app.services.component_pricer import clear_component_cache
 from app.services import scan_state
+from app.services.search_telemetry import begin_source_run, end_source_run
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
@@ -115,6 +116,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
     result = {"scanned": 0, "found": 0, "gems": 0}
 
     try:
+        begin_source_run(source.name)
         raw_listings = await fetch_listings(
             source_name=source.name,
             source_url=source.url,
@@ -184,6 +186,8 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                         consecutive_failures=failures,
                         threshold=SOURCE_FAILURE_THRESHOLD,
                     )
+    finally:
+        end_source_run()
 
     return result
 
