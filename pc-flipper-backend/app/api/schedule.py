@@ -25,6 +25,8 @@ def _job_category(job_id: str) -> str:
         return "maintenance"
     if job_id == "outcome_capture":
         return "analysis"
+    if job_id == "model_retraining":
+        return "analysis"
     return "maintenance"
 
 _JOB_DESCRIPTIONS: dict[str, str] = {
@@ -36,6 +38,7 @@ _JOB_DESCRIPTIONS: dict[str, str] = {
     "playbook_evolution": "Creates pending playbook update proposals from sold-flip outcomes for human approval.",
     "autonomous_cycle": "Runs end-to-end autonomous loop (sourcing, external demand ingestion, playbook evolution).",
     "outcome_capture": "Captures sold outcomes and raises retrain-ready checkpoints once enough new results accumulate.",
+    "model_retraining": "Trains candidate model versions when checkpoint thresholds are met, with promote/rollback support.",
 }
 
 

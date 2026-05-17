@@ -10,6 +10,13 @@ from app.models.flip_intelligence import FlipIntelligence
 from app.models.flip import Flip
 from app.models.outcome_event import RetrainCheckpoint
 from app.services import ai_service
+from app.services.retraining_pipeline import (
+    list_model_versions,
+    list_training_runs,
+    promote_model_version,
+    rollback_to_previous_active,
+    run_retraining_if_ready,
+)
 
 router = APIRouter(prefix="/intel", tags=["intel"])
 
@@ -279,3 +286,28 @@ async def retrain_status(db: AsyncSession = Depends(get_db)):
         "last_flip_id": row.last_flip_id,
         "updated_at": row.updated_at.isoformat() if row.updated_at else None,
     }
+
+
+@router.post("/models/retrain")
+async def retrain_now():
+    return await run_retraining_if_ready(triggered_by="manual")
+
+
+@router.get("/models/versions")
+async def model_versions(limit: int = 20):
+    return {"items": await list_model_versions(limit=limit)}
+
+
+@router.get("/models/runs")
+async def model_runs(limit: int = 30):
+    return {"items": await list_training_runs(limit=limit)}
+
+
+@router.post("/models/{version}/promote")
+async def promote(version: str):
+    return await promote_model_version(version)
+
+
+@router.post("/models/rollback")
+async def rollback():
+    return await rollback_to_previous_active()

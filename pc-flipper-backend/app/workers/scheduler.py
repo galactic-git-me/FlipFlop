@@ -16,6 +16,7 @@ from app.services.external_demand import ingest_external_demand_signals
 from app.services.playbook_evolution import run_playbook_evolution
 from app.services.autonomous_loop import run_autonomous_cycle
 from app.services.outcome_capture import capture_outcomes_and_check_retrain
+from app.services.retraining_pipeline import run_retraining_if_ready
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -31,6 +32,7 @@ _job_history: dict[str, deque[dict]] = {
     "playbook_evolution": deque(maxlen=50),
     "autonomous_cycle": deque(maxlen=50),
     "outcome_capture": deque(maxlen=50),
+    "model_retraining": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 
@@ -96,6 +98,7 @@ def start_scheduler():
     playbook_evolution_start = now + timedelta(minutes=25)
     autonomous_cycle_start = now + timedelta(minutes=30)
     outcome_capture_start = now + timedelta(minutes=35)
+    model_retraining_start = now + timedelta(minutes=40)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -185,6 +188,17 @@ def start_scheduler():
         next_run_time=outcome_capture_start,
     )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=6),
+        id="model_retraining",
+        name="Model Retraining",
+        kwargs={"job_id": "model_retraining", "fn": run_retraining_if_ready},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=model_retraining_start,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -214,6 +228,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("autonomous_cycle", run_autonomous_cycle)
     if swarm_id == "outcome_capture":
         return await _run_job_with_history("outcome_capture", capture_outcomes_and_check_retrain)
+    if swarm_id == "model_retraining":
+        return await _run_job_with_history("model_retraining", run_retraining_if_ready)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 
