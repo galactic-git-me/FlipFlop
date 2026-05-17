@@ -347,8 +347,10 @@ async def scrape_facebook_playwright(
 
         for term in search_terms[:20]:
             try:
+                # Force a UK marketplace path to avoid geo redirects (for example /sanfrancisco/)
+                # when anonymous/headless sessions do not have stable location context.
                 url = (
-                    "https://www.facebook.com/marketplace/search"
+                    "https://www.facebook.com/marketplace/london/search/"
                     f"?query={term.replace(' ', '%20')}"
                     f"&minPrice={int(min_price)}"
                     f"&maxPrice={int(max_price)}"
