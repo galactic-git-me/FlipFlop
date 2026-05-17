@@ -12,15 +12,15 @@
 - [x] Build demand-normalized pricing multipliers per component tier
 
 ## Phase 3: Compatibility intelligence
-- [ ] Explicit compatibility graph (socket/chipset/memory/PSU/headroom)
-- [ ] Confidence score + hard-fail incompatibility reasons in wizard
+- [x] Explicit compatibility rules engine foundation (socket/memory/PSU/headroom)
+- [x] Confidence score + hard-fail incompatibility reasons in wizard
 
 ## Phase 4: Autonomous playbook evolution
-- [ ] Nightly playbook proposal generation from profitable conversions
+- [x] Nightly playbook proposal generation from sold-flip outcomes
 - [ ] Human-approval lane with rollback + A/B scoring
 
 ## Phase 5: Closed-loop orchestration
-- [ ] End-to-end autonomous loop orchestration with checkpoints
+- [x] End-to-end autonomous loop orchestration with checkpoints
 - [ ] Outcome capture + retraining triggers
 
 ## Current deliverables (this session)

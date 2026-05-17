@@ -46,6 +46,8 @@ export interface WizardBuild {
   valid: boolean;
   validation_score: number;
   rejection_reason: string;
+  compatibility_confidence?: number;
+  compatibility_warnings?: string[];
   rank: number;
   gem_id?: number;
   playbook_id?: number;

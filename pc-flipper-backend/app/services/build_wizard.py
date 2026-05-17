@@ -21,6 +21,7 @@ from dataclasses import dataclass, field, asdict
 from typing import Literal
 
 import structlog
+from app.services.compatibility_engine import evaluate_build_compatibility
 
 log = structlog.get_logger(__name__)
 
@@ -66,6 +67,8 @@ class Build:
     valid: bool = True
     validation_score: float = 0.0   # 0–100
     rejection_reason: str = ""
+    compatibility_confidence: float = 0.0
+    compatibility_warnings: list[str] = field(default_factory=list)
     rank: int = 0
 
 
@@ -262,6 +265,17 @@ def _hard_validate(build: Build, intent: RefinedIntent) -> tuple[bool, str]:
     if build.base_cost <= 0:
         return False, "Base cost is zero — build is not grounded"
 
+    # Structured compatibility checks
+    compat = evaluate_build_compatibility(
+        base_spec=build.base_spec,
+        upgrades=[asdict(u) for u in build.upgrades],
+        constraints=intent.constraints,
+    )
+    build.compatibility_confidence = compat.confidence
+    build.compatibility_warnings = compat.warnings
+    if not compat.compatible:
+        return False, "; ".join(compat.hard_fail_reasons)
+
     return True, ""
 
 
@@ -270,10 +284,11 @@ def _score_build(build: Build) -> float:
     Composite score 0–100 used for ranking.
     Weights: profit 50%, demand 30%, risk 20%.
     """
-    profit_score  = min(100, (build.estimated_profit / 300) * 100) * 0.50
+    profit_score  = min(100, (build.estimated_profit / 300) * 100) * 0.45
     demand_score  = (_DEMAND_SCORE.get(build.demand_fit, 2) / 4) * 100 * 0.30
     risk_score    = ((4 - _RISK_SCORE.get(build.risk, 2)) / 3) * 100 * 0.20
-    return round(profit_score + demand_score + risk_score, 1)
+    compat_score  = (build.compatibility_confidence * 100) * 0.05
+    return round(profit_score + demand_score + risk_score + compat_score, 1)
 
 
 async def validator_agent(builds: list[Build], intent: RefinedIntent) -> list[Build]:
@@ -496,6 +511,8 @@ def _build_to_dict(b: Build) -> dict:
         "valid": b.valid,
         "validation_score": b.validation_score,
         "rejection_reason": b.rejection_reason,
+        "compatibility_confidence": b.compatibility_confidence,
+        "compatibility_warnings": b.compatibility_warnings,
         "rank": b.rank,
     }
 
@@ -510,5 +527,8 @@ def _dict_to_build(d: dict) -> Build:
         risk=d["risk"], demand_fit=d["demand_fit"], why=d["why"],
         sell_platform=d["sell_platform"], sell_price_target=d["sell_price_target"],
         valid=d.get("valid", True), validation_score=d.get("validation_score", 0),
-        rejection_reason=d.get("rejection_reason", ""), rank=d.get("rank", 0),
+        rejection_reason=d.get("rejection_reason", ""),
+        compatibility_confidence=d.get("compatibility_confidence", 0.0),
+        compatibility_warnings=d.get("compatibility_warnings", []),
+        rank=d.get("rank", 0),
     )

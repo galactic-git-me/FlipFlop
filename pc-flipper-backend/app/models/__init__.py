@@ -8,6 +8,7 @@ from app.models.flip_intelligence import FlipIntelligence
 from app.models.app_settings import AppSettings
 from app.models.search_telemetry import SearchTelemetry
 from app.models.external_demand_signal import ExternalDemandSignal
+from app.models.outcome_event import OutcomeEvent, RetrainCheckpoint
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -20,4 +21,6 @@ __all__ = [
     "AppSettings",
     "SearchTelemetry",
     "ExternalDemandSignal",
+    "OutcomeEvent",
+    "RetrainCheckpoint",
 ]

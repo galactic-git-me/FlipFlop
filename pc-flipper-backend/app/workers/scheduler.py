@@ -13,6 +13,9 @@ from app.swarms.upgrade_parts import run_upgrade_parts_swarm
 from app.swarms.cases import run_cases_swarm
 from app.swarms.accessories import run_accessories_swarm
 from app.services.external_demand import ingest_external_demand_signals
+from app.services.playbook_evolution import run_playbook_evolution
+from app.services.autonomous_loop import run_autonomous_cycle
+from app.services.outcome_capture import capture_outcomes_and_check_retrain
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -25,6 +28,9 @@ _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
     "accessories": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
+    "playbook_evolution": deque(maxlen=50),
+    "autonomous_cycle": deque(maxlen=50),
+    "outcome_capture": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 
@@ -87,6 +93,9 @@ def start_scheduler():
     cases_start = now + timedelta(minutes=10)
     accessories_start = now + timedelta(minutes=15)
     external_demand_start = now + timedelta(minutes=20)
+    playbook_evolution_start = now + timedelta(minutes=25)
+    autonomous_cycle_start = now + timedelta(minutes=30)
+    outcome_capture_start = now + timedelta(minutes=35)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -143,6 +152,39 @@ def start_scheduler():
         next_run_time=external_demand_start,
     )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="playbook_evolution",
+        name="Playbook Evolution",
+        kwargs={"job_id": "playbook_evolution", "fn": run_playbook_evolution},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=playbook_evolution_start,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=6),
+        id="autonomous_cycle",
+        name="Autonomous Cycle",
+        kwargs={"job_id": "autonomous_cycle", "fn": run_autonomous_cycle},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=autonomous_cycle_start,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=6),
+        id="outcome_capture",
+        name="Outcome Capture",
+        kwargs={"job_id": "outcome_capture", "fn": capture_outcomes_and_check_retrain},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=outcome_capture_start,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -166,6 +208,12 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("accessories", run_accessories_swarm)
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
+    if swarm_id == "playbook_evolution":
+        return await _run_job_with_history("playbook_evolution", run_playbook_evolution)
+    if swarm_id == "autonomous_cycle":
+        return await _run_job_with_history("autonomous_cycle", run_autonomous_cycle)
+    if swarm_id == "outcome_capture":
+        return await _run_job_with_history("outcome_capture", capture_outcomes_and_check_retrain)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 
