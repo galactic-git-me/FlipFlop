@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from typing import Iterable
 
 import httpx
+import re
+import json
 from sqlalchemy import delete, select
 
 from app.database import AsyncSessionLocal
@@ -36,8 +38,8 @@ async def ingest_external_demand_signals() -> dict:
 
     for topic, queries in TOPIC_QUERIES.items():
         signals.extend(await _fetch_reddit_signals(topic, queries, now))
-        signals.extend(await _fetch_google_trends_scaffold(topic, queries, now))
-        signals.extend(await _fetch_steam_scaffold(topic, now))
+        signals.extend(await _fetch_google_trends_signals(topic, queries, now))
+        signals.extend(await _fetch_steam_signals(topic, queries, now))
 
     inserted = await _persist_signals(signals)
     await _prune_old(days=30)
@@ -78,37 +80,100 @@ async def _fetch_reddit_signals(topic: str, queries: Iterable[str], now: datetim
     return out
 
 
-async def _fetch_google_trends_scaffold(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
-    # Scaffold: emit neutral placeholders until authenticated Trends integration is configured.
-    return [
-        DemandSignal(
-            source="google_trends",
-            topic=topic,
-            query=q,
-            score=0.0,
-            confidence=0.1,
-            sample_size=None,
-            signal_time=now,
-            notes="Scaffold signal: Google Trends adapter not configured yet",
+async def _fetch_google_trends_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
+    """
+    Real adapter (no API key):
+      - Reads Google Daily Trends feed for GB.
+      - Scores query relevance by keyword mention hits in trending titles.
+    """
+    out: list[DemandSignal] = []
+    trends_titles: list[str] = []
+    async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+        try:
+            resp = await client.get(
+                "https://trends.google.com/trends/api/dailytrends",
+                params={"hl": "en-GB", "tz": "0", "geo": "GB"},
+                headers={"User-Agent": "FlipFlopDemandBot/1.0"},
+            )
+            if resp.status_code == 200:
+                payload = resp.text
+                # Trends API prepends anti-XSSI chars like )]}'
+                payload = re.sub(r"^\)\]\}',?\n?", "", payload)
+                data = json.loads(payload)
+                days = data.get("default", {}).get("trendingSearchesDays", [])
+                for day in days:
+                    for item in day.get("trendingSearches", []):
+                        title = (item.get("title", {}) or {}).get("query")
+                        if title:
+                            trends_titles.append(str(title).lower())
+        except Exception:
+            trends_titles = []
+
+    total_titles = max(1, len(trends_titles))
+    corpus = " | ".join(trends_titles)
+    for q in queries:
+        ql = q.lower().strip()
+        if not ql:
+            continue
+        hits = corpus.count(ql)
+        # include partial-token hits for key words
+        for token in [t for t in re.split(r"\s+", ql) if len(t) >= 3]:
+            hits += corpus.count(token) * 0.15
+        score = min(100.0, float(hits) * 18.0)
+        out.append(
+            DemandSignal(
+                source="google_trends",
+                topic=topic,
+                query=q,
+                score=round(score, 2),
+                confidence=0.5 if trends_titles else 0.15,
+                sample_size=total_titles,
+                signal_time=now,
+                notes="Google Daily Trends (GB) relevance proxy",
+            )
         )
-        for q in queries
-    ]
+    return out
 
 
-async def _fetch_steam_scaffold(topic: str, now: datetime) -> list[DemandSignal]:
-    # Scaffold for Steam HW trends linkage.
-    return [
-        DemandSignal(
-            source="steam_hardware",
-            topic=topic,
-            query=None,
-            score=0.0,
-            confidence=0.1,
-            sample_size=None,
-            signal_time=now,
-            notes="Scaffold signal: Steam hardware parser not configured yet",
+async def _fetch_steam_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
+    """
+    Real adapter (no API key):
+      - Scrapes public Steam Hardware Survey page text.
+      - Uses keyword mention frequency as relative demand proxy.
+    """
+    out: list[DemandSignal] = []
+    body = ""
+    async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+        try:
+            resp = await client.get(
+                "https://store.steampowered.com/hwsurvey/Steam-Hardware-Software-Survey-Welcome-to-Steam",
+                headers={"User-Agent": "FlipFlopDemandBot/1.0"},
+            )
+            if resp.status_code == 200:
+                body = resp.text.lower()
+        except Exception:
+            body = ""
+
+    for q in queries:
+        ql = q.lower().strip()
+        if not ql:
+            continue
+        tokens = [t for t in re.split(r"\s+", ql) if len(t) >= 3]
+        hits = sum(body.count(t) for t in tokens) if body else 0
+        score = min(100.0, hits * 2.5)
+        out.append(
+            DemandSignal(
+                source="steam_hardware",
+                topic=topic,
+                query=q,
+                score=round(score, 2),
+                confidence=0.45 if body else 0.15,
+                sample_size=len(tokens) if tokens else None,
+                signal_time=now,
+                notes="Steam Hardware Survey keyword incidence proxy",
+            )
         )
-    ]
+    return out
 
 
 async def _persist_signals(signals: list[DemandSignal]) -> int:

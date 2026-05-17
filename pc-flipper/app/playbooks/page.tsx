@@ -607,6 +607,7 @@ export default function PlaybooksPage() {
   const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [proposals, setProposals] = useState<PlaybookProposal[]>([]);
   const [experimentSummary, setExperimentSummary] = useState<Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }>>({});
+  const [experimentAttribution, setExperimentAttribution] = useState<Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number }>>({});
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("active");
   const [showCreate, setShowCreate] = useState(false);
@@ -622,14 +623,20 @@ export default function PlaybooksPage() {
       setPlaybooks(pbs);
       setProposals(props);
       try {
-        const exp = await api.playbooks.experimentSummary();
+        const [exp, attrib] = await Promise.all([
+          api.playbooks.experimentSummary(),
+          api.playbooks.experimentAttribution(14),
+        ]);
         setExperimentSummary(exp.variants || {});
+        setExperimentAttribution(attrib.variants || {});
       } catch {
         setExperimentSummary({});
+        setExperimentAttribution({});
       }
     } catch {
       setPlaybooks([]); setProposals([]);
       setExperimentSummary({});
+      setExperimentAttribution({});
     } finally {
       setLoading(false);
     }
@@ -771,6 +778,28 @@ export default function PlaybooksPage() {
                     {v.total} total · {v.approved} approved · {v.rejected} rejected · {v.pending} pending
                   </div>
                   <div className="text-xs text-cyan-300 mt-1">Approval rate: {v.approval_rate.toFixed(1)}%</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      <Card className="glass-card">
+        <CardContent className="p-4">
+          <div className="text-xs uppercase tracking-widest text-slate-500 mb-3">Experiment Attribution (14d)</div>
+          {Object.keys(experimentAttribution).length === 0 ? (
+            <p className="text-xs text-slate-600">No attributed sold outcomes yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {Object.entries(experimentAttribution).map(([variant, v]) => (
+                <div key={variant} className="rounded-lg border border-[#1e2d45] bg-[#111c2e] p-3">
+                  <div className="text-sm text-slate-200 font-semibold">Variant {variant}</div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    windows {v.proposal_windows} · flips {v.attributed_flips}
+                  </div>
+                  <div className="text-xs text-emerald-300 mt-1">
+                    avg profit £{v.avg_profit.toFixed(0)} · ROI {v.avg_roi_pct.toFixed(1)}%
+                  </div>
                 </div>
               ))}
             </div>

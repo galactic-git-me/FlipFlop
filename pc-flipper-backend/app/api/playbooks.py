@@ -21,7 +21,7 @@ Routes:
   GET    /playbooks/active-keywords  → flat list of search keywords from all
                                         active playbooks (used by scraper)
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import structlog
@@ -32,6 +32,7 @@ from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.playbook import Playbook, PlaybookProposal
+from app.models.flip_intelligence import FlipIntelligence
 from app.schemas.playbook import (
     PlaybookCreate, PlaybookUpdate, PlaybookOut,
     ProposalCreate, ProposalResolve, ProposalOut,
@@ -142,6 +143,71 @@ async def experiment_summary(db: AsyncSession = Depends(get_db)):
         }
 
     return {"variants": summary}
+
+
+@router.get("/experiments/attribution")
+async def experiment_attribution(window_days: int = Query(14, ge=7, le=60), db: AsyncSession = Depends(get_db)):
+    """
+    Attribute sold-outcome performance to approved A/B evolution proposals.
+    Method:
+      - For each approved UPDATE proposal from playbook_evolution_v1,
+        collect sold outcomes in FlipIntelligence for `window_days` after approval.
+      - Aggregate avg profit/ROI by variant.
+    """
+    result = await db.execute(
+        select(PlaybookProposal)
+        .where(
+            PlaybookProposal.action == "UPDATE",
+            PlaybookProposal.status == "approved",
+        )
+        .order_by(PlaybookProposal.resolved_at.desc().nullslast())
+    )
+    proposals = result.scalars().all()
+
+    by_variant: dict[str, dict[str, float]] = {}
+    by_variant_counts: dict[str, int] = {}
+
+    for p in proposals:
+        ds = p.demand_signals or {}
+        if ds.get("source") != "playbook_evolution_v1":
+            continue
+        variant = str(ds.get("ab_variant") or "unknown")
+        if not p.resolved_at:
+            continue
+
+        from_dt = p.resolved_at
+        to_dt = p.resolved_at + timedelta(days=window_days)
+        flips_result = await db.execute(
+            select(FlipIntelligence).where(
+                FlipIntelligence.created_at >= from_dt,
+                FlipIntelligence.created_at < to_dt,
+            )
+        )
+        flips = list(flips_result.scalars().all())
+        if not flips:
+            continue
+
+        total_profit = sum(float(f.profit or 0.0) for f in flips)
+        total_roi = sum(float(f.roi_pct or 0.0) for f in flips)
+
+        d = by_variant.setdefault(variant, {"profit_sum": 0.0, "roi_sum": 0.0, "flip_count": 0.0, "proposal_count": 0.0})
+        d["profit_sum"] += total_profit
+        d["roi_sum"] += total_roi
+        d["flip_count"] += float(len(flips))
+        d["proposal_count"] += 1.0
+        by_variant_counts[variant] = by_variant_counts.get(variant, 0) + 1
+
+    summary = {}
+    for variant, d in by_variant.items():
+        flips = max(1.0, d["flip_count"])
+        summary[variant] = {
+            "proposal_windows": int(d["proposal_count"]),
+            "attributed_flips": int(d["flip_count"]),
+            "avg_profit": round(d["profit_sum"] / flips, 2),
+            "avg_roi_pct": round(d["roi_sum"] / flips, 2),
+        }
+
+    return {"window_days": window_days, "variants": summary}
 
 
 @router.get("/{playbook_id}", response_model=PlaybookOut)
