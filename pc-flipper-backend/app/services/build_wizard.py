@@ -36,6 +36,7 @@ class RefinedIntent:
     priorities: list[str]           # e.g. ["max profit", "low risk"]
     constraints: list[str]          # e.g. ["must have PSU", "ATX only"]
     user_notes: str
+    owned_components: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -70,6 +71,8 @@ class Build:
     compatibility_confidence: float = 0.0
     compatibility_warnings: list[str] = field(default_factory=list)
     rank: int = 0
+    owned_components_applied: list[str] = field(default_factory=list)
+    owned_value_offset: float = 0.0
 
 
 @dataclass
@@ -112,6 +115,7 @@ async def wizard_agent(
     user_notes: str,
     priorities: list[str],
     constraints: list[str],
+    owned_components: list[dict] | None = None,
 ) -> RefinedIntent:
     """Turns raw user input + playbook into a clean RefinedIntent."""
     return RefinedIntent(
@@ -122,7 +126,37 @@ async def wizard_agent(
         priorities=priorities or ["max profit", "low risk"],
         constraints=constraints or [],
         user_notes=user_notes or "",
+        owned_components=list(owned_components or []),
     )
+
+
+def _apply_owned_components(builds: list[Build], owned_components: list[dict]) -> None:
+    """
+    If user already owns components, do not count those upgrade costs again.
+    """
+    if not owned_components:
+        return
+    owned_names = [str(c.get("name", "")).strip().lower() for c in owned_components if str(c.get("name", "")).strip()]
+    if not owned_names:
+        return
+
+    for b in builds:
+        offset = 0.0
+        applied: list[str] = []
+        for u in b.upgrades:
+            item = (u.item or "").lower()
+            role = (u.role or "").lower()
+            match_name = next((n for n in owned_names if n in item or n in role), None)
+            if match_name:
+                offset += float(u.cost_estimate or 0.0)
+                applied.append(u.item)
+        if offset > 0:
+            b.total_cost = max(0.0, b.total_cost - offset)
+            b.estimated_profit = b.estimated_resale - b.total_cost
+            b.profit_margin_pct = (b.estimated_profit / b.total_cost * 100.0) if b.total_cost > 0 else 0.0
+            b.owned_components_applied = applied
+            b.owned_value_offset = round(offset, 2)
+            b.why = f"{b.why} · owned-offset £{offset:.0f}"
 
 
 # ─── Agent 2: Composer ────────────────────────────────────────────────────────
@@ -420,13 +454,14 @@ async def run_build_wizard(
     user_notes: str,
     priorities: list[str],
     constraints: list[str],
+    owned_components: list[dict] | None = None,
 ) -> dict:
     """
     Main entry point.  Runs the full Wizard → Composer → Validator loop.
     Returns a dict ready for JSON serialisation.
     """
     # Phase 1: Wizard
-    intent = await wizard_agent(playbook, budget, user_notes, priorities, constraints)
+    intent = await wizard_agent(playbook, budget, user_notes, priorities, constraints, owned_components)
     log.info("wizard.intent", playbook=intent.playbook_name, budget=intent.budget_max)
 
     # Phase 2+3: Composer → Validator loop (max 3 attempts)
@@ -436,6 +471,7 @@ async def run_build_wizard(
     for attempt in range(1, 4):
         log.info("composer.attempt", n=attempt)
         candidates = await composer_agent(intent, playbook, attempt)
+        _apply_owned_components(candidates, intent.owned_components)
 
         valid = await validator_agent(candidates, intent)
         rejected = [b for b in candidates if not b.valid]
@@ -514,6 +550,8 @@ def _build_to_dict(b: Build) -> dict:
         "compatibility_confidence": b.compatibility_confidence,
         "compatibility_warnings": b.compatibility_warnings,
         "rank": b.rank,
+        "owned_components_applied": b.owned_components_applied,
+        "owned_value_offset": b.owned_value_offset,
     }
 
 
