@@ -87,8 +87,12 @@ export default function DashboardPage() {
   const [feedsDone, setFeedsDone] = useState(0);
   const [elapsedSecs, setElapsedSecs] = useState(0);
   const [triggering, setTriggering] = useState(false);
+  const [triggeringAutoCycle, setTriggeringAutoCycle] = useState(false);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
+  const [retrainReady, setRetrainReady] = useState<boolean | null>(null);
+  const [soldSinceCheckpoint, setSoldSinceCheckpoint] = useState<number>(0);
+  const [autonomousCycleHealthy, setAutonomousCycleHealthy] = useState<boolean | null>(null);
   const [flippingId, setFlippingId] = useState<number | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -205,6 +209,23 @@ export default function DashboardPage() {
     }
   };
 
+  const loadAutonomousHealth = async () => {
+    try {
+      const [retrain, runs] = await Promise.all([
+        api.intel.retrainStatus(),
+        api.schedule.runs("autonomous_cycle"),
+      ]);
+      setRetrainReady(Boolean(retrain.retrain_ready));
+      setSoldSinceCheckpoint(Number(retrain.sold_flips_since || 0));
+      const last = runs && runs.length > 0 ? runs[0] : null;
+      setAutonomousCycleHealthy(last ? last.status === "success" : null);
+    } catch {
+      setRetrainReady(null);
+      setSoldSinceCheckpoint(0);
+      setAutonomousCycleHealthy(null);
+    }
+  };
+
   useEffect(() => {
     if (!loading) return;
     const tick = setInterval(() => {
@@ -236,8 +257,10 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
+    const id2 = setTimeout(() => { void loadAutonomousHealth(); }, 0);
     return () => {
       clearTimeout(id);
+      clearTimeout(id2);
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, []);
@@ -257,6 +280,18 @@ export default function DashboardPage() {
       router.push("/flips");
     } catch {
       setFlippingId(null);
+    }
+  };
+
+  const triggerAutonomousCycle = async () => {
+    setTriggeringAutoCycle(true);
+    try {
+      await api.schedule.run("autonomous_cycle");
+      await loadAutonomousHealth();
+    } catch {
+      // ignore
+    } finally {
+      setTriggeringAutoCycle(false);
     }
   };
 
@@ -384,6 +419,27 @@ export default function DashboardPage() {
           <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
         </div>
         <div className="flex items-center gap-3">
+          {autonomousCycleHealthy !== null && (
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
+              autonomousCycleHealthy
+                ? "bg-cyan-500/10 border-cyan-400/25"
+                : "bg-amber-500/10 border-amber-400/25"
+            }`}>
+              <Activity className={`w-3.5 h-3.5 ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`} />
+              <span className={`text-xs font-semibold ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`}>
+                Auto Loop {autonomousCycleHealthy ? "Healthy" : "Attention"} · Retrain {retrainReady ? "Ready" : "Collecting"} ({soldSinceCheckpoint})
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={triggerAutonomousCycle}
+                disabled={triggeringAutoCycle}
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${triggeringAutoCycle ? "animate-spin" : ""}`} />
+                {triggeringAutoCycle ? "Running…" : "Run Auto Cycle"}
+              </Button>
+            </div>
+          )}
           {gems.length > 0 && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#00dc82]/10 border border-[#00dc82]/25 new-badge-pulse">
               <Bell className="w-3.5 h-3.5 text-[#00dc82]" />

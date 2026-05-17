@@ -174,6 +174,10 @@ export default function SchedulePage() {
   const [runningIds, setRunningIds] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<string | null>(null);
   const [runHistory, setRunHistory] = useState<Record<string, JobRun[]>>({});
+  const [retrainStatus, setRetrainStatus] = useState<{ sold_flips_since: number; retrain_ready: boolean } | null>(null);
+  const [externalDemandSummary, setExternalDemandSummary] = useState<Record<string, { count: number; avg_score: number; avg_confidence: number }>>({});
+  const [pricingMultipliers, setPricingMultipliers] = useState<Record<string, number>>({});
+  const [autonomousLastRun, setAutonomousLastRun] = useState<JobRun | null>(null);
 
   /* fetch jobs from backend (non-fatal) */
   const load = useCallback(async () => {
@@ -181,6 +185,23 @@ export default function SchedulePage() {
     try {
       const data = await api.schedule.list();
       setJobs(data);
+      try {
+        const [retrain, ext, mult, autoRuns] = await Promise.all([
+          api.intel.retrainStatus(),
+          api.demand.externalSignals(10),
+          api.demand.pricingMultipliers(),
+          api.schedule.runs("autonomous_cycle"),
+        ]);
+        setRetrainStatus({ sold_flips_since: retrain.sold_flips_since, retrain_ready: retrain.retrain_ready });
+        setExternalDemandSummary(ext.summary || {});
+        setPricingMultipliers(mult.multipliers || {});
+        setAutonomousLastRun((autoRuns && autoRuns.length > 0) ? autoRuns[0] : null);
+      } catch {
+        setRetrainStatus(null);
+        setExternalDemandSummary({});
+        setPricingMultipliers({});
+        setAutonomousLastRun(null);
+      }
     } catch {
       setJobs(DEFAULT_JOBS);
     } finally {
@@ -288,6 +309,60 @@ export default function SchedulePage() {
           </Card>
         ))}
       </div>
+
+      {/* Autonomous Ops */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2">
+            <Brain className="w-3.5 h-3.5 text-cyan-400" />
+            Autonomous Ops
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="rounded-lg border border-[#1e2d45] bg-[#060a10] p-3">
+              <div className="text-xs text-slate-500 uppercase tracking-wider">Retrain Status</div>
+              <div className={`text-sm font-semibold mt-1 ${retrainStatus?.retrain_ready ? "text-emerald-400" : "text-slate-300"}`}>
+                {retrainStatus?.retrain_ready ? "READY" : "Collecting"}
+              </div>
+              <div className="text-xs text-slate-600 mt-1">
+                {retrainStatus ? `${retrainStatus.sold_flips_since} sold flips since checkpoint` : "No checkpoint yet"}
+              </div>
+            </div>
+            <div className="rounded-lg border border-[#1e2d45] bg-[#060a10] p-3">
+              <div className="text-xs text-slate-500 uppercase tracking-wider">Demand Multipliers</div>
+              <div className="text-xs text-slate-400 mt-1 space-y-1">
+                <div>GPU: {((pricingMultipliers.gpu_midrange ?? 1) * 100).toFixed(0)}%</div>
+                <div>CPU: {((pricingMultipliers.cpu_workstation ?? 1) * 100).toFixed(0)}%</div>
+                <div>AM5 board: {((pricingMultipliers.motherboard_am5 ?? 1) * 100).toFixed(0)}%</div>
+              </div>
+            </div>
+            <div className="rounded-lg border border-[#1e2d45] bg-[#060a10] p-3">
+              <div className="text-xs text-slate-500 uppercase tracking-wider">Autonomous Cycle</div>
+              <div className="text-sm text-slate-300 mt-1">
+                {autonomousLastRun ? (autonomousLastRun.status === "success" ? "Healthy" : autonomousLastRun.status) : "No runs yet"}
+              </div>
+              <div className="text-xs text-slate-600 mt-1">
+                {autonomousLastRun?.started_at ? `Last run ${formatRelativeTime(new Date(autonomousLastRun.started_at))}` : "Waiting for first cycle"}
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border border-[#1e2d45] bg-[#060a10] p-3">
+            <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">External Demand Pulse</div>
+            {Object.keys(externalDemandSummary).length === 0 ? (
+              <div className="text-xs text-slate-600">No external signals loaded yet.</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {Object.entries(externalDemandSummary).map(([src, s]) => (
+                  <div key={src} className="text-xs text-slate-400">
+                    <span className="text-slate-300">{src.replace("_", " ")}</span>: {s.count} · score {s.avg_score.toFixed(1)} · conf {(s.avg_confidence * 100).toFixed(0)}%
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Job groups */}
       {grouped.map(({ cat, items }) => {
