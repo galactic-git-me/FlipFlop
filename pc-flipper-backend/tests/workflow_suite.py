@@ -223,10 +223,48 @@ async def test_retraining_workflow() -> TestResult:
         async with AsyncSessionLocal() as db:
             ck = RetrainCheckpoint(name="policy", last_flip_id=0, sold_flips_since=40, ready=True)
             db.add(ck)
+            src = DataSource(name="WF-Retrain", url="https://example.com", source_type=SourceType.scrape, enabled=True)
+            db.add(src)
+            await db.flush()
+            listing = Listing(
+                external_id="wf-retrain-base",
+                source_id=src.id,
+                source_name=src.name,
+                title="WF retrain listing",
+                description="wf",
+                price=200,
+                url="https://example.com/wf-retrain",
+                image_urls=[],
+                location="UK",
+                condition="used",
+                cpu="i7",
+                ram_gb=16,
+                ram_type="DDR4",
+                storage_gb=512,
+                storage_type="SSD",
+                gpu=None,
+                has_psu=True,
+                raw_specs={},
+                gem_score=70,
+                classification=Classification.gem,
+                gem_signals=[],
+                estimated_resale=360,
+                estimated_profit=112,
+                estimated_upgrade_cost=20,
+                initial_estimated_profit=112,
+            )
+            db.add(listing)
+            await db.flush()
+            flips: list[Flip] = []
+            for _ in range(40):
+                f = Flip(listing_id=listing.id, base_cost=200.0, upgrade_cost=20.0, total_cost=220.0)
+                db.add(f)
+                flips.append(f)
+            await db.flush()
             for i in range(40):
                 db.add(
                     FlipIntelligence(
-                        flip_id=900000 + i,
+                        flip_id=flips[i].id,
                         source_site="WF",
                         buy_price=200.0,
                         gem_score_at_buy=70.0,
@@ -251,7 +289,7 @@ async def test_retraining_workflow() -> TestResult:
         assert isinstance(res.get("version"), str)
         return TestResult(name, True, f"version={res.get('version')}")
     except Exception as e:
-        return TestResult(name, False, str(e))
+        return TestResult(name, False, repr(e))
 
 
 async def main():
