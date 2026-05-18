@@ -3,6 +3,7 @@ Scraper service — fetches listings from configured data sources.
 Each platform has its own adapter. Falls back to HTML scraping when no API.
 """
 import asyncio
+import base64
 import random
 import re
 from dataclasses import dataclass, field
@@ -19,6 +20,8 @@ from app.services.spec_parser import parse_specs
 
 settings = get_settings()
 ua = UserAgent()
+_EBAY_TOKEN: str | None = None
+_EBAY_TOKEN_EXP_TS: float = 0.0
 
 # ── Global title exclusions ──────────────────────────────────────────────────
 # Mini PCs / NUCs are not worth flipping: they use laptop CPUs, soldered RAM,
@@ -180,6 +183,115 @@ def _headers() -> dict:
         "Accept-Encoding": "gzip, deflate",
     }
 
+async def _get_ebay_access_token(client: httpx.AsyncClient) -> str | None:
+    """Get/refresh eBay OAuth token for Browse API."""
+    global _EBAY_TOKEN, _EBAY_TOKEN_EXP_TS
+    now = asyncio.get_event_loop().time()
+    if _EBAY_TOKEN and now < _EBAY_TOKEN_EXP_TS - 60:
+        return _EBAY_TOKEN
+
+    if not settings.ebay_app_id or not settings.ebay_client_secret:
+        return None
+
+    creds = f"{settings.ebay_app_id}:{settings.ebay_client_secret}".encode("utf-8")
+    basic = base64.b64encode(creds).decode("ascii")
+    headers = {
+        "Authorization": f"Basic {basic}",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+    data = {
+        "grant_type": "client_credentials",
+        "scope": "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.browse",
+    }
+    resp = await client.post("https://api.ebay.com/identity/v1/oauth2/token", data=data, headers=headers)
+    if resp.status_code != 200:
+        return None
+    payload = resp.json()
+    token = payload.get("access_token")
+    expires_in = int(payload.get("expires_in", 3600))
+    if not token:
+        return None
+    _EBAY_TOKEN = token
+    _EBAY_TOKEN_EXP_TS = now + expires_in
+    return _EBAY_TOKEN
+
+
+def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> list[RawListing]:
+    out: list[RawListing] = []
+    for it in items or []:
+        title = str(it.get("title") or "").strip()
+        if not title or _is_mini_pc(title):
+            continue
+        item_id = str(it.get("itemId") or "")
+        item_web_url = str(it.get("itemWebUrl") or "")
+        price_obj = (it.get("price") or {})
+        price = _parse_price(str(price_obj.get("value") or "0"))
+        if price <= 0:
+            continue
+        image = (it.get("image") or {}).get("imageUrl") or ""
+        condition = it.get("condition")
+        loc = (it.get("itemLocation") or {}).get("country")
+        buying = (it.get("buyingOptions") or [])
+        listing_type = "auction" if "AUCTION" in buying else "buy_it_now"
+        if item_id:
+            external_id = f"ebay_{item_id}"
+        else:
+            external_id = f"ebay_{_extract_ebay_id(item_web_url)}"
+        out.append(
+            RawListing(
+                external_id=external_id,
+                title=title,
+                price=price,
+                url=item_web_url,
+                location=loc,
+                condition=condition,
+                description=f"term:{term}",
+                image_urls=[image] if image else [],
+                source_name=source_name,
+                listing_type=listing_type,
+            )
+        )
+    return out
+
+
+async def _scrape_ebay_api_term(
+    client: httpx.AsyncClient,
+    token: str,
+    term: str,
+    min_price: float,
+    max_price: float,
+    auction_mode: bool,
+    is_component_term: bool,
+) -> list[RawListing]:
+    endpoint = "https://api.ebay.com/buy/browse/v1/item_summary/search"
+    buying = "AUCTION" if auction_mode else "FIXED_PRICE"
+    hi = int(max_price) if max_price > 0 else 5000
+    filters = [
+        f"price:[{int(min_price)}..{hi}]",
+        "priceCurrency:GBP",
+        f"buyingOptions:{{{buying}}}",
+        "itemLocationCountry:GB",
+    ]
+    if not is_component_term:
+        filters.append("conditions:{USED}")
+    params = {
+        "q": term,
+        "limit": "60",
+        "sort": "endingSoonest" if auction_mode else "newlyListed",
+        "filter": ",".join(filters),
+    }
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+    }
+    resp = await client.get(endpoint, params=params, headers=headers)
+    if resp.status_code != 200:
+        return []
+    payload = resp.json()
+    items = payload.get("itemSummaries") or []
+    return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK")
+
 
 async def _scrape_ebay_playwright_term(
     term: str,
@@ -294,6 +406,31 @@ async def scrape_ebay(
             try:
                 is_component_term = any(m in term.lower() for m in component_markers)
                 sacat = "0" if is_component_term else "179"
+                token = await _get_ebay_access_token(client)
+                if token:
+                    api_listings = await _scrape_ebay_api_term(
+                        client=client,
+                        token=token,
+                        term=term,
+                        min_price=min_price,
+                        max_price=max_price,
+                        auction_mode=auction_mode,
+                        is_component_term=is_component_term,
+                    )
+                    if api_listings:
+                        if auction_mode:
+                            for l in api_listings:
+                                l.source_name = "eBay UK Auctions"
+                                l.listing_type = "auction"
+                        before = len(results)
+                        for listing in api_listings:
+                            if listing.external_id not in seen_ids:
+                                seen_ids.add(listing.external_id)
+                                results.append(listing)
+                        added = len(results) - before
+                        record_term_result(term=term, found=len(api_listings), new=added)
+                        print(f"[scraper] eBay API '{term}': {len(api_listings)} found, {added} new (total {len(results)})")
+                        continue
                 if auction_mode:
                     params = {
                         "_nkw": term,
