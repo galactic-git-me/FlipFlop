@@ -291,7 +291,6 @@ async def scrape_ebay(
                         "_nkw": term,
                         "_sacat": sacat,
                         "LH_Auction": "1",   # Auctions only
-                        "LH_ItemCondition": "3000",
                         "_udlo": str(int(min_price)),
                         "_udhi": str(int(max_price)),
                         "LH_PrefLoc": "1",
@@ -303,22 +302,29 @@ async def scrape_ebay(
                         "_nkw": term,
                         "_sacat": sacat,   # component terms search all categories
                         "LH_BIN": "1",     # Buy It Now
-                        "LH_ItemCondition": "3000",  # Used
                         "_udlo": str(int(min_price)),
                         "_udhi": str(int(max_price)),
                         "LH_PrefLoc": "1", # UK only
                         "_sop": "10",      # Sort: newly listed
                         "_ipg": "60",      # 60 results per page
                     }
+                    # Component searches are often listed as new/refurb; do not over-filter.
+                    if not is_component_term:
+                        params["LH_ItemCondition"] = "3000"
                 new_listings: list[RawListing] = []
                 blocked = False
                 last_status = 0
+                query_variants = [params]
+                # Fallback query when strict filters produce zero: broaden category/condition.
+                relaxed = dict(params)
+                relaxed["_sacat"] = "0"
+                relaxed.pop("LH_ItemCondition", None)
+                relaxed.pop("LH_PrefLoc", None)
+                relaxed["_udhi"] = str(max(int(max_price), 2000))
+                query_variants.append(relaxed)
                 for attempt in range(1, 4):
-                    resp = await client.get(
-                        "https://www.ebay.co.uk/sch/i.html",
-                        params=params,
-                        headers=_headers(),
-                    )
+                    variant = query_variants[min(attempt - 1, len(query_variants) - 1)]
+                    resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=variant, headers=_headers())
                     last_status = resp.status_code
                     blocked = _is_ebay_blocked(resp.status_code, resp.text)
                     new_listings = _parse_ebay_html(resp.text, term)
