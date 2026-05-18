@@ -186,12 +186,12 @@ async def _scrape_ebay_playwright_term(
     min_price: float,
     max_price: float,
     auction_mode: bool = False,
-) -> list[RawListing]:
+) -> tuple[list[RawListing], bool]:
     """Browser fallback for eBay when HTTP path is blocked or returns empty."""
     try:
         from playwright.async_api import async_playwright
     except ImportError:
-        return []
+        return [], False
 
     if auction_mode:
         url = (
@@ -211,6 +211,7 @@ async def _scrape_ebay_playwright_term(
         )
 
     html = ""
+    title = ""
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(
@@ -225,11 +226,29 @@ async def _scrape_ebay_playwright_term(
             await page.evaluate("window.scrollBy(0, 900)")
             await page.wait_for_timeout(1200)
             html = await page.content()
+            title = (await page.title()) or ""
         finally:
             await context.close()
             await browser.close()
 
-    return _parse_ebay_html(html, term) if html else []
+    blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
+    blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
+    return (_parse_ebay_html(html, term) if html else []), blocked
+
+
+def _is_ebay_blocked(status_code: int, body: str) -> bool:
+    if status_code in (401, 403, 429):
+        return True
+    probe = (body or "").lower()
+    blocked_markers = (
+        "access denied",
+        "you don't have permission",
+        "errors.edgesuite.net",
+        "akamai",
+        "bot",
+        "forbidden",
+    )
+    return any(m in probe for m in blocked_markers)
 
 
 # ---------------------------------------------------------------------------
@@ -291,25 +310,39 @@ async def scrape_ebay(
                         "_sop": "10",      # Sort: newly listed
                         "_ipg": "60",      # 60 results per page
                     }
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=_headers(),
-                )
-                new_listings = _parse_ebay_html(resp.text, term)
-                if resp.status_code >= 400 or not new_listings:
-                    pw_listings = await _scrape_ebay_playwright_term(
+                new_listings: list[RawListing] = []
+                blocked = False
+                last_status = 0
+                for attempt in range(1, 4):
+                    resp = await client.get(
+                        "https://www.ebay.co.uk/sch/i.html",
+                        params=params,
+                        headers=_headers(),
+                    )
+                    last_status = resp.status_code
+                    blocked = _is_ebay_blocked(resp.status_code, resp.text)
+                    new_listings = _parse_ebay_html(resp.text, term)
+
+                    if not blocked and new_listings:
+                        break
+
+                    pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
                         term=term,
                         min_price=min_price,
                         max_price=max_price,
                         auction_mode=auction_mode,
                     )
                     if pw_listings:
+                        new_listings = pw_listings
+                        blocked = False
                         print(
                             f"[scraper] eBay '{term}': HTTP blocked/empty "
                             f"(status={resp.status_code}), Playwright returned {len(pw_listings)}"
                         )
-                        new_listings = pw_listings
+                        break
+                    blocked = blocked or pw_blocked
+                    if blocked and attempt < 3:
+                        await asyncio.sleep(random.uniform(8.0, 18.0))
                 # In auction mode every result is an auction — enforce it regardless
                 # of whether the bid-count element was parsed (it's sometimes absent
                 # in search snippets but always present on the item page).
@@ -324,7 +357,15 @@ async def scrape_ebay(
                         seen_ids.add(listing.external_id)
                         results.append(listing)
                 added = len(results) - before
-                record_term_result(term=term, found=len(new_listings), new=added)
+                if blocked and not new_listings:
+                    record_term_result(
+                        term=term,
+                        found=0,
+                        new=0,
+                        error=f"ebay_blocked(status={last_status})",
+                    )
+                else:
+                    record_term_result(term=term, found=len(new_listings), new=added)
                 print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
             except Exception as exc:
                 record_term_result(term=term, error=str(exc))
