@@ -343,7 +343,7 @@ async def _seed_default_data():
                 db.add(DataSource(name=_ms_name, url="", source_type=SourceType.scrape, enabled=True))
                 log.info("seeded.manual_source", name=_ms_name)
 
-        # ── Auction platform stubs ────────────────────────────────────────────
+        # ── Auction platform sources ──────────────────────────────────────────
         _auction_sources = [
             # IT-focused UK liquidation — no bot detection observed, scraper implemented
             ("Apex Auctions",          "https://www.apexauctions.co.uk",          True),

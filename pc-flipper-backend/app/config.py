@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     ebay_app_id: str = ""
     ebay_client_secret: str = ""
+    merkandi_api_key: str = ""
 
     stability_api_key: str = ""
     image_gen_provider: str = "pollinations"

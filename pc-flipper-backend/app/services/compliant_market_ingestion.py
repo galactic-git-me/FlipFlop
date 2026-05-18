@@ -73,7 +73,7 @@ def _normalize_row(source: str, row: dict[str, Any]) -> dict[str, Any]:
     location_text = (row.get("location_text") or row.get("location") or "").strip() or None
     url = row.get("url")
     if isinstance(url, str) and "example.com" in url.lower():
-        raise ValueError("Blocked placeholder URL (example.com). Use real source data.")
+        raise ValueError("Blocked reference URL (example.com). Use a real source URL.")
 
     normalized = {
         "source": source,

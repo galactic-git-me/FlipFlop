@@ -452,7 +452,7 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                     if not href.startswith("http"):
                         continue
                     img_src = str(item.get("img", ""))
-                    # Skip tiny data URIs (Google's lazy-load placeholders)
+                    # Skip tiny data URIs from lazy-load markup
                     if img_src.startswith("data:") and len(img_src) < 300:
                         img_src = ""
 

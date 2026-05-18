@@ -320,7 +320,7 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
             image_url = ""
             if img_el:
                 image_url = img_el.get("src") or img_el.get("data-defer-load") or img_el.get("data-src") or ""
-                # Skip placeholder images
+                # Skip non-content images
                 if "ebaystatic.com" in image_url or image_url.endswith(".png"):
                     image_url = ""
                 elif image_url:
@@ -884,7 +884,7 @@ def _parse_john_pye_html(html: str, min_price: float, max_price: float) -> list[
             listings.append(RawListing(
                 external_id=external_id,
                 title=title,
-                price=price or min_price,  # use min_price as placeholder if no current bid
+                price=price or min_price,  # use min_price when no current bid is visible
                 url=url,
                 location=None,
                 condition="used",
@@ -1147,7 +1147,7 @@ async def fetch_listings(
         return [_convert(r) for r in pl_results]
 
     if any(k in name for k in ("merkandi", "wholesale clearance")):
-        # Explicit stub calls for observability — logs reason and keeps pipeline healthy.
+        # Explicit adapter calls for observability — logs reasons and keeps pipeline healthy.
         if "merkandi" in name:
             await scrape_merkandi(_AUCTION_TERMS, min_price=min_price, max_price=max_price)
         else:
