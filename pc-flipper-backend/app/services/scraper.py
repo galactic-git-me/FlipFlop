@@ -181,6 +181,57 @@ def _headers() -> dict:
     }
 
 
+async def _scrape_ebay_playwright_term(
+    term: str,
+    min_price: float,
+    max_price: float,
+    auction_mode: bool = False,
+) -> list[RawListing]:
+    """Browser fallback for eBay when HTTP path is blocked or returns empty."""
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        return []
+
+    if auction_mode:
+        url = (
+            "https://www.ebay.co.uk/sch/i.html"
+            f"?_nkw={term.replace(' ', '+')}"
+            "&_sacat=179&LH_Auction=1&LH_ItemCondition=3000"
+            f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
+            "&LH_PrefLoc=1&_sop=1&_ipg=60"
+        )
+    else:
+        url = (
+            "https://www.ebay.co.uk/sch/i.html"
+            f"?_nkw={term.replace(' ', '+')}"
+            "&_sacat=179&LH_BIN=1&LH_ItemCondition=3000"
+            f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
+            "&LH_PrefLoc=1&_sop=10&_ipg=60"
+        )
+
+    html = ""
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(
+            user_agent=ua.random,
+            locale="en-GB",
+            viewport={"width": 1366, "height": 768},
+        )
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            await page.wait_for_timeout(1800)
+            await page.evaluate("window.scrollBy(0, 900)")
+            await page.wait_for_timeout(1200)
+            html = await page.content()
+        finally:
+            await context.close()
+            await browser.close()
+
+    return _parse_ebay_html(html, term) if html else []
+
+
 # ---------------------------------------------------------------------------
 # eBay adapter — uses Browse API when key available, else HTML scraping
 # ---------------------------------------------------------------------------
@@ -199,15 +250,27 @@ async def scrape_ebay(
     """
     results: list[RawListing] = []
     seen_ids: set[str] = set()
+    component_markers = (
+        "motherboard",
+        "cpu",
+        "bundle",
+        "ram",
+        "ssd",
+        "psu",
+        "graphics card",
+        "gpu",
+    )
 
     async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
         for term in search_terms:
             await asyncio.sleep(random.uniform(0.8, 1.8))
             try:
+                is_component_term = any(m in term.lower() for m in component_markers)
+                sacat = "0" if is_component_term else "179"
                 if auction_mode:
                     params = {
                         "_nkw": term,
-                        "_sacat": "179",
+                        "_sacat": sacat,
                         "LH_Auction": "1",   # Auctions only
                         "LH_ItemCondition": "3000",
                         "_udlo": str(int(min_price)),
@@ -219,7 +282,7 @@ async def scrape_ebay(
                 else:
                     params = {
                         "_nkw": term,
-                        "_sacat": "179",   # PCs / Desktops category
+                        "_sacat": sacat,   # component terms search all categories
                         "LH_BIN": "1",     # Buy It Now
                         "LH_ItemCondition": "3000",  # Used
                         "_udlo": str(int(min_price)),
@@ -234,6 +297,19 @@ async def scrape_ebay(
                     headers=_headers(),
                 )
                 new_listings = _parse_ebay_html(resp.text, term)
+                if resp.status_code >= 400 or not new_listings:
+                    pw_listings = await _scrape_ebay_playwright_term(
+                        term=term,
+                        min_price=min_price,
+                        max_price=max_price,
+                        auction_mode=auction_mode,
+                    )
+                    if pw_listings:
+                        print(
+                            f"[scraper] eBay '{term}': HTTP blocked/empty "
+                            f"(status={resp.status_code}), Playwright returned {len(pw_listings)}"
+                        )
+                        new_listings = pw_listings
                 # In auction mode every result is an auction — enforce it regardless
                 # of whether the bid-count element was parsed (it's sometimes absent
                 # in search snippets but always present on the item page).
