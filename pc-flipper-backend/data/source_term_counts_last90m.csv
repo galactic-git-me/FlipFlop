@@ -1,0 +1,233 @@
+source,term,found,new,error_events,events
+BidSpotter,7700x b650,60,0,0,1
+BidSpotter,Dell OptiPlex,60,0,0,1
+BidSpotter,HP EliteDesk,60,0,0,1
+BidSpotter,Lenovo ThinkCentre,60,0,0,1
+BidSpotter,computer tower,60,0,0,1
+BidSpotter,cpu bundle,60,0,0,1
+BidSpotter,ddr4 ram,60,0,0,1
+BidSpotter,desktop pc,60,0,0,1
+BidSpotter,gaming computer,60,0,0,1
+BidSpotter,gaming pc,60,0,0,1
+BidSpotter,graphics card,60,0,0,1
+BidSpotter,i5 desktop,60,0,0,1
+BidSpotter,i7 desktop,60,0,0,1
+BidSpotter,motherboard,60,0,0,1
+BidSpotter,nvme ssd,60,0,0,1
+BidSpotter,office pc,60,0,0,1
+BidSpotter,pc case,60,0,0,1
+BidSpotter,power supply,60,0,0,1
+BidSpotter,refurbished pc,60,0,0,1
+BidSpotter,workstation,60,0,0,1
+Facebook Marketplace,pc tower,22,22,0,1
+Facebook Marketplace,Dell OptiPlex,20,20,0,1
+Facebook Marketplace,gaming pc,20,20,0,1
+Facebook Marketplace,desktop pc,14,14,0,1
+John Pye,Dell OptiPlex,0,0,1,1
+John Pye,HP EliteDesk,0,0,1,1
+John Pye,computer tower,0,0,1,1
+John Pye,desktop pc,0,0,1,1
+John Pye,gaming pc,0,0,1,1
+John Pye,workstation,0,0,1,1
+Wilsons Auctions,7700x b650,1,0,0,1
+Wilsons Auctions,Dell OptiPlex,1,0,0,1
+Wilsons Auctions,HP EliteDesk,1,0,0,1
+Wilsons Auctions,Lenovo ThinkCentre,1,0,0,1
+Wilsons Auctions,computer tower,1,0,0,1
+Wilsons Auctions,cpu bundle,1,0,0,1
+Wilsons Auctions,ddr4 ram,1,0,0,1
+Wilsons Auctions,desktop pc,1,0,0,1
+Wilsons Auctions,gaming computer,1,0,0,1
+Wilsons Auctions,gaming pc,1,0,0,1
+Wilsons Auctions,graphics card,1,0,0,1
+Wilsons Auctions,i5 desktop,1,0,0,1
+Wilsons Auctions,i7 desktop,1,0,0,1
+Wilsons Auctions,motherboard,1,0,0,1
+Wilsons Auctions,nvme ssd,1,0,0,1
+Wilsons Auctions,office pc,1,0,0,1
+Wilsons Auctions,pc case,1,0,0,1
+Wilsons Auctions,power supply,1,0,0,1
+Wilsons Auctions,refurbished pc,1,0,0,1
+Wilsons Auctions,workstation,1,0,0,1
+eBay UK,pc base unit,79,79,0,1
+eBay UK,computer tower,60,15,0,1
+eBay UK,desktop pc,60,60,0,1
+eBay UK,gaming pc,60,36,0,1
+eBay UK,Acer Veriton tower,0,0,0,1
+eBay UK,Dell OptiPlex,0,0,0,1
+eBay UK,Dell Precision tower,0,0,0,1
+eBay UK,Dell Vostro tower,0,0,0,1
+eBay UK,Dell workstation,0,0,0,1
+eBay UK,Fujitsu Esprimo,0,0,0,1
+eBay UK,HP Compaq tower,0,0,0,1
+eBay UK,HP EliteDesk,0,0,0,1
+eBay UK,HP ProDesk,0,0,0,1
+eBay UK,HP Z240,0,0,0,1
+eBay UK,HP Z440,0,0,0,1
+eBay UK,HP Z640,0,0,0,1
+eBay UK,HP workstation,0,0,0,1
+eBay UK,Lenovo ThinkCentre,0,0,0,1
+eBay UK,Lenovo ThinkStation,0,0,0,1
+eBay UK,bulk pcs desktop,0,0,0,1
+eBay UK,compter tower,0,0,0,1
+eBay UK,computre tower,0,0,0,1
+eBay UK,deskptop pc,0,0,0,1
+eBay UK,desktop computer no SSD,0,0,0,1
+eBay UK,desktop faulty,0,0,0,1
+eBay UK,desktop liquid cooled,0,0,0,1
+eBay UK,desktop no gpu,0,0,0,1
+eBay UK,desktop no os,0,0,0,1
+eBay UK,desktop pcs lot,0,0,0,1
+eBay UK,desktop spares or repair,0,0,0,1
+eBay UK,desktop untested,0,0,0,1
+eBay UK,destkop computer,0,0,0,1
+eBay UK,destop pc,0,0,0,1
+eBay UK,ex office pc,0,0,0,1
+eBay UK,gaiming pc,0,0,0,1
+eBay UK,gameing pc,0,0,0,1
+eBay UK,gaming pc fault,0,0,0,1
+eBay UK,gaming pc no gpu,0,0,0,1
+eBay UK,gaming pc no graphics card,0,0,0,1
+eBay UK,gaming pc no hard drive,0,0,0,1
+eBay UK,gaming pc quick sale,0,0,0,1
+eBay UK,gaming pc untested,0,0,0,1
+eBay UK,gaming pc water cooled,0,0,0,1
+eBay UK,gaming pc with aio,0,0,0,1
+eBay UK,gamng pc,0,0,0,1
+eBay UK,gamnig pc,0,0,0,1
+eBay UK,gmaing pc,0,0,0,1
+eBay UK,i5 10400 desktop,0,0,0,1
+eBay UK,i5 desktop,0,0,0,1
+eBay UK,i5 tower,0,0,0,1
+eBay UK,i7 10700 desktop,0,0,0,1
+eBay UK,i7 desktop,0,0,0,1
+eBay UK,i7 tower,0,0,0,1
+eBay UK,i9 desktop,0,0,0,1
+eBay UK,i9 tower,0,0,0,1
+eBay UK,it clearance desktop,0,0,0,1
+eBay UK,office computers clearance,0,0,0,1
+eBay UK,office pc tower,0,0,0,1
+eBay UK,office tower pc,0,0,0,1
+eBay UK,old computer quick sale,0,0,0,1
+eBay UK,old pc clearing out,0,0,0,1
+eBay UK,pc base unit no graphics,0,0,0,1
+eBay UK,pc boots no display,0,0,0,1
+eBay UK,pc collect today,0,0,0,1
+eBay UK,pc faulty,0,0,0,1
+eBay UK,pc free to good home,0,0,0,1
+eBay UK,pc job lot,0,0,0,1
+eBay UK,pc liquid cooler,0,0,0,1
+eBay UK,pc need gone today,0,0,0,1
+eBay UK,pc no display,0,0,0,1
+eBay UK,pc no hard drive,0,0,0,1
+eBay UK,pc no longer needed,0,0,0,1
+eBay UK,pc no operating system,0,0,0,1
+eBay UK,pc no os,0,0,0,1
+eBay UK,pc no power supply,0,0,0,1
+eBay UK,pc no psu,0,0,0,1
+eBay UK,pc powers on no signal,0,0,0,1
+eBay UK,pc powers up untested,0,0,0,1
+eBay UK,pc quick sale,0,0,0,1
+eBay UK,pc spares or repair,0,0,0,1
+eBay UK,pc tower,0,0,0,1
+eBay UK,pc tower no graphics,0,0,0,1
+eBay UK,pc tower no storage,0,0,0,1
+eBay UK,pc towre,0,0,0,1
+eBay UK,pc untested,0,0,0,1
+eBay UK,ryzen 5 3600 desktop,0,0,0,1
+eBay UK,ryzen 5 desktop,0,0,0,1
+eBay UK,ryzen 7 5800 desktop,0,0,0,1
+eBay UK,ryzen 7 desktop,0,0,0,1
+eBay UK,ryzen 9 desktop,0,0,0,1
+eBay UK,son old pc,0,0,0,1
+eBay UK,unused pc,0,0,0,1
+eBay UK,workstation joblot,0,0,0,1
+eBay UK,xeon desktop,0,0,0,1
+eBay UK,xeon tower,0,0,0,1
+eBay UK Auctions,office computers clearance,56,55,0,1
+eBay UK Auctions,desktop pcs lot,12,12,0,1
+eBay UK Auctions,it clearance desktop,8,8,0,1
+eBay UK Auctions,7700 motherboard bundle,0,0,0,1
+eBay UK Auctions,7700x b650,0,0,0,1
+eBay UK Auctions,7900 bundle,0,0,0,1
+eBay UK Auctions,Dell OptiPlex,0,0,0,1
+eBay UK Auctions,Dell Precision tower,0,0,0,1
+eBay UK Auctions,HP EliteDesk,0,0,0,1
+eBay UK Auctions,HP Z440,0,0,0,1
+eBay UK Auctions,HP Z640,0,0,0,1
+eBay UK Auctions,HP workstation,0,0,0,1
+eBay UK Auctions,Lenovo ThinkCentre,0,0,0,1
+eBay UK Auctions,am4 motherboard,0,0,0,1
+eBay UK Auctions,am5 bundle,0,0,0,1
+eBay UK Auctions,asus tuf b650,0,0,0,1
+eBay UK Auctions,atx pc case,0,0,0,1
+eBay UK Auctions,b650 tomahawk,0,0,0,1
+eBay UK Auctions,bulk desktops,0,0,0,1
+eBay UK Auctions,ddr4 ram lot,0,0,0,1
+eBay UK Auctions,ddr5 bundle,0,0,0,1
+eBay UK Auctions,ddr5 ram lot,0,0,0,1
+eBay UK Auctions,desktop pc,0,0,0,1
+eBay UK Auctions,desktop untested,0,0,0,1
+eBay UK Auctions,ex office pc lot,0,0,0,1
+eBay UK Auctions,gaming pc,0,0,0,1
+eBay UK Auctions,gaming pc faulty,0,0,0,1
+eBay UK Auctions,gaming pc untested,0,0,0,1
+eBay UK Auctions,gigabyte aorus elite b650,0,0,0,1
+eBay UK Auctions,gtx 1660,0,0,0,1
+eBay UK Auctions,i7 desktop,0,0,0,1
+eBay UK Auctions,i7 tower,0,0,0,1
+eBay UK Auctions,i9 tower,0,0,0,1
+eBay UK Auctions,intel i7 cpu,0,0,0,1
+eBay UK Auctions,lga1700 motherboard,0,0,0,1
+eBay UK Auctions,motherboard bundle,0,0,0,1
+eBay UK Auctions,msi gaming plus b650,0,0,0,1
+eBay UK Auctions,nvme ssd,0,0,0,1
+eBay UK Auctions,office pc lot,0,0,0,1
+eBay UK Auctions,pc job lot,0,0,0,1
+eBay UK Auctions,pc no display,0,0,0,1
+eBay UK Auctions,pc power supply,0,0,0,1
+eBay UK Auctions,pc spares or repair,0,0,0,1
+eBay UK Auctions,pc tower,0,0,0,1
+eBay UK Auctions,pc untested,0,0,0,1
+eBay UK Auctions,proart am5,0,0,0,1
+eBay UK Auctions,rtx 3060,0,0,0,1
+eBay UK Auctions,ryzen 7 cpu,0,0,0,1
+eBay UK Auctions,ryzen 7700,0,0,0,1
+eBay UK Auctions,ryzen 7700x,0,0,0,1
+eBay UK Auctions,ryzen 7900,0,0,0,1
+eBay UK Auctions,ryzen 9700x,0,0,0,1
+eBay UK Auctions,ryzen bundle,0,0,0,1
+eBay UK Auctions,ryzen desktop,0,0,0,1
+eBay UK Auctions,workstation joblot,0,0,0,1
+eBay UK Auctions,xeon tower,0,0,0,1
+i-bidder,7700x b650,23,0,0,1
+i-bidder,Dell OptiPlex,23,0,0,1
+i-bidder,HP EliteDesk,23,0,0,1
+i-bidder,Lenovo ThinkCentre,23,0,0,1
+i-bidder,computer tower,23,0,0,1
+i-bidder,cpu bundle,23,0,0,1
+i-bidder,ddr4 ram,23,0,0,1
+i-bidder,desktop pc,23,0,0,1
+i-bidder,gaming computer,23,0,0,1
+i-bidder,gaming pc,23,0,0,1
+i-bidder,graphics card,23,0,0,1
+i-bidder,i5 desktop,23,0,0,1
+i-bidder,i7 desktop,23,0,0,1
+i-bidder,motherboard,23,0,0,1
+i-bidder,nvme ssd,23,0,0,1
+i-bidder,office pc,23,0,0,1
+i-bidder,pc case,23,0,0,1
+i-bidder,power supply,23,0,0,1
+i-bidder,refurbished pc,23,0,0,1
+i-bidder,workstation,23,0,0,1
+unknown,HP workstation,24,24,0,1
+unknown,gaming pc,22,22,0,1
+unknown,Dell OptiPlex,21,21,0,1
+unknown,HP EliteDesk,19,19,0,1
+unknown,Lenovo ThinkCentre,19,19,0,1
+unknown,Dell workstation,18,18,0,1
+unknown,pc tower no graphics,18,18,0,1
+unknown,pc no hard drive,17,17,0,1
+unknown,desktop pc,14,14,0,1
+unknown,gaming pc no gpu,12,12,0,1
+unknown,pc tower,0,0,1,1
