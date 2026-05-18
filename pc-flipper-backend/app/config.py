@@ -15,6 +15,10 @@ class Settings(BaseSettings):
 
     ebay_app_id: str = ""
     ebay_client_secret: str = ""
+    ebay_proxy_url: str = ""
+    ebay_delay_min_seconds: float = 4.0
+    ebay_delay_max_seconds: float = 10.0
+    ebay_block_cooldown_seconds: float = 45.0
     merkandi_api_key: str = ""
 
     stability_api_key: str = ""

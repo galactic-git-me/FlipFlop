@@ -280,9 +280,17 @@ async def scrape_ebay(
         "gpu",
     )
 
-    async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
-        for term in search_terms:
-            await asyncio.sleep(random.uniform(0.8, 1.8))
+    blocked_terms: list[str] = []
+    client_kwargs = {"timeout": 30, "follow_redirects": True}
+    if settings.ebay_proxy_url:
+        client_kwargs["proxy"] = settings.ebay_proxy_url
+
+    async with httpx.AsyncClient(**client_kwargs) as client:
+        queue = list(search_terms)
+        second_pass = False
+        while queue:
+            term = queue.pop(0)
+            await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
             try:
                 is_component_term = any(m in term.lower() for m in component_markers)
                 sacat = "0" if is_component_term else "179"
@@ -370,12 +378,60 @@ async def scrape_ebay(
                         new=0,
                         error=f"ebay_blocked(status={last_status})",
                     )
+                    blocked_terms.append(term)
                 else:
                     record_term_result(term=term, found=len(new_listings), new=added)
                 print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
             except Exception as exc:
                 record_term_result(term=term, error=str(exc))
                 print(f"[scraper] eBay error for {term!r}: {exc}")
+        if blocked_terms and not second_pass:
+            second_pass = True
+            await asyncio.sleep(settings.ebay_block_cooldown_seconds)
+            queue = list(dict.fromkeys(blocked_terms))
+            blocked_terms.clear()
+            while queue:
+                term = queue.pop(0)
+                await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+                try:
+                    is_component_term = any(m in term.lower() for m in component_markers)
+                    params = {
+                        "_nkw": term,
+                        "_sacat": "0" if is_component_term else "179",
+                        "LH_Auction": "1" if auction_mode else None,
+                        "LH_BIN": None if auction_mode else "1",
+                        "_udlo": str(int(min_price)),
+                        "_udhi": str(max(int(max_price), 2000)),
+                        "_sop": "1" if auction_mode else "10",
+                        "_ipg": "60",
+                    }
+                    params = {k: v for k, v in params.items() if v is not None}
+                    resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_headers())
+                    new_listings = _parse_ebay_html(resp.text, term)
+                    blocked = _is_ebay_blocked(resp.status_code, resp.text)
+                    if not new_listings:
+                        pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
+                            term=term,
+                            min_price=min_price,
+                            max_price=max_price,
+                            auction_mode=auction_mode,
+                        )
+                        blocked = blocked or pw_blocked
+                        new_listings = pw_listings
+                    before = len(results)
+                    for listing in new_listings:
+                        if listing.external_id not in seen_ids:
+                            seen_ids.add(listing.external_id)
+                            results.append(listing)
+                    added = len(results) - before
+                    if blocked and not new_listings:
+                        record_term_result(term=term, found=0, new=0, error=f"ebay_blocked_retry(status={resp.status_code})")
+                    else:
+                        record_term_result(term=term, found=len(new_listings), new=added)
+                    print(f"[scraper] eBay retry '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
+                except Exception as exc:
+                    record_term_result(term=term, error=f"ebay_retry_error:{exc}")
+                    print(f"[scraper] eBay retry error for {term!r}: {exc}")
     return results
 
 
