@@ -64,6 +64,7 @@ class RawListing:
     description: str
     image_urls: list[str] = field(default_factory=list)
     source_name: str = ""
+    source_confidence: str = "browser_verified"
     # "auction" | "buy_it_now" | "classified"
     listing_type: str = "buy_it_now"
     # When the auction/listing expires (None for BIN / classified)
@@ -248,6 +249,7 @@ def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> lis
                 description=f"term:{term}",
                 image_urls=[image] if image else [],
                 source_name=source_name,
+                source_confidence="official_api",
                 listing_type=listing_type,
             )
         )

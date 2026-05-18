@@ -9,6 +9,7 @@ class ListingOut(BaseModel):
     external_id: str
     dedupe_fingerprint: Optional[str] = None
     source_name: str
+    source_confidence: str
     title: str
     price: float
     url: str

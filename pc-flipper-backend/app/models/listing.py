@@ -30,6 +30,7 @@ class Listing(Base):
     dedupe_fingerprint: Mapped[str | None] = mapped_column(String(255), index=True)
     source_id: Mapped[int] = mapped_column(Integer, index=True)
     source_name: Mapped[str] = mapped_column(String(100))
+    source_confidence: Mapped[str] = mapped_column(String(32), default="browser_verified", index=True)
 
     # Raw listing data
     title: Mapped[str] = mapped_column(String(500))

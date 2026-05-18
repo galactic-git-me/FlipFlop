@@ -357,6 +357,7 @@ async def _upsert_listings(
             listing.last_seen_at = datetime.utcnow()
             listing.price = raw.price
             listing.status = ListingStatus.active
+            listing.source_confidence = getattr(raw, "source_confidence", listing.source_confidence or "browser_verified")
             listing.estimated_resale = resale
             listing.resale_low = resale_range.low
             listing.resale_high = resale_range.high
@@ -390,6 +391,7 @@ async def _upsert_listings(
                 dedupe_fingerprint=fp,
                 source_id=source_id,
                 source_name=raw.source_name,
+                source_confidence=getattr(raw, "source_confidence", "browser_verified"),
                 title=raw.title,
                 description=raw.description,
                 price=raw.price,
