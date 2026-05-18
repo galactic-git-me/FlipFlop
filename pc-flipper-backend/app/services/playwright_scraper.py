@@ -374,6 +374,7 @@ async def scrape_facebook_playwright(
         page = await context.new_page()
 
         for term in search_terms[:20]:
+            term_before = len(results)
             try:
                 # Force a UK marketplace path to avoid geo redirects (for example /sanfrancisco/)
                 # when anonymous/headless sessions do not have stable location context.
@@ -408,6 +409,13 @@ async def scrape_facebook_playwright(
                     log.warning(
                         "facebook.playwright.login_required",
                         hint="Save fb_cookies.json — see playwright_scraper.py instructions",
+                    )
+                    record_term_result(
+                        term=term,
+                        found=0,
+                        new=0,
+                        error="login_required",
+                        source_name="Facebook Marketplace",
                     )
                     break  # No point trying other terms without auth
 
@@ -510,8 +518,17 @@ async def scrape_facebook_playwright(
                     except Exception:
                         continue
 
+                term_new = len(results) - term_before
+                record_term_result(
+                    term=term,
+                    found=term_new,
+                    new=term_new,
+                    source_name="Facebook Marketplace",
+                )
+
             except Exception as exc:
                 log.error("facebook.playwright.error", term=term, error=str(exc))
+                record_term_result(term=term, error=str(exc), source_name="Facebook Marketplace")
                 continue
 
         if browser is not None:
