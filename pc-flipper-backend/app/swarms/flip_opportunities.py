@@ -13,6 +13,7 @@ from app.database import AsyncSessionLocal
 from app.models.listing import Listing, ListingStatus, Classification
 from app.models.source import DataSource
 from app.models.search_config import SearchConfig
+from app.models.search_telemetry import SearchTelemetry
 from app.services.scraper import fetch_listings
 from app.services.spec_parser import parse_specs
 from app.services.classifier import score_listing
@@ -136,7 +137,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
             log.info("source.skipped", source=source.name, reason=reason)
             return result
 
-        begin_source_run(source.name)
+        run_id = begin_source_run(source.name)
         raw_listings = await fetch_listings(
             source_name=source.name,
             source_url=source.url,
@@ -169,6 +170,57 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                     )
                 )
                 await db.commit()
+
+        # Retry only failed terms later in the same hour, while keeping successful data.
+        failed_terms = await _failed_terms_for_run(run_id, source.name)
+        if failed_terms:
+            delay_minutes = max(1, int(getattr(config, "source_retry_delay_minutes", 0) or 0))
+            # Pull settings-based retry delay from global settings when config object has no field.
+            from app.config import get_settings as _get_settings
+            delay_minutes = max(1, int(_get_settings().source_retry_delay_minutes))
+            max_terms = max(1, int(_get_settings().source_retry_max_terms))
+            failed_terms = failed_terms[:max_terms]
+            log.info(
+                "source.retry.scheduled",
+                source=source.name,
+                failed_terms=len(failed_terms),
+                delay_minutes=delay_minutes,
+            )
+            await asyncio.sleep(delay_minutes * 60)
+            retry_run_id = begin_source_run(source.name)
+            retry_raw = await fetch_listings(
+                source_name=source.name,
+                source_url=source.url,
+                search_terms=failed_terms,
+                min_price=config.min_price,
+                max_price=config.max_price,
+            )
+            end_source_run()
+            result["found"] += len(retry_raw)
+            async with _DB_WRITE_LOCK:
+                async with AsyncSessionLocal() as db:
+                    retry_gems = await _upsert_listings(db, retry_raw, source.id, config)
+                    result["gems"] += retry_gems
+                    await db.execute(
+                        update(DataSource)
+                        .where(DataSource.id == source.id)
+                        .values(
+                            last_scraped_at=datetime.utcnow(),
+                            listings_found_last_run=len(raw_listings) + len(retry_raw),
+                            listings_found_total=DataSource.listings_found_total + len(retry_raw),
+                        )
+                    )
+                    await db.commit()
+            retry_failed_terms = await _failed_terms_for_run(retry_run_id, source.name)
+            if retry_failed_terms:
+                log.warning(
+                    "source.retry.partial",
+                    source=source.name,
+                    retried_terms=len(failed_terms),
+                    still_failed_terms=len(retry_failed_terms),
+                )
+            else:
+                log.info("source.retry.success", source=source.name, retried_terms=len(failed_terms))
 
         scan_state.site_done(source.name, result["found"], result["gems"])
         log.info("source.done", source=source.name, found=result["found"], gems=result["gems"])
@@ -210,6 +262,23 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         end_source_run()
 
     return result
+
+
+async def _failed_terms_for_run(run_id: str | None, source_name: str) -> list[str]:
+    if not run_id:
+        return []
+    async with AsyncSessionLocal() as db:
+        rows = await db.execute(
+            select(SearchTelemetry.term)
+            .where(
+                SearchTelemetry.run_id == run_id,
+                SearchTelemetry.source == source_name,
+                SearchTelemetry.error.is_not(None),
+            )
+        )
+        terms = [str(t[0]).strip() for t in rows.all() if t and t[0]]
+    # Preserve order, drop duplicates
+    return list(dict.fromkeys(terms))
 
 
 async def _upsert_listings(
