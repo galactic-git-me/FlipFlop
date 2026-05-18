@@ -17,6 +17,7 @@ Cookie setup for Facebook:
 
 import asyncio
 import json
+import os
 import re
 import random
 from datetime import datetime
@@ -31,6 +32,7 @@ log = structlog.get_logger(__name__)
 
 # Path to optional Facebook session cookies
 FB_COOKIES_PATH = Path(__file__).parent.parent.parent / "fb_cookies.json"
+FB_PROFILE_DIR = Path(__file__).parent.parent.parent / ".fb-profile"
 
 # Stealth args that suppress automation signals
 _STEALTH_ARGS = [
@@ -110,8 +112,31 @@ def _is_pc_listing(title: str) -> bool:
 # ── Shared browser context factory ──────────────────────────────────────────
 
 async def _make_context(playwright, cookies: list | None = None):
+    headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
+    use_persistent_profile = os.getenv("FB_USE_PROFILE", "0").lower() in {"1", "true", "yes"}
+
+    if use_persistent_profile:
+        FB_PROFILE_DIR.mkdir(parents=True, exist_ok=True)
+        context = await playwright.chromium.launch_persistent_context(
+            user_data_dir=str(FB_PROFILE_DIR),
+            headless=headless,
+            args=_STEALTH_ARGS,
+            user_agent=_USER_AGENT,
+            viewport={"width": 1366, "height": 768},
+            locale="en-GB",
+            timezone_id="Europe/London",
+            java_script_enabled=True,
+        )
+        await context.add_init_script(_STEALTH_JS)
+        if cookies:
+            try:
+                await context.add_cookies(cookies)
+            except Exception:
+                pass
+        return None, context
+
     browser = await playwright.chromium.launch(
-        headless=True,
+        headless=headless,
         args=_STEALTH_ARGS,
     )
     context = await browser.new_context(
