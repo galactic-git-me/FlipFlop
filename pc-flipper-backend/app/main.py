@@ -166,6 +166,7 @@ _FLIP_SEARCH_TERMS = [
     "desktop pc",
     "gaming pc",
     "computer tower",
+    "motherboard cpu combo",
 
     # ── 2. BRAND WORKSTATIONS (HIGH VALUE / OFTEN UNDERPRICED) ──────────────
     # Office IT clearances dump these for almost nothing.

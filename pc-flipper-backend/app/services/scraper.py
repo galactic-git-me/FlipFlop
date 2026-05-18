@@ -925,6 +925,7 @@ _GUMTREE_FB_TERMS = [
     # component lanes (build-from-parts)
     "motherboard bundle", "motherboard lga1700", "motherboard am4",
     "cpu bundle", "intel i7 cpu", "ryzen 7 cpu",
+    "motherboard cpu combo",
     "graphics card", "rtx 3060", "gtx 1660",
     "ddr4 ram", "ddr5 ram", "nvme ssd", "power supply psu",
     "pc case atx", "mid tower case",
@@ -943,7 +944,7 @@ _PRELOVED_TERMS = [
     "i7 tower", "i7 desktop", "ryzen 7 desktop",
     "office pc tower", "ex office pc",
     # component lanes
-    "motherboard", "cpu", "graphics card", "ddr4 ram", "ddr5 ram",
+    "motherboard", "cpu", "motherboard cpu combo", "graphics card", "ddr4 ram", "ddr5 ram",
     "nvme ssd", "psu", "pc case",
     # AM5 combo strategy
     "7700x b650", "am5 bundle", "ryzen bundle", "ddr5 bundle",
@@ -969,6 +970,7 @@ _AUCTION_TERMS = [
     # components and enclosures
     "motherboard",
     "cpu bundle",
+    "motherboard cpu combo",
     "graphics card",
     "ddr4 ram",
     "nvme ssd",
@@ -1021,6 +1023,7 @@ _EBAY_AUCTION_TERMS = [
     "i7 desktop",
     # ── Individual components and cases ─────────────────────────────────────
     "motherboard bundle",
+    "motherboard cpu combo",
     "lga1700 motherboard",
     "am4 motherboard",
     "intel i7 cpu",
