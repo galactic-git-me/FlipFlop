@@ -18,6 +18,7 @@ from app.services.autonomous_loop import run_autonomous_cycle
 from app.services.outcome_capture import capture_outcomes_and_check_retrain
 from app.services.retraining_pipeline import run_retraining_if_ready
 from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
+from app.services.compliant_market_ingestion import run_compliant_market_ingestion
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -34,6 +35,7 @@ _job_history: dict[str, deque[dict]] = {
     "autonomous_cycle": deque(maxlen=50),
     "outcome_capture": deque(maxlen=50),
     "model_retraining": deque(maxlen=50),
+    "compliant_market_ingestion": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 
@@ -109,6 +111,7 @@ def start_scheduler():
     autonomous_cycle_start = now + timedelta(minutes=30)
     outcome_capture_start = now + timedelta(minutes=35)
     model_retraining_start = now + timedelta(minutes=40)
+    compliant_ingestion_start = now + timedelta(minutes=45)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -219,6 +222,17 @@ def start_scheduler():
         next_run_time=model_retraining_start,
     )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=settings.compliant_ingestion_interval_hours),
+        id="compliant_market_ingestion",
+        name="Compliant Market Ingestion",
+        kwargs={"job_id": "compliant_market_ingestion", "fn": run_compliant_market_ingestion},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=compliant_ingestion_start,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -250,6 +264,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("outcome_capture", capture_outcomes_and_check_retrain)
     if swarm_id == "model_retraining":
         return await _run_job_with_history("model_retraining", run_retraining_if_ready)
+    if swarm_id == "compliant_market_ingestion":
+        return await _run_job_with_history("compliant_market_ingestion", run_compliant_market_ingestion)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 

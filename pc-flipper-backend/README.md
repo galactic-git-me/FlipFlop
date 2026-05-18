@@ -62,3 +62,27 @@ Full interactive docs: `http://localhost:8000/docs`
 | `upgrade_parts` | Every 24 hr | Updates used prices for GPU/RAM/SSD/PSU |
 
 Trigger manually via API: `POST /api/swarms/flip_opportunities/trigger`
+
+## Compliant Market Ingestion
+
+This backend includes a compliant ingestion job that consumes permitted JSON/CSV feeds and normalizes them into:
+
+- `source_runs`
+- `listings_raw`
+- `listings_normalized`
+
+Setup:
+
+```bash
+cp config/compliant_sources.example.json config/compliant_sources.json
+# Edit source names and file paths to approved feeds
+```
+
+Environment variables:
+
+- `COMPLIANT_INGESTION_MANIFEST_PATH` (default: `config/compliant_sources.json`)
+- `COMPLIANT_INGESTION_INTERVAL_HOURS` (default: `6`)
+
+Manual run via swarms API:
+
+- `POST /api/swarms/compliant_market_ingestion/trigger`

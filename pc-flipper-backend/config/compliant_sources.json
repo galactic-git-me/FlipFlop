@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "name": "sample_partner_feed",
+      "kind": "json",
+      "path": "data/sample_partner_feed.json"
+    },
+    {
+      "name": "sample_csv_feed",
+      "kind": "csv",
+      "path": "data/sample_partner_feed.csv"
+    }
+  ]
+}

@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     flip_scan_interval_minutes: int = 60
     parts_update_interval_hours: int = 24
     estimation_interval_hours: int = 24
+    compliant_ingestion_manifest_path: str = "config/compliant_sources.json"
+    compliant_ingestion_interval_hours: int = 6
 
     max_concurrent_flips: int = 1
     auto_buy_autonomous: bool = False

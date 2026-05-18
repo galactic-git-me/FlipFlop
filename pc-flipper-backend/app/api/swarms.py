@@ -20,7 +20,18 @@ async def scan_status():
 async def trigger(swarm_id: str, background_tasks: BackgroundTasks):
     """Trigger a swarm in the background and return immediately so the scan overlay can animate."""
     # Validate swarm ID first
-    valid = {"flip_opportunities", "upgrade_parts", "cases", "accessories"}
+    valid = {
+        "flip_opportunities",
+        "upgrade_parts",
+        "cases",
+        "accessories",
+        "external_demand",
+        "playbook_evolution",
+        "autonomous_cycle",
+        "outcome_capture",
+        "model_retraining",
+        "compliant_market_ingestion",
+    }
     if swarm_id not in valid:
         raise HTTPException(400, f"Unknown swarm: {swarm_id!r}")
 
