@@ -99,17 +99,38 @@ start_postgres() {
     docker compose up -d db >/dev/null
   )
 
-  # Wait for port to open (up to ~60s)
-  local attempts=60
+  # Resolve DB container id for health/readiness checks
+  local db_cid
+  db_cid="$(cd "$BACKEND_DIR" && docker compose ps -q db)"
+  if [[ -z "$db_cid" ]]; then
+    echo "Could not resolve db container id from docker compose."
+    exit 1
+  fi
+
+  # Wait for container health (or running) and pg_isready (up to ~90s)
+  local attempts=90
   while (( attempts > 0 )); do
-    if lsof -nP -iTCP:"$DB_PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+    local health status
+    health="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$db_cid" 2>/dev/null || true)"
+    status="$(docker inspect -f '{{.State.Status}}' "$db_cid" 2>/dev/null || true)"
+
+    if [[ "$health" == "healthy" ]]; then
       return 0
     fi
+    if [[ "$status" == "running" ]]; then
+      if docker exec "$db_cid" pg_isready -U "$DB_USER" -d "$DB_NAME" >/dev/null 2>&1; then
+        return 0
+      fi
+    fi
+
     sleep 1
     attempts=$((attempts-1))
   done
 
-  echo "Postgres did not become ready on port $DB_PORT."
+  echo "Postgres did not become ready (container status/health/pg_isready failed)."
+  echo "Container: $db_cid"
+  docker inspect -f 'status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$db_cid" || true
+  docker logs --tail 80 "$db_cid" || true
   exit 1
 }
 
@@ -148,7 +169,7 @@ echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
   if [[ "$FRONTEND_MODE" == "dev" ]]; then
     NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
   else
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build >/dev/null 2>&1
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build
     NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
   fi
 ) >"$FRONTEND_LOG" 2>&1 &

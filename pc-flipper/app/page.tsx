@@ -1790,7 +1790,7 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: TrendDir }) {
 
 // ── Trending Build Categories card ────────────────────────────────────────────
 function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
-  const categories = computeBuildCategories(listings);
+  const categories = computeBuildCategories(listings, Date.now());
 
   const trendIcon = (t: TrendDir) =>
     t === "rising" ? "↑" : t === "falling" ? "↓" : "→";
