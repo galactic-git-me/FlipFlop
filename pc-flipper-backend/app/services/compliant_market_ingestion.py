@@ -71,6 +71,10 @@ def _normalize_row(source: str, row: dict[str, Any]) -> dict[str, Any]:
 
     price = _to_float(row.get("price"))
     location_text = (row.get("location_text") or row.get("location") or "").strip() or None
+    url = row.get("url")
+    if isinstance(url, str) and "example.com" in url.lower():
+        raise ValueError("Blocked placeholder URL (example.com). Use real source data.")
+
     normalized = {
         "source": source,
         "external_id": external_id,
@@ -80,7 +84,7 @@ def _normalize_row(source: str, row: dict[str, Any]) -> dict[str, Any]:
         "location_text": location_text,
         "category": row.get("category"),
         "condition": row.get("condition"),
-        "url": row.get("url"),
+        "url": url,
         "seller_type": row.get("seller_type"),
         "listed_at": _to_dt(row.get("listed_at")),
         "dedupe_fingerprint": _fingerprint(source, external_id, title, price, location_text),
@@ -129,9 +133,13 @@ def _load_manifest(path: str) -> list[SourceSpec]:
         raise ValueError("Manifest must be an object with a 'sources' array")
     specs: list[SourceSpec] = []
     for entry in payload["sources"]:
+        name = str(entry["name"]).strip()
+        lowered_name = name.lower()
+        if any(token in lowered_name for token in ("sample", "mock", "dummy", "fake")):
+            raise ValueError(f"Blocked non-production source name: {name}")
         specs.append(
             SourceSpec(
-                name=str(entry["name"]).strip(),
+                name=name,
                 kind=str(entry.get("kind", "")).strip().lower(),
                 path=str(entry["path"]).strip(),
             )
@@ -234,4 +242,3 @@ async def run_compliant_market_ingestion() -> dict[str, Any]:
         "updated": total_updated,
         "results": results,
     }
-

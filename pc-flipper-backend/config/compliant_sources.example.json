@@ -1,14 +1,14 @@
 {
   "sources": [
     {
-      "name": "sample_partner_feed",
+      "name": "partner_feed_main",
       "kind": "json",
-      "path": "data/sample_partner_feed.json"
+      "path": "/absolute/path/to/approved-feed.json"
     },
     {
-      "name": "sample_csv_feed",
+      "name": "partner_feed_secondary",
       "kind": "csv",
-      "path": "data/sample_partner_feed.csv"
+      "path": "/absolute/path/to/approved-feed.csv"
     }
   ]
 }
