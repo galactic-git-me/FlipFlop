@@ -313,7 +313,10 @@ async def scrape_gumtree_playwright(
                 log.error("gumtree.playwright.error", term=term, error=str(exc))
                 continue
 
-        await browser.close()
+        if browser is not None:
+            await browser.close()
+        else:
+            await context.close()
 
     log.info("gumtree.playwright.done", total=len(results))
     return results
@@ -511,7 +514,10 @@ async def scrape_facebook_playwright(
                 log.error("facebook.playwright.error", term=term, error=str(exc))
                 continue
 
-        await browser.close()
+        if browser is not None:
+            await browser.close()
+        else:
+            await context.close()
 
     log.info("facebook.playwright.done", total=len(results))
     return results
