@@ -1565,3 +1565,27 @@ INFO:     100.84.151.109:60173 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay retry 'HP Z640': 0 found, 0 new (total 26)
 INFO:     100.84.151.109:64301 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:64301 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 26)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:53156 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58476 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58476 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 26)
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:52583 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52583 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52583 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52583 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 26)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:58443 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58443 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58443 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:54939 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 26)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60842 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60842 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
