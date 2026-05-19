@@ -2440,3 +2440,14 @@ INFO:     100.84.151.109:57777 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:58486 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:58389 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:58389 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62787 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62787 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62787 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51252 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51252 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55372 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63925 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63925 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55685 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55058 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55058 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
