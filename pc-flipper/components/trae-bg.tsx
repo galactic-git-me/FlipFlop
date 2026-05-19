@@ -44,7 +44,7 @@ export function TraeBg() {
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 0,
+        zIndex: -10,
         overflow: "hidden",
         pointerEvents: "none",
         background: "#080c14",
