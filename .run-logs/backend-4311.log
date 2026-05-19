@@ -790,3 +790,21 @@ INFO:     100.84.151.109:50207 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 14:25:07 [info     ] amazon.cases.done              found=10 search=darth vader pc case
 INFO:     100.84.151.109:49475 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:49475 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:25:31 [info     ] temu.cases.done                found=0 search=star wars pc case
+INFO:     100.84.151.109:52542 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:25:35 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=None
+INFO:     100.84.151.109:53730 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53730 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 117)
+2026-05-19 14:25:55 [info     ] temu.cases.done                found=0 search=darth vader pc case
+INFO:     100.84.151.109:51530 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51530 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51530 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:26:11 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
+2026-05-19 14:26:19 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+INFO:     100.84.151.109:62051 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55727 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 117)
+INFO:     100.84.151.109:55727 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:26:41 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+2026-05-19 14:26:46 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
