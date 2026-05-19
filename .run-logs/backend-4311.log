@@ -2810,3 +2810,54 @@ INFO:     100.84.151.109:62665 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:31:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
 [scraper] eBay 'nvme ssd': 0 found, 0 new (total 96)
 INFO:     100.84.151.109:62919 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:31:15 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-19 04:31:15 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-19 04:31:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+2026-05-19 04:31:20 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-19 04:31:25 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-19 04:31:26 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+2026-05-19 04:31:26 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-19 04:31:26 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-19 04:31:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:31:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-19 04:31:27 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-19 04:31:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+2026-05-19 04:31:37 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+2026-05-19 04:31:38 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-19 04:31:38 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-19 04:31:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:58666 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 96)
+2026-05-19 04:31:48 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
+2026-05-19 04:31:49 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-19 04:31:49 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-19 04:31:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:31:51 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-19 04:31:52 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-19 04:31:54 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
+2026-05-19 04:31:55 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 04:31:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-19 04:32:00 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-19 04:32:00 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-19 04:32:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:32:01 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay error for 'atx pc case': Page.evaluate: Target crashed 
+2026-05-19 04:32:10 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=40.99
+[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
+2026-05-19 04:32:11 [info     ] facebook.playwright.items      count=0 term=i7 tower
+2026-05-19 04:32:11 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Di7%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 tower title=Facebook
+2026-05-19 04:32:11 [info     ] facebook.playwright.done       total=0
+2026-05-19 04:32:11 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.84.151.109:53115 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-19 04:32:15 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+2026-05-19 04:32:19 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-19 04:32:20 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-19 04:32:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-19 04:32:23 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+2026-05-19 04:32:25 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-19 04:32:28 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
