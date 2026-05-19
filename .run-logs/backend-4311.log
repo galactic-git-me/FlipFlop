@@ -1970,3 +1970,41 @@ INFO:     100.84.151.109:56765 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 15:07:12 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
 2026-05-19 15:07:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
 2026-05-19 15:07:14 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:55754 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55754 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50787 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 15:07:32 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-19 15:07:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-19 15:07:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-19 15:07:45 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-19 15:07:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.84.151.109:54945 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54945 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:07:47 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-19 15:07:47 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-19 15:07:48 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-19 15:07:49 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 15:07:50 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-19 15:07:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-19 15:07:58 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-19 15:08:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+INFO:     100.84.151.109:62299 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 15:08:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+INFO:     100.84.151.109:51452 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51452 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-19 15:08:21 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-19 15:08:23 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-19 15:08:23 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-19 15:08:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-19 15:08:25 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-19 15:08:25 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 15:08:26 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-19 15:08:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-19 15:08:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-19 15:08:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-19 15:08:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:55158 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55158 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55158 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
