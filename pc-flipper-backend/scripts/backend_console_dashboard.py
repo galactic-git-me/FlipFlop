@@ -122,13 +122,46 @@ def _color_line(line: str) -> Text:
     return t
 
 
-def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any, log_lines: list[str], log_file: str) -> Group:
+def build_layout(
+    base_url: str,
+    schedule: Any,
+    sources: Any,
+    swarm_runs: Any,
+    demand_runs: Any,
+    listing_stats: Any,
+    demand_summary: Any,
+    log_lines: list[str],
+    log_file: str,
+) -> Group:
     title = Text(f"FlipFlop Backend Console  |  {base_url}", style="bold cyan")
     subtitle = Text(datetime.now().strftime("Updated %Y-%m-%d %H:%M:%S"), style="dim")
+
+    kpi_tbl = Table.grid(expand=True)
+    kpi_tbl.add_column(justify="center")
+    kpi_tbl.add_column(justify="center")
+    kpi_tbl.add_column(justify="center")
+    kpi_tbl.add_column(justify="center")
+    kpi_tbl.add_column(justify="center")
+
+    listing_runs_count = len(swarm_runs) if isinstance(swarm_runs, list) else 0
+    demand_runs_count = len(demand_runs) if isinstance(demand_runs, list) else 0
+    total_listings = int((listing_stats or {}).get("total_listings") or (demand_summary or {}).get("total_listings") or 0)
+    total_gems = int((listing_stats or {}).get("gems_count") or (demand_summary or {}).get("total_gems") or 0)
+    gem_rate = float((demand_summary or {}).get("gem_rate_pct") or 0.0)
+    avg_profit = float((listing_stats or {}).get("avg_profit") or 0.0)
+
+    kpi_tbl.add_row(
+        f"[bold cyan]{listing_runs_count}[/bold cyan]\n[dim]listing runs[/dim]",
+        f"[bold magenta]{demand_runs_count}[/bold magenta]\n[dim]demand runs[/dim]",
+        f"[bold green]{total_gems}[/bold green] / [bold]{total_listings}[/bold]\n[dim]gems vs listings[/dim]",
+        f"[bold yellow]{gem_rate:.1f}%[/bold yellow]\n[dim]gem rate[/dim]",
+        f"[bold blue]£{avg_profit:.0f}[/bold blue]\n[dim]avg profit[/dim]",
+    )
 
     top = Table.grid(expand=True)
     top.add_column()
     top.add_row(Panel(Group(title, subtitle), border_style="cyan", box=box.ROUNDED))
+    top.add_row(Panel(kpi_tbl, title="Live Stats", border_style="bright_blue"))
 
     jobs_tbl = Table(box=box.SIMPLE_HEAVY, expand=True)
     jobs_tbl.add_column("Job", style="bold")
@@ -234,8 +267,23 @@ def main() -> int:
                 schedule = _safe_get(client, f"{api}/schedule")
                 sources = _safe_get(client, f"{api}/sources/")
                 runs = _safe_get(client, f"{api}/schedule/flip_opportunities/runs")
+                demand_runs = _safe_get(client, f"{api}/schedule/external_demand/runs")
+                listing_stats = _safe_get(client, f"{api}/listings/stats")
+                demand_summary = _safe_get(client, f"{api}/demand/summary")
                 lines = tailer.poll()
-                live.update(build_layout(args.base_url, schedule, sources, runs, lines, log_file))
+                live.update(
+                    build_layout(
+                        args.base_url,
+                        schedule,
+                        sources,
+                        runs,
+                        demand_runs,
+                        listing_stats,
+                        demand_summary,
+                        lines,
+                        log_file,
+                    )
+                )
                 time.sleep(max(0.2, args.refresh))
 
 
