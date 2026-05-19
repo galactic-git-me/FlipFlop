@@ -955,3 +955,25 @@ INFO:     100.84.151.109:53830 - "OPTIONS /api/playbooks/proposals?status=pendin
 INFO:     100.84.151.109:53830 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 20:38:21 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
 INFO:     100.84.151.109:53786 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:38:40 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
+INFO:     100.84.151.109:59881 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59881 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:38:45 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-19 20:38:53 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:59295 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59295 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59295 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:39:16 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-19 20:39:17 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+INFO:     100.84.151.109:53378 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57988 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57988 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+2026-05-19 20:39:40 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-19 20:39:47 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-19 20:39:52 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+INFO:     100.84.151.109:61349 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61349 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
