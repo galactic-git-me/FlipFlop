@@ -2763,3 +2763,50 @@ INFO:     100.84.151.109:61785 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:29:48 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
 2026-05-19 04:29:48 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
 2026-05-19 04:29:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+2026-05-19 04:29:58 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-19 04:29:58 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
+2026-05-19 04:29:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-19 04:30:01 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+2026-05-19 04:30:03 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-19 04:30:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-19 04:30:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-19 04:30:09 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-19 04:30:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
+2026-05-19 04:30:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:51608 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:30:15 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 96)
+2026-05-19 04:30:20 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-19 04:30:20 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP workstation title=Facebook
+2026-05-19 04:30:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:30:25 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-19 04:30:31 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-19 04:30:31 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-19 04:30:31 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
+2026-05-19 04:30:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-19 04:30:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-19 04:30:33 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-19 04:30:34 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62665 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:30:42 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
+2026-05-19 04:30:42 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
+2026-05-19 04:30:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-19 04:30:51 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+2026-05-19 04:30:53 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
+2026-05-19 04:30:53 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
+2026-05-19 04:30:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:30:57 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-19 04:30:57 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-19 04:30:59 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-19 04:31:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-19 04:31:04 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-19 04:31:05 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-19 04:31:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:62919 - "GET /health HTTP/1.1" 200 OK
