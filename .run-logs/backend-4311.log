@@ -2224,3 +2224,13 @@ INFO:     100.84.151.109:63797 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:63797 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:63797 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51523 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56583 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56583 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60542 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60542 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60542 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53830 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53830 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53830 - "GET /health HTTP/1.1" 200 OK
