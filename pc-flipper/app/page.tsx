@@ -479,11 +479,21 @@ export default function DashboardPage() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <ListingsTrackedCard total={stats.total_listings} listings={listings} />
-        <GemsFoundCard total={stats.gems_count} listings={listings} />
-        <AvgProfitCard avg={stats.avg_profit} listings={listings} />
-        <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:auto-rows-[minmax(0,1fr)]">
+        <div className="lg:row-span-2">
+          <ListingsTrackedCard total={stats.total_listings} listings={listings} />
+        </div>
+        <div className="lg:row-span-2">
+          <GemsFoundCard total={stats.gems_count} listings={listings} />
+        </div>
+        <div className="grid grid-rows-2 gap-4">
+          <AvgProfitCard avg={stats.avg_profit} listings={listings} compact />
+          <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} compact />
+        </div>
+        <div className="grid grid-rows-2 gap-4">
+          <GemHighlightCard period="day" listing={gemOfDay} />
+          <GemHighlightCard period="week" listing={gemOfWeek} />
+        </div>
       </div>
 
       {listings.length === 0 ? (
@@ -508,14 +518,6 @@ export default function DashboardPage() {
             <CurrentStrategyCard playbooks={activePlaybooks} demandSummary={demandSummary} />
             <AuctionIntelCard auctions={auctionIntel} />
           </div>
-
-          {/* ── Gem of the Day / Gem of the Week ──────────────────────────────── */}
-          {(gemOfDay || gemOfWeek) && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {gemOfDay && <GemOfPeriod period="day" listing={gemOfDay} onFlip={handleFlip} flippingId={flippingId} />}
-              {gemOfWeek && <GemOfPeriod period="week" listing={gemOfWeek} onFlip={handleFlip} flippingId={flippingId} />}
-            </div>
-          )}
 
           {/* ── PnL Chart ─────────────────────────────────────────────────────── */}
           <Card>
@@ -1559,19 +1561,19 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
 }
 
 // ── Avg Profit ────────────────────────────────────────────────────────────────
-function AvgProfitCard({ avg, listings }: { avg: number; listings: Listing[] }) {
+function AvgProfitCard({ avg, listings, compact = false }: { avg: number; listings: Listing[]; compact?: boolean }) {
   const profits = listings.map((l) => l.estimated_profit ?? 0).filter((p) => p !== 0);
   const minProfit = profits.length ? Math.min(...profits) : 0;
   const maxProfit = profits.length ? Math.max(...profits) : 0;
 
   return (
     <Card className="border-[#00dc82]/30 bg-[#041922]/55 shadow-[0_12px_44px_rgba(0,184,255,0.15)]">
-      <CardContent className="pt-5 pb-5">
+      <CardContent className={compact ? "pt-4 pb-4" : "pt-5 pb-5"}>
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] text-cyan-300 font-semibold uppercase tracking-[0.2em]">Avg Profit</span>
           <TrendingUp className="w-4.5 h-4.5 text-cyan-300" />
         </div>
-        <div className="text-4xl leading-none font-black text-cyan-200 tabular-nums">
+        <div className={`${compact ? "text-3xl" : "text-4xl"} leading-none font-black text-cyan-200 tabular-nums`}>
           £<CountUp to={avg} from={0} duration={1.5} />
         </div>
         {profits.length > 0 && (
@@ -1587,10 +1589,53 @@ function AvgProfitCard({ avg, listings }: { avg: number; listings: Listing[] }) 
   );
 }
 
+function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing: Listing | null }) {
+  const label = period === "day" ? "Gem of the Day" : "Gem of the Week";
+  if (!listing) {
+    return (
+      <Card className="border-[#00dc82]/20 bg-[#03150e]/45">
+        <CardContent className="pt-4 pb-4">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
+            <Gem className="w-4 h-4 text-[#00dc82]/70" />
+          </div>
+          <div className="text-sm text-slate-500">No qualifying listing yet</div>
+        </CardContent>
+      </Card>
+    );
+  }
+  const profit = listing.estimated_profit ?? 0;
+  return (
+    <Card className="border-[#00dc82]/25 bg-[#03150e]/55">
+      <CardContent className="pt-4 pb-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
+          <Gem className="w-4 h-4 text-[#00dc82]" />
+        </div>
+        <a
+          href={listing.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-semibold text-slate-100 hover:text-[#00dc82] line-clamp-2 leading-tight"
+        >
+          {listing.title}
+        </a>
+        <div className="mt-2 flex items-center justify-between text-xs">
+          <span className="text-slate-400">{listing.source_name}</span>
+          <span className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums`}>
+            {profit >= 0 ? "+" : ""}{formatCurrency(profit)}
+          </span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // ── Next Scan countdown ───────────────────────────────────────────────────────
-function NextScanCard({ swarm, intervalMinutes }: {
+function NextScanCard({ swarm, intervalMinutes, compact = false }: {
   swarm: { id: string; name: string; next_run: string | null } | null;
   intervalMinutes: number;
+  compact?: boolean;
 }) {
   const [nowMs, setNowMs] = useState(() => Date.now());
   useEffect(() => {
@@ -1601,12 +1646,12 @@ function NextScanCard({ swarm, intervalMinutes }: {
   if (!swarm?.next_run) {
     return (
       <Card>
-        <CardContent className="pt-5">
+        <CardContent className={compact ? "pt-4 pb-4" : "pt-5"}>
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
             <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
           </div>
-          <div className="text-2xl font-bold text-yellow-400">—</div>
+          <div className={`${compact ? "text-xl" : "text-2xl"} font-bold text-yellow-400`}>—</div>
           <div className="text-xs text-slate-600 mt-1">flip swarm</div>
         </CardContent>
       </Card>
@@ -1624,12 +1669,12 @@ function NextScanCard({ swarm, intervalMinutes }: {
 
   return (
     <Card>
-      <CardContent className="pt-5">
+      <CardContent className={compact ? "pt-4 pb-4" : "pt-5"}>
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
           <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
         </div>
-        <div className="text-2xl font-bold text-yellow-400 tabular-nums">{label}</div>
+        <div className={`${compact ? "text-xl" : "text-2xl"} font-bold text-yellow-400 tabular-nums`}>{label}</div>
         <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
           <div
             className="h-full rounded-full bg-yellow-400/70 transition-all duration-1000"

@@ -57,10 +57,10 @@ export function TraeBg() {
         <div style={{ position: "absolute", inset: 0 }}>
           <GridDistortion
             imageSrc={imageSrc}
-            grid={10}
-            mouse={0.1}
-            strength={0.15}
-            relaxation={0.9}
+            grid={12}
+            mouse={0.28}
+            strength={0.28}
+            relaxation={0.92}
           />
         </div>
       </ErrorBoundary>

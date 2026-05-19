@@ -19,18 +19,22 @@ const fragmentShader = `
 uniform sampler2D uDataTexture;
 uniform sampler2D uTexture;
 uniform vec4 resolution;
+uniform float time;
 varying vec2 vUv;
 
 void main() {
   vec2 uv = vUv;
   // Data texture is stored in 0..1 range with neutral center at 0.5
   vec2 offset = texture2D(uDataTexture, vUv).rg - vec2(0.5);
-  // Add subtle autonomous wave so effect is visible even without pointer events
+  // Autonomous wave + radial pulse so distortion remains visible at rest.
   vec2 wave = vec2(
-    sin(vUv.y * 22.0 + time * 0.9),
-    cos(vUv.x * 18.0 + time * 0.8)
-  ) * 0.003;
-  gl_FragColor = texture2D(uTexture, uv - 0.06 * offset + wave);
+    sin(vUv.y * 26.0 + time * 1.1),
+    cos(vUv.x * 24.0 + time * 1.0)
+  ) * 0.006;
+  vec2 c = vUv - vec2(0.5);
+  float ring = sin(length(c) * 36.0 - time * 1.4) * 0.004;
+  vec2 radial = normalize(c + vec2(0.0001)) * ring;
+  gl_FragColor = texture2D(uTexture, uv - 0.14 * offset + wave + radial);
 }`;
 
 interface GridDistortionProps {
@@ -206,8 +210,8 @@ const GridDistortion = ({
           if (distSq < maxDist * maxDist) {
             const index = 4 * (i + size * j);
             const power = Math.min(maxDist / Math.sqrt(distSq), 10);
-            const dx = strength * 180 * mouseState.vX * power;
-            const dy = strength * 180 * mouseState.vY * power;
+            const dx = strength * 360 * mouseState.vX * power;
+            const dy = strength * 360 * mouseState.vY * power;
             texData[index] = Math.max(0, Math.min(255, texData[index] + dx));
             texData[index + 1] = Math.max(0, Math.min(255, texData[index + 1] - dy));
           }
