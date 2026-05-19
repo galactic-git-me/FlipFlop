@@ -23,6 +23,13 @@ ua = UserAgent()
 _EBAY_TOKEN: str | None = None
 _EBAY_TOKEN_EXP_TS: float = 0.0
 
+
+def _ebay_base_url() -> str:
+    env = (settings.ebay_environment or "production").strip().lower()
+    if env == "sandbox":
+        return "https://api.sandbox.ebay.com"
+    return "https://api.ebay.com"
+
 # ── Global title exclusions ──────────────────────────────────────────────────
 # Mini PCs / NUCs are not worth flipping: they use laptop CPUs, soldered RAM,
 # proprietary PSUs, and sell for £50-150 against a £30-40 upgrade ceiling.
@@ -194,6 +201,9 @@ async def _get_ebay_access_token(client: httpx.AsyncClient) -> str | None:
     if not settings.ebay_app_id or not settings.ebay_client_secret:
         return None
 
+    ebay_base = _ebay_base_url()
+    scope_base = "https://api.ebay.com/oauth/api_scope"
+    scope_browse = "https://api.ebay.com/oauth/api_scope/buy.browse"
     creds = f"{settings.ebay_app_id}:{settings.ebay_client_secret}".encode("utf-8")
     basic = base64.b64encode(creds).decode("ascii")
     headers = {
@@ -202,9 +212,9 @@ async def _get_ebay_access_token(client: httpx.AsyncClient) -> str | None:
     }
     data = {
         "grant_type": "client_credentials",
-        "scope": "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.browse",
+        "scope": f"{scope_base} {scope_browse}",
     }
-    resp = await client.post("https://api.ebay.com/identity/v1/oauth2/token", data=data, headers=headers)
+    resp = await client.post(f"{ebay_base}/identity/v1/oauth2/token", data=data, headers=headers)
     if resp.status_code != 200:
         return None
     payload = resp.json()
@@ -265,7 +275,7 @@ async def _scrape_ebay_api_term(
     auction_mode: bool,
     is_component_term: bool,
 ) -> list[RawListing]:
-    endpoint = "https://api.ebay.com/buy/browse/v1/item_summary/search"
+    endpoint = f"{_ebay_base_url()}/buy/browse/v1/item_summary/search"
     buying = "AUCTION" if auction_mode else "FIXED_PRICE"
     hi = int(max_price) if max_price > 0 else 5000
     filters = [

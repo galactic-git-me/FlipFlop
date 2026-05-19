@@ -15,6 +15,8 @@ class Settings(BaseSettings):
 
     ebay_app_id: str = ""
     ebay_client_secret: str = ""
+    # "production" | "sandbox"
+    ebay_environment: str = "production"
     ebay_proxy_url: str = ""
     ebay_delay_min_seconds: float = 4.0
     ebay_delay_max_seconds: float = 10.0
