@@ -3227,3 +3227,28 @@ INFO:     100.84.151.109:63628 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:55:33 [info     ] resale_scraper.fallback_buy_price buy_price=281.75 median=746.1 query=gaming PC ryzen 5 3400g rtx 3060
 2026-05-19 04:55:33 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK Auctions
 Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 03:58:30 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 0)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61385 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52843 - "GET /health HTTP/1.1" 200 OK
