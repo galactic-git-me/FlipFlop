@@ -556,3 +556,23 @@ INFO:     100.84.151.109:61621 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61621 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:61621 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 20:21:45 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
+2026-05-19 20:21:53 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+INFO:     100.84.151.109:57414 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49849 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49849 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:22:09 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-19 20:22:23 [info     ] accessories_swarm.start
+2026-05-19 20:22:25 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+2026-05-19 20:22:28 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+INFO:     100.84.151.109:55315 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55315 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:22:33 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+INFO:     100.84.151.109:55315 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:22:51 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=234.99
+INFO:     100.84.151.109:55011 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55011 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:22:56 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63413 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:23:08 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
