@@ -1120,3 +1120,46 @@ INFO:     100.84.151.109:55702 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 14:36:54 [info     ] facebook.playwright.items      count=0 term=gaming pc
 2026-05-19 14:36:54 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc title=Facebook
 2026-05-19 14:36:54 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-19 14:36:56 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+INFO:     100.84.151.109:58249 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58249 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:37:01 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+INFO:     100.84.151.109:58249 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:37:01 [info     ] apex.playwright.done           total=0
+2026-05-19 14:37:02 [info     ] auction_scraper.apex.done      total=0
+2026-05-19 14:37:02 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-19 14:37:04 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-19 14:37:05 [info     ] facebook.playwright.items      count=0 term=desktop pc
+2026-05-19 14:37:05 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Ddesktop%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=desktop pc title=Facebook
+2026-05-19 14:37:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 142)
+2026-05-19 14:37:16 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-19 14:37:16 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
+2026-05-19 14:37:16 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:57606 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57606 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-19 14:37:27 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-19 14:37:27 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
+2026-05-19 14:37:27 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+2026-05-19 14:37:28 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+INFO:     100.84.151.109:57368 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:37:41 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-19 14:37:41 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
+2026-05-19 14:37:41 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:61430 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61430 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61430 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61430 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:37:53 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-19 14:37:55 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-19 14:37:55 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP workstation title=Facebook
+2026-05-19 14:37:55 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:61383 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:38:05 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-19 14:38:09 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 142)
+2026-05-19 14:38:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
+2026-05-19 14:38:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:59795 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59795 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
