@@ -1,171 +1,918 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [2665506] using WatchFiles
-INFO:     Started server process [2665551]
+INFO:     Started reloader process [2714999] using WatchFiles
+INFO:     Started server process [2715134]
 INFO:     Waiting for application startup.
-2026-05-19 03:23:49 [info     ] app.startup
-2026-05-19 03:23:49 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-19 03:23:49 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-19 03:23:49 [info     ] scheduler.started              jobs=11
+2026-05-19 03:27:22 [info     ] app.startup
+2026-05-19 03:27:22 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-19 03:27:22 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-19 03:27:22 [info     ] scheduler.started              jobs=11
 INFO:     Application startup complete.
-2026-05-19 03:23:49 [info     ] flip_opportunities_swarm.start
-2026-05-19 03:23:50 [info     ] source.skipped                 reason=cooldown_active_2212s source=Manual Submission
-2026-05-19 03:23:50 [info     ] source.skipped                 reason=cooldown_active_2212s source=Manual Photo
-2026-05-19 03:23:50 [info     ] source.skipped                 reason=cooldown_active_2212s source=WF-Retrain
-2026-05-19 03:23:50 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-19 03:23:50 [info     ] source.skipped                 reason=cooldown_active_2212s source=Gumtree
-2026-05-19 03:23:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:23:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
-2026-05-19 03:23:51 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
-2026-05-19 03:23:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
-[scraper] John Pye error for 'desktop pc': All connection attempts failed
-2026-05-19 03:23:54 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
-2026-05-19 03:23:54 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:23:54 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:23:54 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:23:57 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
-2026-05-19 03:23:57 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
-2026-05-19 03:23:57 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
-2026-05-19 03:23:57 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
-[scraper] John Pye error for 'gaming pc': All connection attempts failed
-2026-05-19 03:23:59 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
-2026-05-19 03:23:59 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
-2026-05-19 03:23:59 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
-2026-05-19 03:23:59 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
-[scraper] John Pye error for 'computer tower': All connection attempts failed
-2026-05-19 03:24:01 [info     ] preloved.playwright.fetch      term=pc tower
-2026-05-19 03:24:01 [info     ] preloved.playwright.raw        count=19 term=pc tower
-2026-05-19 03:24:01 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
-2026-05-19 03:24:02 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:02 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:02 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
-2026-05-19 03:24:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:02 [info     ] apex.playwright.auction_items  count=23
-2026-05-19 03:24:02 [info     ] apex.playwright.uk_auctions    count=23
-2026-05-19 03:24:03 [info     ] preloved.playwright.fetch      term=gaming pc
-2026-05-19 03:24:03 [info     ] preloved.playwright.raw        count=20 term=gaming pc
-2026-05-19 03:24:03 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
-[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
-2026-05-19 03:24:04 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:05 [info     ] preloved.playwright.fetch      term=desktop pc
-2026-05-19 03:24:05 [info     ] preloved.playwright.raw        count=20 term=desktop pc
-2026-05-19 03:24:05 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
-2026-05-19 03:24:07 [info     ] preloved.playwright.fetch      term=HP EliteDesk
-2026-05-19 03:24:07 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
-2026-05-19 03:24:07 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
-2026-05-19 03:24:07 [info     ] preloved.playwright.term_done  running_total=34 term=HP EliteDesk
-2026-05-19 03:24:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
-[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
-2026-05-19 03:24:09 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
-2026-05-19 03:24:09 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
-2026-05-19 03:24:09 [info     ] preloved.playwright.term_done  running_total=35 term=Dell OptiPlex
-2026-05-19 03:24:11 [info     ] preloved.playwright.done       total=35
-2026-05-19 03:24:11 [error    ] source.error                   error=(sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+2026-05-19 03:27:22 [info     ] flip_opportunities_swarm.start
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_1999s source=Manual Submission
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_1999s source=Manual Photo
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_1999s source=WF-Retrain
+2026-05-19 03:27:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_2252s source=Apex Auctions
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_2209s source=John Pye
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_1999s source=Gumtree
+2026-05-19 03:27:22 [info     ] source.skipped                 reason=cooldown_active_408s source=Preloved
+2026-05-19 03:27:23 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:27:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:27:23 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:27:23 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 03:27:34 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:34 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
+2026-05-19 03:27:34 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:27:35 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+2026-05-19 03:27:45 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
+2026-05-19 03:27:45 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
+2026-05-19 03:27:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:27:56 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:56 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
+2026-05-19 03:27:56 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
+2026-05-19 03:27:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:27:56 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:52838 - "OPTIONS /api/facebook/status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61497 - "OPTIONS /api/listings/stats/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56601 - "OPTIONS /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60482 - "OPTIONS /api/flips/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60483 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-18T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+2026-05-19 03:27:58 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:52838 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-11T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "OPTIONS /api/config/search/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61497 - "OPTIONS /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56601 - "OPTIONS /api/playbooks/?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60482 - "OPTIONS /api/demand/summary/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60483 - "OPTIONS /api/demand/auction-intel/?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52838 - "OPTIONS /api/intel/retrain-status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60482 - "OPTIONS /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61497 - "GET /api/facebook/status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60483 - "GET /api/listings/stats/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56601 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 510, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 756, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 635, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 653, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 432, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
 [SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
 FROM listings 
-WHERE listings.external_id = $1::VARCHAR OR listings.dedupe_fingerprint = $2::VARCHAR]
-[parameters: ('preloved_123031711', 'desktop pc cooler master|||10')]
-(Background on this error at: https://sqlalche.me/e/20/f405) source=Preloved
-2026-05-19 03:24:11 [info     ] apex.playwright.lots           count=0 href=#!/auctions/7453a638-5583-4add-9b02-9b9b84c4c33c
-[scraper] John Pye error for 'workstation': All connection attempts failed
-2026-05-19 03:24:11 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
-2026-05-19 03:24:12 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
-2026-05-19 03:24:12 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
-2026-05-19 03:24:12 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:19 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
-2026-05-19 03:24:23 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
-2026-05-19 03:24:23 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
-2026-05-19 03:24:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:23 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:24 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:26 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:26 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:26 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
-2026-05-19 03:24:28 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=AMD Ryzen 7 7800X3D
-2026-05-19 03:24:28 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
-2026-05-19 03:24:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
-2026-05-19 03:24:30 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
-[scraper] eBay 'pc tower': 60 found, 60 new (total 60)
-2026-05-19 03:24:32 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
-2026-05-19 03:24:34 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
-2026-05-19 03:24:35 [info     ] facebook.playwright.items      count=0 term=pc tower
-2026-05-19 03:24:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower title=Facebook
-2026-05-19 03:24:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:37 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+WHERE listings.status = $1::listingstatus ORDER BY listings.estimated_profit DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: ('active', 500, 0)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     100.84.151.109:52838 - "GET /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "GET /api/demand/summary/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52838 - "GET /api/config/search/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59342 - "GET /api/playbooks/?status=active HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52838 - "GET /api/demand/auction-intel/?limit=15 HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60482 - "GET /api/flips/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 695, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 300, in serialize_response
+    raise ResponseValidationError(
+fastapi.exceptions.ResponseValidationError: <exception str() failed>
+INFO:     100.84.151.109:64327 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60483 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-11T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 510, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 756, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 635, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 653, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 432, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 11, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     100.84.151.109:61497 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-18T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 510, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 756, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 635, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 653, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 432, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 18, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     100.84.151.109:52838 - "GET /api/intel/retrain-status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59342 - "GET /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 307 Temporary Redirect
+2026-05-19 03:27:58 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:58 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:27:59 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:59342 - "OPTIONS /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52838 - "OPTIONS /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52838 - "OPTIONS /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59342 - "OPTIONS /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52838 - "OPTIONS /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55694 - "OPTIONS /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50820 - "GET /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58825 - "OPTIONS /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "OPTIONS /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52838 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59342 - "GET /api/demand/summary HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 510, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 756, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 635, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 653, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 432, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/demand.py", line 47, in get_demand_summary
+    categories = await compute_demand(db)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/demand_service.py", line 237, in compute_demand
+    result = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus]
+[parameters: ('active',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     100.84.151.109:55694 - "GET /api/demand/auction-intel?limit=15 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 510, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 756, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 635, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 653, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/connection.py", line 432, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/demand.py", line 38, in get_auction_intel
+    return await compute_auction_intel(db, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/demand_service.py", line 280, in compute_auction_intel
+    result = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column listings.source_confidence does not exist
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.listing_type = $2::VARCHAR AND listings.listing_ends_at > $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.listing_ends_at ASC 
+ LIMIT $4::INTEGER]
+[parameters: ('active', 'auction', datetime.datetime(2026, 5, 19, 2, 28, 0, 70875), 15)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     100.84.151.109:58825 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64327 - "GET /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50820 - "GET /api/intel/retrain-status HTTP/1.1" 200 OK
+2026-05-19 03:28:01 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:28:01 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:28:04 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
 [scraper] eBay 'AMD Ryzen 7 7800X3D': 62 found, 62 new (total 62)
-2026-05-19 03:24:45 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
-2026-05-19 03:24:46 [info     ] facebook.playwright.items      count=0 term=gaming pc
-2026-05-19 03:24:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc title=Facebook
-2026-05-19 03:24:46 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:53 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
-2026-05-19 03:24:54 [info     ] apex.playwright.done           total=0
-2026-05-19 03:24:55 [info     ] auction_scraper.apex.done      total=0
-2026-05-19 03:24:55 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
-2026-05-19 03:24:58 [info     ] facebook.playwright.items      count=0 term=desktop pc
-2026-05-19 03:24:58 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Ddesktop%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=desktop pc title=Facebook
-2026-05-19 03:24:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:24:58 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
-2026-05-19 03:25:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
-2026-05-19 03:25:00 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
-2026-05-19 03:25:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
-2026-05-19 03:25:02 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
-2026-05-19 03:25:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
-2026-05-19 03:25:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
-2026-05-19 03:25:04 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
-2026-05-19 03:25:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
-2026-05-19 03:25:05 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
-2026-05-19 03:25:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
-2026-05-19 03:25:09 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
-2026-05-19 03:25:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
-2026-05-19 03:25:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:25:20 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
-2026-05-19 03:25:20 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
-2026-05-19 03:25:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 60)
-[scraper] eBay 'Ryzen 9 7900': 27 found, 17 new (total 79)
-2026-05-19 03:25:25 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
-2026-05-19 03:25:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
-2026-05-19 03:25:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
-2026-05-19 03:25:31 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
-2026-05-19 03:25:31 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
-2026-05-19 03:25:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:25:37 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
-2026-05-19 03:25:39 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
-2026-05-19 03:25:39 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
-2026-05-19 03:25:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
-2026-05-19 03:25:41 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
-2026-05-19 03:25:41 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
-2026-05-19 03:25:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
-2026-05-19 03:25:42 [info     ] facebook.playwright.items      count=0 term=HP workstation
-2026-05-19 03:25:42 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP workstation title=Facebook
-2026-05-19 03:25:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:25:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
-2026-05-19 03:25:52 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
-2026-05-19 03:25:53 [info     ] facebook.playwright.items      count=0 term=Dell workstation
-2026-05-19 03:25:53 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
-2026-05-19 03:25:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:25:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
-2026-05-19 03:25:55 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
-2026-05-19 03:26:04 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
-2026-05-19 03:26:04 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
-2026-05-19 03:26:04 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
-[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 79)
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 60)
-2026-05-19 03:26:14 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
-2026-05-19 03:26:15 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
-2026-05-19 03:26:15 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
-2026-05-19 03:26:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
-2026-05-19 03:26:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
-2026-05-19 03:26:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
-2026-05-19 03:26:16 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
-2026-05-19 03:26:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
-2026-05-19 03:26:19 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
-2026-05-19 03:26:19 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
-2026-05-19 03:26:20 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
-2026-05-19 03:26:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
-2026-05-19 03:26:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
-2026-05-19 03:26:22 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
-2026-05-19 03:26:26 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
-2026-05-19 03:26:26 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
-2026-05-19 03:26:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc tower': 60 found, 60 new (total 60)
+2026-05-19 03:28:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-19 03:28:07 [info     ] facebook.playwright.items      count=0 term=pc tower
+2026-05-19 03:28:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower title=Facebook
+2026-05-19 03:28:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:28:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+2026-05-19 03:28:18 [info     ] facebook.playwright.items      count=0 term=gaming pc
+2026-05-19 03:28:18 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc title=Facebook
+2026-05-19 03:28:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:55313 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:28:29 [info     ] facebook.playwright.items      count=0 term=desktop pc
+2026-05-19 03:28:29 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Ddesktop%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=desktop pc title=Facebook
+2026-05-19 03:28:29 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:28:32 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
