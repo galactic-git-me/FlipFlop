@@ -6,6 +6,7 @@ import { BackendStatus } from "@/components/backend-status";
 import { TraeBg } from "@/components/trae-bg";
 import { FacebookCookieBanner } from "@/components/facebook-cookie-banner";
 import { TopCommandBar } from "@/components/top-command-bar";
+import { FaviconAnimator } from "@/components/favicon-animator";
 
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
@@ -35,6 +36,7 @@ export default function RootLayout({
       className={`${rajdhani.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="h-full node-body">
+        <FaviconAnimator />
         <TraeBg />
         <Sidebar />
 
