@@ -2533,3 +2533,14 @@ INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:55738 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:63077 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:63077 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57259 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57259 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57259 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55828 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55828 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56188 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:53072 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53072 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65040 - "GET /health HTTP/1.1" 200 OK
