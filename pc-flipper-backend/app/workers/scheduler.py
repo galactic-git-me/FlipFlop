@@ -5,6 +5,8 @@ from collections import deque
 from datetime import datetime, timezone, timedelta
 from time import perf_counter
 from typing import Awaitable, Callable
+import json
+from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app.config import get_settings
@@ -38,6 +40,57 @@ _job_history: dict[str, deque[dict]] = {
     "compliant_market_ingestion": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
+_STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
+
+
+def _load_state() -> dict:
+    try:
+        if not _STATE_FILE.exists():
+            return {}
+        return json.loads(_STATE_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _save_state(state: dict) -> None:
+    try:
+        _STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        _STATE_FILE.write_text(json.dumps(state, ensure_ascii=True, indent=2), encoding="utf-8")
+    except Exception:
+        # Best-effort persistence only; scheduler should still run if this fails.
+        pass
+
+
+def _mark_success(job_id: str, finished_at: datetime) -> None:
+    state = _load_state()
+    state[job_id] = {"last_success_at": finished_at.isoformat()}
+    _save_state(state)
+
+
+def _next_run_for(job_id: str, interval_minutes: int, now: datetime) -> datetime:
+    """
+    Return next run time for a periodic job.
+    If the last successful run was recent (inside interval), delay startup run
+    so we don't rescan immediately after backend restart.
+    """
+    state = _load_state()
+    rec = state.get(job_id) if isinstance(state, dict) else None
+    if not isinstance(rec, dict):
+        return now
+    ts = rec.get("last_success_at")
+    if not isinstance(ts, str):
+        return now
+    try:
+        last_success = datetime.fromisoformat(ts)
+        if last_success.tzinfo is None:
+            last_success = last_success.replace(tzinfo=timezone.utc)
+        elapsed = now - last_success.astimezone(timezone.utc)
+        interval = timedelta(minutes=max(1, interval_minutes))
+        if elapsed < interval:
+            return now + (interval - elapsed)
+    except Exception:
+        return now
+    return now
 
 
 def _push_history(job_id: str, status: str, started_at: datetime, finished_at: datetime | None, message: str):
@@ -73,6 +126,7 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         took_ms = int((perf_counter() - t0) * 1000)
         summary = f"Completed ({took_ms}ms)"
         _push_history(job_id, "success", started, finished, summary)
+        _mark_success(job_id, finished)
         return result
     except Exception as exc:
         finished = datetime.now(timezone.utc)
@@ -102,7 +156,7 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
-    flip_now = now
+    flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
     upgrade_start = now + timedelta(minutes=5)
     cases_start = now + timedelta(minutes=10)
     accessories_start = now + timedelta(minutes=15)
@@ -121,7 +175,7 @@ def start_scheduler():
         kwargs={"job_id": "flip_opportunities", "fn": run_flip_opportunities_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=flip_now,   # primary sourcing starts immediately
+        next_run_time=flip_next,
     )
 
     scheduler.add_job(
