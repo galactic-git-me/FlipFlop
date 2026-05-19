@@ -32,12 +32,24 @@ require_cmd() {
 
 port_in_use() {
   local port="$1"
-  lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1
+  if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+    return 0
+  fi
+  if command -v ss >/dev/null 2>&1; then
+    ss -ltn "( sport = :$port )" 2>/dev/null | tail -n +2 | grep -q .
+    return $?
+  fi
+  return 1
 }
 
 port_pids() {
   local port="$1"
-  lsof -t -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | sort -u
+  {
+    lsof -t -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null || true
+    if command -v fuser >/dev/null 2>&1; then
+      fuser -n tcp "$port" 2>/dev/null || true
+    fi
+  } | tr ' ' '\n' | sed '/^$/d' | sort -u
 }
 
 free_port() {
@@ -246,6 +258,16 @@ if [[ $EXIT_CODE -ne 0 ]]; then
   echo "Check logs:"
   echo "  $FRONTEND_LOG"
   echo "  $BACKEND_LOG"
+else
+  # A clean exit from wait -n still means one child ended, so print a quick hint.
+  if ! kill -0 "$FRONTEND_PID" >/dev/null 2>&1; then
+    echo
+    echo "Frontend process exited. Check: $FRONTEND_LOG"
+  fi
+  if ! kill -0 "$BACKEND_PID" >/dev/null 2>&1; then
+    echo
+    echo "Backend process exited. Check: $BACKEND_LOG"
+  fi
 fi
 
 cleanup

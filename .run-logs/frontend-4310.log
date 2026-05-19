@@ -1,11 +1,59 @@
 
+> pc-flipper@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
+
+▲ Next.js 16.2.4 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.7s
+  Running TypeScript ...
+  Finished TypeScript in 7.1s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/18) ...
+  Generating static pages using 11 workers (4/18) 
+  Generating static pages using 11 workers (8/18) 
+  Generating static pages using 11 workers (13/18) 
+✓ Generating static pages using 11 workers (18/18) in 621ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/nasa-bg
+├ ○ /cases
+├ ○ /chat
+├ ○ /flips
+├ ○ /intel
+├ ○ /logs
+├ ○ /opportunities
+├ ○ /parts
+├ ○ /playbooks
+├ ○ /schedule
+├ ○ /search-config
+├ ○ /selling
+├ ○ /settings
+└ ○ /sources
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
 > pc-flipper@0.1.0 start
 > next start -p 4310 -H 0.0.0.0
 
 ▲ Next.js 16.2.4
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 166ms
+✓ Ready in 156ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
