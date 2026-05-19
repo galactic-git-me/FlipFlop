@@ -2886,3 +2886,17 @@ INFO:     100.84.151.109:49631 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:33:43 [info     ] temu.cases.done                found=0 search=budget gaming case atx
 2026-05-19 04:33:44 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
 2026-05-19 04:33:46 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-19 04:34:07 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:65061 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:34:15 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-19 04:34:33 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-19 04:34:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+2026-05-19 04:34:40 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:65262 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:35:06 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-19 04:35:11 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
