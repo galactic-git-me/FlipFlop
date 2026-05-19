@@ -1653,3 +1653,101 @@ INFO:     100.84.151.109:65404 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 26)
 INFO:     100.84.151.109:52973 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:52973 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 26)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60612 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:59025 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59025 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 26)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 26)
+2026-05-19 21:36:03 [info     ] auction_price.fallback         current_bid=23.58 fallback=31.83 query=pc tower
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:03 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:03 [info     ] auction_price.fallback         current_bid=21.5 fallback=29.03 query=core i5 10400 pc tower
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC core i5 10400 rtx 3060 status=403
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC core i5 10400 rtx 3060 status=403
+2026-05-19 21:36:03 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC core i5 10400 rtx 3060
+2026-05-19 21:36:03 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC core i5 10400 rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC core i5 10400 rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC core i5 10400 rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:04 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=546 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=546 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=0 length=546 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:05 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:05 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:06 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=446.2 query=gaming PC rtx 3060
+2026-05-19 21:36:06 [info     ] auction_price.fallback         current_bid=8.66 fallback=11.69 query=i5-3470 pc tower
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-3470 rtx 3060 status=403
+2026-05-19 21:36:06 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-3470 rtx 3060 status=403
+2026-05-19 21:36:06 [info     ] resale_scraper.fallback_buy_price buy_price=11.69 median=506.03 query=gaming PC i5-3470 rtx 3060
+2026-05-19 21:36:07 [info     ] auction_price.fallback         current_bid=338.2 fallback=456.57 query=i7-4790k gaming pc
+2026-05-19 21:36:07 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-4790k gtx 1070 status=403
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC i7-4790k gtx 1070 status=403
+2026-05-19 21:36:08 [info     ] resale_scraper.fallback_buy_price buy_price=456.57 median=667.88 query=gaming PC i7-4790k gtx 1070
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=0 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=179 length=393 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=179 length=546 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 21:36:08 [info     ] resale_scraper.fallback_buy_price buy_price=31.83 median=530.2 query=gaming PC rtx 3060
+2026-05-19 21:36:08 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:59799 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49662 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49662 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63181 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63181 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63181 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
