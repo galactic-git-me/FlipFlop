@@ -2277,3 +2277,19 @@ INFO:     100.84.151.109:64482 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:64482 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 [scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:64482 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63275 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63275 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59598 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50781 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50781 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57631 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58507 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58507 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58088 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58088 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58088 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58088 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
