@@ -1589,3 +1589,20 @@ INFO:     100.84.151.109:54939 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:60842 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:60842 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:51523 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:56320 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56320 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 26)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:58008 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58008 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58008 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 26)
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 26)
+[scraper] eBay retry error for 'ryzen 7 cpu': Page.evaluate: Target crashed 
+INFO:     100.84.151.109:56027 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52565 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52565 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
