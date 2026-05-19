@@ -1236,3 +1236,29 @@ INFO:     100.84.151.109:63795 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 14:39:34 [info     ] facebook.playwright.items      count=0 term=pc quick sale
 2026-05-19 14:39:34 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
 2026-05-19 14:39:34 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-19 14:39:45 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-19 14:39:45 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-19 14:39:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay error for 'desktop pcs lot': Page.evaluate: Target crashed 
+2026-05-19 14:39:48 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+INFO:     100.84.151.109:56970 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56970 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:39:56 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-19 14:39:56 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-19 14:39:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20tower&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:59659 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:40:08 [info     ] facebook.playwright.items      count=0 term=i7 tower
+2026-05-19 14:40:08 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Di7%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 tower title=Facebook
+2026-05-19 14:40:08 [info     ] facebook.playwright.done       total=0
+2026-05-19 14:40:08 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-19 14:40:11 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+INFO:     100.84.151.109:49346 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49346 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:40:20 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63318 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62444 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62444 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay '7700x b650': 0 found, 0 new (total 142)
+2026-05-19 14:40:44 [info     ] temu.cases.done                found=0 search=cheap atx pc case
