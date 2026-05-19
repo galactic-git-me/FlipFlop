@@ -2367,3 +2367,26 @@ INFO:     100.84.151.109:61384 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:10:23 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
 2026-05-19 04:10:26 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
 2026-05-19 04:10:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-19 04:10:28 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-19 04:10:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=ddr4+ram&country=gb&priceFrom=0&priceTo=500
+2026-05-19 04:10:37 [info     ] temu.cases.done                found=0 search=tempered glass gaming case atx
+INFO:     100.84.151.109:49217 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:10:50 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 04:10:53 [info     ] Wilsons Auctions.playwright.cards count=1 term=ddr4 ram
+2026-05-19 04:10:53 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=ddr4 ram
+2026-05-19 04:10:55 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-19 04:10:55 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 70)
+2026-05-19 04:11:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 04:11:01 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+2026-05-19 04:11:03 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-19 04:11:04 [info     ] i-bidder.playwright.cards      count=23 term=ddr4 ram
+2026-05-19 04:11:05 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=ddr4 ram
+2026-05-19 04:11:07 [info     ] i-bidder.playwright.done       total=0
+2026-05-19 04:11:07 [info     ] source.done                    found=0 gems=0 source=i-bidder
+INFO:     100.84.151.109:53825 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+2026-05-19 04:11:25 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+2026-05-19 04:11:38 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+INFO:     100.84.151.109:55057 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:11:48 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
