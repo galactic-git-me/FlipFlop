@@ -209,7 +209,22 @@ open_tmux_logs() {
     tmux kill-session -t "$TMUX_SESSION"
   fi
 
-  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend dashboard (Rich): http://$PUBLIC_HOST:$BACKEND_PORT; echo API base: http://$PUBLIC_HOST:$BACKEND_PORT/api; echo; if [[ -x \"$BACKEND_DIR/.venv/bin/python\" ]]; then \"$BACKEND_DIR/.venv/bin/python\" \"$BACKEND_DIR/scripts/backend_console_dashboard.py\" --base-url \"http://$PUBLIC_HOST:$BACKEND_PORT\"; else python3 \"$BACKEND_DIR/scripts/backend_console_dashboard.py\" --base-url \"http://$PUBLIC_HOST:$BACKEND_PORT\"; fi'"
+  tmux new-session -d -s "$TMUX_SESSION" "bash -lc '
+    echo Backend dashboard (Rich): http://$PUBLIC_HOST:$BACKEND_PORT
+    echo API base: http://$PUBLIC_HOST:$BACKEND_PORT/api
+    echo Backend log file: $BACKEND_LOG
+    echo
+    if [[ -x \"$BACKEND_DIR/.venv/bin/python\" ]]; then
+      \"$BACKEND_DIR/.venv/bin/python\" \"$BACKEND_DIR/scripts/backend_console_dashboard.py\" --base-url \"http://$PUBLIC_HOST:$BACKEND_PORT\"
+    else
+      python3 \"$BACKEND_DIR/scripts/backend_console_dashboard.py\" --base-url \"http://$PUBLIC_HOST:$BACKEND_PORT\"
+    fi
+    code=$?
+    echo
+    echo \"[warn] Rich backend dashboard exited (status: \$code). Falling back to backend logs...\"
+    echo
+    tail -n 240 -f \"$BACKEND_LOG\"
+  '"
   tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; echo Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT; echo Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT; echo; tail -n 240 -f \"$FRONTEND_LOG\"'"
   tmux select-layout -t "$TMUX_SESSION" even-horizontal
 
