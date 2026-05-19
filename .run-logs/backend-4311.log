@@ -3016,3 +3016,17 @@ INFO:     100.84.151.109:58990 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
 [scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:60482 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 96)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 96)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52499 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 96)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58919 - "GET /health HTTP/1.1" 200 OK
