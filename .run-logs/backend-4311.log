@@ -488,3 +488,39 @@ INFO:     100.84.151.109:55187 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 20:18:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
 2026-05-19 20:18:25 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
 2026-05-19 20:18:25 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-19 20:18:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-19 20:18:28 [info     ] temu.cases.done                found=0 search=gaming pc case rgb mid tower
+INFO:     100.84.151.109:53131 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:18:35 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-19 20:18:37 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-19 20:18:38 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-19 20:18:40 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:64450 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64450 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:18:52 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+2026-05-19 20:18:54 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+2026-05-19 20:18:59 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 20:19:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-19 20:19:01 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+2026-05-19 20:19:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:53642 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53642 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53642 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+2026-05-19 20:19:12 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 20:19:15 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+2026-05-19 20:19:15 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-19 20:19:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-19 20:19:18 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+2026-05-19 20:19:26 [info     ] amazon.cases.done              found=10 search=tempered glass gaming case atx
+2026-05-19 20:19:29 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-19 20:19:31 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+INFO:     100.84.151.109:63539 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54083 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54083 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:19:36 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 20:19:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-19 20:19:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-19 20:19:40 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-19 20:19:40 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
