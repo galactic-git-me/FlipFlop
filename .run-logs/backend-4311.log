@@ -1490,3 +1490,14 @@ INFO:     100.84.151.109:55557 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:64114 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:64114 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59840 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55555 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55555 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63450 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:63450 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63450 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49831 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61496 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61496 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
