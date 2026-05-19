@@ -977,3 +977,29 @@ INFO:     100.84.151.109:57988 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 20:39:52 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
 INFO:     100.84.151.109:61349 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:61349 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61349 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:40:11 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56064 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56064 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-19 20:40:28 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+2026-05-19 20:40:32 [debug    ] upgrade_parts.bh               part=PC Build Bundle price_gbp=5.12
+2026-05-19 20:40:34 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+INFO:     100.84.151.109:62081 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:40:41 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-19 20:40:42 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+2026-05-19 20:40:45 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
+2026-05-19 20:40:48 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
+INFO:     100.84.151.109:64299 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64299 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:40:51 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=40.99
+2026-05-19 20:40:54 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=40.99
+2026-05-19 20:40:56 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
+2026-05-19 20:40:59 [debug    ] upgrade_parts.bh               part=RX 580 8GB price_gbp=14.35
+INFO:     100.84.151.109:58044 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:41:06 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61162 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61162 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
