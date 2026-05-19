@@ -1606,3 +1606,28 @@ INFO:     100.84.151.109:58008 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:56027 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:52565 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:52565 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 26)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50160 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 26)
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 26)
+[scraper] eBay retry error for 'nvme ssd': Page.goto: net::ERR_NETWORK_CHANGED at https://www.ebay.co.uk/sch/i.html?_nkw=nvme+ssd&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=nvme+ssd&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+INFO:     100.84.151.109:61266 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61266 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56945 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 26)
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:55335 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55335 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:50461 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:59516 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59516 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
