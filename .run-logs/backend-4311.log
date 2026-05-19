@@ -372,3 +372,43 @@ INFO:     100.84.151.109:59122 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:59122 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 20:14:10 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
 2026-05-19 20:14:13 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-19 20:14:14 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-19 20:14:16 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-19 20:14:26 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-19 20:14:28 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+2026-05-19 20:14:30 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+INFO:     100.84.151.109:60746 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60746 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60746 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:14:39 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-19 20:14:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-19 20:14:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-19 20:14:42 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1650 4GB sold=None
+2026-05-19 20:14:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:14:48 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-19 20:14:51 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-19 20:14:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-19 20:14:53 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-19 20:14:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-19 20:14:55 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-19 20:14:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+INFO:     100.84.151.109:58840 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58840 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58840 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:15:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-19 20:15:20 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-19 20:15:20 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-19 20:15:20 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-19 20:15:20 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1660 Super sold=None
+2026-05-19 20:15:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-19 20:15:22 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:15:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+INFO:     100.84.151.109:55982 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55982 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:15:25 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-19 20:15:28 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-19 20:15:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+2026-05-19 20:15:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:60446 - "GET /health HTTP/1.1" 200 OK
