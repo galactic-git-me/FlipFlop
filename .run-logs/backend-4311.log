@@ -2126,3 +2126,38 @@ INFO:     100.84.151.109:62439 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:62439 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 15:12:49 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
 2026-05-19 15:12:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-19 15:12:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-19 15:12:55 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-19 15:12:57 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-19 15:12:59 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+INFO:     100.84.151.109:51295 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55936 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55936 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:13:15 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+2026-05-19 15:13:17 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-19 15:13:17 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-19 15:13:19 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 15:13:23 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-19 15:13:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-19 15:13:24 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-19 15:13:27 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-19 15:13:27 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+2026-05-19 15:13:28 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-19 15:13:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:55002 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55002 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55002 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:13:50 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-19 15:13:51 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-19 15:13:52 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+2026-05-19 15:13:53 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-19 15:13:53 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+2026-05-19 15:13:54 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-19 15:13:55 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:59014 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52216 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59014 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:14:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+2026-05-19 15:14:04 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
