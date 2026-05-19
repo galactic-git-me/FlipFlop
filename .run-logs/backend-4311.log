@@ -6454,3 +6454,4 @@ Call log:
 2026-05-19 09:55:11 [debug    ] resale_scraper.empty_response  cat=0 length=546 query=gaming PC i5-10500 rtx 3060 status=403
 2026-05-19 09:55:11 [info     ] resale_scraper.fallback_buy_price buy_price=269.99 median=731.99 query=gaming PC i5-10500 rtx 3060
 2026-05-19 09:55:11 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK Auctions
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 08:58:30 UTC)" skipped: maximum number of running instances reached (1)
