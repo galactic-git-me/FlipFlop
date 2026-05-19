@@ -595,3 +595,19 @@ INFO:     100.84.151.109:51513 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:58374 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:58374 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:59040 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49710 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49710 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 52)
+INFO:     100.84.151.109:53779 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57094 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57094 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:10:58 [info     ] upgrade_parts_swarm.start      total_parts=48
+INFO:     100.84.151.109:57794 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:11:05 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=60.22
+INFO:     100.84.151.109:57794 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57794 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:11:10 [debug    ] upgrade_parts.ebay             buy=62.7 part=GTX 1060 3GB sold=49.06
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 52)
+2026-05-19 14:11:14 [debug    ] upgrade_parts.ebay             buy=79.99 part=GTX 1650 4GB sold=68.9
+2026-05-19 14:11:19 [debug    ] upgrade_parts.ebay             buy=118.49 part=GTX 1660 Super sold=99.9
+2026-05-19 14:11:24 [debug    ] upgrade_parts.ebay             buy=99.99 part=GTX 1070 8GB sold=83.32
