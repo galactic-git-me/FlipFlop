@@ -2623,3 +2623,13 @@ INFO:     100.84.151.109:52127 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:57614 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:57614 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55636 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51013 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51013 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63366 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50401 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50401 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59865 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59865 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59865 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
