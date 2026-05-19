@@ -77,6 +77,9 @@ POOR_TITLE_PATTERNS = [
     r"unwanted pc",
 ]
 
+_AM4_HINTS = ("am4", "b450", "b550", "x470", "x570")
+_AM5_HINTS = ("am5", "b650", "x670", "a620")
+
 
 @dataclass
 class ScoringResult:
@@ -138,6 +141,20 @@ def score_listing(
     # DDR4 bonus (better upgrade candidate)
     if ram_type and "ddr4" in ram_type.lower():
         result.score += 10
+        result.signals.append("ddr4 value platform")
+    elif ram_type and "ddr5" in ram_type.lower():
+        # Keep DDR5 eligible, but reflect current weaker flip margins vs DDR4.
+        result.score -= 8
+        result.signals.append("ddr5 higher cost")
+
+    # Platform generation bias: prefer AM4 value builds over AM5 at current prices.
+    # This is a soft scoring preference only (never an exclusion gate).
+    if any(h in title_lower for h in _AM4_HINTS):
+        result.score += 8
+        result.signals.append("am4 value platform")
+    if any(h in title_lower for h in _AM5_HINTS):
+        result.score -= 10
+        result.signals.append("am5 higher entry cost")
 
     # Price band
     if price <= 50:
