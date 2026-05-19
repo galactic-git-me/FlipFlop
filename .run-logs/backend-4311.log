@@ -1003,3 +1003,19 @@ INFO:     100.84.151.109:58044 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:61162 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:61162 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:41:29 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+INFO:     100.84.151.109:53751 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:41:37 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+INFO:     100.84.151.109:53751 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53751 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-19 20:42:01 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+INFO:     100.84.151.109:49689 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57633 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57633 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:42:24 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+INFO:     100.84.151.109:59555 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59555 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:42:33 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+INFO:     100.84.151.109:63326 - "GET /health HTTP/1.1" 200 OK
