@@ -8925,3 +8925,34 @@ Call log:
 2026-05-19 13:02:18 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
 2026-05-19 13:02:20 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
 2026-05-19 13:02:22 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 53)
+2026-05-19 13:02:43 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-19 13:02:45 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-19 13:02:45 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-19 13:02:45 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-19 13:02:47 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 13:02:47 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-19 13:02:49 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-19 13:02:50 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-19 13:02:53 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-19 13:02:54 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-19 13:02:56 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-19 13:03:12 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-19 13:03:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+2026-05-19 13:03:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-19 13:03:19 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 13:03:21 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-19 13:03:22 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 13:03:23 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 53)
+2026-05-19 13:03:28 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 13:03:31 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-19 13:03:32 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-19 13:03:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-19 13:03:39 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-19 13:03:41 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-19 13:03:42 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-19 13:03:56 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-19 13:03:59 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-19 13:03:59 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-19 13:04:01 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
