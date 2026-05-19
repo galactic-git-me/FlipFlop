@@ -2553,3 +2553,213 @@ INFO:     100.84.151.109:56993 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'rtx 3060': 0 found, 0 new (total 96)
 2026-05-19 04:28:11 [info     ] aliexpress.cases.done          found=0 search=desktop gaming case compact atx
 INFO:     100.84.151.109:51897 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+2026-05-19 04:28:30 [info     ] flip_opportunities_swarm.start
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+[scraper] No adapter for source 'WF-Retrain', skipping
+2026-05-19 04:28:30 [info     ] source.skipped                 reason=cooldown_active_144s source=Wilsons Auctions
+2026-05-19 04:28:30 [info     ] source.skipped                 reason=cooldown_active_156s source=i-bidder
+2026-05-19 04:28:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-19 04:28:30 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-19 04:28:30 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-19 04:28:30 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
+2026-05-19 04:28:30 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-19 04:28:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 04:28:31 [debug    ] upgrade_parts.ebay             buy=None part=2TB NVMe SSD sold=None
+2026-05-19 04:28:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:28:33 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:33 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:33 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:33 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:34 [info     ] aliexpress.cases.done          found=0 search=slim gaming pc case
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-19 04:28:36 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-19 04:28:36 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-19 04:28:36 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-19 04:28:36 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-19 04:28:38 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-19 04:28:38 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-19 04:28:38 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-19 04:28:38 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-19 04:28:40 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-19 04:28:40 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-19 04:28:40 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-19 04:28:41 [info     ] apex.playwright.auction_items  count=23
+2026-05-19 04:28:41 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:41 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
+2026-05-19 04:28:41 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:62424 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:28:41 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:41 [info     ] apex.playwright.uk_auctions    count=23
+2026-05-19 04:28:42 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-19 04:28:42 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-19 04:28:42 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+2026-05-19 04:28:42 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-19 04:28:44 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 04:28:44 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-19 04:28:44 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-19 04:28:44 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-19 04:28:46 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+2026-05-19 04:28:46 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-19 04:28:46 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-19 04:28:46 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-19 04:28:46 [info     ] preloved.playwright.term_done  running_total=34 term=HP EliteDesk
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-19 04:28:48 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
+2026-05-19 04:28:48 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
+2026-05-19 04:28:48 [info     ] preloved.playwright.term_done  running_total=35 term=Dell OptiPlex
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 96)
+2026-05-19 04:28:50 [info     ] preloved.playwright.done       total=35
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-19 04:28:50 [info     ] apex.playwright.lots           count=0 href=#!/auctions/7453a638-5583-4add-9b02-9b9b84c4c33c
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:50 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-19 04:28:50 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 3 3200 rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 3 3200 rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC i7 4790 rtx 3060 status=403
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC i7 4790 rtx 3060 status=403
+2026-05-19 04:28:52 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:52 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+2026-05-19 04:28:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i7-6700 rtx 3060 status=403
+2026-05-19 04:28:52 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
+2026-05-19 04:28:53 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
+2026-05-19 04:28:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:53 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:54 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:55 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-19 04:28:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5-4570 rtx 3060 status=403
+2026-05-19 04:28:56 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5-4570 rtx 3060 status=403
+2026-05-19 04:28:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-19 04:28:56 [debug    ] resale_scraper.pass            cat=179 found=0 query=gaming PC rtx 3060
+2026-05-19 04:28:57 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 04:28:57 [info     ] resale_scraper.fallback_buy_price buy_price=14.0 median=508.8 query=gaming PC rtx 3060
+2026-05-19 04:28:57 [info     ] source.done                    found=35 gems=0 source=Preloved
+2026-05-19 04:28:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-19 04:28:58 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
+2026-05-19 04:29:03 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
+2026-05-19 04:29:03 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
+2026-05-19 04:29:03 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:29:05 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
+2026-05-19 04:29:07 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-19 04:29:07 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+2026-05-19 04:29:10 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:29:12 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-19 04:29:13 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+2026-05-19 04:29:15 [info     ] facebook.playwright.items      count=0 term=pc tower
+2026-05-19 04:29:15 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower title=Facebook
+2026-05-19 04:29:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:29:16 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-19 04:29:24 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+2026-05-19 04:29:25 [info     ] facebook.playwright.items      count=0 term=gaming pc
+2026-05-19 04:29:25 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc title=Facebook
+2026-05-19 04:29:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:29:29 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-19 04:29:32 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+2026-05-19 04:29:33 [info     ] apex.playwright.done           total=0
+2026-05-19 04:29:34 [info     ] auction_scraper.apex.done      total=0
+2026-05-19 04:29:34 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-19 04:29:36 [info     ] facebook.playwright.items      count=0 term=desktop pc
+2026-05-19 04:29:36 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+2026-05-19 04:29:36 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Ddesktop%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=desktop pc title=Facebook
+2026-05-19 04:29:36 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+2026-05-19 04:29:37 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 96)
+2026-05-19 04:29:38 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-19 04:29:40 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
+2026-05-19 04:29:40 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+INFO:     100.84.151.109:61785 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:29:48 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-19 04:29:48 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
+2026-05-19 04:29:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
