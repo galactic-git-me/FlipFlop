@@ -2542,3 +2542,14 @@ INFO:     100.84.151.109:58214 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:26:46 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
 2026-05-19 04:26:53 [info     ] amazon.cases.done              found=10 search=desktop gaming case compact atx
 2026-05-19 04:26:58 [info     ] amazon.cases.done              found=10 search=slim gaming pc case
+INFO:     100.84.151.109:56346 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:27:21 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+2026-05-19 04:27:23 [info     ] temu.cases.done                found=0 search=desktop gaming case compact atx
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 96)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56993 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:27:47 [info     ] temu.cases.done                found=0 search=slim gaming pc case
+2026-05-19 04:27:56 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 96)
+2026-05-19 04:28:11 [info     ] aliexpress.cases.done          found=0 search=desktop gaming case compact atx
+INFO:     100.84.151.109:51897 - "GET /health HTTP/1.1" 200 OK
