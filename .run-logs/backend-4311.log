@@ -977,3 +977,124 @@ INFO:     100.84.151.109:52025 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 03:29:53 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
 2026-05-19 03:29:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
 2026-05-19 03:29:55 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-19 03:29:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-19 03:29:58 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-19 03:29:58 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-19 03:29:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:65005 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:30:09 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-19 03:30:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-19 03:30:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 62)
+[scraper] eBay 'computer tower': 0 found, 0 new (total 74)
+2026-05-19 03:30:20 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-19 03:30:20 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-19 03:30:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:30:20 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-19 03:30:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-19 03:30:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-19 03:30:25 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 03:30:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 03:30:27 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-19 03:30:27 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-19 03:30:28 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-19 03:30:29 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:61453 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:30:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-19 03:30:31 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-19 03:30:31 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-19 03:30:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:30:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:30:42 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-19 03:30:42 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-19 03:30:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-19 03:30:47 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-19 03:30:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 03:30:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-19 03:30:53 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-19 03:30:53 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-19 03:30:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20tower&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 62)
+INFO:     100.84.151.109:65153 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:31:01 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 74)
+2026-05-19 03:31:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-19 03:31:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-19 03:31:03 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-19 03:31:04 [info     ] facebook.playwright.items      count=0 term=i7 tower
+2026-05-19 03:31:04 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Di7%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 tower title=Facebook
+2026-05-19 03:31:04 [info     ] facebook.playwright.done       total=0
+2026-05-19 03:31:04 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-19 03:31:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:31:06 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-19 03:31:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-19 03:31:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:31:14 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-19 03:31:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-19 03:31:17 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 62)
+2026-05-19 03:31:37 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-19 03:31:39 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-19 03:31:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-19 03:31:41 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-19 03:31:41 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:31:41 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-19 03:31:43 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-19 03:31:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-19 03:31:44 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-19 03:31:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-19 03:31:46 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay error for 'HP workstation': Page.goto: net::ERR_NETWORK_CHANGED at https://www.ebay.co.uk/sch/i.html?_nkw=HP+workstation&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+workstation&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+INFO:     100.84.151.109:60483 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60483 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:32:09 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-19 03:32:11 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 62)
+2026-05-19 03:32:12 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-19 03:32:14 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 03:32:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-19 03:32:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 03:32:18 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 03:32:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:32:21 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-19 03:32:22 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-19 03:32:22 [info     ] upgrade_parts_swarm.start      total_parts=48
+2026-05-19 03:32:23 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 74)
+INFO:     100.84.151.109:54534 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:32:34 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=None
+2026-05-19 03:32:36 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-19 03:32:39 [debug    ] upgrade_parts.ebay             buy=59.99 part=GTX 1060 3GB sold=None
+2026-05-19 03:32:39 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-19 03:32:41 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-19 03:32:42 [debug    ] upgrade_parts.ebay             buy=75.1 part=GTX 1650 4GB sold=None
+2026-05-19 03:32:47 [debug    ] upgrade_parts.ebay             buy=118.49 part=GTX 1660 Super sold=None
+2026-05-19 03:32:52 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-19 03:32:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-19 03:32:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-19 03:32:56 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-19 03:32:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 62)
+2026-05-19 03:32:58 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+INFO:     100.84.151.109:54019 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:32:59 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-19 03:33:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:33:05 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-19 03:33:07 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+2026-05-19 03:33:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 74)
+2026-05-19 03:33:22 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+2026-05-19 03:33:29 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-19 03:33:32 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+2026-05-19 03:33:32 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-19 03:33:32 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-19 03:33:33 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-19 03:33:34 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=office pc
+2026-05-19 03:33:34 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:33:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-19 03:33:35 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-19 03:33:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-19 03:33:38 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500

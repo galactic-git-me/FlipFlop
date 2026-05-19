@@ -1499,23 +1499,23 @@ function ListingsTrackedCard({ total, listings }: { total: number; listings: Lis
   }, {});
 
   return (
-    <Card>
-      <CardContent className="pt-5">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Listings Tracked</span>
-          <Gem className="w-4 h-4 text-slate-400 opacity-60" />
+    <Card className="border-slate-500/25 bg-slate-950/55 shadow-[0_10px_40px_rgba(2,6,23,0.42)]">
+      <CardContent className="pt-5 pb-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-[0.2em]">Listings Tracked</span>
+          <Gem className="w-4.5 h-4.5 text-slate-200/80" />
         </div>
-        <div className="text-2xl font-bold text-slate-300">
+        <div className="text-4xl leading-none font-black text-slate-100 tabular-nums">
           <CountUp to={total} duration={1.5} separator="," />
         </div>
-        <div className="mt-2 flex flex-col gap-1">
+        <div className="mt-3 flex flex-col gap-1.5">
           {Object.entries(bySource).map(([src, count]) => (
-            <div key={src} className="flex items-center justify-between text-xs text-slate-500">
+            <div key={src} className="flex items-center justify-between text-xs text-slate-400">
               <div className="flex items-center gap-1.5">
                 <SourceLogo source={src} />
                 <span className="truncate max-w-[100px]">{src}</span>
               </div>
-              <CountUp to={count} duration={1.2} className="text-slate-400 font-medium" />
+              <CountUp to={count} duration={1.2} className="text-slate-200 font-semibold tabular-nums" />
             </div>
           ))}
         </div>
@@ -1533,23 +1533,23 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
   }, {});
 
   return (
-    <Card className="border-[#00dc82]/20 shadow-[0_0_24px_rgba(0,220,130,0.06)]">
-      <CardContent className="pt-5">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Gems Found</span>
-          <Gem className="w-4 h-4 text-[#00dc82] opacity-60" />
+    <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
+      <CardContent className="pt-5 pb-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] text-[#7ce7b6] font-semibold uppercase tracking-[0.2em]">Gems Found</span>
+          <Gem className="w-4.5 h-4.5 text-[#00dc82]" />
         </div>
-        <div className="text-2xl font-bold text-[#00dc82]">
+        <div className="text-4xl leading-none font-black text-[#00f49a] tabular-nums">
           <CountUp to={total} duration={1.5} separator="," />
         </div>
-        <div className="mt-2 flex flex-col gap-1">
+        <div className="mt-3 flex flex-col gap-1.5">
           {Object.entries(bySource).map(([src, count]) => (
-            <div key={src} className="flex items-center justify-between text-xs text-slate-500">
+            <div key={src} className="flex items-center justify-between text-xs text-[#89eabf]/85">
               <div className="flex items-center gap-1.5">
                 <SourceLogo source={src} />
                 <span className="truncate max-w-[100px]">{src}</span>
               </div>
-              <CountUp to={count} duration={1.2} className="text-[#00dc82]/70 font-medium" />
+              <CountUp to={count} duration={1.2} className="text-[#00f49a] font-bold tabular-nums" />
             </div>
           ))}
         </div>
@@ -1565,21 +1565,21 @@ function AvgProfitCard({ avg, listings }: { avg: number; listings: Listing[] }) 
   const maxProfit = profits.length ? Math.max(...profits) : 0;
 
   return (
-    <Card className="border-[#00dc82]/20 shadow-[0_0_24px_rgba(0,220,130,0.06)]">
-      <CardContent className="pt-5">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Avg Profit</span>
-          <TrendingUp className="w-4 h-4 text-[#00dc82] opacity-60" />
+    <Card className="border-[#00dc82]/30 bg-[#041922]/55 shadow-[0_12px_44px_rgba(0,184,255,0.15)]">
+      <CardContent className="pt-5 pb-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] text-cyan-300 font-semibold uppercase tracking-[0.2em]">Avg Profit</span>
+          <TrendingUp className="w-4.5 h-4.5 text-cyan-300" />
         </div>
-        <div className="text-2xl font-bold text-[#00dc82]">
+        <div className="text-4xl leading-none font-black text-cyan-200 tabular-nums">
           £<CountUp to={avg} from={0} duration={1.5} />
         </div>
         {profits.length > 0 && (
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
-            <span className="text-red-400/70">£<CountUp to={minProfit} duration={1.2} /></span>
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-cyan-100/65">
+            <span className="text-red-300/90">£<CountUp to={minProfit} duration={1.2} /></span>
             <span className="text-slate-600">→</span>
-            <span className="text-[#00dc82]/70">£<CountUp to={maxProfit} duration={1.2} /></span>
-            <span className="text-slate-600 ml-0.5">range</span>
+            <span className="text-cyan-200 font-semibold">£<CountUp to={maxProfit} duration={1.2} /></span>
+            <span className="text-cyan-100/55 ml-0.5 uppercase tracking-wider">range</span>
           </div>
         )}
       </CardContent>

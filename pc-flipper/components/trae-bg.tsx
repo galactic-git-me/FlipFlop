@@ -45,6 +45,7 @@ export function TraeBg() {
         position: "fixed",
         inset: 0,
         zIndex: 0,
+        overflow: "hidden",
         pointerEvents: "none",
         background: "#080c14",
         backgroundImage: `url(${imageSrc})`,
@@ -53,13 +54,15 @@ export function TraeBg() {
       }}
     >
       <ErrorBoundary>
-        <GridDistortion
-          imageSrc={imageSrc}
-          grid={10}
-          mouse={0.1}
-          strength={0.15}
-          relaxation={0.9}
-        />
+        <div style={{ position: "absolute", inset: 0 }}>
+          <GridDistortion
+            imageSrc={imageSrc}
+            grid={10}
+            mouse={0.1}
+            strength={0.15}
+            relaxation={0.9}
+          />
+        </div>
       </ErrorBoundary>
     </div>
   );
