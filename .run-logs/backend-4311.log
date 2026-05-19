@@ -2409,3 +2409,23 @@ INFO:     100.84.151.109:62082 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:50873 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:50873 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:50873 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64943 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49244 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49244 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56206 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56206 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56206 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay retry error for 'msi gaming plus b650': Page.goto: net::ERR_NETWORK_CHANGED at https://www.ebay.co.uk/sch/i.html?_nkw=msi+gaming+plus+b650&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=msi+gaming+plus+b650&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+2026-05-19 15:32:12 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
+INFO:     100.84.151.109:61427 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61427 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50194 - "GET /health HTTP/1.1" 200 OK
