@@ -61,6 +61,9 @@ _EBAY_HEADERS = {
 
 
 TRACKED_PARTS = [
+    # ── Generic market lane (especially useful for Temu/AliExpress discovery) ─
+    {"name": "PC Build Bundle", "category": PartCategory.accessory, "ebay_search": "pc build", "bh_search": "pc+build"},
+
     # ── GPUs — budget / mid tier ─────────────────────────────────────────────
     {"name": "GTX 1060 6GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1060 6GB used",    "bh_search": "gtx+1060+6gb"},
     {"name": "GTX 1060 3GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1060 3GB used",    "bh_search": "gtx+1060+3gb"},

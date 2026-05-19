@@ -980,6 +980,7 @@ _AUCTION_SEARCH_TERMS = [
     "desktop pc",
     "gaming pc",
     "computer tower",
+    "pc build",
     "HP EliteDesk",
     "Dell OptiPlex",
     "workstation",

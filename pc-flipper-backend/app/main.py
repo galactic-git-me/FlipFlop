@@ -166,6 +166,7 @@ _FLIP_SEARCH_TERMS = [
     "desktop pc",
     "gaming pc",
     "computer tower",
+    "pc build",
     "motherboard cpu combo",
 
     # ── 2. BRAND WORKSTATIONS (HIGH VALUE / OFTEN UNDERPRICED) ──────────────

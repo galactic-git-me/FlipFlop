@@ -39,7 +39,7 @@ CASE_THEMES = [
     # Novelty / eye-catching — these are real products on AliExpress / Temu
     {"theme": "Skull / Dark", "terms": ["skull pc case gaming", "dark gaming case skull"]},
     {"theme": "Transparent / Open Frame", "terms": ["open frame pc case atx", "transparent pc case gaming"]},
-    {"theme": "Compact / Desktop", "terms": ["desktop gaming case compact atx", "slim gaming pc case"]},
+    {"theme": "Compact / Desktop", "terms": ["desktop gaming case compact atx", "slim gaming pc case", "pc build case"]},
 ]
 
 SOURCES = [

@@ -1089,7 +1089,7 @@ def _parse_preloved_html(html: str) -> list[RawListing]:
 # ---------------------------------------------------------------------------
 
 _JOHN_PYE_TERMS = [
-    "desktop pc", "gaming pc", "computer tower",
+    "desktop pc", "gaming pc", "computer tower", "pc build",
     "HP EliteDesk", "Dell OptiPlex", "workstation",
     "i7 desktop", "i5 desktop", "gaming computer",
 ]
@@ -1227,7 +1227,7 @@ def _parse_john_pye_html(html: str, min_price: float, max_price: float) -> list[
 #   - kept short to reduce block risk and scan time
 _GUMTREE_FB_TERMS = [
     # broad sweeps
-    "pc tower", "gaming pc", "desktop pc",
+    "pc tower", "gaming pc", "desktop pc", "pc build",
     # workstation clearance
     "HP EliteDesk", "Dell OptiPlex", "Lenovo ThinkCentre",
     "HP workstation", "Dell workstation",
@@ -1255,7 +1255,7 @@ _GUMTREE_FB_TERMS = [
 ]
 
 _PRELOVED_TERMS = [
-    "pc tower", "gaming pc", "desktop pc",
+    "pc tower", "gaming pc", "desktop pc", "pc build",
     "HP EliteDesk", "Dell OptiPlex", "Lenovo ThinkCentre",
     "gaming pc no gpu", "pc no hard drive",
     "pc untested", "pc spares or repair",
@@ -1276,6 +1276,7 @@ _AUCTION_TERMS = [
     "desktop pc",
     "gaming pc",
     "computer tower",
+    "pc build",
     "HP EliteDesk",
     "Dell OptiPlex",
     "workstation",
@@ -1333,6 +1334,7 @@ _EBAY_AUCTION_TERMS = [
     "gaming pc",
     "desktop pc",
     "pc tower",
+    "pc build",
     # ── CPU-named (uninformed seller = low reserve)
     "i7 tower",
     "i9 tower",
