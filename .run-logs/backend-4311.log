@@ -597,3 +597,23 @@ INFO:     100.84.151.109:61131 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 20:24:25 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
 INFO:     100.84.151.109:61787 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:63590 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63590 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-19 20:24:38 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-19 20:24:48 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+2026-05-19 20:24:58 [info     ] amazon.cases.done              found=10 search=astronaut pc case
+INFO:     100.84.151.109:49652 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49652 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:25:02 [info     ] amazon.cases.done              found=10 search=space gaming case
+INFO:     100.84.151.109:59461 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay error for 'gaming pc': Page.evaluate: Target crashed 
+2026-05-19 20:25:13 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+INFO:     100.84.151.109:63372 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63372 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:25:26 [info     ] temu.cases.done                found=0 search=astronaut pc case
+INFO:     100.84.151.109:65381 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-19 20:25:49 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+INFO:     100.84.151.109:57835 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57835 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:25:51 [info     ] temu.cases.done                found=0 search=space gaming case
