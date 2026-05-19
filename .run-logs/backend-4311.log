@@ -1285,3 +1285,21 @@ INFO:     100.84.151.109:57458 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:64864 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:50549 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:50549 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64425 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64425 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64425 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:56457 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56457 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55216 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61427 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61427 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56735 - "GET /health HTTP/1.1" 200 OK
