@@ -691,3 +691,24 @@ INFO:     100.84.151.109:63771 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:63771 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 20:31:23 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=None
 2026-05-19 20:31:29 [info     ] temu.cases.done                found=0 search=gaming pc case custom art
+INFO:     100.84.151.109:56580 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57416 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57416 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+2026-05-19 20:31:52 [info     ] aliexpress.cases.done          found=0 search=anime gaming pc case
+2026-05-19 20:31:58 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
+INFO:     100.84.151.109:53816 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64598 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64598 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:32:14 [info     ] aliexpress.cases.done          found=0 search=gaming pc case custom art
+2026-05-19 20:32:23 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+2026-05-19 20:32:26 [info     ] amazon.cases.done              found=10 search=skull pc case gaming
+INFO:     100.84.151.109:64026 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64026 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:32:29 [info     ] amazon.cases.done              found=10 search=dark gaming case skull
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64026 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:32:34 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:32:54 [info     ] temu.cases.done                found=0 search=skull pc case gaming
