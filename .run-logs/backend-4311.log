@@ -1764,3 +1764,16 @@ INFO:     100.84.151.109:49311 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 15:02:29 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK Auctions
 2026-05-19 15:02:29 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=177 new_gems=0 sources_scanned=2
 INFO:     100.84.151.109:55925 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55201 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55201 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53785 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53785 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53785 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57720 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52916 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52916 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
