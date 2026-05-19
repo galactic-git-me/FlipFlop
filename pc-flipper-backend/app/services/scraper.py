@@ -1371,6 +1371,28 @@ _EBAY_AUCTION_TERMS = [
     "msi gaming plus b650",
 ]
 
+_REQUIRED_CPU_TERMS = [
+    "AMD Ryzen 7 7800X3D",
+    "Ryzen 9 7900",
+    "Ryzen 9 7900X",
+]
+
+
+def _prioritize_terms(base_terms: list[str], required_terms: list[str]) -> list[str]:
+    """Place required terms first while preserving order and deduping case-insensitively."""
+    seen: set[str] = set()
+    merged: list[str] = []
+    for term in required_terms + base_terms:
+        cleaned = term.strip()
+        if not cleaned:
+            continue
+        key = cleaned.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(cleaned)
+    return merged
+
 
 async def fetch_listings(
     source_name: str,
@@ -1424,9 +1446,13 @@ async def fetch_listings(
         )
 
     name = source_name.lower()
+    prioritized_ebay_auction_terms = _prioritize_terms(_EBAY_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_gumtree_fb_terms = _prioritize_terms(_GUMTREE_FB_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_preloved_terms = _prioritize_terms(_PRELOVED_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_auction_terms = _prioritize_terms(_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
 
     if "ebay" in name and "auction" in name:
-        return await scrape_ebay(_EBAY_AUCTION_TERMS, min_price, max_price, auction_mode=True)
+        return await scrape_ebay(prioritized_ebay_auction_terms, min_price, max_price, auction_mode=True)
 
     if "ebay" in name:
         return await scrape_ebay(search_terms, min_price, max_price)
@@ -1436,11 +1462,11 @@ async def fetch_listings(
         return []
 
     if "facebook" in name or "marketplace" in name:
-        pl_results = await scrape_facebook_playwright(_GUMTREE_FB_TERMS, min_price, max_price)
+        pl_results = await scrape_facebook_playwright(prioritized_gumtree_fb_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if "preloved" in name:
-        pl_results = await scrape_preloved_playwright(_PRELOVED_TERMS, min_price, max_price)
+        pl_results = await scrape_preloved_playwright(prioritized_preloved_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if "john pye" in name or "johnpye" in name:
@@ -1448,31 +1474,31 @@ async def fetch_listings(
 
     if "apex" in name:
         from app.services.playwright_scraper import scrape_apex_playwright
-        pl_results = await scrape_apex_playwright(_EBAY_AUCTION_TERMS, min_price, max_price)
+        pl_results = await scrape_apex_playwright(prioritized_ebay_auction_terms, min_price, max_price)
         if pl_results:
             return [_convert(r) for r in pl_results]
         # Fallback path: lightweight HTTP scraper when Playwright is unavailable/blocked.
-        lots = await scrape_apex_http(_EBAY_AUCTION_TERMS, min_price=min_price, max_price=max_price)
+        lots = await scrape_apex_http(prioritized_ebay_auction_terms, min_price=min_price, max_price=max_price)
         return [_convert_auction_lot(l) for l in lots]
 
     if "wilsons" in name:
-        pl_results = await scrape_wilsons_playwright(_AUCTION_TERMS, min_price, max_price)
+        pl_results = await scrape_wilsons_playwright(prioritized_auction_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if "i-bidder" in name or "ibidder" in name:
-        pl_results = await scrape_ibidder_playwright(_AUCTION_TERMS, min_price, max_price)
+        pl_results = await scrape_ibidder_playwright(prioritized_auction_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if "bidspotter" in name:
-        pl_results = await scrape_bidspotter_playwright(_AUCTION_TERMS, min_price, max_price)
+        pl_results = await scrape_bidspotter_playwright(prioritized_auction_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if any(k in name for k in ("merkandi", "wholesale clearance")):
         # Explicit adapter calls for observability — logs reasons and keeps pipeline healthy.
         if "merkandi" in name:
-            await scrape_merkandi(_AUCTION_TERMS, min_price=min_price, max_price=max_price)
+            await scrape_merkandi(prioritized_auction_terms, min_price=min_price, max_price=max_price)
         else:
-            await scrape_wholesale_clearance(_AUCTION_TERMS, min_price=min_price, max_price=max_price)
+            await scrape_wholesale_clearance(prioritized_auction_terms, min_price=min_price, max_price=max_price)
         return []
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")

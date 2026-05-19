@@ -445,6 +445,7 @@ _MINI_PC_EXCLUDE: set[str] = {
 
 _AM5_TARGET_KW: set[str] = {
     "am5", "b650", "x670", "ryzen 7700", "ryzen 7700x", "ryzen 9700x", "ryzen 7900",
+    "ryzen 9 7900", "ryzen 9 7900x", "7800x3d", "amd ryzen 7 7800x3d",
 }
 
 _AM5_RED_FLAGS: set[str] = {
