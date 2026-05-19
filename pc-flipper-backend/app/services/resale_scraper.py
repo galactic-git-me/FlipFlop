@@ -23,6 +23,7 @@ Key filtering to avoid low auction starting bids:
 
 import re
 import asyncio
+import time
 import httpx
 from bs4 import BeautifulSoup
 from dataclasses import dataclass, field
@@ -49,6 +50,9 @@ ua = UserAgent()
 
 # Per-run cache: spec fingerprint → ResaleRange
 _cache: dict[str, "ResaleRange"] = {}
+_RESALE_EBAY_BLOCK_UNTIL_TS: float = 0.0
+_RESALE_EBAY_BLOCK_LOGGED: bool = False
+_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
 
 
 @dataclass
@@ -220,6 +224,17 @@ async def _fetch_sold_prices(query: str) -> list[float]:
     Does NOT use LH_BIN=1 — that parameter silently breaks the sold-listings
     page on eBay UK.  Auction items are filtered in _extract_prices instead.
     """
+    global _RESALE_EBAY_BLOCK_UNTIL_TS, _RESALE_EBAY_BLOCK_LOGGED
+
+    now = time.monotonic()
+    if now < _RESALE_EBAY_BLOCK_UNTIL_TS:
+        if not _RESALE_EBAY_BLOCK_LOGGED:
+            wait_s = round(_RESALE_EBAY_BLOCK_UNTIL_TS - now, 1)
+            log.warning("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
+            _RESALE_EBAY_BLOCK_LOGGED = True
+        return []
+    _RESALE_EBAY_BLOCK_LOGGED = False
+
     all_prices: list[float] = []
 
     for sacat in ("179", "0"):
@@ -246,6 +261,15 @@ async def _fetch_sold_prices(query: str) -> list[float]:
                     params=params,
                     headers=headers,
                 )
+            if resp.status_code in (401, 403, 429):
+                _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
+                log.warning(
+                    "resale_scraper.block_detected",
+                    status=resp.status_code,
+                    cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
+                    query=query,
+                )
+                return []
             if resp.status_code != 200 or len(resp.text) < 2000:
                 log.debug("resale_scraper.empty_response", query=query, cat=sacat,
                           status=resp.status_code, length=len(resp.text))

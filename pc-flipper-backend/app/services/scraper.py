@@ -418,7 +418,7 @@ async def scrape_ebay(
             try:
                 is_component_term = any(m in term.lower() for m in component_markers)
                 sacat = "0" if is_component_term else "179"
-                token = await _get_ebay_access_token(client)
+                token = await _get_ebay_access_token(client) if settings.ebay_use_api else None
                 if token:
                     api_listings = await _scrape_ebay_api_term(
                         client=client,

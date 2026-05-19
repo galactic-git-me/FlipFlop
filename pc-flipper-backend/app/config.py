@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     ebay_client_secret: str = ""
     # "production" | "sandbox"
     ebay_environment: str = "production"
+    # Keep scraper path primary unless explicitly enabled.
+    ebay_use_api: bool = False
     ebay_proxy_url: str = ""
     ebay_delay_min_seconds: float = 4.0
     ebay_delay_max_seconds: float = 10.0
