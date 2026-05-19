@@ -178,6 +178,10 @@ BACKEND_PID=$!
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 (
   cd "$FRONTEND_DIR"
+  echo "============================================================"
+  echo "Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT"
+  echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
+  echo "============================================================"
   if [[ "$FRONTEND_MODE" == "dev" ]]; then
     NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
   else
@@ -199,8 +203,8 @@ open_tmux_logs() {
     tmux kill-session -t "$TMUX_SESSION"
   fi
 
-  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend logs: $BACKEND_LOG; echo; tail -n 120 -f \"$BACKEND_LOG\"'"
-  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; tail -n 120 -f \"$FRONTEND_LOG\"'"
+  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend logs: $BACKEND_LOG; echo; echo Backend URL: http://$PUBLIC_HOST:$BACKEND_PORT; echo API base: http://$PUBLIC_HOST:$BACKEND_PORT/api; echo; tail -n 120 -f \"$BACKEND_LOG\"'"
+  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; echo Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT; echo Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT; echo; tail -n 120 -f \"$FRONTEND_LOG\"'"
   tmux select-layout -t "$TMUX_SESSION" even-horizontal
 
   echo
@@ -235,9 +239,9 @@ trap cleanup INT TERM
 
 echo
 echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
-echo "Tailscale Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
 echo "Backend : http://$PUBLIC_HOST:$BACKEND_PORT"
 echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
+echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
 echo "Mode    : $FRONTEND_MODE"
 echo
 echo "Logs:"
