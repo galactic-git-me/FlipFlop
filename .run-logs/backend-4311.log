@@ -1282,3 +1282,18 @@ INFO:     100.84.151.109:61523 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 14:42:10 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
 INFO:     100.84.151.109:56743 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:56743 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58317 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:42:35 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+INFO:     100.84.151.109:51735 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51735 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 142)
+2026-05-19 14:42:57 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+INFO:     100.84.151.109:53399 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:43:06 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+INFO:     100.84.151.109:49170 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49170 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:43:30 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+INFO:     100.84.151.109:50918 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50918 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50918 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
