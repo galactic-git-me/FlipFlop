@@ -1605,26 +1605,57 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
     );
   }
   const profit = listing.estimated_profit ?? 0;
+  const resale = listing.estimated_resale ?? 0;
   return (
     <Card className="border-[#00dc82]/25 bg-[#03150e]/55">
-      <CardContent className="pt-4 pb-4">
-        <div className="flex items-center justify-between mb-1.5">
+      <CardContent className="pt-4 pb-4 space-y-2.5">
+        <div className="flex items-center justify-between">
           <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
           <Gem className="w-4 h-4 text-[#00dc82]" />
         </div>
-        <a
-          href={listing.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-base font-semibold text-slate-100 hover:text-[#00dc82] line-clamp-2 leading-tight"
-        >
-          {listing.title}
-        </a>
-        <div className="mt-2 flex items-center justify-between text-base">
-          <span className="text-slate-400">{listing.source_name}</span>
-          <span className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums`}>
-            {profit >= 0 ? "+" : ""}{formatCurrency(profit)}
-          </span>
+
+        <div className="flex gap-3">
+          <div className="w-20 h-20 rounded-lg overflow-hidden border border-[#00dc82]/20 bg-black/20 shrink-0">
+            {listing.image_urls?.[0] ? (
+              <img src={listing.image_urls[0]} alt={listing.title} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-slate-600 text-sm">No image</div>
+            )}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <a
+              href={listing.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-base font-semibold text-slate-100 hover:text-[#00dc82] line-clamp-2 leading-tight"
+            >
+              {listing.title}
+            </a>
+            <div className="mt-1 text-sm text-slate-400 truncate">{listing.source_name}</div>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {listing.cpu && <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300">{listing.cpu}</span>}
+              {listing.ram_gb && <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300">{listing.ram_gb}GB {listing.ram_type ?? "RAM"}</span>}
+              {listing.gpu && <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300">{listing.gpu}</span>}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 text-sm">
+          <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
+            <div className="text-slate-500">Buy</div>
+            <div className="text-slate-100 font-semibold tabular-nums">{formatCurrency(listing.price)}</div>
+          </div>
+          <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
+            <div className="text-slate-500">Resale</div>
+            <div className="text-slate-100 font-semibold tabular-nums">{resale ? formatCurrency(resale) : "—"}</div>
+          </div>
+          <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
+            <div className="text-slate-500">Profit</div>
+            <div className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums`}>
+              {profit >= 0 ? "+" : ""}{formatCurrency(profit)}
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
