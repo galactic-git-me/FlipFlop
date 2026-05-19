@@ -235,6 +235,7 @@ trap cleanup INT TERM
 
 echo
 echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
+echo "Tailscale Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
 echo "Backend : http://$PUBLIC_HOST:$BACKEND_PORT"
 echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
 echo "Mode    : $FRONTEND_MODE"
