@@ -2967,3 +2967,29 @@ INFO:     100.84.151.109:52133 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 96)
 INFO:     100.84.151.109:64460 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:36:47 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-19 04:36:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-19 04:36:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+INFO:     100.84.151.109:58744 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:37:15 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-19 04:37:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-19 04:37:18 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-19 04:37:18 [info     ] source.done                    found=0 gems=0 source=John Pye
+2026-05-19 04:37:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 96)
+[scraper] eBay error for 'Dell Precision tower': Page.evaluate: Target crashed 
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-19 04:37:41 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-19 04:37:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
+2026-05-19 04:37:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=ddr4+ram&country=gb
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 0)
+2026-05-19 04:38:08 [info     ] BidSpotter.playwright.cards    count=60 term=ddr4 ram
+2026-05-19 04:38:10 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=ddr4 ram
