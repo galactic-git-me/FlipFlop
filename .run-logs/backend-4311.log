@@ -2332,3 +2332,38 @@ INFO:     100.84.151.109:56867 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:09:02 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
 2026-05-19 04:09:02 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
 2026-05-19 04:09:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 04:09:07 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-19 04:09:10 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-19 04:09:11 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-19 04:09:11 [info     ] temu.cases.done                found=0 search=rgb gaming pc case atx
+INFO:     100.84.151.109:54139 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:09:13 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+2026-05-19 04:09:19 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-19 04:09:35 [info     ] temu.cases.done                found=0 search=gaming pc case rgb mid tower
+2026-05-19 04:09:36 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 04:09:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-19 04:09:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+[scraper] eBay error for 'HP ProDesk': Page.evaluate: Target crashed 
+2026-05-19 04:09:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:58845 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:09:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 04:09:47 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+2026-05-19 04:09:48 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-19 04:09:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-19 04:09:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+2026-05-19 04:09:54 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-19 04:09:58 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+2026-05-19 04:10:09 [info     ] amazon.cases.done              found=10 search=tempered glass gaming case atx
+[scraper] eBay 'gaming pc faulty': 70 found, 70 new (total 70)
+INFO:     100.84.151.109:61384 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:10:13 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 04:10:13 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+2026-05-19 04:10:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-19 04:10:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-19 04:10:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=ddr4+ram&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+2026-05-19 04:10:23 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 04:10:26 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-19 04:10:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
