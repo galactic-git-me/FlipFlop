@@ -10,6 +10,8 @@ from __future__ import annotations
 import argparse
 import time
 from datetime import datetime, timezone
+from collections import deque
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -56,7 +58,71 @@ def _age(iso_ts: str | None) -> str:
         return "—"
 
 
-def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any) -> Group:
+class LogTailer:
+    def __init__(self, log_file: str, max_lines: int = 20):
+        self.path = Path(log_file)
+        self.max_lines = max_lines
+        self.lines: deque[str] = deque(maxlen=max_lines)
+        self._fh = None
+        self._inode = None
+        self._load_initial()
+
+    def _load_initial(self) -> None:
+        try:
+            if not self.path.exists():
+                return
+            with self.path.open("r", encoding="utf-8", errors="replace") as f:
+                for ln in f.readlines()[-self.max_lines:]:
+                    self.lines.append(ln.rstrip("\n"))
+        except Exception:
+            pass
+
+    def _ensure_open(self) -> None:
+        try:
+            if not self.path.exists():
+                return
+            st = self.path.stat()
+            inode = (st.st_dev, st.st_ino)
+            if self._fh is None or self._inode != inode:
+                if self._fh:
+                    self._fh.close()
+                self._fh = self.path.open("r", encoding="utf-8", errors="replace")
+                self._fh.seek(0, 2)
+                self._inode = inode
+        except Exception:
+            self._fh = None
+            self._inode = None
+
+    def poll(self) -> list[str]:
+        self._ensure_open()
+        if not self._fh:
+            return list(self.lines)
+        try:
+            while True:
+                ln = self._fh.readline()
+                if not ln:
+                    break
+                self.lines.append(ln.rstrip("\n"))
+        except Exception:
+            pass
+        return list(self.lines)
+
+
+def _color_line(line: str) -> Text:
+    t = Text(line)
+    lower = line.lower()
+    if "[error" in lower or " error " in lower:
+        t.stylize("bold red")
+    elif "[warning" in lower or " warning " in lower:
+        t.stylize("yellow")
+    elif "[info" in lower or " info " in lower:
+        t.stylize("cyan")
+    elif "[debug" in lower or " debug " in lower:
+        t.stylize("dim")
+    return t
+
+
+def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any, log_lines: list[str], log_file: str) -> Group:
     title = Text(f"FlipFlop Backend Console  |  {base_url}", style="bold cyan")
     subtitle = Text(datetime.now().strftime("Updated %Y-%m-%d %H:%M:%S"), style="dim")
 
@@ -87,17 +153,15 @@ def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any) ->
         jobs_tbl.add_row("schedule", "[red]unavailable[/red]", "—", "—")
 
     sources_tbl = Table(box=box.SIMPLE, expand=True)
-    sources_tbl.add_column("Source", style="bold")
-    sources_tbl.add_column("Enabled")
-    sources_tbl.add_column("Found")
-    sources_tbl.add_column("Last Scan")
-    sources_tbl.add_column("Error")
+    sources_tbl.add_column("Source", style="bold", no_wrap=True)
+    sources_tbl.add_column("Enabled", no_wrap=True)
+    sources_tbl.add_column("Found", no_wrap=True)
+    sources_tbl.add_column("Last Scan", no_wrap=True)
+    sources_tbl.add_column("Error", overflow="fold")
 
     if isinstance(sources, list):
         for src in sources[:8]:
             err = src.get("last_error") or ""
-            if len(err) > 36:
-                err = err[:33] + "..."
             sources_tbl.add_row(
                 str(src.get("name", "—")),
                 "yes" if src.get("enabled") else "no",
@@ -109,18 +173,16 @@ def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any) ->
         sources_tbl.add_row("sources", "—", "—", "—", "unavailable")
 
     runs_tbl = Table(box=box.SIMPLE, expand=True)
-    runs_tbl.add_column("Recent flip_opportunities runs", style="bold")
-    runs_tbl.add_column("Status")
-    runs_tbl.add_column("When")
-    runs_tbl.add_column("Duration")
-    runs_tbl.add_column("Message")
+    runs_tbl.add_column("Recent flip_opportunities runs", style="bold", no_wrap=True)
+    runs_tbl.add_column("Status", no_wrap=True)
+    runs_tbl.add_column("When", no_wrap=True)
+    runs_tbl.add_column("Duration", no_wrap=True)
+    runs_tbl.add_column("Message", overflow="fold")
     if isinstance(swarm_runs, list) and swarm_runs:
         for r in swarm_runs[:8]:
             st = str(r.get("status", ""))
             st_style = "green" if st == "success" else ("yellow" if st in {"running", "skipped"} else "red")
             msg = str(r.get("message", ""))
-            if len(msg) > 48:
-                msg = msg[:45] + "..."
             runs_tbl.add_row(
                 str(r.get("id", "—"))[-10:],
                 f"[{st_style}]{st}[/{st_style}]",
@@ -131,37 +193,51 @@ def build_layout(base_url: str, schedule: Any, sources: Any, swarm_runs: Any) ->
     else:
         runs_tbl.add_row("—", "—", "—", "—", "No run history yet")
 
+    log_tbl = Table.grid(expand=True)
+    log_tbl.add_column()
+    if log_lines:
+        for ln in log_lines[-20:]:
+            log_tbl.add_row(_color_line(ln))
+    else:
+        log_tbl.add_row(Text("No log lines yet", style="dim"))
+
     middle = Table.grid(expand=True)
-    middle.add_column(ratio=1)
     middle.add_column(ratio=2)
+    middle.add_column(ratio=3)
     middle.add_row(
-        Panel(jobs_tbl, title="Scheduler", border_style="blue"),
         Panel(sources_tbl, title="Sources", border_style="magenta"),
+        Panel(log_tbl, title=f"Live Logs · {log_file}", border_style="yellow"),
     )
 
-    bottom = Panel(runs_tbl, title="Recent Runs", border_style="green")
-
-    return Group(top, middle, bottom)
+    return Group(
+        top,
+        Panel(jobs_tbl, title="Scheduler", border_style="blue"),
+        middle,
+        Panel(runs_tbl, title="Recent Runs", border_style="green"),
+    )
 
 
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--base-url", default="http://127.0.0.1:4311", help="Backend base URL without /api")
     p.add_argument("--refresh", type=float, default=1.0, help="Refresh seconds")
+    p.add_argument("--log-file", default="", help="Path to backend log file to tail")
     args = p.parse_args()
 
     api = args.base_url.rstrip("/") + "/api"
+    log_file = args.log_file or str((Path(__file__).resolve().parents[2] / ".run-logs" / "backend-4311.log"))
+    tailer = LogTailer(log_file=log_file, max_lines=24)
 
-    with httpx.Client() as client:
+    with httpx.Client(follow_redirects=True) as client:
         with Live(refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True) as live:
             while True:
                 schedule = _safe_get(client, f"{api}/schedule")
-                sources = _safe_get(client, f"{api}/sources")
+                sources = _safe_get(client, f"{api}/sources/")
                 runs = _safe_get(client, f"{api}/schedule/flip_opportunities/runs")
-                live.update(build_layout(args.base_url, schedule, sources, runs))
+                lines = tailer.poll()
+                live.update(build_layout(args.base_url, schedule, sources, runs, lines, log_file))
                 time.sleep(max(0.2, args.refresh))
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
