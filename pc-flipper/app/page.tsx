@@ -408,6 +408,10 @@ export default function DashboardPage() {
     );
   }
 
+  const latestListings = [...listings]
+    .sort((a, b) => new Date(b.first_seen_at).getTime() - new Date(a.first_seen_at).getTime())
+    .slice(0, 24);
+
   return (
     <div className="p-6 space-y-6 dashboard-zoom">
       <ManualSubmitModal
@@ -1059,6 +1063,89 @@ export default function DashboardPage() {
           </Card>
         </>
       )}
+
+      {latestListings.length > 0 && (
+        <LatestListingsCarousel
+          listings={latestListings}
+          nowMs={nowMs}
+          onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
+        />
+      )}
+    </div>
+  );
+}
+
+function formatElapsedMMSS(firstSeen: string, nowMs: number): string {
+  const elapsed = Math.max(0, Math.floor((nowMs - new Date(firstSeen).getTime()) / 1000));
+  const mm = Math.floor(elapsed / 60);
+  const ss = elapsed % 60;
+  return `${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+}
+
+function LatestListingsCarousel({
+  listings,
+  nowMs,
+  onOpen,
+}: {
+  listings: Listing[];
+  nowMs: number;
+  onOpen: (listing: Listing) => void;
+}) {
+  const items = [...listings, ...listings];
+  return (
+    <div className="mt-2 border border-[#1e2d45] rounded-2xl bg-[#050b14]/95 backdrop-blur-md">
+      <style>{`
+        @keyframes flipflop-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+      <div className="px-4 pt-2 pb-1 flex items-center justify-between">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-[#7ce7b6] font-semibold">Latest Listings</div>
+        <div className="text-[10px] text-slate-500">newest first · live timers</div>
+      </div>
+      <div className="overflow-hidden pb-3">
+        <div
+          className="flex gap-3 w-max px-4"
+          style={{
+            animation: "flipflop-marquee 52s linear infinite",
+          }}
+        >
+          {items.map((l, idx) => (
+            <button
+              key={`${l.id}-${idx}`}
+              onClick={() => onOpen(l)}
+              className="w-[280px] shrink-0 rounded-xl overflow-hidden border border-white/10 bg-[#0a1628] hover:border-[#00dc82]/50 transition-colors text-left"
+              title={l.title}
+            >
+              <div className="relative h-28 bg-[#060e1c]">
+                {l.image_urls?.[0] ? (
+                  <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center opacity-20">
+                    <Gem className="w-7 h-7 text-slate-400" />
+                  </div>
+                )}
+                <div className="absolute top-1.5 left-1.5">
+                  <FlippabilityScore score={l.gem_score} size="sm" showLabel={false} />
+                </div>
+                <div className="absolute top-1.5 right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/60 border border-white/20 text-[#7ce7b6] tabular-nums">
+                  +{formatElapsedMMSS(l.first_seen_at, nowMs)}
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 via-black/55 to-transparent">
+                  <div className="text-sm font-semibold text-white line-clamp-1">{l.title}</div>
+                  <div className="text-[10px] text-slate-300 mt-0.5 flex items-center justify-between">
+                    <span>{l.source_name}</span>
+                    <span className={(l.estimated_profit ?? 0) >= 0 ? "text-[#00dc82]" : "text-red-400"}>
+                      {(l.estimated_profit ?? 0) >= 0 ? "+" : ""}{formatCurrency(l.estimated_profit ?? 0)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
