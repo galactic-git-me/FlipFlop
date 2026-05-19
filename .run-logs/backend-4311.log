@@ -2449,3 +2449,15 @@ Call log:
   - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
 
 2026-05-19 04:17:20 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-19 04:17:27 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
+2026-05-19 04:17:32 [info     ] amazon.cases.done              found=10 search=star wars pc case
+2026-05-19 04:17:36 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+INFO:     100.84.151.109:53361 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:18:01 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-19 04:18:02 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-12400 sold=None
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:63189 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:18:25 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-19 04:18:37 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-12700 sold=None
+INFO:     100.84.151.109:62118 - "GET /health HTTP/1.1" 200 OK
