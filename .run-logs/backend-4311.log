@@ -2501,3 +2501,16 @@ INFO:     100.84.151.109:51207 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:62256 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:22:42 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
 2026-05-19 04:22:52 [info     ] aliexpress.cases.done          found=0 search=gaming pc case custom art
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 96)
+2026-05-19 04:23:06 [info     ] amazon.cases.done              found=10 search=skull pc case gaming
+2026-05-19 04:23:10 [info     ] amazon.cases.done              found=10 search=dark gaming case skull
+INFO:     100.84.151.109:58458 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:23:17 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+2026-05-19 04:23:30 [info     ] playbook_evolution.done        proposals_created=1 sold_flips=1
+2026-05-19 04:23:35 [info     ] temu.cases.done                found=0 search=skull pc case gaming
+INFO:     100.84.151.109:53051 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 96)
+2026-05-19 04:23:52 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-19 04:23:59 [info     ] temu.cases.done                found=0 search=dark gaming case skull
+INFO:     100.84.151.109:64740 - "GET /health HTTP/1.1" 200 OK
