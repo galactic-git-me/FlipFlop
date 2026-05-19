@@ -1262,3 +1262,26 @@ INFO:     100.84.151.109:60253 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:60253 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 [scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:52965 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 26)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60966 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60966 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61550 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58830 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58830 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 26)
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57458 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57458 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57458 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 26)
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64864 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50549 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50549 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
