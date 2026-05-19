@@ -2901,3 +2901,8 @@ INFO:     100.84.151.109:61632 - "GET /api/playbooks/proposals?status=pending HT
 [scraper] eBay 'office pc lot': 38 found, 38 new (total 68)
 [scraper] eBay 'nvme ssd': 60 found, 60 new (total 60)
 INFO:     100.84.151.109:61531 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50353 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50353 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63726 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64536 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64536 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
