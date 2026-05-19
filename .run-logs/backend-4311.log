@@ -714,3 +714,24 @@ INFO:     100.84.151.109:50896 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 14:19:30 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
 INFO:     100.84.151.109:50896 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 14:19:40 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+INFO:     100.84.151.109:57546 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57546 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:19:55 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
+INFO:     100.84.151.109:63649 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 117)
+2026-05-19 14:20:16 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+INFO:     100.84.151.109:58196 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58196 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:20:19 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
+INFO:     100.84.151.109:65168 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63057 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63057 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:20:42 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 117)
+2026-05-19 14:20:51 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
+2026-05-19 14:20:58 [info     ] accessories_swarm.start
+2026-05-19 14:20:59 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+INFO:     100.84.151.109:51886 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:21:06 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+INFO:     100.84.151.109:51886 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51886 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
