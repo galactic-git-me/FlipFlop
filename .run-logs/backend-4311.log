@@ -2300,3 +2300,19 @@ INFO:     100.84.151.109:50770 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:64942 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:64942 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56761 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60482 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60482 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52797 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56632 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56632 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57769 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57769 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57769 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
