@@ -10,22 +10,45 @@ Tailscale URL: andromeda-ts:4310
 - Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 6.6s
+✓ Compiled successfully in 7.9s
   Running TypeScript ...
-  Finished TypeScript in 7.1s ...
+  Finished TypeScript in 7.6s ...
   Collecting page data using 11 workers ...
   Generating static pages using 11 workers (0/18) ...
-⨯ useSearchParams() should be wrapped in a suspense boundary at page "/chat". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
-    at S (/home/mac/CODING/FlipFlop/pc-flipper/.next/server/chunks/ssr/node_modules_03alrmj._.js:2:2692)
-    at r (/home/mac/CODING/FlipFlop/pc-flipper/.next/server/chunks/ssr/node_modules_03alrmj._.js:4:6760)
-    at /home/mac/CODING/FlipFlop/pc-flipper/.next/server/chunks/ssr/app_chat_page_tsx_047t_4s._.js:1:20169
-    at an (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:84267)
-    at ai (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:86086)
-    at al (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:107860)
-    at ao (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:105275)
-    at aa (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:84619)
-    at ai (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:86135)
-    at ai (/home/mac/CODING/FlipFlop/pc-flipper/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:104615)
-Error occurred prerendering page "/chat". Read more: https://nextjs.org/docs/messages/prerender-error
-Export encountered an error on /chat/page: /chat, exiting the build.
-⨯ Next.js build worker exited with code: 1 and signal: null
+  Generating static pages using 11 workers (4/18) 
+  Generating static pages using 11 workers (8/18) 
+  Generating static pages using 11 workers (13/18) 
+✓ Generating static pages using 11 workers (18/18) in 652ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/nasa-bg
+├ ○ /cases
+├ ○ /chat
+├ ○ /flips
+├ ○ /intel
+├ ○ /logs
+├ ○ /opportunities
+├ ○ /parts
+├ ○ /playbooks
+├ ○ /schedule
+├ ○ /search-config
+├ ○ /selling
+├ ○ /settings
+└ ○ /sources
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+Tailscale URL (live): andromeda-ts:4310
+
+> pc-flipper@0.1.0 start
+> next start -p 4310 -H 0.0.0.0
+
+▲ Next.js 16.2.4
+- Local:         http://localhost:4310
+- Network:       http://0.0.0.0:4310
+✓ Ready in 163ms

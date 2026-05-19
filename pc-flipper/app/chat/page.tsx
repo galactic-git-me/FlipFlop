@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Wand2, Cpu, Trophy, ClipboardList,
@@ -599,7 +599,7 @@ function WizardProgress({ phase }: { phase: Phase }) {
 
 // ─── Main wizard ──────────────────────────────────────────────────────────────
 
-export default function BuildWizardPage() {
+function BuildWizardPageContent() {
   const searchParams = useSearchParams();
   const prefillListingId = Number(searchParams.get("listing_id") || 0) || null;
   const prefillMarker = prefillListingId ? `[prefill listing #${prefillListingId}] Build around this purchased listing.` : "";
@@ -915,5 +915,13 @@ export default function BuildWizardPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function BuildWizardPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-sm text-slate-400">Loading Build Wizard...</div>}>
+      <BuildWizardPageContent />
+    </Suspense>
   );
 }
