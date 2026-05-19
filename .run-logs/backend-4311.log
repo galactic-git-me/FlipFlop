@@ -808,3 +808,25 @@ INFO:     100.84.151.109:55727 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:55727 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 14:26:41 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
 2026-05-19 14:26:46 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+2026-05-19 14:26:54 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+INFO:     100.84.151.109:53424 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53424 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:26:59 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+INFO:     100.84.151.109:53424 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay error for 'i9 tower': Page.evaluate: Target crashed 
+INFO:     100.84.151.109:53154 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53154 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53154 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53154 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:27:23 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+2026-05-19 14:27:23 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+INFO:     100.84.151.109:49867 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 117)
+INFO:     100.84.151.109:50584 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50584 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:27:48 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-19 14:27:59 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+INFO:     100.84.151.109:62599 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:28:11 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+INFO:     100.84.151.109:57629 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57629 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
