@@ -1389,3 +1389,24 @@ INFO:     100.84.151.109:64298 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:64298 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 [scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 142)
 INFO:     100.84.151.109:64298 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 142)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:65311 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65311 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:49604 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:58780 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58780 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:59708 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 142)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62832 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62832 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:55998 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:55998 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55998 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
