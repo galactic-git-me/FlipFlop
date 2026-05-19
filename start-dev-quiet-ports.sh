@@ -209,8 +209,8 @@ open_tmux_logs() {
     tmux kill-session -t "$TMUX_SESSION"
   fi
 
-  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend logs: $BACKEND_LOG; echo; echo Backend URL: http://$PUBLIC_HOST:$BACKEND_PORT; echo API base: http://$PUBLIC_HOST:$BACKEND_PORT/api; echo; tail -n 120 -f \"$BACKEND_LOG\"'"
-  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; echo Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT; echo Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT; echo; tail -n 120 -f \"$FRONTEND_LOG\"'"
+  tmux new-session -d -s "$TMUX_SESSION" "bash -lc 'echo Backend logs: $BACKEND_LOG; echo; echo Backend URL: http://$PUBLIC_HOST:$BACKEND_PORT; echo API base: http://$PUBLIC_HOST:$BACKEND_PORT/api; echo; tail -n 240 -f \"$BACKEND_LOG\"'"
+  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; echo Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT; echo Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT; echo; tail -n 240 -f \"$FRONTEND_LOG\"'"
   tmux select-layout -t "$TMUX_SESSION" even-horizontal
 
   echo

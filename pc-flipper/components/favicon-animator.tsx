@@ -11,26 +11,29 @@ function framePath(i: number): string {
 }
 
 function setFavicon(href: string): void {
+  const existing = document.head.querySelectorAll('link[rel*="icon"]');
+  existing.forEach((el) => el.parentElement?.removeChild(el));
+
   const rels = ["icon", "shortcut icon", "apple-touch-icon"];
   for (const rel of rels) {
-    let el = document.head.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-    if (!el) {
-      el = document.createElement("link");
-      el.rel = rel;
-      document.head.appendChild(el);
-    }
+    const el = document.createElement("link");
+    el.rel = rel;
+    el.type = "image/png";
     el.href = href;
+    document.head.appendChild(el);
   }
 }
 
 export function FaviconAnimator() {
   useEffect(() => {
     let idx = START_FRAME;
-    setFavicon(framePath(idx));
+    let tick = 0;
+    setFavicon(`${framePath(idx)}?v=${tick}`);
 
     const id = window.setInterval(() => {
       idx = (idx + 1) % FRAME_COUNT;
-      setFavicon(framePath(idx));
+      tick += 1;
+      setFavicon(`${framePath(idx)}?v=${tick}`);
     }, FRAME_MS);
 
     return () => window.clearInterval(id);
@@ -38,4 +41,3 @@ export function FaviconAnimator() {
 
   return null;
 }
-

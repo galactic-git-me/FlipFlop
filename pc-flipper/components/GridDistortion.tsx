@@ -19,22 +19,12 @@ const fragmentShader = `
 uniform sampler2D uDataTexture;
 uniform sampler2D uTexture;
 uniform vec4 resolution;
-uniform float time;
 varying vec2 vUv;
 
 void main() {
   vec2 uv = vUv;
-  // Data texture is stored in 0..1 range with neutral center at 0.5
-  vec2 offset = texture2D(uDataTexture, vUv).rg - vec2(0.5);
-  // Autonomous wave + radial pulse so distortion remains visible at rest.
-  vec2 wave = vec2(
-    sin(vUv.y * 26.0 + time * 1.1),
-    cos(vUv.x * 24.0 + time * 1.0)
-  ) * 0.006;
-  vec2 c = vUv - vec2(0.5);
-  float ring = sin(length(c) * 36.0 - time * 1.4) * 0.004;
-  vec2 radial = normalize(c + vec2(0.0001)) * ring;
-  gl_FragColor = texture2D(uTexture, uv - 0.14 * offset + wave + radial);
+  vec4 offset = texture2D(uDataTexture, vUv);
+  gl_FragColor = texture2D(uTexture, uv - 0.02 * offset.rg);
 }`;
 
 interface GridDistortionProps {
@@ -44,7 +34,6 @@ interface GridDistortionProps {
   relaxation?: number;
   imageSrc: string;
   className?: string;
-  onTextureReady?: (ready: boolean) => void;
 }
 
 const GridDistortion = ({
@@ -54,18 +43,23 @@ const GridDistortion = ({
   relaxation = 0.9,
   imageSrc,
   className = "",
-  onTextureReady,
 }: GridDistortionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
+  const planeRef = useRef<THREE.Mesh | null>(null);
+  const imageAspectRef = useRef(1);
   const animationIdRef = useRef<number | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const container = containerRef.current;
-    let mounted = true;
 
+    const container = containerRef.current;
     const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -73,12 +67,14 @@ const GridDistortion = ({
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
+    rendererRef.current = renderer;
 
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
     const camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000);
     camera.position.z = 2;
+    cameraRef.current = camera;
 
     const uniforms: Record<string, THREE.IUniform> = {
       time: { value: 0 },
@@ -87,30 +83,14 @@ const GridDistortion = ({
       uDataTexture: { value: null },
     };
 
-    let imageAspect = 1;
-
     const size = grid;
-    // Use Uint8 texture for broad compatibility (works without float texture extensions)
-    const data = new Uint8Array(4 * size * size);
+    const data = new Float32Array(4 * size * size);
     for (let i = 0; i < size * size; i++) {
-      // Neutral center (128, 128) means zero distortion at rest
-      data[i * 4] = 128;
-      data[i * 4 + 1] = 128;
-      data[i * 4 + 2] = 0;
-      data[i * 4 + 3] = 255;
+      data[i * 4] = Math.random() * 255 - 125;
+      data[i * 4 + 1] = Math.random() * 255 - 125;
     }
 
-    const dataTexture = new THREE.DataTexture(
-      data,
-      size,
-      size,
-      THREE.RGBAFormat,
-      THREE.UnsignedByteType
-    );
-    dataTexture.minFilter = THREE.LinearFilter;
-    dataTexture.magFilter = THREE.LinearFilter;
-    dataTexture.wrapS = THREE.ClampToEdgeWrapping;
-    dataTexture.wrapT = THREE.ClampToEdgeWrapping;
+    const dataTexture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
     dataTexture.needsUpdate = true;
     uniforms.uDataTexture.value = dataTexture;
 
@@ -124,9 +104,12 @@ const GridDistortion = ({
 
     const geometry = new THREE.PlaneGeometry(1, 1, size - 1, size - 1);
     const plane = new THREE.Mesh(geometry, material);
+    planeRef.current = plane;
     scene.add(plane);
 
     const handleResize = () => {
+      if (!container || !renderer || !camera) return;
+
       const rect = container.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
@@ -134,7 +117,10 @@ const GridDistortion = ({
 
       const containerAspect = width / height;
       renderer.setSize(width, height);
-      plane.scale.set(containerAspect, 1, 1);
+
+      if (plane) {
+        plane.scale.set(containerAspect, 1, 1);
+      }
 
       const frustumHeight = 1;
       const frustumWidth = frustumHeight * containerAspect;
@@ -148,31 +134,34 @@ const GridDistortion = ({
     };
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(
-      imageSrc,
-      (texture) => {
-        if (!mounted) { texture.dispose(); return; }
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        imageAspect = texture.image.width / texture.image.height;
-        void imageAspect;
-        uniforms.uTexture.value = texture;
+    textureLoader.load(imageSrc, (texture) => {
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      imageAspectRef.current = texture.image.width / texture.image.height;
+      uniforms.uTexture.value = texture;
+      handleResize();
+    });
+
+    if (window.ResizeObserver) {
+      const resizeObserver = new ResizeObserver(() => {
         handleResize();
-        onTextureReady?.(true);
-      },
-      undefined,
-      () => {
-        onTextureReady?.(false);
-      }
-    );
+      });
+      resizeObserver.observe(container);
+      resizeObserverRef.current = resizeObserver;
+    } else {
+      window.addEventListener("resize", handleResize);
+    }
 
-    resizeObserverRef.current = new ResizeObserver(handleResize);
-    resizeObserverRef.current.observe(container);
-    handleResize();
-
-    const mouseState = { x: 0, y: 0, prevX: 0, prevY: 0, vX: 0, vY: 0 };
+    const mouseState = {
+      x: 0,
+      y: 0,
+      prevX: 0,
+      prevY: 0,
+      vX: 0,
+      vY: 0,
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
@@ -183,20 +172,34 @@ const GridDistortion = ({
       Object.assign(mouseState, { x, y, prevX: x, prevY: y });
     };
 
-    // Listen on window so pointer-events:none on parent doesn't block events
-    window.addEventListener("mousemove", handleMouseMove);
+    const handleMouseLeave = () => {
+      if (dataTexture) {
+        dataTexture.needsUpdate = true;
+      }
+      Object.assign(mouseState, {
+        x: 0,
+        y: 0,
+        prevX: 0,
+        prevY: 0,
+        vX: 0,
+        vY: 0,
+      });
+    };
+
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseleave", handleMouseLeave);
+    handleResize();
 
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
+      if (!renderer || !scene || !camera) return;
+
       uniforms.time.value += 0.05;
 
-      const texData = dataTexture.image.data as Uint8Array;
+      const texData = dataTexture.image.data as Float32Array;
       for (let i = 0; i < size * size; i++) {
-        const rIdx = i * 4;
-        const gIdx = rIdx + 1;
-        // Relax back toward neutral center (128)
-        texData[rIdx] = Math.max(0, Math.min(255, Math.round(128 + (texData[rIdx] - 128) * relaxation)));
-        texData[gIdx] = Math.max(0, Math.min(255, Math.round(128 + (texData[gIdx] - 128) * relaxation)));
+        texData[i * 4] *= relaxation;
+        texData[i * 4 + 1] *= relaxation;
       }
 
       const gridMouseX = size * mouseState.x;
@@ -205,15 +208,12 @@ const GridDistortion = ({
 
       for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-          const distSq =
-            Math.pow(gridMouseX - i, 2) + Math.pow(gridMouseY - j, 2);
+          const distSq = Math.pow(gridMouseX - i, 2) + Math.pow(gridMouseY - j, 2);
           if (distSq < maxDist * maxDist) {
             const index = 4 * (i + size * j);
-            const power = Math.min(maxDist / Math.sqrt(distSq), 10);
-            const dx = strength * 360 * mouseState.vX * power;
-            const dy = strength * 360 * mouseState.vY * power;
-            texData[index] = Math.max(0, Math.min(255, texData[index] + dx));
-            texData[index + 1] = Math.max(0, Math.min(255, texData[index + 1] - dy));
+            const power = Math.min(maxDist / Math.sqrt(distSq || 1e-6), 10);
+            texData[index] += strength * 100 * mouseState.vX * power;
+            texData[index + 1] -= strength * 100 * mouseState.vY * power;
           }
         }
       }
@@ -225,10 +225,19 @@ const GridDistortion = ({
     animate();
 
     return () => {
-      mounted = false;
-      if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
-      resizeObserverRef.current?.disconnect();
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+      } else {
+        window.removeEventListener("resize", handleResize);
+      }
+
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+
       renderer.dispose();
       renderer.forceContextLoss();
       if (container.contains(renderer.domElement)) {
@@ -237,25 +246,29 @@ const GridDistortion = ({
       geometry.dispose();
       material.dispose();
       dataTexture.dispose();
-      if (uniforms.uTexture.value) uniforms.uTexture.value.dispose();
-      onTextureReady?.(false);
+      const texture = uniforms.uTexture.value as THREE.Texture | null;
+      if (texture) texture.dispose();
+
+      sceneRef.current = null;
+      rendererRef.current = null;
+      cameraRef.current = null;
+      planeRef.current = null;
     };
-  }, [grid, mouse, strength, relaxation, imageSrc, onTextureReady]);
+  }, [grid, mouse, strength, relaxation, imageSrc]);
 
   return (
     <div
       ref={containerRef}
       className={`distortion-container ${className}`.trim()}
       style={{
-        position: "absolute",
-        inset: 0,
         width: "100%",
         height: "100%",
-        minWidth: 0,
-        minHeight: 0,
+        minWidth: "0",
+        minHeight: "0",
       }}
     />
   );
 };
 
 export default GridDistortion;
+
