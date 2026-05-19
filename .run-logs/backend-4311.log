@@ -326,3 +326,49 @@ INFO:     100.84.151.109:51523 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 20:12:38 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
 2026-05-19 20:12:40 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
 2026-05-19 20:12:50 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 20:12:53 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-19 20:12:53 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+INFO:     100.84.151.109:56426 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56426 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:12:55 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:12:56 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-19 20:12:58 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-19 20:12:59 [debug    ] upgrade_parts.ebay             buy=None part=PC Build Bundle sold=None
+2026-05-19 20:12:59 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-19 20:13:01 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-19 20:13:04 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+INFO:     100.84.151.109:61284 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:13:06 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-19 20:13:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64136 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64136 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:13:27 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-19 20:13:29 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-19 20:13:29 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-19 20:13:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:13:31 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-19 20:13:33 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-19 20:13:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+INFO:     100.84.151.109:55523 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:13:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+2026-05-19 20:13:35 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-19 20:13:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-19 20:13:37 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1060 6GB sold=None
+2026-05-19 20:13:38 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:61258 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61258 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+2026-05-19 20:13:59 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+2026-05-19 20:14:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=office pc
+2026-05-19 20:14:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-19 20:14:03 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-19 20:14:03 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1060 3GB sold=49.74
+INFO:     100.84.151.109:59122 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:14:06 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-19 20:14:06 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-19 20:14:07 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:59122 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59122 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:14:10 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-19 20:14:13 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
