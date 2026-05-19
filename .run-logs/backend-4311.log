@@ -1005,3 +1005,249 @@ INFO:     100.84.151.109:61383 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 03:44:38 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
 2026-05-19 03:44:40 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
 INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:44:46 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-19 03:44:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-19 03:44:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-19 03:45:10 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+INFO:     100.84.151.109:56695 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:45:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-19 03:45:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-19 03:45:13 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-19 03:45:13 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-19 03:45:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-19 03:45:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:45:15 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-19 03:45:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-19 03:45:16 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+WARNING:  WatchFiles detected changes in 'tests/test_demand_playbook_evolution.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-19 03:45:17 [info     ] scheduler.stopped
+2026-05-19 03:45:17 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2953889]
+INFO:     Started server process [2996565]
+INFO:     Waiting for application startup.
+2026-05-19 03:45:18 [info     ] app.startup
+2026-05-19 03:45:18 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-19 03:45:18 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-19 03:45:18 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-19 03:45:18 [info     ] flip_opportunities_swarm.start
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_923s source=Manual Submission
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_923s source=Manual Photo
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_923s source=WF-Retrain
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_213s source=Facebook Marketplace
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_1176s source=Apex Auctions
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_1133s source=John Pye
+2026-05-19 03:45:18 [info     ] source.skipped                 reason=cooldown_active_923s source=Gumtree
+2026-05-19 03:45:19 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:45:19 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:45:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 03:45:21 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:21 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:21 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:21 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:23 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-19 03:45:23 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-19 03:45:23 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-19 03:45:23 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-19 03:45:25 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-19 03:45:25 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-19 03:45:25 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-19 03:45:25 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-19 03:45:27 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-19 03:45:27 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-19 03:45:27 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-19 03:45:29 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-19 03:45:29 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-19 03:45:29 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-19 03:45:30 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+WARNING:  WatchFiles detected changes in 'tests/test_demand_playbook_evolution.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-19 03:45:31 [info     ] scheduler.stopped
+2026-05-19 03:45:31 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2996565]
+INFO:     Started server process [3001619]
+INFO:     Waiting for application startup.
+2026-05-19 03:45:32 [info     ] app.startup
+2026-05-19 03:45:32 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-19 03:45:32 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-19 03:45:32 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-19 03:45:32 [info     ] flip_opportunities_swarm.start
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_909s source=Manual Submission
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_909s source=Manual Photo
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_909s source=WF-Retrain
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_1119s source=John Pye
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_199s source=Facebook Marketplace
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_909s source=Gumtree
+2026-05-19 03:45:32 [info     ] source.skipped                 reason=cooldown_active_1162s source=Apex Auctions
+2026-05-19 03:45:32 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:45:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 03:45:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:45:35 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:35 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:35 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:35 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:37 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-19 03:45:37 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-19 03:45:37 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-19 03:45:37 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-19 03:45:39 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-19 03:45:39 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-19 03:45:39 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-19 03:45:39 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-19 03:45:41 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-19 03:45:41 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-19 03:45:41 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+INFO:     100.84.151.109:55320 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:45:43 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-19 03:45:43 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-19 03:45:43 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-19 03:45:44 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+WARNING:  WatchFiles detected changes in 'tests/test_demand_playbook_evolution.py'. Reloading...
+2026-05-19 03:45:45 [info     ] preloved.playwright.fetch      term=desktop pc
+INFO:     Shutting down
+2026-05-19 03:45:45 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-19 03:45:45 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+INFO:     Waiting for application shutdown.
+2026-05-19 03:45:45 [info     ] scheduler.stopped
+2026-05-19 03:45:45 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3001619]
+INFO:     Started server process [3005870]
+INFO:     Waiting for application startup.
+2026-05-19 03:45:46 [info     ] app.startup
+2026-05-19 03:45:46 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-19 03:45:46 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-19 03:45:46 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-19 03:45:46 [info     ] flip_opportunities_swarm.start
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_895s source=Manual Submission
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_895s source=Manual Photo
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_895s source=WF-Retrain
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_185s source=Facebook Marketplace
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_1148s source=Apex Auctions
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_1104s source=John Pye
+2026-05-19 03:45:46 [info     ] source.skipped                 reason=cooldown_active_895s source=Gumtree
+2026-05-19 03:45:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:45:47 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:45:47 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 03:45:49 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:50 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:50 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:50 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:45:51 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-19 03:45:51 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-19 03:45:51 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-19 03:45:51 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-19 03:45:53 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-19 03:45:53 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-19 03:45:53 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-19 03:45:53 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-19 03:45:55 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-19 03:45:56 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-19 03:45:56 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-19 03:45:57 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-19 03:45:57 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-19 03:45:57 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-19 03:45:58 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:00 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-19 03:46:00 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-19 03:46:00 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-19 03:46:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:01 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-19 03:46:01 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-19 03:46:01 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-19 03:46:01 [info     ] preloved.playwright.term_done  running_total=34 term=HP EliteDesk
+2026-05-19 03:46:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+2026-05-19 03:46:03 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
+2026-05-19 03:46:03 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
+2026-05-19 03:46:03 [info     ] preloved.playwright.term_done  running_total=35 term=Dell OptiPlex
+2026-05-19 03:46:05 [info     ] preloved.playwright.done       total=35
+2026-05-19 03:46:05 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+WARNING:  WatchFiles detected changes in 'tests/test_demand_playbook_evolution.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-19 03:46:06 [info     ] scheduler.stopped
+2026-05-19 03:46:06 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3005870]
+INFO:     Started server process [3011123]
+INFO:     Waiting for application startup.
+2026-05-19 03:46:07 [info     ] app.startup
+2026-05-19 03:46:07 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-19 03:46:07 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-19 03:46:07 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-19 03:46:07 [info     ] flip_opportunities_swarm.start
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_874s source=Manual Submission
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_874s source=Manual Photo
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_874s source=WF-Retrain
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_1084s source=John Pye
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_164s source=Facebook Marketplace
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_1127s source=Apex Auctions
+2026-05-19 03:46:07 [info     ] source.skipped                 reason=cooldown_active_874s source=Gumtree
+2026-05-19 03:46:08 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 03:46:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-19 03:46:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-19 03:46:10 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:10 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:10 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:10 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:51672 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 03:46:12 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-19 03:46:12 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-19 03:46:12 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-19 03:46:12 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-19 03:46:15 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-19 03:46:15 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-19 03:46:15 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-19 03:46:15 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-19 03:46:16 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-19 03:46:17 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-19 03:46:17 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-19 03:46:19 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-19 03:46:19 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-19 03:46:19 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-19 03:46:19 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:21 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-19 03:46:21 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-19 03:46:21 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-19 03:46:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-19 03:46:23 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-19 03:46:23 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-19 03:46:23 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-19 03:46:23 [info     ] preloved.playwright.term_done  running_total=34 term=HP EliteDesk
+2026-05-19 03:46:23 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+2026-05-19 03:46:25 [info     ] preloved.playwright.fetch      term=Dell OptiPlex
+2026-05-19 03:46:25 [info     ] preloved.playwright.raw        count=4 term=Dell OptiPlex
+2026-05-19 03:46:25 [info     ] preloved.playwright.term_done  running_total=35 term=Dell OptiPlex
+2026-05-19 03:46:27 [info     ] preloved.playwright.done       total=35
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:27 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 3 3200 rtx 3060 status=403
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 3 3200 rtx 3060 status=403
+2026-05-19 03:46:28 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 03:46:28 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-19 03:46:28 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 5 3600x rtx 3060 status=403

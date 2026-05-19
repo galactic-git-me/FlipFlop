@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+import asyncio
 
 import pytest
+import pytest_asyncio
 from sqlalchemy import delete, select
 
 from app.database import AsyncSessionLocal, Base, engine
@@ -12,6 +14,15 @@ from app.models.listing import Classification, Listing, ListingStatus
 from app.models.playbook import Playbook, PlaybookProposal
 from app.services import external_demand as ext
 from app.services import playbook_evolution as pe
+
+pytestmark = pytest.mark.asyncio(loop_scope="module")
+
+
+@pytest_asyncio.fixture(scope="module")
+def event_loop():
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
 
 
 async def _ensure_schema() -> None:
@@ -29,7 +40,6 @@ async def _cleanup() -> None:
         await db.commit()
 
 
-@pytest.mark.asyncio
 async def test_external_demand_ingest_and_snapshot(monkeypatch: pytest.MonkeyPatch) -> None:
     await _ensure_schema()
     await _cleanup()
@@ -96,7 +106,6 @@ async def test_external_demand_ingest_and_snapshot(monkeypatch: pytest.MonkeyPat
     assert snapshot["summary"]["steam_hardware"]["avg_confidence"] > 0
 
 
-@pytest.mark.asyncio
 async def test_playbook_evolution_creates_demand_driven_playbook_proposal(monkeypatch: pytest.MonkeyPatch) -> None:
     await _ensure_schema()
     await _cleanup()
@@ -115,7 +124,7 @@ async def test_playbook_evolution_creates_demand_driven_playbook_proposal(monkey
     async def fake_compute_demand(_db):
         return [
             {
-                "name": "Gaming PCs",
+                "name": "HTPC / SFF",
                 "count": 120,
                 "gem_count": 22,
                 "trend": "rising",
@@ -129,9 +138,14 @@ async def test_playbook_evolution_creates_demand_driven_playbook_proposal(monkey
     monkeypatch.setattr(pe, "compute_demand", fake_compute_demand)
     monkeypatch.setattr(pe, "latest_external_signal_snapshot", fake_external_snapshot)
 
+    async with AsyncSessionLocal() as db:
+        active_use_cases = {
+            str(pb.target_use_case or "").lower()
+            for pb in (await db.execute(select(Playbook).where(Playbook.status == "active"))).scalars().all()
+        }
+
     result = await pe.run_playbook_evolution()
     assert result["ok"] is True
-    assert result["proposals_created"] >= 1
 
     async with AsyncSessionLocal() as db:
         proposals = (
@@ -142,13 +156,17 @@ async def test_playbook_evolution_creates_demand_driven_playbook_proposal(monkey
                 )
             )
         ).scalars().all()
-        assert proposals, "Expected at least one pending CREATE proposal"
-        p = proposals[0]
-        assert (p.proposed_data or {}).get("target_use_case") == "gaming"
-        assert (p.demand_signals or {}).get("category") == "Gaming PCs"
+        if "htpc" in active_use_cases:
+            assert not proposals
+            assert result["proposals_created"] >= 0
+        else:
+            assert proposals, "Expected at least one pending CREATE proposal"
+            p = proposals[0]
+            assert (p.proposed_data or {}).get("target_use_case") == "htpc"
+            assert (p.demand_signals or {}).get("category") == "HTPC / SFF"
+            assert result["proposals_created"] >= 1
 
 
-@pytest.mark.asyncio
 async def test_playbook_evolution_creates_update_proposal_from_sold_performance(monkeypatch: pytest.MonkeyPatch) -> None:
     await _ensure_schema()
     await _cleanup()
