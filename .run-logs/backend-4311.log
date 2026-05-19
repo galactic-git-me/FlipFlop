@@ -2195,3 +2195,30 @@ INFO:     100.84.151.109:52830 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 15:15:19 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
 2026-05-19 15:15:20 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
 2026-05-19 15:15:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:50795 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+2026-05-19 15:15:40 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+INFO:     100.84.151.109:55497 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55497 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:15:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-19 15:15:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+2026-05-19 15:15:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 15:15:54 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-19 15:15:57 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-19 15:15:58 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-19 15:16:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:56120 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56120 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56120 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+2026-05-19 15:16:16 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-19 15:16:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-19 15:16:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-19 15:16:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:51294 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50787 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50787 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:16:32 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-19 15:16:34 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-19 15:16:35 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-19 15:16:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
