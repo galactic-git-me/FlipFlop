@@ -611,3 +611,21 @@ INFO:     100.84.151.109:57794 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 14:11:14 [debug    ] upgrade_parts.ebay             buy=79.99 part=GTX 1650 4GB sold=68.9
 2026-05-19 14:11:19 [debug    ] upgrade_parts.ebay             buy=118.49 part=GTX 1660 Super sold=99.9
 2026-05-19 14:11:24 [debug    ] upgrade_parts.ebay             buy=99.99 part=GTX 1070 8GB sold=83.32
+2026-05-19 14:11:29 [debug    ] upgrade_parts.ebay             buy=63.79 part=RX 570 8GB sold=52.32
+INFO:     100.84.151.109:57020 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64706 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64706 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:11:34 [debug    ] upgrade_parts.ebay             buy=93.7 part=RX 580 8GB sold=62.7
+2026-05-19 14:11:38 [debug    ] upgrade_parts.ebay             buy=146.3 part=RTX 2060 6GB sold=119.99
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 52)
+INFO:     100.84.151.109:59379 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59379 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:11:59 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=139.99
+INFO:     100.84.151.109:59379 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65413 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65413 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59511 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:12:34 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 52)
+INFO:     100.84.151.109:56171 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56171 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
