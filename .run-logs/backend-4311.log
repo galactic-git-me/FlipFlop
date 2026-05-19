@@ -5263,3 +5263,730 @@ INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1"
 INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46734 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:29 [info     ] aliexpress.cases.done          found=0 search=gaming pc case custom art
+2026-05-20 00:40:29 [info     ] aliexpress.cases.done          found=0 search=anime gaming pc case
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51339 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46756 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-20 00:40:35 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-20 00:40:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-20 00:40:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46772 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:35 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-20 00:40:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-20 00:40:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-20 00:40:37 [info     ] amazon.cases.done              found=10 search=transparent pc case gaming
+2026-05-20 00:40:37 [info     ] amazon.cases.done              found=10 search=open frame pc case atx
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40804 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40810 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:40 [info     ] temu.cases.done                found=0 search=skull pc case gaming
+INFO:     100.84.151.109:60916 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60916 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:40:41 [info     ] aliexpress.cases.done          found=0 search=skull pc case gaming
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40812 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:42 [info     ] temu.cases.done                found=0 search=dark gaming case skull
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:40:43 [info     ] aliexpress.cases.done          found=0 search=dark gaming case skull
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40822 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:44 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1660 Super sold=None
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40830 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:46 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-20 00:40:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-20 00:40:46 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+2026-05-20 00:40:46 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-20 00:40:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-20 00:40:46 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46194 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46208 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:50 [info     ] amazon.cases.done              found=10 search=slim gaming pc case
+2026-05-20 00:40:51 [info     ] amazon.cases.done              found=10 search=desktop gaming case compact atx
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46222 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46230 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:40:58 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-20 00:40:58 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-20 00:40:58 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-20 00:40:58 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-20 00:40:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-20 00:40:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43012 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54842 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:01 [info     ] temu.cases.done                found=0 search=transparent pc case gaming
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:01 [info     ] temu.cases.done                found=0 search=open frame pc case atx
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:03 [info     ] aliexpress.cases.done          found=0 search=open frame pc case atx
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:05 [info     ] aliexpress.cases.done          found=0 search=transparent pc case gaming
+INFO:     100.84.151.109:54842 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54842 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43038 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33008 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:09 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-20 00:41:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-20 00:41:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-20 00:41:09 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-20 00:41:09 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-20 00:41:09 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-20 00:41:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33016 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33036 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:15 [info     ] temu.cases.done                found=0 search=desktop gaming case compact atx
+2026-05-20 00:41:15 [info     ] temu.cases.done                found=0 search=slim gaming pc case
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60568 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:19 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:20 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-20 00:41:20 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-20 00:41:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-20 00:41:20 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-20 00:41:21 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-20 00:41:21 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-20 00:41:21 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60600 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:24 [info     ] aliexpress.cases.done          found=0 search=slim gaming pc case
+2026-05-20 00:41:24 [info     ] aliexpress.cases.done          found=0 search=desktop gaming case compact atx
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60604 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54154 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62901 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56758 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62901 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-20 00:41:30 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-20 00:41:31 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:31 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-20 00:41:31 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-20 00:41:31 [info     ] facebook.playwright.done       total=0
+2026-05-20 00:41:31 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-20 00:41:32 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-20 00:41:32 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-20 00:41:32 [info     ] facebook.playwright.done       total=0
+2026-05-20 00:41:32 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56772 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:32 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56778 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:36 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43598 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43608 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:43 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-20 00:41:44 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43622 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49194 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49206 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:41:50 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+INFO:     100.101.209.68:36754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36754 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:41:51 [info     ] temu.cases.done                found=0 search=slim micro atx case office
