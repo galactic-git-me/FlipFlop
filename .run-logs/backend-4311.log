@@ -1631,3 +1631,25 @@ INFO:     100.84.151.109:50461 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 26)
 INFO:     100.84.151.109:59516 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:59516 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 26)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:57997 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57997 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57997 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 26)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 26)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51103 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57708 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57708 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 26)
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 26)
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:65404 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65404 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65404 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 26)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:52973 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52973 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
