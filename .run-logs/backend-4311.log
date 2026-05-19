@@ -5334,3 +5334,245 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-19 07:24:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
 2026-05-19 07:24:55 [info     ] resale_scraper.fallback_buy_price buy_price=31.77 median=530.12 query=gaming PC rtx 3060
 2026-05-19 07:24:55 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 06:58:30 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 53)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 53)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 53)
+[scraper] eBay 'motherboard bundle': 51 found, 50 new (total 103)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 103)
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 103)
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 103)
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 103)
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 103)
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 103)
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 103)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 103)
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 103)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 103)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 103)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 103)
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 103)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 103)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 103)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 103)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 103)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 103)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 103)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 103)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 103)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 103)
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 103)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 103)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc untested': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 103)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 103)
+[scraper] eBay retry 'desktop untested': 0 found, 0 new (total 103)
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 103)
+[scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 103)
+[scraper] eBay retry 'HP workstation': 0 found, 0 new (total 103)
+[scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 103)
+[scraper] eBay retry 'Dell Precision tower': 0 found, 0 new (total 103)
+[scraper] eBay retry 'HP Z440': 0 found, 0 new (total 103)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 103)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 103)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 103)
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 103)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 103)
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 103)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 103)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 103)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 103)
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 103)
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 103)
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 103)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 103)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 103)
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 103)
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 103)
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 103)
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 103)
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 103)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 103)
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 103)
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 103)
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 103)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 103)
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 103)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 103)
+2026-05-19 07:58:48 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-19 07:58:48 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-19 07:58:48 [info     ] resale_scraper.fallback_buy_price buy_price=301.05 median=853.26 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-19 07:58:48 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-19 07:58:48 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-19 07:58:48 [info     ] resale_scraper.fallback_buy_price buy_price=301.05 median=853.26 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:49 [info     ] resale_scraper.fallback_buy_price buy_price=521.71 median=1118.05 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 3800x rtx 3060 status=403
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 3800x rtx 3060 status=403
+2026-05-19 07:58:49 [info     ] resale_scraper.fallback_buy_price buy_price=183.47 median=712.16 query=gaming PC ryzen 7 3800x rtx 3060
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 1700x rtx 3060 status=403
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 1700x rtx 3060 status=403
+2026-05-19 07:58:49 [info     ] resale_scraper.fallback_buy_price buy_price=64.12 median=568.94 query=gaming PC ryzen 7 1700x rtx 3060
+2026-05-19 07:58:49 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 5 4600g rtx 3060 status=403
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 5 4600g rtx 3060 status=403
+2026-05-19 07:58:50 [info     ] resale_scraper.fallback_buy_price buy_price=33.75 median=532.5 query=gaming PC ryzen 5 4600g rtx 3060
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:50 [info     ] resale_scraper.fallback_buy_price buy_price=101.22 median=613.46 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 9850x rtx 3060 status=403
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 9850x rtx 3060 status=403
+2026-05-19 07:58:50 [info     ] resale_scraper.fallback_buy_price buy_price=436.32 median=1015.58 query=gaming PC ryzen 7 9850x rtx 3060
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:50 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:50 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 8700g rtx 3060 status=403
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 8700g rtx 3060 status=403
+2026-05-19 07:58:51 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 8700g rtx 3060
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 5 5500x rtx 3060 status=403
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 5 5500x rtx 3060 status=403
+2026-05-19 07:58:51 [info     ] resale_scraper.fallback_buy_price buy_price=191.81 median=722.17 query=gaming PC ryzen 5 5500x rtx 3060
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:51 [info     ] resale_scraper.fallback_buy_price buy_price=101.22 median=529.46 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:51 [info     ] resale_scraper.fallback_buy_price buy_price=521.71 median=1118.05 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-19 07:58:51 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-19 07:58:52 [info     ] resale_scraper.fallback_buy_price buy_price=378.0 median=945.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-19 07:58:52 [info     ] auction_price.fallback         current_bid=50.79 fallback=68.57 query=ryzen 7 7700x pc tower
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 7 7700x rtx 3060 status=403
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 7700x rtx 3060 status=403
+2026-05-19 07:58:52 [info     ] resale_scraper.fallback_buy_price buy_price=68.57 median=574.28 query=gaming PC ryzen 7 7700x rtx 3060
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:52 [info     ] resale_scraper.fallback_buy_price buy_price=43.06 median=543.67 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 5 7500x rx 9060 xt status=403
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 5 7500x rx 9060 xt status=403
+2026-05-19 07:58:52 [info     ] resale_scraper.fallback_buy_price buy_price=371.52 median=565.82 query=gaming PC ryzen 5 7500x rx 9060 xt
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 9700x rtx 3060 status=403
+2026-05-19 07:58:52 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 9700x rtx 3060 status=403
+2026-05-19 07:58:52 [info     ] resale_scraper.fallback_buy_price buy_price=190.49 median=720.59 query=gaming PC ryzen 7 9700x rtx 3060
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 9 5900x rtx 3060 status=403
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 9 5900x rtx 3060 status=403
+2026-05-19 07:58:53 [info     ] resale_scraper.fallback_buy_price buy_price=223.02 median=759.62 query=gaming PC ryzen 9 5900x rtx 3060
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:53 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 1800x rtx 3060 status=403
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 1800x rtx 3060 status=403
+2026-05-19 07:58:53 [info     ] resale_scraper.fallback_buy_price buy_price=14.22 median=509.06 query=gaming PC ryzen 7 1800x rtx 3060
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=0 length=544 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:53 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:53 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 7 5700x rtx 3060 status=403
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 5700x rtx 3060 status=403
+2026-05-19 07:58:54 [info     ] resale_scraper.fallback_buy_price buy_price=351.94 median=914.33 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:54 [info     ] resale_scraper.fallback_buy_price buy_price=101.22 median=613.46 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:54 [info     ] resale_scraper.fallback_buy_price buy_price=453.87 median=1036.64 query=gaming PC rtx 3060
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 7 9700x rtx 3060 status=403
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 9700x rtx 3060 status=403
+2026-05-19 07:58:54 [info     ] resale_scraper.fallback_buy_price buy_price=190.49 median=720.59 query=gaming PC ryzen 7 9700x rtx 3060
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:54 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:54 [info     ] resale_scraper.fallback_buy_price buy_price=43.06 median=543.67 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 2700x rtx 3060 status=403
+2026-05-19 07:58:55 [info     ] resale_scraper.fallback_buy_price buy_price=43.06 median=543.67 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 5800x rtx 3060 status=403
+2026-05-19 07:58:55 [info     ] resale_scraper.fallback_buy_price buy_price=101.22 median=613.46 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 7 3800x rtx 3060 status=403
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 3800x rtx 3060 status=403
+2026-05-19 07:58:55 [info     ] resale_scraper.fallback_buy_price buy_price=183.47 median=712.16 query=gaming PC ryzen 7 3800x rtx 3060
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 5 5600x rtx 3060 status=403
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 5 5600x rtx 3060 status=403
+2026-05-19 07:58:55 [info     ] resale_scraper.fallback_buy_price buy_price=64.85 median=569.82 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 7 3800xt rtx 3060 status=403
+2026-05-19 07:58:55 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 3800xt rtx 3060 status=403
+2026-05-19 07:58:55 [info     ] resale_scraper.fallback_buy_price buy_price=106.25 median=619.5 query=gaming PC ryzen 7 3800xt rtx 3060
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:56 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=0 length=544 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:56 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC ryzen 5 2600h rtx 3060 status=403
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 5 2600h rtx 3060 status=403
+2026-05-19 07:58:56 [info     ] resale_scraper.fallback_buy_price buy_price=71.15 median=493.38 query=gaming PC ryzen 5 2600h rtx 3060
+2026-05-19 07:58:56 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:57 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=549.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:57 [info     ] resale_scraper.fallback_buy_price buy_price=453.87 median=1036.64 query=gaming PC rtx 3060
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:57 [info     ] resale_scraper.fallback_buy_price buy_price=521.71 median=1118.05 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=0 length=544 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:57 [info     ] resale_scraper.fallback_buy_price buy_price=453.87 median=1036.64 query=gaming PC rtx 3060
+2026-05-19 07:58:57 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 3700x rtx 3060 status=403
+2026-05-19 07:58:58 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 5700x rtx 3060 status=403
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 7 5700x rtx 3060 status=403
+2026-05-19 07:58:58 [info     ] resale_scraper.fallback_buy_price buy_price=351.94 median=914.33 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:58 [info     ] resale_scraper.fallback_buy_price buy_price=521.71 median=1118.05 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=179 length=544 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=0 length=544 query=gaming PC ryzen 9 9950x rtx 3060 status=403
+2026-05-19 07:58:58 [info     ] resale_scraper.fallback_buy_price buy_price=521.71 median=1118.05 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-19 07:58:58 [debug    ] resale_scraper.empty_response  cat=179 length=391 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:59 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:59 [info     ] resale_scraper.fallback_buy_price buy_price=453.87 median=1036.64 query=gaming PC rtx 3060
+2026-05-19 07:58:59 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:59 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC rtx 3060 status=403
+2026-05-19 07:58:59 [info     ] resale_scraper.fallback_buy_price buy_price=453.87 median=1036.64 query=gaming PC rtx 3060
+2026-05-19 07:58:59 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC ryzen 7 3800xt rtx 3060 status=403
+2026-05-19 07:58:59 [debug    ] resale_scraper.empty_response  cat=0 length=391 query=gaming PC ryzen 7 3800xt rtx 3060 status=403
+2026-05-19 07:58:59 [info     ] resale_scraper.fallback_buy_price buy_price=106.25 median=619.5 query=gaming PC ryzen 7 3800xt rtx 3060
+2026-05-19 07:58:59 [info     ] auction_price.fallback         current_bid=22.05 fallback=29.77 query=intel i5 3570k pc tower
+2026-05-19 07:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=548 query=gaming PC intel i5 3570k rtx 3060 status=403
+2026-05-19 07:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC intel i5 3570k rtx 3060 status=403
+2026-05-19 07:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=29.77 median=527.72 query=gaming PC intel i5 3570k rtx 3060
+2026-05-19 07:59:00 [info     ] auction_price.fallback         current_bid=135.9 fallback=183.47 query=i7 6700k pc tower
+2026-05-19 07:59:00 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i7 6700k rtx 3060 status=403
+2026-05-19 07:59:00 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC i7 6700k rtx 3060 status=403
+2026-05-19 07:59:00 [info     ] resale_scraper.fallback_buy_price buy_price=183.47 median=628.16 query=gaming PC i7 6700k rtx 3060
+2026-05-19 07:59:00 [info     ] auction_price.fallback         current_bid=63.1 fallback=85.19 query=i5 2500k pc tower
+2026-05-19 07:59:01 [debug    ] resale_scraper.empty_response  cat=179 length=395 query=gaming PC i5 2500k rtx 3060 status=403
+2026-05-19 07:59:01 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC i5 2500k rtx 3060 status=403
+2026-05-19 07:59:01 [info     ] resale_scraper.fallback_buy_price buy_price=85.19 median=594.23 query=gaming PC i5 2500k rtx 3060
+2026-05-19 07:59:01 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK Auctions
+2026-05-19 07:59:01 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=489 new_gems=0 sources_scanned=13
+2026-05-19 07:59:01 [info     ] ghost_lifecycle.updated        missing_cutoff_days=3 moved_to_missing=9 moved_to_removed=0 removed_cutoff_days=14
