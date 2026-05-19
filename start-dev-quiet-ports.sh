@@ -230,12 +230,55 @@ tail -n 240 -f "$BACKEND_LOG"
 EOF
   chmod +x "$backend_pane_script"
 
+  local backend_tail_script="$LOG_DIR/backend-tail-$BACKEND_PORT.sh"
+  cat >"$backend_tail_script" <<EOF
+#!/usr/bin/env bash
+set +e
+if python3 -c "from rich.console import Console" >/dev/null 2>&1; then
+  python3 "$ROOT_DIR/scripts/rich_tail.py" --title "Backend Logs" --file "$BACKEND_LOG" --lines 180
+else
+  echo "Backend logs: $BACKEND_LOG"
+  echo
+  tail -n 240 -f "$BACKEND_LOG"
+fi
+EOF
+  chmod +x "$backend_tail_script"
+
+  local frontend_tail_script="$LOG_DIR/frontend-tail-$FRONTEND_PORT.sh"
+  cat >"$frontend_tail_script" <<EOF
+#!/usr/bin/env bash
+set +e
+if python3 -c "from rich.console import Console" >/dev/null 2>&1; then
+  python3 "$ROOT_DIR/scripts/rich_tail.py" --title "Frontend Logs" --file "$FRONTEND_LOG" --lines 180
+else
+  echo "Frontend logs: $FRONTEND_LOG"
+  echo
+  tail -n 240 -f "$FRONTEND_LOG"
+fi
+EOF
+  chmod +x "$frontend_tail_script"
+
+  local alerts_tail_script="$LOG_DIR/alerts-tail-$BACKEND_PORT.sh"
+  cat >"$alerts_tail_script" <<EOF
+#!/usr/bin/env bash
+set +e
+echo "Alerts / Errors (backend + frontend)"
+echo "Backend : $BACKEND_LOG"
+echo "Frontend: $FRONTEND_LOG"
+echo
+touch "$BACKEND_LOG" "$FRONTEND_LOG"
+tail -n 120 -f "$BACKEND_LOG" "$FRONTEND_LOG" | grep --line-buffered -Ei "error|warn|failed|exception|traceback|critical|429|403"
+EOF
+  chmod +x "$alerts_tail_script"
+
   tmux new-session -d -s "$TMUX_SESSION" "bash '$backend_pane_script'"
-  tmux split-window -h -t "$TMUX_SESSION" "bash -lc 'echo Frontend logs: $FRONTEND_LOG; echo; echo Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT; echo Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT; echo; tail -n 240 -f \"$FRONTEND_LOG\"'"
-  tmux select-layout -t "$TMUX_SESSION" even-horizontal
+  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
+  tmux split-window -v -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
+  tmux split-window -v -t "$TMUX_SESSION":0.1 "bash '$alerts_tail_script'"
+  tmux select-layout -t "$TMUX_SESSION":0 tiled
 
   echo
-  echo "Opening tmux session '$TMUX_SESSION' with split panes (backend | frontend logs)."
+  echo "Opening tmux session '$TMUX_SESSION' with 4-pane quadrant layout."
   echo "Detach with Ctrl+b then d to return."
   if [[ -t 1 ]]; then
     tmux attach -t "$TMUX_SESSION" || true
