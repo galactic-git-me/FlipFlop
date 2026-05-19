@@ -3363,3 +3363,16 @@ INFO:     100.84.151.109:51373 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
 [scraper] eBay retry 'HP Z440': 0 found, 0 new (total 1)
 INFO:     100.84.151.109:56183 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'desktop spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 1)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 1)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc boots no display': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 1)
+[scraper] eBay retry 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 1)
+[scraper] eBay retry 'pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 1)
+[scraper] eBay retry 'desktop faulty': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58446 - "GET /health HTTP/1.1" 200 OK
