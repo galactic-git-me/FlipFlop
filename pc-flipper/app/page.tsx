@@ -377,7 +377,7 @@ export default function DashboardPage() {
     return (
       <div className="h-full flex items-center justify-center p-6">
         <div className="w-full max-w-xl rounded-2xl border border-[#1e2d45] bg-[#0d1320]/90 p-5">
-          <div className="flex items-center justify-between text-sm mb-2">
+          <div className="flex items-center justify-between text-base mb-2">
             <div className="flex items-center gap-2 text-slate-300">
               <RefreshCw className="w-4 h-4 animate-spin" />
               Retrieving live market data…
@@ -390,7 +390,7 @@ export default function DashboardPage() {
               style={{ width: `${Math.max(2, Math.min(100, loadProgress))}%` }}
             />
           </div>
-          <div className="mt-2 text-xs text-slate-500">
+          <div className="mt-2 text-base text-slate-500">
             {loadProgress < 100
               ? `Fetched ${feedsDone}/11 dashboard feeds • ${elapsedSecs}s elapsed`
               : "Finalizing data..."}
@@ -398,7 +398,7 @@ export default function DashboardPage() {
           <div className="mt-3">
             <button
               onClick={() => setLoading(false)}
-              className="text-xs px-3 py-1.5 rounded-md border border-[#2a3d5c] text-slate-300 hover:text-white hover:border-[#4b648f] transition-colors"
+              className="text-base px-3 py-1.5 rounded-md border border-[#2a3d5c] text-slate-300 hover:text-white hover:border-[#4b648f] transition-colors"
             >
               Open dashboard now
             </button>
@@ -423,7 +423,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <img src="/pics/logo.png" alt="FlipFlop" className="h-12 w-auto object-contain" />
-          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
+          <p className="text-base text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
         </div>
         <div className="flex items-center gap-3">
           {autonomousCycleHealthy !== null && (
@@ -433,7 +433,7 @@ export default function DashboardPage() {
                 : "bg-amber-500/10 border-amber-400/25"
             }`}>
               <Activity className={`w-3.5 h-3.5 ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`} />
-              <span className={`text-xs font-semibold ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`}>
+              <span className={`text-base font-semibold ${autonomousCycleHealthy ? "text-cyan-300" : "text-amber-300"}`}>
                 Auto Loop {autonomousCycleHealthy ? "Healthy" : "Attention"} · Retrain {retrainReady ? "Ready" : "Collecting"} ({soldSinceCheckpoint})
               </span>
               {autonomousLastRunAt && (
@@ -455,7 +455,7 @@ export default function DashboardPage() {
           {gems.length > 0 && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#00dc82]/10 border border-[#00dc82]/25 new-badge-pulse">
               <Bell className="w-3.5 h-3.5 text-[#00dc82]" />
-              <span className="text-xs font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
+              <span className="text-base font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
             </div>
           )}
           <Button variant="secondary" size="sm" onClick={() => setShowManualSubmit(true)}>
@@ -469,7 +469,7 @@ export default function DashboardPage() {
         </div>
       </div>
       {autoCycleMessage && (
-        <div className={`rounded-xl px-3 py-2 text-sm border ${
+        <div className={`rounded-xl px-3 py-2 text-base border ${
           autoCycleMessage.type === "success"
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
             : "bg-red-500/10 border-red-500/30 text-red-300"
@@ -520,7 +520,7 @@ export default function DashboardPage() {
           </div>
 
           {/* ── PnL Chart ─────────────────────────────────────────────────────── */}
-          <Card>
+          <Card className="-mt-3">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <CardTitle className="flex items-center gap-2">
@@ -537,19 +537,19 @@ export default function DashboardPage() {
                     type="date"
                     value={pnlDateFrom}
                     onChange={e => setPnlDateFrom(e.target.value)}
-                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
+                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
                   />
-                  <span className="text-slate-600 text-xs">→</span>
+                  <span className="text-slate-600 text-base">→</span>
                   <input
                     type="date"
                     value={pnlDateTo}
                     onChange={e => setPnlDateTo(e.target.value)}
-                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
+                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
                   />
                   <select
                     value={pnlSource}
                     onChange={e => setPnlSource(e.target.value)}
-                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
+                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
                   >
                     <option value="all">All sources</option>
                     {allSources.map(s => <option key={s} value={s}>{s}</option>)}
@@ -558,7 +558,7 @@ export default function DashboardPage() {
                     <select
                       value={pnlPlatform}
                       onChange={e => setPnlPlatform(e.target.value)}
-                      className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
+                      className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50"
                     >
                       <option value="all">All platforms</option>
                       {allPlatforms.map(p => <option key={p} value={p}>{p}</option>)}
@@ -569,7 +569,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               {pnlData.length === 0 ? (
-                <div className="flex items-center justify-center h-48 text-slate-600 text-sm">
+                <div className="flex items-center justify-center h-48 text-slate-600 text-base">
                   No sold flips in this date range yet — PnL will appear as you log sales.
                 </div>
               ) : (
@@ -654,7 +654,7 @@ export default function DashboardPage() {
               max={listings.length}
               value={topN}
               onChange={e => setTopN(Math.max(1, Math.min(listings.length, Number(e.target.value) || 1)))}
-              className="w-16 bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#00dc82]/50 text-center"
+              className="w-16 bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50 text-center"
             />
             <span className="text-[11px] text-slate-500">by score (of {listings.length})</span>
           </div>
@@ -664,7 +664,7 @@ export default function DashboardPage() {
             {/* Chart 1: Buy price vs resale */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Buy price vs resale — bubble = profit</CardTitle>
+                <CardTitle className="text-base">Buy price vs resale — bubble = profit</CardTitle>
                 <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
               </CardHeader>
               <CardContent>
@@ -730,7 +730,7 @@ export default function DashboardPage() {
             {/* Chart 2: Flippability score vs ROI% */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Flippability score vs ROI% — bubble = profit</CardTitle>
+                <CardTitle className="text-base">Flippability score vs ROI% — bubble = profit</CardTitle>
                 <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
               </CardHeader>
               <CardContent>
@@ -791,7 +791,7 @@ export default function DashboardPage() {
           {/* Recent Gems — last 24 h gems/amazing_gems only */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#00dc82]" /> Gems Found (last 24 h)
                 {recentGems.length > 0
                   ? <Badge variant="success">{recentGems.length}</Badge>
@@ -806,7 +806,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-white/[0.07] px-6 py-5 text-center text-slate-600 text-sm">
+              <div className="rounded-xl border border-dashed border-white/[0.07] px-6 py-5 text-center text-slate-600 text-base">
                 No gem or amazing-gem listings found in the last 24 hours. Trigger a scan to refresh.
               </div>
             )}
@@ -819,7 +819,7 @@ export default function DashboardPage() {
                 <CardTitle className="flex items-center gap-2">
                   <Gem className="w-3.5 h-3.5 text-[#00dc82]" />
                   All Listings
-                  <span className="text-xs font-normal text-slate-500">({listings.length} total · sorted by flippability)</span>
+                  <span className="text-base font-normal text-slate-500">({listings.length} total · sorted by flippability)</span>
                 </CardTitle>
                 <div className="flex items-center gap-2">
                   {/* Column picker */}
@@ -844,7 +844,7 @@ export default function DashboardPage() {
                               ${visibleCols.has(col.key) ? "bg-[#00dc82]/20 border-[#00dc82]/60" : "border-white/20"}`}>
                               {visibleCols.has(col.key) && <Check className="w-2.5 h-2.5 text-[#00dc82]" />}
                             </div>
-                            <span className="text-xs text-slate-300">{col.label}</span>
+                            <span className="text-base text-slate-300">{col.label}</span>
                           </button>
                         ))}
                         <div className="border-t border-white/10 mt-2 pt-2 flex gap-1">
@@ -868,7 +868,7 @@ export default function DashboardPage() {
                   <select
                     value={pageSize}
                     onChange={e => { setPageSize(Number(e.target.value)); setTablePage(1); }}
-                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-400 focus:outline-none focus:border-[#00dc82]/50"
+                    className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-400 focus:outline-none focus:border-[#00dc82]/50"
                   >
                     {[10, 20, 50, 100].map(n => <option key={n} value={n}>{n} / page</option>)}
                   </select>
@@ -915,7 +915,7 @@ export default function DashboardPage() {
                         {/* Title + badges */}
                         <div>
                           <a href={l.url} target="_blank" rel="noopener noreferrer"
-                            className="text-xs font-semibold text-slate-200 line-clamp-2 hover:text-[#00dc82] transition-colors leading-snug">
+                            className="text-base font-semibold text-slate-200 line-clamp-2 hover:text-[#00dc82] transition-colors leading-snug">
                             {l.title}
                           </a>
                           <div className="flex flex-wrap items-center gap-1 mt-1.5">
@@ -1013,7 +1013,7 @@ export default function DashboardPage() {
 
               {/* Pagination bar */}
               <div className="flex items-center justify-between px-5 py-3 border-t border-white/[0.06]">
-                <span className="text-xs text-slate-500">
+                <span className="text-base text-slate-500">
                   Showing {(tablePage - 1) * pageSize + 1}–{Math.min(tablePage * pageSize, listings.length)} of {listings.length}
                 </span>
                 <div className="flex items-center gap-1">
@@ -1034,12 +1034,12 @@ export default function DashboardPage() {
                     }, [])
                     .map((p, i) =>
                       p === "…"
-                        ? <span key={`ellipsis-${i}`} className="px-1.5 text-xs text-slate-600">…</span>
+                        ? <span key={`ellipsis-${i}`} className="px-1.5 text-base text-slate-600">…</span>
                         : (
                           <button
                             key={p}
                             onClick={() => setTablePage(p as number)}
-                            className={`w-7 h-7 rounded-lg text-xs transition-colors
+                            className={`w-7 h-7 rounded-lg text-base transition-colors
                               ${tablePage === p ? "bg-[#00dc82]/20 text-[#00dc82] font-semibold" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"}`}
                           >
                             {p}
@@ -1122,7 +1122,7 @@ function GemOfPeriod({
 
           {/* Title */}
           <a href={l.url} target="_blank" rel="noopener noreferrer"
-            className="text-sm font-semibold text-slate-100 line-clamp-1 hover:text-[#00dc82] transition-colors block">
+            className="text-base font-semibold text-slate-100 line-clamp-1 hover:text-[#00dc82] transition-colors block">
             {l.title}
           </a>
 
@@ -1146,7 +1146,7 @@ function GemOfPeriod({
         <div className="flex-shrink-0 flex flex-col items-end justify-between">
           <div className="text-right">
             <AuctionPriceDisplay listing={l} />
-            <div className={`text-sm font-bold mt-0.5 ${profit > 0 ? "text-[#00dc82]" : "text-red-400"}`}>
+            <div className={`text-base font-bold mt-0.5 ${profit > 0 ? "text-[#00dc82]" : "text-red-400"}`}>
               {profit > 0 ? "+" : ""}{formatCurrency(profit)} profit
             </div>
             {l.resale_low != null && l.resale_high != null && l.resale_low !== l.resale_high && (
@@ -1190,7 +1190,7 @@ function PnlTooltip({ active, payload }: { active?: boolean; payload?: { payload
   if (!active || !payload?.[0]) return null;
   const d = payload[0].payload;
   return (
-    <div className="rounded-xl p-3 text-xs shadow-2xl" style={{ background: "rgba(8,15,26,0.97)", border: "1px solid rgba(255,255,255,0.1)" }}>
+    <div className="rounded-xl p-3 text-base shadow-2xl" style={{ background: "rgba(8,15,26,0.97)", border: "1px solid rgba(255,255,255,0.1)" }}>
       <p className="text-slate-200 font-semibold mb-1.5">{d.date} · {d.label}</p>
       <div className="space-y-1">
         <div className="flex justify-between gap-6">
@@ -1365,7 +1365,7 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: { pay
   const fmt = (v: number) => `${v >= 0 ? "+" : ""}${formatCurrency(v)}`;
 
   return (
-    <div className="glass-card rounded-xl p-3 text-xs shadow-2xl" style={{ maxWidth: 284, background: "rgba(8,15,26,0.97)", border: "1px solid rgba(255,255,255,0.1)" }}>
+    <div className="glass-card rounded-xl p-3 text-base shadow-2xl" style={{ maxWidth: 284, background: "rgba(8,15,26,0.97)", border: "1px solid rgba(255,255,255,0.1)" }}>
       <p className="text-slate-100 font-semibold mb-2 leading-snug line-clamp-2">{d.title}</p>
       <div className="flex justify-between items-start gap-3 mb-1">
         <span className="text-slate-400 font-medium shrink-0">
@@ -1457,7 +1457,7 @@ function RecentCard({ listing: l }: { listing: Listing }) {
         )}
       </div>
       <div className="p-2.5 space-y-1.5">
-        <p className="text-xs text-slate-100 font-semibold line-clamp-2 leading-tight">{l.title}</p>
+        <p className="text-base text-slate-100 font-semibold line-clamp-2 leading-tight">{l.title}</p>
         {specs.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {specs.map((s, i) => <span key={i} className="text-[10px] text-slate-400 bg-white/[0.05] rounded px-1.5 py-0.5 leading-none">{s}</span>)}
@@ -1465,7 +1465,7 @@ function RecentCard({ listing: l }: { listing: Listing }) {
         )}
         <div className="flex items-center justify-between pt-0.5">
           <AuctionPriceDisplay listing={l} />
-          <span className={`text-xs font-bold ${profitColor}`}>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</span>
+          <span className={`text-base font-bold ${profitColor}`}>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</span>
         </div>
       </div>
     </a>
@@ -1502,7 +1502,7 @@ function ListingsTrackedCard({ total, listings }: { total: number; listings: Lis
 
   return (
     <Card className="border-slate-500/25 bg-slate-950/55 shadow-[0_10px_40px_rgba(2,6,23,0.42)]">
-      <CardContent className="pt-5 pb-5">
+      <CardContent className="pt-5 pb-5 min-h-[220px]">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-[0.2em]">Listings Tracked</span>
           <Gem className="w-4.5 h-4.5 text-slate-200/80" />
@@ -1512,7 +1512,7 @@ function ListingsTrackedCard({ total, listings }: { total: number; listings: Lis
         </div>
         <div className="mt-3 flex flex-col gap-1.5">
           {Object.entries(bySource).map(([src, count]) => (
-            <div key={src} className="flex items-center justify-between text-xs text-slate-400">
+            <div key={src} className="flex items-center justify-between text-base text-slate-400">
               <div className="flex items-center gap-1.5">
                 <SourceLogo source={src} />
                 <span className="truncate max-w-[100px]">{src}</span>
@@ -1536,7 +1536,7 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
 
   return (
     <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
-      <CardContent className="pt-5 pb-5">
+      <CardContent className="pt-5 pb-5 min-h-[220px]">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] text-[#7ce7b6] font-semibold uppercase tracking-[0.2em]">Gems Found</span>
           <Gem className="w-4.5 h-4.5 text-[#00dc82]" />
@@ -1546,7 +1546,7 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
         </div>
         <div className="mt-3 flex flex-col gap-1.5">
           {Object.entries(bySource).map(([src, count]) => (
-            <div key={src} className="flex items-center justify-between text-xs text-[#89eabf]/85">
+            <div key={src} className="flex items-center justify-between text-base text-[#89eabf]/85">
               <div className="flex items-center gap-1.5">
                 <SourceLogo source={src} />
                 <span className="truncate max-w-[100px]">{src}</span>
@@ -1577,7 +1577,7 @@ function AvgProfitCard({ avg, listings, compact = false }: { avg: number; listin
           £<CountUp to={avg} from={0} duration={1.5} />
         </div>
         {profits.length > 0 && (
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-cyan-100/65">
+          <div className="mt-3 flex items-center gap-1.5 text-base text-cyan-100/65">
             <span className="text-red-300/90">£<CountUp to={minProfit} duration={1.2} /></span>
             <span className="text-slate-600">→</span>
             <span className="text-cyan-200 font-semibold">£<CountUp to={maxProfit} duration={1.2} /></span>
@@ -1599,7 +1599,7 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
             <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
             <Gem className="w-4 h-4 text-[#00dc82]/70" />
           </div>
-          <div className="text-sm text-slate-500">No qualifying listing yet</div>
+          <div className="text-base text-slate-500">No qualifying listing yet</div>
         </CardContent>
       </Card>
     );
@@ -1616,11 +1616,11 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
           href={listing.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-semibold text-slate-100 hover:text-[#00dc82] line-clamp-2 leading-tight"
+          className="text-base font-semibold text-slate-100 hover:text-[#00dc82] line-clamp-2 leading-tight"
         >
           {listing.title}
         </a>
-        <div className="mt-2 flex items-center justify-between text-xs">
+        <div className="mt-2 flex items-center justify-between text-base">
           <span className="text-slate-400">{listing.source_name}</span>
           <span className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums`}>
             {profit >= 0 ? "+" : ""}{formatCurrency(profit)}
@@ -1648,11 +1648,11 @@ function NextScanCard({ swarm, intervalMinutes, compact = false }: {
       <Card>
         <CardContent className={compact ? "pt-4 pb-4" : "pt-5"}>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
+            <span className="text-base text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
             <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
           </div>
           <div className={`${compact ? "text-xl" : "text-2xl"} font-bold text-yellow-400`}>—</div>
-          <div className="text-xs text-slate-600 mt-1">flip swarm</div>
+          <div className="text-base text-slate-600 mt-1">flip swarm</div>
         </CardContent>
       </Card>
     );
@@ -1672,7 +1672,7 @@ function NextScanCard({ swarm, intervalMinutes, compact = false }: {
     <Card>
       <CardContent className={compact ? "pt-4 pb-4" : "pt-5"}>
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
+          <span className="text-base text-slate-500 font-medium uppercase tracking-wider">Next Scan</span>
           <Zap className="w-4 h-4 text-yellow-400 opacity-60" />
         </div>
         <div className={`${compact ? "text-xl" : "text-2xl"} font-bold text-yellow-400 tabular-nums`}>{label}</div>
@@ -1686,7 +1686,7 @@ function NextScanCard({ swarm, intervalMinutes, compact = false }: {
             }}
           />
         </div>
-        <div className="text-xs text-slate-600 mt-1.5">flip swarm · every {intervalMinutes}m</div>
+        <div className="text-base text-slate-600 mt-1.5">flip swarm · every {intervalMinutes}m</div>
       </CardContent>
     </Card>
   );
@@ -1855,12 +1855,12 @@ function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="w-3.5 h-3.5 text-[#00dc82]" />
           Trending Build Categories
-          <span className="text-xs font-normal text-slate-500 ml-1">demand signals · last 7 days</span>
+          <span className="text-base font-normal text-slate-500 ml-1">demand signals · last 7 days</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         {categories.length === 0 ? (
-          <div className="px-5 py-8 text-center text-slate-600 text-sm">
+          <div className="px-5 py-8 text-center text-slate-600 text-base">
             Run a scan to generate demand signals
           </div>
         ) : (
@@ -1876,7 +1876,7 @@ function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
             {categories.map(cat => (
               <div key={cat.name} className="flex items-center gap-4 px-5 py-2.5 hover:bg-white/[0.02] transition-colors">
                 <div className="w-36 flex-shrink-0">
-                  <span className="text-sm font-medium text-slate-200">{cat.emoji} {cat.name}</span>
+                  <span className="text-base font-medium text-slate-200">{cat.emoji} {cat.name}</span>
                   <div className="text-[10px] text-slate-500 mt-0.5">
                     {cat.count} listings
                     {cat.gemCount > 0 && (
@@ -1888,14 +1888,14 @@ function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
                   <MiniSparkline data={cat.sparkline} trend={cat.trend} />
                 </div>
                 <div className="w-16 flex-shrink-0 text-center">
-                  <span className={`text-xs font-semibold ${strengthColor(cat.strength)}`}>{cat.strength}</span>
+                  <span className={`text-base font-semibold ${strengthColor(cat.strength)}`}>{cat.strength}</span>
                   <div className="text-[9px] text-slate-600 mt-0.5">demand</div>
                 </div>
                 <div className="w-8 flex-shrink-0 text-center">
-                  <span className={`text-sm font-bold ${trendColor(cat.trend)}`}>{trendIcon(cat.trend)}</span>
+                  <span className={`text-base font-bold ${trendColor(cat.trend)}`}>{trendIcon(cat.trend)}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-xs text-slate-400 truncate block">{cat.insight}</span>
+                  <span className="text-base text-slate-400 truncate block">{cat.insight}</span>
                 </div>
               </div>
             ))}
@@ -1904,7 +1904,7 @@ function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
         <div className="px-5 py-2 border-t border-white/[0.06] flex items-center gap-3">
           {(["rising", "stable", "falling"] as TrendDir[]).map(t => (
             <div key={t} className="flex items-center gap-1">
-              <span className={`text-xs font-bold ${t === "rising" ? "text-[#00dc82]" : t === "falling" ? "text-red-400" : "text-slate-500"}`}>
+              <span className={`text-base font-bold ${t === "rising" ? "text-[#00dc82]" : t === "falling" ? "text-red-400" : "text-slate-500"}`}>
                 {t === "rising" ? "↑" : t === "falling" ? "↓" : "→"}
               </span>
               <span className="text-[10px] text-slate-600 capitalize">{t}</span>
@@ -2050,7 +2050,7 @@ function PlaybookActivityCard({
       <CardContent className="flex-1">
         <div className="overflow-y-auto" style={{ maxHeight: 220 }}>
         {rows.length === 0 ? (
-          <div className="text-xs text-slate-600 text-center py-6">
+          <div className="text-base text-slate-600 text-center py-6">
             {tab === "additions" && "No rising categories yet — run a scan"}
             {tab === "updates"   && "No source activity recorded yet"}
             {tab === "retirements" && "Nothing retired — all systems active"}
@@ -2065,7 +2065,7 @@ function PlaybookActivityCard({
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-medium text-slate-200 truncate">{row.name}</span>
+                    <span className="text-base font-medium text-slate-200 truncate">{row.name}</span>
                     <span className="text-[10px] text-slate-600 flex-shrink-0 whitespace-nowrap">{row.date}</span>
                   </div>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">{row.reason}</p>
@@ -2133,7 +2133,7 @@ function CurrentStrategyCard({
           </Link>
         </CardTitle>
         {/* Market health pill */}
-        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-semibold w-fit mt-1 ${hc.bg} ${hc.color}`}>
+        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-base font-semibold w-fit mt-1 ${hc.bg} ${hc.color}`}>
           <hc.Icon className="w-3.5 h-3.5" />
           {hc.label}
           {demandSummary && (
@@ -2146,10 +2146,10 @@ function CurrentStrategyCard({
 
       <CardContent className="flex-1">
         {playbooks.length === 0 ? (
-          <div className="text-center py-8 text-slate-600 text-sm">
+          <div className="text-center py-8 text-slate-600 text-base">
             <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
             <p>No active playbooks</p>
-            <Link href="/playbooks" className="text-xs text-[#00dc82]/70 hover:text-[#00dc82] mt-1 inline-block">
+            <Link href="/playbooks" className="text-base text-[#00dc82]/70 hover:text-[#00dc82] mt-1 inline-block">
               Create your first playbook →
             </Link>
           </div>
@@ -2168,7 +2168,7 @@ function CurrentStrategyCard({
                   <span className="text-xl flex-shrink-0 mt-0.5">{pb.emoji || "🖥️"}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-slate-100 truncate">{pb.name}</span>
+                      <span className="text-base font-semibold text-slate-100 truncate">{pb.name}</span>
                       {matchedCat && (
                         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
                           matchedCat.strength === "High"   ? "bg-[#00dc82]/10 border-[#00dc82]/30 text-[#00dc82]" :
@@ -2196,7 +2196,7 @@ function CurrentStrategyCard({
               );
             })}
             {playbooks.length > 4 && (
-              <Link href="/playbooks" className="block text-center text-xs text-slate-500 hover:text-[#00dc82] transition-colors py-1">
+              <Link href="/playbooks" className="block text-center text-base text-slate-500 hover:text-[#00dc82] transition-colors py-1">
                 +{playbooks.length - 4} more active playbooks
               </Link>
             )}
@@ -2205,7 +2205,7 @@ function CurrentStrategyCard({
       </CardContent>
 
       {demandSummary && (
-        <div className="px-4 py-2.5 border-t border-white/[0.06] flex items-center gap-3 text-xs text-slate-500">
+        <div className="px-4 py-2.5 border-t border-white/[0.06] flex items-center gap-3 text-base text-slate-500">
           {demandSummary.rising_count > 0 && (
             <span className="text-[#00dc82]">↑ {demandSummary.rising_count} rising</span>
           )}
@@ -2252,13 +2252,13 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
           <Gavel className="w-3.5 h-3.5 text-amber-400" />
           Auction Intelligence
           {endingSoon.length > 0 && (
-            <span className="ml-1 text-xs font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-2 py-0.5 rounded-full animate-pulse">
+            <span className="ml-1 text-base font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-2 py-0.5 rounded-full animate-pulse">
               {endingSoon.length} ending soon
             </span>
           )}
         </CardTitle>
         {auctions.length > 0 && (
-          <div className="flex gap-3 text-xs text-slate-500 mt-1">
+          <div className="flex gap-3 text-base text-slate-500 mt-1">
             {endingSoon.length > 0 && <span className="text-amber-400">🔴 {endingSoon.length} &lt;1h</span>}
             {today.length > 0      && <span className="text-yellow-400">🟡 {today.length} today</span>}
             {upcoming.length > 0   && <span className="text-slate-400">⚪ {upcoming.length} upcoming</span>}
@@ -2268,10 +2268,10 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
 
       <CardContent className="flex-1">
         {ordered.length === 0 ? (
-          <div className="text-center py-8 text-slate-600 text-sm">
+          <div className="text-center py-8 text-slate-600 text-base">
             <Gavel className="w-8 h-8 mx-auto mb-2 opacity-30" />
             <p>No live auctions tracked</p>
-            <p className="text-xs mt-1 text-slate-700">Auctions appear here when scraped from eBay</p>
+            <p className="text-base mt-1 text-slate-700">Auctions appear here when scraped from eBay</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -2291,7 +2291,7 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-slate-200 truncate">{a.title}</p>
+                    <p className="text-base font-medium text-slate-200 truncate">{a.title}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       {a.cpu && <span className="text-[10px] text-slate-500 truncate max-w-[90px]">{a.cpu}</span>}
                       {a.gpu && <span className="text-[10px] text-slate-500 truncate max-w-[70px]">{a.gpu}</span>}
@@ -2305,7 +2305,7 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
                       <Clock className="w-2.5 h-2.5" />
                       {fmtTime(a.time_left_secs)}
                     </div>
-                    <div className="text-xs font-semibold text-slate-300">
+                    <div className="text-base font-semibold text-slate-300">
                       £{(a.expected_buy_price ?? a.price).toFixed(0)}
                     </div>
                     {a.estimated_profit != null && (
@@ -2324,7 +2324,7 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
 
       {auctions.length > 8 && (
         <div className="px-4 py-2.5 border-t border-white/[0.06]">
-          <Link href="/opportunities" className="text-xs text-slate-500 hover:text-[#00dc82] transition-colors">
+          <Link href="/opportunities" className="text-base text-slate-500 hover:text-[#00dc82] transition-colors">
             View all {auctions.length} auctions →
           </Link>
         </div>
