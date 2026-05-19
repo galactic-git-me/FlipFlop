@@ -3226,3 +3226,4 @@ INFO:     100.84.151.109:63628 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:55:33 [debug    ] resale_scraper.empty_response  cat=0 length=548 query=gaming PC ryzen 5 3400g rtx 3060 status=403
 2026-05-19 04:55:33 [info     ] resale_scraper.fallback_buy_price buy_price=281.75 median=746.1 query=gaming PC ryzen 5 3400g rtx 3060
 2026-05-19 04:55:33 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK Auctions
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 03:58:30 UTC)" skipped: maximum number of running instances reached (1)
