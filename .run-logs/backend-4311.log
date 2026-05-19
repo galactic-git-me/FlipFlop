@@ -252,3 +252,39 @@ INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 20:09:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
 INFO:     100.84.151.109:51361 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:51361 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51361 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-19 20:10:20 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-19 20:10:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+INFO:     100.84.151.109:64211 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+2026-05-19 20:10:24 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+INFO:     100.84.151.109:64211 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:10:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-19 20:10:26 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-19 20:10:26 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-19 20:10:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 20:10:28 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:10:29 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-19 20:10:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-19 20:10:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:57593 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:10:47 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+INFO:     100.84.151.109:55890 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+2026-05-19 20:10:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+INFO:     100.84.151.109:55890 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:10:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-19 20:11:00 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-19 20:11:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-19 20:11:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-19 20:11:03 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+INFO:     100.84.151.109:55185 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:11:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:11:05 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-19 20:11:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-19 20:11:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+2026-05-19 20:11:14 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:11:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 20:11:18 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
