@@ -1303,3 +1303,22 @@ INFO:     100.84.151.109:61427 - "GET /api/playbooks/proposals?status=pending HT
 [scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 0)
 [scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:56735 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:57195 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57195 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58141 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58141 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58141 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 0)
+2026-05-19 21:04:25 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:56735 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60781 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60781 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53004 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53004 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53004 - "GET /health HTTP/1.1" 200 OK
