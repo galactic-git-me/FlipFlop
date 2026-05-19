@@ -3030,3 +3030,16 @@ INFO:     100.84.151.109:52499 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
 [scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:58919 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 96)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 96)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51588 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:56898 - "GET /health HTTP/1.1" 200 OK
