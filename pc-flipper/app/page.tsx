@@ -1661,7 +1661,8 @@ function NextScanCard({ swarm, intervalMinutes, compact = false }: {
   const nextMs = new Date(swarm.next_run).getTime();
   const remainMs = Math.max(0, nextMs - nowMs);
   const intervalMs = intervalMinutes * 60 * 1000;
-  const progress = Math.min(1, Math.max(0, 1 - remainMs / intervalMs));
+  // Countdown-style progress: full just after scheduling, drains toward zero.
+  const progress = Math.min(1, Math.max(0, remainMs / intervalMs));
 
   const mins = Math.floor(remainMs / 60000);
   const secs = Math.floor((remainMs % 60000) / 1000);
@@ -1677,8 +1678,12 @@ function NextScanCard({ swarm, intervalMinutes, compact = false }: {
         <div className={`${compact ? "text-xl" : "text-2xl"} font-bold text-yellow-400 tabular-nums`}>{label}</div>
         <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
           <div
-            className="h-full rounded-full bg-yellow-400/70 transition-all duration-1000"
-            style={{ width: `${progress * 100}%` }}
+            className="h-full rounded-full transition-all duration-1000"
+            // 3-color gradient aligned to app palette (cyan -> primary -> green).
+            style={{
+              width: `${progress * 100}%`,
+              backgroundImage: "linear-gradient(90deg, #00b8ff 0%, #a4e6ff 52%, #00dc82 100%)",
+            }}
           />
         </div>
         <div className="text-xs text-slate-600 mt-1.5">flip swarm · every {intervalMinutes}m</div>
