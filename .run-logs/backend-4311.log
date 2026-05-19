@@ -2403,3 +2403,19 @@ INFO:     100.84.151.109:52384 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:12:48 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
 2026-05-19 04:12:53 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
 INFO:     100.84.151.109:59054 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:13:16 [info     ] aliexpress.cases.done          found=0 search=mini itx pc case gaming
+2026-05-19 04:13:23 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-19 04:13:30 [info     ] accessories_swarm.start
+2026-05-19 04:13:31 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 96)
+2026-05-19 04:13:39 [info     ] aliexpress.cases.done          found=0 search=small form factor pc case gaming
+INFO:     100.84.151.109:53507 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:13:50 [info     ] amazon.cases.done              found=10 search=cyberpunk gaming case
+2026-05-19 04:13:54 [info     ] amazon.cases.done              found=10 search=neon pc case rgb
+2026-05-19 04:13:59 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+INFO:     100.84.151.109:53043 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 96)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+2026-05-19 04:14:18 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-19 04:14:33 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None

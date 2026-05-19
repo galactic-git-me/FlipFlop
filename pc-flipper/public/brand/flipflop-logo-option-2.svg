@@ -1,0 +1,16 @@
+<svg width="640" height="200" viewBox="0 0 640 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ffGrad2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00B8FF"/>
+      <stop offset="52%" stop-color="#A4E6FF"/>
+      <stop offset="100%" stop-color="#00DC82"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="12" width="176" height="176" rx="32" fill="#0B111D" stroke="#1F2C3D"/>
+  <path d="M100 42L138 64V108L100 130L62 108V64L100 42Z" fill="url(#ffGrad2)" fill-opacity="0.2" stroke="url(#ffGrad2)" stroke-width="8"/>
+  <path d="M40 98C40 66 66 40 98 40" stroke="url(#ffGrad2)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M160 102C160 134 134 160 102 160" stroke="url(#ffGrad2)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M94 36L108 46L96 56" fill="none" stroke="url(#ffGrad2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M106 144L92 134L104 124" fill="none" stroke="url(#ffGrad2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="216" y="126" fill="url(#ffGrad2)" font-size="82" font-family="Rajdhani, Arial, sans-serif" font-weight="700" letter-spacing="1.5">FlipFlop</text>
+</svg>
