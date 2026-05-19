@@ -9087,3 +9087,8 @@ Call log:
 2026-05-19 13:10:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=ddr4 ram
 2026-05-19 13:10:44 [info     ] Wilsons Auctions.playwright.done total=0
 2026-05-19 13:10:44 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-19 13:10:59 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 13:11:01 [info     ] i-bidder.playwright.cards      count=23 term=ddr4 ram
+2026-05-19 13:11:02 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=ddr4 ram
+2026-05-19 13:11:04 [info     ] i-bidder.playwright.done       total=0
+2026-05-19 13:11:04 [info     ] source.done                    found=0 gems=0 source=i-bidder
