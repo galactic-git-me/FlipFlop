@@ -524,3 +524,35 @@ INFO:     100.84.151.109:54083 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 20:19:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
 2026-05-19 20:19:40 [info     ] Wilsons Auctions.playwright.done total=0
 2026-05-19 20:19:40 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-19 20:19:50 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 20:19:53 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-19 20:19:54 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-19 20:19:55 [info     ] temu.cases.done                found=0 search=tempered glass gaming case atx
+2026-05-19 20:19:56 [info     ] i-bidder.playwright.done       total=0
+2026-05-19 20:19:56 [info     ] source.done                    found=0 gems=0 source=i-bidder
+INFO:     100.84.151.109:50321 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50321 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50321 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:20:05 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-19 20:20:20 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+INFO:     100.84.151.109:63833 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63833 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50844 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:20:40 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-19 20:20:43 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50409 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50409 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49837 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:21:07 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:21:16 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-19 20:21:16 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+2026-05-19 20:21:21 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61621 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61621 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61621 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:21:45 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
