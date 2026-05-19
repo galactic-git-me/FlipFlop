@@ -7413,3 +7413,29 @@ Call log:
 2026-05-19 11:07:51 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
 2026-05-19 11:07:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
 2026-05-19 11:07:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 121)
+2026-05-19 11:08:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-19 11:08:20 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-19 11:08:20 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+2026-05-19 11:08:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 11:08:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 157)
+2026-05-19 11:08:29 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-19 11:08:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-19 11:08:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-19 11:08:54 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+[scraper] eBay 'gaming pc untested': HTTP blocked/empty (status=200), Playwright returned 53
+[scraper] eBay 'gaming pc untested': 53 found, 53 new (total 53)
+2026-05-19 11:08:56 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-19 11:08:57 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-19 11:08:59 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 121)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 157)
+2026-05-19 11:09:04 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-19 11:09:07 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-19 11:09:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-19 11:09:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+2026-05-19 11:09:31 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 11:09:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-19 11:09:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
