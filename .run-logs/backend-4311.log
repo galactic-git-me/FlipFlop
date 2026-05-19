@@ -1211,3 +1211,35 @@ INFO:     100.84.151.109:65382 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:62343 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:62343 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:62343 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'desktop untested': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 26)
+[scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Z440': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63808 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58275 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:58275 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58275 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58275 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56899 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64563 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64563 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:55363 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52330 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52330 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay retry error for 'ryzen desktop': Page.evaluate: Target crashed 
+INFO:     100.84.151.109:62234 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62234 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62234 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62234 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62234 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
