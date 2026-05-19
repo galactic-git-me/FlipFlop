@@ -157,15 +157,15 @@ def start_scheduler():
 
     now = datetime.now(timezone.utc)
     flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
-    upgrade_start = now + timedelta(minutes=5)
-    cases_start = now + timedelta(minutes=10)
-    accessories_start = now + timedelta(minutes=15)
-    external_demand_start = now + timedelta(minutes=20)
-    playbook_evolution_start = now + timedelta(minutes=25)
-    autonomous_cycle_start = now + timedelta(minutes=30)
-    outcome_capture_start = now + timedelta(minutes=35)
-    model_retraining_start = now + timedelta(minutes=40)
-    compliant_ingestion_start = now + timedelta(minutes=45)
+    upgrade_start = now
+    cases_start = now
+    accessories_start = now
+    external_demand_start = now
+    playbook_evolution_start = now
+    autonomous_cycle_start = now
+    outcome_capture_start = now
+    model_retraining_start = now
+    compliant_ingestion_start = now
 
     scheduler.add_job(
         _run_job_with_history,
@@ -186,7 +186,7 @@ def start_scheduler():
         kwargs={"job_id": "upgrade_parts", "fn": run_upgrade_parts_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=upgrade_start,   # stagger writes to avoid SQLite contention
+        next_run_time=upgrade_start,
     )
 
     scheduler.add_job(
@@ -197,7 +197,7 @@ def start_scheduler():
         kwargs={"job_id": "cases", "fn": run_cases_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=cases_start,   # stagger writes to avoid SQLite contention
+        next_run_time=cases_start,
     )
 
     scheduler.add_job(
@@ -208,7 +208,7 @@ def start_scheduler():
         kwargs={"job_id": "accessories", "fn": run_accessories_swarm},
         replace_existing=True,
         max_instances=1,
-        next_run_time=accessories_start,   # stagger writes to avoid SQLite contention
+        next_run_time=accessories_start,
     )
 
     scheduler.add_job(
