@@ -37,7 +37,7 @@ export function Sidebar() {
   return (
     <aside className="node-sidebar">
       <div className="node-brand-wrap">
-        <img src="/pics/logo.png" alt="FlipFlop" className="h-10 w-auto object-contain" />
+        <img src="/pics/logo.png" alt="FlipFlop" className="h-[120px] w-auto object-contain" />
         <p className="node-version">Operational v1.0.4</p>
       </div>
 

@@ -426,7 +426,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <img src="/pics/logo.png" alt="FlipFlop" className="h-12 w-auto object-contain" />
+          <img src="/pics/logo.png" alt="FlipFlop" className="h-[144px] w-auto object-contain" />
           <p className="text-base text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
         </div>
         <div className="flex items-center gap-3">

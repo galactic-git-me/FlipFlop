@@ -80,7 +80,7 @@ export function TopCommandBar() {
       <div className="node-topbar-right">
         <div className="node-live-chip">
           <span className="node-live-dot" />
-          <img src="/pics/logo.png" alt="FlipFlop" className="h-5 w-auto object-contain" />
+          <img src="/pics/logo.png" alt="FlipFlop" className="h-[60px] w-auto object-contain" />
         </div>
         <div className="node-top-icons relative">
           <Radio className="h-4 w-4" />
