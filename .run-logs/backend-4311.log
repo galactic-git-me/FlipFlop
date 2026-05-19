@@ -2256,3 +2256,22 @@ INFO:     100.84.151.109:50064 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:50064 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 15:18:12 [info     ] Wilsons Auctions.playwright.done total=0
 2026-05-19 15:18:12 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+2026-05-19 15:18:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 15:18:26 [info     ] i-bidder.playwright.cards      count=23 term=ddr4 ram
+2026-05-19 15:18:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=ddr4 ram
+2026-05-19 15:18:29 [info     ] i-bidder.playwright.done       total=0
+2026-05-19 15:18:29 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-19 15:18:29 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=35 new_gems=0 sources_scanned=4
+INFO:     100.84.151.109:63767 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63767 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63767 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58605 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62953 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62953 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:59386 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59386 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59386 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59386 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59386 - "GET /health HTTP/1.1" 200 OK
