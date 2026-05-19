@@ -743,3 +743,25 @@ INFO:     100.84.151.109:65510 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 20:35:06 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
 2026-05-19 20:35:10 [info     ] temu.cases.done                found=0 search=transparent pc case gaming
 2026-05-19 20:35:32 [info     ] aliexpress.cases.done          found=0 search=open frame pc case atx
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-19 20:35:42 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
+2026-05-19 20:35:55 [info     ] aliexpress.cases.done          found=0 search=transparent pc case gaming
+INFO:     100.84.151.109:62513 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59146 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59146 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63849 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:36:07 [info     ] amazon.cases.done              found=10 search=desktop gaming case compact atx
+2026-05-19 20:36:11 [info     ] amazon.cases.done              found=10 search=slim gaming pc case
+2026-05-19 20:36:18 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+INFO:     100.84.151.109:58530 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58530 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63114 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:36:36 [info     ] temu.cases.done                found=0 search=desktop gaming case compact atx
+INFO:     100.84.151.109:63114 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63114 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:36:54 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+2026-05-19 20:37:02 [info     ] temu.cases.done                found=0 search=slim gaming pc case
+INFO:     100.84.151.109:49653 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52904 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52904 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
