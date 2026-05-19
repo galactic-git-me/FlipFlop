@@ -3005,3 +3005,14 @@ INFO:     100.84.151.109:57297 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay '7900 bundle': 0 found, 0 new (total 96)
 [scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:61686 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 96)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58990 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 96)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60482 - "GET /health HTTP/1.1" 200 OK
