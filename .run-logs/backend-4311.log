@@ -2514,3 +2514,18 @@ INFO:     100.84.151.109:53051 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:23:52 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
 2026-05-19 04:23:59 [info     ] temu.cases.done                found=0 search=dark gaming case skull
 INFO:     100.84.151.109:64740 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 96)
+2026-05-19 04:24:22 [info     ] aliexpress.cases.done          found=0 search=skull pc case gaming
+2026-05-19 04:24:26 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+INFO:     100.84.151.109:65463 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:24:45 [info     ] aliexpress.cases.done          found=0 search=dark gaming case skull
+2026-05-19 04:24:59 [info     ] amazon.cases.done              found=10 search=open frame pc case atx
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-19 04:25:01 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+2026-05-19 04:25:04 [info     ] amazon.cases.done              found=10 search=transparent pc case gaming
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:65400 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:25:29 [info     ] temu.cases.done                found=0 search=open frame pc case atx
+2026-05-19 04:25:36 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
+INFO:     100.84.151.109:57277 - "GET /health HTTP/1.1" 200 OK
