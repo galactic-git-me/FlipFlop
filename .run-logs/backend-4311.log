@@ -7439,3 +7439,27 @@ Call log:
 2026-05-19 11:09:31 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
 2026-05-19 11:09:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
 2026-05-19 11:09:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+2026-05-19 11:09:35 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc no display': 0 found, 0 new (total 53)
+2026-05-19 11:09:41 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 11:09:44 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-19 11:09:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 121)
+2026-05-19 11:09:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 157)
+2026-05-19 11:10:07 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 11:10:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-19 11:10:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-19 11:10:12 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=ddr4+ram&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 11:10:19 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 11:10:21 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-19 11:10:22 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-19 11:10:24 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=ddr4+ram&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 53)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 157)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 121)
+2026-05-19 11:10:45 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 11:10:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=ddr4 ram
+2026-05-19 11:10:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=ddr4 ram
+2026-05-19 11:10:50 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-19 11:10:50 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
