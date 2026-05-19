@@ -5955,3 +5955,38 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-19 09:06:37 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
 2026-05-19 09:06:39 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
 2026-05-19 09:06:39 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 09:06:52 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-19 09:06:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
+2026-05-19 09:06:56 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=ddr4+ram&country=gb
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 50)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] eBay 'pc untested': 0 found, 0 new (total 97)
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-19 09:07:11 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-19 09:07:12 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-19 09:07:14 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-19 09:07:14 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-19 09:07:14 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=office pc
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-19 09:07:15 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-19 09:07:16 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 09:07:17 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] John Pye error for 'workstation': All connection attempts failed
+2026-05-19 09:07:18 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-19 09:07:18 [info     ] source.done                    found=0 gems=0 source=John Pye
+2026-05-19 09:07:20 [info     ] BidSpotter.playwright.cards    count=60 term=ddr4 ram
+2026-05-19 09:07:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=ddr4 ram
+2026-05-19 09:07:24 [info     ] BidSpotter.playwright.done     total=0
+2026-05-19 09:07:24 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 50)
+2026-05-19 09:07:49 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 97)
+2026-05-19 09:07:49 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-19 09:07:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-19 09:07:51 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=refurbished pc
+2026-05-19 09:07:52 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-19 09:07:53 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-19 09:07:54 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 09:07:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
