@@ -271,6 +271,19 @@ body {
   position: relative;
 }
 
+/* Landing page typography bump */
+.dashboard-zoom .text-\[9px\] { font-size: 10px !important; }
+.dashboard-zoom .text-\[10px\] { font-size: 11px !important; }
+.dashboard-zoom .text-\[11px\] { font-size: 12px !important; }
+.dashboard-zoom .text-xs { font-size: 0.86rem !important; }
+.dashboard-zoom .text-sm { font-size: 0.98rem !important; }
+.dashboard-zoom .text-base { font-size: 1.08rem !important; }
+.dashboard-zoom .text-lg { font-size: 1.2rem !important; }
+.dashboard-zoom .text-xl { font-size: 1.35rem !important; }
+.dashboard-zoom .text-2xl { font-size: 1.65rem !important; }
+.dashboard-zoom .text-3xl { font-size: 2rem !important; }
+.dashboard-zoom .text-4xl { font-size: 2.35rem !important; }
+
 .glass-card {
   background: var(--nf-panel);
   backdrop-filter: blur(16px);
