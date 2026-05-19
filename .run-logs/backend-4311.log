@@ -2369,3 +2369,21 @@ INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals?status=pending HT
 [scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 0)
 [scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61963 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61963 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:59959 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59959 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59959 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58152 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57038 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57038 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58696 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58696 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58696 - "GET /health HTTP/1.1" 200 OK
