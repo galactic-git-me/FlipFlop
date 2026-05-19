@@ -2668,3 +2668,14 @@ INFO:     100.84.151.109:64264 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:59884 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:53204 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:53204 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62732 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53101 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53101 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51414 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51414 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51414 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59871 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49650 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49650 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
