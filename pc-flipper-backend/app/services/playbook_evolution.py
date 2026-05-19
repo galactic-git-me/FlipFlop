@@ -14,6 +14,100 @@ from app.services.external_demand import latest_external_signal_snapshot
 log = structlog.get_logger(__name__)
 
 
+def _latest_query_signal_map(external: dict) -> dict[str, dict]:
+    """Return latest google_trends signal row by query (lowercased)."""
+    out: dict[str, dict] = {}
+    for item in (external.get("items", {}) or {}).get("google_trends", []) or []:
+        q = str(item.get("query") or "").strip().lower()
+        if not q:
+            continue
+        ts = str(item.get("signal_time") or "")
+        prev = out.get(q)
+        if not prev or ts > str(prev.get("signal_time") or ""):
+            out[q] = item
+    return out
+
+
+def _score_for(signal_map: dict[str, dict], query: str) -> float:
+    try:
+        return float((signal_map.get(query.lower(), {}) or {}).get("score") or 0.0)
+    except Exception:
+        return 0.0
+
+
+async def _pending_update_exists(db, playbook_id: int, marker: str) -> bool:
+    result = await db.execute(
+        select(PlaybookProposal).where(
+            and_(
+                PlaybookProposal.playbook_id == playbook_id,
+                PlaybookProposal.action == "UPDATE",
+                PlaybookProposal.status == "pending",
+            )
+        )
+    )
+    rows = list(result.scalars().all())
+    for p in rows:
+        ds = dict(p.demand_signals or {})
+        if str(ds.get("source") or "") == marker:
+            return True
+    return False
+
+
+async def _create_demand_rule_update(
+    db,
+    pb: Playbook,
+    *,
+    reason: str,
+    marker: str,
+    demand_signals: dict,
+    keyword_add: list[str] | None = None,
+    target_profit_multiplier: float | None = None,
+) -> bool:
+    if await _pending_update_exists(db, pb.id, marker):
+        return False
+
+    proposed_data: dict = {}
+    if keyword_add:
+        old_strategy = dict(pb.search_strategy or {})
+        old_keywords = list(old_strategy.get("keywords", []) or [])
+        merged = []
+        seen = set()
+        for kw in old_keywords + keyword_add:
+            k = str(kw).strip()
+            if not k:
+                continue
+            lk = k.lower()
+            if lk in seen:
+                continue
+            seen.add(lk)
+            merged.append(k)
+        old_strategy["keywords"] = merged
+        proposed_data["search_strategy"] = old_strategy
+
+    if target_profit_multiplier is not None and target_profit_multiplier > 0:
+        old_profit = dict(pb.profit_strategy or {})
+        current_target = float(old_profit.get("target_profit_gbp") or 0.0)
+        if current_target > 0:
+            old_profit["target_profit_gbp"] = round(max(20.0, current_target * target_profit_multiplier), 0)
+            proposed_data["profit_strategy"] = old_profit
+
+    if not proposed_data:
+        return False
+
+    db.add(
+        PlaybookProposal(
+            action="UPDATE",
+            playbook_id=pb.id,
+            proposed_data=proposed_data,
+            reason=reason,
+            demand_signals=demand_signals,
+            status="pending",
+            proposed_at=datetime.utcnow(),
+        )
+    )
+    return True
+
+
 async def run_playbook_evolution() -> dict:
     """
     Nightly proposal generator.
@@ -45,8 +139,87 @@ async def run_playbook_evolution() -> dict:
         playbooks = list(playbooks_result.scalars().all())
 
         demand_categories = await compute_demand(db)
-        external = await latest_external_signal_snapshot(limit_per_source=15)
+        external = await latest_external_signal_snapshot(limit_per_source=50)
         proposals_created = 0
+
+        # Explicit demand rules from Google Trends buyer-intent queries.
+        # These rules propose search-strategy updates; they do not auto-apply.
+        gt = _latest_query_signal_map(external)
+        score_ai = _score_for(gt, "ai pc")
+        score_gaming = _score_for(gt, "gaming pc")
+        score_budget = _score_for(gt, "budget gaming pc")
+        score_workstation = _score_for(gt, "workstation pc")
+
+        async def _apply_rule_to_use_case(
+            use_case: str,
+            *,
+            trigger_score: float,
+            threshold: float,
+            marker: str,
+            reason: str,
+            keyword_add: list[str],
+            target_profit_multiplier: float | None = None,
+        ) -> int:
+            if trigger_score < threshold:
+                return 0
+            created = 0
+            for pb in playbooks:
+                if str(pb.target_use_case or "").lower() != use_case:
+                    continue
+                ok = await _create_demand_rule_update(
+                    db,
+                    pb,
+                    reason=reason,
+                    marker=marker,
+                    demand_signals={
+                        "source": marker,
+                        "query_score": round(trigger_score, 2),
+                        "threshold": threshold,
+                        "external_summary": external.get("summary", {}),
+                    },
+                    keyword_add=keyword_add,
+                    target_profit_multiplier=target_profit_multiplier,
+                )
+                if ok:
+                    created += 1
+            return created
+
+        proposals_created += await _apply_rule_to_use_case(
+            "ai_workstation",
+            trigger_score=score_ai,
+            threshold=5.0,
+            marker="demand_rules_v1_ai_pc",
+            reason="Google Trends shows elevated 'ai pc' demand; expand AI workstation sourcing terms and nudge target profit.",
+            keyword_add=["ai pc", "ai workstation", "local llm pc", "ml workstation"],
+            target_profit_multiplier=1.08,
+        )
+        proposals_created += await _apply_rule_to_use_case(
+            "gaming",
+            trigger_score=score_gaming,
+            threshold=4.0,
+            marker="demand_rules_v1_gaming_pc",
+            reason="Google Trends indicates gaming-PC intent; broaden gaming playbook search coverage.",
+            keyword_add=["gaming pc", "custom gaming pc", "prebuilt gaming pc", "gaming desktop"],
+            target_profit_multiplier=1.05,
+        )
+        proposals_created += await _apply_rule_to_use_case(
+            "budget",
+            trigger_score=score_budget,
+            threshold=2.0,
+            marker="demand_rules_v1_budget_gaming_pc",
+            reason="Budget gaming search demand is rising; add low-cost gaming-intent terms to budget sourcing.",
+            keyword_add=["budget gaming pc", "cheap gaming pc", "entry gaming pc"],
+            target_profit_multiplier=1.04,
+        )
+        proposals_created += await _apply_rule_to_use_case(
+            "workstation",
+            trigger_score=score_workstation,
+            threshold=2.0,
+            marker="demand_rules_v1_workstation_pc",
+            reason="Workstation search demand is rising; add workstation-intent terms to sourcing strategy.",
+            keyword_add=["workstation pc", "cad workstation", "render workstation"],
+            target_profit_multiplier=1.04,
+        )
 
         # Demand-driven CREATE proposals for missing high-demand archetypes.
         active_use_cases = {str(pb.target_use_case or "").lower() for pb in playbooks}
