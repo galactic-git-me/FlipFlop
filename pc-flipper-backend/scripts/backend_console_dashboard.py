@@ -128,6 +128,8 @@ def build_layout(
     sources: Any,
     swarm_runs: Any,
     demand_runs: Any,
+    upgrade_runs: Any,
+    autonomous_runs: Any,
     listing_stats: Any,
     demand_summary: Any,
     log_lines: list[str],
@@ -165,25 +167,40 @@ def build_layout(
 
     jobs_tbl = Table(box=box.SIMPLE_HEAVY, expand=True)
     jobs_tbl.add_column("Job", style="bold")
-    jobs_tbl.add_column("Status")
-    jobs_tbl.add_column("Next")
+    jobs_tbl.add_column("Processed")
+    jobs_tbl.add_column("OK / Err")
     jobs_tbl.add_column("Last")
+    jobs_tbl.add_column("Next")
+
+    runs_by_job: dict[str, list[dict[str, Any]]] = {
+        "flip_opportunities": swarm_runs if isinstance(swarm_runs, list) else [],
+        "external_demand": demand_runs if isinstance(demand_runs, list) else [],
+        "upgrade_parts": upgrade_runs if isinstance(upgrade_runs, list) else [],
+        "autonomous_cycle": autonomous_runs if isinstance(autonomous_runs, list) else [],
+    }
+
+    def _run_metrics(job_id: str) -> tuple[str, str]:
+        rows = runs_by_job.get(job_id, [])
+        processed = len(rows)
+        ok = sum(1 for r in rows if str(r.get("status", "")).lower() == "success")
+        err = sum(1 for r in rows if str(r.get("status", "")).lower() in {"error", "failed"})
+        return str(processed), f"[green]{ok}[/green] / [red]{err}[/red]"
 
     if isinstance(schedule, list):
         for job in schedule:
             jid = str(job.get("id", ""))
             if jid not in {"flip_opportunities", "upgrade_parts", "external_demand", "autonomous_cycle"}:
                 continue
-            enabled = bool(job.get("enabled", False))
-            status = "[green]enabled[/green]" if enabled else "[red]paused[/red]"
+            processed, ok_err = _run_metrics(jid)
             jobs_tbl.add_row(
                 jid,
-                status,
-                _age(job.get("next_run_at")),
+                processed,
+                ok_err,
                 _age(job.get("last_run_at")),
+                _age(job.get("next_run_at")),
             )
     else:
-        jobs_tbl.add_row("schedule", "[red]unavailable[/red]", "—", "—")
+        jobs_tbl.add_row("schedule", "—", "[red]unavailable[/red]", "—", "—")
 
     sources_tbl = Table(box=box.SIMPLE, expand=True)
     sources_tbl.add_column("Source", style="bold", no_wrap=True)
@@ -268,6 +285,8 @@ def main() -> int:
                 sources = _safe_get(client, f"{api}/sources/")
                 runs = _safe_get(client, f"{api}/schedule/flip_opportunities/runs")
                 demand_runs = _safe_get(client, f"{api}/schedule/external_demand/runs")
+                upgrade_runs = _safe_get(client, f"{api}/schedule/upgrade_parts/runs")
+                autonomous_runs = _safe_get(client, f"{api}/schedule/autonomous_cycle/runs")
                 listing_stats = _safe_get(client, f"{api}/listings/stats")
                 demand_summary = _safe_get(client, f"{api}/demand/summary")
                 lines = tailer.poll()
@@ -278,6 +297,8 @@ def main() -> int:
                         sources,
                         runs,
                         demand_runs,
+                        upgrade_runs,
+                        autonomous_runs,
                         listing_stats,
                         demand_summary,
                         lines,
