@@ -3043,3 +3043,23 @@ INFO:     100.84.151.109:51588 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
 [scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 96)
 INFO:     100.84.151.109:56898 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 96)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 96)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 96)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 96)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 96)
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:63640 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 96)
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 96)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 96)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 96)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49297 - "GET /health HTTP/1.1" 200 OK
