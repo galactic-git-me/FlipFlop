@@ -29,6 +29,8 @@ TOPIC_QUERIES: dict[str, list[str]] = {
     "am5_bundles": ["7700x b650", "am5 bundle", "ryzen bundle", "ddr5 bundle"],
     "midrange_gpu": ["rtx 3060", "rtx 3070", "rx 6700 xt", "rx 7600"],
     "workstation_cpu": ["ryzen 7900", "ryzen 9700x", "i7 12700", "i9 12900"],
+    # Demand-intent lanes: what buyers are actively searching for.
+    "pc_intent": ["gaming pc", "ai pc", "workstation pc", "budget gaming pc", "custom pc"],
 }
 
 
@@ -82,57 +84,139 @@ async def _fetch_reddit_signals(topic: str, queries: Iterable[str], now: datetim
 
 async def _fetch_google_trends_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
     """
-    Real adapter (no API key):
-      - Reads Google Daily Trends feed for GB.
-      - Scores query relevance by keyword mention hits in trending titles.
+    Real adapter (no API key), UK-focused:
+      - Uses Google Trends explore API to get:
+        1) interest over time (last 7 days)
+        2) geographic interest by region (UK)
+      - Produces one signal per query with score + geo insight notes.
     """
     out: list[DemandSignal] = []
-    trends_titles: list[str] = []
     async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-        try:
-            resp = await client.get(
-                "https://trends.google.com/trends/api/dailytrends",
-                params={"hl": "en-GB", "tz": "0", "geo": "GB"},
-                headers={"User-Agent": "FlipFlopDemandBot/1.0"},
-            )
-            if resp.status_code == 200:
-                payload = resp.text
-                # Trends API prepends anti-XSSI chars like )]}'
-                payload = re.sub(r"^\)\]\}',?\n?", "", payload)
-                data = json.loads(payload)
-                days = data.get("default", {}).get("trendingSearchesDays", [])
-                for day in days:
-                    for item in day.get("trendingSearches", []):
-                        title = (item.get("title", {}) or {}).get("query")
-                        if title:
-                            trends_titles.append(str(title).lower())
-        except Exception:
-            trends_titles = []
-
-    total_titles = max(1, len(trends_titles))
-    corpus = " | ".join(trends_titles)
-    for q in queries:
-        ql = q.lower().strip()
-        if not ql:
-            continue
-        hits = corpus.count(ql)
-        # include partial-token hits for key words
-        for token in [t for t in re.split(r"\s+", ql) if len(t) >= 3]:
-            hits += corpus.count(token) * 0.15
-        score = min(100.0, float(hits) * 18.0)
-        out.append(
-            DemandSignal(
-                source="google_trends",
-                topic=topic,
-                query=q,
-                score=round(score, 2),
-                confidence=0.5 if trends_titles else 0.15,
-                sample_size=total_titles,
-                signal_time=now,
-                notes="Google Daily Trends (GB) relevance proxy",
-            )
-        )
+        for q in queries:
+            q_clean = q.strip()
+            if not q_clean:
+                continue
+            try:
+                trend = await _google_trends_interest_for_query(client, q_clean)
+                out.append(
+                    DemandSignal(
+                        source="google_trends",
+                        topic=topic,
+                        query=q_clean,
+                        score=trend["score"],
+                        confidence=trend["confidence"],
+                        sample_size=trend["sample_size"],
+                        signal_time=now,
+                        notes=trend["notes"],
+                    )
+                )
+            except Exception:
+                out.append(
+                    DemandSignal(
+                        source="google_trends",
+                        topic=topic,
+                        query=q_clean,
+                        score=0.0,
+                        confidence=0.1,
+                        sample_size=0,
+                        signal_time=now,
+                        notes="Google Trends fetch failed for query",
+                    )
+                )
     return out
+
+
+def _parse_trends_json(payload: str) -> dict:
+    cleaned = re.sub(r"^\)\]\}',?\n?", "", payload or "")
+    return json.loads(cleaned) if cleaned else {}
+
+
+async def _google_trends_interest_for_query(client: httpx.AsyncClient, query: str) -> dict:
+    headers = {"User-Agent": "FlipFlopDemandBot/1.0"}
+    req = {
+        "comparisonItem": [{"keyword": query, "geo": "GB", "time": "now 7-d"}],
+        "category": 0,
+        "property": "",
+    }
+
+    explore_resp = await client.get(
+        "https://trends.google.com/trends/api/explore",
+        params={"hl": "en-GB", "tz": "0", "req": json.dumps(req, separators=(",", ":"))},
+        headers=headers,
+    )
+    if explore_resp.status_code != 200:
+        raise RuntimeError(f"explore status {explore_resp.status_code}")
+    explore = _parse_trends_json(explore_resp.text)
+    widgets = explore.get("widgets", []) or []
+    if not widgets:
+        raise RuntimeError("no widgets")
+
+    timeseries_widget = next((w for w in widgets if str(w.get("id", "")).startswith("TIMESERIES")), None)
+    geo_widget = next((w for w in widgets if str(w.get("id", "")).startswith("GEO_MAP")), None)
+    if not timeseries_widget:
+        raise RuntimeError("no timeseries widget")
+
+    ts_req = timeseries_widget.get("request", {})
+    ts_token = timeseries_widget.get("token")
+    ts_resp = await client.get(
+        "https://trends.google.com/trends/api/widgetdata/multiline",
+        params={"hl": "en-GB", "tz": "0", "req": json.dumps(ts_req, separators=(",", ":")), "token": ts_token},
+        headers=headers,
+    )
+    if ts_resp.status_code != 200:
+        raise RuntimeError(f"multiline status {ts_resp.status_code}")
+    ts_data = _parse_trends_json(ts_resp.text)
+    timeline = ts_data.get("default", {}).get("timelineData", []) or []
+    values = []
+    for row in timeline:
+        v = (row.get("value") or [0])[0]
+        try:
+            values.append(float(v))
+        except Exception:
+            continue
+    avg_interest = sum(values) / len(values) if values else 0.0
+    recent_interest = values[-1] if values else 0.0
+    score = round(min(100.0, (avg_interest * 0.65) + (recent_interest * 0.35)), 2)
+
+    top_regions = []
+    if geo_widget and geo_widget.get("request") and geo_widget.get("token"):
+        geo_resp = await client.get(
+            "https://trends.google.com/trends/api/widgetdata/comparedgeo",
+            params={
+                "hl": "en-GB",
+                "tz": "0",
+                "req": json.dumps(geo_widget.get("request"), separators=(",", ":")),
+                "token": geo_widget.get("token"),
+            },
+            headers=headers,
+        )
+        if geo_resp.status_code == 200:
+            geo_data = _parse_trends_json(geo_resp.text)
+            regions = geo_data.get("default", {}).get("geoMapData", []) or []
+            ranked = []
+            for r in regions:
+                region_name = r.get("geoName")
+                raw_val = (r.get("value") or [0])[0]
+                try:
+                    val = float(raw_val)
+                except Exception:
+                    val = 0.0
+                if region_name and val > 0:
+                    ranked.append((str(region_name), val))
+            ranked.sort(key=lambda t: t[1], reverse=True)
+            top_regions = [name for name, _ in ranked[:3]]
+
+    notes = (
+        f"Google Trends UK 7d interest avg={avg_interest:.1f}, latest={recent_interest:.1f}"
+        + (f", top regions: {', '.join(top_regions)}" if top_regions else "")
+    )
+    confidence = 0.7 if values else 0.2
+    return {
+        "score": score,
+        "confidence": confidence,
+        "sample_size": len(values),
+        "notes": notes,
+    }
 
 
 async def _fetch_steam_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
