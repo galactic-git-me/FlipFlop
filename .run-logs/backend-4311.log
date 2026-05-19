@@ -2222,3 +2222,37 @@ INFO:     100.84.151.109:50787 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-19 15:16:34 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
 2026-05-19 15:16:35 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
 2026-05-19 15:16:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay error for 'ryzen 7700': Page.evaluate: Target crashed 
+2026-05-19 15:16:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61382 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:16:56 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-19 15:16:56 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+2026-05-19 15:16:58 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:61382 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 15:17:09 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-19 15:17:12 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-19 15:17:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-19 15:17:14 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:62674 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62674 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:17:30 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50060 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 15:17:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-19 15:17:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-19 15:17:35 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=ddr4+ram&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:55249 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55249 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:17:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-19 15:17:49 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-19 15:17:50 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-19 15:17:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=ddr4+ram&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:50386 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 15:18:08 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=ddr4 ram
+2026-05-19 15:18:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=ddr4 ram
+2026-05-19 15:18:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=ddr4 ram
+INFO:     100.84.151.109:50064 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50064 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 15:18:12 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-19 15:18:12 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
