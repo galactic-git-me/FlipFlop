@@ -2461,3 +2461,15 @@ INFO:     100.84.151.109:63189 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:18:25 [info     ] temu.cases.done                found=0 search=darth vader pc case
 2026-05-19 04:18:37 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-12700 sold=None
 INFO:     100.84.151.109:62118 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:18:48 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 96)
+2026-05-19 04:19:11 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+INFO:     100.84.151.109:55399 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:19:12 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 3600 sold=None
+2026-05-19 04:19:22 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+2026-05-19 04:19:26 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61910 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:19:47 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
+2026-05-19 04:19:51 [info     ] temu.cases.done                found=0 search=alien pc case gaming
