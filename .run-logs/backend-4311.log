@@ -412,3 +412,37 @@ INFO:     100.84.151.109:55982 - "GET /api/playbooks/proposals?status=pending HT
 [scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
 2026-05-19 20:15:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
 INFO:     100.84.151.109:60446 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:15:47 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-19 20:15:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+INFO:     100.84.151.109:51931 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51931 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:15:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-19 20:15:54 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-19 20:15:57 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-19 20:15:57 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+2026-05-19 20:15:57 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+2026-05-19 20:15:58 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 20:16:04 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+INFO:     100.84.151.109:55226 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:16:06 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-19 20:16:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+2026-05-19 20:16:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:50644 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50644 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:16:14 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-19 20:16:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
+2026-05-19 20:16:18 [info     ] BidSpotter.playwright.done     total=0
+2026-05-19 20:16:18 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-19 20:16:31 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-19 20:16:32 [debug    ] upgrade_parts.ebay             buy=None part=RX 570 8GB sold=None
+2026-05-19 20:16:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-19 20:16:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=office pc
+INFO:     100.84.151.109:52370 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:16:35 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.84.151.109:52370 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52370 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:16:42 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-19 20:16:44 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-19 20:16:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-19 20:16:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
