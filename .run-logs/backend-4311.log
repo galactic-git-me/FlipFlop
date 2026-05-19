@@ -167,3 +167,29 @@ INFO:     Application startup complete.
 2026-05-19 23:04:20 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
 2026-05-19 23:04:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
 2026-05-19 23:04:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 62)
+2026-05-19 23:04:41 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-19 23:04:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-19 23:04:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-19 23:04:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-19 23:04:53 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     Shutting down
+2026-05-19 23:04:53 [warning  ] BidSpotter.playwright.no_results mode=fallback_parse term=gaming pc
+INFO:     Waiting for application shutdown.
+2026-05-19 23:04:53 [info     ] scheduler.stopped
+Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 23:03:06 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 71, in run_flip_opportunities_swarm
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-19 23:04:53 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2768175]
+INFO:     Stopping reloader process [2768016]
