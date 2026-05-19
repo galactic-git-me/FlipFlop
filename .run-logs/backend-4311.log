@@ -1450,3 +1450,25 @@ INFO:     100.84.151.109:63181 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:61383 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:54768 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:54768 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 142)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 142)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61650 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61650 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61650 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 142)
+[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:61581 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61581 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:59189 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 142)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57028 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57028 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:62970 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 142)
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:52790 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52790 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
