@@ -1243,3 +1243,22 @@ INFO:     100.84.151.109:62234 - "OPTIONS /api/playbooks/proposals/?status=pendi
 INFO:     100.84.151.109:62234 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:62234 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:62234 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc build': 0 found, 0 new (total 26)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63228 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61673 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61673 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:56736 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56736 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62027 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:60253 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60253 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52965 - "GET /health HTTP/1.1" 200 OK
