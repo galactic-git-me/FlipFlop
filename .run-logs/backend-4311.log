@@ -5812,3 +5812,51 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-19 09:01:07 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
 2026-05-19 09:01:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
 2026-05-19 09:01:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:01:18 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-19 09:01:18 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-19 09:01:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:01:25 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-19 09:01:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+[scraper] eBay 'computer tower': 0 found, 0 new (total 50)
+2026-05-19 09:01:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-19 09:01:29 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-19 09:01:29 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-19 09:01:29 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:01:33 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 09:01:33 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 53)
+2026-05-19 09:01:35 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-19 09:01:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-19 09:01:36 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-19 09:01:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 09:01:37 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-19 09:01:38 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-19 09:01:40 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-19 09:01:40 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-19 09:01:40 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:01:51 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-19 09:01:51 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-19 09:01:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:01:52 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-19 09:01:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-19 09:01:56 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-19 09:02:02 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-19 09:02:02 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-19 09:02:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-19 09:02:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-19 09:02:11 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-19 09:02:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-19 09:02:11 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-19 09:02:13 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-19 09:02:13 [info     ] facebook.playwright.items      count=0 term=i7 tower
+2026-05-19 09:02:13 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Di7%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=i7 tower title=Facebook
+2026-05-19 09:02:13 [info     ] facebook.playwright.done       total=0
+2026-05-19 09:02:13 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-19 09:02:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 09:02:14 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-19 09:02:16 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 50)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 53)
+2026-05-19 09:02:19 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-19 09:02:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-19 09:02:23 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
