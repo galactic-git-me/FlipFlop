@@ -1362,3 +1362,16 @@ INFO:     100.84.151.109:60543 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:60543 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61228 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61228 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:57980 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57980 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57980 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50160 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50303 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:59651 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59651 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49720 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57800 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57800 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
