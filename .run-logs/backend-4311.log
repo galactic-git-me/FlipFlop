@@ -656,3 +656,20 @@ INFO:     100.84.151.109:56533 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 20:28:43 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
 INFO:     100.84.151.109:58151 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:58151 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:28:46 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58076 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58076 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58076 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:29:09 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
+2026-05-19 20:29:11 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49652 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55965 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55965 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:29:36 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-19 20:29:38 [debug    ] upgrade_parts.ebay             buy=160.0 part=Ryzen 5 5600X sold=None
+INFO:     100.84.151.109:64808 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64808 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:30:00 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+INFO:     100.84.151.109:64808 - "GET /health HTTP/1.1" 200 OK
