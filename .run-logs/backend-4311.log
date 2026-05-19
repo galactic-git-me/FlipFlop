@@ -2419,3 +2419,15 @@ INFO:     100.84.151.109:53043 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
 2026-05-19 04:14:18 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
 2026-05-19 04:14:33 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+INFO:     100.84.151.109:57284 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:14:43 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 96)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-19 04:15:07 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+2026-05-19 04:15:08 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+INFO:     100.84.151.109:58490 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:15:30 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+2026-05-19 04:15:40 [info     ] amazon.cases.done              found=10 search=astronaut pc case
+INFO:     100.84.151.109:57915 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:15:42 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-19 04:15:45 [info     ] amazon.cases.done              found=10 search=space gaming case
