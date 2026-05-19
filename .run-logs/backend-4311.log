@@ -2860,3 +2860,16 @@ INFO:     100.84.151.109:54126 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:54126 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 [scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
 INFO:     100.84.151.109:52392 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52392 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52392 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56868 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58737 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58737 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51933 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51933 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51933 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53862 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53862 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
