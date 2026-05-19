@@ -634,3 +634,25 @@ INFO:     100.84.151.109:54712 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:54157 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:54157 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 20:27:20 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-19 20:27:23 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-12400 sold=None
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52980 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52980 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52980 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:27:45 [info     ] temu.cases.done                found=0 search=darth vader pc case
+INFO:     100.84.151.109:58206 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58206 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:27:59 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-12700 sold=None
+INFO:     100.84.151.109:51523 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-19 20:28:08 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+INFO:     100.84.151.109:62535 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62535 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62535 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62535 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 20:28:32 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+INFO:     100.84.151.109:56533 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:28:34 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 3600 sold=None
+2026-05-19 20:28:43 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+INFO:     100.84.151.109:58151 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58151 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
