@@ -2390,3 +2390,16 @@ INFO:     100.84.151.109:53825 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:11:38 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
 INFO:     100.84.151.109:55057 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:11:48 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+[scraper] eBay 'HP EliteDesk': 26 found, 26 new (total 96)
+2026-05-19 04:12:00 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+2026-05-19 04:12:04 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
+INFO:     100.84.151.109:51130 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:12:14 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-19 04:12:29 [info     ] temu.cases.done                found=0 search=mini itx pc case gaming
+INFO:     100.84.151.109:52384 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 96)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+2026-05-19 04:12:48 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-19 04:12:53 [info     ] temu.cases.done                found=0 search=small form factor pc case gaming
+INFO:     100.84.151.109:59054 - "GET /health HTTP/1.1" 200 OK
