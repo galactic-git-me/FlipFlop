@@ -1262,3 +1262,23 @@ INFO:     100.84.151.109:62444 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:62444 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 [scraper] eBay '7700x b650': 0 found, 0 new (total 142)
 2026-05-19 14:40:44 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+INFO:     100.84.151.109:54804 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54804 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54804 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:41:07 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+2026-05-19 14:41:16 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:62301 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55951 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55951 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:41:41 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+INFO:     100.84.151.109:61523 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61523 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61523 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+2026-05-19 14:42:04 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 142)
+2026-05-19 14:42:10 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+INFO:     100.84.151.109:56743 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56743 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
