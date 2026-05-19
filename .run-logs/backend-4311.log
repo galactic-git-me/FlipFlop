@@ -2146,3 +2146,1135 @@ INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.84.151.109:65382 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:49654 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49654 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46590 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46602 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:38 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:40 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+INFO:     100.101.209.68:48604 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:26:40 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-20 00:26:41 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48618 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42046 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:48 [info     ] amazon.cases.done              found=10 search=star wars pc case
+INFO:     100.101.209.68:42050 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:26:49 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:50 [info     ] temu.cases.done                found=0 search=astronaut pc case
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42058 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:52 [info     ] temu.cases.done                found=0 search=space gaming case
+INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42074 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/swarms/flip_opportunities.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-20 00:26:53 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-20 23:25:16 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 151, in run_upgrade_parts_swarm
+    buy = await _ebay_buy_price(client, part_def["ebay_search"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 303, in _ebay_buy_price
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-20 00:25:16 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 71, in run_flip_opportunities_swarm
+asyncio.exceptions.CancelledError
+Job "Autonomous Cycle (trigger: interval[6:00:00], next run at: 2026-05-20 05:25:16 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/autonomous_loop.py", line 18, in run_autonomous_cycle
+    sourcing = await run_flip_opportunities_swarm()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 71, in run_flip_opportunities_swarm
+asyncio.exceptions.CancelledError
+2026-05-20 00:26:54 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3986850]
+INFO:     Started server process [4027570]
+INFO:     Waiting for application startup.
+2026-05-20 00:26:55 [info     ] app.startup
+2026-05-20 00:26:55 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-20 00:26:55 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-20 00:26:55 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-20 00:26:55 [info     ] accessories_swarm.start
+2026-05-20 00:26:55 [info     ] flip_opportunities_swarm.start
+2026-05-20 00:26:55 [info     ] cases_swarm.start
+2026-05-20 00:26:55 [info     ] flip_opportunities_swarm.start
+2026-05-20 00:26:55 [info     ] upgrade_parts_swarm.start      total_parts=49
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57666 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57666 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2503s source=BidSpotter
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_93s source=WF-Retrain
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_94s source=Gumtree
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_317s source=Facebook Marketplace
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_157s source=Apex Auctions
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_94s source=Manual Submission
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_94s source=Manual Photo
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_112s source=John Pye
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2699s source=Wilsons Auctions
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2718s source=i-bidder
+2026-05-20 00:26:55 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57666 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2503s source=BidSpotter
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_93s source=WF-Retrain
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_93s source=Gumtree
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_317s source=Facebook Marketplace
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_157s source=Apex Auctions
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_93s source=Manual Submission
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_93s source=Manual Photo
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_112s source=John Pye
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2699s source=Wilsons Auctions
+2026-05-20 00:26:55 [info     ] source.skipped                 reason=cooldown_active_2717s source=i-bidder
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57666 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42080 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 00:26:55 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:57 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+INFO:     100.101.209.68:58038 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:59 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:26:59 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:26:59 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:26:59 [info     ] amazon.cases.done              found=10 search=gaming pc case rgb mid tower
+2026-05-20 00:26:59 [info     ] amazon.cases.done              found=10 search=rgb gaming pc case atx
+INFO:     100.84.151.109:57666 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58040 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:00 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-20 00:27:00 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-20 00:27:00 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-20 00:27:00 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-20 00:27:01 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-20 00:27:01 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-20 00:27:01 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-20 00:27:01 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58046 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:02 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:02 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-20 00:27:02 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-20 00:27:02 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:03 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-20 00:27:03 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-20 00:27:03 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-20 00:27:03 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-20 00:27:05 [info     ] preloved.playwright.fetch      term=pc tower
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:05 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-20 00:27:05 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-20 00:27:05 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-20 00:27:05 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-20 00:27:05 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58068 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:07 [info     ] amazon.cases.done              found=10 search=tempered glass gaming case atx
+2026-05-20 00:27:07 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+2026-05-20 00:27:07 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-20 00:27:07 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-20 00:27:07 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-20 00:27:07 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-20 00:27:07 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-20 00:27:07 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54676 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:09 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-20 00:27:09 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-20 00:27:09 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:10 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-20 00:27:10 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-20 00:27:10 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54690 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:11 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-20 00:27:11 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-20 00:27:11 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:12 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-20 00:27:12 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-20 00:27:12 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:13 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-20 00:27:13 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-20 00:27:13 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-20 00:27:13 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+INFO:     100.101.209.68:54692 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:13 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-20 00:27:13 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-20 00:27:13 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-20 00:27:13 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54702 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:15 [info     ] preloved.playwright.done       total=44
+2026-05-20 00:27:15 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] source.done                    found=44 gems=0 source=Preloved
+2026-05-20 00:27:15 [info     ] preloved.playwright.done       total=44
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:15 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-20 00:27:16 [info     ] source.done                    found=44 gems=0 source=Preloved
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37582 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49653 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49653 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-20 00:27:20 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+2026-05-20 00:27:21 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37586 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:22 [info     ] temu.cases.done                found=0 search=rgb gaming pc case atx
+2026-05-20 00:27:23 [info     ] temu.cases.done                found=0 search=gaming pc case rgb mid tower
+INFO:     100.101.209.68:42078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37596 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/swarms/flip_opportunities.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-20 00:27:24 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-20 23:26:55 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 151, in run_upgrade_parts_swarm
+    buy = await _ebay_buy_price(client, part_def["ebay_search"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 303, in _ebay_buy_price
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-20 00:26:55 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 124, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 74, in run_flip_opportunities_swarm
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-20 00:27:24 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4027570]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.dispatch (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:388:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
+INFO:     Started server process [4040675]
+INFO:     Waiting for application startup.
+2026-05-20 00:27:26 [info     ] app.startup
+2026-05-20 00:27:26 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-20 00:27:26 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-20 00:27:26 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-20 00:27:26 [info     ] accessories_swarm.start
+2026-05-20 00:27:26 [info     ] flip_opportunities_swarm.start
+2026-05-20 00:27:26 [info     ] cases_swarm.start
+2026-05-20 00:27:26 [info     ] flip_opportunities_swarm.start
+2026-05-20 00:27:26 [info     ] upgrade_parts_swarm.start      total_parts=49
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:26 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+INFO:     100.101.209.68:37622 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2668s source=Wilsons Auctions
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2687s source=i-bidder
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2472s source=BidSpotter
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_62s source=WF-Retrain
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_63s source=Gumtree
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_63s source=Manual Submission
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_63s source=Manual Photo
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_81s source=John Pye
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_286s source=Facebook Marketplace
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_126s source=Apex Auctions
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2668s source=Wilsons Auctions
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2686s source=i-bidder
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_2472s source=BidSpotter
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_62s source=WF-Retrain
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_62s source=Gumtree
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_62s source=Manual Submission
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_62s source=Manual Photo
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_81s source=John Pye
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_286s source=Facebook Marketplace
+2026-05-20 00:27:26 [info     ] source.skipped                 reason=cooldown_active_126s source=Apex Auctions
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 00:27:26 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46116 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:28 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:30 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:56631 - "GET /health HTTP/1.1" 200 OK
+2026-05-20 00:27:30 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-20 00:27:30 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46120 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:31 [info     ] amazon.cases.done              found=10 search=rgb gaming pc case atx
+2026-05-20 00:27:31 [info     ] amazon.cases.done              found=10 search=gaming pc case rgb mid tower
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:32 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-20 00:27:32 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-20 00:27:32 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-20 00:27:32 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-20 00:27:32 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-20 00:27:32 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-20 00:27:32 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-20 00:27:32 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46136 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:34 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-20 00:27:34 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-20 00:27:34 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-20 00:27:34 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:35 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-20 00:27:35 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-20 00:27:35 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-20 00:27:35 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:46144 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:36 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-20 00:27:36 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-20 00:27:36 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-20 00:27:36 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-20 00:27:36 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-20 00:27:36 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47176 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:38 [info     ] amazon.cases.done              found=10 search=tempered glass gaming case atx
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:38 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-20 00:27:38 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-20 00:27:38 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-20 00:27:38 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-20 00:27:38 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-20 00:27:38 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:39 [info     ] amazon.cases.done              found=10 search=pc case tempered glass rgb
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 00:27:40 [info     ] preloved.playwright.fetch      term=desktop pc
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:40 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-20 00:27:40 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-20 00:27:40 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-20 00:27:40 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-20 00:27:40 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47190 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:42 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-20 00:27:42 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-20 00:27:42 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-20 00:27:42 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+2026-05-20 00:27:42 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-20 00:27:42 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47192 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:27:44 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-20 00:27:44 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-20 00:27:44 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-20 00:27:44 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:45 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-20 00:27:45 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-20 00:27:45 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-20 00:27:45 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+INFO:     100.84.151.109:58080 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58080 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47206 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-20 00:27:46 [info     ] preloved.playwright.done       total=44
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:47 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] source.done                    found=44 gems=0 source=Preloved
+2026-05-20 00:27:47 [info     ] preloved.playwright.done       total=44
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-20 00:27:47 [info     ] source.done                    found=44 gems=0 source=Preloved
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50942 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50952 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:52 [info     ] aliexpress.cases.done          found=0 search=rgb gaming pc case atx
+2026-05-20 00:27:52 [info     ] aliexpress.cases.done          found=0 search=gaming pc case rgb mid tower
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50960 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:54 [info     ] temu.cases.done                found=0 search=rgb gaming pc case atx
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:27:54 [info     ] temu.cases.done                found=0 search=gaming pc case rgb mid tower
+INFO:     100.101.209.68:50976 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34626 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58703 - "GET /health HTTP/1.1" 200 OK
+2026-05-20 00:28:01 [debug    ] upgrade_parts.ebay             buy=None part=PC Build Bundle sold=None
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34632 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:28:02 [info     ] amazon.cases.done              found=10 search=mini itx pc case gaming
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 00:28:02 [info     ] amazon.cases.done              found=10 search=small form factor pc case gaming
+2026-05-20 00:28:02 [info     ] temu.cases.done                found=0 search=tempered glass gaming case atx
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34644 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:28:04 [info     ] temu.cases.done                found=0 search=pc case tempered glass rgb
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49653 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40064 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49653 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40080 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40086 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 00:28:15 [info     ] aliexpress.cases.done          found=0 search=pc case tempered glass rgb
+2026-05-20 00:28:15 [info     ] aliexpress.cases.done          found=0 search=tempered glass gaming case atx
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40094 - "GET /api/schedule HTTP/1.1" 200 OK

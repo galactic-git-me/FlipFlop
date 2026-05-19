@@ -27,10 +27,13 @@ from app.services.source_health import (
     apply_success,
     should_skip_due_to_cooldown,
 )
+from app.config import get_settings
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
 _DB_WRITE_LOCK = asyncio.Lock()
+_settings = get_settings()
+_ENRICH_CONCURRENCY = max(1, min(24, int(getattr(_settings, "max_concurrent_scrapers", 8) or 8)))
 
 
 def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
@@ -288,11 +291,74 @@ async def _upsert_listings(
     config: SearchConfig,
 ) -> int:
     new_gems = 0
+    sem = asyncio.Semaphore(_ENRICH_CONCURRENCY)
 
-    for raw in raw_listings:
-        specs = parse_specs(raw.title, raw.description)
+    async def _enrich_listing(raw):
+        async with sem:
+            try:
+                specs = parse_specs(raw.title, raw.description)
+                if not _passes_filter(raw.price, specs, config, title=raw.title):
+                    return None
+                fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu)
+                expected_buy_price: float | None = None
+                if raw.listing_type == "auction":
+                    expected_buy_price = await get_expected_auction_price(specs.cpu, specs.gpu, raw.price)
+                effective_buy_price = expected_buy_price if expected_buy_price else raw.price
+                resale_range = await get_resale_range(
+                    specs.cpu, specs.ram_gb, specs.ram_type,
+                    specs.storage_gb, specs.storage_type, specs.gpu,
+                    buy_price=effective_buy_price,
+                )
+                upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
+                resale = resale_range.median
+                profit = estimate_profit(effective_buy_price, resale, upgrade_cost)
+                profit_low = estimate_profit(effective_buy_price, resale_range.low, upgrade_cost)
+                profit_high = estimate_profit(effective_buy_price, resale_range.high, upgrade_cost)
+                score_result = score_listing(
+                    title=raw.title,
+                    price=raw.price,
+                    estimated_profit=profit,
+                    cpu=specs.cpu,
+                    ram_gb=specs.ram_gb,
+                    ram_type=specs.ram_type,
+                    storage_gb=specs.storage_gb,
+                    gpu=specs.gpu,
+                    has_psu=specs.has_psu,
+                    location=raw.location,
+                    profit_low=profit_low,
+                    profit_high=profit_high,
+                )
+                return {
+                    "raw": raw,
+                    "specs": specs,
+                    "fp": fp,
+                    "expected_buy_price": expected_buy_price,
+                    "resale_range": resale_range,
+                    "upgrade_cost": upgrade_cost,
+                    "resale": resale,
+                    "profit": profit,
+                    "score_result": score_result,
+                }
+            except Exception as exc:
+                log.warning("listing.enrichment_error", source=raw.source_name, external_id=raw.external_id, error=str(exc))
+                return None
+
+    enriched = await asyncio.gather(*[_enrich_listing(raw) for raw in raw_listings], return_exceptions=False)
+
+    for item in enriched:
+        if not item:
+            continue
+        raw = item["raw"]
+        specs = item["specs"]
+        fp = item["fp"]
+        expected_buy_price = item["expected_buy_price"]
+        resale_range = item["resale_range"]
+        upgrade_cost = item["upgrade_cost"]
+        resale = item["resale"]
+        profit = item["profit"]
+        score_result = item["score_result"]
+
         with db.no_autoflush:
-            fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu)
             existing = await db.execute(
                 select(Listing).where(
                     (Listing.external_id == raw.external_id) |
@@ -300,58 +366,6 @@ async def _upsert_listings(
                 )
             )
             listing = existing.scalar_one_or_none()
-
-        if not _passes_filter(raw.price, specs, config, title=raw.title):
-            continue
-
-        # ── For auction listings: estimate the realistic final hammer price ──────
-        # raw.price = current bid (almost certainly too low — bidding war still ahead).
-        # We use completed eBay auction comps to find what similar hardware actually
-        # clears at.  This is used BOTH as the buy-price for profit calculations
-        # AND stored as expected_buy_price on the listing so the UI can show it.
-        expected_buy_price: float | None = None
-        if raw.listing_type == "auction":
-            expected_buy_price = await get_expected_auction_price(
-                specs.cpu, specs.gpu, raw.price
-            )
-
-        # The effective buy cost to use in all profit maths:
-        #   - Auction  → expected_buy_price (realistic hammer price)
-        #   - BIN / classified → raw.price (already a fixed ask)
-        effective_buy_price = expected_buy_price if expected_buy_price else raw.price
-
-        # Live eBay comp scrape — returns market price range from real sold listings.
-        # buy_price is passed so the fallback can anchor to the listing's own
-        # market price rather than a lookup table.
-        resale_range = await get_resale_range(
-            specs.cpu, specs.ram_gb, specs.ram_type,
-            specs.storage_gb, specs.storage_type, specs.gpu,
-            buy_price=effective_buy_price,
-        )
-        upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
-
-        # Compute the full profit range: profit = resale - total_cost.
-        # profit_low (conservative / 25th-pct) drives the REJECT safety gate —
-        # if the worst-case market price still produces a loss, the deal is risky.
-        resale      = resale_range.median
-        profit      = estimate_profit(effective_buy_price, resale,            upgrade_cost)
-        profit_low  = estimate_profit(effective_buy_price, resale_range.low,  upgrade_cost)
-        profit_high = estimate_profit(effective_buy_price, resale_range.high, upgrade_cost)
-
-        score_result = score_listing(
-            title=raw.title,
-            price=raw.price,
-            estimated_profit=profit,
-            cpu=specs.cpu,
-            ram_gb=specs.ram_gb,
-            ram_type=specs.ram_type,
-            storage_gb=specs.storage_gb,
-            gpu=specs.gpu,
-            has_psu=specs.has_psu,
-            location=raw.location,
-            profit_low=profit_low,
-            profit_high=profit_high,
-        )
 
         if listing:
             listing.last_seen_at = datetime.utcnow()
