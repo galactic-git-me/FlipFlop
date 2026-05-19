@@ -907,3 +907,23 @@ INFO:     100.84.151.109:57037 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:63281 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:63281 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 2026-05-19 14:34:07 [info     ] aliexpress.cases.done          found=0 search=transparent pc case gaming
+2026-05-19 14:34:09 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-19 14:34:18 [info     ] amazon.cases.done              found=10 search=desktop gaming case compact atx
+2026-05-19 14:34:22 [info     ] amazon.cases.done              found=10 search=slim gaming pc case
+INFO:     100.84.151.109:63526 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63526 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63526 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 142)
+2026-05-19 14:34:44 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+2026-05-19 14:34:47 [info     ] temu.cases.done                found=0 search=desktop gaming case compact atx
+INFO:     100.84.151.109:55407 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55407 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59121 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:35:11 [info     ] temu.cases.done                found=0 search=slim gaming pc case
+INFO:     100.84.151.109:57330 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57330 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:35:20 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 142)
+2026-05-19 14:35:26 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
+INFO:     100.84.151.109:57485 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 14:35:31 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
