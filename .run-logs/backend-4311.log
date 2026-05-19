@@ -1088,3 +1088,18 @@ INFO:     100.84.151.109:65382 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 20:45:20 [info     ] temu.cases.done                found=0 search=slim htpc case living room
 INFO:     100.84.151.109:60887 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:60887 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56521 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 20:45:43 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-19 20:45:43 [info     ] cases_swarm.done               errors=0 found=292 upserted=234
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65381 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57612 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54021 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54021 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58040 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58040 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58040 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
