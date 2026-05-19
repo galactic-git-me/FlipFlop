@@ -117,37 +117,55 @@ async def run_cases_swarm() -> dict:
     all_themes = CASE_THEMES + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
 
-    async with AsyncSessionLocal() as db:
-        for theme_def in all_themes:
-            for source in SOURCES:
-                # Use up to 2 terms per source per theme for better coverage
-                for term in theme_def["terms"][:2]:
-                    try:
-                        fn_key = source["fn"].replace("-", "_").replace(" ", "_")
-                        scrape_fn = globals().get(f"_scrape_{fn_key}")
-                        if not scrape_fn:
-                            log.warning("cases.no_scraper", source=source["name"])
-                            continue
-                        cases = await scrape_fn(term, theme_def["theme"])
-                        stats["found"] += len(cases)
-                        record_term_result(
-                            source_name=f"Cases:{source['name']}",
-                            term=term,
-                            found=len(cases),
-                            new=0,
-                        )
+    # Fan out scraping concurrently (network-bound), but keep writes controlled.
+    max_scrape_concurrency = 6
+    sem = asyncio.Semaphore(max_scrape_concurrency)
 
-                        for case in cases[:8]:  # Top 8 per search (was 5)
-                            await _upsert_case(db, case)
-                            stats["upserted"] += 1
-                    except Exception as exc:
-                        stats["errors"] += 1
-                        record_term_result(
-                            source_name=f"Cases:{source['name']}",
-                            term=term,
-                            error=str(exc),
-                        )
-                        log.error("cases.scrape.error", source=source["name"], term=term, error=str(exc))
+    async def _scrape_one(source: dict, theme: str, term: str):
+        fn_key = source["fn"].replace("-", "_").replace(" ", "_")
+        scrape_fn = globals().get(f"_scrape_{fn_key}")
+        if not scrape_fn:
+            log.warning("cases.no_scraper", source=source["name"])
+            return source["name"], term, []
+        async with sem:
+            cases = await scrape_fn(term, theme)
+            return source["name"], term, cases
+
+    scrape_tasks: list[asyncio.Task] = []
+    for theme_def in all_themes:
+        for source in SOURCES:
+            for term in theme_def["terms"][:2]:
+                scrape_tasks.append(asyncio.create_task(_scrape_one(source, theme_def["theme"], term)))
+
+    scrape_results = await asyncio.gather(*scrape_tasks, return_exceptions=True)
+
+    async with AsyncSessionLocal() as db:
+        for r in scrape_results:
+            if isinstance(r, Exception):
+                stats["errors"] += 1
+                log.error("cases.scrape.error", error=str(r))
+                continue
+
+            source_name, term, cases = r
+            try:
+                stats["found"] += len(cases)
+                record_term_result(
+                    source_name=f"Cases:{source_name}",
+                    term=term,
+                    found=len(cases),
+                    new=0,
+                )
+                for case in cases[:8]:
+                    await _upsert_case(db, case)
+                    stats["upserted"] += 1
+            except Exception as exc:
+                stats["errors"] += 1
+                record_term_result(
+                    source_name=f"Cases:{source_name}",
+                    term=term,
+                    error=str(exc),
+                )
+                log.error("cases.upsert.error", source=source_name, term=term, error=str(exc))
 
         await db.commit()
 
