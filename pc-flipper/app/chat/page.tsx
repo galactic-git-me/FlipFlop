@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Wand2, Cpu, Trophy, ClipboardList,
   ChevronRight, ChevronLeft, RotateCcw, Search,
@@ -599,7 +600,11 @@ function WizardProgress({ phase }: { phase: Phase }) {
 // ─── Main wizard ──────────────────────────────────────────────────────────────
 
 export default function BuildWizardPage() {
-  const [phase, setPhase] = useState<Phase>("playbook");
+  const searchParams = useSearchParams();
+  const prefillListingId = Number(searchParams.get("listing_id") || 0) || null;
+  const prefillMarker = prefillListingId ? `[prefill listing #${prefillListingId}] Build around this purchased listing.` : "";
+
+  const [phase, setPhase] = useState<Phase>(prefillListingId ? "intent" : "playbook");
 
   // Playbooks
   const [playbooks, setPlaybooks]     = useState<WizardPlaybook[]>([]);
@@ -608,7 +613,7 @@ export default function BuildWizardPage() {
 
   // Intent form
   const [budget, setBudget]           = useState(300);
-  const [notes, setNotes]             = useState("");
+  const [notes, setNotes]             = useState(prefillMarker);
   const [priorities, setPriorities]   = useState<string[]>(["Maximum profit"]);
   const [constraints, setConstraints] = useState<string[]>([]);
 
@@ -622,6 +627,7 @@ export default function BuildWizardPage() {
   const [selectedBuild, setSelectedBuild] = useState<WizardBuild | null>(null);
   const [plan, setPlan]               = useState<PurchasePlan | null>(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
+  const autoStartedForListingRef = useRef<number | null>(null);
 
   // Load playbooks on mount
   useEffect(() => {
@@ -666,6 +672,7 @@ export default function BuildWizardPage() {
         constraints,
         gem_limit: 5,
         playbook_limit: 6,
+        listing_id: prefillListingId ?? undefined,
       });
 
       if (data.attempts > 1) {
@@ -694,7 +701,16 @@ export default function BuildWizardPage() {
       setGenError(msg || "Generation failed — is the backend running?");
       setPhase("intent");
     }
-  }, [budget, notes, priorities, constraints]);
+  }, [budget, notes, priorities, constraints, prefillListingId]);
+
+  useEffect(() => {
+    if (!prefillListingId) return;
+    if (loadingPbs) return;
+    if (phase !== "intent") return;
+    if (autoStartedForListingRef.current === prefillListingId) return;
+    autoStartedForListingRef.current = prefillListingId;
+    void runGeneration();
+  }, [prefillListingId, loadingPbs, phase, runGeneration]);
 
   // ── Generate plan ───────────────────────────────────────────────────────────
   const generatePlan = useCallback(async () => {

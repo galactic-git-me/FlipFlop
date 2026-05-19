@@ -350,7 +350,7 @@ export const api = {
         method: "POST",
         body: JSON.stringify(body),
       }),
-    generateGemMatrix: (body: Omit<GenerateRequest, "playbook_id"> & { gem_limit?: number; playbook_limit?: number }) =>
+    generateGemMatrix: (body: Omit<GenerateRequest, "playbook_id"> & { gem_limit?: number; playbook_limit?: number; listing_id?: number }) =>
       request<GenerateResult>("/build-wizard/generate-gem-matrix", {
         method: "POST",
         body: JSON.stringify(body),

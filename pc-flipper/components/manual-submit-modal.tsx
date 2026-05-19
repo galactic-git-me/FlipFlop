@@ -195,6 +195,12 @@ export function ManualSubmitModal({ open, onClose, onSuccess }: Props) {
     router.push("/opportunities");
   };
 
+  const goToBuildWizard = () => {
+    if (!result) return;
+    handleClose();
+    router.push(`/chat?listing_id=${result.id}`);
+  };
+
   if (!open) return null;
 
   return (
@@ -370,6 +376,13 @@ export function ManualSubmitModal({ open, onClose, onSuccess }: Props) {
           {state === "success" ? (
             <>
               <Button variant="ghost" onClick={reset} className="text-slate-400">Submit another</Button>
+              <Button
+                variant="ghost"
+                onClick={goToBuildWizard}
+                className="text-[#00dc82] border border-[#00dc82]/30 hover:bg-[#00dc82]/10"
+              >
+                Build system from this →
+              </Button>
               <Button onClick={goToOpportunities}
                 className="ml-auto bg-[#00dc82] text-black hover:bg-[#00dc82]/90 font-semibold">
                 View in Opportunities →

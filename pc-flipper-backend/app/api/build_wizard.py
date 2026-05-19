@@ -35,6 +35,7 @@ class GemMatrixRequest(BaseModel):
     constraints: list[str] = []
     gem_limit: int = 4
     playbook_limit: int = 4
+    listing_id: int | None = None
 
 
 def _listing_lane(listing: Listing) -> str:
@@ -206,18 +207,24 @@ async def generate_gem_matrix(body: GemMatrixRequest, db: AsyncSession = Depends
     if not playbooks:
         raise HTTPException(404, "No active playbooks found")
 
-    gem_query = await db.execute(
-        select(Listing)
-        .where(
-            Listing.status == ListingStatus.active,
-            Listing.classification.in_([Classification.gem, Classification.amazing_gem]),
+    if body.listing_id is not None:
+        listing = await db.get(Listing, body.listing_id)
+        if not listing or listing.status != ListingStatus.active:
+            raise HTTPException(404, f"Listing {body.listing_id} not found or not active.")
+        gems = [listing]
+    else:
+        gem_query = await db.execute(
+            select(Listing)
+            .where(
+                Listing.status == ListingStatus.active,
+                Listing.classification.in_([Classification.gem, Classification.amazing_gem]),
+            )
+            .order_by(Listing.gem_score.desc(), Listing.last_seen_at.desc())
+            .limit(max(1, body.gem_limit))
         )
-        .order_by(Listing.gem_score.desc(), Listing.last_seen_at.desc())
-        .limit(max(1, body.gem_limit))
-    )
-    gems = gem_query.scalars().all()
-    if not gems:
-        raise HTTPException(404, "No gem listings found. Run a market scan first.")
+        gems = gem_query.scalars().all()
+        if not gems:
+            raise HTTPException(404, "No gem listings found. Run a market scan first.")
 
     builds = []
     for gem in gems:
