@@ -2431,3 +2431,21 @@ INFO:     100.84.151.109:58490 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:57915 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:15:42 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
 2026-05-19 04:15:45 [info     ] amazon.cases.done              found=10 search=space gaming case
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 96)
+2026-05-19 04:16:09 [info     ] temu.cases.done                found=0 search=astronaut pc case
+INFO:     100.84.151.109:60542 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:16:17 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+2026-05-19 04:16:34 [info     ] temu.cases.done                found=0 search=space gaming case
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:63947 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:16:52 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+2026-05-19 04:16:57 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58016 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay error for 'gaming pc': Page.goto: net::ERR_NETWORK_CHANGED at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+2026-05-19 04:17:20 [info     ] aliexpress.cases.done          found=0 search=space gaming case
