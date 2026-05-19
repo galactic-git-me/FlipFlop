@@ -1163,3 +1163,76 @@ INFO:     100.84.151.109:61383 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 14:38:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
 INFO:     100.84.151.109:59795 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:59795 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:38:28 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
+2026-05-19 14:38:28 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-19 14:38:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:55165 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55165 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55165 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:38:44 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
+2026-05-19 14:38:48 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
+2026-05-19 14:38:50 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+2026-05-19 14:38:51 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 2080 8GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 3060 12GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RTX 4060 8GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-19 14:38:52 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-19 14:38:52 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=7 box=0 ebay_buy=8 ebay_sold=9 errors=0 overclockers=0 scan=0 temu=0 updated=9
+INFO:     100.84.151.109:54733 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62923 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54733 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 14:39:02 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-19 14:39:02 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-19 14:39:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 142)
+2026-05-19 14:39:13 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-19 14:39:13 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-19 14:39:13 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+2026-05-19 14:39:15 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-19 14:39:23 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-19 14:39:24 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-19 14:39:24 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-19 14:39:24 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:63795 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63795 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63795 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-19 14:39:34 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-19 14:39:34 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-19 14:39:34 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
