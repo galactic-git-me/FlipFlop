@@ -5182,3 +5182,4 @@ Call log:
 2026-05-19 06:54:47 [debug    ] resale_scraper.empty_response  cat=0 length=395 query=gaming PC ryzen 5 7600x rtx 3060 status=403
 2026-05-19 06:54:47 [info     ] resale_scraper.fallback_buy_price buy_price=183.2 median=711.84 query=gaming PC ryzen 5 7600x rtx 3060
 2026-05-19 06:54:47 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 05:58:30 UTC)" skipped: maximum number of running instances reached (1)
