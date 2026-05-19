@@ -2231,3 +2231,37 @@ INFO:     100.84.151.109:51078 - "GET /health HTTP/1.1" 200 OK
 [scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
 2026-05-19 04:04:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
 2026-05-19 04:04:49 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-19 04:05:04 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-19 04:05:06 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+2026-05-19 04:05:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+INFO:     100.84.151.109:49561 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:05:14 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1650 4GB sold=None
+2026-05-19 04:05:16 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-19 04:05:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-19 04:05:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-19 04:05:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 04:05:21 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-19 04:05:24 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-19 04:05:25 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-19 04:05:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-19 04:05:32 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-19 04:05:34 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-19 04:05:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+INFO:     100.84.151.109:53448 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-19 04:05:49 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1660 Super sold=None
+2026-05-19 04:05:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-19 04:05:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-19 04:05:56 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-19 04:05:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 04:05:59 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-19 04:05:59 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-19 04:06:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-19 04:06:01 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-19 04:06:02 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-19 04:06:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+2026-05-19 04:06:05 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51843 - "GET /health HTTP/1.1" 200 OK
