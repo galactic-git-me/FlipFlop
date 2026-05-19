@@ -2488,3 +2488,16 @@ INFO:     100.84.151.109:62945 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:21:13 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
 2026-05-19 04:21:18 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
 2026-05-19 04:21:32 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5800X sold=None
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 96)
+INFO:     100.84.151.109:64640 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:21:42 [info     ] temu.cases.done                found=0 search=anime gaming pc case
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-19 04:22:06 [info     ] temu.cases.done                found=0 search=gaming pc case custom art
+2026-05-19 04:22:07 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=None
+INFO:     100.84.151.109:51207 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 96)
+2026-05-19 04:22:29 [info     ] aliexpress.cases.done          found=0 search=anime gaming pc case
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62256 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:22:42 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
+2026-05-19 04:22:52 [info     ] aliexpress.cases.done          found=0 search=gaming pc case custom art
