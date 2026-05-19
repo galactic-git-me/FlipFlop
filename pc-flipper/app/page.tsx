@@ -422,7 +422,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase">Command_Deck</h1>
+          <h1 className="text-3xl font-bold font-mono tracking-wider uppercase ff-gradient-text">FlipFlop</h1>
           <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">Live market intelligence</p>
         </div>
         <div className="flex items-center gap-3">

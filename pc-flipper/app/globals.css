@@ -90,6 +90,13 @@ body {
   font-weight: 700;
 }
 
+.ff-gradient-text {
+  background: linear-gradient(90deg, #00b8ff 0%, #a4e6ff 50%, #00dc82 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
 .node-version {
   margin: 0.3rem 0 0;
   color: var(--nf-text-muted);

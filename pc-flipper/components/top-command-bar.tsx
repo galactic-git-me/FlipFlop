@@ -80,7 +80,7 @@ export function TopCommandBar() {
       <div className="node-topbar-right">
         <div className="node-live-chip">
           <span className="node-live-dot" />
-          <span>COMMAND_DECK</span>
+          <span className="ff-gradient-text">FlipFlop</span>
         </div>
         <div className="node-top-icons relative">
           <Radio className="h-4 w-4" />

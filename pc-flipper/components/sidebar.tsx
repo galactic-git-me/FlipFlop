@@ -37,7 +37,7 @@ export function Sidebar() {
   return (
     <aside className="node-sidebar">
       <div className="node-brand-wrap">
-        <h1 className="node-brand">NODE_FLIP</h1>
+        <h1 className="node-brand ff-gradient-text">FlipFlop</h1>
         <p className="node-version">Operational v1.0.4</p>
       </div>
 

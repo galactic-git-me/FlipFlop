@@ -20,7 +20,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PC Flip Profit Maximizer",
+  title: "FlipFlop",
   description: "AI-powered PC flipping intelligence platform",
 };
 
