@@ -1335,3 +1335,15 @@ INFO:     100.84.151.109:61130 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:55999 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:55999 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:55999 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:51294 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56973 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56973 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-19 20:07:23 UTC)" skipped: maximum number of running instances reached (1)
+INFO:     100.84.151.109:63318 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63318 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63318 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 26)
+INFO:     100.84.151.109:55231 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55231 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55977 - "GET /health HTTP/1.1" 200 OK
