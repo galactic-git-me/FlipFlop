@@ -1492,3 +1492,25 @@ INFO:     100.84.151.109:54593 - "GET /api/playbooks/proposals?status=pending HT
 INFO:     100.84.151.109:59545 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:59545 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:59545 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 142)
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:56192 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56192 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 142)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55341 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:51265 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51265 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:52080 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:50931 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50931 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 142)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:56641 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 142)
+INFO:     100.84.151.109:56641 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56641 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
