@@ -94,8 +94,11 @@ async def _scrape_source_bg(source_id: int):
     from app.models.listing import Listing, ListingStatus, Classification
     from app.services import scan_state
     from app.services.search_telemetry import begin_source_run, end_source_run
+    from app.config import get_settings
 
     log = structlog.get_logger(__name__)
+    settings = get_settings()
+    enrich_concurrency = max(1, min(24, int(getattr(settings, "max_concurrent_scrapers", 8) or 8)))
 
     async with AsyncSessionLocal() as db:
         source = await db.get(DataSource, source_id)
@@ -130,32 +133,61 @@ async def _scrape_source_bg(source_id: int):
                 "stick pc", "tiny pc", "mini computer",
             }
             new_gems = 0
-            for raw in raw_listings:
-                # Skip mini PCs — not worth flipping
-                if any(kw in raw.title.lower() for kw in _MINI_PC_KW):
+            sem = asyncio.Semaphore(enrich_concurrency)
+
+            async def _enrich_listing(raw):
+                async with sem:
+                    try:
+                        if any(kw in raw.title.lower() for kw in _MINI_PC_KW):
+                            return None
+                        specs = parse_specs(raw.title, raw.description)
+                        resale_range = await get_resale_range(
+                            specs.cpu, specs.ram_gb, specs.ram_type,
+                            specs.storage_gb, specs.storage_type, specs.gpu,
+                            buy_price=raw.price,
+                        )
+                        upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
+                        resale = resale_range.median
+                        profit = estimate_profit(raw.price, resale, upgrade_cost)
+                        profit_low = estimate_profit(raw.price, resale_range.low, upgrade_cost)
+                        profit_high = estimate_profit(raw.price, resale_range.high, upgrade_cost)
+                        score_result = score_listing(
+                            title=raw.title, price=raw.price, estimated_profit=profit,
+                            cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
+                            storage_gb=specs.storage_gb, gpu=specs.gpu, has_psu=specs.has_psu,
+                            location=raw.location,
+                            profit_low=profit_low, profit_high=profit_high,
+                        )
+                        return {
+                            "raw": raw,
+                            "specs": specs,
+                            "resale_range": resale_range,
+                            "upgrade_cost": upgrade_cost,
+                            "resale": resale,
+                            "profit": profit,
+                            "score_result": score_result,
+                        }
+                    except Exception as exc:
+                        log.warning("source.scrape.listing_enrichment_error", source=source.name, external_id=raw.external_id, error=str(exc))
+                        return None
+
+            enriched = await asyncio.gather(*[_enrich_listing(raw) for raw in raw_listings], return_exceptions=False)
+
+            for item in enriched:
+                if not item:
                     continue
+                raw = item["raw"]
+                specs = item["specs"]
+                resale_range = item["resale_range"]
+                upgrade_cost = item["upgrade_cost"]
+                resale = item["resale"]
+                profit = item["profit"]
+                score_result = item["score_result"]
+
                 existing = await db.execute(
                     select(Listing).where(Listing.external_id == raw.external_id)
                 )
                 listing = existing.scalar_one_or_none()
-                specs = parse_specs(raw.title, raw.description)
-                resale_range = await get_resale_range(
-                    specs.cpu, specs.ram_gb, specs.ram_type,
-                    specs.storage_gb, specs.storage_type, specs.gpu,
-                    buy_price=raw.price,
-                )
-                upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
-                resale      = resale_range.median
-                profit      = estimate_profit(raw.price, resale,            upgrade_cost)
-                profit_low  = estimate_profit(raw.price, resale_range.low,  upgrade_cost)
-                profit_high = estimate_profit(raw.price, resale_range.high, upgrade_cost)
-                score_result = score_listing(
-                    title=raw.title, price=raw.price, estimated_profit=profit,
-                    cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
-                    storage_gb=specs.storage_gb, gpu=specs.gpu, has_psu=specs.has_psu,
-                    location=raw.location,
-                    profit_low=profit_low, profit_high=profit_high,
-                )
                 if listing:
                     listing.last_seen_at = datetime.utcnow()
                     listing.price = raw.price
