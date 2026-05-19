@@ -2473,3 +2473,18 @@ INFO:     100.84.151.109:55399 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61910 - "GET /health HTTP/1.1" 200 OK
 2026-05-19 04:19:47 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
 2026-05-19 04:19:51 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 96)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:61544 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:20:15 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+2026-05-19 04:20:22 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600X sold=None
+2026-05-19 04:20:39 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+INFO:     100.84.151.109:54213 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 96)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+2026-05-19 04:20:57 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5700X sold=None
+2026-05-19 04:21:02 [info     ] aliexpress.cases.done          found=0 search=xenomorph pc case
+INFO:     100.84.151.109:62945 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 04:21:13 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
+2026-05-19 04:21:18 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
+2026-05-19 04:21:32 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5800X sold=None
