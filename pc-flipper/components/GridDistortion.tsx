@@ -83,6 +83,17 @@ const GridDistortion = ({
       uDataTexture: { value: null },
     };
 
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(imageSrc, (texture) => {
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      imageAspectRef.current = texture.image.width / texture.image.height;
+      uniforms.uTexture.value = texture;
+      handleResize();
+    });
+
     const size = grid;
     const data = new Float32Array(4 * size * size);
     for (let i = 0; i < size * size; i++) {
@@ -133,17 +144,6 @@ const GridDistortion = ({
       uniforms.resolution.value.set(width, height, 1, 1);
     };
 
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(imageSrc, (texture) => {
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      imageAspectRef.current = texture.image.width / texture.image.height;
-      uniforms.uTexture.value = texture;
-      handleResize();
-    });
-
     if (window.ResizeObserver) {
       const resizeObserver = new ResizeObserver(() => {
         handleResize();
@@ -186,7 +186,7 @@ const GridDistortion = ({
       });
     };
 
-    container.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
     container.addEventListener("mouseleave", handleMouseLeave);
     handleResize();
 
@@ -211,7 +211,7 @@ const GridDistortion = ({
           const distSq = Math.pow(gridMouseX - i, 2) + Math.pow(gridMouseY - j, 2);
           if (distSq < maxDist * maxDist) {
             const index = 4 * (i + size * j);
-            const power = Math.min(maxDist / Math.sqrt(distSq || 1e-6), 10);
+            const power = Math.min(maxDist / Math.sqrt(distSq), 10);
             texData[index] += strength * 100 * mouseState.vX * power;
             texData[index + 1] -= strength * 100 * mouseState.vY * power;
           }
@@ -235,7 +235,7 @@ const GridDistortion = ({
         window.removeEventListener("resize", handleResize);
       }
 
-      container.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
 
       renderer.dispose();
@@ -271,4 +271,3 @@ const GridDistortion = ({
 };
 
 export default GridDistortion;
-
