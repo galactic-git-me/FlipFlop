@@ -183,10 +183,16 @@ echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
   echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
   echo "============================================================"
   if [[ "$FRONTEND_MODE" == "dev" ]]; then
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
+    _frontend_child=$!
+    echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
+    wait "$_frontend_child"
   else
     NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
+    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
+    _frontend_child=$!
+    echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
+    wait "$_frontend_child"
   fi
 ) >"$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!
