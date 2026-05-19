@@ -132,6 +132,7 @@ def build_layout(
     autonomous_runs: Any,
     listing_stats: Any,
     demand_summary: Any,
+    scan_status: Any,
     log_lines: list[str],
     log_file: str,
 ) -> Group:
@@ -151,6 +152,11 @@ def build_layout(
     total_gems = int((listing_stats or {}).get("gems_count") or (demand_summary or {}).get("total_gems") or 0)
     gem_rate = float((demand_summary or {}).get("gem_rate_pct") or 0.0)
     avg_profit = float((listing_stats or {}).get("avg_profit") or 0.0)
+    live_running = bool((scan_status or {}).get("running"))
+    live_total = int((scan_status or {}).get("total") or 0)
+    live_done = int((scan_status or {}).get("completed") or 0)
+    live_found = int((scan_status or {}).get("total_found") or 0)
+    live_gems = int((scan_status or {}).get("total_gems") or 0)
 
     kpi_tbl.add_row(
         f"[bold cyan]{listing_runs_count}[/bold cyan]\n[dim]listing runs[/dim]",
@@ -159,6 +165,14 @@ def build_layout(
         f"[bold yellow]{gem_rate:.1f}%[/bold yellow]\n[dim]gem rate[/dim]",
         f"[bold blue]£{avg_profit:.0f}[/bold blue]\n[dim]avg profit[/dim]",
     )
+    if live_running:
+        kpi_tbl.add_row(
+            f"[bold bright_cyan]{live_done}/{live_total}[/bold bright_cyan]\n[dim]scan progress[/dim]",
+            f"[bold bright_green]{live_found}[/bold bright_green]\n[dim]live found[/dim]",
+            f"[bold bright_yellow]{live_gems}[/bold bright_yellow]\n[dim]live gems[/dim]",
+            f"[green]running[/green]\n[dim]scan state[/dim]",
+            f"[dim]{', '.join((scan_status or {}).get('current_sites') or []) or '—'}[/dim]\n[dim]active sources[/dim]",
+        )
 
     top = Table.grid(expand=True)
     top.add_column()
@@ -209,7 +223,23 @@ def build_layout(
     sources_tbl.add_column("Last Scan", no_wrap=True)
     sources_tbl.add_column("Error", overflow="fold")
 
-    if isinstance(sources, list):
+    if live_running and isinstance(scan_status, dict) and isinstance(scan_status.get("sites"), list):
+        for src in scan_status.get("sites", [])[:10]:
+            st = str(src.get("status") or "—")
+            st_label = {
+                "pending": "[dim]pending[/dim]",
+                "scanning": "[cyan]scanning[/cyan]",
+                "done": "[green]done[/green]",
+                "error": "[red]error[/red]",
+            }.get(st, st)
+            sources_tbl.add_row(
+                str(src.get("name", "—")),
+                st_label,
+                str(src.get("found") or 0),
+                "live",
+                str(src.get("error") or "—"),
+            )
+    elif isinstance(sources, list):
         for src in sources[:8]:
             err = src.get("last_error") or ""
             sources_tbl.add_row(
@@ -289,6 +319,7 @@ def main() -> int:
                 autonomous_runs = _safe_get(client, f"{api}/schedule/autonomous_cycle/runs")
                 listing_stats = _safe_get(client, f"{api}/listings/stats")
                 demand_summary = _safe_get(client, f"{api}/demand/summary")
+                scan_status = _safe_get(client, f"{api}/swarms/scan/status")
                 lines = tailer.poll()
                 live.update(
                     build_layout(
@@ -301,6 +332,7 @@ def main() -> int:
                         autonomous_runs,
                         listing_stats,
                         demand_summary,
+                        scan_status,
                         lines,
                         log_file,
                     )
