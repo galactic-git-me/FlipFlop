@@ -220,3 +220,514 @@ INFO:     Application startup complete.
 2026-05-19 19:56:58 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
 2026-05-19 19:56:58 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
 2026-05-19 19:56:59 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-19 19:57:00 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-19 19:57:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 19:57:02 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:52618 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55103 - "OPTIONS /api/facebook/status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "OPTIONS /api/listings/stats/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62774 - "OPTIONS /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53229 - "OPTIONS /api/flips/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52618 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-18T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55103 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-11T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "OPTIONS /api/config/search/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "OPTIONS /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62774 - "OPTIONS /api/playbooks/?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53229 - "OPTIONS /api/demand/summary/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52618 - "OPTIONS /api/demand/auction-intel/?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "OPTIONS /api/intel/retrain-status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55103 - "OPTIONS /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62774 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53229 - "GET /api/facebook/status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55103 - "GET /api/listings/stats/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55240 - "GET /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "GET /api/config/search/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52618 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "GET /api/playbooks/?status=active HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62774 - "GET /api/flips/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 695, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 300, in serialize_response
+    raise ResponseValidationError(
+fastapi.exceptions.ResponseValidationError: <exception str() failed>
+INFO:     100.84.151.109:55240 - "GET /api/demand/summary/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53229 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-18T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 18, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 18, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 18, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 18, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:55103 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-11T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 11, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 11, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 11, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 11, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:56933 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "GET /api/demand/auction-intel/?limit=15 HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56933 - "GET /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53859 - "GET /api/intel/retrain-status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55251 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61149 - "OPTIONS /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "OPTIONS /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "OPTIONS /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53859 - "OPTIONS /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61149 - "OPTIONS /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "OPTIONS /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55251 - "OPTIONS /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "GET /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53859 - "OPTIONS /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55251 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61149 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55240 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61149 - "GET /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53859 - "GET /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55251 - "GET /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56933 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-19 19:57:04 [info     ] facebook.playwright.items      count=0 term=pc build
+2026-05-19 19:57:04 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bbuild%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc build title=Facebook
+2026-05-19 19:57:04 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:57:16 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-19 19:57:16 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
+2026-05-19 19:57:16 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:57:20 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-19 19:57:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-19 19:57:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-19 19:57:27 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-19 19:57:27 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
+2026-05-19 19:57:27 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:52633 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52633 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 19:57:33 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.84.151.109:52633 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 19:57:34 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-19 19:57:35 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-19 19:57:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-19 19:57:36 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-19 19:57:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 19:57:37 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-19 19:57:38 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-19 19:57:38 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
+2026-05-19 19:57:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:57:40 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-19 19:57:47 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-19 19:57:49 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-19 19:57:49 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP workstation title=Facebook
+2026-05-19 19:57:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:57:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-19 19:57:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+INFO:     100.84.151.109:64800 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64800 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 19:58:00 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-19 19:58:00 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
+2026-05-19 19:58:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:64787 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 19:58:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-19 19:58:10 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
+2026-05-19 19:58:10 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
+2026-05-19 19:58:10 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:58:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-19 19:58:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-19 19:58:12 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-19 19:58:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 19:58:14 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-19 19:58:15 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-19 19:58:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-19 19:58:17 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-19 19:58:18 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.84.151.109:56868 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56868 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 19:58:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-19 19:58:21 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
+2026-05-19 19:58:21 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
+2026-05-19 19:58:21 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:58:33 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-19 19:58:33 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-19 19:58:33 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:64825 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 19:58:43 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+INFO:     100.84.151.109:52374 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52374 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-19 19:58:45 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-19 19:58:45 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-19 19:58:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+2026-05-19 19:58:45 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+2026-05-19 19:58:46 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 19:58:47 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-19 19:58:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-19 19:58:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-19 19:58:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-19 19:58:50 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-19 19:58:52 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-19 19:58:53 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+[scraper] eBay error for 'pc job lot': Page.goto: net::ERR_NETWORK_CHANGED at https://www.ebay.co.uk/sch/i.html?_nkw=pc+job+lot&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+job+lot&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+2026-05-19 19:58:55 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-19 19:58:56 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-19 19:58:56 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-19 19:58:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:64031 - "GET /health HTTP/1.1" 200 OK
+2026-05-19 19:59:07 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-19 19:59:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-19 19:59:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:64031 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64031 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK

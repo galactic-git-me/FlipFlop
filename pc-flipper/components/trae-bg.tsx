@@ -46,7 +46,7 @@ export function TraeBg() {
         inset: 0,
         zIndex: -10,
         overflow: "hidden",
-        pointerEvents: "none",
+        pointerEvents: "auto",
         background: "#080c14",
         backgroundImage: `url(${imageSrc})`,
         backgroundSize: "cover",
