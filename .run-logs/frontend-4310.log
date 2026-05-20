@@ -10,7 +10,7 @@ Tailscale URL: andromeda-ts:4310
 - Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 11.8s
+✓ Compiled successfully in 10.5s
   Running TypeScript ...
   Finished TypeScript in 9.5s ...
   Collecting page data using 11 workers ...
@@ -18,7 +18,7 @@ Tailscale URL: andromeda-ts:4310
   Generating static pages using 11 workers (4/18) 
   Generating static pages using 11 workers (8/18) 
   Generating static pages using 11 workers (13/18) 
-✓ Generating static pages using 11 workers (18/18) in 967ms
+✓ Generating static pages using 11 workers (18/18) in 749ms
   Finalizing page optimization ...
 
 Route (app)
@@ -51,4 +51,4 @@ Tailscale URL (live): andromeda-ts:4310
 ▲ Next.js 16.2.4
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 176ms
+✓ Ready in 181ms
