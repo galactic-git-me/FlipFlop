@@ -80,15 +80,21 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     if not started or expected_terms <= 0:
         return neutral_running_cell(last_ts)
 
-    done = 0
+    unique_hits = set()
     for src, rows in (source_items or {}).items():
-        if not any(str(src).startswith(pref) for pref in source_prefixes):
+        src_s = str(src)
+        if not any(src_s.startswith(pref) for pref in source_prefixes):
             continue
         for it in rows or []:
             ts = _parse_iso((it or {}).get("ts"))
-            if ts and ts >= started:
-                done += 1
+            if not ts or ts < started:
+                continue
+            term = str((it or {}).get("term") or "").strip().lower()
+            if not term:
+                continue
+            unique_hits.add((src_s, term))
 
+    done = len(unique_hits)
     pct = min(1.0, max(0.0, done / float(expected_terms)))
     width = 14
     filled = int(round(width * pct))
@@ -238,15 +244,21 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     if not started or expected_terms <= 0:
         return neutral_running_cell(last_ts)
 
-    done = 0
+    unique_hits = set()
     for src, rows in (source_items or {}).items():
-        if not any(str(src).startswith(pref) for pref in source_prefixes):
+        src_s = str(src)
+        if not any(src_s.startswith(pref) for pref in source_prefixes):
             continue
         for it in rows or []:
             ts = _parse_iso((it or {}).get("ts"))
-            if ts and ts >= started:
-                done += 1
+            if not ts or ts < started:
+                continue
+            term = str((it or {}).get("term") or "").strip().lower()
+            if not term:
+                continue
+            unique_hits.add((src_s, term))
 
+    done = len(unique_hits)
     pct = min(1.0, max(0.0, done / float(expected_terms)))
     width = 14
     filled = int(round(width * pct))
