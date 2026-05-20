@@ -304,3 +304,107 @@ INFO:     100.101.209.68:36200 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 2026-05-20 11:09:34 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
 2026-05-20 11:09:34 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
 2026-05-20 11:09:34 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-20 11:09:38 [info     ] amazon.cases.done              found=10 search=astronaut pc case
+2026-05-20 11:09:39 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-20 11:09:40 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+2026-05-20 11:09:40 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-20 11:09:40 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+2026-05-20 11:09:40 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-20 11:09:40 [info     ] amazon.cases.done              found=10 search=space gaming case
+2026-05-20 11:09:40 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-20 11:09:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-20 11:09:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-20 11:09:42 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-20 11:09:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-20 11:09:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-20 11:09:42 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-20 11:09:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:09:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:09:43 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:09:44 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-20 11:09:44 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-20 11:09:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:09:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-20 11:09:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-20 11:09:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:09:46 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:09:50 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+2026-05-20 11:09:50 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+2026-05-20 11:09:51 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+2026-05-20 11:09:52 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+2026-05-20 11:09:58 [info     ] amazon.cases.done              found=10 search=star wars pc case
+2026-05-20 11:10:01 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-20 11:10:03 [info     ] temu.cases.done                found=0 search=astronaut pc case
+2026-05-20 11:10:05 [info     ] temu.cases.done                found=0 search=space gaming case
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-20 11:10:06 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-20 11:10:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-20 11:10:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-20 11:10:07 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+2026-05-20 11:10:08 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-20 11:10:08 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-20 11:10:09 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-20 11:10:09 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-20 11:10:13 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-20 11:10:13 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-20 11:10:13 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+2026-05-20 11:10:13 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-20 11:10:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-20 11:10:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-20 11:10:16 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:10:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:10:18 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:10:18 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-20 11:10:18 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:10:19 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:10:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-20 11:10:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:10:20 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-20 11:10:20 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:10:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:10:21 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-20 11:10:21 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+2026-05-20 11:10:21 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-20 11:10:22 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+2026-05-20 11:10:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-20 11:10:23 [info     ] temu.cases.done                found=0 search=star wars pc case
+2026-05-20 11:10:23 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:10:24 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:10:26 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+2026-05-20 11:10:26 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-20 11:10:28 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+2026-05-20 11:10:34 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
+2026-05-20 11:10:36 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
+2026-05-20 11:10:39 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-20 11:10:39 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-20 11:10:40 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-20 11:10:40 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-20 11:10:41 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-20 11:10:41 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-20 11:10:41 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+2026-05-20 11:10:41 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+2026-05-20 11:10:41 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-20 11:10:41 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-20 11:10:43 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-20 11:10:43 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-20 11:10:46 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+2026-05-20 11:10:46 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+2026-05-20 11:10:47 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-20 11:10:48 [info     ] aliexpress.cases.done          found=0 search=xenomorph pc case
+2026-05-20 11:10:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-20 11:10:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-20 11:10:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-20 11:10:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-20 11:10:55 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-20 11:10:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-20 11:10:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-20 11:10:55 [info     ] amazon.cases.done              found=10 search=skull pc case gaming
+2026-05-20 11:10:57 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-20 11:10:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:10:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:10:57 [info     ] amazon.cases.done              found=10 search=dark gaming case skull
+2026-05-20 11:10:57 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-20 11:10:59 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
