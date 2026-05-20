@@ -37,6 +37,7 @@ _job_history: dict[str, deque[dict]] = {
     "autonomous_cycle": deque(maxlen=50),
     "outcome_capture": deque(maxlen=50),
     "model_retraining": deque(maxlen=50),
+    "retrain_checkpoint_watchdog": deque(maxlen=50),
     "compliant_market_ingestion": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
@@ -124,9 +125,14 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         result = await fn()
         finished = datetime.now(timezone.utc)
         took_ms = int((perf_counter() - t0) * 1000)
-        summary = f"Completed ({took_ms}ms)"
-        _push_history(job_id, "success", started, finished, summary)
-        _mark_success(job_id, finished)
+        if isinstance(result, dict) and result.get("ok") is False:
+            reason = str(result.get("reason") or "not_ready")
+            summary = f"Skipped ({reason}, {took_ms}ms)"
+            _push_history(job_id, "skipped", started, finished, summary)
+        else:
+            summary = f"Completed ({took_ms}ms)"
+            _push_history(job_id, "success", started, finished, summary)
+            _mark_success(job_id, finished)
         return result
     except Exception as exc:
         finished = datetime.now(timezone.utc)
@@ -267,10 +273,11 @@ def start_scheduler():
     )
 
     scheduler.add_job(
-        check_stale_retrain_checkpoint,
+        _run_job_with_history,
         trigger=IntervalTrigger(hours=6),
         id="retrain_checkpoint_watchdog",
         name="Retrain Checkpoint Watchdog",
+        kwargs={"job_id": "retrain_checkpoint_watchdog", "fn": check_stale_retrain_checkpoint},
         replace_existing=True,
         max_instances=1,
         next_run_time=model_retraining_start,

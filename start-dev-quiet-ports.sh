@@ -260,6 +260,14 @@ def age(ts):
     except Exception:
         return "—"
 
+def completed_since(last_ts):
+    if not last_ts:
+        return "—"
+    a = age(last_ts)
+    if a == "—":
+        return "—"
+    return f"completed {a} ago"
+
 url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
 console = Console()
 try:
@@ -301,16 +309,21 @@ for j in rows:
         term = "multi-source cycle"
     else:
         term = "—"
-    last = age(j.get("last_run_at"))
     st_raw = str(j.get("last_status") or "—")
+    if st_raw == "running":
+        last = age(j.get("last_run_at"))
+    else:
+        last = completed_since(j.get("last_run_at"))
     if st_raw == "success":
         st = "[green]success[/green]"
-    elif st_raw in {"running", "skipped"}:
-        st = f"[yellow]{st_raw}[/yellow]"
+    elif st_raw == "running":
+        st = "[yellow]running[/yellow]"
+    elif st_raw == "skipped":
+        st = "[red]skipped[/red]"
     elif st_raw in {"failed", "error"}:
         st = f"[red]{st_raw}[/red]"
     else:
-        st = st_raw
+        st = "[red]no data[/red]" if st_raw in {"—", "", "None", "null"} else st_raw
     table.add_row(jid, en, term, last, st)
 
 console.clear()
@@ -345,6 +358,14 @@ def age(ts):
     except Exception:
         return "—"
 
+def completed_since(last_ts):
+    if not last_ts:
+        return "—"
+    a = age(last_ts)
+    if a == "—":
+        return "—"
+    return f"completed {a} ago"
+
 url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
 try:
     with urllib.request.urlopen(url, timeout=4) as r:
@@ -378,8 +399,11 @@ for j in rows:
         term = "multi-source cycle"
     else:
         term = "—"
-    last = age(j.get("last_run_at"))
     st = str(j.get("last_status") or "—")
+    if st == "running":
+        last = age(j.get("last_run_at"))
+    else:
+        last = completed_since(j.get("last_run_at"))
     print(f"{jid:30} {en:3} {term[:28]:28} {last:10} {st}")
 PY
     sleep 2
