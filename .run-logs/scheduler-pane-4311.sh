@@ -69,6 +69,41 @@ def _seconds_since(ts):
     except Exception:
         return 0
 
+
+
+def _parse_iso(ts):
+    if not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except Exception:
+        return None
+
+def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
+    started = _parse_iso(last_ts)
+    if not started or expected_terms <= 0:
+        return running_cell(last_ts)
+    done = 0
+    for src, rows in (source_items or {}).items():
+        if not any(str(src).startswith(pref) for pref in source_prefixes):
+            continue
+        for it in rows:
+            ts = _parse_iso(it.get("ts"))
+            if ts and ts >= started:
+                done += 1
+    pct = min(1.0, done / float(expected_terms))
+    width = 14
+    filled = int(width * pct)
+    bar = f"[cyan]{'█'*filled}[/cyan][dim]{'░'*(width-filled)}[/dim]"
+    secs = _seconds_since(last_ts)
+    m, s = divmod(secs, 60)
+    h, m = divmod(m, 60)
+    elapsed = f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    return f"{bar} [white]{elapsed}[/white] [dim]({done}/{expected_terms})[/dim]"
+
 def running_cell(last_ts):
     secs = _seconds_since(last_ts)
     width = 14
@@ -128,7 +163,12 @@ for j in rows:
         term = "—"
     st_raw = str(j.get("last_status") or "—")
     if st_raw == "running":
-        last = running_cell(j.get("last_run_at"))
+        if jid == "cases":
+            last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["Cases:"], 150)
+        elif jid == "upgrade_parts":
+            last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["UpgradeParts:"], 82)
+        else:
+            last = running_cell(j.get("last_run_at"))
     elif st_raw == "skipped":
         last = ""
     else:
