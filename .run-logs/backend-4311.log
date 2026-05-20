@@ -63941,3 +63941,1059 @@ INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1"
 INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51999 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51999 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51999 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43096 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43100 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:40:45 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-20 02:40:45 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-20 02:40:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43104 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 76)
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41610 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41614 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41628 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41644 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:40:56 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-20 02:40:56 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-20 02:40:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53516 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53526 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63850 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 76)
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53538 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53540 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63850 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63850 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53546 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:07 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-20 02:41:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-20 02:41:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48232 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 76)
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=21.5 fallback=29.03 query=pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=259.66 fallback=350.54 query=ryzen 7 7800x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=350.54 median=912.65 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=135.9 fallback=183.47 query=ryzen 7 3800x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=183.47 median=712.16 query=gaming PC ryzen 7 3800x rtx 3060
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=47.5 fallback=64.12 query=ryzen 7 1700x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=64.12 median=568.94 query=gaming PC ryzen 7 1700x rtx 3060
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=74.57 fallback=100.67 query=ryzen 7 5800x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=100.67 median=612.8 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=25.0 fallback=33.75 query=ryzen 5 4600g pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=33.75 median=532.5 query=gaming PC ryzen 5 4600g rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=333.1 fallback=449.69 query=ryzen 9 9950x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=449.69 median=1031.63 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-20 02:41:09 [info     ] auction_price.fallback         current_bid=31.9 fallback=43.06 query=ryzen 7 2700x pc tower
+2026-05-20 02:41:09 [info     ] resale_scraper.fallback_buy_price buy_price=43.06 median=543.67 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=61.02 fallback=82.38 query=ryzen 7 2700x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=82.38 median=590.86 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=142.08 fallback=191.81 query=ryzen 5 5500x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=191.81 median=722.17 query=gaming PC ryzen 5 5500x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=100.0 fallback=135.0 query=ryzen 7 3700x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=183.47 median=712.16 query=gaming PC ryzen 7 3800x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=323.2 fallback=436.32 query=ryzen 7 9850x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=436.32 median=1015.58 query=gaming PC ryzen 7 9850x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=100.67 median=612.8 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=152.08 fallback=205.31 query=ryzen 7 9700x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=205.31 median=738.37 query=gaming PC ryzen 7 9700x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=304.0 fallback=410.4 query=ryzen 5 7500x gaming pc
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=410.4 median=612.48 query=gaming PC ryzen 5 7500x rx 9060 xt
+INFO:     100.101.209.68:48244 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=78.7 fallback=106.25 query=ryzen 7 3800xt pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=106.25 median=619.5 query=gaming PC ryzen 7 3800xt rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=165.2 fallback=223.02 query=ryzen 9 5900x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=223.02 median=759.62 query=gaming PC ryzen 9 5900x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=53.0 fallback=71.55 query=ryzen 7 7700x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=71.55 median=577.86 query=gaming PC ryzen 7 7700x rtx 3060
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=56.74 fallback=76.6 query=ryzen 5 2600h pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=76.6 median=499.92 query=gaming PC ryzen 5 2600h rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=449.69 median=1031.63 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=100.67 median=528.8 query=gaming PC ryzen 7 5800x rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-20 02:41:10 [info     ] auction_price.fallback         current_bid=51.47 fallback=69.48 query=ryzen 5 5600x pc tower
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=69.48 median=575.38 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=449.69 median=1031.63 query=gaming PC ryzen 9 9950x rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=100.67 median=612.8 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-20 02:41:10 [info     ] resale_scraper.fallback_buy_price buy_price=449.69 median=1031.63 query=gaming PC ryzen 9 9950x rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 02:41:11 [info     ] auction_price.fallback         current_bid=87.08 fallback=117.56 query=ryzen 7 8700g pc tower
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=117.56 median=633.07 query=gaming PC ryzen 7 8700g rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=106.25 median=619.5 query=gaming PC ryzen 7 3800xt rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=82.38 median=506.86 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] auction_price.fallback         current_bid=465.7 fallback=628.7 query=ryzen 7 5700x pc tower
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=628.7 median=1246.44 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-20 02:41:11 [info     ] auction_price.fallback         current_bid=260.7 fallback=351.94 query=ryzen 7 5700x pc tower
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=351.94 median=914.33 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=82.38 median=590.86 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=29.03 median=526.84 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=82.38 median=590.86 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=454.44 query=gaming PC gtx 1660
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=404.5 median=893.4 query=gaming PC ryzen 5 4500 rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=286.7 median=464.04 query=gaming PC i3-12100f gtx1660
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=369.99 median=563.99 query=gaming PC gtx 1660
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=45.05 median=462.06 query=gaming PC i5-11400 rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=450.0 query=gaming PC i5-11400 rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=617.64 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=156.7 median=680.04 query=gaming PC i7-6700 rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=1050.84 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=379.0 median=862.8 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=104.7 median=617.64 query=gaming PC i5-11400f rtx 3060
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=905.64 query=gaming PC i7-10700f rtx 3060
+2026-05-20 02:41:11 [info     ] auction_price.fallback         current_bid=360.2 fallback=486.27 query=gaming pc
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=486.27 median=703.52 query=gaming PC rx 5700
+2026-05-20 02:41:11 [info     ] auction_price.fallback         current_bid=225.34 fallback=304.21 query=ryzen 7 7840u pc tower
+2026-05-20 02:41:11 [info     ] resale_scraper.fallback_buy_price buy_price=304.21 median=773.05 query=gaming PC ryzen 7 7840u rtx 3060
+2026-05-20 02:41:11 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=60
+2026-05-20 02:41:11 [info     ] source.done                    found=138 gems=1 source=eBay UK Auctions
+2026-05-20 02:41:11 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=182 new_gems=1 sources_scanned=3
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48256 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48258 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:17 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-20 02:41:17 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-20 02:41:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:19 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+2026-05-20 02:41:19 [info     ] autonomous_cycle.done          duration_ms=7410284
+INFO:     100.101.209.68:54646 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54666 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42556 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 02:41:28 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-20 02:41:28 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-20 02:41:28 [info     ] facebook.playwright.done       total=0
+2026-05-20 02:41:28 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56735 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49961 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49961 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42570 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42578 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42582 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58062 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58064 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45560 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45562 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45568 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45580 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60901 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60901 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60901 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45590 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51890 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60901 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51902 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51904 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51910 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50628 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50648 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50668 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52758 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52768 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60838 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60838 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55488 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60117 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55518 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60460 - "GET /api/schedule HTTP/1.1" 200 OK
