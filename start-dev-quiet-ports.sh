@@ -15,6 +15,7 @@ PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-prod}" # prod | dev
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
+LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-1}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-pcflipper}"
@@ -613,6 +614,35 @@ EOF
   fi
 }
 
+launch_dashboard_window() {
+  [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]] || return 0
+  local backend_pane_script="$LOG_DIR/backend-pane-$BACKEND_PORT.sh"
+  [[ -x "$backend_pane_script" ]] || return 0
+
+  if command -v gnome-terminal >/dev/null 2>&1; then
+    nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+    echo "Opened backend dashboard in separate maximized gnome-terminal window."
+    return 0
+  fi
+  if command -v xfce4-terminal >/dev/null 2>&1; then
+    nohup xfce4-terminal --maximize --command="bash '$backend_pane_script'" >/dev/null 2>&1 &
+    echo "Opened backend dashboard in separate maximized xfce4-terminal window."
+    return 0
+  fi
+  if command -v konsole >/dev/null 2>&1; then
+    nohup konsole --maximize -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+    echo "Opened backend dashboard in separate maximized konsole window."
+    return 0
+  fi
+  if command -v x-terminal-emulator >/dev/null 2>&1; then
+    nohup x-terminal-emulator -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+    echo "Opened backend dashboard in separate terminal window."
+    return 0
+  fi
+
+  echo "No supported terminal emulator found for separate dashboard window."
+}
+
 _cleaned_up=0
 cleanup() {
   if [[ "$_cleaned_up" -eq 1 ]]; then
@@ -646,6 +676,7 @@ echo
 echo "Press Ctrl+C to stop both."
 
 open_tmux_logs
+launch_dashboard_window
 
 set +e
 wait -n "$FRONTEND_PID" "$BACKEND_PID"
