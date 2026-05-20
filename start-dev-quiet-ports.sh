@@ -631,6 +631,17 @@ launch_dashboard_window() {
   local backend_pane_script="$LOG_DIR/backend-pane-$BACKEND_PORT.sh"
   [[ -x "$backend_pane_script" ]] || return 0
 
+  # GUI terminals need an active display/session.
+  if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
+    if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
+      echo "Opened backend dashboard in separate tmux window '$TMUX_SESSION:dashboard' (no GUI DISPLAY)."
+      return 0
+    fi
+    echo "Skipping external terminal launch: no GUI DISPLAY in this TTY session."
+    return 0
+  fi
+
   if command -v gnome-terminal >/dev/null 2>&1; then
     nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
     echo "Opened backend dashboard in separate maximized gnome-terminal window."
@@ -687,8 +698,8 @@ echo "  $BACKEND_LOG"
 echo
 echo "Press Ctrl+C to stop both."
 
-launch_dashboard_window
 open_tmux_logs
+launch_dashboard_window
 
 set +e
 wait -n "$FRONTEND_PID" "$BACKEND_PID"
