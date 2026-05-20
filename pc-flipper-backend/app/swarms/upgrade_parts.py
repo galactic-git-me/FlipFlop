@@ -12,9 +12,9 @@ Scrapes current prices for tracked upgrade components from:
   - Amazon / Temu / AliExpress → additional new retail lanes via Playwright
 
 Architecture:
-  - All eBay requests run through a single persistent httpx session sequentially
-    with 1–1.5 s delays to avoid rate-limiting.  3-attempt exponential-backoff
-    retry on 403 / empty response.
+  - eBay requests use a single persistent httpx session with bounded concurrency
+    per part to improve throughput while still limiting request pressure.
+    3-attempt exponential-backoff retry on 403 / empty response.
   - BargainHardware uses a shared Playwright browser context (one launch per swarm).
   - Scan / Overclockers / Box run concurrently at the end (they're new-retail and
     less aggressive about bot detection).
@@ -136,28 +136,37 @@ async def run_upgrade_parts_swarm() -> dict:
         "amazon": 0, "temu": 0, "aliexpress": 0,
     }
 
-    # ── Phase 1: eBay — single persistent session, sequential with delays ────
+    # ── Phase 1: eBay — bounded concurrent fetches per part ───────────────────
     ebay_sold_map:  dict[str, float | None] = {}
     ebay_buy_map:   dict[str, float | None] = {}
-    async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
-        for part_def in TRACKED_PARTS:
+    ebay_concurrency = 6
+    sem = asyncio.Semaphore(ebay_concurrency)
+
+    async def _fetch_ebay_for_part(client: httpx.AsyncClient, part_def: dict):
+        async with sem:
             name = part_def["name"]
-            sold = await _ebay_sold_median(client, part_def["ebay_search"])
+            search = part_def["ebay_search"]
+            sold = await _ebay_sold_median(client, search)
+            await asyncio.sleep(random.uniform(0.2, 0.6))
+            buy = await _ebay_buy_price(client, search)
+            await asyncio.sleep(random.uniform(0.2, 0.6))
+            return name, search, sold, buy
+
+    async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
+        ebay_tasks = [asyncio.create_task(_fetch_ebay_for_part(client, p)) for p in TRACKED_PARTS]
+        for done in asyncio.as_completed(ebay_tasks):
+            name, search, sold, buy = await done
             ebay_sold_map[name] = sold
             if sold:
                 stats["ebay_sold"] += 1
-            await asyncio.sleep(random.uniform(1.0, 1.5))
-
-            buy = await _ebay_buy_price(client, part_def["ebay_search"])
             ebay_buy_map[name] = buy
             if buy:
                 stats["ebay_buy"] += 1
-            await asyncio.sleep(random.uniform(1.0, 1.5))
 
             log.debug("upgrade_parts.ebay", part=name, sold=sold, buy=buy)
             record_term_result(
                 source_name="UpgradeParts:eBay",
-                term=part_def["ebay_search"],
+                term=search,
                 found=1 if (sold or buy) else 0,
                 new=0,
             )
