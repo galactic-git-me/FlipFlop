@@ -100,7 +100,7 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     filled = int(round(width * pct))
     bar = f"[cyan]{'█'*filled}[/cyan][dim]{'░'*(width-filled)}[/dim]"
     elapsed = age(last_ts)
-    return f"{bar} [blue]elapsed [/blue]{paint_time_tokens(elapsed)} [dim]({done}/{expected_terms})[/dim]"
+    return f"{bar} {paint_time_tokens(elapsed)} [dim]({done}/{expected_terms})[/dim]"
 
 url = "http://andromeda-ts:4311/api/schedule"
 console = Console()
