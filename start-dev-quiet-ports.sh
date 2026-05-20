@@ -285,7 +285,7 @@ def completed_since(last_ts):
     a = age(last_ts)
     if a == "—":
         return "—"
-    return paint_time_tokens(f"completed {a} ago")
+    return paint_time_tokens(f"done {a} ago")
 
 def _parse_iso(ts):
     if not ts:
@@ -366,15 +366,12 @@ except Exception:
 
 table = Table(title="Scheduler", expand=True)
 table.add_column("Job", style="bold cyan")
-table.add_column("En", justify="center")
 table.add_column("Current Term Search", style="yellow")
 table.add_column("Last", justify="right")
 table.add_column("Status", style="magenta")
 
 for j in rows:
     jid = str(j.get("id", ""))
-    en = "[green]yes[/green]" if j.get("enabled") else "[red]no[/red]"
-
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
     elif jid == "upgrade_parts":
@@ -416,7 +413,7 @@ for j in rows:
     else:
         st = st_raw
 
-    table.add_row(jid, en, term, last, st)
+    table.add_row(jid, term, last, st)
 
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
@@ -458,7 +455,7 @@ def completed_since(last_ts):
     a = age(last_ts)
     if a == "—":
         return "—"
-    return f"completed {a} ago"
+    return f"done {a} ago"
 
 def _parse_iso(ts):
     if not ts:
@@ -529,7 +526,6 @@ print(f"{'JOB':30} {'EN':3} {'CURRENT TERM SEARCH':28} {'LAST':28} STATUS")
 print("-" * 115)
 for j in rows:
     jid = str(j.get("id", ""))[:30]
-    en = "yes" if j.get("enabled") else "no"
 
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
