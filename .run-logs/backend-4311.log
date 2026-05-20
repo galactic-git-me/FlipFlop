@@ -985,3 +985,957 @@ INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 2026-05-20 11:00:44 [info     ] amazon.cases.done              found=10 search=space gaming case
+2026-05-20 11:00:45 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-20 11:00:45 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-20 11:00:45 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:46 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-20 11:00:46 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-20 11:00:46 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:40856 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40860 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40864 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:47 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 11:00:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-20 11:00:48 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:00:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:00:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+INFO:     100.101.209.68:39324 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39338 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39354 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-20 11:00:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:00:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+INFO:     100.101.209.68:39356 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39360 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39372 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:52 [info     ] temu.cases.done                found=0 search=cyberpunk gaming case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39378 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39394 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39410 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:00:53 [info     ] temu.cases.done                found=0 search=neon pc case rgb
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:54 [info     ] aliexpress.cases.done          found=0 search=cyberpunk gaming case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39422 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39424 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:00:56 [info     ] aliexpress.cases.done          found=0 search=neon pc case rgb
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57496 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57508 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57510 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57512 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57526 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57530 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57538 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57554 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57568 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:02 [info     ] amazon.cases.done              found=10 search=star wars pc case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:04 [info     ] amazon.cases.done              found=10 search=darth vader pc case
+INFO:     100.101.209.68:57574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57580 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57596 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay error for 'Ryzen 9 7900': Page.evaluate: Target crashed 
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56118 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56134 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56136 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:08 [info     ] temu.cases.done                found=0 search=astronaut pc case
+INFO:     100.101.209.68:56140 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56154 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56160 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:10 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
+2026-05-20 11:01:10 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
+2026-05-20 11:01:10 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:11 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-20 11:01:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
+2026-05-20 11:01:11 [info     ] temu.cases.done                found=0 search=space gaming case
+2026-05-20 11:01:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+INFO:     100.101.209.68:56168 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56184 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56194 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56204 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56220 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56236 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:14 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-20 11:01:14 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 11:01:15 [info     ] aliexpress.cases.done          found=0 search=astronaut pc case
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56248 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56258 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56262 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:16 [info     ] aliexpress.cases.done          found=0 search=space gaming case
+2026-05-20 11:01:17 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:17 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:42324 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42332 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42346 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-20 11:01:20 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-20 11:01:20 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:42362 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42368 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42374 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:20 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:22 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:01:22 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-20 11:01:22 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-20 11:01:22 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-20 11:01:22 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-20 11:01:22 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:42382 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42394 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42410 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:23 [info     ] amazon.cases.done              found=10 search=alien pc case gaming
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-20 11:01:24 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:24 [info     ] amazon.cases.done              found=10 search=xenomorph pc case
+2026-05-20 11:01:24 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:01:25 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+INFO:     100.101.209.68:42420 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-20 11:01:25 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+INFO:     100.101.209.68:42434 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42442 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 11:01:26 [info     ] temu.cases.done                found=0 search=star wars pc case
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-20 11:01:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+INFO:     100.101.209.68:36510 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36516 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36524 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:29 [info     ] temu.cases.done                found=0 search=darth vader pc case
+2026-05-20 11:01:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-20 11:01:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:36534 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36544 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36558 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:30 [debug    ] upgrade_parts.ebay             buy=35.0 part=Intel i7-10700 sold=None
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36564 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36566 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36576 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:32 [info     ] aliexpress.cases.done          found=0 search=star wars pc case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:34 [info     ] aliexpress.cases.done          found=0 search=darth vader pc case
+INFO:     100.101.209.68:36584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36596 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36598 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36606 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36622 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36626 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57612 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57614 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57626 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57632 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57642 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:41 [info     ] amazon.cases.done              found=10 search=anime gaming pc case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:42 [info     ] amazon.cases.done              found=10 search=gaming pc case custom art
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57648 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57662 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57668 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-20 11:01:44 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:44 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-20 11:01:44 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-20 11:01:44 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-20 11:01:44 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-20 11:01:44 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:45 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+INFO:     100.101.209.68:57684 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57694 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57710 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:46 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-20 11:01:47 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38756 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38770 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-20 11:01:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-20 11:01:49 [info     ] temu.cases.done                found=0 search=alien pc case gaming
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:50 [info     ] temu.cases.done                found=0 search=xenomorph pc case
+INFO:     100.101.209.68:38784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38794 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38808 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:50 [info     ] aliexpress.cases.done          found=0 search=alien pc case gaming
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38814 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38830 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38840 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:01:53 [info     ] aliexpress.cases.done          found=0 search=xenomorph pc case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38842 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38854 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38856 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60040 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:56 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-20 11:01:57 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60054 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60070 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:01:59 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-20 11:01:59 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-20 11:01:59 [info     ] amazon.cases.done              found=10 search=skull pc case gaming
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:00 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-20 11:02:00 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-20 11:02:00 [info     ] amazon.cases.done              found=10 search=dark gaming case skull
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60074 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60078 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60094 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:02:01 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-20 11:02:02 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-20 11:02:02 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:02 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60106 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60112 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60118 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:02:04 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
+2026-05-20 11:02:04 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:04 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-20 11:02:05 [info     ] temu.cases.done                found=0 search=anime gaming pc case
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+INFO:     100.101.209.68:60130 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60146 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60152 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-20 11:02:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:06 [info     ] temu.cases.done                found=0 search=gaming pc case custom art
+2026-05-20 11:02:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-20 11:02:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:54450 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54458 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54462 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
