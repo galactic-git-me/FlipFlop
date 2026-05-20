@@ -386,10 +386,10 @@ async def scrape_ebay(
     auction_mode: bool = False,
 ) -> list[RawListing]:
     """
-    Searches eBay UK for each term in sequence.
+    Searches eBay UK with bounded term concurrency.
     auction_mode=True → returns ending-soonest auctions (LH_Auction=1, _sop=1).
     auction_mode=False → returns Buy It Now listings (LH_BIN=1, _sop=10 newest).
-    Deduplicates within run. Delay 0.8–1.8 s.
+    Deduplicates within run. Per-term jitter/delays are still applied.
     """
     results: list[RawListing] = []
     seen_ids: set[str] = set()
@@ -410,130 +410,133 @@ async def scrape_ebay(
         client_kwargs["proxy"] = settings.ebay_proxy_url
 
     async with httpx.AsyncClient(**client_kwargs) as client:
-        queue = list(search_terms)
-        second_pass = False
-        while queue:
-            term = queue.pop(0)
-            await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
-            try:
-                is_component_term = any(m in term.lower() for m in component_markers)
-                sacat = "0" if is_component_term else "179"
-                token = await _get_ebay_access_token(client) if settings.ebay_use_api else None
-                if token:
-                    api_listings = await _scrape_ebay_api_term(
-                        client=client,
-                        token=token,
-                        term=term,
-                        min_price=min_price,
-                        max_price=max_price,
-                        auction_mode=auction_mode,
-                        is_component_term=is_component_term,
-                    )
-                    if api_listings:
+        term_concurrency = max(1, min(6, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
+        sem = asyncio.Semaphore(term_concurrency)
+
+        async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
+            async with sem:
+                await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+                try:
+                    is_component_term = any(m in term.lower() for m in component_markers)
+                    sacat = "0" if is_component_term else "179"
+                    token = await _get_ebay_access_token(client) if settings.ebay_use_api else None
+                    if token:
+                        api_listings = await _scrape_ebay_api_term(
+                            client=client,
+                            token=token,
+                            term=term,
+                            min_price=min_price,
+                            max_price=max_price,
+                            auction_mode=auction_mode,
+                            is_component_term=is_component_term,
+                        )
                         if auction_mode:
                             for l in api_listings:
                                 l.source_name = "eBay UK Auctions"
                                 l.listing_type = "auction"
-                        before = len(results)
-                        for listing in api_listings:
-                            if listing.external_id not in seen_ids:
-                                seen_ids.add(listing.external_id)
-                                results.append(listing)
-                        added = len(results) - before
-                        record_term_result(term=term, found=len(api_listings), new=added)
-                        print(f"[scraper] eBay API '{term}': {len(api_listings)} found, {added} new (total {len(results)})")
-                        continue
-                if auction_mode:
-                    params = {
-                        "_nkw": term,
-                        "_sacat": sacat,
-                        "LH_Auction": "1",   # Auctions only
-                        "_udlo": str(int(min_price)),
-                        "_udhi": str(int(max_price)),
-                        "LH_PrefLoc": "1",
-                        "_sop": "1",         # Sort: ending soonest (live deals)
-                        "_ipg": "60",
-                    }
-                else:
-                    params = {
-                        "_nkw": term,
-                        "_sacat": sacat,   # component terms search all categories
-                        "LH_BIN": "1",     # Buy It Now
-                        "_udlo": str(int(min_price)),
-                        "_udhi": str(int(max_price)),
-                        "LH_PrefLoc": "1", # UK only
-                        "_sop": "10",      # Sort: newly listed
-                        "_ipg": "60",      # 60 results per page
-                    }
-                    # Component searches are often listed as new/refurb; do not over-filter.
-                    if not is_component_term:
-                        params["LH_ItemCondition"] = "3000"
-                new_listings: list[RawListing] = []
-                blocked = False
-                last_status = 0
-                query_variants = [params]
-                # Fallback query when strict filters produce zero: broaden category/condition.
-                relaxed = dict(params)
-                relaxed["_sacat"] = "0"
-                relaxed.pop("LH_ItemCondition", None)
-                relaxed.pop("LH_PrefLoc", None)
-                relaxed["_udhi"] = str(max(int(max_price), 2000))
-                query_variants.append(relaxed)
-                for attempt in range(1, 4):
-                    variant = query_variants[min(attempt - 1, len(query_variants) - 1)]
-                    resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=variant, headers=_headers())
-                    last_status = resp.status_code
-                    blocked = _is_ebay_blocked(resp.status_code, resp.text)
-                    new_listings = _parse_ebay_html(resp.text, term)
+                        return term, api_listings, False, 200, None
 
-                    if not blocked and new_listings:
-                        break
+                    if auction_mode:
+                        params = {
+                            "_nkw": term,
+                            "_sacat": sacat,
+                            "LH_Auction": "1",
+                            "_udlo": str(int(min_price)),
+                            "_udhi": str(int(max_price)),
+                            "LH_PrefLoc": "1",
+                            "_sop": "1",
+                            "_ipg": "60",
+                        }
+                    else:
+                        params = {
+                            "_nkw": term,
+                            "_sacat": sacat,
+                            "LH_BIN": "1",
+                            "_udlo": str(int(min_price)),
+                            "_udhi": str(int(max_price)),
+                            "LH_PrefLoc": "1",
+                            "_sop": "10",
+                            "_ipg": "60",
+                        }
+                        if not is_component_term:
+                            params["LH_ItemCondition"] = "3000"
 
-                    pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
-                        term=term,
-                        min_price=min_price,
-                        max_price=max_price,
-                        auction_mode=auction_mode,
-                    )
-                    if pw_listings:
-                        new_listings = pw_listings
-                        blocked = False
-                        print(
-                            f"[scraper] eBay '{term}': HTTP blocked/empty "
-                            f"(status={resp.status_code}), Playwright returned {len(pw_listings)}"
+                    new_listings: list[RawListing] = []
+                    blocked = False
+                    last_status = 0
+                    query_variants = [params]
+                    relaxed = dict(params)
+                    relaxed["_sacat"] = "0"
+                    relaxed.pop("LH_ItemCondition", None)
+                    relaxed.pop("LH_PrefLoc", None)
+                    relaxed["_udhi"] = str(max(int(max_price), 2000))
+                    query_variants.append(relaxed)
+
+                    for attempt in range(1, 4):
+                        variant = query_variants[min(attempt - 1, len(query_variants) - 1)]
+                        resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=variant, headers=_headers())
+                        last_status = resp.status_code
+                        blocked = _is_ebay_blocked(resp.status_code, resp.text)
+                        new_listings = _parse_ebay_html(resp.text, term)
+
+                        if not blocked and new_listings:
+                            break
+
+                        pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
+                            term=term,
+                            min_price=min_price,
+                            max_price=max_price,
+                            auction_mode=auction_mode,
                         )
-                        break
-                    blocked = blocked or pw_blocked
-                    if blocked and attempt < 3:
-                        await asyncio.sleep(random.uniform(8.0, 18.0))
-                # In auction mode every result is an auction — enforce it regardless
-                # of whether the bid-count element was parsed (it's sometimes absent
-                # in search snippets but always present on the item page).
-                if auction_mode:
-                    for l in new_listings:
-                        if l.listing_type != "auction":
-                            l.listing_type = "auction"
-                        l.source_name = "eBay UK Auctions"
-                before = len(results)
-                for listing in new_listings:
-                    if listing.external_id not in seen_ids:
-                        seen_ids.add(listing.external_id)
-                        results.append(listing)
-                added = len(results) - before
-                if blocked and not new_listings:
-                    record_term_result(
-                        term=term,
-                        found=0,
-                        new=0,
-                        error=f"ebay_blocked(status={last_status})",
-                    )
-                    blocked_terms.append(term)
-                else:
-                    record_term_result(term=term, found=len(new_listings), new=added)
-                print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
-            except Exception as exc:
-                record_term_result(term=term, error=str(exc))
-                print(f"[scraper] eBay error for {term!r}: {exc}")
+                        if pw_listings:
+                            new_listings = pw_listings
+                            blocked = False
+                            print(
+                                f"[scraper] eBay '{term}': HTTP blocked/empty "
+                                f"(status={resp.status_code}), Playwright returned {len(pw_listings)}"
+                            )
+                            break
+                        blocked = blocked or pw_blocked
+                        if blocked and attempt < 3:
+                            await asyncio.sleep(random.uniform(8.0, 18.0))
+
+                    if auction_mode:
+                        for l in new_listings:
+                            if l.listing_type != "auction":
+                                l.listing_type = "auction"
+                            l.source_name = "eBay UK Auctions"
+                    return term, new_listings, blocked, last_status, None
+                except Exception as exc:
+                    return term, [], False, 0, str(exc)
+
+        term_tasks = [asyncio.create_task(_fetch_term(term)) for term in search_terms]
+        for done in asyncio.as_completed(term_tasks):
+            term, new_listings, blocked, last_status, err = await done
+            if err:
+                record_term_result(term=term, error=err)
+                print(f"[scraper] eBay error for {term!r}: {err}")
+                continue
+
+            before = len(results)
+            for listing in new_listings:
+                if listing.external_id not in seen_ids:
+                    seen_ids.add(listing.external_id)
+                    results.append(listing)
+            added = len(results) - before
+
+            if blocked and not new_listings:
+                record_term_result(
+                    term=term,
+                    found=0,
+                    new=0,
+                    error=f"ebay_blocked(status={last_status})",
+                )
+                blocked_terms.append(term)
+            else:
+                record_term_result(term=term, found=len(new_listings), new=added)
+            print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
+
+        second_pass = False
         if blocked_terms and not second_pass:
             second_pass = True
             await asyncio.sleep(settings.ebay_block_cooldown_seconds)
