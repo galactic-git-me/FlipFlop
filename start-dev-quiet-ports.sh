@@ -247,6 +247,8 @@ from rich.panel import Panel
 
 CASES_TOTAL_TERMS = 150
 UPGRADE_PARTS_TOTAL_TERMS = 82
+FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
+FLIP_SOURCE_NAMES = {"eBay UK Auctions", "Facebook Marketplace", "BidSpotter"}
 
 def age(ts):
     if not ts:
@@ -337,7 +339,34 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     elapsed = age(last_ts)
     return f"{bar} {paint_time_tokens(elapsed)} [dim]({done}/{expected_terms})[/dim]"
 
-url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
+def expected_flip_terms(base_url):
+    keywords = []
+    enabled_sources = set()
+    try:
+        with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as r_cfg:
+            cfg = json.load(r_cfg) or {}
+        keywords = cfg.get("keywords") or []
+    except Exception:
+        keywords = []
+
+    try:
+        with urllib.request.urlopen(f"{base_url}/api/sources", timeout=4) as r_src:
+            sources = json.load(r_src) or []
+        for src in sources:
+            if not src or not src.get("enabled"):
+                continue
+            name = str(src.get("name") or "")
+            if name in FLIP_SOURCE_NAMES:
+                enabled_sources.add(name)
+    except Exception:
+        enabled_sources = set()
+
+    kw_count = max(1, len([k for k in keywords if str(k).strip()]))
+    src_count = len(enabled_sources) if enabled_sources else len(FLIP_SOURCE_NAMES)
+    return max(1, kw_count * src_count)
+
+base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
+url = f"{base_url}/api/schedule"
 console = Console()
 try:
     with urllib.request.urlopen(url, timeout=4) as r:
@@ -349,15 +378,16 @@ except Exception as e:
 
 latest_term_by_source = {}
 telem_source_items = {}
+flip_expected_terms = expected_flip_terms(base_url)
 try:
-    with urllib.request.urlopen("http://$PUBLIC_HOST:$BACKEND_PORT/api/search-telemetry/recent", timeout=4) as r2:
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r2:
         telem_recent = json.load(r2)
     for item in telem_recent.get("items", []):
         src = str((item or {}).get("source") or "")
         if src and src not in latest_term_by_source:
             latest_term_by_source[src] = str((item or {}).get("term") or "—")
 
-    with urllib.request.urlopen("http://$PUBLIC_HOST:$BACKEND_PORT/api/search-telemetry/by-source", timeout=4) as r3:
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/by-source", timeout=4) as r3:
         telem_by_source = json.load(r3)
     telem_source_items = dict((telem_by_source or {}).get("items", {}))
 except Exception:
@@ -366,7 +396,7 @@ except Exception:
 
 table = Table(title="Scheduler", expand=True)
 table.add_column("Job", style="bold cyan")
-table.add_column("Current Term Search", style="yellow")
+table.add_column("Search Terms", style="yellow")
 table.add_column("Last", justify="right")
 table.add_column("Status", style="magenta")
 
@@ -389,7 +419,9 @@ for j in rows:
 
     st_raw = str(j.get("last_status") or "—")
     if st_raw == "running":
-        if jid == "cases":
+        if jid == "flip_opportunities":
+            last = term_progress_cell(j.get("last_run_at"), telem_source_items, FLIP_SOURCE_PREFIXES, flip_expected_terms)
+        elif jid == "cases":
             last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["Cases:"], CASES_TOTAL_TERMS)
         elif jid == "upgrade_parts":
             last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["UpgradeParts:"], UPGRADE_PARTS_TOTAL_TERMS)
@@ -433,6 +465,8 @@ from datetime import datetime, timezone
 
 CASES_TOTAL_TERMS = 150
 UPGRADE_PARTS_TOTAL_TERMS = 82
+FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
+FLIP_SOURCE_NAMES = {"eBay UK Auctions", "Facebook Marketplace", "BidSpotter"}
 
 def age(ts):
     if not ts:
@@ -497,7 +531,34 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     bar = ("#" * filled) + ("-" * (width - filled))
     return f"{bar} {age(last_ts)} ({done}/{expected_terms})"
 
-url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
+def expected_flip_terms(base_url):
+    keywords = []
+    enabled_sources = set()
+    try:
+        with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as r_cfg:
+            cfg = json.load(r_cfg) or {}
+        keywords = cfg.get("keywords") or []
+    except Exception:
+        keywords = []
+
+    try:
+        with urllib.request.urlopen(f"{base_url}/api/sources", timeout=4) as r_src:
+            sources = json.load(r_src) or []
+        for src in sources:
+            if not src or not src.get("enabled"):
+                continue
+            name = str(src.get("name") or "")
+            if name in FLIP_SOURCE_NAMES:
+                enabled_sources.add(name)
+    except Exception:
+        enabled_sources = set()
+
+    kw_count = max(1, len([k for k in keywords if str(k).strip()]))
+    src_count = len(enabled_sources) if enabled_sources else len(FLIP_SOURCE_NAMES)
+    return max(1, kw_count * src_count)
+
+base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
+url = f"{base_url}/api/schedule"
 try:
     with urllib.request.urlopen(url, timeout=4) as r:
         rows = json.load(r)
@@ -507,15 +568,16 @@ except Exception as e:
 
 latest_term_by_source = {}
 telem_source_items = {}
+flip_expected_terms = expected_flip_terms(base_url)
 try:
-    with urllib.request.urlopen("http://$PUBLIC_HOST:$BACKEND_PORT/api/search-telemetry/recent", timeout=4) as r2:
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r2:
         telem_recent = json.load(r2)
     for item in telem_recent.get("items", []):
         src = str((item or {}).get("source") or "")
         if src and src not in latest_term_by_source:
             latest_term_by_source[src] = str((item or {}).get("term") or "—")
 
-    with urllib.request.urlopen("http://$PUBLIC_HOST:$BACKEND_PORT/api/search-telemetry/by-source", timeout=4) as r3:
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/by-source", timeout=4) as r3:
         telem_by_source = json.load(r3)
     telem_source_items = dict((telem_by_source or {}).get("items", {}))
 except Exception:
@@ -544,7 +606,9 @@ for j in rows:
 
     st = str(j.get("last_status") or "—")
     if st == "running":
-        if jid == "cases":
+        if jid == "flip_opportunities":
+            last = term_progress_cell(j.get("last_run_at"), telem_source_items, FLIP_SOURCE_PREFIXES, flip_expected_terms)
+        elif jid == "cases":
             last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["Cases:"], CASES_TOTAL_TERMS)
         elif jid == "upgrade_parts":
             last = term_progress_cell(j.get("last_run_at"), telem_source_items, ["UpgradeParts:"], UPGRADE_PARTS_TOTAL_TERMS)
