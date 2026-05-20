@@ -39,14 +39,34 @@ except Exception as e:
 table = Table(title="Scheduler", expand=True)
 table.add_column("Job", style="bold cyan")
 table.add_column("En", justify="center")
-table.add_column("Next", justify="right", style="yellow")
+table.add_column("Current Term Search", style="yellow")
 table.add_column("Last", justify="right", style="blue")
 table.add_column("Status", style="magenta")
+
+latest_term_by_source = {}
+try:
+    with urllib.request.urlopen("http://andromeda-ts:4311/api/search-telemetry/recent", timeout=4) as r2:
+        telem = json.load(r2)
+    for item in telem.get("items", []):
+        src = str(item.get("source") or "")
+        if src and src not in latest_term_by_source:
+            latest_term_by_source[src] = str(item.get("term") or "—")
+except Exception:
+    pass
 
 for j in rows:
     jid = str(j.get("id",""))
     en = "[green]yes[/green]" if j.get("enabled") else "[red]no[/red]"
-    nxt = age(j.get("next_run_at"))
+    if jid == "flip_opportunities":
+        term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
+    elif jid == "upgrade_parts":
+        term = latest_term_by_source.get("UpgradeParts:eBay") or "—"
+    elif jid == "external_demand":
+        term = "demand signals"
+    elif jid == "autonomous_cycle":
+        term = "multi-source cycle"
+    else:
+        term = "—"
     last = age(j.get("last_run_at"))
     st_raw = str(j.get("last_status") or "—")
     if st_raw == "success":
@@ -57,7 +77,7 @@ for j in rows:
         st = f"[red]{st_raw}[/red]"
     else:
         st = st_raw
-    table.add_row(jid, en, nxt, last, st)
+    table.add_row(jid, en, term, last, st)
 
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
@@ -99,15 +119,34 @@ except Exception as e:
     print(f"schedule unavailable: {e}")
     rows = []
 
-print(f"{'JOB':30} {'EN':3} {'NEXT':10} {'LAST':10} STATUS")
+print(f"{'JOB':30} {'EN':3} {'CURRENT TERM SEARCH':28} {'LAST':10} STATUS")
 print("-"*80)
+latest_term_by_source = {}
+try:
+    with urllib.request.urlopen("http://andromeda-ts:4311/api/search-telemetry/recent", timeout=4) as r2:
+        telem = json.load(r2)
+    for item in telem.get("items", []):
+        src = str(item.get("source") or "")
+        if src and src not in latest_term_by_source:
+            latest_term_by_source[src] = str(item.get("term") or "—")
+except Exception:
+    pass
 for j in rows:
     jid = str(j.get("id",""))[:30]
     en = "yes" if j.get("enabled") else "no"
-    nxt = age(j.get("next_run_at"))
+    if jid == "flip_opportunities":
+        term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
+    elif jid == "upgrade_parts":
+        term = latest_term_by_source.get("UpgradeParts:eBay") or "—"
+    elif jid == "external_demand":
+        term = "demand signals"
+    elif jid == "autonomous_cycle":
+        term = "multi-source cycle"
+    else:
+        term = "—"
     last = age(j.get("last_run_at"))
     st = str(j.get("last_status") or "—")
-    print(f"{jid:30} {en:3} {nxt:10} {last:10} {st}")
+    print(f"{jid:30} {en:3} {term[:28]:28} {last:10} {st}")
 PY
     sleep 2
   done

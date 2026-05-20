@@ -130,6 +130,7 @@ def build_layout(
     demand_runs: Any,
     upgrade_runs: Any,
     autonomous_runs: Any,
+    search_recent: Any,
     listing_stats: Any,
     demand_summary: Any,
     scan_status: Any,
@@ -252,26 +253,34 @@ def build_layout(
     else:
         sources_tbl.add_row("sources", "—", "—", "—", "unavailable")
 
-    runs_tbl = Table(box=box.SIMPLE, expand=True)
-    runs_tbl.add_column("Recent flip_opportunities runs", style="bold", no_wrap=True)
-    runs_tbl.add_column("Status", no_wrap=True)
-    runs_tbl.add_column("When", no_wrap=True)
-    runs_tbl.add_column("Duration", no_wrap=True)
-    runs_tbl.add_column("Message", overflow="fold")
-    if isinstance(swarm_runs, list) and swarm_runs:
-        for r in swarm_runs[:8]:
-            st = str(r.get("status", ""))
-            st_style = "green" if st == "success" else ("yellow" if st in {"running", "skipped"} else "red")
-            msg = str(r.get("message", ""))
-            runs_tbl.add_row(
-                str(r.get("id", "—"))[-10:],
-                f"[{st_style}]{st}[/{st_style}]",
-                _age(r.get("started_at")),
-                f"{r.get('duration_ms') or 0}ms",
-                msg or "—",
+    terms_tbl = Table(box=box.SIMPLE, expand=True)
+    terms_tbl.add_column("Source", style="bold", no_wrap=True)
+    terms_tbl.add_column("Current Term Search", overflow="fold")
+    terms_tbl.add_column("Found/New", no_wrap=True)
+    terms_tbl.add_column("When", no_wrap=True)
+    terms_tbl.add_column("Status", no_wrap=True)
+
+    if isinstance(search_recent, dict) and isinstance(search_recent.get("items"), list):
+        latest_by_source: dict[str, dict[str, Any]] = {}
+        for row in search_recent.get("items", []):
+            src = str(row.get("source") or "—")
+            if src not in latest_by_source:
+                latest_by_source[src] = row
+        for src, row in list(latest_by_source.items())[:12]:
+            term = str(row.get("term") or "—")
+            found = int(row.get("found") or 0)
+            new = int(row.get("new") or 0)
+            err = row.get("error")
+            status = "[red]error[/red]" if err else "[green]ok[/green]"
+            terms_tbl.add_row(
+                src,
+                term,
+                f"{found}/{new}",
+                _age(row.get("ts")),
+                status,
             )
     else:
-        runs_tbl.add_row("—", "—", "—", "—", "No run history yet")
+        terms_tbl.add_row("—", "No telemetry yet", "—", "—", "—")
 
     log_tbl = Table.grid(expand=True)
     log_tbl.add_column()
@@ -293,7 +302,7 @@ def build_layout(
         top,
         Panel(jobs_tbl, title="Scheduler", border_style="blue"),
         middle,
-        Panel(runs_tbl, title="Recent Runs", border_style="green"),
+        Panel(terms_tbl, title="Live Term Search", border_style="green"),
     )
 
 
@@ -317,6 +326,7 @@ def main() -> int:
                 demand_runs = _safe_get(client, f"{api}/schedule/external_demand/runs")
                 upgrade_runs = _safe_get(client, f"{api}/schedule/upgrade_parts/runs")
                 autonomous_runs = _safe_get(client, f"{api}/schedule/autonomous_cycle/runs")
+                search_recent = _safe_get(client, f"{api}/search-telemetry/recent")
                 listing_stats = _safe_get(client, f"{api}/listings/stats")
                 demand_summary = _safe_get(client, f"{api}/demand/summary")
                 scan_status = _safe_get(client, f"{api}/swarms/scan/status")
@@ -330,6 +340,7 @@ def main() -> int:
                         demand_runs,
                         upgrade_runs,
                         autonomous_runs,
+                        search_recent,
                         listing_stats,
                         demand_summary,
                         scan_status,
