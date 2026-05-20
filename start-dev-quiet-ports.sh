@@ -262,13 +262,29 @@ def age(ts):
     except Exception:
         return "—"
 
+def paint_time_tokens(s):
+    out = ""
+    i = 0
+    while i < len(s):
+        ch = s[i]
+        if ch.isdigit():
+            j = i
+            while j < len(s) and (s[j].isdigit() or s[j] in {"h", "m", "s", ":"}):
+                j += 1
+            out += f"[white]{s[i:j]}[/white]"
+            i = j
+        else:
+            out += f"[blue]{ch}[/blue]"
+            i += 1
+    return out
+
 def completed_since(last_ts):
     if not last_ts:
         return "—"
     a = age(last_ts)
     if a == "—":
         return "—"
-    return f"completed [white]{a}[/white] ago"
+    return paint_time_tokens(f"completed {a} ago")
 
 def _parse_iso(ts):
     if not ts:
@@ -291,7 +307,7 @@ def neutral_running_cell(last_ts):
     elapsed = age(last_ts)
     if elapsed == "—":
         return "—"
-    return f"[white]{elapsed}[/white]"
+    return paint_time_tokens(elapsed)
 
 def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     started = _parse_iso(last_ts)
@@ -312,7 +328,7 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
     filled = int(round(width * pct))
     bar = f"[cyan]{'█'*filled}[/cyan][dim]{'░'*(width-filled)}[/dim]"
     elapsed = age(last_ts)
-    return f"{bar} [white]{elapsed}[/white] [dim]({done}/{expected_terms})[/dim]"
+    return f"{bar} [blue]elapsed [/blue]{paint_time_tokens(elapsed)} [dim]({done}/{expected_terms})[/dim]"
 
 url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
 console = Console()

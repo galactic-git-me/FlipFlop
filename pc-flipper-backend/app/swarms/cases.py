@@ -126,10 +126,13 @@ async def run_cases_swarm() -> dict:
         scrape_fn = globals().get(f"_scrape_{fn_key}")
         if not scrape_fn:
             log.warning("cases.no_scraper", source=source["name"])
-            return source["name"], term, []
+            return {"source_name": source["name"], "term": term, "cases": [], "error": None}
         async with sem:
-            cases = await scrape_fn(term, theme)
-            return source["name"], term, cases
+            try:
+                cases = await scrape_fn(term, theme)
+                return {"source_name": source["name"], "term": term, "cases": cases, "error": None}
+            except Exception as exc:
+                return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
     scrape_tasks: list[asyncio.Task] = []
     for theme_def in all_themes:
@@ -137,24 +140,39 @@ async def run_cases_swarm() -> dict:
             for term in theme_def["terms"][:2]:
                 scrape_tasks.append(asyncio.create_task(_scrape_one(source, theme_def["theme"], term)))
 
-    scrape_results = await asyncio.gather(*scrape_tasks, return_exceptions=True)
+    scrape_results: list[dict] = []
+    for done in asyncio.as_completed(scrape_tasks):
+        r = await done
+        scrape_results.append(r)
+        source_name = r.get("source_name") or "unknown"
+        term = r.get("term") or ""
+        err = r.get("error")
+        if err:
+            stats["errors"] += 1
+            record_term_result(
+                source_name=f"Cases:{source_name}",
+                term=term,
+                error=err,
+            )
+            log.error("cases.scrape.error", source=source_name, term=term, error=err)
+        else:
+            cases = r.get("cases") or []
+            record_term_result(
+                source_name=f"Cases:{source_name}",
+                term=term,
+                found=len(cases),
+                new=0,
+            )
 
     async with AsyncSessionLocal() as db:
         for r in scrape_results:
-            if isinstance(r, Exception):
-                stats["errors"] += 1
-                log.error("cases.scrape.error", error=str(r))
+            source_name = r.get("source_name") or "unknown"
+            term = r.get("term") or ""
+            cases = r.get("cases") or []
+            if r.get("error"):
                 continue
-
-            source_name, term, cases = r
             try:
                 stats["found"] += len(cases)
-                record_term_result(
-                    source_name=f"Cases:{source_name}",
-                    term=term,
-                    found=len(cases),
-                    new=0,
-                )
                 for case in cases[:8]:
                     await _upsert_case(db, case)
                     stats["upserted"] += 1
