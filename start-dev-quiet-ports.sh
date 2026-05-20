@@ -615,6 +615,29 @@ EOF
   tmux split-window -v -t "$TMUX_SESSION":0.1 "bash '$frontend_tail_script'"
   tmux select-layout -t "$TMUX_SESSION":0 tiled
 
+  # Launch backend dashboard in a separate window/terminal before attach.
+  if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
+    if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
+      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
+      echo "Opened backend dashboard in separate tmux window '$TMUX_SESSION:dashboard'."
+    elif command -v gnome-terminal >/dev/null 2>&1; then
+      nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+      echo "Opened backend dashboard in separate maximized gnome-terminal window."
+    elif command -v xfce4-terminal >/dev/null 2>&1; then
+      nohup xfce4-terminal --maximize --command="bash '$backend_pane_script'" >/dev/null 2>&1 &
+      echo "Opened backend dashboard in separate maximized xfce4-terminal window."
+    elif command -v konsole >/dev/null 2>&1; then
+      nohup konsole --maximize -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+      echo "Opened backend dashboard in separate maximized konsole window."
+    elif command -v x-terminal-emulator >/dev/null 2>&1; then
+      nohup x-terminal-emulator -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
+      echo "Opened backend dashboard in separate terminal window."
+    else
+      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
+      echo "No GUI terminal detected; opened dashboard as tmux window '$TMUX_SESSION:dashboard'."
+    fi
+  fi
+
   echo
   echo "Opening tmux session '$TMUX_SESSION' with 4-pane quadrant layout."
   echo "Detach with Ctrl+b then d to return."
@@ -626,45 +649,6 @@ EOF
   fi
 }
 
-launch_dashboard_window() {
-  [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]] || return 0
-  local backend_pane_script="$LOG_DIR/backend-pane-$BACKEND_PORT.sh"
-  [[ -x "$backend_pane_script" ]] || return 0
-
-  # GUI terminals need an active display/session.
-  if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
-    if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
-      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
-      echo "Opened backend dashboard in separate tmux window '$TMUX_SESSION:dashboard' (no GUI DISPLAY)."
-      return 0
-    fi
-    echo "Skipping external terminal launch: no GUI DISPLAY in this TTY session."
-    return 0
-  fi
-
-  if command -v gnome-terminal >/dev/null 2>&1; then
-    nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-    echo "Opened backend dashboard in separate maximized gnome-terminal window."
-    return 0
-  fi
-  if command -v xfce4-terminal >/dev/null 2>&1; then
-    nohup xfce4-terminal --maximize --command="bash '$backend_pane_script'" >/dev/null 2>&1 &
-    echo "Opened backend dashboard in separate maximized xfce4-terminal window."
-    return 0
-  fi
-  if command -v konsole >/dev/null 2>&1; then
-    nohup konsole --maximize -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-    echo "Opened backend dashboard in separate maximized konsole window."
-    return 0
-  fi
-  if command -v x-terminal-emulator >/dev/null 2>&1; then
-    nohup x-terminal-emulator -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-    echo "Opened backend dashboard in separate terminal window."
-    return 0
-  fi
-
-  echo "No supported terminal emulator found for separate dashboard window."
-}
 
 _cleaned_up=0
 cleanup() {
@@ -699,7 +683,6 @@ echo
 echo "Press Ctrl+C to stop both."
 
 open_tmux_logs
-launch_dashboard_window
 
 set +e
 wait -n "$FRONTEND_PID" "$BACKEND_PID"
