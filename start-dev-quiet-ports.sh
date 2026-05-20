@@ -618,7 +618,7 @@ EOF
   # Launch backend dashboard in a separate window/terminal before attach.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
     if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
-      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
+      tmux new-window -d -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
       echo "Opened backend dashboard in separate tmux window '$TMUX_SESSION:dashboard'."
     elif command -v gnome-terminal >/dev/null 2>&1; then
       nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
@@ -633,10 +633,12 @@ EOF
       nohup x-terminal-emulator -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
       echo "Opened backend dashboard in separate terminal window."
     else
-      tmux new-window -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
+      tmux new-window -d -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
       echo "No GUI terminal detected; opened dashboard as tmux window '$TMUX_SESSION:dashboard'."
     fi
   fi
+
+  tmux select-window -t "$TMUX_SESSION":0
 
   echo
   echo "Opening tmux session '$TMUX_SESSION' with 4-pane quadrant layout."
