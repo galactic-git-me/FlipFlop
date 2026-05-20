@@ -266,7 +266,7 @@ def completed_since(last_ts):
     a = age(last_ts)
     if a == "—":
         return "—"
-    return f"completed {a} ago"
+    return f"completed [white]{a}[/white] ago"
 
 url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
 console = Console()
@@ -282,7 +282,7 @@ table = Table(title="Scheduler", expand=True)
 table.add_column("Job", style="bold cyan")
 table.add_column("En", justify="center")
 table.add_column("Current Term Search", style="yellow")
-table.add_column("Last", justify="right", style="blue")
+table.add_column("Last", justify="right")
 table.add_column("Status", style="magenta")
 
 latest_term_by_source = {}
@@ -312,6 +312,8 @@ for j in rows:
     st_raw = str(j.get("last_status") or "—")
     if st_raw == "running":
         last = age(j.get("last_run_at"))
+    elif st_raw == "skipped":
+        last = ""
     else:
         last = completed_since(j.get("last_run_at"))
     if st_raw == "success":
@@ -322,8 +324,10 @@ for j in rows:
         st = "[red]skipped[/red]"
     elif st_raw in {"failed", "error"}:
         st = f"[red]{st_raw}[/red]"
+    elif st_raw in {"—", "", "None", "null"}:
+        st = "[red]no data[/red]"
     else:
-        st = "[red]no data[/red]" if st_raw in {"—", "", "None", "null"} else st_raw
+        st = st_raw
     table.add_row(jid, en, term, last, st)
 
 console.clear()
@@ -364,7 +368,7 @@ def completed_since(last_ts):
     a = age(last_ts)
     if a == "—":
         return "—"
-    return f"completed {a} ago"
+    return f"completed [white]{a}[/white] ago"
 
 url = "http://$PUBLIC_HOST:$BACKEND_PORT/api/schedule"
 try:
@@ -402,6 +406,8 @@ for j in rows:
     st = str(j.get("last_status") or "—")
     if st == "running":
         last = age(j.get("last_run_at"))
+    elif st == "skipped":
+        last = ""
     else:
         last = completed_since(j.get("last_run_at"))
     print(f"{jid:30} {en:3} {term[:28]:28} {last:10} {st}")
