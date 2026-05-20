@@ -2,12 +2,22 @@
 from __future__ import annotations
 
 import argparse
+import re
 import time
 from collections import deque
 from pathlib import Path
 
 from rich.console import Console
 from rich.text import Text
+
+_ENDPOINT_STYLES: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"\s/api/schedule(?:/|\\s|$)"), "bright_cyan"),
+    (re.compile(r"\s/api/sources(?:/|\\s|$)"), "bright_magenta"),
+    (re.compile(r"\s/api/listings(?:/|\\s|$)"), "bright_green"),
+    (re.compile(r"\s/api/demand(?:/|\\s|$)"), "bright_yellow"),
+    (re.compile(r"\s/api/search-telemetry(?:/|\\s|$)"), "bright_blue"),
+    (re.compile(r"\s/api/swarms(?:/|\\s|$)"), "bright_white"),
+]
 
 
 def style_line(line: str) -> Text:
@@ -17,6 +27,13 @@ def style_line(line: str) -> Text:
         t.stylize("bold red")
     elif "warn" in low:
         t.stylize("yellow")
+    elif "http/1.1" in low and "/api/" in low:
+        for patt, style in _ENDPOINT_STYLES:
+            if patt.search(low):
+                t.stylize(style)
+                break
+        else:
+            t.stylize("cyan")
     elif "ready" in low or "compiled successfully" in low or "started" in low:
         t.stylize("green")
     elif "info" in low:
@@ -75,4 +92,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -32,7 +32,53 @@ def completed_since(last_ts):
     a = age(last_ts)
     if a == "—":
         return "—"
-    return f"completed [white]{a}[/white] ago"
+    return f"completed {a} ago"
+
+def _seconds_since(ts):
+    if not ts:
+        return 0
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z","+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = int((datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds())
+        return max(0, secs)
+    except Exception:
+        return 0
+
+def running_cell_text(last_ts):
+    secs = _seconds_since(last_ts)
+    width = 14
+    phase = secs % (width + 1)
+    filled = min(width, phase)
+    bar = ("#"*filled) + ("-"*(width-filled))
+    m, s = divmod(secs, 60)
+    h, m = divmod(m, 60)
+    elapsed = f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    return f"{bar} {elapsed}"
+
+def _seconds_since(ts):
+    if not ts:
+        return 0
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z","+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = int((datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds())
+        return max(0, secs)
+    except Exception:
+        return 0
+
+def running_cell(last_ts):
+    secs = _seconds_since(last_ts)
+    width = 14
+    phase = secs % (width + 1)
+    filled = min(width, phase)
+    bar = f"[cyan]{'█'*filled}[/cyan][dim]{'░'*(width-filled)}[/dim]"
+    m, s = divmod(secs, 60)
+    h, m = divmod(m, 60)
+    elapsed = f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    return f"{bar} [white]{elapsed}[/white]"
 
 url = "http://andromeda-ts:4311/api/schedule"
 console = Console()
@@ -68,7 +114,11 @@ for j in rows:
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
     elif jid == "upgrade_parts":
-        term = latest_term_by_source.get("UpgradeParts:eBay") or "—"
+        term = latest_term_by_source.get("UpgradeParts:eBay") or latest_term_by_source.get("UpgradeParts:Amazon") or latest_term_by_source.get("UpgradeParts:AliExpress") or "—"
+    elif jid == "cases":
+        term = latest_term_by_source.get("Cases:eBay") or latest_term_by_source.get("Cases:Amazon") or latest_term_by_source.get("Cases:Temu") or latest_term_by_source.get("Cases:AliExpress") or "—"
+    elif jid == "accessories":
+        term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
     elif jid == "autonomous_cycle":
@@ -77,7 +127,7 @@ for j in rows:
         term = "—"
     st_raw = str(j.get("last_status") or "—")
     if st_raw == "running":
-        last = age(j.get("last_run_at"))
+        last = running_cell(j.get("last_run_at"))
     elif st_raw == "skipped":
         last = ""
     else:
@@ -136,6 +186,29 @@ def completed_since(last_ts):
         return "—"
     return f"completed [white]{a}[/white] ago"
 
+def _seconds_since(ts):
+    if not ts:
+        return 0
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z","+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = int((datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds())
+        return max(0, secs)
+    except Exception:
+        return 0
+
+def running_cell(last_ts):
+    secs = _seconds_since(last_ts)
+    width = 14
+    phase = secs % (width + 1)
+    filled = min(width, phase)
+    bar = f"[cyan]{'█'*filled}[/cyan][dim]{'░'*(width-filled)}[/dim]"
+    m, s = divmod(secs, 60)
+    h, m = divmod(m, 60)
+    elapsed = f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    return f"{bar} [white]{elapsed}[/white]"
+
 url = "http://andromeda-ts:4311/api/schedule"
 try:
     with urllib.request.urlopen(url, timeout=4) as r:
@@ -162,7 +235,11 @@ for j in rows:
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
     elif jid == "upgrade_parts":
-        term = latest_term_by_source.get("UpgradeParts:eBay") or "—"
+        term = latest_term_by_source.get("UpgradeParts:eBay") or latest_term_by_source.get("UpgradeParts:Amazon") or latest_term_by_source.get("UpgradeParts:AliExpress") or "—"
+    elif jid == "cases":
+        term = latest_term_by_source.get("Cases:eBay") or latest_term_by_source.get("Cases:Amazon") or latest_term_by_source.get("Cases:Temu") or latest_term_by_source.get("Cases:AliExpress") or "—"
+    elif jid == "accessories":
+        term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
     elif jid == "autonomous_cycle":
@@ -171,7 +248,7 @@ for j in rows:
         term = "—"
     st = str(j.get("last_status") or "—")
     if st == "running":
-        last = age(j.get("last_run_at"))
+        last = running_cell(j.get("last_run_at"))
     elif st == "skipped":
         last = ""
     else:
