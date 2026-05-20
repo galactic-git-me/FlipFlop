@@ -11,12 +11,19 @@ from rich.console import Console
 from rich.text import Text
 
 _ENDPOINT_STYLES: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"\s/api/schedule(?:/|\\s|$)"), "bright_cyan"),
-    (re.compile(r"\s/api/sources(?:/|\\s|$)"), "bright_magenta"),
-    (re.compile(r"\s/api/listings(?:/|\\s|$)"), "bright_green"),
-    (re.compile(r"\s/api/demand(?:/|\\s|$)"), "bright_yellow"),
-    (re.compile(r"\s/api/search-telemetry(?:/|\\s|$)"), "bright_blue"),
-    (re.compile(r"\s/api/swarms(?:/|\\s|$)"), "bright_white"),
+    (re.compile(r"\s/api/schedule(?:/|\\s|$)"), "bright_blue"),
+    (re.compile(r"\s/api/sources(?:/|\\s|$)"), "bright_green"),
+    (re.compile(r"\s/api/listings(?:/|\\s|$)"), "bright_white"),
+    (re.compile(r"\s/api/demand(?:/|\\s|$)"), "bright_cyan"),
+    (re.compile(r"\s/api/search-telemetry(?:/|\\s|$)"), "bright_magenta"),
+    (re.compile(r"\s/api/swarms(?:/|\\s|$)"), "bright_black"),
+    (re.compile(r"\s/api/parts(?:/|\\s|$)"), "blue"),
+    (re.compile(r"\s/api/playbooks(?:/|\\s|$)"), "magenta"),
+    (re.compile(r"\s/api/flips(?:/|\\s|$)"), "green"),
+    (re.compile(r"\s/api/intel(?:/|\\s|$)"), "cyan"),
+    (re.compile(r"\s/api/settings(?:/|\\s|$)"), "white"),
+    (re.compile(r"\s/api/facebook(?:/|\\s|$)"), "bright_blue"),
+    (re.compile(r"\s/api/manual-submit(?:/|\\s|$)"), "bright_green"),
 ]
 
 
@@ -27,6 +34,8 @@ def style_line(line: str) -> Text:
         t.stylize("bold red")
     elif "warn" in low:
         t.stylize("yellow")
+    elif "catalogue" in low:
+        t.stylize("bright_blue")
     elif "http/1.1" in low and "/api/" in low:
         for patt, style in _ENDPOINT_STYLES:
             if patt.search(low):

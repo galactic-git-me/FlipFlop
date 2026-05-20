@@ -340,6 +340,7 @@ try:
         if src and src not in latest_term_by_source:
             latest_term_by_source[src] = str(item.get("term") or "—")
 except Exception:
+    telem_source_items = {}
     pass
 
 for j in rows:
