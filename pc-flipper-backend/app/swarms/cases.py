@@ -48,6 +48,9 @@ SOURCES = [
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
+    {"name": "BargainHardware",   "fn": "bargainhardware"},
+    {"name": "CherryTree Inc",    "fn": "cherrytree"},
+    {"name": "Alibaba",           "fn": "alibaba"},
 ]
 
 
@@ -1061,6 +1064,106 @@ async def _scrape_etsy(search: str, theme: str) -> list[RawCase]:
             await browser.close()
 
     log.info("etsy.cases.done", search=search, found=len(cases))
+    return cases
+
+
+async def _scrape_bargainhardware(search: str, theme: str) -> list[RawCase]:
+    return await _scrape_generic_case_market(
+        search=search,
+        theme=theme,
+        source_site="BargainHardware",
+        url=f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search.replace(' ', '+')}",
+    )
+
+
+async def _scrape_cherrytree(search: str, theme: str) -> list[RawCase]:
+    return await _scrape_generic_case_market(
+        search=search,
+        theme=theme,
+        source_site="CherryTree Inc",
+        url=f"https://www.cherrytreeinc.com/search?q={search.replace(' ', '+')}",
+    )
+
+
+async def _scrape_alibaba(search: str, theme: str) -> list[RawCase]:
+    return await _scrape_generic_case_market(
+        search=search,
+        theme=theme,
+        source_site="Alibaba",
+        url=f"https://www.alibaba.com/trade/search?SearchText={search.replace(' ', '+')}",
+    )
+
+
+async def _scrape_generic_case_market(search: str, theme: str, source_site: str, url: str) -> list[RawCase]:
+    cases: list[RawCase] = []
+    try:
+        from playwright.async_api import async_playwright
+    except Exception:
+        return cases
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+        )
+        ctx = await browser.new_context(user_agent=ua.random, locale="en-GB", timezone_id="Europe/London")
+        await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+        page = await ctx.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            await asyncio.sleep(1.0)
+            await page.evaluate("window.scrollBy(0, 700)")
+            await asyncio.sleep(0.7)
+            raw = await page.evaluate(
+                """() => {
+                    const out = [];
+                    const re = /([£$€])\\s*([\\d,]+\\.?\\d*)/;
+                    const anchors = Array.from(document.querySelectorAll('a[href]')).slice(0, 700);
+                    const seen = new Set();
+                    for (const a of anchors) {
+                        let href = a.href || a.getAttribute('href') || '';
+                        if (!href) continue;
+                        if (href.startsWith('/')) href = location.origin + href;
+                        const key = href.split('?')[0];
+                        if (seen.has(key)) continue;
+                        const node = a.closest('article,li,div') || a;
+                        const title = ((a.textContent || node.textContent || '').replace(/\\s+/g, ' ').trim());
+                        if (!title || title.length < 8) continue;
+                        const m = re.exec(node.textContent || '');
+                        if (!m) continue;
+                        const price = parseFloat((m[2] || '').replace(/,/g, ''));
+                        if (!Number.isFinite(price)) continue;
+                        const img = (node.querySelector('img')?.src || '');
+                        seen.add(key);
+                        out.push({title, href, price, img});
+                        if (out.length >= 14) break;
+                    }
+                    return out;
+                }"""
+            )
+            for item in raw or []:
+                try:
+                    title = str(item.get("title", "")).strip()[:200]
+                    price = float(item.get("price", 0) or 0)
+                    href = str(item.get("href", ""))
+                    if not title or len(title) < 5 or price <= 0 or price > 350 or not href.startswith("http"):
+                        continue
+                    cases.append(
+                        RawCase(
+                            name=title,
+                            price=price,
+                            source_site=source_site,
+                            source_url=href,
+                            image_url=str(item.get("img", "")),
+                            theme=theme,
+                        )
+                    )
+                except Exception:
+                    continue
+        except Exception as exc:
+            log.warning("cases.generic_market.error", source=source_site, search=search, error=str(exc))
+        finally:
+            await browser.close()
+    log.info("cases.generic_market.done", source=source_site, search=search, found=len(cases))
     return cases
 
 

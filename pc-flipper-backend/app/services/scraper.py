@@ -1508,6 +1508,78 @@ async def fetch_listings(
         pl_results = await scrape_bidspotter_playwright(prioritized_auction_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
+    if "amazon" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="Amazon",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.amazon.co.uk/s?k={term.replace(' ', '+')}&i=computers",
+            item_selector='[data-component-type="s-search-result"]',
+            link_selector='h2 a, a.a-link-normal[href*="/dp/"]',
+            title_selector='h2 span, h2',
+        )
+
+    if "temu" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="Temu",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.temu.com/search_result.html?search_key={term.replace(' ', '+')}&search_method=user",
+            item_selector='a[href*="/goods"]',
+            link_selector='a[href*="/goods"]',
+            title_selector='h3, h4, p, span',
+        )
+
+    if "aliexpress" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="AliExpress",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.aliexpress.com/wholesale?SearchText={term.replace(' ', '+')}&g=y&SortType=price_asc",
+            item_selector='a[href*="/item/"]',
+            link_selector='a[href*="/item/"]',
+            title_selector='h1, h2, h3, h4, p, span',
+        )
+
+    if "alibaba" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="Alibaba",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.alibaba.com/trade/search?SearchText={term.replace(' ', '+')}",
+            item_selector='a[href*="/product-detail/"], a[href*="/x/"]',
+            link_selector='a[href*="/product-detail/"], a[href*="/x/"]',
+            title_selector='h1, h2, h3, h4, p, span',
+        )
+
+    if "bargainhardware" in name or "bargain hardware" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="BargainHardware",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={term.replace(' ', '+')}",
+            item_selector='a[href*="/de/"]',
+            link_selector='a[href*="/de/"]',
+            title_selector='h1, h2, h3, h4, p, span',
+        )
+
+    if "cherrytree" in name:
+        return await _scrape_generic_marketplace_listings(
+            source_name="CherryTree",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.cherrytreeinc.com/search?q={term.replace(' ', '+')}",
+            item_selector='a[href]',
+            link_selector='a[href]',
+            title_selector='h1, h2, h3, h4, p, span',
+        )
+
     if any(k in name for k in ("merkandi", "wholesale clearance")):
         # Explicit adapter calls for observability — logs reasons and keeps pipeline healthy.
         if "merkandi" in name:
@@ -1518,3 +1590,132 @@ async def fetch_listings(
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")
     return []
+
+
+async def _scrape_generic_marketplace_listings(
+    *,
+    source_name: str,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+    build_url,
+    item_selector: str,
+    link_selector: str,
+    title_selector: str,
+) -> list[RawListing]:
+    try:
+        from playwright.async_api import async_playwright
+    except Exception:
+        return []
+
+    results: list[RawListing] = []
+    seen: set[str] = set()
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+            ],
+        )
+        ctx = await browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/124.0.0.0 Safari/537.36"
+            ),
+            locale="en-GB",
+            timezone_id="Europe/London",
+        )
+        await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+
+        page = await ctx.new_page()
+        for term in search_terms:
+            try:
+                url = build_url(term)
+                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                try:
+                    await page.wait_for_selector(item_selector, timeout=10000)
+                except Exception:
+                    pass
+                await asyncio.sleep(1.0)
+                await page.evaluate("window.scrollBy(0, 800)")
+                await asyncio.sleep(0.8)
+
+                raw = await page.evaluate(
+                    """({itemSelector, linkSelector, titleSelector}) => {
+                        const out = [];
+                        const seen = new Set();
+                        const nodes = document.querySelectorAll(itemSelector);
+                        const priceRe = /([£$€])\\s*([\\d,]+\\.?\\d*)/;
+                        for (const node of nodes) {
+                            try {
+                                const linkEl = node.matches('a') ? node : node.querySelector(linkSelector);
+                                if (!linkEl) continue;
+                                let href = linkEl.href || linkEl.getAttribute('href') || '';
+                                if (!href) continue;
+                                if (href.startsWith('/')) href = location.origin + href;
+                                const key = href.split('?')[0];
+                                if (seen.has(key)) continue;
+                                seen.add(key);
+
+                                const titleEl = node.querySelector(titleSelector) || linkEl;
+                                const title = (titleEl?.textContent || node.textContent || '').replace(/\\s+/g, ' ').trim();
+                                if (!title || title.length < 6) continue;
+
+                                let price = 0;
+                                const scope = node.matches('a') ? (node.parentElement || node) : node;
+                                for (const el of scope.querySelectorAll('*')) {
+                                    const txt = (el.textContent || '').trim();
+                                    const m = priceRe.exec(txt);
+                                    if (m) {
+                                        price = parseFloat((m[2] || '').replace(/,/g, ''));
+                                        if (Number.isFinite(price) && price > 0) break;
+                                    }
+                                }
+                                if (!price || !Number.isFinite(price)) continue;
+                                const imgEl = node.querySelector('img');
+                                const image = imgEl ? (imgEl.src || imgEl.getAttribute('src') || '') : '';
+                                out.push({title, href, price, image});
+                            } catch (_) {}
+                        }
+                        return out;
+                    }""",
+                    {"itemSelector": item_selector, "linkSelector": link_selector, "titleSelector": title_selector},
+                )
+
+                added = 0
+                for item in raw or []:
+                    try:
+                        price = float(item.get("price") or 0)
+                    except Exception:
+                        continue
+                    if price < float(min_price) or price > float(max_price):
+                        continue
+                    href = str(item.get("href") or "")
+                    external_id = f"{source_name.lower()}_{abs(hash(href))}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+                    results.append(
+                        RawListing(
+                            external_id=external_id,
+                            title=str(item.get("title") or "")[:240],
+                            price=price,
+                            url=href,
+                            location=None,
+                            condition="unknown",
+                            description="",
+                            image_urls=[item.get("image")] if item.get("image") else [],
+                            source_name=source_name,
+                            listing_type="classified",
+                        )
+                    )
+                    added += 1
+                record_term_result(term=term, found=added, new=added, source_name=source_name)
+            except Exception as exc:
+                record_term_result(term=term, error=str(exc), source_name=source_name)
+        await browser.close()
+    return results

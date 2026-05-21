@@ -327,6 +327,12 @@ async def _seed_default_data():
             # John Pye — major UK liquidator. Blocks scrapers (HTTP 403).
             # Listed as disabled; a future Playwright + auth approach could unlock it.
             ("John Pye",          "https://www.johnpye.co.uk",    False),
+            ("Amazon",            "https://www.amazon.co.uk",      True),
+            ("Temu",              "https://www.temu.com",          True),
+            ("AliExpress",        "https://www.aliexpress.com",    True),
+            ("Alibaba",           "https://www.alibaba.com",       True),
+            ("BargainHardware",   "https://www.bargainhardware.eu", True),
+            ("CherryTree Inc",    "https://www.cherrytreeinc.com", True),
         ]
         for src_name, src_url, src_enabled in _new_sources:
             exists = await db.scalar(
@@ -380,7 +386,20 @@ async def _seed_default_data():
 
         # ── Ensure selected proven sources are enabled on existing installs ──────
         # Gumtree is intentionally excluded — Reblaze WAF blocks all automation.
-        for _src_name in ("Facebook Marketplace", "Apex Auctions", "Wilsons Auctions", "i-bidder"):
+        for _src_name in (
+            "eBay UK",
+            "eBay UK Auctions",
+            "Facebook Marketplace",
+            "Apex Auctions",
+            "Wilsons Auctions",
+            "i-bidder",
+            "Amazon",
+            "Temu",
+            "AliExpress",
+            "Alibaba",
+            "BargainHardware",
+            "CherryTree Inc",
+        ):
             await db.execute(
                 _update(DataSource)
                 .where(DataSource.name == _src_name)

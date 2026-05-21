@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import dataclass
 from fake_useragent import UserAgent
+from playwright.async_api import async_playwright
 
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
@@ -192,21 +193,55 @@ async def run_accessories_swarm() -> dict:
     async with AsyncSessionLocal() as db:
         for search_def in ACCESSORY_SEARCHES:
             try:
-                results = await _scrape_ebay_accessories(
+                source_batches: list[tuple[str, list[RawAccessory]]] = []
+                ebay_results = await _scrape_ebay_accessories(
                     search_def["term"],
                     search_def["theme"],
                     search_def["condition"],
                 )
-                stats["found"] += len(results)
-                record_term_result(
-                    source_name="Accessories:eBay",
-                    term=search_def["term"],
-                    found=len(results),
-                    new=0,
-                )
-                for acc in results[:8]:
-                    await _upsert_accessory(db, acc)
-                    stats["upserted"] += 1
+                source_batches.append(("Accessories:eBay", ebay_results))
+
+                async with async_playwright() as p:
+                    browser = await p.chromium.launch(
+                        headless=True,
+                        args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+                    )
+                    ctx = await browser.new_context(
+                        user_agent=ua.random,
+                        locale="en-GB",
+                        timezone_id="Europe/London",
+                    )
+                    await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+                    page = await ctx.new_page()
+
+                    source_batches.append(
+                        ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
+                    )
+                    source_batches.append(
+                        ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
+                    )
+                    source_batches.append(
+                        ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
+                    )
+                    source_batches.append(
+                        ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
+                    )
+                    source_batches.append(
+                        ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
+                    )
+                    await browser.close()
+
+                for source_name, results in source_batches:
+                    stats["found"] += len(results)
+                    record_term_result(
+                        source_name=source_name,
+                        term=search_def["term"],
+                        found=len(results),
+                        new=0,
+                    )
+                    for acc in results[:8]:
+                        await _upsert_accessory(db, acc)
+                        stats["upserted"] += 1
             except Exception as exc:
                 stats["errors"] += 1
                 record_term_result(
@@ -220,6 +255,55 @@ async def run_accessories_swarm() -> dict:
 
     log.info("accessories_swarm.done", **stats)
     return stats
+
+
+async def _scrape_playwright_accessories(page, term: str, theme: str, site: str, url: str) -> list[RawAccessory]:
+    out: list[RawAccessory] = []
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await asyncio.sleep(1.0)
+        await page.evaluate("window.scrollBy(0, 700)")
+        await asyncio.sleep(0.6)
+        rows = await page.evaluate(
+            """() => {
+                const data = [];
+                const re = /([£$€])\\s*([\\d,]+\\.?\\d*)/;
+                const anchors = Array.from(document.querySelectorAll('a[href]')).slice(0, 500);
+                const seen = new Set();
+                for (const a of anchors) {
+                    const href = a.href || '';
+                    if (!href || seen.has(href)) continue;
+                    const txt = (a.textContent || '').replace(/\\s+/g, ' ').trim();
+                    if (!txt || txt.length < 8) continue;
+                    let price = 0;
+                    const node = a.closest('div,li,article') || a;
+                    const scopeText = (node.textContent || '');
+                    const m = re.exec(scopeText);
+                    if (m) price = parseFloat((m[2] || '').replace(/,/g, ''));
+                    if (!Number.isFinite(price) || price <= 0 || price > 80) continue;
+                    const img = (node.querySelector('img')?.src || '');
+                    seen.add(href);
+                    data.push({title: txt, href, price, img});
+                    if (data.length >= 12) break;
+                }
+                return data;
+            }"""
+        )
+        for r in rows or []:
+            out.append(
+                RawAccessory(
+                    name=str(r.get("title") or "")[:200],
+                    price=float(r.get("price") or 0.0),
+                    source_site=site,
+                    source_url=str(r.get("href") or ""),
+                    image_url=str(r.get("img") or ""),
+                    theme=theme,
+                    condition=PartCondition.new,
+                )
+            )
+    except Exception as exc:
+        log.warning("accessories.playwright.error", site=site, term=term, error=str(exc))
+    return out
 
 
 def _parse_price(text: str) -> float:
