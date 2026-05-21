@@ -1,0 +1,26 @@
+{
+  "SGO": {
+    "tx_count": 138,
+    "money_into_token_bnb": 86.576205331,
+    "money_out_of_token_bnb": 0.0,
+    "net_token_flow_bnb": 86.576205331,
+    "money_into_token_usd_then": 56200.02999999997,
+    "money_out_of_token_usd_then": 0.0,
+    "net_token_flow_usd_then": 56200.02999999997,
+    "money_into_token_usd_today": 57037.26983411612,
+    "money_out_of_token_usd_today": 0.0,
+    "net_token_flow_usd_today": 57037.26983411612
+  },
+  "SAFUU": {
+    "tx_count": 143,
+    "money_into_token_bnb": 106.19802822400003,
+    "money_out_of_token_bnb": 0.0,
+    "net_token_flow_bnb": 106.19802822400003,
+    "money_into_token_usd_then": 68945.36,
+    "money_out_of_token_usd_then": 0.0,
+    "net_token_flow_usd_then": 68945.36,
+    "money_into_token_usd_today": 69964.32297425343,
+    "money_out_of_token_usd_today": 0.0,
+    "net_token_flow_usd_today": 69964.32297425343
+  }
+}
