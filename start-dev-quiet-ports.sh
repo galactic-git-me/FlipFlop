@@ -637,7 +637,10 @@ if python3 -c "from rich.console import Console" >/dev/null 2>&1; then
 else
   echo "Backend logs: $BACKEND_LOG"
   echo
-  tail -n 240 -f "$BACKEND_LOG"
+  tail -n 240 -f "$BACKEND_LOG" | sed -u \
+    -e 's/\(ERROR\|Error\|error\|FAILED\|failed\)/\x1b[31m&\x1b[0m/g' \
+    -e 's/\(WARN\|Warn\|warn\)/\x1b[33m&\x1b[0m/g' \
+    -e 's/\(INFO\|Info\|info\)/\x1b[36m&\x1b[0m/g'
 fi
 EOF
   chmod +x "$backend_tail_script"
@@ -670,10 +673,11 @@ EOF
   chmod +x "$alerts_tail_script"
 
   tmux new-session -d -s "$TMUX_SESSION" "bash '$backend_pane_script'"
-  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$scheduler_pane_script'"
-  tmux split-window -v -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
-  tmux split-window -v -t "$TMUX_SESSION":0.1 "bash '$frontend_tail_script'"
-  tmux select-layout -t "$TMUX_SESSION":0 tiled
+  # Right column (top): frontend logs. Bottom-right: scheduler (swapped per request).
+  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
+  # Keep top panes at ~66% height and bottom panes at ~34%.
+  tmux split-window -v -p 34 -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
+  tmux split-window -v -p 34 -t "$TMUX_SESSION":0.1 "bash '$scheduler_pane_script'"
 
   # Launch backend dashboard in a separate window/terminal before attach.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
