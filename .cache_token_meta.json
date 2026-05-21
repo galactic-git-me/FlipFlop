@@ -1,0 +1,546 @@
+{
+  "0x1b6f2d3844c6ae7d56ceb3c3643b9060ba28feb0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": {
+    "symbol": "WBNB",
+    "name": "Wrapped BNB"
+  },
+  "0x55d398326f99059ff775485246999027b3197955": {
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "0x5a110fc00474038f6c02e89c707d638602ea44b5": {
+    "symbol": "USDF",
+    "name": "Astherus USDF"
+  },
+  "0x128463a60784c4d3f46c23af3f65ed859ba87974": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc271fc70dd9e678ac1ab632f797894fe4be2c345": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x251793d2e0bd6b88f9d48326923b91a5618083d1": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x47a90a2d92a8367a91efa1906bfc8c1e05bf10c4": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x128c33c16ee6d337154d0996220a791d89aa0442": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xae670d43f4142cac9a9bab105e301f500a27ae6c": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x55ad16bd573b3365f43a9daeb0cc66a73821b4a5": {
+    "symbol": "AIOT",
+    "name": "OKZOO"
+  },
+  "0xb433ae7e7011a2fb9a4bbb86140e0f653dcfcfba": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x31c2f6fcff4f8759b3bd5bf0e1084a055615c768": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xf0e3b8eb7d29d1ffd2b2959e88f26d806347c091": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364": {
+    "symbol": "PCS-V3-POS",
+    "name": "Pancake V3 Positions NFT-V1"
+  },
+  "0x172fcd41e0913e95784454622d1c3724f546f849": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd": {
+    "symbol": "LINK",
+    "name": "ChainLink Token"
+  },
+  "0xc8d19b4ea42939a4b14260f0c8b4a0d6f70c8496": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x2170ed0880ac9a755fd29b2688956bd959f933f8": {
+    "symbol": "ETH",
+    "name": "Ethereum Token"
+  },
+  "0x16fe21c91c426e603977b1c6ecd59fc510a518c2": {
+    "symbol": "BSW-LP",
+    "name": "Biswap LPs"
+  },
+  "0x62fcb3c1794fb95bd8b1a97f6ad5d8a7e4943a1e": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x783eb90b7d2cd01f981a23e6cf92314a3819535d": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6c6b6fe5312493e7f5c08b998846c07554695a93": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xaebe45e3a03b734c68e5557ae04bfc76917b4686": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xf2c88757f8d03634671208935974b60a2a28bdb3": {
+    "symbol": "SHELL",
+    "name": "MyShell Token"
+  },
+  "0xb28da7bc87a9dd1e60849aa7fcb5da24ea913c42": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6352a56caadc4f1e25cd6c75970fa768a3304e64": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1d519280255d5d90f469f79dc8f5abe05f64429f": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc6806b70774e9a3167b5574cdc197e6b6cb12a55": {
+    "symbol": "rmooBeefyPancakeWBNB-SHELL",
+    "name": "Reward Moo Beefy Pancake WBNB-SHELL"
+  },
+  "0xb1f9ea84780beea0a9d2c89c0163511aa1f1328d": {
+    "symbol": "cowPancakeWBNB-SHELL",
+    "name": "Cow Pancake WBNB-SHELL"
+  },
+  "0x1c482130a1205213ad130404221dc9b5350fe4bd": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x556b9306565093c855aea9ae92a594704c2cd59e": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc0ac16add3b3de0ee490878137e15c8fe4afdb6e": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6131b5fae19ea4f9d964eac0408e4408b66337b5": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6e4141d33021b52c91c28608403db4a0ffb50ec6": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xb6934215b856b03430fc8dc058bd1c668b6a3182": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x570a5d26f7765ecb712c0924e4de545b89fd43df": {
+    "symbol": "SOL",
+    "name": "SOLANA"
+  },
+  "0xab46d39cb398fb3649ecba781180016fef75f50b": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x173e6db4a756443909cbae04552c841411dbcef8": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x546e1e993c7878fa928b54566eb4a6bcd5a2dac0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6fe9e9de56356f7edbfcbb29fab7cd69471a4869": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": {
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "0xef4fb24ad0916217251f553c0596f8edc630eb66": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x663dc15d3c1ac63ff12e45ab68fea3f0a883c251": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x2c3c320d49019d4f9a92352e947c7e5acfe47d68": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xcdb3d3642fb4d48d2b5e4fb4a014448a2761c063": {
+    "symbol": "JTT",
+    "name": "Justus Token"
+  },
+  "0x491acc56b46b09b91cea690c3d5c7be17e390fbb": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x7bd336d7d5172939961f6693ca5ed58ccab37f51": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x5bc37ae740ec995360731f876e63085b1057c4b2": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x16b9a82891338f9ba80e2d6970fdda79d1eb0dae": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x4c0c5daacd39be2c67d7207255de9ac7c58b4ec0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x78b2425fc305c0266143eaa527b01b043af83fb8": {
+    "symbol": "VSL",
+    "name": "Vetter Skylabs Token"
+  },
+  "0xe691b7326a75d73704dd03989205108015888aa1": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x1c440e95bf2c1354043963e3543e93162818ce96": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xbdb2cf92ffad65c9d195a9cb95759912b0687c4b": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x18c240732237ec214a93b44f2a99cfdf52e6d7e5": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe9e7cea3dedca5984780bafc599bd69add087d56": {
+    "symbol": "BUSD",
+    "name": "BUSD Token"
+  },
+  "0xe81a79e9d951759aef3fccef17022276b3a0c7e5": {
+    "symbol": "MASS",
+    "name": "Momentum"
+  },
+  "0x13f4ea83d0bd40e75c8222255bc855a974568dd4": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xb07956e0372ef2be02bea1e46ff0a984deb13b49": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x85faac652b707fdf6907ef726751087f9e0b6687": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x396407b841dcdda2ae7a97a84df9e3c58cbff9a4": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x2b8b70ffe0f0e752352ebe6021c99a58c4fa702a": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x9321bc6185adc9b9cb503cc211e17cb311c3fa95": {
+    "symbol": "SGO",
+    "name": "SGO"
+  },
+  "0x7ba9a18a46b7320224de22a4c7f9e6aaca2083dd": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe": {
+    "symbol": "XRP",
+    "name": "XRP Token"
+  },
+  "0x6f0f18f5fcc1466ec41c8106689e10befe68d1c0": {
+    "symbol": "APE-LP",
+    "name": "ApeSwapFinance LPs"
+  },
+  "0x1442c87f18fe2c770f779845802b13b509370b5e": {
+    "symbol": "PXA",
+    "name": "Prosperous XRP Arbitrage"
+  },
+  "0xd979aaa6884da39e44fea5290a57aef83b7b385d": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xd15b00e81f98a7db25f1dc1ba6e983a4316c4cac": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xf932cf3b10d5b466cf1f0d205ce652175f4bd6f0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xd8d4478e6950ffe499794893a41c3d1731ba3700": {
+    "symbol": "NEURONMM",
+    "name": "Neuron Market Maker"
+  },
+  "0x4fbfb88367b1e563b38448eb1bdd911c06702255": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x740e5550dee220b5809f3d194015e057db659ed7": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x2fb44657dcffa8de2b0fd6f07bb2e4796e4b7680": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xb099ed146fad4d0daa31e3810591fc0554af62bb": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xb09fe1613fe03e7361319d2a43edc17422f36b09": {
+    "symbol": "BOG",
+    "name": "Bogged Finance"
+  },
+  "0x6e43700d87e289f6feb77d07235f2fc6b548f51b": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xdd901faf9652d474b0a70263e13da294990d49ae": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x8ef73cd16e7b35bf36b95a44c0dd8c25728ba971": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x0c30d3d66bc7c73a83fda929888c34dcb24fd599": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x64c7f3c2c19b41a6ad67bb5f4edc8edbb3284f34": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc2006c6deee655ca4e62265171d3ad14e52ef00a": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x8ac27a809591f90c13b34f1d2a6c3ab9aa6a7f8b": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xd3970cdc6982466d1f506f83a31fff805f55c639": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xd09695ecdd11bf1ab8eb100dd0887c8c838b3e64": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xe5fd2b7cfd44272dcad9d6f262340c17557d72de": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xa84c7681f09b853ce6dd227b56e0e5c024ed5d14": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x9e074bd0602be6fdb7ba5f59d17315b52cfc859f": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xa897d0f9328ca49c5a77ef95b10074b3ed1d66c6": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xf8a1465b2225b841d9f4f6c9a03aa7514236903b": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x31d47178ae252ad9b14ea1310b1dbd1dd0d8ea63": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xa1dfc8c6ce2efb1257fc1ba187396a4df76dc46a": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x87944f3d2b3d05fd6e1610522242436ee6ba76df": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x3a8036c5549851bd3713b477baa49ddcd8183530": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x58a716d2557641d56da0bf211b6add8460c15d35": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xb858fe95d36d4bec7c3bcb456e31642710832d69": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xba625fdcc8d35e43e9b9e337779d4e4794a80dac": {
+    "symbol": "kiwi",
+    "name": "kiwi"
+  },
+  "0x3cd26c1e33ec2e690380640cbdbf91178541674e": {
+    "symbol": "APE-LP",
+    "name": "ApeSwapFinance LPs"
+  },
+  "0x07d9a4fc576a56264acead826229b1989d0c3fb8": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x36696169c63e42cd08ce11f5deebbcebae652050": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x5e0f5bdc4d1c68f5e45a72cf0ce70b82b40e6373": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe42be98613347658f82dcd90ce8102e70d329c86": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe5ba47fd94cb645ba4119222e34fb33f59c7cd90": {
+    "symbol": "SAFUU",
+    "name": "Safuu"
+  },
+  "0x639272128754e5f71fe4f69bf453f7a073754c9c": {
+    "symbol": "KMF",
+    "name": "Kiwi Middle Finger NFTs"
+  },
+  "0xda1689c5557564d06e2a546f8fd47350b9d44a73": {
+    "symbol": "BNBLION",
+    "name": "Bnb LION Inu"
+  },
+  "0xbcd30d25b88bc6cc7fdd1c11007b4c12fff73525": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x6b0a03c7bd8441e0f8959394761e29bd6afbfdf7": {
+    "symbol": "ONE",
+    "name": "One Token"
+  },
+  "0x9745cfbd9ca67ecab58270264fd1aa0579eb58a0": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xe27efa907c2ce4e181be8d5960febd22aaffb400": {
+    "symbol": "TWO",
+    "name": "TWO Token"
+  },
+  "0x9efea348a482d36fbf2c14979ddf81f3aec6fbe6": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xf5d9b8947b11ddf5ee33374cc2865e775ebe00dc": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xcc1785d9b3279cbe66c1567f43b0df8d19a6cc38": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc57d494758298e9d3d816a9b4efe4e8a662febea": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xb770f2cc1d2e31c77c66fa01292c5d7c8193d504": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x2fab0c7ace25621a34cf31e0ce282634d8bfe39d": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1a29bd7c11347dba166f0893b2fcf03f3b80b17f": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xfbffeccb8ec2d959b15699ef80d035c5f5a7bf50": {
+    "symbol": "SGO",
+    "name": "SGO"
+  },
+  "0xc03085e0e82bb4753564da525cbf18eba7e72f71": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x132f13c3896eab218762b9e46f55c9c478905849": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x6169b3b23e57de79a6146a2170980ceb1f83b9e0": {
+    "symbol": "VETTER",
+    "name": "Vetter Token"
+  },
+  "0x531780face85306877d7e1f05d713d1b50a37f7a": {
+    "symbol": "BSHARE",
+    "name": "BSHARE"
+  },
+  "0x522348779dcb2911539e76a1042aa922f9c47ee3": {
+    "symbol": "BOMB",
+    "name": "bomb.money"
+  },
+  "0x83c5b5b309ee8e232fe9db217d394e262a71bcc0": {
+    "symbol": "APE-LP",
+    "name": "ApeSwapFinance LPs"
+  },
+  "0x17b1e028a1837ff15ba9e7140add0d13790092a3": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xeace8db83eb66063e06adf6f7d8b54aefacc91cd": {
+    "symbol": "ONE",
+    "name": "ONE NFT"
+  },
+  "0x10ed43c718714eb63d5aa57b78b54704e256024e": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x169f653a54acd441ab34b73da9946e2c451787ef": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x58f876857a02d6762e0101bb5c46a8c1ed44dc16": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x18b2a687610328590bc8f2e5fedde3b582a49cda": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x40cc5022c928c8f763b810a90a055856dd99b31c": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": {
+    "symbol": "BTCB",
+    "name": "BTCB Token"
+  },
+  "0xb8cda6ae6d005d56205b29797add341c85e59608": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x06f94a00ab25a808c7588d080cd4cfdccffff887": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xdef1c0ded9bec7f1a1670819833240f027b25eff": {
+    "symbol": "",
+    "name": ""
+  }
+}
