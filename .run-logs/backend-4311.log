@@ -59538,3 +59538,1686 @@ INFO:     100.101.209.68:52022 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47988 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47988 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52026 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47988 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33598 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33618 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33646 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50384 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50386 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50390 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:07 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RX+7600+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:08 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i7-10700&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:08 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=GTX+1070+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:56032 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-21 06:33:08 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=750W+ATX+PSU+80+gold&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:08 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i9-10900K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:56046 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:08 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=550W+ATX+PSU+80+bronze&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i5-10600K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+5800X&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+6600+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:56068 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43130 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43138 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=480GB+SATA+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:43140 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+6650+XT+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=32GB+DDR4+3200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=650W+ATX+PSU+80+bronze&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1070+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AMD+Ryzen+9+5900X&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=RTX+2070+8GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=RX+580+8GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_NETWORK_CHANGED at https://www.temu.com/search_result.html?search_key=RX+7600+8GB+used&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=RX+7600+8GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=32GB+DDR5+5200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=pc+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=GTX+1060+6GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_NETWORK_CHANGED at https://www.aliexpress.com/wholesale?SearchText=RX+570+8GB+used&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+570+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=1TB+NVMe+M.2+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=AMD+Ryzen+9+5900X&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+4060+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=480GB+SATA+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.aliexpress.com/wholesale?SearchText=RTX+3070+8GB+used&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3070+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+3070+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:43152 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:11 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Target crashed  source=aliexpress
+INFO:     100.101.209.68:56770 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-21 06:33:12 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=RTX+3070+8GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:12 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=GTX+1060+3GB+used&search_method=user", waiting until "domcontentloaded"
+ source=temu
+INFO:     100.101.209.68:42828 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-21 06:33:12 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=1TB+SATA+SSD&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-21 06:33:12 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_NETWORK_CHANGED at https://www.amazon.co.uk/s?k=Intel+Core+i7-10700K&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i7-10700K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:12 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3080+10GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:42836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40706 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40736 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45022 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45034 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=500GB+NVMe+M.2+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i9-10900K&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RX+6700+XT+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-21 06:33:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=2TB+NVMe+M.2+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:45050 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Target crashed  source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=2TB+internal+hard+drive&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i5-10400&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:38290 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Target crashed  source=temu
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AMD+Ryzen+5+5600X&i=computers", waiting until "domcontentloaded"
+ source=amazon
+INFO:     100.101.209.68:38306 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Target crashed  source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=1TB+SATA+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1060+3GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=32GB+DDR4+3200+kit&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:38322 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+4060+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:38334 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38350 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1650+4GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-21 06:33:14 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-12700&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+INFO:     100.101.209.68:45158 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45178 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45190 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-21 06:33:16 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-21 06:33:16 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+INFO:     100.101.209.68:36096 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:17 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+[scraper] eBay error for 'pc tower': Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+2026-05-21 06:33:18 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+INFO:     100.101.209.68:41614 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41630 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41634 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41640 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-21 06:33:20 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+INFO:     100.101.209.68:54770 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54796 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42764 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42778 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39272 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41954 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34178 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36874 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36888 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43972 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43986 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44000 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44006 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44026 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44028 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50804 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50812 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36368 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36450 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49130 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45962 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45976 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45988 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56570 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56592 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56598 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56610 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41124 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41154 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56678 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56694 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56704 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56650 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38616 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40168 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40194 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43716 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43770 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43774 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50628 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50644 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50668 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50680 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38974 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38980 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50350 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47314 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47334 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47370 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47372 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49754 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49776 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49810 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49816 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49818 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49834 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 570 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 580 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 2060 6GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 2070 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 2080 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 3060 12GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RTX 4060 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-21 06:33:26 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-21 06:33:26 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=6 box=0 ebay_buy=1 ebay_sold=0 errors=0 overclockers=0 scan=0 temu=0 updated=6
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33598 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33600 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33602 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33616 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33622 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33636 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33638 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33640 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33644 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33662 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33670 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33702 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33706 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33720 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33732 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33748 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33756 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33772 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33784 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33786 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33788 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42330 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42344 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42360 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42364 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42366 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42370 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42396 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42402 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42414 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42430 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42436 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42440 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42442 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42448 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42458 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42462 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42466 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42484 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42496 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42504 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42516 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42520 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42528 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42536 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42546 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42552 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42560 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44212 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44214 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44216 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44220 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44236 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44248 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44262 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44266 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44282 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44290 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44320 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44322 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44328 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44330 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44338 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44352 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44366 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44368 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44384 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44388 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44398 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44410 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44418 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57706 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57710 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57714 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57730 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57736 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57738 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57748 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57750 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57762 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57778 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57786 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57810 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57812 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57818 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57826 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57864 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57876 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57878 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57892 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54156 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54166 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54174 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54184 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54186 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54202 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54216 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54218 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54232 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54238 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54254 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54270 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54282 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54296 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54304 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54318 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54330 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54340 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54342 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54358 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54368 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54376 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54386 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54394 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54410 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54424 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54426 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54442 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49142 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49158 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49160 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49174 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49184 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49190 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49196 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49210 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49214 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49230 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49252 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49268 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49278 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49284 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49296 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49304 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49312 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49324 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49340 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49346 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49348 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42906 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42908 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42912 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42928 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42936 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42952 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
