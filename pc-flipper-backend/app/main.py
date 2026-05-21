@@ -9,7 +9,7 @@ from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts
 from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
@@ -17,6 +17,177 @@ from app.api.logs import install_log_capture
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
+
+_CASE_DEFAULT_SOURCES = [
+    "eBay",
+    "eBay (Worldwide)",
+    "Amazon",
+    "Temu",
+    "AliExpress",
+    "BargainHardware",
+    "CherryTree Inc",
+    "Alibaba",
+]
+
+_CASE_TAXONOMY: dict[str, list[str]] = {
+    "Fish Tank / Panoramic Cases": [
+        "fish tank pc case", "panoramic pc case", "dual chamber pc case", "wraparound glass case",
+        "aquarium pc case", "corner glass pc case", "seamless glass pc case", "infinity glass pc case",
+        "tempered glass showcase case", "frameless gaming case",
+    ],
+    "RGB / Gamer Bait": [
+        "argb gaming case", "rgb airflow case", "rgb infinity mirror case", "rgb cyberpunk case",
+        "gamer aesthetic case", "streamer setup pc case", "esports gaming case", "neon gaming case",
+        "rgb sync case", "addressable rgb case",
+    ],
+    "Airflow / Performance Style": [
+        "mesh airflow case", "high airflow gaming case", "airflow rgb case", "performance airflow chassis",
+        "silent airflow case", "mesh front tower", "cooling optimized case", "high static airflow case",
+    ],
+    "Luxury / Premium Feel": [
+        "premium aluminum pc case", "luxury gaming case", "minimalist gaming case", "modern workstation case",
+        "creator pc case", "ultra clean build case", "stealth pc case", "matte white gaming case",
+        "brushed aluminum pc case",
+    ],
+    "White Builds": [
+        "white fish tank case", "white rgb case", "white gaming tower", "snow white pc case",
+        "white panoramic chassis", "white airflow case", "arctic gaming case",
+    ],
+    "Small But Expensive-Looking": [
+        "micro atx fish tank", "compact gaming case", "mini tower rgb case", "compact airflow chassis",
+        "sff gaming case", "cube gaming case",
+    ],
+    "Cyberpunk / Sci-Fi Style": [
+        "cyberpunk pc case", "futuristic gaming case", "mech style pc case", "transformer style case",
+        "sci fi pc chassis", "spaceship pc case", "tron inspired pc case", "industrial gaming case",
+    ],
+    "Star Trek Inspired": [
+        "federation command build", "starfleet workstation", "LCARS inspired pc", "starship bridge setup",
+        "warp core gaming pc", "federation white rgb case", "tactical console build",
+    ],
+    "Borg Aesthetic": [
+        "borg cube pc", "borg collective build", "assimilated gaming rig", "green borg rgb build",
+        "nanotech workstation", "tactical starfleet chassis", "borg green rgb", "cybernetic mesh build",
+        "hive mind workstation", "assimilation core pc", "industrial sci fi build", "biomechanical pc case",
+        "glowing green coolant build", "matrix grid case",
+    ],
+    "Star Wars Inspired": [
+        "galactic empire build", "rebel alliance gaming pc", "jedi workstation", "sith gaming rig",
+        "imperial black rgb build", "death star pc", "hyperspace build", "clone trooper white pc",
+        "mandalorian inspired build", "bounty hunter gaming pc",
+    ],
+    "Battlestar Galactica / Cylon": [
+        "cylon red eye pc", "battlestar inspired workstation", "colonial fleet build", "resurrection ship aesthetic",
+        "tactical military sci fi build", "cylon chrome build", "red scanner rgb pc", "warship command pc",
+    ],
+    "Babylon 5": [
+        "station command build", "diplomatic station workstation", "earth alliance pc", "shadow vessel inspired build",
+        "vorlon aesthetic pc", "ancient alien tech build",
+    ],
+    "Farscape": [
+        "leviathan inspired build", "biomechanical spaceship pc", "living ship aesthetic", "peacekeeper tactical build",
+        "alien tech workstation", "organic sci fi build",
+    ],
+    "Transformers": [
+        "autobot gaming pc", "decepticon workstation", "cybertron inspired build", "optimus prime rgb pc",
+        "megatron tactical build", "transformer mech chassis", "robotic warfare gaming rig", "cybertron command center",
+        "metallic mech pc build", "battle mech workstation", "transforming rgb setup", "machine uprising aesthetic",
+    ],
+    "Anime Inspired": [
+        "anime gaming pc", "manga aesthetic workstation", "waifu rgb build", "neon tokyo gaming rig",
+        "japanese cyberpunk pc", "mecha anime workstation", "shonen inspired gaming setup", "anime battle station",
+        "otaku gaming pc", "kawaii rgb setup",
+    ],
+    "Naruto Inspired": [
+        "hidden leaf gaming pc", "hokage workstation", "akatsuki rgb build", "sharingan gaming rig",
+        "ninja tactical pc", "chakra powered setup", "sage mode workstation", "red cloud aesthetic pc",
+        "rinnegan rgb build", "shinobi command center",
+    ],
+    "Pokemon Inspired": [
+        "pokedex workstation", "pikachu yellow rgb build", "charizard gaming pc", "team rocket black build",
+        "legendary pokemon workstation", "master trainer gaming setup", "pokeball aesthetic pc", "electric type rgb build",
+        "psychic type workstation", "elite four command system",
+    ],
+    "Dragon Ball Inspired": [
+        "super saiyan gaming pc", "dragon radar workstation", "capsule corp build", "ultra instinct rgb setup",
+        "saiyan warrior pc", "fusion powered workstation", "dragon ball z gaming rig", "energy aura rgb build",
+        "kamehameha blue build", "galactic fighter workstation",
+    ],
+    "Marvel Inspired": [
+        "avengers workstation", "shield tactical pc", "stark industries build", "arc reactor rgb build",
+        "gamma powered gaming pc", "multiverse gaming rig",
+    ],
+    "Iron Man / Jarvis": [
+        "jarvis ai workstation", "stark industries pc", "arc reactor build", "iron legion gaming pc",
+        "red gold rgb build", "holographic ai setup", "ai assistant workstation", "billionaire inventor aesthetic",
+    ],
+    "Hulk": [
+        "gamma core build", "radioactive green rgb pc", "gamma powered workstation", "rage mode gaming rig",
+        "toxic green airflow build",
+    ],
+    "X-Men": [
+        "cerebro workstation", "mutant tactical pc", "x-gene gaming build", "blackbird command system",
+        "omega level workstation",
+    ],
+    "Spider-Man": [
+        "spiderverse gaming pc", "red blue rgb build", "webcore gaming setup", "spider tech workstation",
+        "urban hero aesthetic",
+    ],
+    "Batman": [
+        "batcomputer workstation", "dark knight pc", "stealth tactical build", "gotham command system",
+        "matte black rgb case", "vigilante workstation", "cave workstation aesthetic", "black ops gaming pc",
+    ],
+    "Superman / Supergirl": [
+        "kryptonian workstation", "fortress of solitude build", "crystal core pc", "blue red rgb setup",
+        "solar powered gaming rig", "alien tech workstation",
+    ],
+    "High-Performing Brand & Style Searches": [
+        "lian li style case", "hyte y60 style case", "nzxt style case", "o11 dynamic style case",
+        "corsair crystal style", "y60 panoramic clone", "infinity mirror case",
+    ],
+    "Cheap Hidden-Gem Brands": [
+        "Montech panoramic case", "darkFlash fish tank", "Jonsbo white case", "SAMA dual chamber",
+        "GameMax infinity mirror", "CiT gaming case", "Kolink rgb airflow", "Xigmatek panoramic case",
+        "Mars Gaming rgb case", "Tecware airflow chassis",
+    ],
+    "Perceived Value / Listing Booster Keywords": [
+        "showcase build", "custom gaming pc", "ultra rgb", "premium airflow", "streamer pc", "creator workstation",
+        "high fps gaming pc", "ai workstation", "content creator pc", "liquid cooled aesthetic", "battle station pc",
+        "next gen gaming rig", "futuristic ai desktop", "cinematic rgb build", "command center workstation",
+    ],
+}
+
+
+def _infer_case_attributes(term: str, group_name: str) -> dict:
+    t = term.lower()
+    attrs: dict[str, list[str] | str] = {
+        "group": group_name,
+        "colors": [],
+        "materials": [],
+        "sizes": [],
+        "styles": [],
+        "franchises": [],
+    }
+    for color in ("white", "black", "green", "red", "blue", "yellow", "gold", "silver", "chrome", "matte", "neon"):
+        if color in t:
+            attrs["colors"].append(color)
+    for mat in ("glass", "tempered glass", "aluminum", "mesh", "metal", "biomechanical", "crystal"):
+        if mat in t:
+            attrs["materials"].append(mat)
+    for size in ("atx", "micro atx", "mini itx", "sff", "mini tower", "mid tower", "full tower", "compact", "cube"):
+        if size in t:
+            attrs["sizes"].append(size)
+    for style in ("airflow", "rgb", "argb", "panoramic", "dual chamber", "workstation", "gaming", "stealth", "premium"):
+        if style in t:
+            attrs["styles"].append(style)
+    for franchise in (
+        "star trek", "borg", "star wars", "battlestar", "cylon", "babylon", "farscape", "transformers",
+        "naruto", "pokemon", "dragon ball", "marvel", "iron man", "hulk", "x-men", "spider", "batman", "superman",
+    ):
+        if franchise in t:
+            attrs["franchises"].append(franchise)
+    attrs["capture_fields"] = ["color", "material", "size", "form_factor", "theme", "style", "franchise"]
+    return attrs
 
 
 @asynccontextmanager
@@ -99,6 +270,7 @@ app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
 app.include_router(search_telemetry.router, prefix="/api")
+app.include_router(source_search_terms.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")

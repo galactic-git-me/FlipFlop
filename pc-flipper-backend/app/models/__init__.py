@@ -12,6 +12,7 @@ from app.models.outcome_event import OutcomeEvent, RetrainCheckpoint
 from app.models.model_registry import ModelVersion, TrainingRun
 from app.models.alert_event import AlertEvent
 from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
+from app.models.source_search_term import SourceSearchTerm
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -32,4 +33,5 @@ __all__ = [
     "SourceRun",
     "ListingRaw",
     "ListingNormalized",
+    "SourceSearchTerm",
 ]
