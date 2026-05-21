@@ -1445,3 +1445,76 @@ Call log:
 [scraper] eBay 'i5 tower': 0 found, 0 new (total 87)
 2026-05-21 14:25:51 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
 2026-05-21 14:25:53 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
+2026-05-21 14:25:57 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+2026-05-21 14:25:57 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-21 14:25:58 [info     ] amazon.cases.done              found=2 search=slim htpc case living room
+2026-05-21 14:25:59 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=slim+htpc+case+living+room
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=slim+htpc+case+living+room", waiting until "domcontentloaded"
+ search=slim htpc case living room source=CherryTree Inc
+2026-05-21 14:25:59 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=CherryTree Inc
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+2026-05-21 14:26:02 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=BargainHardware
+2026-05-21 14:26:03 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=Alibaba
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+2026-05-21 14:26:07 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-21 14:26:08 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-21 14:26:18 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-21 14:26:19 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-21 14:26:20 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-21 14:26:20 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-21 14:26:20 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-21 14:26:21 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-21 14:26:22 [info     ] cases_swarm.done               errors=0 found=408 upserted=330
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 0)
+2026-05-21 14:26:22 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-21 14:26:23 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+2026-05-21 14:26:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-21 14:26:26 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 87)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+2026-05-21 14:26:55 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-21 14:26:57 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-21 14:26:58 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-21 14:26:58 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-21 14:27:00 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-21 14:27:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-21 14:27:01 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-21 14:27:03 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 87)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 87)
+2026-05-21 14:27:16 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-21 14:27:27 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+2026-05-21 14:27:29 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-21 14:27:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
+2026-05-21 14:27:33 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-21 14:27:35 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-21 14:27:35 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-21 14:27:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-21 14:27:37 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-21 14:27:39 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-21 14:27:39 [info     ] i-bidder.playwright.done       total=0
+2026-05-21 14:27:39 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-21 14:27:41 [info     ] i-bidder.playwright.done       total=0
+2026-05-21 14:27:41 [info     ] source.done                    found=0 gems=0 source=i-bidder
