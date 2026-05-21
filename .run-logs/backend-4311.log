@@ -3248,3 +3248,32 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
 2026-05-21 19:42:40 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
 2026-05-21 19:42:41 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
+2026-05-21 19:42:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc no os': 0 found, 0 new (total 43)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 43)
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 43)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+2026-05-21 19:43:04 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-21 19:43:06 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-21 19:43:06 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+2026-05-21 19:43:08 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+2026-05-21 19:43:16 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-21 19:43:18 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-21 19:43:19 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-21 19:43:21 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+2026-05-21 19:43:40 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 43)
+2026-05-21 19:43:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-21 19:43:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 43)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 43)
+2026-05-21 19:43:44 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-21 19:43:44 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+2026-05-21 19:43:54 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-21 19:43:56 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-21 19:43:57 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-21 19:43:58 [info     ] i-bidder.playwright.done       total=0
+2026-05-21 19:43:59 [info     ] source.done                    found=0 gems=0 source=i-bidder
