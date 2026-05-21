@@ -808,3 +808,159 @@ Call log:
 2026-05-21 14:19:15 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
 2026-05-21 14:19:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
 2026-05-21 14:19:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-21 14:19:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RX 570 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RX 580 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 2060 6GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 2070 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 2080 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 3060 12GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-21 14:19:17 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-21 14:19:18 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-21 14:19:18 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=4 box=0 ebay_buy=6 ebay_sold=6 errors=0 overclockers=0 scan=0 temu=0 updated=7
+2026-05-21 14:19:18 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-21 14:19:18 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-21 14:19:20 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-21 14:19:20 [info     ] source.done                    found=0 gems=0 source=John Pye
+2026-05-21 14:19:20 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=BargainHardware
+2026-05-21 14:19:20 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=BargainHardware
+2026-05-21 14:19:20 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=autobot+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=autobot+gaming+pc", waiting until "domcontentloaded"
+ search=autobot gaming pc source=CherryTree Inc
+2026-05-21 14:19:20 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=CherryTree Inc
+2026-05-21 14:19:20 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=decepticon+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=decepticon+workstation", waiting until "domcontentloaded"
+ search=decepticon workstation source=CherryTree Inc
+2026-05-21 14:19:21 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=CherryTree Inc
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+2026-05-21 14:19:24 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=Alibaba
+2026-05-21 14:19:25 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=Alibaba
+2026-05-21 14:19:26 [info     ] temu.cases.done                found=0 search=autobot gaming pc
+2026-05-21 14:19:27 [info     ] aliexpress.cases.done          found=0 search=decepticon workstation
+2026-05-21 14:19:28 [info     ] temu.cases.done                found=0 search=decepticon workstation
+2026-05-21 14:19:30 [info     ] aliexpress.cases.done          found=0 search=autobot gaming pc
+2026-05-21 14:19:30 [info     ] amazon.cases.done              found=10 search=anime gaming pc
+2026-05-21 14:19:32 [info     ] amazon.cases.done              found=10 search=manga aesthetic workstation
+2026-05-21 14:19:36 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=BargainHardware
+2026-05-21 14:19:36 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=anime+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=anime+gaming+pc", waiting until "domcontentloaded"
+ search=anime gaming pc source=CherryTree Inc
+2026-05-21 14:19:36 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=CherryTree Inc
+2026-05-21 14:19:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=manga+aesthetic+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=manga+aesthetic+workstation", waiting until "domcontentloaded"
+ search=manga aesthetic workstation source=CherryTree Inc
+2026-05-21 14:19:37 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=BargainHardware
+2026-05-21 14:19:37 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=CherryTree Inc
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-21 14:19:41 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=Alibaba
+2026-05-21 14:19:41 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=Alibaba
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-21 14:19:49 [info     ] amazon.cases.done              found=4 search=hidden leaf gaming pc
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+2026-05-21 14:19:49 [info     ] amazon.cases.done              found=0 search=hokage workstation
+2026-05-21 14:19:50 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+2026-05-21 14:19:51 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-21 14:19:51 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-21 14:19:52 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-21 14:19:52 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-21 14:19:53 [info     ] aliexpress.cases.done          found=0 search=manga aesthetic workstation
+2026-05-21 14:19:53 [info     ] aliexpress.cases.done          found=0 search=anime gaming pc
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-21 14:19:53 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-21 14:19:54 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-21 14:19:54 [info     ] temu.cases.done                found=0 search=anime gaming pc
+2026-05-21 14:19:54 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-21 14:19:55 [info     ] temu.cases.done                found=0 search=manga aesthetic workstation
+2026-05-21 14:19:56 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-21 14:19:56 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-21 14:19:58 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+2026-05-21 14:19:58 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:19:59 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=BargainHardware
+2026-05-21 14:19:59 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=BargainHardware
+2026-05-21 14:20:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=hidden+leaf+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=hidden+leaf+gaming+pc", waiting until "domcontentloaded"
+ search=hidden leaf gaming pc source=CherryTree Inc
+2026-05-21 14:20:00 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=CherryTree Inc
+2026-05-21 14:20:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=hokage+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=hokage+workstation", waiting until "domcontentloaded"
+ search=hokage workstation source=CherryTree Inc
+2026-05-21 14:20:00 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=CherryTree Inc
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-21 14:20:05 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=Alibaba
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-21 14:20:05 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=Alibaba
+2026-05-21 14:20:12 [info     ] amazon.cases.done              found=0 search=pokedex workstation
+2026-05-21 14:20:14 [info     ] temu.cases.done                found=0 search=hidden leaf gaming pc
+2026-05-21 14:20:14 [info     ] amazon.cases.done              found=10 search=pikachu yellow rgb build
+2026-05-21 14:20:14 [info     ] temu.cases.done                found=0 search=hokage workstation
+2026-05-21 14:20:16 [info     ] aliexpress.cases.done          found=0 search=hokage workstation
+2026-05-21 14:20:16 [info     ] aliexpress.cases.done          found=0 search=hidden leaf gaming pc
+2026-05-21 14:20:20 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=BargainHardware
+2026-05-21 14:20:21 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=pokedex+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=pokedex+workstation", waiting until "domcontentloaded"
+ search=pokedex workstation source=CherryTree Inc
+2026-05-21 14:20:21 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=CherryTree Inc
+2026-05-21 14:20:21 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=pikachu+yellow+rgb+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=pikachu+yellow+rgb+build", waiting until "domcontentloaded"
+ search=pikachu yellow rgb build source=CherryTree Inc
+2026-05-21 14:20:21 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=CherryTree Inc
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-21 14:20:25 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=Alibaba
+2026-05-21 14:20:26 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=BargainHardware
+2026-05-21 14:20:27 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-21 14:20:29 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=Alibaba
+2026-05-21 14:20:29 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-21 14:20:29 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
