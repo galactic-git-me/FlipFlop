@@ -1100,3 +1100,119 @@ Call log:
 2026-05-21 14:21:53 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=CherryTree Inc
 2026-05-21 14:21:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
 2026-05-21 14:21:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:21:57 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=Alibaba
+[scraper] eBay error for 'desktop untested': Page.evaluate: Target crashed 
+2026-05-21 14:21:58 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=Alibaba
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-21 14:22:05 [info     ] amazon.cases.done              found=0 search=gamma core build
+2026-05-21 14:22:05 [info     ] amazon.cases.done              found=10 search=radioactive green rgb pc
+2026-05-21 14:22:08 [info     ] temu.cases.done                found=0 search=jarvis ai workstation
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-21 14:22:09 [info     ] aliexpress.cases.done          found=0 search=jarvis ai workstation
+2026-05-21 14:22:10 [info     ] temu.cases.done                found=0 search=stark industries pc
+2026-05-21 14:22:11 [info     ] aliexpress.cases.done          found=0 search=stark industries pc
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-21 14:22:16 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=BargainHardware
+2026-05-21 14:22:16 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=gamma+core+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=gamma+core+build", waiting until "domcontentloaded"
+ search=gamma core build source=CherryTree Inc
+2026-05-21 14:22:16 [info     ] cases.generic_market.done      found=0 search=gamma core build source=CherryTree Inc
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-21 14:22:17 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=radioactive+green+rgb+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=radioactive+green+rgb+pc", waiting until "domcontentloaded"
+ search=radioactive green rgb pc source=CherryTree Inc
+2026-05-21 14:22:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-21 14:22:17 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=CherryTree Inc
+2026-05-21 14:22:18 [info     ] cases.generic_market.done      found=0 search=gamma core build source=BargainHardware
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-21 14:22:20 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-21 14:22:20 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=refurbished pc
+2026-05-21 14:22:21 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=Alibaba
+2026-05-21 14:22:21 [info     ] cases.generic_market.done      found=0 search=gamma core build source=Alibaba
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+2026-05-21 14:22:22 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-21 14:22:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-21 14:22:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+2026-05-21 14:22:28 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-21 14:22:28 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-21 14:22:29 [info     ] amazon.cases.done              found=1 search=spiderverse gaming pc
+2026-05-21 14:22:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+2026-05-21 14:22:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-21 14:22:30 [info     ] amazon.cases.done              found=10 search=red blue rgb build
+2026-05-21 14:22:30 [info     ] temu.cases.done                found=0 search=radioactive green rgb pc
+2026-05-21 14:22:31 [info     ] aliexpress.cases.done          found=0 search=gamma core build
+[scraper] eBay error for 'lga1700 motherboard': Page.evaluate: Target crashed 
+2026-05-21 14:22:31 [info     ] temu.cases.done                found=0 search=gamma core build
+2026-05-21 14:22:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:22:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:22:32 [info     ] aliexpress.cases.done          found=0 search=radioactive green rgb pc
+2026-05-21 14:22:36 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
+2026-05-21 14:22:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=spiderverse+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=spiderverse+gaming+pc", waiting until "domcontentloaded"
+ search=spiderverse gaming pc source=CherryTree Inc
+2026-05-21 14:22:37 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=CherryTree Inc
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-21 14:22:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=red+blue+rgb+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=red+blue+rgb+build", waiting until "domcontentloaded"
+ search=red blue rgb build source=CherryTree Inc
+2026-05-21 14:22:37 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=CherryTree Inc
+2026-05-21 14:22:38 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+2026-05-21 14:22:42 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=Alibaba
+2026-05-21 14:22:42 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=Alibaba
+[scraper] eBay 'pc spares or repair': 87 found, 87 new (total 87)
+2026-05-21 14:22:50 [info     ] amazon.cases.done              found=0 search=batcomputer workstation
+2026-05-21 14:22:51 [info     ] amazon.cases.done              found=10 search=dark knight pc
+2026-05-21 14:22:53 [info     ] aliexpress.cases.done          found=0 search=spiderverse gaming pc
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-21 14:22:55 [info     ] aliexpress.cases.done          found=0 search=red blue rgb build
+2026-05-21 14:22:56 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-21 14:22:56 [info     ] temu.cases.done                found=0 search=spiderverse gaming pc
+2026-05-21 14:22:56 [info     ] temu.cases.done                found=0 search=red blue rgb build
+2026-05-21 14:22:58 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-21 14:22:58 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+2026-05-21 14:23:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-21 14:23:01 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=BargainHardware
+2026-05-21 14:23:01 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=BargainHardware
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-21 14:23:02 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=batcomputer+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=batcomputer+workstation", waiting until "domcontentloaded"
+ search=batcomputer workstation source=CherryTree Inc
+2026-05-21 14:23:02 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=dark+knight+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=dark+knight+pc", waiting until "domcontentloaded"
+ search=dark knight pc source=CherryTree Inc
+2026-05-21 14:23:02 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=CherryTree Inc
+2026-05-21 14:23:02 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=CherryTree Inc
+2026-05-21 14:23:04 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-21 14:23:04 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-21 14:23:06 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
+2026-05-21 14:23:06 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=Alibaba
+2026-05-21 14:23:06 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-21 14:23:06 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-21 14:23:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-21 14:23:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-21 14:23:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:23:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:23:14 [info     ] amazon.cases.done              found=10 search=kryptonian workstation
+2026-05-21 14:23:15 [info     ] amazon.cases.done              found=2 search=fortress of solitude build
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+2026-05-21 14:23:15 [info     ] temu.cases.done                found=0 search=batcomputer workstation
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 87)
+2026-05-21 14:23:17 [info     ] temu.cases.done                found=0 search=dark knight pc
+2026-05-21 14:23:17 [info     ] aliexpress.cases.done          found=0 search=batcomputer workstation
+2026-05-21 14:23:18 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
