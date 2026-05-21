@@ -1,0 +1,26 @@
+{
+  "unclassified": {
+    "tx_count": 1226,
+    "money_into_project_bnb": 194.34393800800004,
+    "money_out_of_project_bnb": 128.52156578200004,
+    "net_project_flow_bnb": 65.822372226,
+    "money_into_project_usd_then": 126176.50000000009,
+    "money_out_of_project_usd_then": 83439.26999999999,
+    "net_project_flow_usd_then": 42737.2300000001,
+    "money_into_project_usd_today": 128035.70999999996,
+    "money_out_of_project_usd_today": 84671.30000000002,
+    "net_project_flow_usd_today": 43364.409999999945
+  },
+  "safuu": {
+    "tx_count": 350,
+    "money_into_project_bnb": 193.524233555,
+    "money_out_of_project_bnb": 0.0,
+    "net_project_flow_bnb": 193.524233555,
+    "money_into_project_usd_then": 125632.48000000004,
+    "money_out_of_project_usd_then": 0.0,
+    "net_project_flow_usd_then": 125632.48000000004,
+    "money_into_project_usd_today": 127495.62999999993,
+    "money_out_of_project_usd_today": 0.0,
+    "net_project_flow_usd_today": 127495.62999999993
+  }
+}
