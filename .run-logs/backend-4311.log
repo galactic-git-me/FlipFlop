@@ -1518,3 +1518,34 @@ Call log:
 2026-05-21 14:27:39 [info     ] source.done                    found=0 gems=0 source=i-bidder
 2026-05-21 14:27:41 [info     ] i-bidder.playwright.done       total=0
 2026-05-21 14:27:41 [info     ] source.done                    found=0 gems=0 source=i-bidder
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
+2026-05-21 14:27:55 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 87)
+2026-05-21 14:27:57 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-21 14:27:59 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 87)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+2026-05-21 14:28:23 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+2026-05-21 14:28:25 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-21 14:28:27 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 10 found, 10 new (total 10)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 10)
+2026-05-21 14:28:51 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-21 14:28:53 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+2026-05-21 14:28:55 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
