@@ -2403,3 +2403,126 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
 [scraper] eBay retry 'xeon tower': 0 found, 0 new (total 0)
 [scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 0)
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr4 ram lot': 71 found, 68 new (total 68)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 68)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 68)
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 68)
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 68)
+[scraper] eBay retry error for 'ryzen 7700': Page.evaluate: Target crashed 
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay retry '7700 motherboard bundle': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 68)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 68)
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 68)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 0)
+2026-05-21 15:15:44 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=61
+2026-05-21 15:15:44 [info     ] source.done                    found=10 gems=0 source=eBay UK Auctions
+2026-05-21 15:15:44 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=407 new_gems=0 sources_scanned=19
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 68)
+2026-05-21 15:15:52 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+2026-05-21 15:15:52 [info     ] autonomous_cycle.done          duration_ms=6267303
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 68)
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 68)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 68)
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 68)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 68)
+2026-05-21 15:17:02 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=33.0 median=531.6 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=99.97 median=611.96 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=63.1 median=567.72 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=11.54 median=421.85 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=12.03 median=422.44 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=13.43 median=424.12 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=5.08 median=414.1 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=63.1 median=567.72 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=213.9 median=664.68 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=33.0 median=531.6 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=133.08 median=567.7 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=31.0 median=529.2 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=41.0 median=541.2 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=35.04 median=534.05 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.74 median=513.29 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=24.62 median=521.54 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=5.45 median=498.54 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=54.37 median=473.24 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=115.1 median=546.12 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=72.08 median=494.5 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.74 median=429.29 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=215.05 median=750.06 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=60.56 median=564.67 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=42.3 median=542.76 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=42.3 median=542.76 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=21.5 median=517.8 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=372.88 median=939.46 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.22 median=512.66 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.72 median=513.26 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.72 median=513.26 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.72 median=513.26 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=52.7 median=555.24 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=202.2 median=650.64 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=19.36 median=515.23 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=39.18 median=539.02 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=31.9 median=530.28 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=99.5 median=527.4 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=15.54 median=510.65 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=37.1 median=536.52 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=328.2 median=801.84 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=21.5 median=517.8 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=82.08 median=506.5 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=52.7 median=555.24 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=67.0 median=572.4 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=47.49 median=548.99 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=26.7 median=524.04 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=16.15 median=511.38 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=9.52 median=503.42 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=17.75 median=513.3 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=42.3 median=542.76 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=551.99 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=125.5 median=642.6 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=43.04 median=543.65 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=8.66 median=502.39 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=31.89 median=530.27 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=15.54 median=510.65 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=37.1 median=536.52 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=10.79 median=504.95 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=156.7 median=596.04 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=104.7 median=533.64 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=68.3 median=573.96 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=34.99 median=533.99 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-21 15:17:02 [info     ] resale_scraper.fallback_buy_price buy_price=112.08 median=626.5 query=gaming PC rtx 3060
+2026-05-21 15:17:02 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=61
+2026-05-21 15:17:02 [info     ] source.done                    found=68 gems=0 source=eBay UK Auctions
