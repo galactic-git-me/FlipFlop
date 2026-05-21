@@ -542,5 +542,261 @@
   "0xdef1c0ded9bec7f1a1670819833240f027b25eff": {
     "symbol": "",
     "name": ""
+  },
+  "0x6eb3326de16da7453955000cbe3023af8daf7fa1": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x199dc2d3e0195138446c79ec9b708d4641ff126c": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x18286e6091a6f75ab88adb51d48726d5b0f327c5": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x8b206a405c11664189cec6673bf5a9b4e0eaf63e": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x62529d7de8293217c8f74d60c8c0f6481de47f0e": {
+    "symbol": "DAYL",
+    "name": "Daylight"
+  },
+  "0xb34da672837afe372ecef419b25a357a36f59f6f": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x9d0233857a7f75089924ff27e7cc554adab350bb": {
+    "symbol": "DAYLIGHT-LP",
+    "name": "Daylight LPs"
+  },
+  "0x8f0e57e961b6b3c767f01a9d045c7457c22d338c": {
+    "symbol": "DAYL-BUSD",
+    "name": "Daylight-BUSD"
+  },
+  "0x77fcc833fbb6e1e39262b817466041c183424867": {
+    "symbol": "DAYL MAXI",
+    "name": "Daylight MAXI"
+  },
+  "0x2e707261d086687470b515b320478eb1c88d49bb": {
+    "symbol": "APE-LP",
+    "name": "ApeSwapFinance LPs"
+  },
+  "0x45b339f0367fb31060eaed3fe36d98e496c460d7": {
+    "symbol": "DAYLIGHT-LP",
+    "name": "Daylight LPs"
+  },
+  "0x3f93c3d9304a70c9104642ab8cd37b1e2a7c203a": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1111111254fb6c44bac0bed2854e76f90643097d": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe2bbf54dc0ccdd0cf6270f2af2f62ff79903bb27": {
+    "symbol": "NMX-LP",
+    "name": "Nomiswap LPs"
+  },
+  "0x04580ce6dee076354e96fed53cb839de9efb5f3f": {
+    "symbol": "Baby-LP",
+    "name": "Baby LPs"
+  },
+  "0xe4d3c1492993fb9a01119cd23122a3b8e1a725a4": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x312bc7eaaf93f1c60dc5afc115fccde161055fb0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x26d0c625e5f5d6de034495fbde1f6e9377185618": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xfa94e681dfa1cff9c23a4ab2117b861b6efa3f89": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x87c1715176dfd3e3083c68287b339dd0606a56bf": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x39d26bca778a528ebdd57b136f777820be5edd1a": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x458aee8b453f0d0ff22d8aab4fc1d10026a62068": {
+    "symbol": "LSC",
+    "name": "LegendarySafuuClub"
+  },
+  "0xde886e293a5bf5ebd7d6fdf7504fb368a0d9af44": {
+    "symbol": "xxHMINE",
+    "name": "xxHYPERMINE Token"
+  },
+  "0x2e9a994c9a2f661ae685e8d08662df00f862f4da": {
+    "symbol": "BNBx+BNB",
+    "name": "BNBx/BNB"
+  },
+  "0xa844b2ffeb34ab5878e3b520e87b50f125da7919": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x5c9b83467cb615b387f5eb6e0c5aef7add6d4195": {
+    "symbol": "mooEllipsisBNBx",
+    "name": "Moo Ellipsis BNBx"
+  },
+  "0x14b094bb146b783f2e480385ce5c6f4c9176f994": {
+    "symbol": "sex-BNBx+BNB",
+    "name": "Solidex BNBx+BNB Deposit"
+  },
+  "0xaf41054c1487b0e5e2b9250c0332ecbce6ce9d71": {
+    "symbol": "EPX",
+    "name": "Ellipsis X"
+  },
+  "0x8189f0afdbf8fe6a9e13c69ba35528ac6abeb1af": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xf2933531230bdb1806774ad68b02b5e15aec01a4": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x5b74c99aa2356b4eaa7b85dc486843edff8dfdbe": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xad6742a35fb341a9cc6ad674738dd8da98b94fb1": {
+    "symbol": "WOM",
+    "name": "Wombat Token"
+  },
+  "0xe68d05418a8d7969d9ca6761ad46f449629d928c": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xa60205802e1b5c6ec1cafa3cacd49dfeece05ac9": {
+    "symbol": "CONE",
+    "name": "Cone token"
+  },
+  "0xb3cf866c641de74b851b658372bdd9954b840926": {
+    "symbol": "sAMM-CONE/WBNB",
+    "name": "StableV1 AMM - CONE/WBNB"
+  },
+  "0xbf1fc29668e5f5eaa819948599c9ac1b1e03e75f": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xbf170df928ae5c90c9e1b2d10e17c84e53aa5cad": {
+    "symbol": "mooCakeV2WOM-BUSD",
+    "name": "Moo CakeV2 WOM-BUSD"
+  },
+  "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82": {
+    "symbol": "Cake",
+    "name": "PancakeSwap Token"
+  },
+  "0xa5f8c5dbd5f286960b9d90548680ae5ebff07652": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe09cb82ce41899f09d734ebd39841c13f8f0ffb7": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x672cd8201ceb518f9e42526ef7bcfe5263f41951": {
+    "symbol": "vAMM-CONE/WBNB",
+    "name": "VolatileV1 AMM - CONE/WBNB"
+  },
+  "0xce125b4bc12cd4c478679db968089b038df18969": {
+    "symbol": "mooConeCONE-BNB",
+    "name": "Moo Cone CONE-BNB"
+  },
+  "0x09635bd2f4aa47afc7eb9d2f03c4fe4e747d4b42": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc3b5d80e4c094b17603ea8bb15d2d31ff5954aae": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc9558fe08a8ff89ba7910993542da79f489d8e3b": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe52471bcea9c7d7e3fc2da48ecf177c97e1107a8": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x8e40e36b6673ae3f683e6d7f2db91bbe77f4c8e6": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x772f317ec695ce20290b56466b3f48501ba81352": {
+    "symbol": "dEPX",
+    "name": "DotDot Tokenized EPX Lock"
+  },
+  "0x84c97300a190676a19d1e13115629a11f8482bd1": {
+    "symbol": "DDD",
+    "name": "DotDot"
+  },
+  "0xc19956eca8a3333671490ef6d6d4329df049dddd": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0xd4f7b4bc46e6e499d35335d270fd094979d815a0": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xe014a89c9788dafde603a13f2f01390610382471": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x45859d71d4cafb93694ed43a5ece05776fc2465d": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x22a93f53a0a3e6847d05dd504283e8e296a49aae": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x1bdd3cf7f79cfb8edbb955f20ad99211551ba275": {
+    "symbol": "BNBx",
+    "name": "Liquid Staking BNB"
+  },
+  "0x5c73804fedd39f3388e03f4aa1fe06a1c0e60c8e": {
+    "symbol": "epsBNBx-BNB",
+    "name": "Ellipsis.finance Crypto Pool: BNBx-BNB"
+  },
+  "0xfd4afeac39da03a05f61844095a75c4fb7d766da": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xd0a01e04ec25e98bafc6ea22ec655b51c5b8ef86": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x0ed7e52944161450477ee417de9cd3a859b14fd0": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x804678fa97d91b974ec2af3c843270886528a9e6": {
+    "symbol": "Cake-LP",
+    "name": "Pancake LPs"
+  },
+  "0x03c509fd85d51dc7e75fa2de06276cfa147486ea": {
+    "symbol": "",
+    "name": ""
+  },
+  "0x0989b03b8ced1aa72aca962d22f1098653690aef": {
+    "symbol": "SAFUUXN",
+    "name": "SafuuX Nodes"
+  },
+  "0x45f18b88dac1fe53fb4f4f404de5bfeab223f0fd": {
+    "symbol": "",
+    "name": ""
+  },
+  "0xc5c794846ad03cd1c25b9f3149fd430f8ecf6acf": {
+    "symbol": "",
+    "name": ""
   }
 }
