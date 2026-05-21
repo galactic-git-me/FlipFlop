@@ -1,0 +1,354 @@
+{
+  "lookup": [
+    {
+      "friendly_tag": "1inch: Router V4",
+      "address": "0x1111111254fb6c44bac0bed2854e76f90643097d"
+    },
+    {
+      "friendly_tag": "AnySwap: Bridge Avalanche",
+      "address": "0xb1cb88b1a1992deb4189ea4f566b594c13392ada"
+    },
+    {
+      "friendly_tag": "Anyswap: Bridge Fantom",
+      "address": "0x4b3b4120d4d7975455d8c2894228789c91a247f8"
+    },
+    {
+      "friendly_tag": "Anyswap: Polygon Bridge",
+      "address": "0x171a9377c5013bb06bca8cfe22b9c007f2c319f1"
+    },
+    {
+      "friendly_tag": "Aster: Trading",
+      "address": "0x1b6f2d3844c6ae7d56ceb3c3643b9060ba28feb0"
+    },
+    {
+      "friendly_tag": "Aster: Treasury",
+      "address": "0x128463a60784c4d3f46c23af3f65ed859ba87974"
+    },
+    {
+      "friendly_tag": "BabySwap: BABY Token",
+      "address": "0x53e562b9b7e5e94b81f10e96ee70ad06df3d2657"
+    },
+    {
+      "friendly_tag": "Beefy: BIFI Token",
+      "address": "0xca3f508b8e4dd382ee878a314789373d80a5190a"
+    },
+    {
+      "friendly_tag": "Beefy: Staking Contract",
+      "address": "0x453d4ba9a2d594314df88564248497f7d74d6b2c"
+    },
+    {
+      "friendly_tag": "Binance 47",
+      "address": "0x3c783c21a0383057d128bae431894a5c19f9cf06"
+    },
+    {
+      "friendly_tag": "Binance 51",
+      "address": "0x8894e0a0c962cb723c1976a4421c95949be2d4e3"
+    },
+    {
+      "friendly_tag": "Binance: BTCB Token",
+      "address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
+    },
+    {
+      "friendly_tag": "Binance: BUSD Stablecoin",
+      "address": "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 10",
+      "address": "0xeb2d2f1b8c558a40207669291fda468e50c8a0bb"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 11",
+      "address": "0x161ba15a5f335c9f06bb5bbb0a9ce14076fbb645"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 12",
+      "address": "0x515b72ed8a97f42c568d6a143232775018f133c8"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 13",
+      "address": "0xbd612a3f30dca67bf60a39fd0d35e39b7ab80774"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 16",
+      "address": "0xa180fe01b906a1be37be6c534a3300785b20d947"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 17",
+      "address": "0x29bdfbf7d27462a2d115748ace2bd71a2646946c"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 18",
+      "address": "0x73f5ebe90f27b46ea12e5795d16c4b408b19cc6f"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 19",
+      "address": "0x1fbe2acee135d991592f167ac371f3dd893a508b"
+    },
+    {
+      "friendly_tag": "Binance: Hot Wallet 23",
+      "address": "0x01c952174c24e1210d26961d456a77a39e1f0bb0"
+    },
+    {
+      "friendly_tag": "Binance: Withdrawals 2",
+      "address": "0xdccf3b77da55107280bd850ea519df3705d1a75a"
+    },
+    {
+      "friendly_tag": "Binance: Withdrawals 7",
+      "address": "0xe2fc31f816a9b94326492132018c3aecc4a93ae1"
+    },
+    {
+      "friendly_tag": "Biswap: BSW Token",
+      "address": "0x965f527d9159dce6288a2219db51fc6eef120dd1"
+    },
+    {
+      "friendly_tag": "Biswap: LP Contract 3",
+      "address": "0xc7dc9343c90be0ea2af6776efe5e19b2734f8d0d"
+    },
+    {
+      "friendly_tag": "Biswap: Router",
+      "address": "0x3a6d8ca21d1cf76f653a67577fa0d27453350dd8"
+    },
+    {
+      "friendly_tag": "Bitget 3",
+      "address": "0x97b9d2102a9a65a26e1ee82d59e42d1b73b68689"
+    },
+    {
+      "friendly_tag": "BNB Chain: WBNB Token",
+      "address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+    },
+    {
+      "friendly_tag": "Bogged Finance: Proxy",
+      "address": "0xb099ed146fad4d0daa31e3810591fc0554af62bb"
+    },
+    {
+      "friendly_tag": "Bomb Crypto: BCOIN Token",
+      "address": "0x00e1656e45f18ec6747f5a8496fd39b50b38396d"
+    },
+    {
+      "friendly_tag": "BOMB Money: BOMB Token",
+      "address": "0x522348779dcb2911539e76a1042aa922f9c47ee3"
+    },
+    {
+      "friendly_tag": "BOMB Money: BSHARE Token",
+      "address": "0x531780face85306877d7e1f05d713d1b50a37f7a"
+    },
+    {
+      "friendly_tag": "BUSD-T Stablecoin",
+      "address": "0x55d398326f99059ff775485246999027b3197955"
+    },
+    {
+      "friendly_tag": "Chainlink : LINK Token",
+      "address": "0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd"
+    },
+    {
+      "friendly_tag": "Crypto Fight Club: FIGHT Token",
+      "address": "0x4f39c3319188a723003670c3f9b9e7ef991e52f3"
+    },
+    {
+      "friendly_tag": "deBridge: Crosschain Forwarder Proxy",
+      "address": "0x663dc15d3c1ac63ff12e45ab68fea3f0a883c251"
+    },
+    {
+      "friendly_tag": "Dibs.Money: DIBS Token",
+      "address": "0xfd81ef21ea7cf1dc00e9c6dd261b4f3be0341d5c"
+    },
+    {
+      "friendly_tag": "Dibs.Money: DSHARE Token",
+      "address": "0x26d3163b165be95137cee97241e716b2791a7572"
+    },
+    {
+      "friendly_tag": "Ethereum: ETH Token",
+      "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8"
+    },
+    {
+      "friendly_tag": "Fantom: FTM Token",
+      "address": "0xad29abb318791d579433d831ed122afeaf29dcfe"
+    },
+    {
+      "friendly_tag": "Justus Token: JTT Token",
+      "address": "0xcdb3d3642fb4d48d2b5e4fb4a014448a2761c063"
+    },
+    {
+      "friendly_tag": "MetaMask: Gas Station 2",
+      "address": "0xb01caea8c6c47bbf4f4b4c5080ca642043359c2e"
+    },
+    {
+      "friendly_tag": "Metamask: Swap Router",
+      "address": "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31"
+    },
+    {
+      "friendly_tag": "Multichain: Router V4",
+      "address": "0xd1c5966f9f5ee6881ff6b261bbeda45972b1b5f3"
+    },
+    {
+      "friendly_tag": "MyShell: SHELL Token",
+      "address": "0xf2c88757f8d03634671208935974b60a2a28bdb3"
+    },
+    {
+      "friendly_tag": "OKZOO: AIOT Token",
+      "address": "0x55ad16bd573b3365f43a9daeb0cc66a73821b4a5"
+    },
+    {
+      "friendly_tag": "Orbital Swap: Router",
+      "address": "0x6b45064f128ca5addbf79825186f4e3e3c9e7eb5"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: BCOIN 15",
+      "address": "0x2eebe0c34da9ba65521e98cbaa7d97496d05f489"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: BSW 3",
+      "address": "0x8ca3ff14a52b080c54a6d1a405eeca02959d39fe"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: Cake-DUET",
+      "address": "0xbdf0aa1d1985caa357a6ac6661d838da8691c569"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: DIBS",
+      "address": "0x9bebe118018d0de55b00787b5eeabb9eda8a9e0a"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: DSHARE",
+      "address": "0x5998af8868e5e4fbd7c60da221b76b201e441612"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: ESHARE 4",
+      "address": "0x1747af98ebf0b22d500014c7dd52985d736337d2"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: ETH-EMP 4",
+      "address": "0x84821bb588f049913dc579dc511e5e31eb22d5e4"
+    },
+    {
+      "friendly_tag": "PancakeSwap V2: FIGHT-BUSD 4",
+      "address": "0xb9378a7d4f47ac8cf78b4f18ed15a875ab0c89a1"
+    },
+    {
+      "friendly_tag": "PancakeSwap V3: Nonfungible Position Manager",
+      "address": "0x46a15b0b27311cedf172ab29e4f4766fbe7f4364"
+    },
+    {
+      "friendly_tag": "PancakeSwap V3: Smart Router",
+      "address": "0x13f4ea83d0bd40e75c8222255bc855a974568dd4"
+    },
+    {
+      "friendly_tag": "PancakeSwap: Auto CAKE Syrup Pool",
+      "address": "0xa80240eb5d7e05d3f250cf000eec0891d00b51cc"
+    },
+    {
+      "friendly_tag": "PancakeSwap: CAKE Token",
+      "address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+    },
+    {
+      "friendly_tag": "PancakeSwap: IFO Pool",
+      "address": "0x1b2a2f6ed4a1401e8c73b4c2b6172455ce2f78e8"
+    },
+    {
+      "friendly_tag": "PancakeSwap: Main Staking Contract",
+      "address": "0x73feaa1ee314f8c655e354234017be2193c9e24e"
+    },
+    {
+      "friendly_tag": "PancakeSwap: Prediction V2",
+      "address": "0x18b2a687610328590bc8f2e5fedde3b582a49cda"
+    },
+    {
+      "friendly_tag": "PancakeSwap: Router v2",
+      "address": "0x10ed43c718714eb63d5aa57b78b54704e256024e"
+    },
+    {
+      "friendly_tag": "Ripple: XRP Token",
+      "address": "0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe"
+    },
+    {
+      "friendly_tag": "Safuu: Deployer",
+      "address": "0xc38511a85d8fbf2c859e0bce7e831afd4b569939"
+    },
+    {
+      "friendly_tag": "Safuu: SAFUU Token",
+      "address": "0xe5ba47fd94cb645ba4119222e34fb33f59c7cd90"
+    },
+    {
+      "friendly_tag": "SafuuGO: SGO Token",
+      "address": "0x9321bc6185adc9b9cb503cc211e17cb311c3fa95"
+    },
+    {
+      "friendly_tag": "Solana: SOL Token",
+      "address": "0x570a5d26f7765ecb712c0924e4de545b89fd43df"
+    },
+    {
+      "friendly_tag": "Staderlabs: BNBx Token",
+      "address": "0x1bdd3cf7f79cfb8edbb955f20ad99211551ba275"
+    },
+    {
+      "friendly_tag": "USD Coin: USDC Token",
+      "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"
+    },
+    {
+      "friendly_tag": "Valas Finance: VALAS Token",
+      "address": "0xb1ebdd56729940089ecc3ad0bbeeb12b6842ea6f"
+    },
+    {
+      "friendly_tag": "Vetter: VETTER Token",
+      "address": "0x6169b3b23e57de79a6146a2170980ceb1f83b9e0"
+    },
+    {
+      "friendly_tag": "Vitruveo Bridged VTRU (VTRU)",
+      "address": "0xb08504d245713ca9692c8fa605e76a0a11ed4955"
+    },
+    {
+      "friendly_tag": "Vulcan Forged PYR (PYR)",
+      "address": "0x936e203701c6f8b619fcf8bcba8ec0d4157f02a5"
+    },
+    {
+      "friendly_tag": "VulcanSwap: Vulcan Token (VULCAN)",
+      "address": "0xd7f7827507c49235a2a6c13ce07bac75ab183ea8"
+    },
+    {
+      "friendly_tag": "Wombat Exchange: WOM Token",
+      "address": "0xad6742a35fb341a9cc6ad674738dd8da98b94fb1"
+    },
+    {
+      "friendly_tag": "YieldRobot Rug 2",
+      "address": "0xb8cda6ae6d005d56205b29797add341c85e59608"
+    }
+  ],
+  "external_additions": [
+    {
+      "friendly_tag": "Safuu: SAFUU Token",
+      "address": "0xE5bA47fD94CB645ba4119222e34fB33F59C7CD90",
+      "source": "https://bscscan.com/address/0xe5ba47fd94cb645ba4119222e34fb33f59c7cd90",
+      "query_term": "Safuu / SFU / SFX"
+    },
+    {
+      "friendly_tag": "Safuu: Deployer",
+      "address": "0xc38511A85d8FBF2C859e0bCE7E831AFd4b569939",
+      "source": "https://bscscan.com/address/0xc38511a85d8fbf2c859e0bce7e831afd4b569939",
+      "query_term": "Safuu"
+    },
+    {
+      "friendly_tag": "SafuuGO: SGO Token",
+      "address": "0x9321bc6185AdC9B9Cb503cc211E17Cb311c3FA95",
+      "source": "https://bscscan.com/token/0x9321bc6185adc9b9cb503cc211e17cb311c3fa95",
+      "query_term": "SafuuGo / SGO"
+    },
+    {
+      "friendly_tag": "Vulcan Forged PYR (PYR)",
+      "address": "0x936E203701C6f8b619fcf8BCbA8Ec0D4157f02A5",
+      "source": "https://bscscan.com/token/0x936e203701c6f8b619fcf8bcba8ec0d4157f02a5",
+      "query_term": "Vulcan / VUL"
+    },
+    {
+      "friendly_tag": "VulcanSwap: Vulcan Token (VULCAN)",
+      "address": "0xd7F7827507c49235A2a6C13cE07BaC75ab183eA8",
+      "source": "https://vulcanswap.gitbook.io/vulcanswap/tokenomics/vulcanswap-token-vulcan",
+      "query_term": "VUL"
+    },
+    {
+      "friendly_tag": "Vitruveo Bridged VTRU (VTRU)",
+      "address": "0xb08504D245713Ca9692C8fA605E76A0A11Ed4955",
+      "source": "https://bscscan.com/token/0xb08504d245713ca9692c8fa605e76a0a11ed4955",
+      "query_term": "Vitruveo / VTRX"
+    }
+  ]
+}
