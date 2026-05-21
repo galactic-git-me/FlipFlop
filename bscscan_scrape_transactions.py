@@ -75,13 +75,13 @@ def first_link_text(td) -> str:
 
 def parse_row(row) -> Optional[Dict[str, str]]:
     tds = row.find_all("td")
-    if len(tds) < 8:
+    if len(tds) < 13:
         return None
 
+    # BscScan includes hidden date/age/local-date columns, so index by observed layout.
     tx_hash_href = first_link_href(tds[1])
     tx_hash = tx_hash_href.split("/")[-1] if tx_hash_href else first_link_text(tds[1])
-
-    block_text = " ".join(tds[2].get_text(" ", strip=True).split())
+    block_text = " ".join(tds[4].get_text(" ", strip=True).split())
 
     date_td = row.find("td", class_=lambda c: c and "showDate" in c)
     if date_td:
@@ -89,11 +89,11 @@ def parse_row(row) -> Optional[Dict[str, str]]:
     else:
         timestamp_text = ""
 
-    from_addr = first_link_text(tds[5])
-    from_href = first_link_href(tds[5])
+    from_addr = first_link_text(tds[8])
+    from_href = first_link_href(tds[8])
 
-    # The "to" column can include method tags and labels; pick last address-like link if present.
-    to_links = tds[7].find_all("a", href=True)
+    # The "to" column can include labels (e.g., protocol names) and/or raw addresses.
+    to_links = tds[10].find_all("a", href=True)
     to_href = ""
     to_addr = ""
     if to_links:
@@ -107,10 +107,10 @@ def parse_row(row) -> Optional[Dict[str, str]]:
             to_href = to_links[-1].get("href", "")
             to_addr = " ".join(to_links[-1].get_text(" ", strip=True).split())
     else:
-        to_addr = " ".join(tds[7].get_text(" ", strip=True).split())
+        to_addr = " ".join(tds[10].get_text(" ", strip=True).split())
 
-    value_text = " ".join(tds[8].get_text(" ", strip=True).split()) if len(tds) > 8 else ""
-    fee_text = " ".join(tds[9].get_text(" ", strip=True).split()) if len(tds) > 9 else ""
+    value_text = " ".join(tds[11].get_text(" ", strip=True).split())
+    fee_text = " ".join(tds[12].get_text(" ", strip=True).split())
 
     return {
         "tx_hash": tx_hash,
