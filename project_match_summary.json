@@ -1,0 +1,12 @@
+{
+  "total_rows": 1576,
+  "matched_rows": 349,
+  "unique_projects": [
+    "safuu"
+  ],
+  "project_match_counts": {
+    "safuu": 349
+  },
+  "match_records": 349,
+  "rpc_url": "https://bsc-dataseed.binance.org"
+}
