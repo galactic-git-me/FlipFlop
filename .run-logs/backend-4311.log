@@ -1330,3 +1330,118 @@ Call log:
  search=custom gaming pc source=CherryTree Inc
 2026-05-21 14:24:30 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=CherryTree Inc
 2026-05-21 14:24:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-21 14:24:33 [info     ] cases.generic_market.done      found=0 search=showcase build source=Alibaba
+2026-05-21 14:24:33 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=Alibaba
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+2026-05-21 14:24:39 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-21 14:24:45 [info     ] aliexpress.cases.done          found=0 search=showcase build
+2026-05-21 14:24:45 [info     ] temu.cases.done                found=0 search=showcase build
+2026-05-21 14:24:46 [info     ] temu.cases.done                found=0 search=custom gaming pc
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-21 14:24:46 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-21 14:24:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=gaming+atx+case+rgb
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=gaming+atx+case+rgb", waiting until "domcontentloaded"
+ search=gaming atx case rgb source=CherryTree Inc
+2026-05-21 14:24:46 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=CherryTree Inc
+2026-05-21 14:24:47 [info     ] aliexpress.cases.done          found=0 search=custom gaming pc
+2026-05-21 14:24:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-21 14:24:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-21 14:24:50 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+2026-05-21 14:24:50 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+2026-05-21 14:24:51 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-21 14:24:51 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-21 14:24:52 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-21 14:24:52 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=gaming+pc+case+mid+tower
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=gaming+pc+case+mid+tower", waiting until "domcontentloaded"
+ search=gaming pc case mid tower source=CherryTree Inc
+2026-05-21 14:24:52 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=CherryTree Inc
+2026-05-21 14:24:55 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 87)
+2026-05-21 14:24:56 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+2026-05-21 14:25:01 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-21 14:25:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-21 14:25:02 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-21 14:25:02 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-21 14:25:02 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 87)
+2026-05-21 14:25:03 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=slim+micro+atx+case+office
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=slim+micro+atx+case+office", waiting until "domcontentloaded"
+ search=slim micro atx case office source=CherryTree Inc
+2026-05-21 14:25:03 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=CherryTree Inc
+2026-05-21 14:25:03 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-21 14:25:05 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-21 14:25:05 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-21 14:25:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-21 14:25:06 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+2026-05-21 14:25:07 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-21 14:25:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 87)
+2026-05-21 14:25:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:25:12 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-21 14:25:13 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+2026-05-21 14:25:15 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+2026-05-21 14:25:15 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=mini+tower+desktop+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=mini+tower+desktop+case", waiting until "domcontentloaded"
+ search=mini tower desktop case source=CherryTree Inc
+2026-05-21 14:25:15 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=CherryTree Inc
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+2026-05-21 14:25:19 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+2026-05-21 14:25:19 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+2026-05-21 14:25:24 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-21 14:25:25 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-21 14:25:25 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+2026-05-21 14:25:26 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=cheap+atx+pc+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=cheap+atx+pc+case", waiting until "domcontentloaded"
+ search=cheap atx pc case source=CherryTree Inc
+2026-05-21 14:25:26 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=CherryTree Inc
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+2026-05-21 14:25:28 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-21 14:25:29 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+2026-05-21 14:25:34 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-21 14:25:34 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+2026-05-21 14:25:35 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 0)
+2026-05-21 14:25:35 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=budget+gaming+case+atx
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=budget+gaming+case+atx", waiting until "domcontentloaded"
+ search=budget gaming case atx source=CherryTree Inc
+2026-05-21 14:25:35 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=CherryTree Inc
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 87)
+2026-05-21 14:25:39 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-21 14:25:39 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-21 14:25:40 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-21 14:25:41 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-21 14:25:41 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 0)
+2026-05-21 14:25:43 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-21 14:25:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-21 14:25:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-21 14:25:45 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-21 14:25:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 87)
+2026-05-21 14:25:47 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+2026-05-21 14:25:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:25:47 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+2026-05-21 14:25:48 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=mini+itx+htpc+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=mini+itx+htpc+case", waiting until "domcontentloaded"
+ search=mini itx htpc case source=CherryTree Inc
+2026-05-21 14:25:48 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=CherryTree Inc
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 87)
+2026-05-21 14:25:51 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
+2026-05-21 14:25:53 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
