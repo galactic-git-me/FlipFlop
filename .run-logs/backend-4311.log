@@ -1609,3 +1609,35 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-21 14:31:36 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
 [scraper] eBay 'gamng pc': 0 found, 0 new (total 87)
 2026-05-21 14:31:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 10)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 10)
+2026-05-21 14:32:02 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-21 14:32:04 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-21 14:32:06 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+[scraper] eBay retry error for 'pc untested': Page.evaluate: Target crashed 
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 87)
+[scraper] eBay retry 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 87)
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 87)
+[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 10)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-21 14:32:29 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-21 14:32:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+2026-05-21 14:32:34 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 10)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 10)
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-21 14:32:57 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-21 14:32:59 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+[scraper] eBay 'compter tower': 0 found, 0 new (total 87)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 10)
+2026-05-21 14:33:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
