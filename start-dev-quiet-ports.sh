@@ -15,7 +15,8 @@ PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-dev}" # dev | prod
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
-LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-1}"
+LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
+ATTACH_TMUX="${ATTACH_TMUX:-0}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-pcflipper}"
@@ -65,7 +66,11 @@ free_port() {
     kill "$pid" >/dev/null 2>&1 || true
   done
 
-  sleep 1
+  local attempts=5
+  while port_in_use "$port" && (( attempts > 0 )); do
+    sleep 0.4
+    attempts=$((attempts - 1))
+  done
 
   if port_in_use "$port"; then
     pids="$(port_pids "$port" || true)"
@@ -74,7 +79,11 @@ free_port() {
       for pid in $pids; do
         kill -9 "$pid" >/dev/null 2>&1 || true
       done
-      sleep 1
+      attempts=5
+      while port_in_use "$port" && (( attempts > 0 )); do
+        sleep 0.4
+        attempts=$((attempts - 1))
+      done
     fi
   fi
 
@@ -667,14 +676,18 @@ tail -n 120 -f "$BACKEND_LOG" "$FRONTEND_LOG" | grep --line-buffered -Ei "error|
 EOF
   chmod +x "$alerts_tail_script"
 
-  tmux new-session -d -s "$TMUX_SESSION" "bash '$backend_pane_script'"
-  # Right column (top): frontend logs. Bottom-right: scheduler (swapped per request).
-  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
-  # Keep top panes at ~33% height and bottom panes at ~67%.
-  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
-  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.1 "bash '$scheduler_pane_script'"
+  # Layout requested:
+  # top-left:  frontend logs   (33% height)
+  # top-right: backend logs    (33% height)
+  # bottom-left: scheduler     (67% height)
+  # bottom-right: dashboard    (67% height)
+  # all quadrants: 50% width
+  tmux new-session -d -s "$TMUX_SESSION" "bash '$frontend_tail_script'"
+  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
+  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.0 "bash '$scheduler_pane_script'"
+  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.1 "bash '$backend_pane_script'"
 
-  # Launch backend dashboard in a separate window/terminal before attach.
+  # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
     if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
       tmux new-window -d -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
@@ -702,10 +715,10 @@ EOF
   echo
   echo "Opening tmux session '$TMUX_SESSION' with 4-pane quadrant layout."
   echo "Detach with Ctrl+b then d to return."
-  if [[ -t 1 ]]; then
+  if [[ "$ATTACH_TMUX" == "1" && -t 1 ]]; then
     tmux attach -t "$TMUX_SESSION" || true
   else
-    echo "No interactive TTY detected; skipping auto-attach."
+    echo "Skipping auto-attach."
     echo "Attach manually with: tmux attach -t $TMUX_SESSION"
   fi
 }
