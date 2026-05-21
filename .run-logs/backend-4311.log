@@ -1676,3 +1676,37 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay retry 'HP Z440': 0 found, 0 new (total 0)
 2026-05-21 14:34:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
 2026-05-21 14:34:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 87)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 10)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 10)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 0)
+2026-05-21 14:34:48 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 87)
+2026-05-21 14:34:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-21 14:34:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 10)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 87)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 87)
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 10)
+2026-05-21 14:35:14 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-21 14:35:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 10)
+2026-05-21 14:35:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 10)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 10)
+2026-05-21 14:35:42 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+[scraper] eBay 'pc collect today': 60 found, 60 new (total 147)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 0)
+2026-05-21 14:35:44 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+[scraper] eBay 'son old pc': 0 found, 0 new (total 0)
+2026-05-21 14:35:46 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
