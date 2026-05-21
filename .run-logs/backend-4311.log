@@ -1574,3 +1574,38 @@ Call log:
 2026-05-21 14:30:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
 [scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 10)
 2026-05-21 14:30:17 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 10)
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 10)
+2026-05-21 14:30:40 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+2026-05-21 14:30:42 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-21 14:30:44 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 10)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 87)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 87)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 10)
+2026-05-21 14:31:07 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-21 14:31:09 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-21 14:31:11 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-21 13:31:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 10)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 10)
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 87)
+2026-05-21 14:31:34 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 87)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 10)
+2026-05-21 14:31:36 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 87)
+2026-05-21 14:31:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
