@@ -358,6 +358,14 @@ async def scrape_facebook_playwright(
 
     results: list[RawListing] = []
     seen: set[str] = set()
+    login_required = asyncio.Event()
+    settings = None
+    try:
+        from app.config import get_settings
+        settings = get_settings()
+    except Exception:
+        settings = None
+    term_concurrency = max(1, min(4, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
 
     async with async_playwright() as p:
         try:
@@ -371,165 +379,175 @@ async def scrape_facebook_playwright(
                 )
             return []
 
-        page = await context.new_page()
+        sem = asyncio.Semaphore(term_concurrency)
 
-        for term in search_terms[:20]:
-            term_before = len(results)
-            try:
-                # Force a UK marketplace path to avoid geo redirects (for example /sanfrancisco/)
-                # when anonymous/headless sessions do not have stable location context.
-                url = (
-                    "https://www.facebook.com/marketplace/london/search/"
-                    f"?query={term.replace(' ', '%20')}"
-                    f"&minPrice={int(min_price)}"
-                    f"&maxPrice={int(max_price)}"
-                    "&exact=false"
-                )
-                log.info("facebook.playwright.fetch", url=url)
-                await page.goto(url, wait_until="domcontentloaded", timeout=25000)
+        async def _fetch_term(term: str) -> tuple[str, list[RawListing], str | None]:
+            if login_required.is_set():
+                return term, [], "login_required"
+            async with sem:
+                page = await context.new_page()
+                term_results: list[RawListing] = []
+                try:
+                    # Force a UK marketplace path to avoid geo redirects.
+                    url = (
+                        "https://www.facebook.com/marketplace/london/search/"
+                        f"?query={term.replace(' ', '%20')}"
+                        f"&minPrice={int(min_price)}"
+                        f"&maxPrice={int(max_price)}"
+                        "&exact=false"
+                    )
+                    log.info("facebook.playwright.fetch", url=url)
+                    await page.goto(url, wait_until="domcontentloaded", timeout=25000)
 
-                # Dismiss any login/cookie modals
-                for selector in [
-                    "div[aria-label='Close']",
-                    "button:has-text('Allow all cookies')",
-                    "button:has-text('Accept all')",
-                    "[data-testid='cookie-policy-manage-dialog-accept-button']",
-                ]:
+                    for selector in [
+                        "div[aria-label='Close']",
+                        "button:has-text('Allow all cookies')",
+                        "button:has-text('Accept all')",
+                        "[data-testid='cookie-policy-manage-dialog-accept-button']",
+                    ]:
+                        try:
+                            await page.click(selector, timeout=2000)
+                            await asyncio.sleep(0.3)
+                        except Exception:
+                            pass
+
+                    login_wall = await page.query_selector(
+                        "input[name='email'], form[data-testid='royal_login_form']"
+                    )
+                    if login_wall:
+                        login_required.set()
+                        log.warning(
+                            "facebook.playwright.login_required",
+                            hint="Save fb_cookies.json — see playwright_scraper.py instructions",
+                        )
+                        return term, [], "login_required"
+
                     try:
-                        await page.click(selector, timeout=2000)
-                        await asyncio.sleep(0.3)
+                        await page.wait_for_selector(
+                            "[data-testid='marketplace_feed_item'], "
+                            "[aria-label='Marketplace item'], "
+                            "div[class*='x3ct3a4']",
+                            timeout=10000,
+                        )
                     except Exception:
                         pass
 
-                # Check if we hit the login wall
-                login_wall = await page.query_selector(
-                    "input[name='email'], form[data-testid='royal_login_form']"
-                )
-                if login_wall:
-                    log.warning(
-                        "facebook.playwright.login_required",
-                        hint="Save fb_cookies.json — see playwright_scraper.py instructions",
-                    )
-                    record_term_result(
-                        term=term,
-                        found=0,
-                        new=0,
-                        error="login_required",
-                        source_name="Facebook Marketplace",
-                    )
-                    break  # No point trying other terms without auth
+                    await asyncio.sleep(random.uniform(1.0, 2.0))
+                    await page.evaluate("window.scrollBy(0, 800)")
+                    await asyncio.sleep(1.0)
 
-                # Wait for listing cards
-                try:
-                    await page.wait_for_selector(
+                    items = await page.query_selector_all(
                         "[data-testid='marketplace_feed_item'], "
                         "[aria-label='Marketplace item'], "
-                        "div[class*='x3ct3a4']",  # FB uses hashed class names
-                        timeout=10000,
+                        "a[href*='/marketplace/item/']"
                     )
-                except Exception:
-                    pass  # Some items may still be visible
+                    log.info("facebook.playwright.items", term=term, count=len(items))
 
-                await asyncio.sleep(random.uniform(1.0, 2.0))
+                    if not items:
+                        try:
+                            page_title = await page.title()
+                        except Exception:
+                            page_title = ""
+                        link_count = len(await page.query_selector_all("a[href*='/marketplace/item/']"))
+                        log.warning(
+                            "facebook.playwright.no_cards",
+                            term=term,
+                            title=page_title,
+                            current_url=page.url,
+                            item_links=link_count,
+                        )
+                        items = await page.query_selector_all("a[href*='/marketplace/item/']")
 
-                # Scroll once to load more
-                await page.evaluate("window.scrollBy(0, 800)")
-                await asyncio.sleep(1.0)
+                    for item in items:
+                        try:
+                            link_el = item if await item.get_attribute("href") else await item.query_selector(
+                                "a[href*='/marketplace/item/']"
+                            )
+                            if not link_el:
+                                continue
 
-                # Extract items — FB's DOM uses aria-label heavily
-                items = await page.query_selector_all(
-                    "[data-testid='marketplace_feed_item'], "
-                    "[aria-label='Marketplace item'], "
-                    "a[href*='/marketplace/item/']"
-                )
-                log.info("facebook.playwright.items", term=term, count=len(items))
+                            href = await link_el.get_attribute("href") or ""
+                            if not href.startswith("http"):
+                                href = "https://www.facebook.com" + href
 
-                if not items:
-                    try:
-                        page_title = await page.title()
-                    except Exception:
-                        page_title = ""
-                    link_count = len(await page.query_selector_all("a[href*='/marketplace/item/']"))
-                    log.warning(
-                        "facebook.playwright.no_cards",
-                        term=term,
-                        title=page_title,
-                        current_url=page.url,
-                        item_links=link_count,
-                    )
-                    # Fallback: parse direct marketplace item anchors if card selectors failed.
-                    items = await page.query_selector_all("a[href*='/marketplace/item/']")
+                            m = re.search(r"/item/(\d+)", href)
+                            if not m:
+                                continue
+                            external_id = f"fb_{m.group(1)}"
 
-                for item in items:
-                    try:
-                        # Get the link element (may be the item itself)
-                        link_el = item if await item.get_attribute("href") else \
-                                  await item.query_selector("a[href*='/marketplace/item/']")
-                        if not link_el:
+                            spans = await item.query_selector_all("span")
+                            texts = [
+                                (await s.inner_text()).strip()
+                                for s in spans
+                                if (await s.inner_text()).strip()
+                            ]
+
+                            price = 0.0
+                            title = ""
+                            for t in texts:
+                                if "£" in t and not price:
+                                    price = _parse_price(t)
+                                elif len(t) > 8 and not title and "£" not in t:
+                                    title = t
+
+                            if not title or price <= 0 or _is_mini_pc(title):
+                                continue
+
+                            img_el = await item.query_selector("img")
+                            image_url = await img_el.get_attribute("src") or "" if img_el else ""
+
+                            term_results.append(
+                                RawListing(
+                                    external_id=external_id,
+                                    title=title,
+                                    price=price,
+                                    url=href,
+                                    location=None,
+                                    condition="used",
+                                    description="",
+                                    image_urls=[image_url] if image_url else [],
+                                    source_name="Facebook Marketplace",
+                                )
+                            )
+                        except Exception:
                             continue
+                    return term, term_results, None
+                except Exception as exc:
+                    log.error("facebook.playwright.error", term=term, error=str(exc))
+                    return term, [], str(exc)
+                finally:
+                    await page.close()
 
-                        href = await link_el.get_attribute("href") or ""
-                        if not href.startswith("http"):
-                            href = "https://www.facebook.com" + href
-
-                        # Item ID from URL
-                        m = re.search(r"/item/(\d+)", href)
-                        if not m:
-                            continue
-                        external_id = f"fb_{m.group(1)}"
-                        if external_id in seen:
-                            continue
-                        seen.add(external_id)
-
-                        # Title and price are in span elements within the card
-                        spans = await item.query_selector_all("span")
-                        texts = [
-                            (await s.inner_text()).strip()
-                            for s in spans
-                            if (await s.inner_text()).strip()
-                        ]
-
-                        # Price is usually the first span with a £ sign
-                        price = 0.0
-                        title = ""
-                        for t in texts:
-                            if "£" in t and not price:
-                                price = _parse_price(t)
-                            elif len(t) > 8 and not title and "£" not in t:
-                                title = t
-
-                        if not title or price <= 0 or _is_mini_pc(title):
-                            continue
-
-                        img_el = await item.query_selector("img")
-                        image_url = await img_el.get_attribute("src") or "" if img_el else ""
-
-                        results.append(RawListing(
-                            external_id=external_id,
-                            title=title,
-                            price=price,
-                            url=href,
-                            location=None,
-                            condition="used",
-                            description="",
-                            image_urls=[image_url] if image_url else [],
-                            source_name="Facebook Marketplace",
-                        ))
-                    except Exception:
-                        continue
-
-                term_new = len(results) - term_before
+        tasks = [asyncio.create_task(_fetch_term(term)) for term in search_terms[:20]]
+        for done in asyncio.as_completed(tasks):
+            term, term_items, err = await done
+            if err == "login_required":
                 record_term_result(
                     term=term,
-                    found=term_new,
-                    new=term_new,
+                    found=0,
+                    new=0,
+                    error="login_required",
                     source_name="Facebook Marketplace",
                 )
-
-            except Exception as exc:
-                log.error("facebook.playwright.error", term=term, error=str(exc))
-                record_term_result(term=term, error=str(exc), source_name="Facebook Marketplace")
                 continue
+            if err:
+                record_term_result(term=term, error=err, source_name="Facebook Marketplace")
+                continue
+
+            term_new = 0
+            for row in term_items:
+                if row.external_id in seen:
+                    continue
+                seen.add(row.external_id)
+                results.append(row)
+                term_new += 1
+
+            record_term_result(
+                term=term,
+                found=term_new,
+                new=term_new,
+                source_name="Facebook Marketplace",
+            )
 
         if browser is not None:
             await browser.close()

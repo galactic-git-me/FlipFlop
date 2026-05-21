@@ -216,10 +216,12 @@ async def run_upgrade_parts_swarm() -> dict:
         if v and not isinstance(v, Exception):
             stats["box"] += 1
 
-    # ── Phase 3b: Amazon / Temu / AliExpress — concurrent Playwright ─────────
-    amz_r = await asyncio.gather(*[_fetch_amazon(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
-    temu_r = await asyncio.gather(*[_fetch_temu(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
-    ali_r = await asyncio.gather(*[_fetch_aliexpress(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
+    # ── Phase 3b: Amazon / Temu / AliExpress — run all 3 lanes in parallel ───
+    amz_r, temu_r, ali_r = await asyncio.gather(
+        asyncio.gather(*[_fetch_amazon(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
+        asyncio.gather(*[_fetch_temu(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
+        asyncio.gather(*[_fetch_aliexpress(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
+    )
     for v in amz_r:
         if v and not isinstance(v, Exception):
             stats["amazon"] += 1
