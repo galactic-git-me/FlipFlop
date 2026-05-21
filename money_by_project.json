@@ -1,0 +1,26 @@
+{
+  "unclassified": {
+    "tx_count": 1226,
+    "money_in_bnb": 128.52156578200004,
+    "money_out_bnb": 194.34393800800004,
+    "net_bnb": -65.822372226,
+    "money_in_usd_then": 83439.26999999999,
+    "money_out_usd_then": 126176.50000000009,
+    "net_usd_then": -42737.2300000001,
+    "money_in_usd_today_est": 83695.81406855407,
+    "money_out_usd_today_est": 126560.65930956979,
+    "net_usd_today_est": -42864.84524101572
+  },
+  "safuu": {
+    "tx_count": 350,
+    "money_in_bnb": 0.0,
+    "money_out_bnb": 193.524233555,
+    "net_bnb": -193.524233555,
+    "money_in_usd_then": 0.0,
+    "money_out_usd_then": 125632.48000000004,
+    "net_usd_then": -125632.48000000004,
+    "money_in_usd_today_est": 0.0,
+    "money_out_usd_today_est": 126026.8513756871,
+    "net_usd_today_est": -126026.8513756871
+  }
+}
