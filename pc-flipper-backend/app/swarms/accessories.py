@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import dataclass
 from fake_useragent import UserAgent
-from playwright.async_api import async_playwright
 
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
@@ -201,6 +200,7 @@ async def run_accessories_swarm() -> dict:
                 )
                 source_batches.append(("Accessories:eBay", ebay_results))
 
+                from playwright.async_api import async_playwright
                 async with async_playwright() as p:
                     browser = await p.chromium.launch(
                         headless=True,
