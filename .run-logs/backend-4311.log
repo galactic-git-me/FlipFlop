@@ -3549,3 +3549,161 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-21 20:13:47 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
 2026-05-21 20:13:47 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=551.99 query=gaming PC rtx 3060
 2026-05-21 20:13:47 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 63)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 63)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 63)
+[scraper] eBay 'pc build': 0 found, 0 new (total 63)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 63)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 63)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 63)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 63)
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 63)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 63)
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 63)
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 63)
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 63)
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 63)
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 63)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 63)
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 63)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 63)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 63)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 63)
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 63)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 63)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 63)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 63)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 63)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 63)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 42 found, 42 new (total 42)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 42)
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 42)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 63)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 42)
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 63)
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 42)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 63)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 63)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 42)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 42)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 63)
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 63)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 42)
+[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 63)
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 63)
+[scraper] eBay retry error for 'ex office pc lot': Page.evaluate: Target crashed 
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 42)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 42)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 63)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 42)
+[scraper] eBay retry 'pc untested': 0 found, 0 new (total 63)
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 63)
+[scraper] eBay error for 'Dell Precision tower': Page.evaluate: Target crashed 
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 63)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 42)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 42)
+[scraper] eBay retry 'desktop untested': 0 found, 0 new (total 63)
+[scraper] eBay retry 'gaming pc faulty': 0 found, 0 new (total 63)
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 63)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 42)
+[scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 63)
+[scraper] eBay retry 'HP workstation': 0 found, 0 new (total 63)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 42)
+[scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 63)
+[scraper] eBay retry 'Dell Precision tower': 50 found, 50 new (total 113)
+[scraper] eBay retry 'HP Z440': 0 found, 0 new (total 113)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 113)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 113)
+[scraper] eBay retry 'Fujitsu Esprimo': 0 found, 0 new (total 42)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 113)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 42)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 113)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 42)
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 113)
+[scraper] eBay retry 'pc base unit no graphics': 0 found, 0 new (total 42)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 113)
+[scraper] eBay retry 'pc boots no display': 0 found, 0 new (total 42)
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 113)
+[scraper] eBay retry 'i5 tower': 0 found, 0 new (total 42)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 113)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 113)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 42)
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 113)
+[scraper] eBay retry 'HP Z240': 0 found, 0 new (total 42)
+[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 113)
+[scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 42)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 113)
+[scraper] eBay retry 'Lenovo ThinkStation': 0 found, 0 new (total 42)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 113)
+[scraper] eBay retry 'gaming pc no graphics card': 0 found, 0 new (total 42)
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 113)
+[scraper] eBay retry 'pc faulty': 0 found, 0 new (total 42)
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 113)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 42)
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 113)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 42)
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 113)
+[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 42)
+[scraper] eBay retry 'Dell workstation': 0 found, 0 new (total 42)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 113)
+[scraper] eBay retry 'HP Compaq tower': 0 found, 0 new (total 42)
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 113)
+[scraper] eBay retry 'pc tower no graphics': 0 found, 0 new (total 42)
+2026-05-21 20:31:12 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC status=403
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=335.0 median=522.0 query=gaming PC
+2026-05-21 20:31:12 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=17.8 median=513.36 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=23.72 median=520.46 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=94.3 median=605.16 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=39.99 median=539.99 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=39.99 median=539.99 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=36.82 median=536.18 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=36.82 median=536.18 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=36.82 median=536.18 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=39.95 median=539.94 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=3.9 median=496.68 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=39.99 median=539.99 query=gaming PC pentium g4400 rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=37.9 median=537.48 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=56.46 median=559.75 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=53.3 median=555.96 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=59.47 median=563.36 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=149.93 median=671.92 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=155.7 median=678.84 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=19.99 median=515.99 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=44.95 median=545.94 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=56.42 median=559.7 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=25.5 median=522.6 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=54.86 median=557.83 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=55.28 median=558.34 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=19.99 median=515.99 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=353.5 median=832.2 query=gaming PC ryzen 5 5500 rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=726.0 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=22.2 median=518.64 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=47.5 median=549.0 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=19.15 median=514.98 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=5.46 median=498.55 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=5.45 median=498.54 query=gaming PC rtx 3060
+2026-05-21 20:31:12 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5 4590t rtx 3060 status=403
+2026-05-21 20:31:12 [info     ] resale_scraper.fallback_buy_price buy_price=36.0 median=535.2 query=gaming PC i5 4590t rtx 3060
+2026-05-21 20:31:12 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=19
+2026-05-21 20:31:12 [info     ] source.done                    found=85 gems=1 source=eBay UK
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-21 19:31:24 UTC)" skipped: maximum number of running instances reached (1)
