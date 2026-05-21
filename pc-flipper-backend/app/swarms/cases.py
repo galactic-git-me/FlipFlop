@@ -16,8 +16,10 @@ from fake_useragent import UserAgent
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
+from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 import structlog
+from sqlalchemy import select as sa_select
 
 log = structlog.get_logger(__name__)
 ua = UserAgent()
@@ -116,8 +118,9 @@ async def run_cases_swarm() -> dict:
     log.info("cases_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
 
+    dynamic_themes, source_allowlist = await _dynamic_case_themes_from_db()
     playbook_themes = await _playbook_extra_themes()
-    all_themes = CASE_THEMES + playbook_themes
+    all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
 
     # Fan out scraping concurrently (network-bound), but keep writes controlled.
@@ -138,8 +141,9 @@ async def run_cases_swarm() -> dict:
                 return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
     scrape_tasks: list[asyncio.Task] = []
+    enabled_sources = [s for s in SOURCES if not source_allowlist or s["name"] in source_allowlist]
     for theme_def in all_themes:
-        for source in SOURCES:
+        for source in enabled_sources:
             for term in theme_def["terms"][:2]:
                 scrape_tasks.append(asyncio.create_task(_scrape_one(source, theme_def["theme"], term)))
 
@@ -192,6 +196,32 @@ async def run_cases_swarm() -> dict:
 
     log.info("cases_swarm.done", **stats)
     return stats
+
+
+async def _dynamic_case_themes_from_db() -> tuple[list[dict], set[str]]:
+    try:
+        async with AsyncSessionLocal() as db:
+            rows = (
+                await db.execute(
+                    sa_select(SourceSearchTerm).where(
+                        SourceSearchTerm.scope == "cases",
+                        SourceSearchTerm.enabled == True,
+                    )
+                )
+            ).scalars().all()
+        if not rows:
+            return [], set()
+        grouped: dict[str, list[str]] = {}
+        source_allowlist: set[str] = set()
+        for row in rows:
+            grouped.setdefault(row.group_name or "Custom", []).append(row.term)
+            for s in row.source_names or []:
+                source_allowlist.add(str(s))
+        themes = [{"theme": g, "terms": list(dict.fromkeys(ts))} for g, ts in grouped.items() if ts]
+        return themes, source_allowlist
+    except Exception as exc:
+        log.warning("cases.dynamic_terms.error", error=str(exc))
+        return [], set()
 
 
 async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Settings, Save, Bot, Layers, RefreshCw, ShieldCheck, Cpu } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { api, SourceSearchTerm } from "@/lib/api";
 
 interface AppSettings {
   max_concurrent_flips: number;
@@ -18,6 +18,15 @@ interface AppSettings {
   image_gen_provider: string;
   default_sell_platform: string;
   ebay_app_id: string;
+}
+
+interface DataSource {
+  id: number;
+  name: string;
+  url: string;
+  source_type: string;
+  enabled: boolean;
+  config?: Record<string, unknown>;
 }
 
 const DEFAULTS: AppSettings = {
@@ -47,43 +56,62 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-function SettingRow({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
-  return (
-    <div className="flex items-center justify-between gap-4 p-3 bg-[#0a1119] rounded-xl border border-[#1e2d45]">
-      <div>
-        <div className="text-sm text-slate-300 font-medium">{label}</div>
-        {desc && <div className="text-xs text-slate-600 mt-0.5">{desc}</div>}
-      </div>
-      <div className="flex-shrink-0">{children}</div>
-    </div>
-  );
-}
+type TabKey = "general" | "sources" | "terms";
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState<AppSettings>(DEFAULTS);
+  const [tab, setTab] = useState<TabKey>("general");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [settings, setSettings] = useState<AppSettings>(DEFAULTS);
+  const [sources, setSources] = useState<DataSource[]>([]);
+  const [terms, setTerms] = useState<SourceSearchTerm[]>([]);
+
+  const [newSourceName, setNewSourceName] = useState("");
+  const [newSourceUrl, setNewSourceUrl] = useState("");
+
+  const [scope, setScope] = useState("cases");
+  const [newGroup, setNewGroup] = useState("Fish Tank / Panoramic Cases");
+  const [newTerm, setNewTerm] = useState("");
+  const [newTermSources, setNewTermSources] = useState<string[]>([]);
+
+  async function loadAll() {
+    setLoading(true);
+    try {
+      const [s, src, t] = await Promise.all([
+        api.settings.get(),
+        api.sources.list() as Promise<DataSource[]>,
+        api.sourceSearchTerms.list(scope),
+      ]);
+      if (s) setSettings(prev => ({ ...prev, ...(s as Partial<AppSettings>) }));
+      setSources(src ?? []);
+      setTerms(t.items ?? []);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    api.settings.get().then(data => {
-      if (data) setSettings(prev => ({ ...prev, ...(data as Partial<AppSettings>) }));
-    }).catch(() => {}).finally(() => setLoading(false));
+    loadAll().catch(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const save = async () => {
+  useEffect(() => {
+    api.sourceSearchTerms.list(scope).then(r => setTerms(r.items ?? [])).catch(() => {});
+  }, [scope]);
+
+  const groups = useMemo(() => Array.from(new Set(terms.map(t => t.group_name))).sort(), [terms]);
+
+  const saveSettings = async () => {
     setSaving(true);
     try {
       await api.settings.update(settings as unknown as Record<string, unknown>);
       setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
+      setTimeout(() => setSaved(false), 2200);
     } finally {
       setSaving(false);
     }
-  };
-
-  const set = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
   };
 
   if (loading) {
@@ -96,212 +124,241 @@ export default function SettingsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
             <Settings className="w-5 h-5 text-slate-400" /> Settings
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">Platform-wide configuration — Hermes, auto-buy limits, image generation</p>
+          <p className="text-sm text-slate-500 mt-0.5">General controls, dynamic data sources, and source-linked search terms.</p>
         </div>
-        <Button variant="primary" size="sm" onClick={save} disabled={saving}>
+        <Button variant="primary" size="sm" onClick={saveSettings} disabled={saving || tab !== "general"}>
           <Save className="w-3.5 h-3.5" />
-          {saving ? "Saving…" : saved ? "Saved ✓" : "Save Settings"}
+          {saving ? "Saving…" : saved ? "Saved ✓" : "Save General"}
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {/* Flip Management */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5 text-[#00dc82]" /> Flip Management
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <div className="p-3 bg-[#0a1119] rounded-xl border border-[#1e2d45]">
-              <label className="text-xs text-slate-500 mb-2 block">Max Concurrent Flips</label>
-              <div className="flex items-center gap-4">
-                <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  value={settings.max_concurrent_flips}
-                  onChange={e => set("max_concurrent_flips", Number(e.target.value))}
-                  className="flex-1 accent-[#00dc82]"
-                />
-                <span className="text-xl font-black text-[#00dc82] w-6 text-right">
-                  {settings.max_concurrent_flips}
-                </span>
-              </div>
-              <p className="text-xs text-slate-600 mt-1">
-                {settings.max_concurrent_flips === 1
-                  ? "Single flip at a time — conservative approach"
-                  : `Up to ${settings.max_concurrent_flips} simultaneous flips — higher capital required`}
-              </p>
-            </div>
-            <div>
-              <label className="text-xs text-slate-500 mb-2 block">Default Sell Platform</label>
-              <div className="flex gap-2">
-                {["ebay", "facebook", "gumtree"].map(p => (
-                  <button
-                    key={p}
-                    onClick={() => set("default_sell_platform", p)}
-                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium border capitalize transition-all ${
-                      settings.default_sell_platform === p
-                        ? "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/30"
-                        : "bg-[#0a1119] text-slate-500 border-[#1e2d45]"
-                    }`}
-                  >
-                    {p === "ebay" ? "eBay" : p.charAt(0).toUpperCase() + p.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Hermes AI Model */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Cpu className="w-3.5 h-3.5 text-cyan-400" /> Hermes AI Model
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <div className="p-2.5 bg-cyan-400/5 border border-cyan-400/15 rounded-xl text-[11px] text-slate-400 leading-relaxed">
-              Priority: <span className="text-cyan-300 font-mono">OpenRouter primary</span> → OpenRouter fallbacks → Ollama local → Claude Haiku
-            </div>
-            <div>
-              <label className="text-xs text-slate-500 mb-1.5 block">OpenRouter API Key</label>
-              <input
-                type="password"
-                value={settings.openrouter_api_key}
-                onChange={e => set("openrouter_api_key", e.target.value)}
-                placeholder="sk-or-…"
-                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-cyan-400/50"
-              />
-              <p className="text-[10px] text-slate-600 mt-1">Get a free key at <span className="text-cyan-400">openrouter.ai</span> — required for OpenRouter models</p>
-            </div>
-            <div>
-              <label className="text-xs text-slate-500 mb-1.5 block">Primary Model (OpenRouter)</label>
-              <input
-                value={settings.openrouter_primary_model}
-                onChange={e => set("openrouter_primary_model", e.target.value)}
-                placeholder="google/gemma-4-31b-it:free"
-                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-cyan-400/50"
-              />
-              <p className="text-[10px] text-slate-600 mt-1">Used for all chats, scoring, and listing generation — append <code className="text-cyan-400">:free</code> for free tier</p>
-            </div>
-            <div>
-              <label className="text-xs text-slate-500 mb-1.5 block">Ollama Model (local fallback)</label>
-              <div className="flex gap-2">
-                <input
-                  value={settings.ollama_base_url}
-                  onChange={e => set("ollama_base_url", e.target.value)}
-                  placeholder="Ollama base URL"
-                  className="w-1/2 px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-cyan-400/50"
-                />
-                <input
-                  value={settings.ollama_model}
-                  onChange={e => set("ollama_model", e.target.value)}
-                  placeholder="gemma3:4b"
-                  className="w-1/2 px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-cyan-400/50"
-                />
-              </div>
-              <p className="text-[10px] text-slate-600 mt-1">Used when OpenRouter is unavailable. Run <code className="text-cyan-400">ollama pull gemma3:4b</code> on your Ollama host.</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Auto-Buy Safety */}
-        <Card className="border-yellow-400/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-yellow-400" /> Auto-Buy Safety Controls
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <div className="p-3 bg-yellow-400/5 border border-yellow-400/15 rounded-xl text-xs text-slate-400 leading-relaxed">
-              Autonomous mode allows Hermes to purchase units without manual approval. This requires valid eBay API credentials.
-              Start with queue-only mode until you trust the scoring.
-            </div>
-            <SettingRow
-              label="Fully Autonomous Mode"
-              desc="Hermes purchases without approval — requires eBay API"
-            >
-              <Toggle checked={settings.auto_buy_autonomous} onChange={() => set("auto_buy_autonomous", !settings.auto_buy_autonomous)} />
-            </SettingRow>
-            <div className="p-3 bg-[#0a1119] rounded-xl border border-[#1e2d45]">
-              <label className="text-xs text-slate-500 mb-2 block">Max Auto-Buys per Day</label>
-              <div className="flex items-center gap-4">
-                <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  value={settings.auto_buy_daily_limit}
-                  onChange={e => set("auto_buy_daily_limit", Number(e.target.value))}
-                  className="flex-1 accent-yellow-400"
-                />
-                <span className="text-lg font-black text-yellow-400 w-6 text-right">{settings.auto_buy_daily_limit}</span>
-              </div>
-              <p className="text-xs text-slate-600 mt-1">Hard cap on purchases regardless of available gems</p>
-            </div>
-            <div>
-              <label className="text-xs text-slate-500 mb-1.5 block">eBay App ID (for auto-buy)</label>
-              <input
-                type="password"
-                value={settings.ebay_app_id}
-                onChange={e => set("ebay_app_id", e.target.value)}
-                placeholder="eBay-AppID-…"
-                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 font-mono outline-none focus:border-yellow-400/50"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Image Generation */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bot className="w-3.5 h-3.5 text-pink-400" /> AI Image Generation
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <SettingRow
-              label="Enable Image Generation"
-              desc="Generate AI product photos for selling listings"
-            >
-              <Toggle checked={settings.image_gen_enabled} onChange={() => set("image_gen_enabled", !settings.image_gen_enabled)} />
-            </SettingRow>
-            <div>
-              <label className="text-xs text-slate-500 mb-2 block">Image Provider</label>
-              <div className="flex gap-2">
-                {[
-                  { value: "pollinations", label: "Pollinations.ai", desc: "Free · No API key" },
-                  { value: "stability", label: "Stability AI", desc: "Paid · Higher quality" },
-                ].map(opt => (
-                  <button
-                    key={opt.value}
-                    onClick={() => set("image_gen_provider", opt.value)}
-                    className={`flex-1 p-2.5 rounded-xl border text-left transition-all ${
-                      settings.image_gen_provider === opt.value
-                        ? "border-pink-400/40 bg-pink-400/8"
-                        : "border-[#1e2d45] bg-[#0a1119] hover:border-slate-600"
-                    }`}
-                  >
-                    <div className="text-xs font-medium text-slate-200">{opt.label}</div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">{opt.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="p-3 bg-[#0a1119] rounded-xl border border-[#1e2d45] text-xs text-slate-500 leading-relaxed">
-              Images are generated using Stable Diffusion with product-photography prompts based on your PC specs and case theme.
-              Each flip gets a hero shot, side view, and detail shot — ready to copy-paste into eBay listings.
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex gap-2">
+        {[
+          { key: "general", label: "General" },
+          { key: "sources", label: "Data Sources" },
+          { key: "terms", label: "Search Terms" },
+        ].map(t => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key as TabKey)}
+            className={`px-3 py-1.5 rounded-lg text-sm border ${
+              tab === t.key ? "border-[#00dc82]/40 bg-[#00dc82]/10 text-[#00dc82]" : "border-[#1e2d45] text-slate-400"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
+
+      {tab === "general" && (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader><CardTitle>General</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <label className="text-xs text-slate-500 block">Max Concurrent Flips</label>
+              <input
+                type="range"
+                min={1}
+                max={10}
+                value={settings.max_concurrent_flips}
+                onChange={e => setSettings(p => ({ ...p, max_concurrent_flips: Number(e.target.value) }))}
+                className="w-full accent-[#00dc82]"
+              />
+              <label className="text-xs text-slate-500 block">Default Sell Platform</label>
+              <input
+                value={settings.default_sell_platform}
+                onChange={e => setSettings(p => ({ ...p, default_sell_platform: e.target.value }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              />
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Auto Buy Autonomous</span>
+                <Toggle checked={settings.auto_buy_autonomous} onChange={() => setSettings(p => ({ ...p, auto_buy_autonomous: !p.auto_buy_autonomous }))} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Model + eBay</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <input value={settings.openrouter_primary_model} onChange={e => setSettings(p => ({ ...p, openrouter_primary_model: e.target.value }))} placeholder="OpenRouter primary model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <input value={settings.ollama_base_url} onChange={e => setSettings(p => ({ ...p, ollama_base_url: e.target.value }))} placeholder="Ollama URL" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <input value={settings.ollama_model} onChange={e => setSettings(p => ({ ...p, ollama_model: e.target.value }))} placeholder="Ollama model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <input value={settings.ebay_app_id} onChange={e => setSettings(p => ({ ...p, ebay_app_id: e.target.value }))} placeholder="eBay App ID" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {tab === "sources" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Database className="w-4 h-4" /> Data Sources</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <input value={newSourceName} onChange={e => setNewSourceName(e.target.value)} placeholder="Source name" className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <input value={newSourceUrl} onChange={e => setNewSourceUrl(e.target.value)} placeholder="Source URL" className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={async () => {
+                  if (!newSourceName.trim()) return;
+                  await api.sources.create({ name: newSourceName.trim(), url: newSourceUrl.trim(), source_type: "scrape", enabled: true, config: {} });
+                  setNewSourceName("");
+                  setNewSourceUrl("");
+                  setSources(await api.sources.list() as DataSource[]);
+                }}
+              >
+                <Plus className="w-3.5 h-3.5" /> Add Source
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {sources.map(src => (
+                <div key={src.id} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-[#1e2d45] bg-[#0a1119]">
+                  <div>
+                    <div className="text-sm text-slate-200">{src.name}</div>
+                    <div className="text-xs text-slate-500">{src.url || "No URL"}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Toggle
+                      checked={src.enabled}
+                      onChange={async () => {
+                        const updated = await api.sources.update(src.id, { enabled: !src.enabled }) as DataSource;
+                        setSources(prev => prev.map(p => (p.id === src.id ? updated : p)));
+                      }}
+                    />
+                    <button
+                      className="p-1.5 rounded border border-red-500/30 text-red-400"
+                      onClick={async () => {
+                        await api.sources.delete(src.id);
+                        setSources(await api.sources.list() as DataSource[]);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {tab === "terms" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Search className="w-4 h-4" /> Search Terms</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-0">
+            <div className="flex flex-wrap gap-2 items-center">
+              <select value={scope} onChange={e => setScope(e.target.value)} className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm">
+                <option value="cases">cases</option>
+                <option value="flip_opportunities">flip_opportunities</option>
+                <option value="accessories">accessories</option>
+                <option value="upgrade_parts">upgrade_parts</option>
+              </select>
+              <select value={newGroup} onChange={e => setNewGroup(e.target.value)} className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm">
+                {groups.map(g => <option key={g} value={g}>{g}</option>)}
+                <option value="Custom">Custom</option>
+              </select>
+              <input value={newTerm} onChange={e => setNewTerm(e.target.value)} placeholder="New search term" className="flex-1 min-w-[260px] px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={async () => {
+                  if (!newTerm.trim()) return;
+                  const groupName = newGroup === "Custom" ? "Custom" : newGroup;
+                  await api.sourceSearchTerms.create({
+                    scope,
+                    group_name: groupName,
+                    term: newTerm.trim(),
+                    source_names: newTermSources,
+                    attributes: { capture_fields: ["color", "material", "size", "form_factor", "theme", "style", "franchise"] },
+                    enabled: true,
+                  });
+                  setNewTerm("");
+                  setTerms((await api.sourceSearchTerms.list(scope)).items);
+                }}
+              >
+                <Plus className="w-3.5 h-3.5" /> Add Term
+              </Button>
+            </div>
+
+            <div className="p-3 bg-[#0a1119] border border-[#1e2d45] rounded-xl">
+              <div className="text-xs text-slate-500 mb-2">Assign new term to data sources</div>
+              <div className="flex flex-wrap gap-2">
+                {sources.map(s => {
+                  const picked = newTermSources.includes(s.name);
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => setNewTermSources(prev => picked ? prev.filter(n => n !== s.name) : [...prev, s.name])}
+                      className={`px-2 py-1 rounded text-xs border ${picked ? "bg-[#00dc82]/15 border-[#00dc82]/40 text-[#00dc82]" : "border-[#1e2d45] text-slate-400"}`}
+                    >
+                      {s.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-2 max-h-[55vh] overflow-auto pr-1">
+              {terms.map(term => (
+                <div key={term.id} className="p-3 rounded-xl border border-[#1e2d45] bg-[#0a1119] space-y-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-sm text-slate-200">{term.term}</div>
+                      <div className="text-xs text-slate-500">{term.group_name} · {term.scope}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Toggle
+                        checked={term.enabled}
+                        onChange={async () => {
+                          const upd = await api.sourceSearchTerms.update(term.id, { enabled: !term.enabled });
+                          setTerms(prev => prev.map(t => t.id === term.id ? upd : t));
+                        }}
+                      />
+                      <button
+                        className="p-1.5 rounded border border-red-500/30 text-red-400"
+                        onClick={async () => {
+                          await api.sourceSearchTerms.delete(term.id);
+                          setTerms(prev => prev.filter(t => t.id !== term.id));
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {sources.map(s => {
+                      const selected = term.source_names.includes(s.name);
+                      return (
+                        <button
+                          key={`${term.id}-${s.id}`}
+                          onClick={async () => {
+                            const next = selected ? term.source_names.filter(n => n !== s.name) : [...term.source_names, s.name];
+                            const upd = await api.sourceSearchTerms.update(term.id, { source_names: next });
+                            setTerms(prev => prev.map(t => t.id === term.id ? upd : t));
+                          }}
+                          className={`px-2 py-1 rounded text-xs border ${selected ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-300" : "border-[#1e2d45] text-slate-500"}`}
+                        >
+                          {s.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
