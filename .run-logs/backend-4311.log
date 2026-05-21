@@ -1549,3 +1549,28 @@ Call log:
 2026-05-21 14:28:53 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
 [scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
 2026-05-21 14:28:55 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+2026-05-21 14:29:18 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-21 14:29:20 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 87)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 10)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 87)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 87)
+2026-05-21 14:29:22 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+2026-05-21 14:29:45 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-21 14:29:47 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-21 14:29:49 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 87)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 87)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 87)
+2026-05-21 14:30:13 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-21 14:30:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 10)
+2026-05-21 14:30:17 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
