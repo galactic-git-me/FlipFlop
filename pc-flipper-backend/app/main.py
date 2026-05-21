@@ -215,6 +215,7 @@ async def _load_db_settings_into_config():
     from app.database import AsyncSessionLocal
     from app.models.app_settings import AppSettings
     from app.models.source_search_term import SourceSearchTerm
+    from app.models.source_search_term import SourceSearchTerm
     from sqlalchemy import select
     try:
         async with AsyncSessionLocal() as db:
@@ -473,6 +474,7 @@ async def _seed_default_data():
     from app.models.source import DataSource, SourceType
     from app.models.search_config import SearchConfig
     from app.models.app_settings import AppSettings
+    from app.models.source_search_term import SourceSearchTerm
     from sqlalchemy import select, func
 
     async with AsyncSessionLocal() as db:
