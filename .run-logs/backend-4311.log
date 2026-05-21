@@ -964,3 +964,139 @@ Call log:
 2026-05-21 14:20:29 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=Alibaba
 2026-05-21 14:20:29 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
 2026-05-21 14:20:29 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-21 14:20:30 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-21 14:20:30 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-21 14:20:31 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+2026-05-21 14:20:33 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-21 14:20:33 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-21 14:20:35 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-21 14:20:35 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-21 14:20:35 [info     ] amazon.cases.done              found=1 search=x-gene gaming build
+2026-05-21 14:20:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:20:37 [info     ] amazon.cases.done              found=0 search=cerebro workstation
+2026-05-21 14:20:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:20:37 [info     ] aliexpress.cases.done          found=0 search=pokedex workstation
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-21 14:20:38 [info     ] aliexpress.cases.done          found=0 search=pikachu yellow rgb build
+2026-05-21 14:20:39 [info     ] temu.cases.done                found=0 search=pokedex workstation
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-21 14:20:40 [info     ] temu.cases.done                found=0 search=pikachu yellow rgb build
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-21 14:20:45 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=BargainHardware
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+2026-05-21 14:20:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=x-gene+gaming+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=x-gene+gaming+build", waiting until "domcontentloaded"
+ search=x-gene gaming build source=CherryTree Inc
+2026-05-21 14:20:46 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=CherryTree Inc
+2026-05-21 14:20:46 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=BargainHardware
+2026-05-21 14:20:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=cerebro+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=cerebro+workstation", waiting until "domcontentloaded"
+ search=cerebro workstation source=CherryTree Inc
+2026-05-21 14:20:47 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=CherryTree Inc
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+2026-05-21 14:20:50 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=Alibaba
+2026-05-21 14:20:50 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=Alibaba
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-21 14:20:57 [info     ] amazon.cases.done              found=0 search=super saiyan gaming pc
+2026-05-21 14:21:00 [info     ] temu.cases.done                found=0 search=x-gene gaming build
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+2026-05-21 14:21:01 [info     ] aliexpress.cases.done          found=0 search=x-gene gaming build
+2026-05-21 14:21:01 [info     ] aliexpress.cases.done          found=0 search=cerebro workstation
+2026-05-21 14:21:02 [info     ] temu.cases.done                found=0 search=cerebro workstation
+2026-05-21 14:21:03 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-21 14:21:06 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-21 14:21:06 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+2026-05-21 14:21:07 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=BargainHardware
+2026-05-21 14:21:08 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-21 14:21:09 [info     ] amazon.cases.done              found=0 search=dragon radar workstation
+2026-05-21 14:21:09 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-21 14:21:09 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-21 14:21:10 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=super+saiyan+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=super+saiyan+gaming+pc", waiting until "domcontentloaded"
+ search=super saiyan gaming pc source=CherryTree Inc
+2026-05-21 14:21:10 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=CherryTree Inc
+2026-05-21 14:21:11 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=dragon+radar+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=dragon+radar+workstation", waiting until "domcontentloaded"
+ search=dragon radar workstation source=CherryTree Inc
+2026-05-21 14:21:11 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=CherryTree Inc
+2026-05-21 14:21:11 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-21 14:21:12 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=BargainHardware
+2026-05-21 14:21:12 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+2026-05-21 14:21:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-21 14:21:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-21 14:21:15 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=Alibaba
+2026-05-21 14:21:15 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:21:15 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:21:16 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=Alibaba
+2026-05-21 14:21:22 [info     ] amazon.cases.done              found=1 search=avengers workstation
+2026-05-21 14:21:22 [info     ] temu.cases.done                found=0 search=super saiyan gaming pc
+2026-05-21 14:21:23 [info     ] amazon.cases.done              found=10 search=shield tactical pc
+2026-05-21 14:21:24 [info     ] aliexpress.cases.done          found=0 search=super saiyan gaming pc
+2026-05-21 14:21:24 [info     ] aliexpress.cases.done          found=0 search=dragon radar workstation
+2026-05-21 14:21:25 [info     ] temu.cases.done                found=0 search=dragon radar workstation
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+2026-05-21 14:21:29 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=BargainHardware
+2026-05-21 14:21:30 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=BargainHardware
+2026-05-21 14:21:30 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=avengers+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=avengers+workstation", waiting until "domcontentloaded"
+ search=avengers workstation source=CherryTree Inc
+2026-05-21 14:21:30 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=CherryTree Inc
+2026-05-21 14:21:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=shield+tactical+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=shield+tactical+pc", waiting until "domcontentloaded"
+ search=shield tactical pc source=CherryTree Inc
+2026-05-21 14:21:31 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=CherryTree Inc
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-21 14:21:34 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=Alibaba
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+2026-05-21 14:21:35 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=Alibaba
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+2026-05-21 14:21:40 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-21 14:21:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-21 14:21:43 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=office pc
+2026-05-21 14:21:43 [info     ] amazon.cases.done              found=0 search=jarvis ai workstation
+2026-05-21 14:21:44 [info     ] amazon.cases.done              found=10 search=stark industries pc
+2026-05-21 14:21:45 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+2026-05-21 14:21:46 [info     ] aliexpress.cases.done          found=0 search=avengers workstation
+2026-05-21 14:21:47 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-21 14:21:47 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-21 14:21:47 [info     ] temu.cases.done                found=0 search=shield tactical pc
+2026-05-21 14:21:47 [info     ] temu.cases.done                found=0 search=avengers workstation
+2026-05-21 14:21:48 [info     ] aliexpress.cases.done          found=0 search=shield tactical pc
+2026-05-21 14:21:49 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-21 14:21:50 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-21 14:21:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-21 14:21:52 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=BargainHardware
+2026-05-21 14:21:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-21 14:21:53 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=jarvis+ai+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=jarvis+ai+workstation", waiting until "domcontentloaded"
+ search=jarvis ai workstation source=CherryTree Inc
+2026-05-21 14:21:53 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=CherryTree Inc
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-21 14:21:53 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=BargainHardware
+2026-05-21 14:21:53 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=stark+industries+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=stark+industries+pc", waiting until "domcontentloaded"
+ search=stark industries pc source=CherryTree Inc
+2026-05-21 14:21:53 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=CherryTree Inc
+2026-05-21 14:21:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:21:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
