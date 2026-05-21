@@ -349,7 +349,7 @@ except Exception:
     latest_term_by_source = latest_term_by_source or {}
     telem_source_items = {}
 
-print(f"{'JOB':30} {'EN':3} {'CURRENT TERM SEARCH':28} {'LAST':28} STATUS")
+print(f"{'JOB':30} {'CURRENT TERM SEARCH':28} {'LAST':28} STATUS")
 print("-" * 115)
 for j in rows:
     jid = str(j.get("id", ""))[:30]
@@ -384,7 +384,7 @@ for j in rows:
     else:
         last = completed_since(j.get("last_run_at"))
 
-    print(f"{jid:30} {en:3} {term[:28]:28} {str(last)[:28]:28} {st}")
+    print(f"{jid:30} {term[:28]:28} {str(last)[:28]:28} {st}")
 PY
     sleep 2
   done
