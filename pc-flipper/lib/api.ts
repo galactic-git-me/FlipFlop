@@ -160,6 +160,18 @@ export interface SearchTelemetrySourceSummary {
   errors: number;
 }
 
+export interface SourceSearchTerm {
+  id: number;
+  scope: string;
+  group_name: string;
+  term: string;
+  source_names: string[];
+  attributes: Record<string, unknown>;
+  notes?: string | null;
+  enabled: boolean;
+  created_at: string;
+}
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 export function apiUrl(path: string): string {
@@ -242,6 +254,18 @@ export const api = {
     get: () => request<unknown>("/settings"),
     update: (data: Record<string, unknown>) =>
       request<unknown>("/settings", { method: "PUT", body: JSON.stringify(data) }),
+  },
+
+  sourceSearchTerms: {
+    list: (scope?: string) =>
+      request<{ items: SourceSearchTerm[]; groups: string[]; scopes: string[] }>(
+        `/source-search-terms${scope ? `?scope=${encodeURIComponent(scope)}` : ""}`,
+      ),
+    create: (data: Record<string, unknown>) =>
+      request<SourceSearchTerm>("/source-search-terms", { method: "POST", body: JSON.stringify(data) }),
+    update: (id: number, data: Record<string, unknown>) =>
+      request<SourceSearchTerm>(`/source-search-terms/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+    delete: (id: number) => request<void>(`/source-search-terms/${id}`, { method: "DELETE" }),
   },
 
   intel: {

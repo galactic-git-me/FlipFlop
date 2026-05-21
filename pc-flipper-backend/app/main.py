@@ -214,6 +214,7 @@ async def _load_db_settings_into_config():
     """
     from app.database import AsyncSessionLocal
     from app.models.app_settings import AppSettings
+    from app.models.source_search_term import SourceSearchTerm
     from sqlalchemy import select
     try:
         async with AsyncSessionLocal() as db:
@@ -835,5 +836,25 @@ async def _seed_default_data():
             if _pb and not _pb.upsell_strategy:
                 _pb.upsell_strategy = _upsell
                 log.info("migrated.playbook.upsell_strategy", name=_pb_name)
+
+        # ── Seed source-linked case taxonomy terms (dynamic settings UX) ─────
+        taxonomy_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm))
+        if taxonomy_count == 0:
+            rows: list[SourceSearchTerm] = []
+            for group_name, terms in _CASE_TAXONOMY.items():
+                for term in terms:
+                    rows.append(
+                        SourceSearchTerm(
+                            scope="cases",
+                            group_name=group_name,
+                            term=term,
+                            source_names=_CASE_DEFAULT_SOURCES,
+                            attributes=_infer_case_attributes(term, group_name),
+                            notes="seeded_case_taxonomy",
+                            enabled=True,
+                        )
+                    )
+            db.add_all(rows)
+            log.info("seeded.source_search_terms", scope="cases", count=len(rows))
 
         await db.commit()
