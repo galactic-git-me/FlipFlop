@@ -3052,3 +3052,42 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-21 19:35:27 [info     ] source.done                    found=0 gems=0 source=Temu
 [scraper] eBay 'pc no display': 0 found, 0 new (total 0)
 2026-05-21 19:35:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-21 19:35:40 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-21 19:35:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-21 19:35:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=pc build
+2026-05-21 19:35:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-21 19:35:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-21 19:35:49 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-21 19:35:50 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+2026-05-21 19:35:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-21 19:35:52 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-21 19:35:52 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-21 19:35:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+2026-05-21 19:35:56 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton tower': HTTP blocked/empty (status=200), Playwright returned 43
+[scraper] eBay 'Acer Veriton tower': 43 found, 43 new (total 43)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-21 19:36:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-21 19:36:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-21 19:36:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-21 19:36:20 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-21 19:36:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-21 19:36:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-21 19:36:23 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-21 19:36:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-21 19:36:26 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-21 19:36:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-21 19:36:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-21 19:36:46 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 43)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 43)
+2026-05-21 19:36:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+2026-05-21 19:36:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-21 19:36:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
