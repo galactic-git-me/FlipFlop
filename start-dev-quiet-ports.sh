@@ -670,9 +670,9 @@ EOF
   tmux new-session -d -s "$TMUX_SESSION" "bash '$backend_pane_script'"
   # Right column (top): frontend logs. Bottom-right: scheduler (swapped per request).
   tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
-  # Keep top panes at ~66% height and bottom panes at ~34%.
-  tmux split-window -v -l 34% -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
-  tmux split-window -v -l 34% -t "$TMUX_SESSION":0.1 "bash '$scheduler_pane_script'"
+  # Keep top panes at ~33% height and bottom panes at ~67%.
+  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
+  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.1 "bash '$scheduler_pane_script'"
 
   # Launch backend dashboard in a separate window/terminal before attach.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
