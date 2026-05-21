@@ -1216,3 +1216,117 @@ Call log:
 2026-05-21 14:23:17 [info     ] temu.cases.done                found=0 search=dark knight pc
 2026-05-21 14:23:17 [info     ] aliexpress.cases.done          found=0 search=batcomputer workstation
 2026-05-21 14:23:18 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-21 14:23:21 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+2026-05-21 14:23:22 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+2026-05-21 14:23:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=kryptonian+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=kryptonian+workstation", waiting until "domcontentloaded"
+ search=kryptonian workstation source=CherryTree Inc
+2026-05-21 14:23:22 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=CherryTree Inc
+2026-05-21 14:23:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=fortress+of+solitude+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=fortress+of+solitude+build", waiting until "domcontentloaded"
+ search=fortress of solitude build source=CherryTree Inc
+2026-05-21 14:23:23 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=CherryTree Inc
+2026-05-21 14:23:26 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=Alibaba
+2026-05-21 14:23:27 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=Alibaba
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 87)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 87)
+2026-05-21 14:23:32 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-21 14:23:33 [info     ] amazon.cases.done              found=10 search=lian li style case
+2026-05-21 14:23:34 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-21 14:23:34 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-21 14:23:35 [info     ] amazon.cases.done              found=10 search=hyte y60 style case
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-21 14:23:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-21 14:23:38 [info     ] aliexpress.cases.done          found=0 search=kryptonian workstation
+2026-05-21 14:23:40 [info     ] temu.cases.done                found=0 search=kryptonian workstation
+2026-05-21 14:23:40 [info     ] aliexpress.cases.done          found=0 search=fortress of solitude build
+2026-05-21 14:23:41 [info     ] temu.cases.done                found=0 search=fortress of solitude build
+2026-05-21 14:23:42 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-21 14:23:42 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-21 14:23:44 [info     ] cases.generic_market.done      found=0 search=lian li style case source=BargainHardware
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-21 14:23:45 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-21 14:23:45 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-21 14:23:45 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=BargainHardware
+2026-05-21 14:23:45 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=lian+li+style+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=lian+li+style+case", waiting until "domcontentloaded"
+ search=lian li style case source=CherryTree Inc
+2026-05-21 14:23:45 [info     ] cases.generic_market.done      found=0 search=lian li style case source=CherryTree Inc
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-21 14:23:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=hyte+y60+style+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=hyte+y60+style+case", waiting until "domcontentloaded"
+ search=hyte y60 style case source=CherryTree Inc
+2026-05-21 14:23:46 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=CherryTree Inc
+2026-05-21 14:23:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+2026-05-21 14:23:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+2026-05-21 14:23:49 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+2026-05-21 14:23:50 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
+2026-05-21 14:23:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-21 14:23:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+2026-05-21 14:23:57 [info     ] amazon.cases.done              found=10 search=darkFlash fish tank
+2026-05-21 14:23:58 [info     ] amazon.cases.done              found=10 search=Montech panoramic case
+2026-05-21 14:23:59 [info     ] temu.cases.done                found=0 search=lian li style case
+2026-05-21 14:24:00 [info     ] temu.cases.done                found=0 search=hyte y60 style case
+2026-05-21 14:24:02 [info     ] aliexpress.cases.done          found=0 search=lian li style case
+2026-05-21 14:24:03 [info     ] aliexpress.cases.done          found=0 search=hyte y60 style case
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+2026-05-21 14:24:07 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=BargainHardware
+2026-05-21 14:24:07 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=BargainHardware
+2026-05-21 14:24:08 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=Montech+panoramic+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=Montech+panoramic+case", waiting until "domcontentloaded"
+ search=Montech panoramic case source=CherryTree Inc
+2026-05-21 14:24:08 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=CherryTree Inc
+2026-05-21 14:24:08 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=darkFlash+fish+tank
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=darkFlash+fish+tank", waiting until "domcontentloaded"
+ search=darkFlash fish tank source=CherryTree Inc
+2026-05-21 14:24:08 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=CherryTree Inc
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+2026-05-21 14:24:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-21 14:24:11 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=Alibaba
+2026-05-21 14:24:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
+2026-05-21 14:24:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
+2026-05-21 14:24:12 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=Alibaba
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 87)
+2026-05-21 14:24:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 87)
+2026-05-21 14:24:19 [info     ] amazon.cases.done              found=0 search=custom gaming pc
+2026-05-21 14:24:19 [info     ] amazon.cases.done              found=10 search=showcase build
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 87)
+2026-05-21 14:24:22 [info     ] aliexpress.cases.done          found=0 search=Montech panoramic case
+2026-05-21 14:24:22 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-21 14:24:22 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+2026-05-21 14:24:24 [info     ] temu.cases.done                found=0 search=Montech panoramic case
+2026-05-21 14:24:24 [info     ] aliexpress.cases.done          found=0 search=darkFlash fish tank
+2026-05-21 14:24:24 [info     ] temu.cases.done                found=0 search=darkFlash fish tank
+2026-05-21 14:24:25 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-21 14:24:25 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-21 14:24:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-21 14:24:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-21 14:24:28 [info     ] cases.generic_market.done      found=0 search=showcase build source=BargainHardware
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+2026-05-21 14:24:29 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=showcase+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=showcase+build", waiting until "domcontentloaded"
+ search=showcase build source=CherryTree Inc
+2026-05-21 14:24:29 [info     ] cases.generic_market.done      found=0 search=showcase build source=CherryTree Inc
+2026-05-21 14:24:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+2026-05-21 14:24:29 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=BargainHardware
+2026-05-21 14:24:29 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=custom+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=custom+gaming+pc", waiting until "domcontentloaded"
+ search=custom gaming pc source=CherryTree Inc
+2026-05-21 14:24:30 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=CherryTree Inc
+2026-05-21 14:24:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
