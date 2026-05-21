@@ -2527,3 +2527,4 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-21 15:17:02 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=61
 2026-05-21 15:17:02 [info     ] source.done                    found=68 gems=0 source=eBay UK Auctions
 Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-21 14:31:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-21 15:31:24 UTC)" skipped: maximum number of running instances reached (1)
