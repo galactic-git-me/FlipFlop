@@ -1710,3 +1710,16 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-21 14:35:44 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
 [scraper] eBay 'son old pc': 0 found, 0 new (total 0)
 2026-05-21 14:35:46 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 10)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 147)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 147)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 10)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-21 14:36:10 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-21 14:36:12 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 0)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 0)
+2026-05-21 14:36:13 [info     ] BidSpotter.playwright.done     total=0
+2026-05-21 14:36:13 [info     ] source.retry.success           retried_terms=13 source=BidSpotter
+2026-05-21 14:36:13 [info     ] source.done                    found=0 gems=0 source=BidSpotter
