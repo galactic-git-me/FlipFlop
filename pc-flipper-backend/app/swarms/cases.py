@@ -142,8 +142,16 @@ async def run_cases_swarm() -> dict:
 
     scrape_tasks: list[asyncio.Task] = []
     enabled_sources = [s for s in SOURCES if not source_allowlist or s["name"] in source_allowlist]
+    source_once_done: set[str] = set()
     for theme_def in all_themes:
         for source in enabled_sources:
+            # CherryTree should ingest from its cases catalogue once, not per search term.
+            if source["fn"] == "cherrytree":
+                if source["fn"] in source_once_done:
+                    continue
+                source_once_done.add(source["fn"])
+                scrape_tasks.append(asyncio.create_task(_scrape_one(source, "Catalogue", "catalogue")))
+                continue
             for term in theme_def["terms"][:2]:
                 scrape_tasks.append(asyncio.create_task(_scrape_one(source, theme_def["theme"], term)))
 
@@ -1107,12 +1115,28 @@ async def _scrape_bargainhardware(search: str, theme: str) -> list[RawCase]:
 
 
 async def _scrape_cherrytree(search: str, theme: str) -> list[RawCase]:
-    return await _scrape_generic_case_market(
-        search=search,
-        theme=theme,
-        source_site="CherryTree Inc",
-        url=f"https://www.cherrytreeinc.com/search?q={search.replace(' ', '+')}",
-    )
+    # Explicit request: do not search CherryTree by term; ingest from cases section.
+    seeds = [
+        "https://www.cherrytreeinc.com/collections/pc-cases",
+        "https://www.cherrytreeinc.com/collections/cases",
+        "https://www.cherrytreeinc.com/cases",
+    ]
+    all_cases: list[RawCase] = []
+    seen_urls: set[str] = set()
+    for url in seeds:
+        scraped = await _scrape_generic_case_market(
+            search="catalogue",
+            theme=theme or "Catalogue",
+            source_site="CherryTree Inc",
+            url=url,
+        )
+        for c in scraped:
+            key = (c.source_url or "").split("?")[0]
+            if not key or key in seen_urls:
+                continue
+            seen_urls.add(key)
+            all_cases.append(c)
+    return all_cases
 
 
 async def _scrape_alibaba(search: str, theme: str) -> list[RawCase]:

@@ -857,13 +857,16 @@ EOF
   chmod +x "$alerts_tail_script"
 
   # Layout:
-  # - Left: FlipFlop ASCII title (top 50%), frontend logs + backend logs (bottom split 50/50)
-  # - Right: scheduler (full height)
-  local left_top_pane right_pane left_bottom_pane left_bottom_bottom_pane
+  # - Left: compact FlipFlop ASCII header, then frontend/backend logs
+  # - Right: backend stats dashboard, scheduler, sources
+  local left_top_pane right_top_pane left_bottom_pane left_bottom_bottom_pane right_bottom_pane right_bottom_bottom_pane
   left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$title_pane_script'")"
-  right_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
-  left_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
+  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$backend_pane_script'")"
+  # Keep title pane only as tall as needed for ASCII art.
+  left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
+  right_bottom_pane="$(tmux split-window -v -l 55% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$scheduler_pane_script'")"
+  right_bottom_bottom_pane="$(tmux split-window -v -l 45% -P -F "#{pane_id}" -t "$right_bottom_pane" "bash '$sources_pane_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
