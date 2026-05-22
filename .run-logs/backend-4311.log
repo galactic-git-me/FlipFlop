@@ -2550,3 +2550,64 @@ Call log:
 2026-05-22 21:46:49 [info     ] temu.cases.done                found=0 search=gamma core build
 [scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
 2026-05-22 21:46:49 [info     ] aliexpress.cases.done          found=0 search=gamma core build
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+2026-05-22 21:46:50 [info     ] aliexpress.cases.done          found=0 search=radioactive green rgb pc
+2026-05-22 21:46:51 [info     ] temu.cases.done                found=0 search=radioactive green rgb pc
+2026-05-22 21:46:55 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-22 21:46:56 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
+2026-05-22 21:46:59 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=Alibaba
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-22 21:47:00 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=Alibaba
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+2026-05-22 21:47:07 [info     ] amazon.cases.done              found=0 search=batcomputer workstation
+2026-05-22 21:47:08 [info     ] amazon.cases.done              found=10 search=dark knight pc
+2026-05-22 21:47:11 [info     ] temu.cases.done                found=0 search=spiderverse gaming pc
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+2026-05-22 21:47:12 [info     ] aliexpress.cases.done          found=0 search=spiderverse gaming pc
+2026-05-22 21:47:13 [info     ] aliexpress.cases.done          found=0 search=red blue rgb build
+2026-05-22 21:47:13 [info     ] temu.cases.done                found=0 search=red blue rgb build
+2026-05-22 21:47:18 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=BargainHardware
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-22 21:47:18 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=BargainHardware
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-22 21:47:22 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=Alibaba
+2026-05-22 21:47:22 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
+2026-05-22 21:47:30 [info     ] amazon.cases.done              found=10 search=kryptonian workstation
+2026-05-22 21:47:30 [info     ] amazon.cases.done              found=3 search=fortress of solitude build
+2026-05-22 21:47:33 [info     ] temu.cases.done                found=0 search=dark knight pc
+2026-05-22 21:47:33 [info     ] temu.cases.done                found=0 search=batcomputer workstation
+2026-05-22 21:47:34 [info     ] aliexpress.cases.done          found=0 search=batcomputer workstation
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-22 21:47:36 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-22 21:47:38 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+2026-05-22 21:47:40 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+2026-05-22 21:47:43 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=Alibaba
+2026-05-22 21:47:44 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=Alibaba
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+2026-05-22 21:47:51 [info     ] amazon.cases.done              found=10 search=lian li style case
+2026-05-22 21:47:52 [info     ] amazon.cases.done              found=10 search=hyte y60 style case
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-22 21:47:55 [info     ] temu.cases.done                found=0 search=fortress of solitude build
+2026-05-22 21:47:56 [info     ] aliexpress.cases.done          found=0 search=kryptonian workstation
+2026-05-22 21:47:56 [info     ] temu.cases.done                found=0 search=kryptonian workstation
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+2026-05-22 21:47:56 [info     ] aliexpress.cases.done          found=0 search=fortress of solitude build
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+2026-05-22 21:48:01 [info     ] cases.generic_market.done      found=0 search=lian li style case source=BargainHardware
+2026-05-22 21:48:01 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=BargainHardware
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+2026-05-22 21:48:04 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-22 21:48:05 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 20:48:06 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-22 21:48:13 [info     ] amazon.cases.done              found=10 search=Montech panoramic case
+2026-05-22 21:48:13 [info     ] amazon.cases.done              found=10 search=darkFlash fish tank
