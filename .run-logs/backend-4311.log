@@ -7897,3 +7897,35 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 19:32:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
 2026-05-22 19:32:46 [info     ] facebook.playwright.done       total=0
 2026-05-22 19:32:46 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-22 19:33:04 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-22 19:33:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-22 19:33:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-22 19:33:11 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-22 19:33:14 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-22 19:33:14 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-22 19:33:14 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-22 19:33:15 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-22 19:33:16 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 19:33:17 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-22 19:33:18 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-22 19:33:19 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-22 19:33:31 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-22 19:33:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-22 19:33:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+2026-05-22 19:33:48 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-22 19:33:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-22 19:33:51 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-22 19:33:52 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-22 19:33:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 19:33:54 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-22 19:33:55 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-22 19:33:57 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+2026-05-22 19:33:59 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-22 19:34:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-22 19:34:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
