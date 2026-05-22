@@ -187,26 +187,39 @@ BACKEND_PID=$!
 free_port "$FRONTEND_PORT"
 
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
-(
-  cd "$FRONTEND_DIR"
-  echo "============================================================"
-  echo "Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT"
-  echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
-  echo "============================================================"
-  if [[ "$FRONTEND_MODE" == "dev" ]]; then
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
-    _frontend_child=$!
-    echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
-    wait "$_frontend_child"
-  else
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build
-    NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
-    _frontend_child=$!
-    echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
-    wait "$_frontend_child"
-  fi
-) >"$FRONTEND_LOG" 2>&1 &
-FRONTEND_PID=$!
+start_frontend() {
+  (
+    cd "$FRONTEND_DIR"
+    echo "============================================================"
+    echo "Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT"
+    echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
+    echo "============================================================"
+    if [[ "$FRONTEND_MODE" == "dev" ]]; then
+      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
+      _frontend_child=$!
+      echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
+      wait "$_frontend_child"
+    else
+      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build
+      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
+      _frontend_child=$!
+      echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
+      wait "$_frontend_child"
+    fi
+  ) >"$FRONTEND_LOG" 2>&1 &
+  FRONTEND_PID=$!
+}
+
+start_frontend
+sleep 1
+if grep -q "EADDRINUSE" "$FRONTEND_LOG" 2>/dev/null; then
+  echo "Frontend hit EADDRINUSE on $FRONTEND_PORT. Retrying once after forcing port cleanup..."
+  kill "$FRONTEND_PID" >/dev/null 2>&1 || true
+  wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+  free_port "$FRONTEND_PORT"
+  : >"$FRONTEND_LOG"
+  start_frontend
+fi
 
 sleep 1
 
@@ -796,12 +809,13 @@ EOF
   chmod +x "$alerts_tail_script"
 
   # Layout (swapped columns):
-  # - Left: backend dashboard (top 50%), frontend logs (bottom 50%)
+  # - Left: backend dashboard (top 50%), frontend logs + backend logs (bottom split 50/50)
   # - Right: scheduler (top 50%), sources (bottom 50%)
-  local left_top_pane right_top_pane left_bottom_pane right_bottom_pane
+  local left_top_pane right_top_pane left_bottom_pane right_bottom_pane left_bottom_bottom_pane
   left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$backend_pane_script'")"
   right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
   left_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
+  left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
   right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$sources_pane_script'")"
 
   # Optional separate dashboard launch.
