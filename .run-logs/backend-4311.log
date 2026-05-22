@@ -6486,3 +6486,385 @@ Call log:
 2026-05-22 13:37:42 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
 2026-05-22 13:37:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
 2026-05-22 13:37:50 [info     ] temu.cases.done                found=0 search=manga aesthetic workstation
+2026-05-22 13:37:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:37:51 [info     ] temu.cases.done                found=0 search=anime gaming pc
+2026-05-22 13:38:24 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-22 13:38:26 [warning  ] aliexpress.cases.scrape_error  error=Page.evaluate: Target crashed
+2026-05-22 13:38:26 [info     ] aliexpress.cases.done          found=0 search=anime gaming pc
+2026-05-22 13:38:27 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=BargainHardware
+2026-05-22 13:38:28 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=750W+ATX+PSU+80+gold&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:28 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=256GB+SATA+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:28 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=850W+ATX+PSU+80+gold&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:28 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+7600+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:28 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=32GB+DDR4+3200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+3060+12GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i7-10700&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+3070+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i5-12400&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=GTX+1660+Super+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i7-10700K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=1TB+SATA+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:29 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=1TB+NVMe+M.2+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i9-10900K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:30 [info     ] aliexpress.cases.done          found=0 search=manga aesthetic workstation
+2026-05-22 13:38:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=32GB+DDR5+5200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600X&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3080+10GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=256GB+SATA+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1070+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=1TB+SATA+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3060+Ti+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=pc+build&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=Intel+Core+i7-12700&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=500GB+NVMe+M.2+SSD&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-10700&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=2TB+internal+hard+drive&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=16GB+DDR5+5200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i5-10600K&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1650+4GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+4060+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+2060+6GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RX+6650+XT+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AMD+Ryzen+5+5600X&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AMD+Ryzen+7+5700X&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=16GB+DDR4+3200+kit&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:33 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+580+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RX+6700+XT+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=650W+ATX+PSU+80+bronze&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3070+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+6650+XT+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+2060+6GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1660+Super+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+3600&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+2080+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=GTX+1060+6GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=amazon
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=2TB+internal+hard+drive&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i9-10900K&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:34 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=32GB+DDR5+5200+kit&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RTX+2070+8GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i5-10600K&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=GTX+1060+6GB+used&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AMD+Ryzen+9+5900X&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RX+570+8GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=480GB+SATA+SSD&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RTX+3060+12GB+used&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+5800X&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-22 13:38:35 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=BargainHardware
+2026-05-22 13:38:35 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=anime+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=anime+gaming+pc", waiting until "domcontentloaded"
+ search=anime gaming pc source=CherryTree Inc
+2026-05-22 13:38:35 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-22 13:38:36 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-22 13:38:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-22 13:38:40 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=CherryTree Inc
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-22 13:38:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=manga+aesthetic+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=manga+aesthetic+workstation", waiting until "domcontentloaded"
+ search=manga aesthetic workstation source=CherryTree Inc
+2026-05-22 13:38:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:38:43 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=CherryTree Inc
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-22 13:38:45 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-22 13:38:46 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-22 13:38:46 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-22 13:38:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-22 13:38:49 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=Alibaba
+2026-05-22 13:38:50 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=Alibaba
+2026-05-22 13:38:52 [info     ] amazon.cases.done              found=0 search=hokage workstation
+2026-05-22 13:38:52 [info     ] amazon.cases.done              found=4 search=hidden leaf gaming pc
+2026-05-22 13:38:52 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-22 13:38:53 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-22 13:38:53 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=6 box=0 ebay_buy=14 ebay_sold=20 errors=0 overclockers=0 scan=0 temu=0 updated=21
+2026-05-22 13:38:54 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-22 13:38:57 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=BargainHardware
+2026-05-22 13:38:57 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=BargainHardware
+2026-05-22 13:38:57 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=hidden+leaf+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=hidden+leaf+gaming+pc", waiting until "domcontentloaded"
+ search=hidden leaf gaming pc source=CherryTree Inc
+2026-05-22 13:38:57 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=CherryTree Inc
+2026-05-22 13:38:58 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=hokage+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=hokage+workstation", waiting until "domcontentloaded"
+ search=hokage workstation source=CherryTree Inc
+2026-05-22 13:38:58 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=CherryTree Inc
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+2026-05-22 13:39:02 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=Alibaba
+2026-05-22 13:39:02 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=Alibaba
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-22 13:39:05 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-22 13:39:08 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-22 13:39:09 [info     ] amazon.cases.done              found=0 search=pokedex workstation
+2026-05-22 13:39:09 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-22 13:39:11 [info     ] amazon.cases.done              found=10 search=pikachu yellow rgb build
+2026-05-22 13:39:11 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+2026-05-22 13:39:13 [info     ] temu.cases.done                found=0 search=hokage workstation
+2026-05-22 13:39:13 [info     ] temu.cases.done                found=0 search=hidden leaf gaming pc
+2026-05-22 13:39:14 [info     ] aliexpress.cases.done          found=0 search=hidden leaf gaming pc
+2026-05-22 13:39:14 [info     ] aliexpress.cases.done          found=0 search=hokage workstation
+2026-05-22 13:39:18 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-22 13:39:18 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=BargainHardware
+2026-05-22 13:39:19 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-22 13:39:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=pokedex+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=pokedex+workstation", waiting until "domcontentloaded"
+ search=pokedex workstation source=CherryTree Inc
+2026-05-22 13:39:19 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=CherryTree Inc
+2026-05-22 13:39:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=pikachu+yellow+rgb+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=pikachu+yellow+rgb+build", waiting until "domcontentloaded"
+ search=pikachu yellow rgb build source=CherryTree Inc
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-22 13:39:19 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=CherryTree Inc
+2026-05-22 13:39:21 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-22 13:39:21 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-22 13:39:22 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=BargainHardware
+2026-05-22 13:39:22 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-22 13:39:23 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:39:23 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=Alibaba
+2026-05-22 13:39:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-22 13:39:26 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=Alibaba
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-22 13:39:32 [info     ] amazon.cases.done              found=1 search=x-gene gaming build
+2026-05-22 13:39:34 [info     ] temu.cases.done                found=0 search=pokedex workstation
+2026-05-22 13:39:36 [info     ] amazon.cases.done              found=0 search=cerebro workstation
+2026-05-22 13:39:36 [info     ] temu.cases.done                found=0 search=pikachu yellow rgb build
+2026-05-22 13:39:37 [info     ] aliexpress.cases.done          found=0 search=pokedex workstation
+2026-05-22 13:39:37 [info     ] aliexpress.cases.done          found=0 search=pikachu yellow rgb build
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-22 13:39:41 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=BargainHardware
+2026-05-22 13:39:42 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=x-gene+gaming+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=x-gene+gaming+build", waiting until "domcontentloaded"
+ search=x-gene gaming build source=CherryTree Inc
+2026-05-22 13:39:42 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=CherryTree Inc
+2026-05-22 13:39:42 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=cerebro+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=cerebro+workstation", waiting until "domcontentloaded"
+ search=cerebro workstation source=CherryTree Inc
+2026-05-22 13:39:42 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=CherryTree Inc
+2026-05-22 13:39:44 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-22 13:39:44 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=BargainHardware
+2026-05-22 13:39:46 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=Alibaba
+2026-05-22 13:39:47 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-22 13:39:47 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-22 13:39:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-22 13:39:48 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=Alibaba
+2026-05-22 13:39:50 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+2026-05-22 13:39:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:39:52 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-22 13:39:55 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-22 13:39:56 [info     ] amazon.cases.done              found=0 search=super saiyan gaming pc
+2026-05-22 13:39:56 [info     ] temu.cases.done                found=0 search=x-gene gaming build
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-22 13:39:58 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-22 13:39:58 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-22 13:39:58 [info     ] temu.cases.done                found=0 search=cerebro workstation
+2026-05-22 13:39:59 [info     ] aliexpress.cases.done          found=0 search=x-gene gaming build
+2026-05-22 13:40:00 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:40:00 [info     ] aliexpress.cases.done          found=0 search=cerebro workstation
