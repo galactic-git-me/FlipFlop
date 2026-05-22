@@ -6109,3 +6109,132 @@ Call log:
 2026-05-22 13:33:43 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=167.1
 2026-05-22 13:33:43 [info     ] amazon.cases.done              found=10 search=compact gaming case
 2026-05-22 13:33:44 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-22 13:33:46 [info     ] aliexpress.cases.done          found=0 search=white rgb case
+2026-05-22 13:33:46 [info     ] aliexpress.cases.done          found=0 search=white fish tank case
+2026-05-22 13:33:48 [info     ] temu.cases.done                found=0 search=white fish tank case
+2026-05-22 13:33:49 [info     ] temu.cases.done                found=0 search=white rgb case
+2026-05-22 13:33:52 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=None
+2026-05-22 13:33:52 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5800X sold=None
+2026-05-22 13:33:52 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+2026-05-22 13:33:53 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
+2026-05-22 13:33:53 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-22 13:33:54 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=BargainHardware
+2026-05-22 13:33:54 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gaming headset usb
+2026-05-22 13:33:55 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=micro+atx+fish+tank
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=micro+atx+fish+tank", waiting until "domcontentloaded"
+ search=micro atx fish tank source=CherryTree Inc
+2026-05-22 13:33:55 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=CherryTree Inc
+2026-05-22 13:33:56 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=BargainHardware
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+2026-05-22 13:33:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=compact+gaming+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=compact+gaming+case", waiting until "domcontentloaded"
+ search=compact gaming case source=CherryTree Inc
+2026-05-22 13:33:57 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=CherryTree Inc
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+2026-05-22 13:34:00 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-22 13:34:01 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=Alibaba
+2026-05-22 13:34:01 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=Alibaba
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-22 13:34:06 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-22 13:34:08 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-22 13:34:08 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-22 13:34:08 [info     ] temu.cases.done                found=0 search=micro atx fish tank
+2026-05-22 13:34:09 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-22 13:34:09 [info     ] amazon.cases.done              found=10 search=cyberpunk pc case
+2026-05-22 13:34:10 [info     ] amazon.cases.done              found=10 search=futuristic gaming case
+2026-05-22 13:34:10 [info     ] aliexpress.cases.done          found=0 search=micro atx fish tank
+2026-05-22 13:34:10 [info     ] aliexpress.cases.done          found=0 search=compact gaming case
+2026-05-22 13:34:10 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:34:11 [info     ] temu.cases.done                found=0 search=compact gaming case
+2026-05-22 13:34:14 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-22 13:34:15 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=pc headset microphone
+2026-05-22 13:34:15 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-22 13:34:17 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-22 13:34:17 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=BargainHardware
+2026-05-22 13:34:17 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+2026-05-22 13:34:18 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-22 13:34:18 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=BargainHardware
+2026-05-22 13:34:18 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=cyberpunk+pc+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=cyberpunk+pc+case", waiting until "domcontentloaded"
+ search=cyberpunk pc case source=CherryTree Inc
+2026-05-22 13:34:18 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=CherryTree Inc
+2026-05-22 13:34:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=futuristic+gaming+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=futuristic+gaming+case", waiting until "domcontentloaded"
+ search=futuristic gaming case source=CherryTree Inc
+2026-05-22 13:34:19 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=CherryTree Inc
+2026-05-22 13:34:19 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-22 13:34:21 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gaming mousepad xl
+2026-05-22 13:34:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:34:23 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=Alibaba
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-22 13:34:23 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=Alibaba
+2026-05-22 13:34:26 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
+2026-05-22 13:34:26 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
+2026-05-22 13:34:27 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
+2026-05-22 13:34:27 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+2026-05-22 13:34:27 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+2026-05-22 13:34:31 [info     ] amazon.cases.done              found=0 search=federation command build
+2026-05-22 13:34:31 [info     ] amazon.cases.done              found=0 search=starfleet workstation
+2026-05-22 13:34:34 [info     ] aliexpress.cases.done          found=0 search=cyberpunk pc case
+2026-05-22 13:34:34 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gaming mousepad xl
+2026-05-22 13:34:35 [info     ] aliexpress.cases.done          found=0 search=futuristic gaming case
+2026-05-22 13:34:35 [info     ] temu.cases.done                found=0 search=cyberpunk pc case
+2026-05-22 13:34:37 [info     ] temu.cases.done                found=0 search=futuristic gaming case
+2026-05-22 13:34:40 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=large desk mat
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-22 13:34:41 [info     ] cases.generic_market.done      found=0 search=federation command build source=BargainHardware
+2026-05-22 13:34:42 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=federation+command+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=federation+command+build", waiting until "domcontentloaded"
+ search=federation command build source=CherryTree Inc
+2026-05-22 13:34:42 [info     ] cases.generic_market.done      found=0 search=federation command build source=CherryTree Inc
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+2026-05-22 13:34:42 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-22 13:34:42 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=BargainHardware
+2026-05-22 13:34:43 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=starfleet+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=starfleet+workstation", waiting until "domcontentloaded"
+ search=starfleet workstation source=CherryTree Inc
+2026-05-22 13:34:43 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=CherryTree Inc
+2026-05-22 13:34:43 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-22 13:34:45 [debug    ] upgrade_parts.ebay             buy=23.32 part=550W PSU 80+ Bronze sold=None
+2026-05-22 13:34:46 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-22 13:34:46 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-22 13:34:47 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=Alibaba
+2026-05-22 13:34:47 [info     ] cases.generic_market.done      found=0 search=federation command build source=Alibaba
+2026-05-22 13:34:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-22 13:34:48 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+2026-05-22 13:34:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-22 13:34:51 [debug    ] upgrade_parts.ebay             buy=None part=2TB NVMe SSD sold=None
+2026-05-22 13:34:54 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=large desk mat
+2026-05-22 13:34:54 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-22 13:34:56 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-22 13:34:57 [info     ] amazon.cases.done              found=3 search=borg cube pc
+2026-05-22 13:34:57 [info     ] temu.cases.done                found=0 search=federation command build
+2026-05-22 13:34:58 [info     ] temu.cases.done                found=0 search=starfleet workstation
+2026-05-22 13:34:58 [info     ] aliexpress.cases.done          found=0 search=federation command build
+2026-05-22 13:34:59 [info     ] aliexpress.cases.done          found=0 search=starfleet workstation
+2026-05-22 13:34:59 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-22 13:35:00 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
+2026-05-22 13:35:00 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
