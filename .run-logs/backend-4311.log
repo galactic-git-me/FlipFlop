@@ -7929,3 +7929,40 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 19:33:59 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
 2026-05-22 19:34:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
 2026-05-22 19:34:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-22 19:34:25 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-22 19:34:27 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-22 19:34:27 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-22 19:34:27 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-22 19:34:29 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-22 19:34:29 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
+2026-05-22 19:34:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 19:34:30 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-22 19:34:31 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-22 19:34:32 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-22 19:34:34 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-22 19:34:54 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-22 19:34:56 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-22 19:34:58 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-22 19:35:02 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-22 19:35:05 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-22 19:35:05 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-22 19:35:06 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-22 19:35:07 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 19:35:09 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-22 19:35:10 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-22 19:35:12 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-22 19:35:21 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-22 19:35:23 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-22 19:35:25 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-22 19:35:26 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-22 19:35:39 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-22 19:35:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-22 19:35:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=pc build
+2026-05-22 19:35:43 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 19:35:44 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
