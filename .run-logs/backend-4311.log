@@ -4409,3 +4409,9 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
 2026-05-22 01:43:45 [info     ] Wilsons Auctions.playwright.done total=0
 2026-05-22 01:43:45 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-22 01:43:53 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+2026-05-22 01:43:56 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-22 01:43:57 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-22 01:43:59 [info     ] i-bidder.playwright.done       total=0
+2026-05-22 01:43:59 [info     ] source.done                    found=0 gems=0 source=i-bidder
