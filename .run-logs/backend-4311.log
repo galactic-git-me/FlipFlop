@@ -5054,3 +5054,39 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 07:36:26 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
 2026-05-22 07:36:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
 2026-05-22 07:36:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 60)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 60)
+2026-05-22 07:36:44 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-22 07:36:46 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-22 07:36:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 60)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-22 07:36:57 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-22 07:37:00 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-22 07:37:00 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+2026-05-22 07:37:01 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 07:37:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-22 07:37:03 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-22 07:37:04 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-22 07:37:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-22 07:37:11 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-22 07:37:13 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-22 07:37:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 60)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 60)
+2026-05-22 07:37:34 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-22 07:37:36 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-22 07:37:36 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-22 07:37:38 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 07:37:39 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-22 07:37:39 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-22 07:37:41 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-22 07:37:42 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+2026-05-22 07:37:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-22 07:37:43 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+2026-05-22 07:37:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
