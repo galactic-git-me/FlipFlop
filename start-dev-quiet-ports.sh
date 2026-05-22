@@ -16,7 +16,7 @@ TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-dev}" # dev | prod
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
-ATTACH_TMUX="${ATTACH_TMUX:-0}"
+ATTACH_TMUX="${ATTACH_TMUX:-1}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-pcflipper}"
@@ -677,15 +677,15 @@ EOF
   chmod +x "$alerts_tail_script"
 
   # Layout requested:
-  # top-left:  frontend logs   (33% height)
-  # top-right: backend logs    (33% height)
-  # bottom-left: scheduler     (67% height)
-  # bottom-right: dashboard    (67% height)
+  # top-left: scheduler
+  # top-right: backend dashboard
+  # bottom-left: frontend logs (33% height)
+  # bottom-right: backend logs (33% height)
   # all quadrants: 50% width
-  tmux new-session -d -s "$TMUX_SESSION" "bash '$frontend_tail_script'"
-  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$backend_tail_script'"
-  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.0 "bash '$scheduler_pane_script'"
-  tmux split-window -v -l 67% -t "$TMUX_SESSION":0.1 "bash '$backend_pane_script'"
+  tmux new-session -d -s "$TMUX_SESSION" "bash '$scheduler_pane_script'"
+  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$backend_pane_script'"
+  tmux split-window -v -l 33% -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
+  tmux split-window -v -l 33% -t "$TMUX_SESSION":0.1 "bash '$backend_tail_script'"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
