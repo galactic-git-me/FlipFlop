@@ -4191,3 +4191,43 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 01:37:42 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
 2026-05-22 01:37:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
 2026-05-22 01:37:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-22 01:38:06 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+2026-05-22 01:38:08 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=office pc
+2026-05-22 01:38:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-22 01:38:10 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-22 01:38:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-22 01:38:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-22 01:38:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 01:38:16 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-22 01:38:19 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-22 01:38:20 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-22 01:38:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+2026-05-22 01:38:33 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-22 01:38:35 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+2026-05-22 01:38:36 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay error for 'i7 tower': Page.evaluate: Target crashed 
+2026-05-22 01:38:46 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-22 01:38:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-22 01:38:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-22 01:38:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 01:38:54 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-22 01:38:56 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-22 01:38:57 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-22 01:38:59 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-22 01:38:59 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-22 01:39:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-22 01:39:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+2026-05-22 01:39:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
