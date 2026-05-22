@@ -7105,3 +7105,95 @@ Call log:
 2026-05-22 13:42:46 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
 [scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
 2026-05-22 13:42:48 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+2026-05-22 13:42:54 [info     ] amazon.cases.done              found=10 search=Montech panoramic case
+2026-05-22 13:42:55 [info     ] amazon.cases.done              found=10 search=darkFlash fish tank
+2026-05-22 13:42:56 [info     ] temu.cases.done                found=0 search=lian li style case
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-22 13:42:57 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-22 13:42:59 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-22 13:43:00 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-22 13:43:00 [info     ] temu.cases.done                found=0 search=hyte y60 style case
+2026-05-22 13:43:00 [info     ] aliexpress.cases.done          found=0 search=lian li style case
+2026-05-22 13:43:01 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-22 13:43:01 [info     ] aliexpress.cases.done          found=0 search=hyte y60 style case
+2026-05-22 13:43:02 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-22 13:43:02 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+2026-05-22 13:43:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:43:03 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:43:05 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=BargainHardware
+2026-05-22 13:43:06 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=BargainHardware
+2026-05-22 13:43:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=Montech+panoramic+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=Montech+panoramic+case", waiting until "domcontentloaded"
+ search=Montech panoramic case source=CherryTree Inc
+2026-05-22 13:43:06 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=CherryTree Inc
+2026-05-22 13:43:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=darkFlash+fish+tank
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=darkFlash+fish+tank", waiting until "domcontentloaded"
+ search=darkFlash fish tank source=CherryTree Inc
+2026-05-22 13:43:06 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=CherryTree Inc
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 66)
+2026-05-22 13:43:10 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=Alibaba
+2026-05-22 13:43:10 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=Alibaba
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 66)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-22 13:43:18 [info     ] amazon.cases.done              found=10 search=showcase build
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 66)
+2026-05-22 13:43:19 [info     ] amazon.cases.done              found=0 search=custom gaming pc
+2026-05-22 13:43:19 [info     ] temu.cases.done                found=0 search=Montech panoramic case
+2026-05-22 13:43:20 [info     ] aliexpress.cases.done          found=0 search=Montech panoramic case
+2026-05-22 13:43:20 [info     ] temu.cases.done                found=0 search=darkFlash fish tank
+2026-05-22 13:43:23 [info     ] aliexpress.cases.done          found=0 search=darkFlash fish tank
+2026-05-22 13:43:24 [info     ] cases.generic_market.done      found=0 search=showcase build source=BargainHardware
+2026-05-22 13:43:25 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=showcase+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=showcase+build", waiting until "domcontentloaded"
+ search=showcase build source=CherryTree Inc
+2026-05-22 13:43:25 [info     ] cases.generic_market.done      found=0 search=showcase build source=CherryTree Inc
+2026-05-22 13:43:25 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=custom+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=custom+gaming+pc", waiting until "domcontentloaded"
+ search=custom gaming pc source=CherryTree Inc
+2026-05-22 13:43:25 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=CherryTree Inc
+2026-05-22 13:43:28 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=BargainHardware
+2026-05-22 13:43:30 [info     ] cases.generic_market.done      found=0 search=showcase build source=Alibaba
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+2026-05-22 13:43:32 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=Alibaba
+2026-05-22 13:43:36 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-22 13:43:36 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-22 13:43:36 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-22 13:43:38 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-22 13:43:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-22 13:43:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-22 13:43:39 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-22 13:43:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:43:41 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:43:42 [info     ] aliexpress.cases.done          found=0 search=showcase build
+2026-05-22 13:43:43 [info     ] temu.cases.done                found=0 search=showcase build
+2026-05-22 13:43:43 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=gaming+atx+case+rgb
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=gaming+atx+case+rgb", waiting until "domcontentloaded"
+ search=gaming atx case rgb source=CherryTree Inc
+2026-05-22 13:43:43 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=CherryTree Inc
+2026-05-22 13:43:44 [info     ] aliexpress.cases.done          found=0 search=custom gaming pc
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 66)
+2026-05-22 13:43:45 [info     ] temu.cases.done                found=0 search=custom gaming pc
+2026-05-22 13:43:47 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+2026-05-22 13:43:48 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+2026-05-22 13:43:50 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-22 13:43:50 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=gaming+pc+case+mid+tower
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=gaming+pc+case+mid+tower", waiting until "domcontentloaded"
+ search=gaming pc case mid tower source=CherryTree Inc
+2026-05-22 13:43:50 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=CherryTree Inc
+2026-05-22 13:43:52 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+2026-05-22 13:43:54 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-22 13:43:57 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-22 13:43:59 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-22 13:43:59 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-22 13:44:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=slim+micro+atx+case+office
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=slim+micro+atx+case+office", waiting until "domcontentloaded"
+ search=slim micro atx case office source=CherryTree Inc
+2026-05-22 13:44:00 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=CherryTree Inc
