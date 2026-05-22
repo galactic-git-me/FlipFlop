@@ -651,6 +651,27 @@ fi
 EOF
   chmod +x "$scheduler_pane_script"
 
+  local title_pane_script="$LOG_DIR/title-pane.sh"
+  cat >"$title_pane_script" <<'EOF'
+#!/usr/bin/env bash
+set +e
+while true; do
+  clear
+  cat <<'ASCII'
+
+  ███████╗██╗     ██╗██████╗ ███████╗██╗      ██████╗
+  ██╔════╝██║     ██║██╔══██╗██╔════╝██║     ██╔═══██╗
+  █████╗  ██║     ██║██████╔╝█████╗  ██║     ██║   ██║
+  ██╔══╝  ██║     ██║██╔═══╝ ██╔══╝  ██║     ██║   ██║
+  ██║     ███████╗██║██║     ██║     ███████╗╚██████╔╝
+  ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝
+
+ASCII
+  sleep 2
+done
+EOF
+  chmod +x "$title_pane_script"
+
   local sources_pane_script="$LOG_DIR/sources-pane-$BACKEND_PORT.sh"
   cat >"$sources_pane_script" <<EOF
 #!/usr/bin/env bash
@@ -808,15 +829,18 @@ tail -n 120 -f "$BACKEND_LOG" "$FRONTEND_LOG" | grep --line-buffered -Ei "error|
 EOF
   chmod +x "$alerts_tail_script"
 
-  # Layout (swapped columns):
+  # Layout:
   # - Left: backend dashboard (top 50%), frontend logs + backend logs (bottom split 50/50)
-  # - Right: scheduler (top 50%), sources (bottom 50%)
-  local left_top_pane right_top_pane left_bottom_pane right_bottom_pane left_bottom_bottom_pane
+  # - Right: FlipFlo ASCII title (top), scheduler (bottom)
+  # - Bottom-right gets +2 lines versus an even split (taken from top-right)
+  local left_top_pane right_top_pane right_bottom_pane left_bottom_pane left_bottom_bottom_pane right_h right_bottom_lines
   left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$backend_pane_script'")"
-  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
+  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$title_pane_script'")"
+  right_h="$(tmux display-message -p -t "$right_top_pane" "#{pane_height}")"
+  right_bottom_lines=$(( right_h / 2 + 2 ))
+  right_bottom_pane="$(tmux split-window -v -l "$right_bottom_lines" -P -F "#{pane_id}" -t "$right_top_pane" "bash '$scheduler_pane_script'")"
   left_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
-  right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$sources_pane_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
