@@ -4919,3 +4919,61 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 07:32:25 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
 2026-05-22 07:32:25 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
 2026-05-22 07:32:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+2026-05-22 07:32:31 [info     ] apex.playwright.lots           count=0 href=#!/auctions/6e9457b6-241a-4dbf-90a7-266eedef5adc
+2026-05-22 07:32:31 [info     ] apex.playwright.done           total=0
+2026-05-22 07:32:32 [info     ] auction_scraper.apex.done      total=0
+2026-05-22 07:32:32 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-22 07:32:35 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-22 07:32:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-22 07:32:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-22 07:32:35 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-22 07:32:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-22 07:32:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-22 07:32:35 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+2026-05-22 07:32:36 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-22 07:32:36 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-22 07:32:37 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-22 07:32:38 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-22 07:32:38 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-22 07:32:39 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-22 07:32:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-22 07:32:40 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-22 07:32:40 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-22 07:32:41 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 07:32:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-22 07:32:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+2026-05-22 07:32:45 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-22 07:32:45 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-22 07:32:46 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-22 07:32:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-22 07:32:46 [info     ] facebook.playwright.done       total=0
+2026-05-22 07:32:46 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-22 07:33:04 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-22 07:33:06 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-22 07:33:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-22 07:33:09 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-22 07:33:14 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-22 07:33:16 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-22 07:33:17 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-22 07:33:17 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-22 07:33:18 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-22 07:33:19 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 07:33:19 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+2026-05-22 07:33:22 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-22 07:33:27 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-22 07:33:31 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-22 07:33:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-22 07:33:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+2026-05-22 07:33:52 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
