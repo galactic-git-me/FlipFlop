@@ -165,6 +165,9 @@ fi
 
 BACKEND_LOG="$LOG_DIR/backend-$BACKEND_PORT.log"
 FRONTEND_LOG="$LOG_DIR/frontend-$FRONTEND_PORT.log"
+# Reset logs each startup so panes show current run clearly.
+: >"$BACKEND_LOG"
+: >"$FRONTEND_LOG"
 
 if ! getent hosts "$PUBLIC_HOST" >/dev/null 2>&1; then
   echo "Warning: '$PUBLIC_HOST' does not resolve on this machine right now."
@@ -676,16 +679,15 @@ tail -n 120 -f "$BACKEND_LOG" "$FRONTEND_LOG" | grep --line-buffered -Ei "error|
 EOF
   chmod +x "$alerts_tail_script"
 
-  # Layout requested:
-  # top-left: scheduler
-  # top-right: backend dashboard
-  # bottom-left: frontend logs (33% height)
-  # bottom-right: backend logs (33% height)
-  # all quadrants: 50% width
-  tmux new-session -d -s "$TMUX_SESSION" "bash '$scheduler_pane_script'"
-  tmux split-window -h -t "$TMUX_SESSION":0.0 "bash '$backend_pane_script'"
-  tmux split-window -v -l 33% -t "$TMUX_SESSION":0.0 "bash '$frontend_tail_script'"
-  tmux split-window -v -l 33% -t "$TMUX_SESSION":0.1 "bash '$backend_tail_script'"
+  # Optimized layout:
+  # - Max space for scheduler/dashboard
+  # - Minimal space for logs
+  # - Deterministic pane mapping using pane IDs
+  local left_top_pane right_top_pane left_log_pane right_log_pane
+  left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$scheduler_pane_script'")"
+  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$backend_pane_script'")"
+  left_log_pane="$(tmux split-window -v -l 18% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
+  right_log_pane="$(tmux split-window -v -l 18% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$backend_tail_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then

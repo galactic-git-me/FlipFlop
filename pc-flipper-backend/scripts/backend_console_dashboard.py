@@ -282,21 +282,9 @@ def build_layout(
     else:
         terms_tbl.add_row("—", "No telemetry yet", "—", "—", "—")
 
-    log_tbl = Table.grid(expand=True)
-    log_tbl.add_column()
-    if log_lines:
-        for ln in log_lines[-20:]:
-            log_tbl.add_row(_color_line(ln))
-    else:
-        log_tbl.add_row(Text("No log lines yet", style="dim"))
-
     middle = Table.grid(expand=True)
-    middle.add_column(ratio=2)
-    middle.add_column(ratio=3)
-    middle.add_row(
-        Panel(sources_tbl, title="Sources", border_style="magenta"),
-        Panel(log_tbl, title=f"Live Logs · {log_file}", border_style="yellow"),
-    )
+    middle.add_column()
+    middle.add_row(Panel(sources_tbl, title="Sources", border_style="magenta"))
 
     return Group(
         top,
