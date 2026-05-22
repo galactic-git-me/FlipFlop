@@ -1,0 +1,10 @@
+{
+  "method": "No-double-count principal model: loss = external ramp-in minus external ramp-out; internal token conversions treated as reallocations.",
+  "binance_ramp_in_usd_then": 71372.04,
+  "binance_ramp_in_gbp_then": 59037.83,
+  "binance_ramp_out_usd_then": 0.0,
+  "binance_ramp_out_gbp_then": 0.0,
+  "reconciled_principal_net_loss_usd_then": 71372.04,
+  "reconciled_principal_net_loss_gbp_then": 59037.83,
+  "note": "If Binance outflows are missing due to label gaps, this is an upper-bound loss estimate."
+}
