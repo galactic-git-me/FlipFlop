@@ -96,7 +96,8 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
                 continue
             unique_hits.add((src_s, term))
 
-    done = len(unique_hits)
+    # Clamp to expected_terms so retries/duplicates never show > total.
+    done = min(len(unique_hits), int(expected_terms))
     pct = min(1.0, max(0.0, done / float(expected_terms)))
     width = 14
     filled = int(round(width * pct))
@@ -289,7 +290,8 @@ def term_progress_cell(last_ts, source_items, source_prefixes, expected_terms):
                 continue
             unique_hits.add((src_s, term))
 
-    done = len(unique_hits)
+    # Clamp to expected_terms so retries/duplicates never show > total.
+    done = min(len(unique_hits), int(expected_terms))
     pct = min(1.0, max(0.0, done / float(expected_terms)))
     width = 14
     filled = int(round(width * pct))
