@@ -5718,3 +5718,230 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 09:31:24 UTC)" skipped: maximum number of running instances reached (1)
 Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 10:31:24 UTC)" skipped: maximum number of running instances reached (1)
 Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 11:31:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 12:31:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-22 13:31:24 [info     ] accessories_swarm.start
+2026-05-22 13:31:24 [info     ] flip_opportunities_swarm.start
+2026-05-22 13:31:24 [info     ] cases_swarm.start
+2026-05-22 13:31:24 [info     ] upgrade_parts_swarm.start      total_parts=49
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+[scraper] No adapter for source 'WF-Retrain', skipping
+2026-05-22 13:31:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-22 13:31:25 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+2026-05-22 13:31:25 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-22 13:31:25 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+2026-05-22 13:31:25 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-22 13:31:25 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-22 13:31:25 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
+2026-05-22 13:31:26 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-22 13:31:26 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:31:26 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:31:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:27 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-22 13:31:31 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:32 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:32 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:32 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:33 [debug    ] upgrade_parts.ebay             buy=79.99 part=GTX 1650 4GB sold=75.1
+2026-05-22 13:31:33 [info     ] amazon.cases.done              found=10 search=panoramic pc case
+2026-05-22 13:31:33 [info     ] amazon.cases.done              found=10 search=fish tank pc case
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-22 13:31:33 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-22 13:31:33 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-22 13:31:33 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-22 13:31:33 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-22 13:31:37 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-22 13:31:38 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-22 13:31:38 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-22 13:31:38 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+2026-05-22 13:31:42 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-22 13:31:42 [debug    ] upgrade_parts.ebay             buy=99.9 part=GTX 1070 8GB sold=81.3
+2026-05-22 13:31:42 [debug    ] upgrade_parts.ebay             buy=60.0 part=GTX 1060 3GB sold=47.82
+2026-05-22 13:31:42 [debug    ] upgrade_parts.ebay             buy=74.99 part=GTX 1060 6GB sold=62.04
+2026-05-22 13:31:42 [debug    ] upgrade_parts.ebay             buy=343.3 part=PC Build Bundle sold=300.0
+2026-05-22 13:31:43 [debug    ] upgrade_parts.ebay             buy=117.9 part=GTX 1660 Super sold=95.22
+2026-05-22 13:31:43 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-22 13:31:43 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+[scraper] John Pye error for 'pc build': All connection attempts failed
+2026-05-22 13:31:43 [debug    ] upgrade_parts.ebay             buy=21.62 part=RX 570 8GB sold=50.3
+2026-05-22 13:31:47 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-22 13:31:47 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-22 13:31:47 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-22 13:31:47 [info     ] apex.playwright.auction_items  count=27
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-22 13:31:50 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-22 13:31:50 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
+2026-05-22 13:31:50 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
+2026-05-22 13:31:50 [debug    ] upgrade_parts.ebay             buy=177.5 part=RTX 2080 8GB sold=154.95
+2026-05-22 13:31:50 [debug    ] upgrade_parts.ebay             buy=146.3 part=RTX 2060 6GB sold=118.5
+2026-05-22 13:31:50 [debug    ] upgrade_parts.ebay             buy=233.66 part=RTX 3060 12GB sold=209.0
+2026-05-22 13:31:50 [debug    ] upgrade_parts.ebay             buy=151.49 part=RTX 2070 8GB sold=141.1
+2026-05-22 13:31:50 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:50 [debug    ] upgrade_parts.ebay             buy=87.5 part=RX 580 8GB sold=62.62
+2026-05-22 13:31:50 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-22 13:31:50 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-22 13:31:50 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
+2026-05-22 13:31:50 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
+2026-05-22 13:31:51 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
+2026-05-22 13:31:51 [debug    ] upgrade_parts.ebay             buy=198.3 part=RTX 3060 Ti sold=198.3
+2026-05-22 13:31:51 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=BargainHardware
+2026-05-22 13:31:51 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=BargainHardware
+2026-05-22 13:31:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:31:51 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:31:54 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-22 13:31:54 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-22 13:31:54 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-22 13:31:54 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-22 13:31:54 [info     ] apex.playwright.uk_auctions    count=27
+2026-05-22 13:31:54 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=panoramic+pc+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=panoramic+pc+case", waiting until "domcontentloaded"
+ search=panoramic pc case source=CherryTree Inc
+2026-05-22 13:31:54 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=fish+tank+pc+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=fish+tank+pc+case", waiting until "domcontentloaded"
+ search=fish tank pc case source=CherryTree Inc
+2026-05-22 13:31:54 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=CherryTree Inc
+2026-05-22 13:31:55 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=CherryTree Inc
+2026-05-22 13:31:56 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-22 13:31:56 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-22 13:31:56 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-22 13:31:56 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+2026-05-22 13:31:58 [info     ] preloved.playwright.done       total=44
+2026-05-22 13:31:58 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-22 13:31:58 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-22 13:31:59 [info     ] source.done                    found=44 gems=0 source=Preloved
+2026-05-22 13:32:00 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+2026-05-22 13:32:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:00 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
+2026-05-22 13:32:00 [error    ] accessories.scrape.error       error=(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) term=gaming mouse wired
+2026-05-22 13:32:01 [info     ] aliexpress.cases.done          found=0 search=fish tank pc case
+2026-05-22 13:32:02 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
+2026-05-22 13:32:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+2026-05-22 13:32:04 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
+2026-05-22 13:32:04 [info     ] facebook.playwright.items      count=0 term=desktop pc
+2026-05-22 13:32:04 [info     ] facebook.playwright.items      count=0 term=gaming pc
+2026-05-22 13:32:05 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Ddesktop%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=desktop pc title=Facebook
+2026-05-22 13:32:05 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc title=Facebook
+2026-05-22 13:32:05 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-22 13:32:05 [info     ] temu.cases.done                found=0 search=panoramic pc case
+2026-05-22 13:32:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20build&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:05 [info     ] facebook.playwright.items      count=0 term=pc tower
+2026-05-22 13:32:05 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower title=Facebook
+2026-05-22 13:32:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:08 [info     ] amazon.cases.done              found=10 search=argb gaming case
+2026-05-22 13:32:09 [info     ] amazon.cases.done              found=10 search=rgb airflow case
+2026-05-22 13:32:10 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=224.99
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=220.2
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=234.7
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=289.98
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=173.02
+2026-05-22 13:32:11 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=165.0
+2026-05-22 13:32:12 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:13 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:15 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:15 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:15 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=BargainHardware
+2026-05-22 13:32:15 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=BargainHardware
+2026-05-22 13:32:16 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=argb+gaming+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=argb+gaming+case", waiting until "domcontentloaded"
+ search=argb gaming case source=CherryTree Inc
+2026-05-22 13:32:16 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=CherryTree Inc
+2026-05-22 13:32:16 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=rgb+airflow+case
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=rgb+airflow+case", waiting until "domcontentloaded"
+ search=rgb airflow case source=CherryTree Inc
+2026-05-22 13:32:16 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=CherryTree Inc
+2026-05-22 13:32:17 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-22 13:32:17 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
+2026-05-22 13:32:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:17 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=AMD Ryzen 7 7800X3D
+2026-05-22 13:32:17 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-22 13:32:17 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-22 13:32:17 [info     ] facebook.playwright.items      count=0 term=pc build
+2026-05-22 13:32:17 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bbuild%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc build title=Facebook
+2026-05-22 13:32:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:32:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:18 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+2026-05-22 13:32:19 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-22 13:32:21 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
+2026-05-22 13:32:21 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=budget gaming mouse
+2026-05-22 13:32:22 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-22 13:32:27 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
+2026-05-22 13:32:27 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_ABORTED at https://www.aliexpress.com/wholesale?SearchText=optical+mouse&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=optical+mouse&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=optical mouse
+2026-05-22 13:32:28 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+2026-05-22 13:32:28 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-22 13:32:28 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
+2026-05-22 13:32:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+2026-05-22 13:32:29 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-22 13:32:29 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-22 13:32:29 [info     ] amazon.cases.done              found=10 search=mesh airflow case
