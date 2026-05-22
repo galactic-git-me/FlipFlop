@@ -288,7 +288,6 @@ def build_layout(
 
     return Group(
         top,
-        Panel(jobs_tbl, title="Scheduler", border_style="blue"),
         middle,
         Panel(terms_tbl, title="Live Term Search", border_style="green"),
     )

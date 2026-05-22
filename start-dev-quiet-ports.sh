@@ -183,6 +183,9 @@ echo "Starting backend on http://$PUBLIC_HOST:$BACKEND_PORT ..."
 ) >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 
+# Re-check frontend port immediately before launch to avoid race/EADDRINUSE.
+free_port "$FRONTEND_PORT"
+
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 (
   cd "$FRONTEND_DIR"
@@ -635,6 +638,119 @@ fi
 EOF
   chmod +x "$scheduler_pane_script"
 
+  local sources_pane_script="$LOG_DIR/sources-pane-$BACKEND_PORT.sh"
+  cat >"$sources_pane_script" <<EOF
+#!/usr/bin/env bash
+set +e
+if python3 -c "from rich.console import Console" >/dev/null 2>&1; then
+  while true; do
+    python3 - <<'PY'
+import json
+import urllib.request
+from datetime import datetime, timezone
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
+def age(ts):
+    if not ts:
+        return "—"
+    try:
+        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = int((datetime.now(timezone.utc) - dt.astimezone(timezone.utc)).total_seconds())
+        secs = max(0, secs)
+        m, s = divmod(secs, 60)
+        h, m = divmod(m, 60)
+        return f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    except Exception:
+        return "—"
+
+base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
+console = Console()
+rows = []
+try:
+    with urllib.request.urlopen(f"{base_url}/api/sources/", timeout=4) as r:
+        rows = json.load(r) or []
+except Exception:
+    rows = []
+
+table = Table(title="Sources", expand=True)
+table.add_column("Source", style="bold cyan")
+table.add_column("Status")
+table.add_column("Found", justify="right")
+table.add_column("Last Scan", justify="right")
+table.add_column("Error")
+
+if rows:
+    for s in rows[:20]:
+        st = "enabled" if s.get("enabled") else "disabled"
+        st = "[green]enabled[/green]" if s.get("enabled") else "[red]disabled[/red]"
+        err = str(s.get("last_error") or "—")
+        table.add_row(
+            str(s.get("name") or "—"),
+            st,
+            str(s.get("listings_found_total") or s.get("listings_found") or 0),
+            age(s.get("last_scraped_at")),
+            err,
+        )
+else:
+    table.add_row("—", "[red]unavailable[/red]", "—", "—", "No source data")
+
+console.clear()
+console.print(Panel(table, border_style="magenta"))
+PY
+    sleep 2
+  done
+else
+  while true; do
+    clear
+    echo "Sources"
+    python3 - <<'PY'
+import json
+import urllib.request
+from datetime import datetime, timezone
+
+def age(ts):
+    if not ts:
+        return "—"
+    try:
+        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        secs = int((datetime.now(timezone.utc) - dt.astimezone(timezone.utc)).total_seconds())
+        secs = max(0, secs)
+        m, s = divmod(secs, 60)
+        h, m = divmod(m, 60)
+        return f"{h}h{m:02d}m{s:02d}s" if h else f"{m:02d}m{s:02d}s"
+    except Exception:
+        return "—"
+
+base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
+rows = []
+try:
+    with urllib.request.urlopen(f"{base_url}/api/sources/", timeout=4) as r:
+        rows = json.load(r) or []
+except Exception:
+    rows = []
+
+print(f"{'SOURCE':32} {'STATUS':10} {'FOUND':>6} {'LAST':>10} ERROR")
+print("-" * 96)
+for s in rows[:20]:
+    name = str(s.get("name") or "—")[:32]
+    st = "enabled" if s.get("enabled") else "disabled"
+    found = str(s.get("listings_found_total") or s.get("listings_found") or 0)
+    last = age(s.get("last_scraped_at"))
+    err = str(s.get("last_error") or "—")
+    print(f"{name:32} {st:10} {found:>6} {last:>10} {err}")
+PY
+    sleep 2
+  done
+fi
+EOF
+  chmod +x "$sources_pane_script"
+
   local backend_tail_script="$LOG_DIR/backend-tail-$BACKEND_PORT.sh"
   cat >"$backend_tail_script" <<EOF
 #!/usr/bin/env bash
@@ -679,15 +795,14 @@ tail -n 120 -f "$BACKEND_LOG" "$FRONTEND_LOG" | grep --line-buffered -Ei "error|
 EOF
   chmod +x "$alerts_tail_script"
 
-  # Optimized layout:
-  # - Max space for scheduler/dashboard
-  # - Minimal space for logs
-  # - Deterministic pane mapping using pane IDs
-  local left_top_pane right_top_pane left_log_pane right_log_pane
-  left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$scheduler_pane_script'")"
-  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$backend_pane_script'")"
-  left_log_pane="$(tmux split-window -v -l 18% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
-  right_log_pane="$(tmux split-window -v -l 18% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$backend_tail_script'")"
+  # Layout (swapped columns):
+  # - Left: backend dashboard (top 50%), frontend logs (bottom 50%)
+  # - Right: scheduler (top 50%), sources (bottom 50%)
+  local left_top_pane right_top_pane left_bottom_pane right_bottom_pane
+  left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$backend_pane_script'")"
+  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
+  left_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
+  right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$sources_pane_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
