@@ -210,16 +210,41 @@ start_frontend() {
   FRONTEND_PID=$!
 }
 
-start_frontend
-sleep 1
-if grep -q "EADDRINUSE" "$FRONTEND_LOG" 2>/dev/null; then
-  echo "Frontend hit EADDRINUSE on $FRONTEND_PORT. Retrying once after forcing port cleanup..."
-  kill "$FRONTEND_PID" >/dev/null 2>&1 || true
-  wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+force_clear_frontend_port() {
+  # Kill known Next.js launchers that may not yet show as LISTEN in lsof.
+  pkill -f "next dev -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "next start -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "pc-flipper@0.1.0 dev" >/dev/null 2>&1 || true
+  pkill -f "pc-flipper@0.1.0 start" >/dev/null 2>&1 || true
+  sleep 0.3
   free_port "$FRONTEND_PORT"
-  : >"$FRONTEND_LOG"
-  start_frontend
-fi
+}
+
+start_frontend_with_retry() {
+  local attempt=1
+  local max_attempts=3
+  while (( attempt <= max_attempts )); do
+    force_clear_frontend_port
+    : >"$FRONTEND_LOG"
+    start_frontend
+    sleep 1
+
+    if grep -q "EADDRINUSE" "$FRONTEND_LOG" 2>/dev/null; then
+      echo "Frontend attempt $attempt/$max_attempts hit EADDRINUSE on $FRONTEND_PORT; retrying..."
+      kill "$FRONTEND_PID" >/dev/null 2>&1 || true
+      wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+      attempt=$((attempt + 1))
+      continue
+    fi
+
+    return 0
+  done
+
+  echo "Frontend failed to bind port $FRONTEND_PORT after $max_attempts attempts."
+  return 1
+}
+
+start_frontend_with_retry || exit 1
 
 sleep 1
 
@@ -659,12 +684,12 @@ while true; do
   clear
   cat <<'ASCII'
 
-  ███████╗██╗     ██╗██████╗ ███████╗██╗      ██████╗
-  ██╔════╝██║     ██║██╔══██╗██╔════╝██║     ██╔═══██╗
-  █████╗  ██║     ██║██████╔╝█████╗  ██║     ██║   ██║
-  ██╔══╝  ██║     ██║██╔═══╝ ██╔══╝  ██║     ██║   ██║
-  ██║     ███████╗██║██║     ██║     ███████╗╚██████╔╝
-  ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝
+  ███████╗██╗     ██╗██████╗ ███████╗██╗      ██████╗ ██████╗
+  ██╔════╝██║     ██║██╔══██╗██╔════╝██║     ██╔═══██╗██╔══██╗
+  █████╗  ██║     ██║██████╔╝█████╗  ██║     ██║   ██║██████╔╝
+  ██╔══╝  ██║     ██║██╔═══╝ ██╔══╝  ██║     ██║   ██║██╔═══╝
+  ██║     ███████╗██║██║     ██║     ███████╗╚██████╔╝██║
+  ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝ ╚═╝
 
 ASCII
   sleep 2
@@ -830,15 +855,11 @@ EOF
   chmod +x "$alerts_tail_script"
 
   # Layout:
-  # - Left: backend dashboard (top 50%), frontend logs + backend logs (bottom split 50/50)
-  # - Right: FlipFlo ASCII title (top), scheduler (bottom)
-  # - Bottom-right gets +2 lines versus an even split (taken from top-right)
-  local left_top_pane right_top_pane right_bottom_pane left_bottom_pane left_bottom_bottom_pane right_h right_bottom_lines
-  left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$backend_pane_script'")"
-  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$title_pane_script'")"
-  right_h="$(tmux display-message -p -t "$right_top_pane" "#{pane_height}")"
-  right_bottom_lines=$(( right_h / 2 + 2 ))
-  right_bottom_pane="$(tmux split-window -v -l "$right_bottom_lines" -P -F "#{pane_id}" -t "$right_top_pane" "bash '$scheduler_pane_script'")"
+  # - Left: FlipFlop ASCII title (top 50%), frontend logs + backend logs (bottom split 50/50)
+  # - Right: scheduler (full height)
+  local left_top_pane right_pane left_bottom_pane left_bottom_bottom_pane
+  left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$title_pane_script'")"
+  right_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
   left_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
 
