@@ -8102,3 +8102,27 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 19:41:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=refurbished pc
 [scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
 2026-05-22 19:41:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+2026-05-22 19:41:23 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-22 19:41:26 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-22 19:41:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-22 19:41:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-22 19:41:46 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-22 19:41:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-22 19:41:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+2026-05-22 19:41:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+2026-05-22 19:42:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+2026-05-22 19:42:03 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-22 19:42:04 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-22 19:42:06 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-22 19:42:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-22 19:42:25 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-22 19:42:25 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-22 19:42:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+2026-05-22 19:42:38 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-22 19:42:41 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-22 19:42:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
