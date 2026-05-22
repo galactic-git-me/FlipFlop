@@ -6379,3 +6379,110 @@ Call log:
 2026-05-22 13:36:19 [info     ] cases.generic_market.done      found=0 search=station command build source=Alibaba
 2026-05-22 13:36:19 [info     ] cases.generic_market.done      found=0 search=diplomatic station workstation source=Alibaba
 2026-05-22 13:36:21 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+2026-05-22 13:36:27 [info     ] amazon.cases.done              found=10 search=leviathan inspired build
+2026-05-22 13:36:30 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=monitor stand adjustable
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-23 12:31:24 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 254, in run_accessories_swarm
+    await db.commit()
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 1009, in commit
+    await greenlet_spawn(self.sync_session.commit)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 190, in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2028, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 973, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
+[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
+[parameters: ('4.6 4.6 out of 5 stars. (23.6k)', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JEXyGmEyz9JC64sl1PbHKYEAAAGeT6tRfQoAAAH2AQBvbm9fdHhuX2JpZDMgICBvbm9fdHhuX2ltcDEgICBvEdsG/clv1c_ek-IBfHXFbbW5nOjJE ... (1918 characters truncated) ... pf_rd_p=358d43ed-81c4-455e-87e8-a84d0543fd5e&pf_rd_r=Z9HRS6JZ1HV9A16RRFFR&pd_rd_wg=JPCEE&pd_rd_r=9fab178c-7ddd-42a2-9408-97f7f11976a4#customerReviews', 'new', 24.99, 24.99, None, None, '', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 22, 12, 32, 0, 991480), datetime.datetime(2026, 5, 22, 12, 32, 0, 991860))]
+(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2026-05-22 13:36:31 [info     ] temu.cases.done                found=0 search=station command build
+2026-05-22 13:36:34 [info     ] aliexpress.cases.done          found=0 search=station command build
+2026-05-22 13:36:34 [info     ] temu.cases.done                found=0 search=diplomatic station workstation
+2026-05-22 13:36:34 [info     ] aliexpress.cases.done          found=0 search=diplomatic station workstation
+2026-05-22 13:36:36 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-22 13:36:37 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=BargainHardware
+2026-05-22 13:36:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-22 13:36:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-22 13:36:39 [info     ] amazon.cases.done              found=0 search=biomechanical spaceship pc
+2026-05-22 13:36:39 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=BargainHardware
+2026-05-22 13:36:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:36:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=leviathan+inspired+build
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=leviathan+inspired+build", waiting until "domcontentloaded"
+ search=leviathan inspired build source=CherryTree Inc
+2026-05-22 13:36:40 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=CherryTree Inc
+2026-05-22 13:36:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=biomechanical+spaceship+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=biomechanical+spaceship+pc", waiting until "domcontentloaded"
+ search=biomechanical spaceship pc source=CherryTree Inc
+2026-05-22 13:36:40 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=CherryTree Inc
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-22 13:36:44 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=Alibaba
+2026-05-22 13:36:44 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=Alibaba
+2026-05-22 13:36:44 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-22 13:36:47 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+2026-05-22 13:36:49 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-22 13:36:50 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-22 13:36:52 [info     ] amazon.cases.done              found=1 search=autobot gaming pc
+2026-05-22 13:36:52 [info     ] temu.cases.done                found=0 search=leviathan inspired build
+2026-05-22 13:36:52 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-22 13:36:53 [info     ] amazon.cases.done              found=0 search=decepticon workstation
+2026-05-22 13:36:55 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-22 13:36:56 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-22 13:36:56 [info     ] aliexpress.cases.done          found=0 search=leviathan inspired build
+2026-05-22 13:36:56 [info     ] temu.cases.done                found=0 search=biomechanical spaceship pc
+2026-05-22 13:36:58 [info     ] aliexpress.cases.done          found=0 search=biomechanical spaceship pc
+2026-05-22 13:36:59 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=BargainHardware
+2026-05-22 13:36:59 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=autobot+gaming+pc
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=autobot+gaming+pc", waiting until "domcontentloaded"
+ search=autobot gaming pc source=CherryTree Inc
+2026-05-22 13:37:00 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=CherryTree Inc
+2026-05-22 13:37:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.cherrytreeinc.com/search?q=decepticon+workstation
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/search?q=decepticon+workstation", waiting until "domcontentloaded"
+ search=decepticon workstation source=CherryTree Inc
+2026-05-22 13:37:00 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=CherryTree Inc
+2026-05-22 13:37:00 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=BargainHardware
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-22 13:37:04 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=Alibaba
+2026-05-22 13:37:04 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=Alibaba
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+2026-05-22 13:37:12 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-22 13:37:12 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-22 13:37:12 [info     ] amazon.cases.done              found=7 search=anime gaming pc
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-22 13:37:14 [info     ] amazon.cases.done              found=10 search=manga aesthetic workstation
+2026-05-22 13:37:14 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-22 13:37:14 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+2026-05-22 13:37:15 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-22 13:37:16 [info     ] aliexpress.cases.done          found=0 search=autobot gaming pc
+2026-05-22 13:37:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-22 13:37:17 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-22 13:37:18 [info     ] temu.cases.done                found=0 search=decepticon workstation
+2026-05-22 13:37:19 [info     ] temu.cases.done                found=0 search=autobot gaming pc
+2026-05-22 13:37:23 [info     ] aliexpress.cases.done          found=0 search=decepticon workstation
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-22 13:37:34 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-22 13:37:42 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-22 13:37:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-22 13:37:50 [info     ] temu.cases.done                found=0 search=manga aesthetic workstation
