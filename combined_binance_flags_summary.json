@@ -1,0 +1,19 @@
+{
+  "total_rows": 1576,
+  "binance_linked_rows": 257,
+  "by_address_rule": 99,
+  "by_label_rule": 158,
+  "inflows_to_you": 97,
+  "outflows_from_you": 160,
+  "inflow_usd_then": 71372.04,
+  "outflow_usd_then": 38691.2,
+  "net_usd_then": 32680.84,
+  "inflow_usd_today": 72427.3,
+  "outflow_usd_today": 39263.23,
+  "net_usd_today": 33164.07,
+  "user_binance_addresses_used": [
+    "0x88e54b8b638d84fed0bce9480ade1702644fa9a9",
+    "0xae070a43f4142cac9a9bab105e301f500a27ae6c",
+    "0xb6934215b856b03430fc8dc058bd1c668b6a3182"
+  ]
+}
