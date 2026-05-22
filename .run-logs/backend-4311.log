@@ -5713,3 +5713,4 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-22 08:13:41 [info     ] ghost_lifecycle.updated        missing_cutoff_days=3 moved_to_missing=83 moved_to_removed=0 removed_cutoff_days=14
 2026-05-22 08:13:53 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 2026-05-22 08:13:53 [info     ] autonomous_cycle.done          duration_ms=2548363
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-22 07:31:24 UTC)" skipped: maximum number of running instances reached (1)
