@@ -3182,3 +3182,94 @@ Call log:
 Call log:
   - navigating to "https://www.amazon.co.uk/s?k=Intel+Core+i5-10600K&i=computers", waiting until "domcontentloaded"
  source=amazon
+2026-05-24 00:28:26 [info     ] temu.cases.done                found=0 search=pikachu yellow rgb build
+2026-05-24 00:28:26 [info     ] temu.cases.done                found=0 search=pokedex workstation
+2026-05-24 00:28:36 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-24 00:28:36 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-24 00:28:36 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-24 00:28:36 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-24 00:28:37 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-24 00:28:38 [debug    ] upgrade_parts.playwright_fetch.error error=Page.evaluate: Execution context was destroyed, most likely because of a navigation source=temu
+2026-05-24 00:28:38 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=BargainHardware
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 2060 6GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 2070 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 2080 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 3060 12GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 3060 Ti
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 3070 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 3080 10GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RX 6600 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RX 6650 XT
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RX 6700 XT
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RTX 4060 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=RX 7600 8GB
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i5-10400
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i5-10600K
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i7-10700
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i7-10700K
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i9-10900K
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i5-12400
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Intel i7-12700
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 5 3600
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 5 5600X
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5700X
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 7 5800X
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=Ryzen 9 5900X
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=8GB DDR4
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=16GB DDR4 Kit
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=32GB DDR4 Kit
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=16GB DDR5 Kit
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=32GB DDR5 Kit
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=256GB SATA SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=480GB SATA SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=1TB SATA SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=500GB NVMe SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=1TB NVMe SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=2TB NVMe SSD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=2TB HDD
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=550W PSU 80+ Bronze
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=650W PSU 80+ Bronze
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=750W PSU 80+ Gold
+2026-05-24 00:28:39 [debug    ] upgrade_parts.no_price         part=850W PSU 80+ Gold
+2026-05-24 00:28:39 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=8 box=0 ebay_buy=0 ebay_sold=0 errors=0 overclockers=0 scan=0 temu=0 updated=8
+2026-05-24 00:28:40 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=BargainHardware
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-24 00:28:42 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=Alibaba
+2026-05-24 00:28:42 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=Alibaba
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+2026-05-24 00:28:54 [info     ] amazon.cases.done              found=0 search=x-gene gaming build
+2026-05-24 00:28:54 [info     ] amazon.cases.done              found=0 search=cerebro workstation
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+2026-05-24 00:28:58 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=BargainHardware
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-24 00:29:01 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=BargainHardware
+2026-05-24 00:29:02 [info     ] cases.generic_market.done      found=0 search=x-gene gaming build source=Alibaba
+2026-05-24 00:29:04 [info     ] temu.cases.done                found=0 search=x-gene gaming build
+2026-05-24 00:29:05 [info     ] aliexpress.cases.done          found=0 search=x-gene gaming build
+2026-05-24 00:29:05 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=Alibaba
+2026-05-24 00:29:05 [info     ] temu.cases.done                found=0 search=cerebro workstation
+2026-05-24 00:29:05 [info     ] aliexpress.cases.done          found=0 search=cerebro workstation
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-24 00:29:20 [info     ] amazon.cases.done              found=0 search=dragon radar workstation
+2026-05-24 00:29:20 [info     ] amazon.cases.done              found=0 search=super saiyan gaming pc
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-24 00:29:25 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=BargainHardware
+2026-05-24 00:29:26 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=BargainHardware
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+2026-05-24 00:29:28 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=Alibaba
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-24 00:29:30 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=Alibaba
+2026-05-24 00:29:30 [info     ] aliexpress.cases.done          found=0 search=super saiyan gaming pc
+2026-05-24 00:29:30 [info     ] aliexpress.cases.done          found=0 search=dragon radar workstation
+2026-05-24 00:29:32 [info     ] temu.cases.done                found=0 search=super saiyan gaming pc
+2026-05-24 00:29:32 [info     ] temu.cases.done                found=0 search=dragon radar workstation
