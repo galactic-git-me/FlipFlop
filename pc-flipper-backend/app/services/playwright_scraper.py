@@ -20,6 +20,7 @@ import json
 import os
 import re
 import random
+import time
 from datetime import datetime
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -29,6 +30,18 @@ import structlog
 from app.services.search_telemetry import record_term_result
 
 log = structlog.get_logger(__name__)
+_LOG_THROTTLE_TS: dict[str, float] = {}
+
+
+def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
+    """Emit repetitive info logs at most once per window per unique key."""
+    key = f"{event}|{kwargs.get('term','')}|{kwargs.get('status','')}|{kwargs.get('mode','')}"
+    now = time.monotonic()
+    last = _LOG_THROTTLE_TS.get(key, 0.0)
+    if now - last < window_seconds:
+        return
+    _LOG_THROTTLE_TS[key] = now
+    log.info(event, **kwargs)
 
 # Path to optional Facebook session cookies
 FB_COOKIES_PATH = Path(__file__).parent.parent.parent / "fb_cookies.json"
@@ -636,7 +649,7 @@ async def scrape_preloved_playwright(
                 )
                 if not resp.ok:
                     if resp.status in (403, 404):
-                        log.info("preloved.playwright.no_data", status=resp.status, term=term)
+                        _log_info_throttled("preloved.playwright.no_data", status=resp.status, term=term)
                     else:
                         log.warning("preloved.playwright.api_error", status=resp.status, term=term)
                     raw_listings = []
@@ -1075,7 +1088,7 @@ async def _scrape_auction_site(
                 try:
                     await page.wait_for_selector(wait_selector, timeout=12000)
                 except Exception:
-                    log.info(f"{site_name}.playwright.no_results", term=term, mode="fallback_parse")
+                    _log_info_throttled(f"{site_name}.playwright.no_results", term=term, mode="fallback_parse")
 
             await asyncio.sleep(random.uniform(1.0, 2.0))
             await page.evaluate("window.scrollBy(0, 600)")

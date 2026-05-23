@@ -53,6 +53,17 @@ _cache: dict[str, "ResaleRange"] = {}
 _RESALE_EBAY_BLOCK_UNTIL_TS: float = 0.0
 _RESALE_EBAY_BLOCK_LOGGED: bool = False
 _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
+_RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
+
+
+def _info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
+    key = f"{event}|{kwargs.get('status','')}|{kwargs.get('query','')}"
+    now = time.monotonic()
+    last = _RESALE_LOG_THROTTLE_TS.get(key, 0.0)
+    if now - last < window_seconds:
+        return
+    _RESALE_LOG_THROTTLE_TS[key] = now
+    log.info(event, **kwargs)
 
 
 @dataclass
@@ -230,7 +241,7 @@ async def _fetch_sold_prices(query: str) -> list[float]:
     if now < _RESALE_EBAY_BLOCK_UNTIL_TS:
         if not _RESALE_EBAY_BLOCK_LOGGED:
             wait_s = round(_RESALE_EBAY_BLOCK_UNTIL_TS - now, 1)
-            log.info("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
+            _info_throttled("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
             _RESALE_EBAY_BLOCK_LOGGED = True
         return []
     _RESALE_EBAY_BLOCK_LOGGED = False
@@ -263,7 +274,7 @@ async def _fetch_sold_prices(query: str) -> list[float]:
                 )
             if resp.status_code in (401, 403, 429):
                 _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
-                log.info(
+                _info_throttled(
                     "resale_scraper.block_detected",
                     status=resp.status_code,
                     cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
