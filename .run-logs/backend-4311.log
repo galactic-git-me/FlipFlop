@@ -13191,3 +13191,55 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 14:50:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
 2026-05-23 14:50:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
 2026-05-23 14:50:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 14:50:58 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-23 14:50:59 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-23 14:51:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-23 14:51:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-23 14:51:02 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-23 14:51:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-23 14:51:11 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 14:51:13 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 14:51:14 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-23 14:51:14 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-23 14:51:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-23 14:51:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-23 14:51:16 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 14:51:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 14:51:19 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 14:51:19 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 14:51:21 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-23 14:51:22 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-23 14:51:22 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-23 14:51:24 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-23 14:51:24 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-23 14:51:25 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-23 14:51:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-23 14:51:27 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-23 14:51:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+2026-05-23 14:51:29 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+2026-05-23 14:51:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-23 14:51:30 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-23 14:51:49 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 14:51:50 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 14:51:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 14:51:51 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-23 14:51:52 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 14:51:52 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-23 14:51:52 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-23 14:51:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 14:51:54 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-23 14:51:54 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 14:51:55 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 14:51:56 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 14:51:56 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 14:51:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-23 14:51:58 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 14:51:58 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-23 14:51:59 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-23 14:52:00 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-23 14:52:00 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-23 14:52:01 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-23 14:52:02 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-23 14:52:03 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-23 14:52:10 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-23 14:52:10 [info     ] source.done                    found=0 gems=0 source=Temu
