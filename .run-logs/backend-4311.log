@@ -12099,3 +12099,67 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay retry 'pc quick sale': 0 found, 0 new (total 55)
 [scraper] eBay retry 'old pc clearing out': 0 found, 0 new (total 55)
 [scraper] eBay retry 'unused pc': 0 found, 0 new (total 55)
+[scraper] eBay retry 'son old pc': 0 found, 0 new (total 55)
+[scraper] eBay retry 'pc collect today': 0 found, 0 new (total 55)
+[scraper] eBay retry 'pc free to good home': 0 found, 0 new (total 55)
+[scraper] eBay retry 'old computer quick sale': 0 found, 0 new (total 55)
+[scraper] eBay retry 'gaming pc quick sale': 0 found, 0 new (total 55)
+[scraper] eBay retry 'pc no longer needed': 0 found, 0 new (total 55)
+[scraper] eBay retry 'desktop liquid cooled': 0 found, 0 new (total 55)
+[scraper] eBay retry 'pc liquid cooler': 0 found, 0 new (total 55)
+[scraper] eBay retry 'gaming pc water cooled': 0 found, 0 new (total 55)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 55)
+[scraper] eBay retry 'gaming pc with aio': 0 found, 0 new (total 55)
+2026-05-23 11:30:05 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=343.3 median=903.96 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=95.99 median=523.19 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC i3-10100 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=491.2 median=793.44 query=gaming PC rtx 2060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=169.95 median=611.94 query=gaming PC i5-10505 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=54.0 median=556.8 query=gaming PC i3-6100 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=69.99 median=575.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=39.95 median=455.94 query=gaming PC intel i5 4570 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=199.99 median=647.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=24.99 median=521.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=169.95 median=611.94 query=gaming PC i5 7500 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.95 median=467.94 query=gaming PC intel i5 3470 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.95 median=467.94 query=gaming PC i5 4460 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=65.82 median=486.98 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=551.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=66.66 median=571.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=449.99 median=947.99 query=gaming PC i5 14400 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=708.0 query=gaming PC i7-8700 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=918.0 query=gaming PC intel i7 10700 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=159.99 median=599.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=139.99 median=371.99 query=gaming PC i7-7700 gtx 1050
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=169.99 median=611.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=139.99 median=287.99 query=gaming PC i5-9400
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=467.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=467.99 query=gaming PC i5-4590 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=569.99 query=gaming PC xeon e3 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=219.99 median=671.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=79.95 median=503.94 query=gaming PC i7-6700 rtx 3060
+2026-05-23 11:30:05 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=39.99 median=539.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=522.0 query=gaming PC xeon e3-1225 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=707.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=59.99 median=479.99 query=gaming PC pentium g3240 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=119.0 median=550.8 query=gaming PC i5-6500 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=587.99 query=gaming PC i5-4590 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=54.95 median=473.94 query=gaming PC i5 7500 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=54.16 median=472.99 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=49.95 median=467.94 query=gaming PC i5 6500 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=569.99 query=gaming PC xeon e3 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=99.95 median=527.94 query=gaming PC i7 7700 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=167.09 median=608.51 query=gaming PC rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=229.99 median=683.99 query=gaming PC i7-8700 rtx 3060
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=229.99 median=395.99 query=gaming PC i7-8700
+2026-05-23 11:30:05 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5 9400f rtx 3060 status=403
+2026-05-23 11:30:05 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=707.99 query=gaming PC i5 9400f rtx 3060
+2026-05-23 11:30:05 [error    ] source.error                   error=Multiple rows were found when one or none was required source=eBay UK
+2026-05-23 11:30:05 [warning  ] source.auto_disabled           consecutive_failures=3 source=eBay UK threshold=3
+2026-05-23 11:30:05 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=99 new_gems=0 sources_scanned=17
