@@ -219,7 +219,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=2),
+        trigger=IntervalTrigger(hours=1),
         id="external_demand",
         name="External Demand Signals",
         kwargs={"job_id": "external_demand", "fn": ingest_external_demand_signals},
@@ -230,7 +230,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=24),
+        trigger=IntervalTrigger(hours=1),
         id="playbook_evolution",
         name="Playbook Evolution",
         kwargs={"job_id": "playbook_evolution", "fn": run_playbook_evolution},
@@ -241,7 +241,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(hours=1),
         id="autonomous_cycle",
         name="Autonomous Cycle",
         kwargs={"job_id": "autonomous_cycle", "fn": run_autonomous_cycle},
@@ -252,7 +252,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(hours=1),
         id="outcome_capture",
         name="Outcome Capture",
         kwargs={"job_id": "outcome_capture", "fn": capture_outcomes_and_check_retrain},
@@ -263,7 +263,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(hours=1),
         id="model_retraining",
         name="Model Retraining",
         kwargs={"job_id": "model_retraining", "fn": run_retraining_if_ready},
@@ -274,7 +274,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(hours=1),
         id="retrain_checkpoint_watchdog",
         name="Retrain Checkpoint Watchdog",
         kwargs={"job_id": "retrain_checkpoint_watchdog", "fn": check_stale_retrain_checkpoint},
@@ -285,7 +285,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=settings.compliant_ingestion_interval_hours),
+        trigger=IntervalTrigger(hours=1),
         id="compliant_market_ingestion",
         name="Compliant Market Ingestion",
         kwargs={"job_id": "compliant_market_ingestion", "fn": run_compliant_market_ingestion},

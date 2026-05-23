@@ -22,6 +22,7 @@ log = structlog.get_logger(__name__)
 ua = UserAgent()
 
 MAX_PRICE = 80.0  # Max price for accessories
+MAX_SOURCE_URL_LEN = 1900  # DB column is VARCHAR(2000); keep safety headroom
 
 ACCESSORY_SEARCHES = [
     # Mice
@@ -149,13 +150,15 @@ async def _upsert_accessory(db, acc: RawAccessory):
     part = result.scalar_one_or_none()
     now = datetime.utcnow()
 
+    safe_url = (acc.source_url or "")[:MAX_SOURCE_URL_LEN]
+
     if part:
         part.price = acc.price
         if acc.condition == PartCondition.new:
             part.price_new = acc.price
         else:
             part.price_used = acc.price
-        part.source_url = acc.source_url
+        part.source_url = safe_url
         part.image_url = acc.image_url or part.image_url
         part.last_price_update = now
     else:
@@ -164,7 +167,7 @@ async def _upsert_accessory(db, acc: RawAccessory):
             category=PartCategory.accessory,
             condition=acc.condition,
             source_site=acc.source_site,
-            source_url=acc.source_url,
+            source_url=safe_url,
             price=acc.price,
             price_new=acc.price if acc.condition == PartCondition.new else None,
             price_used=acc.price if acc.condition == PartCondition.used else None,
@@ -240,10 +243,21 @@ async def run_accessories_swarm() -> dict:
                         new=0,
                     )
                     for acc in results[:8]:
-                        await _upsert_accessory(db, acc)
-                        stats["upserted"] += 1
+                        try:
+                            await _upsert_accessory(db, acc)
+                            stats["upserted"] += 1
+                        except Exception as row_exc:
+                            stats["errors"] += 1
+                            await db.rollback()
+                            record_term_result(
+                                source_name=source_name,
+                                term=search_def["term"],
+                                error=f"row_upsert_error:{row_exc}",
+                            )
+                            log.error("accessories.upsert.error", term=search_def["term"], source=source_name, error=str(row_exc))
             except Exception as exc:
                 stats["errors"] += 1
+                await db.rollback()
                 record_term_result(
                     source_name="Accessories:eBay",
                     term=search_def["term"],
