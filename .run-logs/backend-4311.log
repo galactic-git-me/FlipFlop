@@ -10676,3 +10676,105 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 08:55:13 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
 [scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
 2026-05-23 08:55:14 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+2026-05-23 08:55:32 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 08:55:33 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 08:55:35 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-23 08:55:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-23 08:55:35 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-23 08:55:35 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-23 08:55:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-23 08:55:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+2026-05-23 08:55:37 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-23 08:55:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:55:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:55:39 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+2026-05-23 08:55:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-23 08:55:41 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-23 08:55:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 08:55:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 08:55:48 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-23 08:55:49 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+2026-05-23 08:55:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+2026-05-23 08:55:50 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-23 08:55:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:55:52 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+2026-05-23 08:56:02 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-23 08:56:04 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-23 08:56:04 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-23 08:56:06 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+2026-05-23 08:56:06 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-23 08:56:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+2026-05-23 08:56:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 08:56:09 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 08:56:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-23 08:56:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-23 08:56:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-23 08:56:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-23 08:56:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:56:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:56:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 08:56:24 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 08:56:26 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-23 08:56:27 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+2026-05-23 08:56:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-23 08:56:28 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-23 08:56:29 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:56:29 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-23 08:56:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-23 08:56:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-23 08:56:31 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-23 08:56:32 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-23 08:56:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-23 08:56:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'pc build': All connection attempts failed
+[scraper] John Pye error for 'pc build': All connection attempts failed
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-23 08:56:46 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-23 08:56:47 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-23 08:56:47 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-23 08:56:47 [info     ] source.done                    found=0 gems=0 source=John Pye
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-23 08:56:47 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-23 08:56:47 [info     ] source.done                    found=0 gems=0 source=John Pye
+2026-05-23 08:56:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-23 08:56:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+2026-05-23 08:56:49 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-23 08:56:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+[scraper] eBay 'desktop untested': HTTP blocked/empty (status=200), Playwright returned 55
+[scraper] eBay 'desktop untested': 55 found, 55 new (total 55)
+2026-05-23 08:56:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:56:51 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:56:56 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-23 08:56:58 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+2026-05-23 08:56:59 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-23 08:57:00 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-23 08:57:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+2026-05-23 08:57:01 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-23 08:57:02 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-23 08:57:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-23 08:57:03 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-23 08:57:04 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-23 08:57:04 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+2026-05-23 08:57:05 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+2026-05-23 08:57:06 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:57:07 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
