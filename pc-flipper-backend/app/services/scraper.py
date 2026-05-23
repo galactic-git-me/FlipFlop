@@ -1392,6 +1392,17 @@ _REQUIRED_CPU_TERMS = [
     "Ryzen 9 7900X",
 ]
 
+_EBAY_PRIORITY_PATTERNS = [
+    "motherboard cpu combo",
+    "motherboard bundle",
+    "cpu motherboard bundle",
+    "pc build",
+    "pc base unit",
+    "desktop pc",
+    "pc tower",
+    "gaming pc",
+]
+
 
 def _prioritize_terms(base_terms: list[str], required_terms: list[str]) -> list[str]:
     """Place required terms first while preserving order and deduping case-insensitively."""
@@ -1407,6 +1418,39 @@ def _prioritize_terms(base_terms: list[str], required_terms: list[str]) -> list[
         seen.add(key)
         merged.append(cleaned)
     return merged
+
+
+def _prioritize_ebay_flip_terms(terms: list[str]) -> list[str]:
+    """Prioritize combo/base-build generic terms first for eBay runs."""
+    cleaned = [t.strip() for t in terms if str(t).strip()]
+    seen: set[str] = set()
+    out: list[str] = []
+
+    # 1) Explicit required CPU terms first.
+    for t in _REQUIRED_CPU_TERMS:
+        k = t.lower()
+        if k not in seen:
+            seen.add(k)
+            out.append(t)
+
+    # 2) High-priority generic combo/base-build patterns.
+    for p in _EBAY_PRIORITY_PATTERNS:
+        for t in cleaned:
+            k = t.lower()
+            if k in seen:
+                continue
+            if p in k:
+                seen.add(k)
+                out.append(t)
+
+    # 3) Everything else in original order.
+    for t in cleaned:
+        k = t.lower()
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(t)
+    return out
 
 
 async def fetch_listings(
@@ -1467,10 +1511,10 @@ async def fetch_listings(
     prioritized_auction_terms = _prioritize_terms(_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
 
     if "ebay" in name and "auction" in name:
-        return await scrape_ebay(prioritized_ebay_auction_terms, min_price, max_price, auction_mode=True)
+        return await scrape_ebay(_prioritize_ebay_flip_terms(prioritized_ebay_auction_terms), min_price, max_price, auction_mode=True)
 
     if "ebay" in name:
-        return await scrape_ebay(search_terms, min_price, max_price)
+        return await scrape_ebay(_prioritize_ebay_flip_terms(search_terms), min_price, max_price)
 
     if "gumtree" in name:
         # Gumtree is blocked by Reblaze WAF — disabled

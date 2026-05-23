@@ -770,6 +770,38 @@ try:
 except Exception:
     keywords, schedule_rows, items = [], [], []
 
+def prioritize_ebay_terms(seq):
+    patterns = [
+        "motherboard cpu combo",
+        "motherboard bundle",
+        "cpu motherboard bundle",
+        "pc build",
+        "pc base unit",
+        "desktop pc",
+        "pc tower",
+        "gaming pc",
+    ]
+    required = ["AMD Ryzen 7 7800X3D", "Ryzen 9 7900", "Ryzen 9 7900X"]
+    out, seen = [], set()
+    for t in required:
+        k = t.lower()
+        if k not in seen:
+            seen.add(k); out.append(t)
+    for p in patterns:
+        for t in seq:
+            k = t.lower()
+            if k in seen:
+                continue
+            if p in k:
+                seen.add(k); out.append(t)
+    for t in seq:
+        k = t.lower()
+        if k not in seen:
+            seen.add(k); out.append(t)
+    return out
+
+keywords = prioritize_ebay_terms(keywords)
+
 table = Table(title="Search Terms", expand=True)
 table.add_column("Term", style="yellow")
 table.add_column("Status")
@@ -885,6 +917,38 @@ try:
     items = payload.get("items", []) or []
 except Exception:
     keywords, schedule_rows, items = [], [], []
+
+def prioritize_ebay_terms(seq):
+    patterns = [
+        "motherboard cpu combo",
+        "motherboard bundle",
+        "cpu motherboard bundle",
+        "pc build",
+        "pc base unit",
+        "desktop pc",
+        "pc tower",
+        "gaming pc",
+    ]
+    required = ["AMD Ryzen 7 7800X3D", "Ryzen 9 7900", "Ryzen 9 7900X"]
+    out, seen = [], set()
+    for t in required:
+        k = t.lower()
+        if k not in seen:
+            seen.add(k); out.append(t)
+    for p in patterns:
+        for t in seq:
+            k = t.lower()
+            if k in seen:
+                continue
+            if p in k:
+                seen.add(k); out.append(t)
+    for t in seq:
+        k = t.lower()
+        if k not in seen:
+            seen.add(k); out.append(t)
+    return out
+
+keywords = prioritize_ebay_terms(keywords)
 
 flip_job = next((j for j in schedule_rows if str((j or {}).get("id")) == "flip_opportunities"), {})
 run_started = parse_iso((flip_job or {}).get("last_run_at"))
