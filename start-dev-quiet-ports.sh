@@ -877,7 +877,10 @@ EOF
   # Keep title pane only as tall as needed for ASCII art.
   left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
-  right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
+  # Give Search Terms 2 extra lines by taking them from Scheduler.
+  right_h="$(tmux display-message -p -t "$right_top_pane" "#{pane_height}")"
+  right_bottom_lines=$(( right_h / 2 + 2 ))
+  right_bottom_pane="$(tmux split-window -v -l "$right_bottom_lines" -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
 
   tmux select-window -t "$TMUX_SESSION":0
 
