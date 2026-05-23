@@ -137,9 +137,6 @@ def build_layout(
     log_lines: list[str],
     log_file: str,
 ) -> Group:
-    title = Text(f"FlipFlop Backend Console  |  {base_url}", style="bold cyan")
-    subtitle = Text(datetime.now().strftime("Updated %Y-%m-%d %H:%M:%S"), style="dim")
-
     kpi_tbl = Table.grid(expand=True)
     kpi_tbl.add_column(justify="center")
     kpi_tbl.add_column(justify="center")
@@ -177,7 +174,6 @@ def build_layout(
 
     top = Table.grid(expand=True)
     top.add_column()
-    top.add_row(Panel(Group(title, subtitle), border_style="cyan", box=box.ROUNDED))
     top.add_row(Panel(kpi_tbl, title="Live Stats", border_style="bright_blue"))
 
     jobs_tbl = Table(box=box.SIMPLE_HEAVY, expand=True)
