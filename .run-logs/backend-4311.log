@@ -3330,3 +3330,61 @@ Call log:
 [scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
 2026-05-24 00:31:07 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
 2026-05-24 00:31:07 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
+[scraper] eBay 'desktop no gpu': 60 found, 60 new (total 60)
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 60)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-24 00:31:11 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=Alibaba
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+2026-05-24 00:31:11 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=Alibaba
+2026-05-24 00:31:11 [info     ] aliexpress.cases.done          found=0 search=spiderverse gaming pc
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 60)
+2026-05-24 00:31:13 [info     ] aliexpress.cases.done          found=0 search=red blue rgb build
+2026-05-24 00:31:14 [info     ] temu.cases.done                found=0 search=red blue rgb build
+2026-05-24 00:31:14 [info     ] temu.cases.done                found=0 search=spiderverse gaming pc
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+2026-05-24 00:31:28 [info     ] amazon.cases.done              found=0 search=batcomputer workstation
+2026-05-24 00:31:28 [info     ] amazon.cases.done              found=0 search=dark knight pc
+2026-05-24 00:31:32 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=BargainHardware
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-24 00:31:33 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=BargainHardware
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+2026-05-24 00:31:36 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
+2026-05-24 00:31:37 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=Alibaba
+2026-05-24 00:31:38 [info     ] aliexpress.cases.done          found=0 search=batcomputer workstation
+2026-05-24 00:31:38 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
+2026-05-24 00:31:40 [info     ] temu.cases.done                found=0 search=dark knight pc
+2026-05-24 00:31:40 [info     ] temu.cases.done                found=0 search=batcomputer workstation
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 60)
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 60)
+2026-05-24 00:31:53 [info     ] amazon.cases.done              found=0 search=kryptonian workstation
+2026-05-24 00:31:55 [info     ] amazon.cases.done              found=0 search=fortress of solitude build
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+2026-05-24 00:31:57 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 60)
+2026-05-24 00:31:59 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+2026-05-24 00:32:02 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=Alibaba
+2026-05-24 00:32:03 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=Alibaba
+2026-05-24 00:32:03 [info     ] aliexpress.cases.done          found=0 search=kryptonian workstation
+2026-05-24 00:32:04 [info     ] aliexpress.cases.done          found=0 search=fortress of solitude build
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+2026-05-24 00:32:06 [info     ] temu.cases.done                found=0 search=kryptonian workstation
+2026-05-24 00:32:06 [info     ] temu.cases.done                found=0 search=fortress of solitude build
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
+2026-05-24 00:32:19 [info     ] amazon.cases.done              found=0 search=lian li style case
+2026-05-24 00:32:20 [info     ] amazon.cases.done              found=0 search=hyte y60 style case
+2026-05-24 00:32:24 [info     ] cases.generic_market.done      found=0 search=lian li style case source=BargainHardware
+2026-05-24 00:32:24 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=BargainHardware
+2026-05-24 00:32:27 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+2026-05-24 00:32:27 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+2026-05-24 00:32:29 [info     ] aliexpress.cases.done          found=0 search=hyte y60 style case
+2026-05-24 00:32:29 [info     ] aliexpress.cases.done          found=0 search=lian li style case
+2026-05-24 00:32:31 [info     ] temu.cases.done                found=0 search=lian li style case
+2026-05-24 00:32:32 [info     ] temu.cases.done                found=0 search=hyte y60 style case
