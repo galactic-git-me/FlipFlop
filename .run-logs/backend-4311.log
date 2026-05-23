@@ -14016,3 +14016,20 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 16:56:59 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
 2026-05-23 16:57:01 [info     ] BidSpotter.playwright.done     total=0
 2026-05-23 16:57:01 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+2026-05-23 16:57:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-23 16:57:25 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-23 16:57:25 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=office pc
+2026-05-23 16:57:26 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 16:57:27 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-23 16:57:29 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-23 16:57:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-23 16:57:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 16:57:59 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-23 16:58:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-23 16:58:01 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=refurbished pc
+2026-05-23 16:58:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 16:58:05 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-23 16:58:07 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-23 16:58:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+2026-05-23 16:58:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-23 16:58:35 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
