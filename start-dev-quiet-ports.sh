@@ -258,27 +258,6 @@ open_tmux_logs() {
     tmux kill-session -t "$TMUX_SESSION"
   fi
 
-  local backend_pane_script="$LOG_DIR/backend-pane-$BACKEND_PORT.sh"
-  cat >"$backend_pane_script" <<EOF
-#!/usr/bin/env bash
-set +e
-echo "Backend dashboard (Rich): http://$PUBLIC_HOST:$BACKEND_PORT"
-echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
-echo "Backend log file: $BACKEND_LOG"
-echo
-if [[ -x "$BACKEND_DIR/.venv/bin/python" ]] && "$BACKEND_DIR/.venv/bin/python" -c "from rich.console import Console" >/dev/null 2>&1; then
-  "$BACKEND_DIR/.venv/bin/python" "$BACKEND_DIR/scripts/backend_console_dashboard.py" --base-url "http://$PUBLIC_HOST:$BACKEND_PORT"
-else
-  python3 "$BACKEND_DIR/scripts/backend_console_dashboard.py" --base-url "http://$PUBLIC_HOST:$BACKEND_PORT"
-fi
-code=\$?
-echo
-echo "[warn] Rich backend dashboard exited (status: \$code). Falling back to backend logs..."
-echo
-tail -n 240 -f "$BACKEND_LOG"
-EOF
-  chmod +x "$backend_pane_script"
-
   local scheduler_pane_script="$LOG_DIR/scheduler-pane-$BACKEND_PORT.sh"
   cat >"$scheduler_pane_script" <<EOF
 #!/usr/bin/env bash
@@ -869,29 +848,6 @@ EOF
   left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
   right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
-
-  # Optional separate dashboard launch.
-  if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
-    if [[ -z "${DISPLAY:-}" && "${XDG_SESSION_TYPE:-}" == "tty" ]]; then
-      tmux new-window -d -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
-      echo "Opened backend dashboard in separate tmux window '$TMUX_SESSION:dashboard'."
-    elif command -v gnome-terminal >/dev/null 2>&1; then
-      nohup gnome-terminal --maximize -- bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-      echo "Opened backend dashboard in separate maximized gnome-terminal window."
-    elif command -v xfce4-terminal >/dev/null 2>&1; then
-      nohup xfce4-terminal --maximize --command="bash '$backend_pane_script'" >/dev/null 2>&1 &
-      echo "Opened backend dashboard in separate maximized xfce4-terminal window."
-    elif command -v konsole >/dev/null 2>&1; then
-      nohup konsole --maximize -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-      echo "Opened backend dashboard in separate maximized konsole window."
-    elif command -v x-terminal-emulator >/dev/null 2>&1; then
-      nohup x-terminal-emulator -e bash -lc "bash '$backend_pane_script'" >/dev/null 2>&1 &
-      echo "Opened backend dashboard in separate terminal window."
-    else
-      tmux new-window -d -t "$TMUX_SESSION" -n dashboard "bash '$backend_pane_script'"
-      echo "No GUI terminal detected; opened dashboard as tmux window '$TMUX_SESSION:dashboard'."
-    fi
-  fi
 
   tmux select-window -t "$TMUX_SESSION":0
 
