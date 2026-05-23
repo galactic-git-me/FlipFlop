@@ -3443,3 +3443,54 @@ Call log:
 2026-05-24 00:33:52 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
 2026-05-24 00:33:53 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
 2026-05-24 00:33:53 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+2026-05-24 00:33:58 [info     ] amazon.cases.done              found=0 search=slim micro atx case office
+2026-05-24 00:34:04 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 60)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+2026-05-24 00:34:08 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+2026-05-24 00:34:08 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-24 00:34:08 [info     ] amazon.cases.done              found=0 search=mini tower desktop case
+2026-05-24 00:34:11 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 60)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+2026-05-24 00:34:16 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 60)
+2026-05-24 00:34:18 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+2026-05-24 00:34:18 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-24 00:34:20 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+2026-05-24 00:34:23 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+2026-05-24 00:34:33 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+2026-05-24 00:34:33 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+2026-05-24 00:34:34 [info     ] amazon.cases.done              found=0 search=budget gaming case atx
+2026-05-24 00:34:36 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-24 00:34:37 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-24 00:34:41 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
+2026-05-24 00:34:44 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-24 00:34:45 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
+2026-05-24 00:34:46 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+2026-05-24 00:34:49 [info     ] amazon.cases.done              found=0 search=mini itx htpc case
+[scraper] eBay 'pc no os': 0 found, 0 new (total 60)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+2026-05-24 00:34:53 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=BargainHardware
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 60)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 60)
+2026-05-24 00:34:57 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=Alibaba
+[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
+2026-05-24 00:34:59 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-24 00:35:00 [info     ] amazon.cases.done              found=0 search=slim htpc case living room
+2026-05-24 00:35:01 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+2026-05-24 00:35:10 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-24 00:35:12 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-24 00:35:12 [info     ] cases_swarm.done               errors=0 found=26 upserted=22
