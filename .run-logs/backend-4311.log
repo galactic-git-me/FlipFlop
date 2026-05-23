@@ -6786,3 +6786,40 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 02:59:50 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard cpu combo
 2026-05-23 02:59:50 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard cpu combo
 2026-05-23 02:59:52 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 98)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 98)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 0)
+2026-05-23 03:00:08 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-23 03:00:10 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-23 03:00:11 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+2026-05-23 03:00:11 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-23 03:00:13 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+2026-05-23 03:00:13 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-23 03:00:14 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
+2026-05-23 03:00:16 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 0)
+2026-05-23 03:00:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 03:00:24 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-23 03:00:24 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-23 03:00:24 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 03:00:26 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-23 03:00:26 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 98)
+2026-05-23 03:00:27 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-23 03:00:27 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-23 03:00:29 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-23 03:00:29 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 98)
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 98)
+2026-05-23 03:00:45 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 03:00:47 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-23 03:00:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-23 03:00:49 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 03:00:50 [info     ] i-bidder.playwright.done       total=0
+2026-05-23 03:00:50 [info     ] source.done                    found=0 gems=0 source=i-bidder
+2026-05-23 03:00:51 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-23 03:00:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-23 03:00:54 [info     ] i-bidder.playwright.done       total=0
+2026-05-23 03:00:54 [info     ] source.done                    found=0 gems=0 source=i-bidder
