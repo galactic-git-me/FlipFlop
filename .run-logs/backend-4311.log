@@ -14383,3 +14383,29 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 18:50:38 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
 2026-05-23 18:50:40 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
 2026-05-23 18:50:43 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-23 18:51:07 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-23 18:51:08 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 18:51:09 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+2026-05-23 18:51:09 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 18:51:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-23 18:51:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-23 18:51:10 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-23 18:51:11 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-23 18:51:12 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 18:51:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-23 18:51:14 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-23 18:51:34 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-23 18:51:36 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 18:51:38 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-23 18:51:45 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 18:51:46 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 18:51:47 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 18:51:47 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-23 18:51:49 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-23 18:51:49 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 18:51:50 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-23 18:51:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-23 18:52:01 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-23 18:52:03 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-23 18:52:05 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-23 18:52:08 [info     ] source.done                    found=0 gems=0 source=Temu
