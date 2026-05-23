@@ -5773,3 +5773,104 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 40)
 [scraper] eBay retry 'desktop spares or repair': 0 found, 0 new (total 40)
 [scraper] eBay retry 'pc no display': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc boots no display': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc powers on no signal': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc faulty': 0 found, 0 new (total 40)
+[scraper] eBay retry 'desktop faulty': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc powers up untested': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gaming pc fault': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc no os': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc no operating system': 0 found, 0 new (total 40)
+[scraper] eBay retry 'desktop no os': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i5 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i5 tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i9 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ryzen 5 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ryzen 7 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ryzen 9 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'xeon desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'i7 10700 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ryzen 7 5800 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 40)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 40)
+[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 40)
+[scraper] eBay retry 'ex office pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'office pc tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'bulk pcs desktop': 0 found, 0 new (total 40)
+[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 40)
+[scraper] eBay retry 'office tower pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gamng pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gmaing pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gamnig pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gaiming pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'compter tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'deskptop pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc towre': 0 found, 0 new (total 40)
+[scraper] eBay retry 'destop pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'destkop computer': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gameing pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'computre tower': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc quick sale': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc need gone today': 0 found, 0 new (total 40)
+[scraper] eBay retry 'old pc clearing out': 0 found, 0 new (total 40)
+[scraper] eBay retry 'son old pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'unused pc': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc collect today': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc free to good home': 0 found, 0 new (total 40)
+[scraper] eBay retry 'old computer quick sale': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gaming pc quick sale': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc no longer needed': 0 found, 0 new (total 40)
+[scraper] eBay retry 'pc liquid cooler': 0 found, 0 new (total 40)
+[scraper] eBay retry 'desktop liquid cooled': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gaming pc water cooled': 0 found, 0 new (total 40)
+[scraper] eBay retry 'gaming pc with aio': 0 found, 0 new (total 40)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 40)
+2026-05-23 02:29:34 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-10400t rtx 3060 status=403
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=156.69 median=596.03 query=gaming PC i5-10400t rtx 3060
+2026-05-23 02:29:34 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-10400 rtx 3060 status=403
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=815.99 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [warning  ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC i5-10400f rtx 2060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=678.84 query=gaming PC i5-10400f gtx 1660ti
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=239.9 median=779.88 query=gaming PC i5-10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=617.64 query=gaming PC i5-10400f rtx 2060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=322.9 median=507.48 query=gaming PC i5 10400f gtx 1650
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=165.0 median=606.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=362.68 median=843.22 query=gaming PC i5 10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=187.5 median=633.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=450.4 median=660.48 query=gaming PC i5 10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=558.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=658.44 query=gaming PC i5-10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=564.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=265.9 median=439.08 query=gaming PC i5 10400f gtx 1650ti
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=579.24 query=gaming PC i5-10400 gtx 1660
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=187.89 median=633.47 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=208.69 median=658.43 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=183.32 median=627.98 query=gaming PC i5-10400t rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=617.64 query=gaming PC i5 10400f rtx 3050
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=844.44 query=gaming PC i5-10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=540.0 query=gaming PC i5-10400f gtx 1650
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=159.95 median=599.94 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=370.0 median=564.0 query=gaming PC i5-10400f rtx 2060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=289.99 median=755.99 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC intel i5 10400f rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=156.69 median=680.03 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=491.2 median=709.44 query=gaming PC i5 10400f rtx 2060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=209.99 median=659.99 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=600.0 query=gaming PC i5-10400f rtx 2060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=156.7 median=596.04 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=720.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=229.99 median=683.99 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=235.0 median=774.0 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=701.64 query=gaming PC i5-10400f gtx 1660
+2026-05-23 02:29:34 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-10400 rtx 3060 status=403
+2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=189.95 median=635.94 query=gaming PC i5-10400 rtx 3060
+2026-05-23 02:29:34 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
