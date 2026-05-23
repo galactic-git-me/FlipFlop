@@ -5874,3 +5874,175 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 02:29:34 [warning  ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-10400 rtx 3060 status=403
 2026-05-23 02:29:34 [info     ] resale_scraper.fallback_buy_price buy_price=189.95 median=635.94 query=gaming PC i5-10400 rtx 3060
 2026-05-23 02:29:34 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'compter tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 0)
+2026-05-23 02:47:11 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=20
+2026-05-23 02:47:11 [info     ] source.done                    found=40 gems=0 source=eBay UK
+2026-05-23 02:47:11 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=84 new_gems=0 sources_scanned=2
+2026-05-23 02:47:11 [info     ] ghost_lifecycle.updated        missing_cutoff_days=3 moved_to_missing=85 moved_to_removed=0 removed_cutoff_days=14
+2026-05-23 02:48:06 [info     ] flip_opportunities_swarm.start
+2026-05-23 02:48:06 [info     ] flip_opportunities_swarm.start
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+[scraper] No adapter for source 'WF-Retrain', skipping
+2026-05-23 02:48:06 [info     ] facebook.playwright.cookies_loaded count=8
+[scraper] No adapter for source 'Manual Submission', skipping
+[scraper] No adapter for source 'Manual Photo', skipping
+[scraper] No adapter for source 'WF-Retrain', skipping
+2026-05-23 02:48:07 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-23 02:48:07 [info     ] source.done                    found=0 gems=0 source=Manual Submission
+2026-05-23 02:48:08 [info     ] source.done                    found=0 gems=0 source=Manual Photo
+2026-05-23 02:48:08 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-23 02:48:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-23 02:48:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-23 02:48:08 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 02:48:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+2026-05-23 02:48:08 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-23 02:48:11 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
+2026-05-23 02:48:11 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-23 02:48:14 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:14 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [warning  ] preloved.playwright.api_error  status=404 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:15 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+2026-05-23 02:48:16 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-23 02:48:16 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-23 02:48:16 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-23 02:48:16 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-23 02:48:16 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+2026-05-23 02:48:16 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900
+2026-05-23 02:48:16 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-23 02:48:16 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-23 02:48:19 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-23 02:48:19 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-23 02:48:19 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-23 02:48:19 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-23 02:48:19 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-23 02:48:19 [warning  ] preloved.playwright.api_error  status=404 term=Ryzen 9 7900X
+2026-05-23 02:48:19 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-23 02:48:19 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'pc build': All connection attempts failed
+2026-05-23 02:48:21 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
+2026-05-23 02:48:21 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:21 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
+2026-05-23 02:48:21 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
+2026-05-23 02:48:21 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-23 02:48:21 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-23 02:48:22 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-23 02:48:22 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-23 02:48:22 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
+2026-05-23 02:48:22 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:22 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-23 02:48:22 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:22 [info     ] facebook.playwright.items      count=0 term=Ryzen 9 7900X
+2026-05-23 02:48:22 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
+2026-05-23 02:48:22 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900 title=Facebook
+2026-05-23 02:48:22 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DRyzen%2B9%2B7900X%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Ryzen 9 7900X title=Facebook
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:22 [info     ] facebook.playwright.items      count=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:22 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DAMD%2BRyzen%2B7%2B7800X3D%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=AMD Ryzen 7 7800X3D title=Facebook
+2026-05-23 02:48:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=desktop%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-23 02:48:23 [info     ] preloved.playwright.fetch      term=gaming pc
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-23 02:48:24 [info     ] preloved.playwright.fetch      term=gaming pc
+[scraper] John Pye error for 'pc build': All connection attempts failed
+2026-05-23 02:48:24 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-23 02:48:24 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-23 02:48:24 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-23 02:48:24 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-23 02:48:24 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:24 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:25 [info     ] apex.playwright.auction_items  count=27
+2026-05-23 02:48:26 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-23 02:48:26 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-23 02:48:26 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-23 02:48:26 [info     ] preloved.playwright.fetch      term=desktop pc
+2026-05-23 02:48:27 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-23 02:48:27 [info     ] preloved.playwright.term_done  running_total=34 term=desktop pc
+2026-05-23 02:48:27 [info     ] apex.playwright.uk_auctions    count=27
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-23 02:48:28 [info     ] apex.playwright.auction_items  count=27
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-23 02:48:28 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-23 02:48:29 [info     ] apex.playwright.uk_auctions    count=27
+2026-05-23 02:48:29 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-23 02:48:29 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-23 02:48:29 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-23 02:48:29 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+2026-05-23 02:48:29 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-23 02:48:29 [info     ] preloved.playwright.term_done  running_total=44 term=pc build
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-23 02:48:29 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-23 02:48:30 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-23 02:48:31 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-23 02:48:31 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-23 02:48:31 [warning  ] preloved.playwright.api_error  status=404 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] preloved.playwright.term_done  running_total=44 term=HP EliteDesk
+2026-05-23 02:48:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
