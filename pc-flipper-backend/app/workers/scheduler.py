@@ -163,15 +163,16 @@ def start_scheduler():
 
     now = datetime.now(timezone.utc)
     flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
-    upgrade_start = now
-    cases_start = now
-    accessories_start = now
-    external_demand_start = now
-    playbook_evolution_start = now
-    autonomous_cycle_start = now
-    outcome_capture_start = now
-    model_retraining_start = now
-    compliant_ingestion_start = now
+    upgrade_start = _next_run_for("upgrade_parts", max(1, int(settings.parts_update_interval_hours * 60)), now)
+    cases_start = _next_run_for("cases", 24 * 60, now)
+    accessories_start = _next_run_for("accessories", 24 * 60, now)
+    external_demand_start = _next_run_for("external_demand", 60, now)
+    playbook_evolution_start = _next_run_for("playbook_evolution", 60, now)
+    autonomous_cycle_start = _next_run_for("autonomous_cycle", 60, now)
+    outcome_capture_start = _next_run_for("outcome_capture", 60, now)
+    model_retraining_start = _next_run_for("model_retraining", 60, now)
+    retrain_watchdog_start = _next_run_for("retrain_checkpoint_watchdog", 60, now)
+    compliant_ingestion_start = _next_run_for("compliant_market_ingestion", 60, now)
 
     scheduler.add_job(
         _run_job_with_history,
@@ -280,7 +281,7 @@ def start_scheduler():
         kwargs={"job_id": "retrain_checkpoint_watchdog", "fn": check_stale_retrain_checkpoint},
         replace_existing=True,
         max_instances=1,
-        next_run_time=model_retraining_start,
+        next_run_time=retrain_watchdog_start,
     )
 
     scheduler.add_job(

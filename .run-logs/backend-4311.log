@@ -36351,294 +36351,137 @@ INFO:     100.101.209.68:54352 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54370 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54356 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 2026-05-23 23:00:31 [error    ] source.error                   error=Multiple rows were found when one or none was required source=Amazon
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           [scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
-[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
-2026-05-23 21:10:57 [info     ] temu.cases.done                found=0 search=argb gaming case
-2026-05-23 21:10:57 [info     ] temu.cases.done                found=0 search=rgb airflow case
-2026-05-23 21:10:57 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
-[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
-2026-05-23 21:11:02 [error    ] accessories.scrape.error       error=(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) term=optical mouse
-2026-05-23 21:11:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2060 6GB sold=None
-2026-05-23 21:11:07 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
-2026-05-23 21:11:07 [debug    ] upgrade_parts.ebay             buy=None part=RX 570 8GB sold=None
-2026-05-23 21:11:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2080 8GB sold=None
-2026-05-23 21:11:08 [debug    ] upgrade_parts.ebay             buy=None part=RTX 2070 8GB sold=None
-2026-05-23 21:11:08 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
-2026-05-23 21:11:12 [info     ] amazon.cases.done              found=0 search=high airflow gaming case
-2026-05-23 21:11:12 [info     ] amazon.cases.done              found=0 search=mesh airflow case
-2026-05-23 21:11:17 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=BargainHardware
-2026-05-23 21:11:19 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=BargainHardware
-2026-05-23 21:11:21 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gaming keyboard rgb
-2026-05-23 21:11:22 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
-2026-05-23 21:11:23 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
-2026-05-23 21:11:23 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
-2026-05-23 21:11:23 [info     ] temu.cases.done                found=0 search=mesh airflow case
-2026-05-23 21:11:24 [info     ] temu.cases.done                found=0 search=high airflow gaming case
-2026-05-23 21:11:24 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
-2026-05-23 21:11:26 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=budget gaming keyboard
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
-2026-05-23 21:11:38 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=budget gaming keyboard
-[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
-2026-05-23 21:11:39 [info     ] amazon.cases.done              found=0 search=luxury gaming case
-2026-05-23 21:11:39 [info     ] amazon.cases.done              found=0 search=premium aluminum pc case
-[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
-2026-05-23 21:11:41 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
-2026-05-23 21:11:41 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
-2026-05-23 21:11:41 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
-2026-05-23 21:11:42 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
-[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
-2026-05-23 21:11:42 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
-2026-05-23 21:11:42 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
-[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
-2026-05-23 21:11:44 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=BargainHardware
-2026-05-23 21:11:44 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=BargainHardware
-[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
-2026-05-23 21:11:49 [info     ] aliexpress.cases.done          found=0 search=premium aluminum pc case
-2026-05-23 21:11:50 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=Alibaba
-2026-05-23 21:11:50 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=Alibaba
-2026-05-23 21:11:51 [info     ] aliexpress.cases.done          found=0 search=luxury gaming case
-2026-05-23 21:11:51 [info     ] temu.cases.done                found=0 search=premium aluminum pc case
-2026-05-23 21:11:51 [info     ] temu.cases.done                found=0 search=luxury gaming case
-[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
-2026-05-23 21:11:59 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=mechanical keyboard
-[scraper] eBay error for 'pc build': Page.evaluate: Target crashed 
-2026-05-23 21:12:06 [info     ] amazon.cases.done              found=0 search=white rgb case
-2026-05-23 21:12:07 [info     ] amazon.cases.done              found=0 search=white fish tank case
-2026-05-23 21:12:14 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=BargainHardware
-2026-05-23 21:12:14 [info     ] cases.generic_market.done      found=0 search=white rgb case source=BargainHardware
-2026-05-23 21:12:15 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
-2026-05-23 21:12:15 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
-2026-05-23 21:12:15 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
-2026-05-23 21:12:15 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
-2026-05-23 21:12:16 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
-2026-05-23 21:12:16 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
-2026-05-23 21:12:16 [info     ] aliexpress.cases.done          found=0 search=white rgb case
-2026-05-23 21:12:16 [info     ] aliexpress.cases.done          found=0 search=white fish tank case
-2026-05-23 21:12:17 [info     ] temu.cases.done                found=0 search=white fish tank case
-2026-05-23 21:12:18 [info     ] temu.cases.done                found=0 search=white rgb case
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'pc build': 0 found, 0 new (total 0)
-2026-05-23 21:12:19 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=Alibaba
-2026-05-23 21:12:20 [info     ] cases.generic_market.done      found=0 search=white rgb case source=Alibaba
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-2026-05-23 21:12:23 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gaming headset usb
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54378 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-23 23:00:31 [warning  ] source.auto_disabled           consecutive_failures=9 source=Amazon threshold=3
+INFO:     100.101.209.68:54384 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:31 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-23 23:00:31 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-23 23:00:31 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=Alibaba
+INFO:     100.101.209.68:54398 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-23 23:00:32 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
+INFO:     100.101.209.68:54400 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54414 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54426 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54432 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54448 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54460 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54470 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54490 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54494 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54500 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:34 [info     ] aliexpress.cases.done          found=0 search=compact gaming case
 [scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-2026-05-23 21:12:30 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=pc headset microphone
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-2026-05-23 21:12:35 [info     ] amazon.cases.done              found=0 search=micro atx fish tank
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-2026-05-23 21:12:35 [info     ] amazon.cases.done              found=0 search=compact gaming case
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-2026-05-23 21:12:40 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=BargainHardware
-2026-05-23 21:12:43 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=BargainHardware
-2026-05-23 21:12:45 [info     ] aliexpress.cases.done          found=0 search=micro atx fish tank
-2026-05-23 21:12:45 [info     ] aliexpress.cases.done          found=0 search=compact gaming case
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-2026-05-23 21:12:47 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=Alibaba
-2026-05-23 21:12:47 [info     ] temu.cases.done                found=0 search=micro atx fish tank
-2026-05-23 21:12:47 [info     ] temu.cases.done                found=0 search=compact gaming case
-2026-05-23 21:12:48 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=Alibaba
-2026-05-23 21:12:49 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=pc headset microphone
-2026-05-23 21:12:50 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-12400 sold=None
-2026-05-23 21:12:50 [debug    ] upgrade_parts.ebay             buy=None part=Intel i9-10900K sold=None
-2026-05-23 21:12:51 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-12700 sold=None
-2026-05-23 21:12:51 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600X sold=None
-2026-05-23 21:12:51 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 5600 sold=None
-2026-05-23 21:12:51 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 5 3600 sold=None
-2026-05-23 21:12:56 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_ABORTED at https://www.aliexpress.com/wholesale?SearchText=gaming+mousepad+xl&g=y&SortType=price_asc
-Call log:
-  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+mousepad+xl&g=y&SortType=price_asc", waiting until "domcontentloaded"
- site=AliExpress term=gaming mousepad xl
-2026-05-23 21:13:02 [info     ] amazon.cases.done              found=0 search=cyberpunk pc case
-2026-05-23 21:13:03 [info     ] amazon.cases.done              found=0 search=futuristic gaming case
+2026-05-23 23:00:34 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=Alibaba
+INFO:     100.101.209.68:54504 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54508 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54514 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54520 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54532 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54540 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54550 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54568 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54572 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54580 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46670 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:46674 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46688 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46694 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46700 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46706 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46722 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46736 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46758 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46764 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46772 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46788 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+INFO:     100.101.209.68:46794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46798 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46810 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46822 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46848 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46854 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46882 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46870 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46884 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46888 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46894 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:44 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+INFO:     100.101.209.68:46902 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46912 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46914 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46920 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46928 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46932 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46942 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46954 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46962 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46970 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46978 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46980 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:33304 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33306 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33312 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33322 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33332 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33346 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33350 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33362 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33366 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33374 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33384 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33394 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33402 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33418 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33424 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33434 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33440 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33444 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33460 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33478 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33468 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33488 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33494 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33498 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-23 23:00:50 [info     ] amazon.cases.done              found=0 search=futuristic gaming case
+2026-05-23 23:00:51 [info     ] amazon.cases.done              found=0 search=cyberpunk pc case
+INFO:     100.101.209.68:33504 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33518 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33522 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33532 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33548 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33554 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33566 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33570 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33586 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33590 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33598 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33604 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33608 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33614 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33628 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33630 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33634 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33642 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33636 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33652 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33676 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33660 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34750 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/workers/scheduler.py'. Reloading...
+INFO:     Shutting down
 [scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-2026-05-23 21:13:06 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gaming mousepad xl
-2026-05-23 21:13:07 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=BargainHardware
-[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
-2026-05-23 21:13:11 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=BargainHardware
-2026-05-23 21:13:12 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=Alibaba
-2026-05-23 21:13:13 [info     ] aliexpress.cases.done          found=0 search=cyberpunk pc case
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-2026-05-23 21:13:13 [info     ] aliexpress.cases.done          found=0 search=futuristic gaming case
-2026-05-23 21:13:13 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 9 5900X sold=182.99
-2026-05-23 21:13:14 [info     ] temu.cases.done                found=0 search=cyberpunk pc case
-[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
-2026-05-23 21:13:16 [info     ] temu.cases.done                found=0 search=futuristic gaming case
-2026-05-23 21:13:17 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=Alibaba
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
-[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
-2026-05-23 21:13:25 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5700X sold=None
-2026-05-23 21:13:25 [debug    ] upgrade_parts.ebay             buy=None part=Ryzen 7 5800X sold=None
-2026-05-23 21:13:25 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
-2026-05-23 21:13:25 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
-2026-05-23 21:13:25 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
-[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
-[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
-2026-05-23 21:13:30 [info     ] amazon.cases.done              found=0 search=federation command build
-2026-05-23 21:13:30 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=large desk mat
-2026-05-23 21:13:31 [info     ] amazon.cases.done              found=0 search=starfleet workstation
-2026-05-23 21:13:36 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=BargainHardware
-2026-05-23 21:13:37 [info     ] cases.generic_market.done      found=0 search=federation command build source=BargainHardware
-2026-05-23 21:13:41 [info     ] cases.generic_market.done      found=0 search=federation command build source=Alibaba
-2026-05-23 21:13:41 [info     ] aliexpress.cases.done          found=0 search=federation command build
-2026-05-23 21:13:42 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=Alibaba
-2026-05-23 21:13:42 [info     ] temu.cases.done                found=0 search=federation command build
-2026-05-23 21:13:42 [info     ] aliexpress.cases.done          found=0 search=starfleet workstation
-2026-05-23 21:13:43 [info     ] temu.cases.done                found=0 search=starfleet workstation
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-2026-05-23 21:13:48 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
-2026-05-23 21:13:49 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=pc controller usb
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-2026-05-23 21:13:56 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gamepad pc usb
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-2026-05-23 21:13:58 [info     ] amazon.cases.done              found=0 search=borg cube pc
-2026-05-23 21:13:58 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
-2026-05-23 21:13:59 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
-2026-05-23 21:13:59 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
-2026-05-23 21:13:59 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
-2026-05-23 21:13:59 [info     ] amazon.cases.done              found=0 search=borg collective build
-2026-05-23 21:14:00 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-[scraper] eBay error for 'pc job lot': Page.evaluate: Target crashed 
-[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
-[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
-2026-05-23 21:14:07 [info     ] cases.generic_market.done      found=0 search=borg collective build source=BargainHardware
-2026-05-23 21:14:07 [info     ] cases.generic_market.done      found=0 search=borg cube pc source=BargainHardware
-[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
-2026-05-23 21:14:09 [info     ] aliexpress.cases.done          found=0 search=borg cube pc
-2026-05-23 21:14:10 [info     ] aliexpress.cases.done          found=0 search=borg collective build
-2026-05-23 21:14:10 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=gamepad pc usb
-2026-05-23 21:14:11 [info     ] temu.cases.done                found=0 search=borg cube pc
-2026-05-23 21:14:12 [info     ] cases.generic_market.done      found=0 search=borg collective build source=Alibaba
-2026-05-23 21:14:12 [info     ] cases.generic_market.done      found=0 search=borg cube pc source=Alibaba
-2026-05-23 21:14:12 [info     ] temu.cases.done                found=0 search=borg collective build
-[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
-[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
-2026-05-23 21:14:22 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
-[scraper] eBay error for 'bulk desktops': Page.evaluate: Target crashed 
-2026-05-23 21:14:29 [info     ] amazon.cases.done              found=0 search=rebel alliance gaming pc
-2026-05-23 21:14:29 [info     ] amazon.cases.done              found=0 search=galactic empire build
-2026-05-23 21:14:32 [debug    ] upgrade_parts.ebay             buy=None part=2TB NVMe SSD sold=None
-2026-05-23 21:14:33 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
-2026-05-23 21:14:33 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=webcam 1080p usb
-2026-05-23 21:14:33 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
-2026-05-23 21:14:33 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
-2026-05-23 21:14:33 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
-2026-05-23 21:14:35 [info     ] cases.generic_market.done      found=0 search=galactic empire build source=BargainHardware
-2026-05-23 21:14:37 [info     ] aliexpress.cases.done          found=0 search=rebel alliance gaming pc
-2026-05-23 21:14:37 [info     ] aliexpress.cases.done          found=0 search=galactic empire build
-[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
-2026-05-23 21:14:37 [info     ] cases.generic_market.done      found=0 search=rebel alliance gaming pc source=BargainHardware
-2026-05-23 21:14:39 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_ABORTED at https://www.aliexpress.com/wholesale?SearchText=hd+webcam+pc&g=y&SortType=price_asc
-Call log:
-  - navigating to "https://www.aliexpress.com/wholesale?SearchText=hd+webcam+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
- site=AliExpress term=hd webcam pc
-2026-05-23 21:14:39 [info     ] temu.cases.done                found=0 search=galactic empire build
-2026-05-23 21:14:40 [info     ] cases.generic_market.done      found=0 search=galactic empire build source=Alibaba
-2026-05-23 21:14:40 [info     ] temu.cases.done                found=0 search=rebel alliance gaming pc
-2026-05-23 21:14:42 [info     ] cases.generic_market.done      found=0 search=rebel alliance gaming pc source=Alibaba
-[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
-[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
-[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-2026-05-23 21:14:52 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=hd webcam pc
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-2026-05-23 21:14:56 [info     ] amazon.cases.done              found=0 search=cylon red eye pc
-2026-05-23 21:14:56 [debug    ] upgrade_parts.ebay             buy=None part=850W PSU 80+ Gold sold=None
-2026-05-23 21:14:56 [info     ] amazon.cases.done              found=0 search=battlestar inspired workstation
-[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
-2026-05-23 21:15:02 [info     ] cases.generic_market.done      found=0 search=battlestar inspired workstation source=BargainHardware
-2026-05-23 21:15:02 [info     ] cases.generic_market.done      found=0 search=cylon red eye pc source=BargainHardware
-2026-05-23 21:15:04 [debug    ] upgrade_parts.bh               part=PC Build Bundle price_gbp=5.12
-[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
-2026-05-23 21:15:06 [info     ] aliexpress.cases.done          found=0 search=battlestar inspired workstation
-2026-05-23 21:15:07 [info     ] aliexpress.cases.done          found=0 search=cylon red eye pc
-2026-05-23 21:15:07 [info     ] cases.generic_market.done      found=0 search=battlestar inspired workstation source=Alibaba
-2026-05-23 21:15:07 [info     ] cases.generic_market.done      found=0 search=cylon red eye pc source=Alibaba
-2026-05-23 21:15:08 [debug    ] upgrade_parts.bh               part=GTX 1060 6GB price_gbp=30.74
-[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
-2026-05-23 21:15:08 [info     ] temu.cases.done                found=0 search=battlestar inspired workstation
-2026-05-23 21:15:09 [info     ] temu.cases.done                found=0 search=cylon red eye pc
-[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
-2026-05-23 21:15:13 [debug    ] upgrade_parts.bh               part=GTX 1060 3GB price_gbp=30.74
-2026-05-23 21:15:13 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=monitor arm single
-[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
-2026-05-23 21:15:18 [debug    ] upgrade_parts.bh               part=GTX 1650 4GB price_gbp=5.12
-2026-05-23 21:15:23 [debug    ] upgrade_parts.bh               part=GTX 1660 Super price_gbp=102.48
-2026-05-23 21:15:24 [info     ] amazon.cases.done              found=0 search=station command build
-2026-05-23 21:15:25 [info     ] amazon.cases.done              found=0 search=diplomatic station workstation
-[scraper] eBay 'workstation joblot': 43 found, 43 new (total 43)
-2026-05-23 21:15:29 [debug    ] upgrade_parts.bh               part=GTX 1070 8GB price_gbp=30.74
-[scraper] eBay 'ex office pc lot': 0 found, 0 new (total 0)
-2026-05-23 21:15:32 [info     ] cases.generic_market.done      found=0 search=diplomatic station workstation source=BargainHardware
-2026-05-23 21:15:34 [debug    ] upgrade_parts.bh               part=RX 570 8GB price_gbp=14.35
-2026-05-23 21:15:35 [info     ] aliexpress.cases.done          found=0 search=station command build
-2026-05-23 21:15:35 [info     ] aliexpress.cases.done          found=0 search=diplomatic station workstation
-2026-05-23 21:15:36 [info     ] cases.generic_market.done      found=0 search=station command build source=BargainHardware
-2026-05-23 21:15:36 [info     ] temu.cases.done                found=0 search=station command build
-2026-05-23 21:15:37 [info     ] temu.cases.done                found=0 search=diplomatic station workstation
-[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
-2026-05-23 21:15:38 [error    ] accessories.scrape.error       error=This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
-(Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a) term=monitor stand adjustable
-Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 20:09:59 UTC)" raised an exception
+2026-05-23 23:00:58 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+INFO:     Waiting for application shutdown.
+2026-05-23 23:00:58 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 21:56:46 UTC)" raised an exception
 Traceback (most recent call last):
   File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
     retval = await job.func(*job.args, **job.kwargs)
@@ -36646,23 +36489,542 @@ Traceback (most recent call last):
   File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
     result = await fn()
              ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 254, in run_accessories_swarm
-    await db.commit()
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 1009, in commit
-    await greenlet_spawn(self.sync_session.commit)
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 190, in greenlet_spawn
-    result = context.switch(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2028, in commit
-    trans.commit(_to_root=True)
-  File "<string>", line 2, in commit
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 103, in _go
-    self._raise_for_prerequisite_state(fn.__name__, current_state)
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 973, in _raise_for_prerequisite_state
-    raise sa_exc.PendingRollbackError(
-sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.StringDataRightTruncationError'>: value too long for type character varying(2000)
-[SQL: INSERT INTO parts (name, brand, model, category, specs, source_site, source_url, condition, price, price_new, price_used, price_refurb, image_url, theme, resale_value_add, is_active, last_price_update, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::partcategory, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::partcondition, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::FLOAT, $13::VARCHAR, $14::VARCHAR, $15::FLOAT, $16::BOOLEAN, $17::TIMESTAMP WITHOUT TIME ZONE, $18::TIMESTAMP WITHOUT TIME ZONE) RETURNING parts.id]
-[parameters: ('Seenda Bluetooth Wireless Mouse, MOU110 Rechargeable Light Up LED Silent Mouse, Dual Mode Connectivity(BT+2.4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 160, in run_cases_swarm
+    r = await done
+        ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 21:56:46 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 158, in run_upgrade_parts_swarm
+    name, search, sold, buy = await done
+                              ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+2026-05-23 23:00:58 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [668811]
+INFO:     Started server process [965915]
+INFO:     Waiting for application startup.
+2026-05-23 23:01:00 [info     ] app.startup
+2026-05-23 23:01:00 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-23 23:01:00 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-23 23:01:00 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-23 23:01:00 [info     ] accessories_swarm.start
+INFO:     100.101.209.68:34764 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34776 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34804 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34816 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34788 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34846 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34864 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34876 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34862 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34886 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34898 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34908 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34910 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34922 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34952 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34936 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34956 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34960 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34974 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34976 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34988 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35004 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35008 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35020 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35030 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35044 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35048 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35064 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35080 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35092 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35100 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35106 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35110 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35124 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41950 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41964 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41974 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41976 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41988 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42000 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42002 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42008 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42014 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42024 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42030 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42038 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42054 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42060 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42076 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42084 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42090 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42096 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42120 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42136 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42152 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42168 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42178 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42204 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42214 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42192 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42222 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42234 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42248 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42250 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42264 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42276 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42282 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42286 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42294 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42304 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42324 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42338 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42354 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42318 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42356 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42366 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42380 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42388 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42392 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42398 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42412 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42414 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42440 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42444 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59912 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59928 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59942 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59952 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59962 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59972 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59978 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59982 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59984 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59986 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59994 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59996 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60000 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60014 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60024 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60038 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60046 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60060 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60066 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60068 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60072 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60082 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60092 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60094 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60114 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60122 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60138 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60154 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60168 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60178 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60182 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60194 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60210 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60222 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60228 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60240 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60250 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60256 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60260 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60276 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60280 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60286 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60300 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60304 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60306 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60312 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60318 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60328 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60334 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60344 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60348 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60362 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60372 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52702 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52710 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52718 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52720 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52724 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52734 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52750 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52756 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52766 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52782 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52792 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52804 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52814 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52816 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52822 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52830 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52844 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52850 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52864 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52870 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52874 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52876 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52888 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52892 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52900 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52914 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52922 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52924 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52938 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52942 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52948 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52952 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52954 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52970 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52982 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52998 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53012 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53026 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53038 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53046 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53056 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53064 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53070 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53072 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53086 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53100 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53110 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53118 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53130 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53146 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53148 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53154 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43840 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43846 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43856 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43866 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43868 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43880 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43888 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43896 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43908 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43948 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43956 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43984 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43996 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44008 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44020 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44034 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44044 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44056 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44066 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44080 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44094 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44106 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44112 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44118 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44130 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44146 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44148 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44156 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44158 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44174 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44192 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44208 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44212 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44220 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44228 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44240 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44254 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44268 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44274 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44280 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44286 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44294 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44318 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44332 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44344 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44358 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44368 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55172 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55178 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55192 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55200 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55214 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55228 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55254 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55262 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55270 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55278 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55292 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55304 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55320 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55324 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55330 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55346 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55356 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55378 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55390 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55404 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55420 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55456 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55462 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55468 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55490 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55504 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55510 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55518 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55524 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55540 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55554 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55570 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55574 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55588 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55590 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55596 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55606 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55620 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55632 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55634 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55648 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55656 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55666 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55674 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55696 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58774 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58788 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58792 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58804 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58818 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58826 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58840 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58854 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58858 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58864 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58874 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58884 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58900 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58906 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58922 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58926 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58936 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58948 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58960 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58964 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58966 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58984 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59008 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59014 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59028 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59042 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59058 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59062 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59086 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59098 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59100 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59110 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59126 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59140 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59142 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59152 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59156 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59162 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59178 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59192 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59204 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59206 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59214 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59216 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59228 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59242 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59254 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59266 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59270 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59272 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59276 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59278 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58016 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58038 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58044 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58052 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58060 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58064 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58070 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58076 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58078 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58082 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58098 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58106 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58120 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58126 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58138 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58150 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58162 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58168 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58176 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58192 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58194 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58206 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58212 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58224 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58240 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58244 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58254 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58268 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58284 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58290 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58302 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58306 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58312 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58320 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58332 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58334 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58342 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58350 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58354 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58344 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58358 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58382 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58398 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58374 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58404 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58402 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58422 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58434 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47170 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47174 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47184 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47194 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47196 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47200 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47224 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47226 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47234 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47238 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47240 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47250 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47262 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47276 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47282 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47288 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47298 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47308 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47310 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47318 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47334 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47338 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47352 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47356 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47394 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47408 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47418 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47428 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47430 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47446 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47454 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47470 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47478 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47502 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47504 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47512 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47518 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47526 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47546 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47550 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47554 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47562 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47570 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47580 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47586 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47588 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47602 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47616 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47628 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42248 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42250 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42252 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42268 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42272 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42280 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42286 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42304 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42310 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42322 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42324 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42338 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42350 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42360 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42364 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42376 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42392 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42402 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42414 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42426 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42434 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42448 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42456 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42488 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+4G USB), Ergonomic Computer Mice for Laptop,PC,Mac,iPad,Tablet,Phone, Black & Grey', None, None, 'accessory', None, 'Amazon', 'https://aax-eu-zaz.amazon.co.uk/x/c/JDe98gULOwMtlL7FKcWAdg4AAAGeVnYkvwoAAAH2AQBvbm9fdHhuX2JpZDEgICBvbm9fdHhuX2ltcDIgICCZLNha/clv1c_ek-IBYHXLbbWxhZCG7 ... (1893 characters truncated) ... 68-940ebb3435e8&pf_rd_p=53ee4643-b401-4028-b968-940ebb3435e8&pf_rd_r=N4QX58M7EM8WKPKWJSZA&pd_rd_wg=4JThB&pd_rd_r=c5eb7f89-09ed-46a3-a810-b0f1e136c020', 'new', 14.39, 14.39, None, None, 'https://m.media-amazon.com/images/I/61iUOmlp0OL._AC_SR260,200_CB1169409_QL70_.jpg', 'Mouse', 0.0, True, datetime.datetime(2026, 5, 23, 20, 11, 2, 21767), datetime.datetime(2026, 5, 23, 20, 11, 2, 21987))]
 (Background on this error at: https://sqlalche.me/e/20/dbapi) (Background on this error at: https://sqlalche.me/e/20/7s2a)
 [scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
 2026-05-23 21:15:39 [info     ] cases.generic_market.done      found=0 search=station command build source=Alibaba
@@ -39389,3 +39751,122 @@ Call log:
 2026-05-23 23:00:24 [debug    ] upgrade_parts.ebay             buy=None part=8GB DDR4 sold=None
 2026-05-23 23:00:25 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR4 Kit sold=None
 2026-05-23 23:00:25 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 Kit sold=None
+2026-05-23 23:00:33 [info     ] amazon.cases.done              found=0 search=cyberpunk pc case
+2026-05-23 23:00:33 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-23 23:00:34 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-23 23:00:35 [info     ] amazon.cases.done              found=0 search=futuristic gaming case
+2026-05-23 23:00:35 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc tower': 0 found, 0 new (total 64)
+2026-05-23 23:00:37 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=BargainHardware
+2026-05-23 23:00:39 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=BargainHardware
+2026-05-23 23:00:44 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+2026-05-23 23:00:44 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=Alibaba
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-23 23:00:46 [info     ] temu.cases.done                found=0 search=futuristic gaming case
+2026-05-23 23:00:46 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+2026-05-23 23:00:47 [info     ] temu.cases.done                found=0 search=cyberpunk pc case
+2026-05-23 23:00:47 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=Alibaba
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 64)
+2026-05-23 23:00:48 [info     ] aliexpress.cases.done          found=0 search=cyberpunk pc case
+2026-05-23 23:00:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-23 23:00:51 [info     ] aliexpress.cases.done          found=0 search=futuristic gaming case
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-23 23:00:54 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 23:00:55 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 64)
+2026-05-23 23:00:57 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 23:00:57 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+WARNING:  WatchFiles detected changes in 'app/workers/scheduler.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-23 23:00:58 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 21:56:46 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 160, in run_cases_swarm
+    r = await done
+        ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 21:56:46 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 158, in run_upgrade_parts_swarm
+    name, search, sold, buy = await done
+                              ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-24 21:56:46 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 207, in run_accessories_swarm
+    async with async_playwright() as p:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/async_api/_context_manager.py", line 40, in __aenter__
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 464, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 550, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+2026-05-23 23:00:59 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [668825]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
+INFO:     Started server process [966003]
+INFO:     Waiting for application startup.
+2026-05-23 23:01:00 [info     ] app.startup
+2026-05-23 23:01:00 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-23 23:01:00 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-23 23:01:00 [info     ] scheduler.started              jobs=11
+INFO:     Application startup complete.
+2026-05-23 23:01:00 [info     ] accessories_swarm.start
