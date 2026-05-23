@@ -2,7 +2,7 @@
 set +e
 while true; do
   clear
-  cat <<'ASCII'
+  cat <<ASCII
 
   ███████╗██╗     ██╗██████╗ ███████╗██╗      ██████╗ ██████╗
   ██╔════╝██║     ██║██╔══██╗██╔════╝██║     ██╔═══██╗██╔══██╗
@@ -12,5 +12,7 @@ while true; do
   ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝ ╚═╝
 
 ASCII
+  echo "  http://andromeda-ts:4311"
+  echo "  Updated 2026-05-23 19:52:49"
   sleep 2
 done
