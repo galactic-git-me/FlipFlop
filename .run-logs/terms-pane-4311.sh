@@ -125,13 +125,15 @@ if keywords:
     for term in keywords:
         st = term_state.get(term)
         if st and st[0] == "done":
-            # Remove successfully completed terms from queue.
             continue
         pending_terms.append(term)
-
     for term in pending_terms[:36]:
         st = term_state.get(term)
-        if st and st[0] == "retry later":
+        if st and st[0] == "done":
+            status = "[green]done[/green]"
+            when = age(st[1])
+            result = st[2]
+        elif st and st[0] == "retry later":
             status = "[red]retry later[/red]"
             when = age(st[1])
             result = st[2]
@@ -267,10 +269,13 @@ for term in keywords:
     if st and st[0] == "done":
         continue
     pending_terms.append(term)
-
 for term in pending_terms[:36]:
     st = term_state.get(term)
-    if st and st[0] == "retry later":
+    if st and st[0] == "done":
+        status = "done"
+        when = age(st[1])
+        result = st[2]
+    elif st and st[0] == "retry later":
         status = "retry later"
         when = age(st[1])
         result = st[2]

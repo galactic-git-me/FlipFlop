@@ -1214,7 +1214,12 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
                 except Exception:
                     continue
         except Exception as exc:
-            log.warning("cases.generic_market.error", source=source_site, search=search, error=str(exc))
+            msg = str(exc)
+            if "ERR_NAME_NOT_RESOLVED" in msg and source_site == "CherryTree Inc":
+                # CherryTree DNS intermittently fails; treat as soft no-data for this cycle.
+                log.info("cases.generic_market.no_data_dns", source=source_site, search=search)
+            else:
+                log.warning("cases.generic_market.error", source=source_site, search=search, error=msg)
         finally:
             await browser.close()
     log.info("cases.generic_market.done", source=source_site, search=search, found=len(cases))
