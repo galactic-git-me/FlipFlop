@@ -5288,3 +5288,16 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 00:59:57 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
 2026-05-23 00:59:58 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
 2026-05-23 01:00:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 123)
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 123)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 123)
+2026-05-23 01:00:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 01:00:20 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-23 01:00:20 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
+2026-05-23 01:00:22 [info     ] Wilsons Auctions.playwright.done total=0
+2026-05-23 01:00:22 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
+2026-05-23 01:00:32 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-23 01:00:35 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-23 01:00:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=graphics card
+2026-05-23 01:00:38 [info     ] i-bidder.playwright.done       total=0
+2026-05-23 01:00:38 [info     ] source.done                    found=0 gems=0 source=i-bidder
