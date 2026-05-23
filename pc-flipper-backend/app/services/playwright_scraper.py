@@ -635,7 +635,10 @@ async def scrape_preloved_playwright(
                     },
                 )
                 if not resp.ok:
-                    log.warning("preloved.playwright.api_error", status=resp.status, term=term)
+                    if resp.status in (403, 404):
+                        log.info("preloved.playwright.no_data", status=resp.status, term=term)
+                    else:
+                        log.warning("preloved.playwright.api_error", status=resp.status, term=term)
                     raw_listings = []
                 else:
                     data = await resp.json()
@@ -1072,7 +1075,7 @@ async def _scrape_auction_site(
                 try:
                     await page.wait_for_selector(wait_selector, timeout=12000)
                 except Exception:
-                    log.warning(f"{site_name}.playwright.no_results", term=term, mode="fallback_parse")
+                    log.info(f"{site_name}.playwright.no_results", term=term, mode="fallback_parse")
 
             await asyncio.sleep(random.uniform(1.0, 2.0))
             await page.evaluate("window.scrollBy(0, 600)")

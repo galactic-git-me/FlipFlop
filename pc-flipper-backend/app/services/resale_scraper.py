@@ -230,7 +230,7 @@ async def _fetch_sold_prices(query: str) -> list[float]:
     if now < _RESALE_EBAY_BLOCK_UNTIL_TS:
         if not _RESALE_EBAY_BLOCK_LOGGED:
             wait_s = round(_RESALE_EBAY_BLOCK_UNTIL_TS - now, 1)
-            log.warning("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
+            log.info("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
             _RESALE_EBAY_BLOCK_LOGGED = True
         return []
     _RESALE_EBAY_BLOCK_LOGGED = False
@@ -263,7 +263,7 @@ async def _fetch_sold_prices(query: str) -> list[float]:
                 )
             if resp.status_code in (401, 403, 429):
                 _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
-                log.warning(
+                log.info(
                     "resale_scraper.block_detected",
                     status=resp.status_code,
                     cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
