@@ -739,36 +739,95 @@ def age(ts):
     except Exception:
         return "—"
 
+def parse_iso(ts):
+    if not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except Exception:
+        return None
+
 base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
 console = Console()
+
+keywords = []
+schedule_rows = []
 items = []
 try:
+    with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as r:
+        cfg = json.load(r) or {}
+    keywords = [str(k).strip() for k in (cfg.get("keywords") or []) if str(k).strip()]
+
+    with urllib.request.urlopen(f"{base_url}/api/schedule", timeout=4) as r:
+        schedule_rows = json.load(r) or []
+
     with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r:
         payload = json.load(r) or {}
     items = payload.get("items", []) or []
 except Exception:
-    items = []
+    keywords, schedule_rows, items = [], [], []
 
 table = Table(title="Search Terms", expand=True)
-table.add_column("Source", style="bold cyan")
 table.add_column("Term", style="yellow")
-table.add_column("Found/New", justify="right")
-table.add_column("When", justify="right")
 table.add_column("Status")
+table.add_column("When", justify="right")
+table.add_column("Result", justify="right")
 
-if items:
-    for it in items[:24]:
-        err = str((it or {}).get("error") or "")
-        status = "[red]error[/red]" if err else "[green]ok[/green]"
+flip_job = next((j for j in schedule_rows if str((j or {}).get("id")) == "flip_opportunities"), {})
+run_started = parse_iso((flip_job or {}).get("last_run_at"))
+run_status = str((flip_job or {}).get("last_status") or "—")
+
+term_state = {}  # term -> (status, ts, result)
+for it in items:
+    src = str((it or {}).get("source") or "")
+    # Focus queue on flip-opportunity eBay terms.
+    if src not in {"eBay UK", "eBay UK Auctions"}:
+        continue
+    term = str((it or {}).get("term") or "").strip()
+    if not term:
+        continue
+    ts = parse_iso((it or {}).get("ts"))
+    if run_started and ts and ts < run_started:
+        continue
+    err = str((it or {}).get("error") or "").strip()
+    found = int((it or {}).get("found") or 0)
+    new = int((it or {}).get("new") or 0)
+    prev = term_state.get(term)
+    # Prefer success over error for a term in same run.
+    if err and prev and prev[0] == "done":
+        continue
+    st = "retry later" if err else "done"
+    term_state[term] = (st, (it or {}).get("ts"), f"{found}/{new}")
+
+if keywords:
+    shown = 0
+    for term in keywords:
+        st = term_state.get(term)
+        if st and st[0] == "done":
+            # Remove successfully completed terms from queue.
+            continue
+        if st and st[0] == "retry later":
+            status = "[red]retry later[/red]"
+            when = age(st[1])
+            result = st[2]
+        else:
+            status = "[yellow]pending[/yellow]" if run_status == "running" else "[cyan]waiting next run[/cyan]"
+            when = "—"
+            result = "—"
         table.add_row(
-            str((it or {}).get("source") or "—"),
-            str((it or {}).get("term") or "—")[:54],
-            f"{int((it or {}).get('found') or 0)}/{int((it or {}).get('new') or 0)}",
-            age((it or {}).get("ts")),
+            term[:54],
             status,
+            when,
+            result,
         )
+        shown += 1
+        if shown >= 36:
+            break
 else:
-    table.add_row("—", "No telemetry yet", "—", "—", "—")
+    table.add_row("No search config keywords", "[red]no data[/red]", "—", "—")
 
 console.clear()
 console.print(Panel(table, border_style="green"))
@@ -799,24 +858,75 @@ def age(ts):
     except Exception:
         return "—"
 
+def parse_iso(ts):
+    if not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except Exception:
+        return None
+
 base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
-items = []
+keywords, schedule_rows, items = [], [], []
 try:
+    with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as r:
+        cfg = json.load(r) or {}
+    keywords = [str(k).strip() for k in (cfg.get("keywords") or []) if str(k).strip()]
+
+    with urllib.request.urlopen(f"{base_url}/api/schedule", timeout=4) as r:
+        schedule_rows = json.load(r) or []
+
     with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r:
         payload = json.load(r) or {}
     items = payload.get("items", []) or []
 except Exception:
-    items = []
+    keywords, schedule_rows, items = [], [], []
 
-print(f"{'SOURCE':30} {'TERM':42} {'F/N':>7} {'WHEN':>10} STATUS")
-print("-" * 102)
-for it in items[:24]:
-    src = str((it or {}).get("source") or "—")[:30]
-    term = str((it or {}).get("term") or "—")[:42]
-    fn = f"{int((it or {}).get('found') or 0)}/{int((it or {}).get('new') or 0)}"
-    when = age((it or {}).get("ts"))
-    status = "error" if (it or {}).get("error") else "ok"
-    print(f"{src:30} {term:42} {fn:>7} {when:>10} {status}")
+flip_job = next((j for j in schedule_rows if str((j or {}).get("id")) == "flip_opportunities"), {})
+run_started = parse_iso((flip_job or {}).get("last_run_at"))
+run_status = str((flip_job or {}).get("last_status") or "—")
+
+term_state = {}
+for it in items:
+    src = str((it or {}).get("source") or "")
+    if src not in {"eBay UK", "eBay UK Auctions"}:
+        continue
+    term = str((it or {}).get("term") or "").strip()
+    if not term:
+        continue
+    ts = parse_iso((it or {}).get("ts"))
+    if run_started and ts and ts < run_started:
+        continue
+    err = str((it or {}).get("error") or "").strip()
+    found = int((it or {}).get("found") or 0)
+    new = int((it or {}).get("new") or 0)
+    prev = term_state.get(term)
+    if err and prev and prev[0] == "done":
+        continue
+    term_state[term] = ("retry later" if err else "done", (it or {}).get("ts"), f"{found}/{new}")
+
+print(f"{'TERM':42} {'STATUS':16} {'WHEN':>10} {'RESULT':>9}")
+print("-" * 84)
+shown = 0
+for term in keywords:
+    st = term_state.get(term)
+    if st and st[0] == "done":
+        continue
+    if st and st[0] == "retry later":
+        status = "retry later"
+        when = age(st[1])
+        result = st[2]
+    else:
+        status = "pending" if run_status == "running" else "waiting next"
+        when = "—"
+        result = "—"
+    print(f"{term[:42]:42} {status:16} {when:>10} {result:>9}")
+    shown += 1
+    if shown >= 36:
+        break
 PY
     sleep 2
   done
