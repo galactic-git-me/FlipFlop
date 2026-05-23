@@ -835,17 +835,13 @@ for it in items:
     term_state[term] = (st, (it or {}).get("ts"), f"{found}/{new}")
 
 if keywords:
-    pending_terms = []
-    for term in keywords:
+    for term in keywords[:36]:
         st = term_state.get(term)
         if st and st[0] == "done":
-            # Remove successfully completed terms from queue.
-            continue
-        pending_terms.append(term)
-
-    for term in pending_terms[:36]:
-        st = term_state.get(term)
-        if st and st[0] == "retry later":
+            status = "[green]done[/green]"
+            when = age(st[1])
+            result = st[2]
+        elif st and st[0] == "retry later":
             status = "[red]retry later[/red]"
             when = age(st[1])
             result = st[2]
@@ -975,16 +971,13 @@ for it in items:
 
 print(f"{'TERM':42} {'STATUS':16} {'WHEN':>10} {'RESULT':>9}")
 print("-" * 84)
-pending_terms = []
-for term in keywords:
+for term in keywords[:36]:
     st = term_state.get(term)
     if st and st[0] == "done":
-        continue
-    pending_terms.append(term)
-
-for term in pending_terms[:36]:
-    st = term_state.get(term)
-    if st and st[0] == "retry later":
+        status = "done"
+        when = age(st[1])
+        result = st[2]
+    elif st and st[0] == "retry later":
         status = "retry later"
         when = age(st[1])
         result = st[2]
