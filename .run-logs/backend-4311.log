@@ -10498,3 +10498,79 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 08:51:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
 2026-05-23 08:51:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
 2026-05-23 08:51:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-23 08:51:51 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 08:51:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 08:51:53 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 08:51:53 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-23 08:51:54 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-23 08:51:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-23 08:51:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=computer tower
+2026-05-23 08:51:55 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:51:57 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-23 08:51:57 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 08:51:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:51:58 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 08:51:59 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 08:51:59 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-23 08:51:59 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-23 08:52:00 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-23 08:52:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+2026-05-23 08:52:02 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-23 08:52:02 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-23 08:52:03 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=computer tower
+2026-05-23 08:52:04 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:52:05 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:52:11 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-23 08:52:11 [info     ] source.done                    found=0 gems=0 source=Temu
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+2026-05-23 08:52:23 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-23 08:52:24 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-23 08:52:25 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-23 08:52:27 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Dell OptiPlex
+2026-05-23 08:52:27 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-23 08:52:28 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-23 08:52:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-23 08:52:30 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-23 08:52:30 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-23 08:52:31 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=pc build
+2026-05-23 08:52:32 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:52:32 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-23 08:52:32 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=pc build
+2026-05-23 08:52:34 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:52:36 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-23 08:52:36 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-23 08:52:36 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-23 08:52:37 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-23 08:52:38 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-23 08:52:40 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
+2026-05-23 08:52:40 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-23 08:52:41 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
+2026-05-23 08:52:41 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:52:43 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+2026-05-23 08:52:51 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-23 08:52:53 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+2026-05-23 08:52:53 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-23 08:52:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-23 08:52:55 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-23 08:52:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+2026-05-23 08:53:05 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-23 08:53:07 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-23 08:53:08 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-23 08:53:08 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 08:53:09 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-23 08:53:09 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 08:53:09 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+2026-05-23 08:53:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:53:14 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
