@@ -679,12 +679,12 @@ EOF
   chmod +x "$scheduler_pane_script"
 
   local title_pane_script="$LOG_DIR/title-pane.sh"
-  cat >"$title_pane_script" <<'EOF'
+  cat >"$title_pane_script" <<EOF
 #!/usr/bin/env bash
 set +e
 while true; do
   clear
-  cat <<'ASCII'
+  cat <<ASCII
 
   ███████╗██╗     ██╗██████╗ ███████╗██╗      ██████╗ ██████╗
   ██╔════╝██║     ██║██╔══██╗██╔════╝██║     ██╔═══██╗██╔══██╗
@@ -694,13 +694,15 @@ while true; do
   ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝ ╚═╝
 
 ASCII
+  echo "  http://$PUBLIC_HOST:$BACKEND_PORT"
+  echo "  Updated $(date '+%Y-%m-%d %H:%M:%S')"
   sleep 2
 done
 EOF
   chmod +x "$title_pane_script"
 
-  local sources_pane_script="$LOG_DIR/sources-pane-$BACKEND_PORT.sh"
-  cat >"$sources_pane_script" <<EOF
+  local terms_pane_script="$LOG_DIR/terms-pane-$BACKEND_PORT.sh"
+  cat >"$terms_pane_script" <<EOF
 #!/usr/bin/env bash
 set +e
 if python3 -c "from rich.console import Console" >/dev/null 2>&1; then
@@ -730,44 +732,44 @@ def age(ts):
 
 base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
 console = Console()
-rows = []
+items = []
 try:
-    with urllib.request.urlopen(f"{base_url}/api/sources/", timeout=4) as r:
-        rows = json.load(r) or []
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r:
+        payload = json.load(r) or {}
+    items = payload.get("items", []) or []
 except Exception:
-    rows = []
+    items = []
 
-table = Table(title="Sources", expand=True)
+table = Table(title="Search Terms", expand=True)
 table.add_column("Source", style="bold cyan")
+table.add_column("Term", style="yellow")
+table.add_column("Found/New", justify="right")
+table.add_column("When", justify="right")
 table.add_column("Status")
-table.add_column("Found", justify="right")
-table.add_column("Last Scan", justify="right")
-table.add_column("Error")
 
-if rows:
-    for s in rows[:20]:
-        st = "enabled" if s.get("enabled") else "disabled"
-        st = "[green]enabled[/green]" if s.get("enabled") else "[red]disabled[/red]"
-        err = str(s.get("last_error") or "—")
+if items:
+    for it in items[:24]:
+        err = str((it or {}).get("error") or "")
+        status = "[red]error[/red]" if err else "[green]ok[/green]"
         table.add_row(
-            str(s.get("name") or "—"),
-            st,
-            str(s.get("listings_found_total") or s.get("listings_found") or 0),
-            age(s.get("last_scraped_at")),
-            err,
+            str((it or {}).get("source") or "—"),
+            str((it or {}).get("term") or "—")[:54],
+            f"{int((it or {}).get('found') or 0)}/{int((it or {}).get('new') or 0)}",
+            age((it or {}).get("ts")),
+            status,
         )
 else:
-    table.add_row("—", "[red]unavailable[/red]", "—", "—", "No source data")
+    table.add_row("—", "No telemetry yet", "—", "—", "—")
 
 console.clear()
-console.print(Panel(table, border_style="magenta"))
+console.print(Panel(table, border_style="green"))
 PY
     sleep 2
   done
 else
   while true; do
     clear
-    echo "Sources"
+    echo "Search Terms"
     python3 - <<'PY'
 import json
 import urllib.request
@@ -789,28 +791,29 @@ def age(ts):
         return "—"
 
 base_url = "http://$PUBLIC_HOST:$BACKEND_PORT"
-rows = []
+items = []
 try:
-    with urllib.request.urlopen(f"{base_url}/api/sources/", timeout=4) as r:
-        rows = json.load(r) or []
+    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/recent", timeout=4) as r:
+        payload = json.load(r) or {}
+    items = payload.get("items", []) or []
 except Exception:
-    rows = []
+    items = []
 
-print(f"{'SOURCE':32} {'STATUS':10} {'FOUND':>6} {'LAST':>10} ERROR")
-print("-" * 96)
-for s in rows[:20]:
-    name = str(s.get("name") or "—")[:32]
-    st = "enabled" if s.get("enabled") else "disabled"
-    found = str(s.get("listings_found_total") or s.get("listings_found") or 0)
-    last = age(s.get("last_scraped_at"))
-    err = str(s.get("last_error") or "—")
-    print(f"{name:32} {st:10} {found:>6} {last:>10} {err}")
+print(f"{'SOURCE':30} {'TERM':42} {'F/N':>7} {'WHEN':>10} STATUS")
+print("-" * 102)
+for it in items[:24]:
+    src = str((it or {}).get("source") or "—")[:30]
+    term = str((it or {}).get("term") or "—")[:42]
+    fn = f"{int((it or {}).get('found') or 0)}/{int((it or {}).get('new') or 0)}"
+    when = age((it or {}).get("ts"))
+    status = "error" if (it or {}).get("error") else "ok"
+    print(f"{src:30} {term:42} {fn:>7} {when:>10} {status}")
 PY
     sleep 2
   done
 fi
 EOF
-  chmod +x "$sources_pane_script"
+  chmod +x "$terms_pane_script"
 
   local backend_tail_script="$LOG_DIR/backend-tail-$BACKEND_PORT.sh"
   cat >"$backend_tail_script" <<EOF
@@ -858,15 +861,14 @@ EOF
 
   # Layout:
   # - Left: compact FlipFlop ASCII header, then frontend/backend logs
-  # - Right: backend stats dashboard, scheduler, sources
-  local left_top_pane right_top_pane left_bottom_pane left_bottom_bottom_pane right_bottom_pane right_bottom_bottom_pane
+  # - Right: scheduler + search terms
+  local left_top_pane right_top_pane left_bottom_pane left_bottom_bottom_pane right_bottom_pane
   left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$title_pane_script'")"
-  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$backend_pane_script'")"
+  right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
   # Keep title pane only as tall as needed for ASCII art.
   left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
-  right_bottom_pane="$(tmux split-window -v -l 55% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$scheduler_pane_script'")"
-  right_bottom_bottom_pane="$(tmux split-window -v -l 45% -P -F "#{pane_id}" -t "$right_bottom_pane" "bash '$sources_pane_script'")"
+  right_bottom_pane="$(tmux split-window -v -l 45% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
