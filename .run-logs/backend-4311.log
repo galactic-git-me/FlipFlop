@@ -9353,3 +9353,29 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 06:57:31 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
 [scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
 2026-05-23 06:57:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+2026-05-23 06:57:53 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-23 06:57:56 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-23 06:57:56 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=refurbished pc
+2026-05-23 06:57:58 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 06:58:05 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-23 06:58:07 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-23 06:58:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=refurbished pc
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+2026-05-23 06:58:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+2026-05-23 06:58:30 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+2026-05-23 06:58:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-23 06:58:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=motherboard
+2026-05-23 06:58:35 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 06:58:42 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-23 06:58:44 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-23 06:58:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard
+2026-05-23 06:58:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+2026-05-23 06:59:07 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-23 06:59:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-23 06:59:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=cpu bundle
+2026-05-23 06:59:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
