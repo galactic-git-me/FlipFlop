@@ -12508,3 +12508,115 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 12:52:22 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
 2026-05-23 12:52:25 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
 2026-05-23 12:52:25 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=pc build
+2026-05-23 12:52:26 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-23 12:52:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-23 12:52:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:52:28 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=workstation
+2026-05-23 12:52:29 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-23 12:52:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-23 12:52:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=pc build
+2026-05-23 12:52:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:52:32 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-23 12:52:53 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-23 12:52:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-23 12:52:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-23 12:52:59 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-23 12:53:02 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-23 12:53:02 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=HP EliteDesk
+2026-05-23 12:53:04 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-23 12:53:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:53:06 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-23 12:53:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=HP EliteDesk
+2026-05-23 12:53:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:53:19 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-23 12:53:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming computer
+2026-05-23 12:53:24 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-23 12:53:37 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-23 12:53:39 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-23 12:53:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Dell OptiPlex
+2026-05-23 12:53:41 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-23 12:53:41 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:53:44 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-23 12:53:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Dell OptiPlex
+2026-05-23 12:53:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:53:47 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-23 12:53:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i7 desktop
+2026-05-23 12:53:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-23 12:54:13 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-23 12:54:14 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-23 12:54:15 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=i5 desktop
+2026-05-23 12:54:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-23 12:54:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=workstation
+2026-05-23 12:54:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:54:18 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+2026-05-23 12:54:19 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-23 12:54:21 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-23 12:54:22 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=workstation
+2026-05-23 12:54:24 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:54:42 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+2026-05-23 12:54:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=office pc
+2026-05-23 12:54:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-23 12:54:50 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-23 12:54:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-23 12:54:52 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-23 12:54:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:54:56 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-23 12:54:59 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-23 12:55:00 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Lenovo ThinkCentre
+2026-05-23 12:55:01 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:55:08 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-23 12:55:10 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=refurbished pc
+2026-05-23 12:55:12 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-23 12:55:26 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 12:55:27 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-23 12:55:27 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming computer
+2026-05-23 12:55:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:55:34 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-23 12:55:35 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+2026-05-23 12:55:36 [info     ] i-bidder.playwright.cards      count=23 term=gaming computer
+2026-05-23 12:55:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard
+2026-05-23 12:55:37 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming computer
+2026-05-23 12:55:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+2026-05-23 12:55:39 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i7+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:56:02 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 12:56:03 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-23 12:56:05 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-23 12:56:05 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i7 desktop
+2026-05-23 12:56:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=cpu bundle
+2026-05-23 12:56:06 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:56:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+2026-05-23 12:56:11 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-23 12:56:13 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-23 12:56:14 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i7 desktop
+2026-05-23 12:56:16 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-23 12:56:30 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-23 12:56:32 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=motherboard cpu combo
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+2026-05-23 12:56:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+[scraper] John Pye error for 'pc build': All connection attempts failed
+2026-05-23 12:56:39 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+2026-05-23 12:56:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-23 12:56:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=i5 desktop
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-23 12:56:44 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-23 12:56:44 [info     ] source.done                    found=0 gems=0 source=John Pye
+2026-05-23 12:56:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:56:48 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-23 12:56:51 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-23 12:56:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=i5 desktop
+2026-05-23 12:56:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 12:56:58 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-23 12:57:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=graphics card
+2026-05-23 12:57:01 [info     ] BidSpotter.playwright.done     total=0
+2026-05-23 12:57:01 [info     ] source.done                    found=0 gems=0 source=BidSpotter
+2026-05-23 12:57:17 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-23 12:57:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-23 12:57:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=office pc
+2026-05-23 12:57:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 12:57:26 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-23 12:57:29 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-23 12:57:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=office pc
+2026-05-23 12:57:32 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
