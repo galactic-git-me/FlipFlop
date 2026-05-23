@@ -89,12 +89,16 @@ for it in items:
     term_state[term] = (st, (it or {}).get("ts"), f"{found}/{new}")
 
 if keywords:
-    shown = 0
+    pending_terms = []
     for term in keywords:
         st = term_state.get(term)
         if st and st[0] == "done":
             # Remove successfully completed terms from queue.
             continue
+        pending_terms.append(term)
+
+    for term in pending_terms[:36]:
+        st = term_state.get(term)
         if st and st[0] == "retry later":
             status = "[red]retry later[/red]"
             when = age(st[1])
@@ -109,9 +113,6 @@ if keywords:
             when,
             result,
         )
-        shown += 1
-        if shown >= 36:
-            break
 else:
     table.add_row("No search config keywords", "[red]no data[/red]", "—", "—")
 
@@ -196,11 +197,15 @@ for it in items:
 
 print(f"{'TERM':42} {'STATUS':16} {'WHEN':>10} {'RESULT':>9}")
 print("-" * 84)
-shown = 0
+pending_terms = []
 for term in keywords:
     st = term_state.get(term)
     if st and st[0] == "done":
         continue
+    pending_terms.append(term)
+
+for term in pending_terms[:36]:
+    st = term_state.get(term)
     if st and st[0] == "retry later":
         status = "retry later"
         when = age(st[1])
@@ -210,9 +215,6 @@ for term in keywords:
         when = "—"
         result = "—"
     print(f"{term[:42]:42} {status:16} {when:>10} {result:>9}")
-    shown += 1
-    if shown >= 36:
-        break
 PY
     sleep 2
   done
