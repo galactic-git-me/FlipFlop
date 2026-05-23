@@ -10436,3 +10436,65 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-23 08:50:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
 2026-05-23 08:50:14 [info     ] source.done                    found=0 gems=0 source=BargainHardware
 2026-05-23 08:50:16 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+2026-05-23 08:50:31 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-23 08:50:32 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-23 08:50:33 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-23 08:50:34 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=gaming pc
+2026-05-23 08:50:35 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-23 08:50:37 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-23 08:50:37 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-23 08:50:38 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-23 08:50:40 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-23 08:50:40 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-23 08:50:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-23 08:50:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+2026-05-23 08:50:41 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-23 08:50:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:50:42 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-23 08:50:43 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-23 08:50:44 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-23 08:50:44 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+2026-05-23 08:50:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+2026-05-23 08:50:46 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=desktop pc
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-23 08:50:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:50:48 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:50:59 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-23 08:51:01 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+2026-05-23 08:51:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-23 08:51:03 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=computer tower
+2026-05-23 08:51:03 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-23 08:51:06 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-23 08:51:14 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 08:51:15 [warning  ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 08:51:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-23 08:51:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-23 08:51:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:51:18 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-23 08:51:18 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=gaming pc
+2026-05-23 08:51:20 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 08:51:20 [warning  ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-23 08:51:20 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-23 08:51:22 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+2026-05-23 08:51:23 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-23 08:51:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-23 08:51:25 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=gaming pc
+2026-05-23 08:51:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-23 08:51:27 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-23 08:51:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-23 08:51:29 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+2026-05-23 08:51:29 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] eBay error for 'Lenovo ThinkStation': Page.evaluate: Target crashed 
+2026-05-23 08:51:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=pc build
+2026-05-23 08:51:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+2026-05-23 08:51:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
