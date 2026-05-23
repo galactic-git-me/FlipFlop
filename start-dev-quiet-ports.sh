@@ -673,7 +673,7 @@ while true; do
   ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝ ╚═╝
 
 ASCII
-  echo "  http://$PUBLIC_HOST:$FRONTEND_PORT"
+  printf "  \e]8;;http://$PUBLIC_HOST:$FRONTEND_PORT\ahttp://$PUBLIC_HOST:$FRONTEND_PORT\e]8;;\a\n"
   python3 - <<'PY'
 import json
 import urllib.request

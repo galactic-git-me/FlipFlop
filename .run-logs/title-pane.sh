@@ -12,7 +12,7 @@ while true; do
   ╚═╝     ╚══════╝╚═╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝ ╚═╝
 
 ASCII
-  echo "  http://andromeda-ts:4310"
+  printf "  \e]8;;http://andromeda-ts:4310\ahttp://andromeda-ts:4310\e]8;;\a\n"
   python3 - <<'PY'
 import json
 import urllib.request
