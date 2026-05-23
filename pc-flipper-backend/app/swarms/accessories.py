@@ -145,9 +145,17 @@ async def _upsert_accessory(db, acc: RawAccessory):
             Part.name == acc.name,
             Part.source_site == acc.source_site,
             Part.category == PartCategory.accessory,
-        )
+        ).order_by(Part.id.desc())
     )
-    part = result.scalar_one_or_none()
+    existing = list(result.scalars().all())
+    part = existing[0] if existing else None
+    if len(existing) > 1:
+        log.warning(
+            "accessories.duplicate_rows",
+            name=acc.name,
+            source=acc.source_site,
+            duplicates=len(existing),
+        )
     now = datetime.utcnow()
 
     safe_url = (acc.source_url or "")[:MAX_SOURCE_URL_LEN]

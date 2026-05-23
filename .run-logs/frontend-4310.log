@@ -11,5 +11,5 @@ Tailscale URL (live): andromeda-ts:4310
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
 - Environments: .env.local
-✓ Ready in 554ms
+✓ Ready in 608ms
 
