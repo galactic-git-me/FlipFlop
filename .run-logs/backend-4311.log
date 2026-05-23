@@ -3273,3 +3273,60 @@ Call log:
 2026-05-24 00:29:30 [info     ] aliexpress.cases.done          found=0 search=dragon radar workstation
 2026-05-24 00:29:32 [info     ] temu.cases.done                found=0 search=super saiyan gaming pc
 2026-05-24 00:29:32 [info     ] temu.cases.done                found=0 search=dragon radar workstation
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+2026-05-24 00:29:45 [info     ] amazon.cases.done              found=0 search=avengers workstation
+2026-05-24 00:29:46 [info     ] amazon.cases.done              found=0 search=shield tactical pc
+2026-05-24 00:29:49 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=BargainHardware
+2026-05-24 00:29:51 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=BargainHardware
+2026-05-24 00:29:53 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=Alibaba
+2026-05-24 00:29:54 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=Alibaba
+2026-05-24 00:29:55 [info     ] aliexpress.cases.done          found=0 search=avengers workstation
+2026-05-24 00:29:55 [info     ] aliexpress.cases.done          found=0 search=shield tactical pc
+2026-05-24 00:29:57 [info     ] temu.cases.done                found=0 search=shield tactical pc
+2026-05-24 00:29:58 [info     ] temu.cases.done                found=0 search=avengers workstation
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-24 00:30:09 [info     ] amazon.cases.done              found=0 search=jarvis ai workstation
+2026-05-24 00:30:10 [info     ] amazon.cases.done              found=0 search=stark industries pc
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-24 00:30:13 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=BargainHardware
+2026-05-24 00:30:15 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=BargainHardware
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+2026-05-24 00:30:18 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=Alibaba
+2026-05-24 00:30:19 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=Alibaba
+2026-05-24 00:30:21 [info     ] aliexpress.cases.done          found=0 search=jarvis ai workstation
+2026-05-24 00:30:22 [info     ] aliexpress.cases.done          found=0 search=stark industries pc
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-24 00:30:23 [info     ] temu.cases.done                found=0 search=jarvis ai workstation
+2026-05-24 00:30:23 [info     ] temu.cases.done                found=0 search=stark industries pc
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+2026-05-24 00:30:36 [info     ] amazon.cases.done              found=0 search=gamma core build
+2026-05-24 00:30:36 [info     ] amazon.cases.done              found=0 search=radioactive green rgb pc
+2026-05-24 00:30:41 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=BargainHardware
+2026-05-24 00:30:43 [info     ] cases.generic_market.done      found=0 search=gamma core build source=BargainHardware
+2026-05-24 00:30:45 [info     ] cases.generic_market.done      found=0 search=gamma core build source=Alibaba
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+2026-05-24 00:30:46 [info     ] aliexpress.cases.done          found=0 search=radioactive green rgb pc
+2026-05-24 00:30:46 [info     ] aliexpress.cases.done          found=0 search=gamma core build
+2026-05-24 00:30:47 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=Alibaba
+2026-05-24 00:30:48 [info     ] temu.cases.done                found=0 search=gamma core build
+2026-05-24 00:30:49 [info     ] temu.cases.done                found=0 search=radioactive green rgb pc
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+2026-05-24 00:31:01 [info     ] amazon.cases.done              found=0 search=spiderverse gaming pc
+2026-05-24 00:31:02 [info     ] amazon.cases.done              found=0 search=red blue rgb build
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+2026-05-24 00:31:07 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
+2026-05-24 00:31:07 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
