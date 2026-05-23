@@ -868,7 +868,7 @@ EOF
   # Keep title pane only as tall as needed for ASCII art.
   left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
   left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
-  right_bottom_pane="$(tmux split-window -v -l 45% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
+  right_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$right_top_pane" "bash '$terms_pane_script'")"
 
   # Optional separate dashboard launch.
   if [[ "$LAUNCH_DASHBOARD_WINDOW" == "1" ]]; then
