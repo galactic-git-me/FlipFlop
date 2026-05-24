@@ -44,13 +44,17 @@ _COOLDOWN_BYPASS_SOURCES = {
     "i-bidder",
     "Wilsons Auctions",
     "Apex Auctions",
-    "John Pye",
     "Amazon",
     "Temu",
     "AliExpress",
     "Alibaba",
     "BargainHardware",
     "CherryTree Inc",
+}
+_NO_RETRY_SOURCES = {
+    # Consistent transport-level failures; retrying within the same hour adds noise
+    # and does not improve yield.
+    "John Pye",
 }
 
 
@@ -197,6 +201,16 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         # Retry only failed terms later in the same hour, while keeping successful data.
         failed_terms = await _failed_terms_for_run(run_id, source.name)
         if failed_terms:
+            if source.name in _NO_RETRY_SOURCES:
+                log.info(
+                    "source.retry.skipped",
+                    source=source.name,
+                    failed_terms=len(failed_terms),
+                    reason="no_retry_source",
+                )
+                scan_state.site_done(source.name, result["found"], result["gems"])
+                log.info("source.done", source=source.name, found=result["found"], gems=result["gems"])
+                return result
             delay_minutes = max(1, int(getattr(config, "source_retry_delay_minutes", 0) or 0))
             # Pull settings-based retry delay from global settings when config object has no field.
             from app.config import get_settings as _get_settings

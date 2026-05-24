@@ -604,12 +604,13 @@ async def _seed_default_data():
                 "destkop computer", "gameing pc", "computre tower",
             }
             if cfg and cfg.keywords:
+                before_count = len(cfg.keywords)
                 cleaned = [k for k in cfg.keywords if str(k).strip().lower() not in _noise_terms]
-                if len(cleaned) != len(cfg.keywords):
+                if len(cleaned) != before_count:
                     cfg.keywords = cleaned
                     log.info(
                         "migrated.search_config.removed_noise_terms",
-                        removed=len(cfg.keywords) - len(cleaned),
+                        removed=before_count - len(cleaned),
                     )
 
         # Seed app settings

@@ -31,6 +31,7 @@ from app.services.search_telemetry import record_term_result
 
 log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
+_PLAYWRIGHT_MISSING_WARNED = False
 
 
 def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -42,6 +43,19 @@ def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> N
         return
     _LOG_THROTTLE_TS[key] = now
     log.info(event, **kwargs)
+
+
+def _log_playwright_missing_once(error: str | None = None) -> None:
+    """Avoid spamming the same missing-Chromium guidance across parallel scrapers."""
+    global _PLAYWRIGHT_MISSING_WARNED
+    if _PLAYWRIGHT_MISSING_WARNED:
+        return
+    _PLAYWRIGHT_MISSING_WARNED = True
+    log.warning(
+        "playwright.chromium_not_installed",
+        error=error or "",
+        fix="Run this command once: playwright install chromium",
+    )
 
 # Path to optional Facebook session cookies
 FB_COOKIES_PATH = Path(__file__).parent.parent.parent / "fb_cookies.json"
@@ -184,11 +198,7 @@ async def _launch_browser(playwright):
     except Exception as exc:
         msg = str(exc)
         if "Executable doesn't exist" in msg or "chromium" in msg.lower():
-            log.error(
-                "playwright.chromium_not_installed",
-                error=msg,
-                fix="Run this command once: playwright install chromium",
-            )
+            _log_playwright_missing_once(msg)
         raise
 
 
