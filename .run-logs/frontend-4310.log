@@ -11,5 +11,16 @@ Tailscale URL (live): andromeda-ts:4310
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
 - Environments: .env.local
-✓ Ready in 398ms
+✓ Ready in 697ms
 
+-----
+[1m[31mFATAL[39m[0m: An unexpected Turbopack error occurred. A panic log has been written to /tmp/next-panic-dc627d5642413ee1ae9d9334b82b04c5.log.
+
+To help make Turbopack better, report this error by clicking here: https://bugs.nextjs.org/search?category=turbopack-error-report&title=Turbopack%20Error%3A%20Too%20many%20open%20files%20%28os%20error%2024%29&body=Turbopack%20version%3A%20%60e0739832%60%0ANext.js%20version%3A%20%600.0.0%60%0A%0AError%20message%3A%0A%60%60%60%0AToo%20many%20open%20files%20%28os%20error%2024%29%0A%60%60%60&labels=Turbopack,Turbopack%20Panic%20Backtrace
+-----
+
+Error [TurbopackInternalError]: Too many open files (os error 24)
+    at <unknown> (TurbopackInternalError: Too many open files (os error 24)) {
+  location: undefined
+}
+[?25h
