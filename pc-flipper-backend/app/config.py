@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     admin_api_key: str = ""
 
     class Config:
-        env_file = ".env"
+        env_file = (".env.local", ".env")
 
 
 @lru_cache
