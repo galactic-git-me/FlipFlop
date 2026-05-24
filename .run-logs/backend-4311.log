@@ -5264,3 +5264,37 @@ Call log:
 2026-05-24 13:25:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
 [scraper] eBay retry 'HP Z640': 0 found, 0 new (total 74)
 2026-05-24 13:25:08 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:25:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=60 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:25:16 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900&country=gb
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+2026-05-24 13:25:30 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 74)
+2026-05-24 13:25:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-24 13:25:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=refurbished pc
+2026-05-24 13:25:36 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:25:36 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-24 13:25:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-24 13:25:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard
+2026-05-24 13:25:40 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
+2026-05-24 13:25:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:25:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+2026-05-24 13:25:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='intel i7 cpu' title='Access Denied'
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 74)
+2026-05-24 13:26:08 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-24 13:26:08 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+2026-05-24 13:26:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-24 13:26:11 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 74)
+2026-05-24 13:26:12 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-24 13:26:13 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+2026-05-24 13:26:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:26:14 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-24 13:26:15 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-24 13:26:15 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=cpu bundle
+2026-05-24 13:26:17 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
