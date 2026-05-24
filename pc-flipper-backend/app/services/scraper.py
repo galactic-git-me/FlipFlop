@@ -212,13 +212,18 @@ async def _get_ebay_access_token(client: httpx.AsyncClient) -> str | None:
         "Authorization": f"Basic {basic}",
         "Content-Type": "application/x-www-form-urlencoded",
     }
-    data = {
-        "grant_type": "client_credentials",
-        "scope": f"{scope_base} {scope_browse}",
-    }
+    data = {"grant_type": "client_credentials", "scope": f"{scope_base} {scope_browse}"}
     resp = await client.post(f"{ebay_base}/identity/v1/oauth2/token", data=data, headers=headers)
     if resp.status_code != 200:
-        return None
+        # Some keysets (e.g. newly-provisioned sandbox apps) reject buy.browse scope.
+        # Fall back to base scope so we can still attempt Browse calls.
+        resp = await client.post(
+            f"{ebay_base}/identity/v1/oauth2/token",
+            data={"grant_type": "client_credentials", "scope": scope_base},
+            headers=headers,
+        )
+        if resp.status_code != 200:
+            return None
     payload = resp.json()
     token = payload.get("access_token")
     expires_in = int(payload.get("expires_in", 3600))

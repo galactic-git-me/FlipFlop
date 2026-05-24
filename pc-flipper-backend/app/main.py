@@ -431,22 +431,7 @@ _FLIP_SEARCH_TERMS = [
     "workstation joblot",
     "office tower pc",
 
-    # ── 7. MISSPELLINGS (eBay gold mine) ────────────────────────────────────
-    # These listings get zero competition from normal buyers who search correctly.
-    # Low bids / low BIN prices as a result — textbook flip opportunity.
-    "gamng pc",
-    "gmaing pc",
-    "gamnig pc",
-    "gaiming pc",
-    "deskptop pc",
-    "compter tower",
-    "pc towre",
-    "destop pc",
-    "destkop computer",
-    "gameing pc",
-    "computre tower",
-
-    # ── 8. EMOTIONAL / DISTRESSED SELLER (Gumtree / Facebook) ───────────────
+    # ── 7. EMOTIONAL / DISTRESSED SELLER (Gumtree / Facebook) ───────────────
     # Price set by urgency, not market knowledge.
     "pc quick sale",
     "pc need gone today",
@@ -459,7 +444,7 @@ _FLIP_SEARCH_TERMS = [
     "gaming pc quick sale",
     "pc no longer needed",
 
-    # ── 9. LIQUID COOLER / UPGRADES ALREADY FITTED ──────────────────────────
+    # ── 8. LIQUID COOLER / UPGRADES ALREADY FITTED ──────────────────────────
     # Seller paid for premium cooling but lists the whole system cheaply.
     "pc liquid cooler",
     "desktop liquid cooled",
