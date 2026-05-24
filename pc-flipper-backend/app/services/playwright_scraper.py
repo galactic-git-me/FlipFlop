@@ -302,6 +302,12 @@ async def scrape_gumtree_playwright(
                         price_text = (await price_el.inner_text()).strip() if price_el else "0"
                         price = _parse_price(price_text)
                         if price <= 0:
+                            # Gumtree card markup shifts often; fallback to full card text parse.
+                            try:
+                                price = _parse_price((await card.inner_text()).strip())
+                            except Exception:
+                                price = 0.0
+                        if price <= 0:
                             continue
 
                         image_url = await img_el.get_attribute("src") or "" if img_el else ""
@@ -1043,6 +1049,7 @@ async def _scrape_auction_site(
     base_url: str = "",
     required_href_tokens: list[str] | None = None,
     enforce_pc_keywords: bool = True,
+    strict_price_cap: bool = True,
 ) -> list[RawListing]:
     """
     Generic Playwright scraper for auction lot search pages.
@@ -1183,7 +1190,7 @@ async def _scrape_auction_site(
                             if price > 0:
                                 break
 
-                    if max_price > 0 and price > max_price:
+                    if strict_price_cap and max_price > 0 and price > max_price:
                         continue
 
                     img_el = await card.query_selector("img")
@@ -1281,6 +1288,7 @@ async def scrape_wilsons_playwright(
             base_url="https://www.wilsonsauctions.com",
             required_href_tokens=["/lot/", "/lots/"],
             enforce_pc_keywords=False,
+            strict_price_cap=False,
         )
 
 
@@ -1342,6 +1350,7 @@ async def scrape_ibidder_playwright(
             base_url="https://www.i-bidder.com",
             required_href_tokens=["/lot/", "/catalogue/", "/auction-catalogues/"],
             enforce_pc_keywords=False,
+            strict_price_cap=False,
         )
 
 
@@ -1402,6 +1411,7 @@ async def scrape_bidspotter_playwright(
             base_url="https://www.bidspotter.co.uk",
             required_href_tokens=["/lot/", "/lots/", "/lot-details/", "/auction-catalogues/"],
             enforce_pc_keywords=False,
+            strict_price_cap=False,
         )
 
 
