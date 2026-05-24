@@ -6,6 +6,7 @@ import asyncio
 import base64
 import random
 import re
+import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
@@ -317,47 +318,88 @@ async def _scrape_ebay_playwright_term(
     except ImportError:
         return [], False
 
+    term_q = term.replace(" ", "+")
     if auction_mode:
-        url = (
-            "https://www.ebay.co.uk/sch/i.html"
-            f"?_nkw={term.replace(' ', '+')}"
-            "&_sacat=179&LH_Auction=1&LH_ItemCondition=3000"
-            f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
-            "&LH_PrefLoc=1&_sop=1&_ipg=60"
-        )
+        urls = [
+            (
+                "https://www.ebay.co.uk/sch/i.html"
+                f"?_nkw={term_q}"
+                "&_sacat=179&LH_Auction=1&LH_ItemCondition=3000"
+                f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
+                "&LH_PrefLoc=1&_sop=1&_ipg=60"
+            ),
+            (
+                "https://www.ebay.co.uk/sch/i.html"
+                f"?_nkw={term_q}"
+                "&_sacat=0&LH_Auction=1"
+                f"&_udlo={int(min_price)}&_udhi={max(int(max_price), 2000)}"
+                "&_sop=1&_ipg=120"
+            ),
+        ]
     else:
-        url = (
-            "https://www.ebay.co.uk/sch/i.html"
-            f"?_nkw={term.replace(' ', '+')}"
-            "&_sacat=179&LH_BIN=1&LH_ItemCondition=3000"
-            f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
-            "&LH_PrefLoc=1&_sop=10&_ipg=60"
-        )
+        urls = [
+            (
+                "https://www.ebay.co.uk/sch/i.html"
+                f"?_nkw={term_q}"
+                "&_sacat=179&LH_BIN=1&LH_ItemCondition=3000"
+                f"&_udlo={int(min_price)}&_udhi={int(max_price)}"
+                "&LH_PrefLoc=1&_sop=10&_ipg=60"
+            ),
+            (
+                "https://www.ebay.co.uk/sch/i.html"
+                f"?_nkw={term_q}"
+                "&_sacat=0&LH_BIN=1"
+                f"&_udlo={int(min_price)}&_udhi={max(int(max_price), 2000)}"
+                "&_sop=10&_ipg=120"
+            ),
+        ]
 
+    stealth_js = """
+Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3]});
+Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
+"""
     html = ""
     title = ""
+    blocked = False
+    listings: list[RawListing] = []
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(
+            headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--disable-dev-shm-usage",
+                "--disable-infobars",
+                "--window-size=1366,768",
+                "--lang=en-GB",
+            ],
+        )
         context = await browser.new_context(
             user_agent=ua.random,
             locale="en-GB",
             viewport={"width": 1366, "height": 768},
         )
+        await context.add_init_script(stealth_js)
         page = await context.new_page()
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            await page.wait_for_timeout(1800)
-            await page.evaluate("window.scrollBy(0, 900)")
-            await page.wait_for_timeout(1200)
-            html = await page.content()
-            title = (await page.title()) or ""
+            for url in urls:
+                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                await page.wait_for_timeout(1800)
+                await page.evaluate("window.scrollBy(0, 900)")
+                await page.wait_for_timeout(1200)
+                html = await page.content()
+                title = (await page.title()) or ""
+                blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
+                blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
+                if blocked:
+                    continue
+                listings = _parse_ebay_html(html, term) if html else []
+                if listings:
+                    break
         finally:
             await context.close()
             await browser.close()
-
-    blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
-    blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
-    return (_parse_ebay_html(html, term) if html else []), blocked
+    return listings, blocked
 
 
 def _is_ebay_blocked(status_code: int, body: str) -> bool:
