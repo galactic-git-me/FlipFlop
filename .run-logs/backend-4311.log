@@ -6596,3 +6596,117 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 Future exception was never retrieved
 future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
 playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='nvme ssd' title='Access Denied'
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc no hard drive' title='Access Denied'
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='pc power supply' title='Access Denied'
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc no power supply' title='Access Denied'
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 53)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop spares or repair' title='Access Denied'
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc no display' title='Access Denied'
+[scraper] eBay playwright blocked term='pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='pc boots no display' title='Access Denied'
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc powers on no signal' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='desktop spares or repair' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no display' title='Access Denied'
+[scraper] eBay playwright blocked term='pc untested' title='Access Denied'
+[scraper] eBay 'pc untested': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc faulty' title='Access Denied'
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc powers on no signal' title='Access Denied'
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay playwright blocked term='msi gaming plus b650' title='Access Denied'
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='desktop spares or repair' title='Access Denied'
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='desktop faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no display' title='Access Denied'
+[scraper] eBay 'pc no display': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='pc powers up untested' title='Access Denied'
+[scraper] eBay playwright blocked term='pc powers on no signal' title='Access Denied'
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc no os' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop no os' title='Access Denied'
+[scraper] eBay playwright blocked term='pc powers up untested' title='Access Denied'
+[scraper] eBay playwright blocked term='pc faulty' title='Access Denied'
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc no operating system' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no os' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop faulty' title='Access Denied'
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='desktop no os' title='Access Denied'
+[scraper] eBay playwright blocked term='i5 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='pc powers up untested' title='Access Denied'
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc no operating system' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no os' title='Access Denied'
+[scraper] eBay 'pc no os': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i5 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='i5 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop no os' title='Access Denied'
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no operating system' title='Access Denied'
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='i5 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i9 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='i5 desktop' title='Access Denied'
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay retry 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='i9 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 5 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='i5 tower' title='Access Denied'
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i9 desktop' title='Access Denied'
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='ryzen 7 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 5 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 9 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
