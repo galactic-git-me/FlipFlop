@@ -22,5 +22,8 @@
   },
   "autonomous_cycle": {
     "last_success_at": "2026-05-24T14:21:28.299115+00:00"
+  },
+  "flip_opportunities": {
+    "last_success_at": "2026-05-24T14:37:56.208048+00:00"
   }
 }
