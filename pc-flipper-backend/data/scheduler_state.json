@@ -19,5 +19,8 @@
   },
   "accessories": {
     "last_success_at": "2026-05-24T14:18:28.723098+00:00"
+  },
+  "autonomous_cycle": {
+    "last_success_at": "2026-05-24T14:21:28.299115+00:00"
   }
 }
