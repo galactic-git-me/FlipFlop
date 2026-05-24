@@ -76,17 +76,35 @@ export default function SettingsPage() {
   const [newTerm, setNewTerm] = useState("");
   const [newTermSources, setNewTermSources] = useState<string[]>([]);
 
+  async function withTimeout<T>(p: Promise<T>, ms = 8000): Promise<T> {
+    return await Promise.race([
+      p,
+      new Promise<T>((_, reject) => setTimeout(() => reject(new Error("timeout")), ms)),
+    ]);
+  }
+
   async function loadAll() {
     setLoading(true);
     try {
-      const [s, src, t] = await Promise.all([
-        api.settings.get(),
-        api.sources.list() as Promise<DataSource[]>,
-        api.sourceSearchTerms.list(scope),
+      const [s, src, t] = await Promise.allSettled([
+        withTimeout(api.settings.get()),
+        withTimeout(api.sources.list() as Promise<DataSource[]>),
+        withTimeout(api.sourceSearchTerms.list(scope)),
       ]);
-      if (s) setSettings(prev => ({ ...prev, ...(s as Partial<AppSettings>) }));
-      setSources(src ?? []);
-      setTerms(t.items ?? []);
+
+      if (s.status === "fulfilled" && s.value) {
+        setSettings(prev => ({ ...prev, ...(s.value as Partial<AppSettings>) }));
+      }
+      if (src.status === "fulfilled") {
+        setSources(src.value ?? []);
+      } else {
+        setSources([]);
+      }
+      if (t.status === "fulfilled") {
+        setTerms(t.value.items ?? []);
+      } else {
+        setTerms([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -98,7 +116,9 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
-    api.sourceSearchTerms.list(scope).then(r => setTerms(r.items ?? [])).catch(() => {});
+    withTimeout(api.sourceSearchTerms.list(scope))
+      .then(r => setTerms(r.items ?? []))
+      .catch(() => setTerms([]));
   }, [scope]);
 
   const groups = useMemo(() => Array.from(new Set(terms.map(t => t.group_name))).sort(), [terms]);
