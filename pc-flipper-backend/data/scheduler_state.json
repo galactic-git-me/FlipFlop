@@ -1,5 +1,8 @@
 {
   "compliant_market_ingestion": {
     "last_success_at": "2026-05-24T11:05:03.671705+00:00"
+  },
+  "external_demand": {
+    "last_success_at": "2026-05-24T11:13:04.119602+00:00"
   }
 }
