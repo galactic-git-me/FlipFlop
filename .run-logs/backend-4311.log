@@ -4622,3 +4622,225 @@ Call log:
 2026-05-24 13:16:37 [info     ] amazon.cases.done              found=10 search=showcase build
 [scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
 2026-05-24 13:16:38 [info     ] amazon.cases.done              found=0 search=custom gaming pc
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+2026-05-24 13:16:43 [info     ] aliexpress.cases.done          found=0 search=Montech panoramic case
+2026-05-24 13:16:43 [info     ] temu.cases.done                found=0 search=Montech panoramic case
+2026-05-24 13:16:44 [info     ] aliexpress.cases.done          found=0 search=darkFlash fish tank
+2026-05-24 13:16:44 [info     ] temu.cases.done                found=0 search=darkFlash fish tank
+[scraper] eBay playwright blocked term='lga1700 motherboard' title='Access Denied'
+2026-05-24 13:16:47 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+2026-05-24 13:16:47 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-24 13:16:48 [info     ] cases.generic_market.done      found=0 search=showcase build source=BargainHardware
+2026-05-24 13:16:49 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=BargainHardware
+[scraper] eBay playwright blocked term='intel i7 cpu' title='Access Denied'
+2026-05-24 13:16:52 [info     ] cases.generic_market.done      found=0 search=showcase build source=Alibaba
+2026-05-24 13:16:53 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=Alibaba
+2026-05-24 13:16:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=graphics card
+2026-05-24 13:16:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+2026-05-24 13:16:54 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-24 13:16:55 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-24 13:16:55 [info     ] BidSpotter.playwright.done     total=62
+2026-05-24 13:16:56 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-witham10190 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-camauc10106 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-h-and-10305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wbs10045 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-maze10066 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-capita10563 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-hgda10024 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-joseph10131 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-select10087 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11489 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11499 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11394 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11403 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11413 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11430 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11435 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibci10309 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibts10369 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-univer10305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem17841 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-univer10306 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11341 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11350 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11462 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-vf-auc10786 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-jps-tr10028 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18265 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18464 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18463 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18444 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18465 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18446 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18447 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18448 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18460 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18461 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18437 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-h-and-10306 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-camauc10107 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ramco-11494 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eddiso12625 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibgi11290 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11359 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11473 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11377 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11445 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-vf-auc10787 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibgi11291 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ncm-au11412 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18491 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wbs10046 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-maze10067 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibcw10843 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-land-h10272 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wi416696 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18466 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18467 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18495 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11422 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11509 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-24 13:16:56 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=8 source=BidSpotter
+2026-05-24 13:16:56 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+2026-05-24 13:16:56 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 13:16:57 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-24 13:16:58 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-24 13:16:58 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-24 13:16:59 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:16:59 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen 7 cpu' title='Access Denied'
+2026-05-24 13:17:02 [info     ] temu.cases.done                found=0 search=showcase build
+2026-05-24 13:17:03 [info     ] temu.cases.done                found=0 search=custom gaming pc
+2026-05-24 13:17:03 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-24 13:17:06 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-24 13:17:06 [info     ] aliexpress.cases.done          found=0 search=showcase build
+2026-05-24 13:17:06 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+2026-05-24 13:17:07 [info     ] aliexpress.cases.done          found=0 search=custom gaming pc
+2026-05-24 13:17:07 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+[scraper] eBay playwright blocked term='rtx 3060' title='Access Denied'
+2026-05-24 13:17:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=office pc
+2026-05-24 13:17:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=office pc
+2026-05-24 13:17:09 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+2026-05-24 13:17:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:17:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+2026-05-24 13:17:14 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+[scraper] eBay playwright blocked term='lga1700 motherboard' title='Access Denied'
+2026-05-24 13:17:18 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-24 13:17:19 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-24 13:17:20 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-24 13:17:20 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-24 13:17:22 [info     ] amazon.cases.done              found=0 search=gaming pc case mid tower
+2026-05-24 13:17:23 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+[scraper] eBay playwright blocked term='intel i7 cpu' title='Access Denied'
+2026-05-24 13:17:26 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-24 13:17:27 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+2026-05-24 13:17:30 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-24 13:17:32 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+2026-05-24 13:17:32 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+2026-05-24 13:17:32 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-24 13:17:32 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+[scraper] eBay playwright blocked term='ryzen 7 cpu' title='Access Denied'
+2026-05-24 13:17:34 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-24 13:17:34 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-24 13:17:35 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-24 13:17:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=desktop pc
+2026-05-24 13:17:35 [info     ] amazon.cases.done              found=0 search=slim micro atx case office
+2026-05-24 13:17:36 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:17:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+2026-05-24 13:17:40 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-24 13:17:43 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-24 13:17:44 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+[scraper] eBay playwright blocked term='rtx 3060' title='Access Denied'
+2026-05-24 13:17:45 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-24 13:17:45 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+2026-05-24 13:17:45 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+2026-05-24 13:17:46 [info     ] amazon.cases.done              found=0 search=mini tower desktop case
+2026-05-24 13:17:46 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+2026-05-24 13:17:46 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=refurbished pc
+2026-05-24 13:17:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=refurbished pc
+2026-05-24 13:17:48 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:17:48 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:17:50 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+[scraper] eBay playwright blocked term='intel i7 cpu' title='Access Denied'
+2026-05-24 13:17:51 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-24 13:17:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+[scraper] eBay playwright blocked term='lga1700 motherboard' title='Access Denied'
+2026-05-24 13:17:55 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-24 13:17:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
+2026-05-24 13:17:57 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-24 13:17:57 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+[scraper] eBay 'lga1700 motherboard': HTTP blocked/empty (status=200), Playwright returned 74
+[scraper] eBay 'lga1700 motherboard': 74 found, 74 new (total 74)
+2026-05-24 13:18:01 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
