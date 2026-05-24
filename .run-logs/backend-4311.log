@@ -1887,8 +1887,8 @@ Call log:
   - navigating to "https://www.aliexp2026-05-24 12:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 Run time of job "External Demand Signals (trigger: interval[1:00:00], next run at: 2026-05-24 12:57:41 UTC)" was missed by 0:02:30.846274
 Run time of job "Compliant Market Ingestion (trigger: interval[1:00:00], next run at: 2026-05-24 13:05:03 UTC)" was missed by 0:00:35.924255
-    100.101.209.68:59808 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59830 - "GET /api/schedule HTTP/1.1" 200 OK
+Run time of job "Model Retraining (trigger: interval[1:00:00], next run at: 2026-05-24 13:29:05 UTC)" was missed by 0:00:01.225803
+.1" 200 OK
 INFO:     100.101.209.68:59814 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59834 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
 INFO:     100.101.209.68:59840 - "GET /api/sources/ HTTP/1.1" 200 OK
@@ -5366,3 +5366,26 @@ Call log:
 2026-05-24 13:28:33 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
 2026-05-24 13:28:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=HP EliteDesk
 2026-05-24 13:28:39 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 74)
+2026-05-24 13:29:02 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-24 13:29:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+2026-05-24 13:29:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 74)
+2026-05-24 13:29:31 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-24 13:29:34 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 13:29:36 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+2026-05-24 13:29:59 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 74)
+2026-05-24 13:30:02 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 13:30:05 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
