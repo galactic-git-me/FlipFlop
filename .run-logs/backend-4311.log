@@ -6490,3 +6490,72 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 2026-05-24 13:45:34 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
 2026-05-24 13:45:35 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard cpu combo
 2026-05-24 13:45:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+no+psu&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+no+psu&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='pc power supply' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no power supply' title='Access Denied'
+[scraper] eBay playwright blocked term='pc no psu' title='Access Denied'
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+2026-05-24 13:45:54 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+[scraper] eBay playwright blocked term='desktop no gpu' title='Access Denied'
+2026-05-24 13:45:56 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-24 13:45:57 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=graphics card
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 53)
+2026-05-24 13:45:59 [info     ] Wilsons Auctions.playwright.done total=1
+2026-05-24 13:45:59 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-24 13:45:59 [info     ] source.done                    found=1 gems=0 source=Wilsons Auctions
+[scraper] eBay playwright blocked term='Acer Veriton tower' title='Access Denied'
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+2026-05-24 13:46:09 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+2026-05-24 13:46:12 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
+2026-05-24 13:46:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=graphics card
+[scraper] eBay playwright blocked term='desktop computer no SSD' title='Access Denied'
+2026-05-24 13:46:15 [info     ] i-bidder.playwright.done       total=20
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-24 13:46:15 [info     ] source.done                    found=20 gems=0 source=i-bidder
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
