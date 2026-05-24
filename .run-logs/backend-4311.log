@@ -419,3 +419,250 @@ INFO:     100.101.209.68:44694 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44682 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44702 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 2026-05-24 12:29:21 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
+INFO:     100.101.209.68:44706 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:29:22 [info     ] aliexpress.cases.done          found=0 search=rgb airflow case
+2026-05-24 12:29:22 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+2026-05-24 12:29:23 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+INFO:     100.101.209.68:44712 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44720 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44736 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:29:27 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
+2026-05-24 12:29:28 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-24 12:29:28 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+INFO:     100.101.209.68:49120 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49126 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49130 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:49150 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49146 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49168 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-24 12:29:31 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+INFO:     100.101.209.68:49182 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49186 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49196 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49204 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:29:31 [info     ] amazon.cases.done              found=10 search=mesh airflow case
+INFO:     100.101.209.68:49210 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49214 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49216 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:29:34 [info     ] amazon.cases.done              found=10 search=high airflow gaming case
+INFO:     100.101.209.68:42838 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42844 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:29:40 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+INFO:     100.101.209.68:42842 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42872 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42882 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42884 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42888 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42896 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42898 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+2026-05-24 12:29:42 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=BargainHardware
+2026-05-24 12:29:42 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+2026-05-24 12:29:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=20 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:29:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=20 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:29:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-24 12:29:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-24 12:29:44 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 12:29:44 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 12:29:44 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
+2026-05-24 12:29:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
+2026-05-24 12:29:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
+2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
+2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
+2026-05-24 12:29:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=desktop+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
+2026-05-24 12:29:45 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+2026-05-24 12:29:46 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=BargainHardware
+2026-05-24 12:29:46 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 12:29:46 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:53884 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:29:49 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
+INFO:     100.101.209.68:53904 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53916 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53928 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53944 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53896 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-24 12:29:50 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
+INFO:     100.101.209.68:53950 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53946 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53954 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:29:50 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
+INFO:     100.101.209.68:53958 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53970 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+2026-05-24 12:29:51 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:29:52 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
+2026-05-24 12:29:52 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
+2026-05-24 12:29:52 [info     ] temu.cases.done                found=0 search=high airflow gaming case
+2026-05-24 12:29:53 [info     ] temu.cases.done                found=0 search=mesh airflow case
+Future exception was never retrieved
+future: <Future finished exception=Error('Target crashed ')>
+playwright._impl._errors.Error: Target crashed 
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-24 12:29:54 [info     ] gumtree.playwright.cards       count=29 term=desktop pc
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-24 12:29:56 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-24 12:29:57 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:47114 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47126 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47148 - "GET /api/config/search HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:47138 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47160 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47170 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47176 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:47196 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47202 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:30:02 [info     ] amazon.cases.done              found=10 search=premium aluminum pc case
+2026-05-24 12:30:03 [info     ] amazon.cases.done              found=10 search=luxury gaming case
+2026-05-24 12:30:03 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
+2026-05-24 12:30:05 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43952 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43960 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43970 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43976 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43990 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43994 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44006 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44022 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44026 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44036 - "GET /api/sources/health HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 12:30:13 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+2026-05-24 12:30:13 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+2026-05-24 12:30:14 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=BargainHardware
+2026-05-24 12:30:15 [info     ] gumtree.playwright.done        total=0
+2026-05-24 12:30:15 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=BargainHardware
+2026-05-24 12:30:16 [info     ] source.done                    found=0 gems=0 source=Gumtree
+INFO:     100.101.209.68:47246 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47262 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47268 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47270 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-24 12:30:18 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 160, in run_cases_swarm
+    r = await done
+        ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 158, in run_upgrade_parts_swarm
+    name, search, sold, buy = await done
+                              ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
+    f = await done.get()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 243, in run_accessories_swarm
+    await browser.close()
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/async_api/_generated.py", line 14176, in close
+    return mapping.from_maybe_impl(await self._impl_obj.close(reason=reason))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_browser.py", line 189, in close
+    await self._channel.send("close", {"reason": reason})
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 526, in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 92, in _inner_send
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 464, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 550, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+2026-05-24 12:30:19 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1941745]
+INFO:     Stopping reloader process [1941741]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
