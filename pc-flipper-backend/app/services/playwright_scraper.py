@@ -219,7 +219,7 @@ async def scrape_gumtree_playwright(
         for term in search_terms[:6]:  # cap terms — each takes ~5s
             try:
                 url = (
-                    "https://www.gumtree.com/search"
+                    "https://www.gumtree.com/for-sale"
                     f"?q={term.replace(' ', '+')}"
                     f"&max_price={int(max_price)}"
                     f"&min_price={int(min_price)}"
@@ -1340,7 +1340,7 @@ async def scrape_ibidder_playwright(
             max_price=max_price,
             wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
             base_url="https://www.i-bidder.com",
-            required_href_tokens=["/lot/", "/catalogue/"],
+            required_href_tokens=["/lot/", "/catalogue/", "/auction-catalogues/"],
             enforce_pc_keywords=False,
         )
 
@@ -1400,7 +1400,7 @@ async def scrape_bidspotter_playwright(
             max_price=max_price,
             wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
             base_url="https://www.bidspotter.co.uk",
-            required_href_tokens=["/lot/", "/lots/"],
+            required_href_tokens=["/lot/", "/lots/", "/lot-details/", "/auction-catalogues/"],
             enforce_pc_keywords=False,
         )
 
