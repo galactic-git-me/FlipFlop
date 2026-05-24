@@ -4844,3 +4844,117 @@ Call log:
 [scraper] eBay 'lga1700 motherboard': HTTP blocked/empty (status=200), Playwright returned 74
 [scraper] eBay 'lga1700 motherboard': 74 found, 74 new (total 74)
 2026-05-24 13:18:01 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
+[scraper] eBay playwright blocked term='gtx 1660' title='Access Denied'
+2026-05-24 13:18:08 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+2026-05-24 13:18:09 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-24 13:18:09 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-24 13:18:10 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 74)
+2026-05-24 13:18:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-24 13:18:11 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-24 13:18:11 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=desktop pc
+2026-05-24 13:18:12 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-24 13:18:12 [info     ] amazon.cases.done              found=0 search=budget gaming case atx
+2026-05-24 13:18:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-24 13:18:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+2026-05-24 13:18:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen 7 cpu' title='Access Denied'
+2026-05-24 13:18:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 74)
+2026-05-24 13:18:16 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-24 13:18:17 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
+[scraper] eBay playwright blocked term='rtx 3060' title='Access Denied'
+2026-05-24 13:18:20 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
+2026-05-24 13:18:20 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+2026-05-24 13:18:21 [info     ] BidSpotter.playwright.cards    count=60 term=office pc
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 74)
+2026-05-24 13:18:22 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+2026-05-24 13:18:23 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-24 13:18:23 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+2026-05-24 13:18:23 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+[scraper] eBay playwright blocked term='ddr4 ram lot' title='Access Denied'
+2026-05-24 13:18:24 [info     ] amazon.cases.done              found=3 search=slim htpc case living room
+2026-05-24 13:18:25 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard
+2026-05-24 13:18:25 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard
+2026-05-24 13:18:26 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=office pc
+2026-05-24 13:18:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:18:27 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=BargainHardware
+2026-05-24 13:18:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:18:28 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=refurbished+pc&country=gb
+2026-05-24 13:18:28 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=Alibaba
+[scraper] eBay playwright blocked term='ddr5 ram lot' title='Access Denied'
+[scraper] eBay playwright blocked term='nvme ssd' title='Access Denied'
+2026-05-24 13:18:36 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+2026-05-24 13:18:36 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+[scraper] eBay playwright blocked term='pc power supply' title='Access Denied'
+[scraper] eBay playwright blocked term='gtx 1660' title='Access Denied'
+2026-05-24 13:18:45 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-24 13:18:46 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-24 13:18:47 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-24 13:18:47 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+2026-05-24 13:18:47 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-24 13:18:47 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+2026-05-24 13:18:48 [info     ] cases_swarm.done               errors=1 found=297 upserted=241
+2026-05-24 13:18:49 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-24 13:18:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+2026-05-24 13:18:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+2026-05-24 13:18:51 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:18:52 [info     ] BidSpotter.playwright.cards    count=60 term=refurbished pc
+2026-05-24 13:18:55 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=refurbished pc
+[scraper] eBay playwright blocked term='ddr4 ram lot' title='Access Denied'
+2026-05-24 13:18:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard&country=gb
+2026-05-24 13:18:59 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+[scraper] eBay playwright blocked term='ddr5 ram lot' title='Access Denied'
+2026-05-24 13:19:01 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-24 13:19:02 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+2026-05-24 13:19:02 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=cpu bundle
+2026-05-24 13:19:03 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=cpu bundle
+2026-05-24 13:19:05 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:19:05 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='nvme ssd' title='Access Denied'
+[scraper] eBay playwright blocked term='pc power supply' title='Access Denied'
+[scraper] eBay playwright blocked term='gtx 1660' title='Access Denied'
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 74)
+2026-05-24 13:19:21 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+2026-05-24 13:19:22 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+2026-05-24 13:19:24 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-24 13:19:24 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+2026-05-24 13:19:24 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-24 13:19:24 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard
+2026-05-24 13:19:26 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:19:26 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-24 13:19:26 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+2026-05-24 13:19:27 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+[scraper] eBay playwright blocked term='ddr4 ram lot' title='Access Denied'
+2026-05-24 13:19:28 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='ddr5 ram lot' title='Access Denied'
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 74)
+2026-05-24 13:19:37 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+[scraper] eBay playwright blocked term='nvme ssd' title='Access Denied'
+2026-05-24 13:19:39 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 74)
+2026-05-24 13:19:40 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
+2026-05-24 13:19:40 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard cpu combo
+2026-05-24 13:19:41 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard cpu combo
+[scraper] eBay playwright blocked term='pc power supply' title='Access Denied'
+2026-05-24 13:19:42 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:19:42 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='7700x b650' title='Access Denied'
+2026-05-24 13:19:50 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+2026-05-24 13:19:54 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=cpu bundle
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 74)
+2026-05-24 13:19:55 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+[scraper] eBay playwright blocked term='am5 bundle' title='Access Denied'
+2026-05-24 13:19:59 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-24 13:20:01 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-24 13:20:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-24 13:20:01 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+2026-05-24 13:20:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-24 13:20:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=HP EliteDesk
