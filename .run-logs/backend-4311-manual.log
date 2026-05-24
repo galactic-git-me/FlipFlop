@@ -1,9 +1,10 @@
-INFO:     Started server process [310456]
+INFO:     Started server process [2914558]
 INFO:     Waiting for application startup.
-2026-05-24 19:33:46 [info     ] app.startup
-2026-05-24 19:33:46 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-24 19:33:46 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-24 19:33:46 [info     ] scheduler.started              jobs=11
+2026-05-24 21:21:41 [info     ] app.startup
+2026-05-24 21:21:42 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-24 21:21:42 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-24 21:21:42 [info     ] scheduler.started              jobs=11
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     127.0.0.1:53680 - "GET /health HTTP/1.1" 200 OK
+2026-05-24 21:21:42 [info     ] ebay.compliance.challenge_ok   endpoint=https://3c5a-185-249-73-114.ngrok-free.app/api/ebay/marketplace-account-deletion has_configured_endpoint=True
+INFO:     127.0.0.1:54288 - "GET /api/ebay/marketplace-account-deletion?challenge_code=test123 HTTP/1.1" 200 OK
