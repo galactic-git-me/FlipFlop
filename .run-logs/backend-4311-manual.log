@@ -1,10 +1,9 @@
-INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
-INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [280250] using WatchFiles
-INFO:     Started server process [280260]
+INFO:     Started server process [310456]
 INFO:     Waiting for application startup.
-2026-05-24 19:31:55 [info     ] app.startup
-2026-05-24 19:31:55 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-24 19:31:55 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-24 19:31:55 [info     ] scheduler.started              jobs=11
+2026-05-24 19:33:46 [info     ] app.startup
+2026-05-24 19:33:46 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-24 19:33:46 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-24 19:33:46 [info     ] scheduler.started              jobs=11
 INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53680 - "GET /health HTTP/1.1" 200 OK
