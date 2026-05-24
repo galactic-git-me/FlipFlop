@@ -6019,3 +6019,83 @@ Call log:
 [scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
 2026-05-24 13:38:39 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
 2026-05-24 13:38:41 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc fault' title='Access Denied'
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-24 13:39:00 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+job+lot&_sacat=0&LH_Auction=1&_udlo=0&_udhi=2000&_sop=1&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+job+lot&_sacat=0&LH_Auction=1&_udlo=0&_udhi=2000&_sop=1&_ipg=120", waiting until "domcontentloaded"
+
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+2026-05-24 13:39:03 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+[scraper] eBay playwright blocked term='pc no display' title='Access Denied'
+2026-05-24 13:39:05 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-24 13:39:05 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 13:39:07 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-24 13:39:07 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+2026-05-24 13:39:09 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='gaming pc water cooled' title='Access Denied'
+2026-05-24 13:39:13 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-24 13:39:15 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-24 13:39:16 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+2026-05-24 13:39:19 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='gaming pc no graphics card' title='Access Denied'
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gaming pc with aio' title='Access Denied'
+2026-05-24 13:39:28 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-24 13:39:32 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+[scraper] eBay playwright blocked term='computer tower' title='Access Denied'
+2026-05-24 13:39:34 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+2026-05-24 13:39:43 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+2026-05-24 13:39:45 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-24 13:39:45 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 13:39:47 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+2026-05-24 13:39:51 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+2026-05-24 13:39:53 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+2026-05-24 13:39:55 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=workstation
+2026-05-24 13:39:56 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-24 13:39:58 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+2026-05-24 13:40:01 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+2026-05-24 13:40:04 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
