@@ -9,10 +9,10 @@
     "last_success_at": "2026-05-24T12:22:27.751841+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-05-24T11:56:46.825653+00:00"
+    "last_success_at": "2026-05-24T12:28:07.092478+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-24T11:56:49.330678+00:00"
+    "last_success_at": "2026-05-24T12:28:08.776191+00:00"
   },
   "upgrade_parts": {
     "last_success_at": "2026-05-24T11:53:39.314825+00:00"
@@ -22,5 +22,8 @@
   },
   "cases": {
     "last_success_at": "2026-05-24T12:18:48.358124+00:00"
+  },
+  "autonomous_cycle": {
+    "last_success_at": "2026-05-24T12:27:39.714117+00:00"
   }
 }
