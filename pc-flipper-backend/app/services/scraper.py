@@ -1461,6 +1461,7 @@ async def fetch_listings(
     max_price: float,
 ) -> list[RawListing]:
     from app.services.playwright_scraper import (
+        scrape_gumtree_playwright,
         scrape_facebook_playwright,
         scrape_preloved_playwright,
         scrape_wilsons_playwright,

@@ -1001,7 +1001,7 @@ async def scrape_apex_playwright(
 
 _AUCTION_PC_KW = {
     "pc", "computer", "desktop", "tower", "workstation", "server",
-    "i3", "i5", "i7", "i9", "ryzen", "xeon",
+    "i3", "i5", "i7", "i9", "ryzen", "xeon", "amd", "intel",
     "optiplex", "elitedesk", "thinkcentre", "prodesk", "thinkstation",
     "nvidia", "radeon", "rtx", "gtx", "gpu", "graphics",
     "z240", "z440", "z640",
@@ -1136,8 +1136,16 @@ async def _scrape_auction_site(
                             or ""
                         ).strip()
                     if not title or len(title) < 5:
-                        skipped_no_title += 1
-                        continue
+                        # Fall back to card text when title nodes are noisy/missing.
+                        try:
+                            card_text = (await card.inner_text()).strip()
+                        except Exception:
+                            card_text = ""
+                        if card_text and len(card_text) >= 5:
+                            title = card_text.split("\n")[0].strip()[:200]
+                        else:
+                            skipped_no_title += 1
+                            continue
                     t = title.lower()
                     if not any(kw in t for kw in _AUCTION_PC_KW):
                         skipped_keyword += 1
