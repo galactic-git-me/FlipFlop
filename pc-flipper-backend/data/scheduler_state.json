@@ -1,6 +1,6 @@
 {
   "compliant_market_ingestion": {
-    "last_success_at": "2026-05-24T20:05:03.678092+00:00"
+    "last_success_at": "2026-05-24T21:05:03.677596+00:00"
   },
   "retrain_checkpoint_watchdog": {
     "last_success_at": "2026-05-24T20:07:30.778367+00:00"
