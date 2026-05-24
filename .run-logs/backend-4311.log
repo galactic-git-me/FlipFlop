@@ -2224,33 +2224,53 @@ Call log:
 2026-05-24 09:10:43 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-6500 rtx 3060 status=403
 2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=587.99 query=gaming PC i5-6500 rtx 3060
 2026-05-24 09:10:43 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
-ading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-TGuay0 --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=486371
-  -   - [pid=486371][err] [0524/080523.312245:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=486371][err] [0524/080526.915835:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=486371][err] [0524/080527.941703:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=486371][err] [0524/080528.618506:ERROR:file_path_watcher_inotify.cc(337)] inotify_init() failed: Too many open files (24)
-
-[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
-[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay retry 'motherboard bundle': 0 found, 0 new (total 0)
-[scraper] eBay error for 'Fujitsu Esprimo': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Fujitsu+Esprimo&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay retry error for 'desktop pc': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=desktop+pc&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay error for 'i7 desktop': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=i7+desktop&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
-
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
 [scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
-[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
-[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
-[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 0)
-[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc no psu': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop no gpu': 0 found, 0 new (total 0)
+2026-05-24 09:29:35 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=22
+2026-05-24 09:29:35 [info     ] source.done                    found=184 gems=1 source=eBay UK
+try 'bulk desktops': 0 found, 0 new (total 0)
 [scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
 [scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
 [scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
