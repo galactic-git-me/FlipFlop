@@ -7,14 +7,9 @@ Tailscale URL (live): andromeda-ts:4310
 > pc-flipper@0.1.0 dev
 > next dev --webpack -p 4310 -H 0.0.0.0
 
-⨯ Failed to start server
-Error: listen EADDRINUSE: address already in use 0.0.0.0:4310
-    at <unknown> (Error: listen EADDRINUSE: address already in [?25h
-.0.0:4310) {
-  code: 'EADDRINUSE',
-  errno: -98,
-  syscall: 'listen',
-  address: '0.0.0.0',
-  port: 4310
-}
-[?25h
+▲ Next.js 16.2.4 (webpack)
+- Local:         http://localhost:4310
+- Network:       http://0.0.0.0:4310
+- Environments: .env.local
+✓ Ready in 454ms
+
