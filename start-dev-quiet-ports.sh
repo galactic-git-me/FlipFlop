@@ -25,6 +25,16 @@ DB_PASSWORD="${DB_PASSWORD:-flipper}"
 
 mkdir -p "$LOG_DIR"
 
+# Attempt to raise open-file limit to reduce Watchpack/EMFILE failures.
+maybe_raise_nofile_limit() {
+  local target="${NOFILE_TARGET:-65535}"
+  local current
+  current="$(ulimit -n 2>/dev/null || echo 0)"
+  if [[ "$current" =~ ^[0-9]+$ ]] && (( current < target )); then
+    ulimit -n "$target" >/dev/null 2>&1 || true
+  fi
+}
+
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
     echo "Missing required command: $1"
@@ -95,6 +105,7 @@ free_port() {
 
 require_cmd npm
 require_cmd lsof
+maybe_raise_nofile_limit
 
 if ! command -v python3 >/dev/null 2>&1 && ! command -v python >/dev/null 2>&1; then
   echo "Missing required command: python3 (or python)"
@@ -190,6 +201,11 @@ echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 start_frontend() {
   (
     cd "$FRONTEND_DIR"
+    # Guard against EMFILE from recursive file watching in larger repos.
+    export WATCHPACK_POLLING="${WATCHPACK_POLLING:-true}"
+    export WATCHPACK_POLLING_INTERVAL="${WATCHPACK_POLLING_INTERVAL:-1000}"
+    export CHOKIDAR_USEPOLLING="${CHOKIDAR_USEPOLLING:-1}"
+    export CHOKIDAR_INTERVAL="${CHOKIDAR_INTERVAL:-1000}"
     echo "============================================================"
     echo "Frontend URL: http://$PUBLIC_HOST:$FRONTEND_PORT"
     echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
