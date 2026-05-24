@@ -6639,3 +6639,250 @@ INFO:     100.101.209.68:57548 - "GET /api/search-telemetry/recent HTTP/1.1" 200
 [scraper] eBay playwright blocked term='pc no longer needed' title='Access Denied'
 INFO:     100.101.209.68:57564 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:57572 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc no longer needed': 0 found, 0 new (total 110)
+INFO:     100.101.209.68:57576 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57580 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57616 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57600 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57632 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57638 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57652 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57654 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57668 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57676 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57684 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc powers on no signal' title='Access Denied'
+[scraper] eBay retry 'pc powers on no signal': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45924 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45936 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc liquid cooler' title='Access Denied'
+INFO:     100.101.209.68:45950 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45966 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45952 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45982 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45968 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45984 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45986 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45990 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46000 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46008 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46024 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46036 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46050 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc liquid cooler': 0 found, 0 new (total 110)
+INFO:     100.101.209.68:47332 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47344 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc powers up untested' title='Access Denied'
+INFO:     100.101.209.68:47358 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47390 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47374 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47412 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47404 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47422 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47430 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47442 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47454 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47458 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47476 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'pc powers up untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:47482 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47486 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='desktop liquid cooled' title='Access Denied'
+INFO:     100.101.209.68:39542 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39550 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39562 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39576 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39592 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39608 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39622 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39630 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39644 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay retry 'desktop liquid cooled': 0 found, 0 new (total 110)
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=59.69 median=563.63 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=28.28 median=441.94 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=95.99 median=607.19 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=30.01 median=444.01 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=9.37 median=503.24 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=37.09 median=536.51 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=19.99 median=515.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=34.56 median=533.47 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=50.17 median=552.2 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=29.99 median=527.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=175.81 median=702.97 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=34.19 median=533.03 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=35.62 median=534.74 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=21.49 median=517.79 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=95.99 median=607.19 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=49.06 median=550.87 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=75.09 median=582.11 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=40.22 median=540.26 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=47.82 median=549.38 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=587.99 query=gaming PC ryzen 5 3400g rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=1.36 median=493.63 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=57.22 median=560.66 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=250.29 median=792.35 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=707.99 query=gaming PC i5 11400 rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=343.3 median=531.96 query=gaming PC rx 580
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=29.97 median=527.96 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=300.21 median=768.25 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=307.07 median=776.48 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=285.82 median=462.98 query=gaming PC i5-6400 gtx 1050
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=68.0 median=489.6 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=249.96 median=419.95 query=gaming PC gtx 750ti
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=19.99 median=515.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=94.3 median=605.16 query=gaming PC i3-3227u rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=94.3 median=521.16 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC core i5 7400 rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=299.17 median=851.0 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=208.29 median=369.95 query=gaming PC gtx 750ti
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=32.0 median=242.4 query=gaming PC
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=324.93 median=797.92 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=298.13 median=849.76 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=719.99 query=gaming PC i7-9700k rtx 2080 super
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=120.3 median=552.36 query=gaming PC i5 4460 rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=343.3 median=615.96 query=gaming PC rtx 2080
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=293.97 median=844.76 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=300.21 median=768.25 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=54.37 median=557.24 query=gaming PC i7 6700t rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=421.83 median=626.2 query=gaming PC gtx 1050
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=266.93 median=728.32 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=19.73 median=515.68 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=310.61 median=780.73 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=905.64 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=330.03 median=804.04 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=459.0 median=670.8 query=gaming PC gtx 1660
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=623.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=671.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=50.26 median=552.31 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=671.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=467.94 query=gaming PC core i7 6770 gtx 1060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=345.51 median=906.61 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=440.0 median=732.0 query=gaming PC rtx2070 super
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=26.46 median=523.75 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=200.99 median=649.19 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=296.05 median=847.26 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=459.0 median=670.8 query=gaming PC gtx 1650
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=600.0 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=1050.84 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=281.5 median=829.8 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=671.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=17.45 median=512.94 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [info     ] resale_scraper.fallback_buy_price buy_price=24.99 median=521.99 query=gaming PC rtx 3060
+2026-05-24 23:20:08 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_298256631198 fingerprint=gaming pc|||250 source=eBay UK
+2026-05-24 23:20:08 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_397319203783 fingerprint=22 full setup gaming pc bundle core i5|||300 source=eBay UK
+2026-05-24 23:20:08 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_366313166190 fingerprint=gaming pc desktop intel i7 16gb ram 500gb||GTX 750TI|250 source=eBay UK
+2026-05-24 23:20:08 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_397061504761 fingerprint=22 full setup gaming pc bundle core i5|||300 source=eBay UK
+2026-05-24 23:20:08 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=12 source=eBay UK
+INFO:     100.101.209.68:39652 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39654 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i9 desktop' title='Access Denied'
+INFO:     100.101.209.68:39660 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39670 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'i9 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49512 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49538 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49564 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49548 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49570 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49578 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49584 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49596 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49606 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49614 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49628 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49640 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49656 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37230 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37246 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37242 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37258 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37264 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37280 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37288 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37300 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37316 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37326 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37336 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37346 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37360 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37370 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37380 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37388 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37394 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37410 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37414 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37438 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37426 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37442 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37448 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37464 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37470 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37480 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37492 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37500 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33198 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33212 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen 9 desktop' title='Access Denied'
+INFO:     100.101.209.68:33224 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33234 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33238 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33242 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33250 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33260 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33266 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33276 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33278 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33282 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33292 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33296 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33302 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 9 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53714 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53730 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53738 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53742 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53746 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53754 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53782 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53796 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53804 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53812 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53826 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53838 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen 5 3600 desktop' title='Access Denied'
+INFO:     100.101.209.68:53844 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53860 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43124 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43132 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43146 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43162 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43188 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43206 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43204 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43214 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43220 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43222 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43226 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43234 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43238 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43254 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen 7 5800 desktop' title='Access Denied'
+INFO:     100.101.209.68:43258 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43262 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
