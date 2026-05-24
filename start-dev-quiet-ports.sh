@@ -18,6 +18,10 @@ FRONTEND_DEV_BUNDLER="${FRONTEND_DEV_BUNDLER:-webpack}" # webpack | turbo
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
 ATTACH_TMUX="${ATTACH_TMUX:-1}"
+ENABLE_NGROK="${ENABLE_NGROK:-1}"
+NGROK_TUNNEL_PORT="${NGROK_TUNNEL_PORT:-$BACKEND_PORT}"
+NGROK_API_PORT="${NGROK_API_PORT:-4048}"
+NGROK_RESTART_DELAY_SECONDS="${NGROK_RESTART_DELAY_SECONDS:-2}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-pcflipper}"
@@ -34,6 +38,117 @@ maybe_raise_nofile_limit() {
   if [[ "$current" =~ ^[0-9]+$ ]] && (( current < target )); then
     ulimit -n "$target" >/dev/null 2>&1 || true
   fi
+}
+
+NGROK_SUPERVISOR_PID=""
+NGROK_MONITOR_PID=""
+NGROK_PUBLIC_URL=""
+NGROK_LOG="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.log"
+NGROK_URL_FILE="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.url"
+BACKEND_ENV_LOCAL="$BACKEND_DIR/.env.local"
+
+start_ngrok_supervisor() {
+  if [[ "$ENABLE_NGROK" != "1" ]]; then
+    return 0
+  fi
+  if ! command -v ngrok >/dev/null 2>&1; then
+    echo "ngrok not found; skipping tunnel auto-start."
+    return 0
+  fi
+
+  # Ensure single ngrok instance for our chosen web API port.
+  pkill -f "ngrok http $NGROK_TUNNEL_PORT.*127.0.0.1:$NGROK_API_PORT" >/dev/null 2>&1 || true
+  : >"$NGROK_LOG"
+
+  (
+    while true; do
+      ngrok http "$NGROK_TUNNEL_PORT" \
+        --log=stdout \
+        --web-addr="127.0.0.1:$NGROK_API_PORT" \
+        >>"$NGROK_LOG" 2>&1 || true
+      sleep "$NGROK_RESTART_DELAY_SECONDS"
+    done
+  ) &
+  NGROK_SUPERVISOR_PID=$!
+}
+
+refresh_ngrok_url() {
+  NGROK_PUBLIC_URL=""
+  if [[ "$ENABLE_NGROK" != "1" ]]; then
+    return 0
+  fi
+  if ! command -v curl >/dev/null 2>&1; then
+    return 0
+  fi
+
+  local attempts=20
+  while (( attempts > 0 )); do
+    NGROK_PUBLIC_URL="$(
+      curl -fsS "http://127.0.0.1:$NGROK_API_PORT/api/tunnels" 2>/dev/null \
+        | "$PYTHON_BIN" -c "import sys,json; d=json.load(sys.stdin); ts=d.get('tunnels') or []; print((ts[0].get('public_url') if ts else '').strip())" 2>/dev/null || true
+    )"
+    if [[ -n "$NGROK_PUBLIC_URL" ]]; then
+      printf "%s\n" "$NGROK_PUBLIC_URL" > "$NGROK_URL_FILE"
+      break
+    fi
+    sleep 0.5
+    attempts=$((attempts - 1))
+  done
+
+  if [[ -n "$NGROK_PUBLIC_URL" && -f "$BACKEND_ENV_LOCAL" ]]; then
+    local endpoint="${NGROK_PUBLIC_URL%/}/api/ebay/marketplace-account-deletion"
+    if grep -q '^EBAY_NOTIFICATION_ENDPOINT=' "$BACKEND_ENV_LOCAL"; then
+      sed -i "s|^EBAY_NOTIFICATION_ENDPOINT=.*|EBAY_NOTIFICATION_ENDPOINT=$endpoint|" "$BACKEND_ENV_LOCAL"
+    else
+      printf "\nEBAY_NOTIFICATION_ENDPOINT=%s\n" "$endpoint" >> "$BACKEND_ENV_LOCAL"
+    fi
+  fi
+}
+
+start_ngrok_monitor() {
+  if [[ "$ENABLE_NGROK" != "1" ]]; then
+    return 0
+  fi
+  if ! command -v curl >/dev/null 2>&1; then
+    return 0
+  fi
+  (
+    local last_url=""
+    local missed=0
+    while true; do
+      local cur_url=""
+      cur_url="$(
+        curl -fsS "http://127.0.0.1:$NGROK_API_PORT/api/tunnels" 2>/dev/null \
+          | "$PYTHON_BIN" -c "import sys,json; d=json.load(sys.stdin); ts=d.get('tunnels') or []; print((ts[0].get('public_url') if ts else '').strip())" 2>/dev/null || true
+      )"
+
+      if [[ -n "$cur_url" ]]; then
+        missed=0
+        if [[ "$cur_url" != "$last_url" ]]; then
+          last_url="$cur_url"
+          printf "%s\n" "$cur_url" > "$NGROK_URL_FILE"
+          NGROK_PUBLIC_URL="$cur_url"
+          if [[ -f "$BACKEND_ENV_LOCAL" ]]; then
+            local endpoint="${cur_url%/}/api/ebay/marketplace-account-deletion"
+            if grep -q '^EBAY_NOTIFICATION_ENDPOINT=' "$BACKEND_ENV_LOCAL"; then
+              sed -i "s|^EBAY_NOTIFICATION_ENDPOINT=.*|EBAY_NOTIFICATION_ENDPOINT=$endpoint|" "$BACKEND_ENV_LOCAL"
+            else
+              printf "\nEBAY_NOTIFICATION_ENDPOINT=%s\n" "$endpoint" >> "$BACKEND_ENV_LOCAL"
+            fi
+          fi
+        fi
+      else
+        missed=$((missed + 1))
+        if (( missed >= 6 )); then
+          # Force a fresh ngrok child; supervisor loop will bring it back.
+          pkill -f "ngrok http $NGROK_TUNNEL_PORT.*127.0.0.1:$NGROK_API_PORT" >/dev/null 2>&1 || true
+          missed=0
+        fi
+      fi
+      sleep 3
+    done
+  ) &
+  NGROK_MONITOR_PID=$!
 }
 
 require_cmd() {
@@ -282,6 +397,9 @@ start_frontend_with_retry() {
 start_frontend_with_retry || exit 1
 
 sleep 1
+start_ngrok_supervisor
+refresh_ngrok_url
+start_ngrok_monitor
 
 open_tmux_logs() {
   if ! command -v tmux >/dev/null 2>&1; then
@@ -1019,6 +1137,15 @@ cleanup() {
   kill "$BACKEND_PID" >/dev/null 2>&1 || true
   wait "$FRONTEND_PID" >/dev/null 2>&1 || true
   wait "$BACKEND_PID" >/dev/null 2>&1 || true
+  if [[ -n "${NGROK_MONITOR_PID:-}" ]]; then
+    kill "$NGROK_MONITOR_PID" >/dev/null 2>&1 || true
+    wait "$NGROK_MONITOR_PID" >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${NGROK_SUPERVISOR_PID:-}" ]]; then
+    kill "$NGROK_SUPERVISOR_PID" >/dev/null 2>&1 || true
+    wait "$NGROK_SUPERVISOR_PID" >/dev/null 2>&1 || true
+  fi
+  pkill -f "ngrok http $NGROK_TUNNEL_PORT.*127.0.0.1:$NGROK_API_PORT" >/dev/null 2>&1 || true
   if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
     tmux kill-session -t "$TMUX_SESSION" >/dev/null 2>&1 || true
   fi
@@ -1031,6 +1158,14 @@ echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
 echo "Backend : http://$PUBLIC_HOST:$BACKEND_PORT"
 echo "API base: http://$PUBLIC_HOST:$BACKEND_PORT/api"
 echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
+if [[ "$ENABLE_NGROK" == "1" ]]; then
+  if [[ -n "$NGROK_PUBLIC_URL" ]]; then
+    echo "ngrok   : $NGROK_PUBLIC_URL"
+    echo "eBay CB : ${NGROK_PUBLIC_URL%/}/api/ebay/marketplace-account-deletion"
+  else
+    echo "ngrok   : starting (monitoring on 127.0.0.1:$NGROK_API_PORT)"
+  fi
+fi
 echo "Mode    : $FRONTEND_MODE"
 echo
 echo "Logs:"
