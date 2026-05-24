@@ -153,7 +153,7 @@ else:
 console.clear()
 console.print(Panel(table, border_style="green"))
 PY
-    sleep 5
+    sleep 8
   done
 else
   while true; do
@@ -285,6 +285,6 @@ for term in pending_terms[:36]:
         result = "—"
     print(f"{term[:42]:42} {status:16} {when:>10} {result:>9}")
 PY
-    sleep 5
+    sleep 8
   done
 fi

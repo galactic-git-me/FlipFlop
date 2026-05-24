@@ -188,34 +188,6 @@ for s in sources_health:
     if str((s or {}).get("cooldown_until") or "").strip():
         flip_cooldown_count += 1
 
-sources_health = []
-try:
-    with urllib.request.urlopen(f"{base_url}/api/sources/health", timeout=4) as rs:
-        sh = json.load(rs) or {}
-    sources_health = sh.get("items", []) or []
-except Exception:
-    sources_health = []
-
-flip_source_names = {
-    "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
-    "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
-    "Amazon", "Alibaba", "AliExpress", "Temu", "BargainHardware", "CherryTree Inc",
-}
-flip_found_total = 0
-flip_error_count = 0
-flip_cooldown_count = 0
-for s in sources_health:
-    name = str((s or {}).get("name") or "")
-    if name not in flip_source_names:
-        continue
-    if not bool((s or {}).get("enabled", False)):
-        continue
-    flip_found_total += int((s or {}).get("listings_found_last_run") or 0)
-    if str((s or {}).get("last_error") or "").strip():
-        flip_error_count += 1
-    if str((s or {}).get("cooldown_until") or "").strip():
-        flip_cooldown_count += 1
-
 table = Table(title="Scheduler", expand=True)
 table.add_column("Job", style="bold cyan")
 table.add_column("Search Terms", style="yellow")
@@ -283,7 +255,7 @@ for j in rows:
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
 PY
-    sleep 5
+    sleep 8
   done
 else
   while true; do
@@ -472,7 +444,7 @@ for j in rows:
 
     print(f"{jid:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
 PY
-    sleep 5
+    sleep 8
   done
 fi
 
