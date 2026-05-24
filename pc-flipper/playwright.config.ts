@@ -14,7 +14,7 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   webServer: {
-    command: 'npm run build && npm run start -- -p 4173 -H 127.0.0.1',
+    command: 'NEXT_PUBLIC_API_URL=/api npm run build && NEXT_PUBLIC_API_URL=/api npm run start -- -p 4173 -H 127.0.0.1',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: true,
     timeout: 180_000,
