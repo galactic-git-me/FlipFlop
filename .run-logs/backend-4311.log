@@ -2917,3 +2917,83 @@ INFO:     100.101.209.68:38180 - "GET /api/search-telemetry/by-source HTTP/1.1" 
 INFO:     100.101.209.68:38192 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:38206 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:38222 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38232 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38246 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37846 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37856 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37854 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37872 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37862 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37876 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37882 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37890 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37898 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37912 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37928 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37938 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37942 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37944 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37952 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37954 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37958 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37962 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37974 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37986 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37994 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38000 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42442 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42454 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42460 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42470 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42480 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42498 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42510 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42524 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42540 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42532 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42544 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42548 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42554 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42570 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42582 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42586 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48398 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48414 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48430 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48444 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48460 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48476 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48464 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48482 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48500 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48502 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48524 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48538 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48554 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48558 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48570 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37372 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37378 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37390 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37392 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37402 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37398 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37422 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37436 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37446 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37456 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37468 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-24 20:31:52 [info     ] scheduler.stopped
+2026-05-24 20:31:52 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3954432]
+INFO:     Stopping reloader process [3954429]
