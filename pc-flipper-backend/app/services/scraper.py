@@ -281,6 +281,8 @@ async def _scrape_ebay_api_term(
     max_price: float,
     auction_mode: bool,
     is_component_term: bool,
+    condition_code: str | None = None,
+    worldwide: bool = False,
 ) -> list[RawListing]:
     endpoint = f"{_ebay_base_url()}/buy/browse/v1/item_summary/search"
     buying = "AUCTION" if auction_mode else "FIXED_PRICE"
@@ -289,9 +291,15 @@ async def _scrape_ebay_api_term(
         f"price:[{int(min_price)}..{hi}]",
         "priceCurrency:GBP",
         f"buyingOptions:{{{buying}}}",
-        "itemLocationCountry:GB",
     ]
-    if not is_component_term:
+    if not worldwide:
+        filters.append("itemLocationCountry:GB")
+    if condition_code:
+        if condition_code == "3000":
+            filters.append("conditions:{USED}")
+        elif condition_code == "1000":
+            filters.append("conditions:{NEW}")
+    elif not is_component_term:
         filters.append("conditions:{USED}")
     params = {
         "q": term,
@@ -444,6 +452,8 @@ async def scrape_ebay(
     min_price: float,
     max_price: float,
     auction_mode: bool = False,
+    condition_code: str | None = None,
+    worldwide: bool = False,
 ) -> list[RawListing]:
     """
     Searches eBay UK with bounded term concurrency.
@@ -489,12 +499,15 @@ async def scrape_ebay(
                             max_price=max_price,
                             auction_mode=auction_mode,
                             is_component_term=is_component_term,
+                            condition_code=condition_code,
+                            worldwide=worldwide,
                         )
-                        if auction_mode:
-                            for l in api_listings:
-                                l.source_name = "eBay UK Auctions"
-                                l.listing_type = "auction"
-                        return term, api_listings, False, 200, None
+                        if api_listings:
+                            if auction_mode:
+                                for l in api_listings:
+                                    l.source_name = "eBay UK Auctions"
+                                    l.listing_type = "auction"
+                            return term, api_listings, False, 200, None
 
                     if auction_mode:
                         params = {
@@ -503,7 +516,7 @@ async def scrape_ebay(
                             "LH_Auction": "1",
                             "_udlo": str(int(min_price)),
                             "_udhi": str(int(max_price)),
-                            "LH_PrefLoc": "1",
+                            "LH_PrefLoc": "2" if worldwide else "1",
                             "_sop": "1",
                             "_ipg": "60",
                         }
@@ -514,11 +527,13 @@ async def scrape_ebay(
                             "LH_BIN": "1",
                             "_udlo": str(int(min_price)),
                             "_udhi": str(int(max_price)),
-                            "LH_PrefLoc": "1",
+                            "LH_PrefLoc": "2" if worldwide else "1",
                             "_sop": "10",
                             "_ipg": "60",
                         }
-                        if not is_component_term:
+                        if condition_code:
+                            params["LH_ItemCondition"] = condition_code
+                        elif not is_component_term:
                             params["LH_ItemCondition"] = "3000"
 
                     new_listings: list[RawListing] = []

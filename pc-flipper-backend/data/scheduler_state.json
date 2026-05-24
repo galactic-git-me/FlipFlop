@@ -1,5 +1,17 @@
 {
   "compliant_market_ingestion": {
     "last_success_at": "2026-05-24T13:05:03.673924+00:00"
+  },
+  "retrain_checkpoint_watchdog": {
+    "last_success_at": "2026-05-24T13:07:30.768531+00:00"
+  },
+  "outcome_capture": {
+    "last_success_at": "2026-05-24T13:07:31.749247+00:00"
+  },
+  "playbook_evolution": {
+    "last_success_at": "2026-05-24T13:07:34.649014+00:00"
+  },
+  "external_demand": {
+    "last_success_at": "2026-05-24T13:09:04.313100+00:00"
   }
 }

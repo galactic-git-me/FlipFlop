@@ -18,6 +18,7 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
+from app.services.scraper import scrape_ebay
 import structlog
 from sqlalchemy import select as sa_select
 
@@ -233,82 +234,29 @@ async def _dynamic_case_themes_from_db() -> tuple[list[dict], set[str]]:
 
 
 async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
-    """eBay UK — uses new .s-card[data-listingid] structure with .s-item fallback."""
-    params = {
-        "_nkw": search,
-        "LH_BIN": "1",
-        "LH_ItemCondition": "1000",  # New only
-        "_sacat": "0",    # All categories — themed cases appear in multiple cats
-        "_sop": "15",     # Sort: price + shipping lowest first
-        "LH_PrefLoc": "2",  # Worldwide (many cases ship from China/HK)
-        "_udhi": "350",   # Max £350
-    }
-    headers = {
-        "User-Agent": ua.random,
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate",
-    }
-    cases = []
     try:
-        await asyncio.sleep(random.uniform(1.0, 2.5))
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
-        if resp.status_code != 200:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        # Try new card structure first
-        items = soup.select(".s-card[data-listingid]")
-        use_new = bool(items)
-        if not items:
-            items = soup.select(".s-item:not(.s-item--placeholder)")
-
-        for item in items[:8]:
-            try:
-                if use_new:
-                    title_el = (
-                        item.select_one("[class*='s-card__title']") or
-                        item.select_one(".s-item__title") or
-                        item.select_one("h3")
-                    )
-                    price_el = (
-                        item.select_one("[class*='s-card__price']") or
-                        item.select_one(".s-item__price") or
-                        item.select_one("[class*='price--']")
-                    )
-                    url_el = item.select_one("a[href*='/itm/']") or item.select_one("a[href]")
-                    img_el = item.select_one("img")
-                else:
-                    title_el = item.select_one(".s-item__title")
-                    price_el = item.select_one(".s-item__price")
-                    url_el = item.select_one("a.s-item__link")
-                    img_el = item.select_one("img.s-item__image-img")
-
-                if not all([title_el, price_el, url_el]):
-                    continue
-                title = title_el.get_text(strip=True)
-                if title.lower() in ("shop on ebay", ""):
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > 350:
-                    continue
-                url = url_el.get("href", "")
-                if not url.startswith("http"):
-                    continue
-                cases.append(RawCase(
-                    name=title[:200],
-                    price=price,
-                    source_site="eBay",
-                    source_url=url,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
+        listings = await scrape_ebay(
+            [search],
+            min_price=1,
+            max_price=350,
+            auction_mode=False,
+            condition_code="1000",
+            worldwide=False,
+        )
+        return [
+            RawCase(
+                name=l.title[:200],
+                price=l.price,
+                source_site="eBay",
+                source_url=l.url,
+                image_url=l.image_urls[0] if l.image_urls else "",
+                theme=theme,
+            )
+            for l in listings[:8]
+        ]
     except Exception as exc:
         log.warning("ebay.cases.error", error=str(exc))
-    return cases
+        return []
 
 
 async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
@@ -317,80 +265,29 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
     new ATX cases at 40-60% of UK retail with free shipping. Excellent for finding
     cheap themed cases to include in flips.
     """
-    params = {
-        "_nkw": search,
-        "LH_BIN": "1",
-        "LH_ItemCondition": "1000",  # New only
-        "_sacat": "0",
-        "_sop": "15",     # Price + shipping lowest first
-        "LH_PrefLoc": "2",  # Worldwide
-        "_udhi": "200",   # Max £200 (international cases are cheaper)
-    }
-    headers = {
-        "User-Agent": ua.random,
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate",
-    }
-    cases = []
     try:
-        await asyncio.sleep(random.uniform(1.0, 2.5))
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
-        if resp.status_code != 200:
-            return cases
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        items = soup.select(".s-card[data-listingid]")
-        use_new = bool(items)
-        if not items:
-            items = soup.select(".s-item:not(.s-item--placeholder)")
-
-        for item in items[:10]:
-            try:
-                if use_new:
-                    title_el = (
-                        item.select_one("[class*='s-card__title']") or
-                        item.select_one(".s-item__title") or
-                        item.select_one("h3")
-                    )
-                    price_el = (
-                        item.select_one("[class*='s-card__price']") or
-                        item.select_one(".s-item__price") or
-                        item.select_one("[class*='price--']")
-                    )
-                    url_el = item.select_one("a[href*='/itm/']") or item.select_one("a[href]")
-                    img_el = item.select_one("img")
-                else:
-                    title_el = item.select_one(".s-item__title")
-                    price_el = item.select_one(".s-item__price")
-                    url_el = item.select_one("a.s-item__link")
-                    img_el = item.select_one("img.s-item__image-img")
-
-                if not all([title_el, price_el, url_el]):
-                    continue
-                title = title_el.get_text(strip=True)
-                if title.lower() in ("shop on ebay", ""):
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > 200:
-                    continue
-                url = url_el.get("href", "")
-                if not url.startswith("http"):
-                    continue
-                cases.append(RawCase(
-                    name=title[:200],
-                    price=price,
-                    source_site="eBay",
-                    source_url=url,
-                    image_url=img_el.get("src", "") if img_el else "",
-                    theme=theme,
-                ))
-            except Exception:
-                continue
+        listings = await scrape_ebay(
+            [search],
+            min_price=1,
+            max_price=200,
+            auction_mode=False,
+            condition_code="1000",
+            worldwide=True,
+        )
+        return [
+            RawCase(
+                name=l.title[:200],
+                price=l.price,
+                source_site="eBay (Worldwide)",
+                source_url=l.url,
+                image_url=l.image_urls[0] if l.image_urls else "",
+                theme=theme,
+            )
+            for l in listings[:10]
+        ]
     except Exception as exc:
         log.warning("ebay_worldwide.cases.error", error=str(exc))
-    return cases
+        return []
 
 
 # ── Google Shopping (UK) ──────────────────────────────────────────────────────

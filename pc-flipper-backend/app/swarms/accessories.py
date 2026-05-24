@@ -16,6 +16,7 @@ from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
+from app.services.scraper import scrape_ebay
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -63,79 +64,34 @@ class RawAccessory:
 
 
 async def _scrape_ebay_accessories(term: str, theme: str, condition_code: str) -> list[RawAccessory]:
-    """Scrape eBay UK BIN listings for an accessory search term."""
+    """eBay API-first with scraper fallback for accessory search terms."""
     condition = PartCondition.new if condition_code == "1000" else PartCondition.used
-    params = {
-        "_nkw": term,
-        "LH_BIN": "1",
-        "LH_ItemCondition": condition_code,
-        "_sacat": "0",
-        "_sop": "15",       # Price + shipping lowest first
-        "LH_PrefLoc": "1",  # UK only
-        "_udhi": str(int(MAX_PRICE)),
-    }
-    headers = {"User-Agent": ua.random, "Accept-Language": "en-GB"}
-    items_out = []
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=headers)
-        if resp.status_code != 200:
-            return items_out
-        soup = BeautifulSoup(resp.text, "lxml")
-
-        items = (
-            soup.select(".s-card[data-listingid]")
-            or soup.select("li.s-item[data-view]")
-            or soup.select(".s-item:not(.s-item--placeholder)")
+        listings = await scrape_ebay(
+            [term],
+            min_price=1,
+            max_price=MAX_PRICE,
+            auction_mode=False,
+            condition_code=condition_code,
+            worldwide=False,
         )
-        use_new = bool(items)
-
-        for item in items[:8]:
-            try:
-                if use_new:
-                    title_el = (
-                        item.select_one("[class*='s-card__title']") or
-                        item.select_one(".s-item__title") or
-                        item.select_one("h3")
-                    )
-                    price_el = (
-                        item.select_one("[class*='s-card__price']") or
-                        item.select_one(".s-item__price") or
-                        item.select_one("[class*='price--']")
-                    )
-                    url_el = item.select_one("a[href*='/itm/']") or item.select_one("a[href]")
-                    img_el = item.select_one("img")
-                else:
-                    title_el = item.select_one(".s-item__title")
-                    price_el = item.select_one(".s-item__price")
-                    url_el = item.select_one("a.s-item__link")
-                    img_el = item.select_one("img.s-item__image-img")
-
-                if not all([title_el, price_el, url_el]):
-                    continue
-                title = title_el.get_text(strip=True)
-                if title.lower() in ("shop on ebay", ""):
-                    continue
-                price = _parse_price(price_el.get_text(strip=True))
-                if price <= 0 or price > MAX_PRICE:
-                    continue
-                url = url_el.get("href", "")
-                if not url or "javascript:void(0)" in url:
-                    continue
-                items_out.append(RawAccessory(
-                    name=title[:200],
-                    price=price,
+        out: list[RawAccessory] = []
+        for l in listings[:8]:
+            out.append(
+                RawAccessory(
+                    name=l.title[:200],
+                    price=l.price,
                     source_site="eBay",
-                    source_url=url,
-                    image_url=img_el.get("src", "") if img_el else "",
+                    source_url=l.url,
+                    image_url=l.image_urls[0] if l.image_urls else "",
                     theme=theme,
                     condition=condition,
-                ))
-            except Exception:
-                continue
+                )
+            )
+        return out
     except Exception as exc:
         log.warning("ebay.accessories.error", term=term, error=str(exc))
-    return items_out
+        return []
 
 
 async def _upsert_accessory(db, acc: RawAccessory):
