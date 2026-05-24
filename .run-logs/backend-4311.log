@@ -6180,3 +6180,81 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 Future exception was never retrieved
 future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
 playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+2026-05-24 13:41:44 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+2026-05-24 13:41:47 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 13:41:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i7 desktop
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+2026-05-24 13:41:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='Dell Precision tower' title='Access Denied'
+2026-05-24 13:41:53 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+2026-05-24 13:41:57 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard
+2026-05-24 13:41:59 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+[scraper] eBay playwright blocked term='HP Z240' title='Access Denied'
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+2026-05-24 13:42:09 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-24 13:42:12 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-24 13:42:12 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+[scraper] eBay playwright blocked term='HP Z440' title='Access Denied'
+2026-05-24 13:42:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+2026-05-24 13:42:22 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+2026-05-24 13:42:23 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-24 13:42:24 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-24 13:42:26 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i5 desktop
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+2026-05-24 13:42:26 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=cpu bundle
+2026-05-24 13:42:28 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+2026-05-24 13:42:29 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='intel i7 cpu' title='Access Denied'
+[scraper] eBay playwright blocked term='Dell Precision tower' title='Access Denied'
+2026-05-24 13:42:46 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+[scraper] eBay playwright blocked term='HP ProDesk' title='Access Denied'
+2026-05-24 13:42:49 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-24 13:42:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=office pc
+2026-05-24 13:42:51 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+2026-05-24 13:42:52 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 13:42:56 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard cpu combo
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+2026-05-24 13:42:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 53)
+2026-05-24 13:43:00 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+[scraper] eBay playwright blocked term='HP Compaq tower' title='Access Denied'
+2026-05-24 13:43:03 [info     ] i-bidder.playwright.cards      count=23 term=office pc
