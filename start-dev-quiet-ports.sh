@@ -14,7 +14,7 @@ BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-0.0.0.0}"
 PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-dev}" # dev | prod
-FRONTEND_DEV_BUNDLER="${FRONTEND_DEV_BUNDLER:-turbo}" # turbo | webpack
+FRONTEND_DEV_BUNDLER="${FRONTEND_DEV_BUNDLER:-webpack}" # webpack | turbo
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
 ATTACH_TMUX="${ATTACH_TMUX:-1}"
@@ -258,7 +258,7 @@ start_frontend_with_retry() {
       attempt=$((attempt + 1))
       continue
     fi
-    if grep -q "EMFILE\\|Watchpack Error (watcher)" "$FRONTEND_LOG" 2>/dev/null; then
+    if grep -q "EMFILE\\|Watchpack Error (watcher)\\|TurbopackInternalError\\|Too many open files (os error 24)" "$FRONTEND_LOG" 2>/dev/null; then
       echo "Frontend attempt $attempt/$max_attempts hit EMFILE watcher exhaustion."
       kill "$FRONTEND_PID" >/dev/null 2>&1 || true
       wait "$FRONTEND_PID" >/dev/null 2>&1 || true

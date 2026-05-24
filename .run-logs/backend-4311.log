@@ -1,668 +1,414 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [1941741] using WatchFiles
-INFO:     Started server process [1941745]
+INFO:     Started reloader process [2083848] using WatchFiles
+INFO:     Started server process [2084091]
 INFO:     Waiting for application startup.
-2026-05-24 12:28:06 [info     ] app.startup
-2026-05-24 12:28:06 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-24 12:28:06 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-24 12:28:06 [info     ] scheduler.started              jobs=11
+2026-05-24 12:31:50 [info     ] app.startup
+2026-05-24 12:31:50 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-24 12:31:50 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-24 12:31:50 [info     ] scheduler.started              jobs=11
 INFO:     Application startup complete.
-2026-05-24 12:28:06 [info     ] accessories_swarm.start
-2026-05-24 12:28:06 [info     ] flip_opportunities_swarm.start
-2026-05-24 12:28:06 [info     ] cases_swarm.start
-2026-05-24 12:28:06 [info     ] flip_opportunities_swarm.start
-2026-05-24 12:28:06 [info     ] upgrade_parts_swarm.start      total_parts=49
-[scraper] No adapter for source 'Manual Submission', skipping
-[scraper] No adapter for source 'Manual Photo', skipping
-[scraper] No adapter for source 'WF-Retrain', skipping
-2026-05-24 12:28:06 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-24 12:28:07 [info     ] cases_swarm.themes             base=11 playbook_extra=8
-2026-05-24 12:28:07 [info     ] source.done                    found=0 gems=0 source=Manual Submission
-[scraper] No adapter for source 'Manual Photo', skipping
-[scraper] No adapter for source 'WF-Retrain', skipping
-2026-05-24 12:28:07 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-24 12:28:07 [info     ] source.skipped                 reason=cooldown_active_5399s source=Manual Submission
-2026-05-24 12:28:08 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-24 12:28:08 [info     ] source.done                    found=0 gems=0 source=Manual Photo
-2026-05-24 12:28:08 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
-INFO:     100.101.209.68:48634 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:08 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
-INFO:     100.101.209.68:48648 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48658 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-2026-05-24 12:28:09 [info     ] source.done                    found=0 gems=0 source=Manual Photo
-INFO:     100.101.209.68:48626 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48674 - "GET /api/sources/ HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [info     ] source.done                    found=0 gems=0 source=WF-Retrain
-INFO:     100.101.209.68:48682 - "GET /api/config/search HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:28:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
-INFO:     100.101.209.68:48698 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-INFO:     100.101.209.68:48684 - "GET /api/demand/summary HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-24 12:28:09 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
-INFO:     100.101.209.68:48686 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 12:28:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
-2026-05-24 12:28:09 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
-INFO:     100.101.209.68:48714 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48738 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48704 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:28:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-INFO:     100.101.209.68:48728 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-2026-05-24 12:28:10 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
-INFO:     100.101.209.68:48750 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:31:50 [info     ] accessories_swarm.start
+2026-05-24 12:31:50 [info     ] flip_opportunities_swarm.start
+2026-05-24 12:31:50 [info     ] cases_swarm.start
+2026-05-24 12:31:50 [info     ] flip_opportunities_swarm.start
+2026-05-24 12:31:50 [info     ] upgrade_parts_swarm.start      total_parts=49
+2026-05-24 12:31:50 [info     ] source.skipped                 reason=cooldown_active_5178s source=Manual Photo
+2026-05-24 12:31:50 [info     ] source.skipped                 reason=cooldown_active_5178s source=WF-Retrain
+2026-05-24 12:31:50 [info     ] source.cooldown_ignored        reason=cooldown_active_5213s source=John Pye
+2026-05-24 12:31:50 [info     ] source.cooldown_ignored        reason=cooldown_active_5305s source=Gumtree
+2026-05-24 12:31:50 [info     ] source.cooldown_ignored        reason=cooldown_active_5179s source=Facebook Marketplace
+2026-05-24 12:31:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-24 12:31:50 [info     ] source.skipped                 reason=cooldown_active_5176s source=Manual Submission
+2026-05-24 12:31:50 [info     ] source.cooldown_ignored        reason=cooldown_active_5201s source=CherryTree Inc
+2026-05-24 12:31:50 [info     ] cases_swarm.themes             base=11 playbook_extra=8
+2026-05-24 12:31:50 [info     ] source.skipped                 reason=cooldown_active_5177s source=Manual Photo
+2026-05-24 12:31:50 [info     ] source.skipped                 reason=cooldown_active_5178s source=WF-Retrain
+2026-05-24 12:31:50 [info     ] source.cooldown_ignored        reason=cooldown_active_5212s source=John Pye
+2026-05-24 12:31:51 [info     ] source.cooldown_ignored        reason=cooldown_active_5304s source=Gumtree
+2026-05-24 12:31:51 [info     ] source.cooldown_ignored        reason=cooldown_active_5178s source=Facebook Marketplace
+2026-05-24 12:31:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-24 12:31:51 [info     ] source.skipped                 reason=cooldown_active_5176s source=Manual Submission
+2026-05-24 12:31:51 [info     ] source.cooldown_ignored        reason=cooldown_active_5200s source=CherryTree Inc
+2026-05-24 12:31:52 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-24 12:31:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:35494 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35516 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:31:53 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-24 12:31:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:35530 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35536 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35546 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-24 12:31:53 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-24 12:31:53 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-24 12:31:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:35500 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35566 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35578 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35556 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:31:53 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:35600 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35588 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35608 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-24 12:31:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=AMD+Ryzen+7+7800X3D&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:35614 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:31:54 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
 [scraper] John Pye error for 'desktop pc': All connection attempts failed
-2026-05-24 12:28:10 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+2026-05-24 12:31:55 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 12:31:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:31:57 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
+2026-05-24 12:31:58 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
 [scraper] John Pye error for 'gaming pc': All connection attempts failed
-[scraper] John Pye error for 'desktop pc': All connection attempts failed
-2026-05-24 12:28:19 [debug    ] upgrade_parts.ebay             buy=60.0 part=GTX 1060 3GB sold=47.55
-2026-05-24 12:28:19 [debug    ] upgrade_parts.ebay             buy=78.81 part=GTX 1650 4GB sold=71.39
-INFO:     100.101.209.68:43460 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:19 [debug    ] upgrade_parts.ebay             buy=99.99 part=GTX 1070 8GB sold=81.3
-2026-05-24 12:28:19 [debug    ] upgrade_parts.ebay             buy=117.9 part=GTX 1660 Super sold=95.24
-INFO:     100.101.209.68:43454 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43446 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43464 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43470 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43490 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43504 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43474 - "GET /api/demand/summary HTTP/1.1" 200 OK
-2026-05-24 12:28:19 [debug    ] upgrade_parts.ebay             buy=343.3 part=PC Build Bundle sold=363.7
-INFO:     100.101.209.68:43496 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43530 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43544 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43518 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43552 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43560 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+2026-05-24 12:31:59 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:00 [info     ] preloved.playwright.no_data    status=404 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:00 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:00 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:00 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:01 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:01 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
 [scraper] John Pye error for 'computer tower': All connection attempts failed
-2026-05-24 12:28:21 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:21 [info     ] preloved.playwright.fetch      term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:27 [debug    ] upgrade_parts.ebay             buy=73.5 part=GTX 1060 6GB sold=60.22
-2026-05-24 12:28:27 [info     ] preloved.playwright.no_data    status=404 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:27 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:27 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
-[scraper] John Pye error for 'gaming pc': All connection attempts failed
-2026-05-24 12:28:27 [info     ] preloved.playwright.raw        count=0 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:27 [info     ] preloved.playwright.term_done  running_total=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:02 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+INFO:     100.101.209.68:34118 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-24 12:32:02 [info     ] preloved.playwright.no_data    status=404 term=Ryzen 9 7900
+2026-05-24 12:32:02 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-24 12:32:02 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:34128 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc base unit' title='Access Denied'
+INFO:     100.101.209.68:34104 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34134 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:03 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
+INFO:     100.101.209.68:34138 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34160 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34180 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-24 12:32:04 [info     ] amazon.cases.done              found=10 search=panoramic pc case
+INFO:     100.101.209.68:34196 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-24 12:32:04 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
+2026-05-24 12:32:04 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
+2026-05-24 12:32:04 [info     ] amazon.cases.done              found=10 search=fish tank pc case
+2026-05-24 12:32:04 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+INFO:     100.101.209.68:34202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:04 [info     ] preloved.playwright.no_data    status=404 term=Ryzen 9 7900X
+2026-05-24 12:32:05 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-24 12:32:05 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:34214 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34218 - "GET /api/sources/health HTTP/1.1" 200 OK
 [scraper] John Pye error for 'pc build': All connection attempts failed
-2026-05-24 12:28:27 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
-2026-05-24 12:28:30 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
-2026-05-24 12:28:30 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900
-2026-05-24 12:28:30 [debug    ] upgrade_parts.ebay             buy=156.99 part=RTX 2080 8GB sold=151.5
-INFO:     100.101.209.68:43774 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:30 [debug    ] upgrade_parts.ebay             buy=151.5 part=RTX 2070 8GB sold=146.3
-2026-05-24 12:28:30 [debug    ] upgrade_parts.ebay             buy=146.3 part=RTX 2060 6GB sold=112.3
-INFO:     100.101.209.68:43766 - "GET /api/config/search HTTP/1.1" 200 OK
-2026-05-24 12:28:31 [info     ] preloved.playwright.no_data    status=404 term=Ryzen 9 7900
-2026-05-24 12:28:31 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
-2026-05-24 12:28:31 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
-2026-05-24 12:28:31 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900
-2026-05-24 12:28:31 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900
-2026-05-24 12:28:32 [debug    ] upgrade_parts.ebay             buy=87.5 part=RX 580 8GB sold=64.99
-INFO:     100.101.209.68:43796 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:32 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:32 [debug    ] upgrade_parts.ebay             buy=75.0 part=RX 570 8GB sold=50.0
-INFO:     100.101.209.68:43794 - "GET /api/demand/summary HTTP/1.1" 200 OK
-[scraper] John Pye error for 'computer tower': All connection attempts failed
-INFO:     100.101.209.68:43808 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43804 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43810 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:33 [info     ] source.done                    found=0 gems=0 source=CherryTree Inc
-2026-05-24 12:28:33 [info     ] amazon.cases.done              found=0 search=fish tank pc case
-INFO:     100.101.209.68:43780 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43812 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43822 - "GET /api/sources/ HTTP/1.1" 200 OK
-2026-05-24 12:28:33 [info     ] amazon.cases.done              found=0 search=panoramic pc case
+2026-05-24 12:32:06 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
+2026-05-24 12:32:06 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
+2026-05-24 12:32:06 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
+2026-05-24 12:32:06 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-24 12:32:07 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-24 12:32:07 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-24 12:32:07 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:09 [info     ] preloved.playwright.fetch      term=pc tower
+2026-05-24 12:32:09 [info     ] preloved.playwright.raw        count=19 term=pc tower
+2026-05-24 12:32:09 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
+2026-05-24 12:32:09 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+[scraper] John Pye error for 'pc build': All connection attempts failed
+2026-05-24 12:32:10 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-24 12:32:10 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-24 12:32:10 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
 [scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+INFO:     100.101.209.68:58302 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58306 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58316 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:11 [info     ] preloved.playwright.fetch      term=gaming pc
+2026-05-24 12:32:11 [info     ] preloved.playwright.raw        count=20 term=gaming pc
+2026-05-24 12:32:11 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
+2026-05-24 12:32:12 [info     ] apex.playwright.auction_items  count=27
+INFO:     100.101.209.68:58332 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:32:12 [info     ] preloved.playwright.fetch      term=desktop pc
+INFO:     100.101.209.68:58346 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58352 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58358 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:32:13 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-24 12:32:13 [info     ] preloved.playwright.term_done  running_total=35 term=desktop pc
+INFO:     100.101.209.68:58364 - "GET /api/schedule HTTP/1.1" 200 OK
 [scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-INFO:     100.101.209.68:43832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43842 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43854 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:28:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:28:34 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.no_data    status=404 term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.fetch      term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.raw        count=0 term=Ryzen 9 7900X
-2026-05-24 12:28:34 [info     ] preloved.playwright.term_done  running_total=0 term=Ryzen 9 7900X
-2026-05-24 12:28:35 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
-[scraper] John Pye error for 'pc build': All connection attempts failed
-2026-05-24 12:28:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
-[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
-2026-05-24 12:28:35 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
-2026-05-24 12:28:36 [info     ] preloved.playwright.fetch      term=pc tower
-2026-05-24 12:28:36 [info     ] preloved.playwright.fetch      term=pc tower
-2026-05-24 12:28:36 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:36 [info     ] preloved.playwright.raw        count=19 term=pc tower
-2026-05-24 12:28:36 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
-2026-05-24 12:28:36 [info     ] preloved.playwright.raw        count=19 term=pc tower
-2026-05-24 12:28:36 [info     ] preloved.playwright.term_done  running_total=12 term=pc tower
-2026-05-24 12:28:37 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:37 [info     ] apex.playwright.auction_items  count=27
-2026-05-24 12:28:37 [info     ] apex.playwright.auction_items  count=27
-2026-05-24 12:28:38 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
-2026-05-24 12:28:38 [info     ] preloved.playwright.fetch      term=gaming pc
-2026-05-24 12:28:39 [info     ] aliexpress.cases.done          found=12 search=fish tank pc case
-2026-05-24 12:28:39 [info     ] preloved.playwright.fetch      term=gaming pc
+INFO:     100.101.209.68:58370 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58386 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-24 12:32:13 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=BargainHardware
+INFO:     100.101.209.68:58396 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-24 12:32:13 [info     ] preloved.playwright.fetch      term=desktop pc
+INFO:     100.101.209.68:58408 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:14 [info     ] preloved.playwright.raw        count=20 term=desktop pc
+2026-05-24 12:32:14 [info     ] preloved.playwright.term_done  running_total=35 term=desktop pc
+INFO:     100.101.209.68:58416 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 [scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
-2026-05-24 12:28:39 [info     ] preloved.playwright.raw        count=20 term=gaming pc
-2026-05-24 12:28:39 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
-2026-05-24 12:28:39 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=BargainHardware
-2026-05-24 12:28:39 [info     ] preloved.playwright.raw        count=20 term=gaming pc
-2026-05-24 12:28:39 [info     ] preloved.playwright.term_done  running_total=30 term=gaming pc
-2026-05-24 12:28:41 [info     ] preloved.playwright.fetch      term=desktop pc
-2026-05-24 12:28:41 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-24 12:28:41 [info     ] preloved.playwright.raw        count=20 term=desktop pc
-2026-05-24 12:28:41 [info     ] preloved.playwright.term_done  running_total=35 term=desktop pc
-INFO:     100.101.209.68:58200 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58210 - "GET /api/config/search HTTP/1.1" 200 OK
-2026-05-24 12:28:41 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=BargainHardware
-INFO:     100.101.209.68:58238 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:41 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-INFO:     100.101.209.68:58240 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:28:42 [info     ] preloved.playwright.fetch      term=desktop pc
-INFO:     100.101.209.68:58224 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58246 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58266 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58274 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58252 - "GET /api/config/search HTTP/1.1" 200 OK
-2026-05-24 12:28:42 [info     ] preloved.playwright.raw        count=20 term=desktop pc
-2026-05-24 12:28:42 [info     ] preloved.playwright.term_done  running_total=35 term=desktop pc
-INFO:     100.101.209.68:58284 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-2026-05-24 12:28:42 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
-INFO:     100.101.209.68:58294 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58300 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58312 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58328 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:28:43 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:28:43 [info     ] preloved.playwright.fetch      term=pc build
-[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:58420 - "GET /api/sources/health HTTP/1.1" 200 OK
 [scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
-2026-05-24 12:28:43 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
-2026-05-24 12:28:43 [info     ] preloved.playwright.raw        count=18 term=pc build
-2026-05-24 12:28:43 [info     ] preloved.playwright.term_done  running_total=45 term=pc build
-2026-05-24 12:28:43 [info     ] apex.playwright.uk_auctions    count=27
-2026-05-24 12:28:44 [info     ] preloved.playwright.fetch      term=pc build
-2026-05-24 12:28:44 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-24 12:28:44 [info     ] preloved.playwright.raw        count=18 term=pc build
-2026-05-24 12:28:44 [info     ] preloved.playwright.term_done  running_total=45 term=pc build
-2026-05-24 12:28:44 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-24 12:28:45 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
-2026-05-24 12:28:45 [info     ] preloved.playwright.fetch      term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.no_data    status=404 term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.term_done  running_total=45 term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.fetch      term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
-2026-05-24 12:28:45 [info     ] preloved.playwright.term_done  running_total=45 term=HP EliteDesk
-2026-05-24 12:28:46 [info     ] apex.playwright.uk_auctions    count=27
-2026-05-24 12:28:46 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
-2026-05-24 12:28:47 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-24 12:28:47 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-24 12:28:48 [info     ] preloved.playwright.done       total=45
-2026-05-24 12:28:48 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
-2026-05-24 12:28:48 [info     ] preloved.playwright.done       total=45
-2026-05-24 12:28:49 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 3600x rtx 3060 status=403
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 3 3200 rtx 3060 status=403
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
-2026-05-24 12:28:49 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
-INFO:     100.101.209.68:35492 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35506 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35512 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35526 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35538 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35556 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35566 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-2026-05-24 12:28:50 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=208.7
-INFO:     100.101.209.68:35568 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35582 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35548 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35610 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35612 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
-2026-05-24 12:28:51 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
-INFO:     100.101.209.68:35596 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-2026-05-24 12:28:51 [info     ] source.done                    found=45 gems=0 source=Preloved
-INFO:     100.101.209.68:35618 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:28:51 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
-2026-05-24 12:28:52 [info     ] temu.cases.done                found=0 search=panoramic pc case
-2026-05-24 12:28:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:28:52 [info     ] source.done                    found=45 gems=0 source=Preloved
-2026-05-24 12:28:52 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-24 12:32:14 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-24 12:32:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:32:15 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-24 12:32:15 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-24 12:32:15 [info     ] preloved.playwright.term_done  running_total=45 term=pc build
+2026-05-24 12:32:15 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-24 12:32:15 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-24 12:32:16 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:16 [info     ] preloved.playwright.fetch      term=pc build
+2026-05-24 12:32:16 [info     ] preloved.playwright.raw        count=18 term=pc build
+2026-05-24 12:32:16 [info     ] preloved.playwright.term_done  running_total=45 term=pc build
+2026-05-24 12:32:17 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:32:17 [info     ] apex.playwright.auction_items  count=27
+2026-05-24 12:32:17 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-24 12:32:18 [info     ] preloved.playwright.no_data    status=404 term=HP EliteDesk
+2026-05-24 12:32:18 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-24 12:32:18 [info     ] preloved.playwright.term_done  running_total=45 term=HP EliteDesk
+2026-05-24 12:32:18 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=BargainHardware
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-24 12:32:18 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=John Pye
+2026-05-24 12:32:18 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-24 12:32:19 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-24 12:32:19 [info     ] preloved.playwright.fetch      term=HP EliteDesk
+2026-05-24 12:32:19 [info     ] preloved.playwright.raw        count=0 term=HP EliteDesk
+2026-05-24 12:32:19 [info     ] preloved.playwright.term_done  running_total=45 term=HP EliteDesk
+INFO:     100.101.209.68:44368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44376 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44380 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:20 [debug    ] upgrade_parts.ebay             buy=117.9 part=GTX 1660 Super sold=None
+2026-05-24 12:32:20 [info     ] preloved.playwright.done       total=45
+INFO:     100.101.209.68:44386 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:32:22 [info     ] apex.playwright.uk_auctions    count=27
+INFO:     100.101.209.68:44398 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44414 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-24 12:32:22 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 3 3200 rtx 3060 status=403
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 3600x rtx 3060 status=403
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+INFO:     100.101.209.68:44424 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-24 12:32:22 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
+2026-05-24 12:32:22 [info     ] aliexpress.cases.done          found=0 search=fish tank pc case
+INFO:     100.101.209.68:44436 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 12:32:23 [info     ] preloved.playwright.done       total=45
+INFO:     100.101.209.68:44450 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44466 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44468 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-24 12:32:23 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+INFO:     100.101.209.68:44484 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44486 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-24 12:32:23 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+INFO:     100.101.209.68:44500 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+2026-05-24 12:32:24 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC ryzen 3 3200 rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=798.0 query=gaming PC ryzen 5 3600x rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC i7 4790 rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=145.99 median=667.19 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=2.75 median=495.3 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=720.0 query=gaming PC i7-6700 rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=95.0 median=606.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-4570 rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=92.99 median=603.59 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=543.59 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=48.99 median=550.79 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=97.99 median=609.59 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=845.99 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=284.99 median=833.99 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=443.99 median=1024.79 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] resale_scraper.fallback_buy_price buy_price=26.99 median=524.39 query=gaming PC rtx 3060
+2026-05-24 12:32:24 [info     ] source.done                    found=45 gems=0 source=Preloved
+2026-05-24 12:32:24 [info     ] temu.cases.done                found=0 search=panoramic pc case
+2026-05-24 12:32:24 [info     ] source.done                    found=45 gems=0 source=Preloved
+2026-05-24 12:32:25 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-24 12:32:26 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1060 6GB sold=None
+2026-05-24 12:32:26 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+2026-05-24 12:32:27 [info     ] apex.playwright.uk_auctions    count=27
+2026-05-24 12:32:27 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1070 8GB sold=None
+2026-05-24 12:32:27 [debug    ] upgrade_parts.ebay             buy=None part=PC Build Bundle sold=None
+2026-05-24 12:32:27 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1650 4GB sold=None
+2026-05-24 12:32:27 [debug    ] upgrade_parts.ebay             buy=None part=GTX 1060 3GB sold=None
+2026-05-24 12:32:29 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+2026-05-24 12:32:29 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:49588 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49598 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49606 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:30 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
+2026-05-24 12:32:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:49608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:32:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-24 12:32:31 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:49622 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49630 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49638 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49652 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49668 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49672 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49678 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49694 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49700 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49704 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:32:32 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:35 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
 [scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
-2026-05-24 12:28:56 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:56 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
-2026-05-24 12:28:58 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
-2026-05-24 12:28:58 [info     ] amazon.cases.done              found=10 search=argb gaming case
-INFO:     100.101.209.68:48784 - "GET /api/config/search HTTP/1.1" 200 OK
-2026-05-24 12:28:58 [info     ] amazon.cases.done              found=10 search=rgb airflow case
-INFO:     100.101.209.68:48788 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48796 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48812 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48822 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48826 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48836 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:48814 - "GET /api/demand/summary HTTP/1.1" 200 OK
-2026-05-24 12:29:00 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
-INFO:     100.101.209.68:48854 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48846 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48864 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:29:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
-INFO:     100.101.209.68:48874 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48888 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
-[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:48902 - "GET /api/sources/health HTTP/1.1" 200 OK
-[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
-[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
-[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-24 12:32:35 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:36 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 12:32:36 [info     ] amazon.cases.done              found=10 search=argb gaming case
+2026-05-24 12:32:37 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 12:32:38 [info     ] amazon.cases.done              found=10 search=rgb airflow case
+INFO:     100.101.209.68:32778 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:40 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
+INFO:     100.101.209.68:32806 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:32:40 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:32812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32838 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32842 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32828 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32852 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32882 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32896 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:41 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+INFO:     100.101.209.68:32908 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32914 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:32:42 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-24 12:32:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 12:32:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
 [scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
 [scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
 [scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-24 12:32:43 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
 [scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
 [scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
 [scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
-[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
-2026-05-24 12:29:02 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:29:02 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
-[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
-2026-05-24 12:29:03 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
-2026-05-24 12:29:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:29:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:29:04 [info     ] gumtree.playwright.cards       count=25 term=pc tower
-[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
-2026-05-24 12:29:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 12:29:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
 [scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
-2026-05-24 12:29:07 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3080 10GB sold=None
-INFO:     100.101.209.68:33392 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33406 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33420 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:29:08 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
-2026-05-24 12:29:08 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 Ti sold=None
-2026-05-24 12:29:08 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=BargainHardware
-2026-05-24 12:29:09 [debug    ] upgrade_parts.ebay             buy=None part=RX 6650 XT sold=None
-INFO:     100.101.209.68:33428 - "GET /api/listings/stats HTTP/1.1" 200 OK
-2026-05-24 12:29:10 [debug    ] upgrade_parts.ebay             buy=None part=RX 6600 8GB sold=None
-INFO:     100.101.209.68:33454 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33462 - "GET /api/config/search HTTP/1.1" 200 OK
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-INFO:     100.101.209.68:33466 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:33442 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33474 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33480 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33500 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33486 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33514 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33528 - "GET /api/sources/health HTTP/1.1" 200 OK
 [scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
-2026-05-24 12:29:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:29:14 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=BargainHardware
-INFO:     100.101.209.68:33542 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33548 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33550 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:29:17 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
-2026-05-24 12:29:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
-[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-24 12:29:18 [info     ] temu.cases.done                found=0 search=argb gaming case
-2026-05-24 12:29:19 [info     ] temu.cases.done                found=0 search=rgb airflow case
-INFO:     100.101.209.68:44634 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44636 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44650 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44658 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:44674 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44648 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44692 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44694 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44682 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44702 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-2026-05-24 12:29:21 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
-INFO:     100.101.209.68:44706 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:29:22 [info     ] aliexpress.cases.done          found=0 search=rgb airflow case
-2026-05-24 12:29:22 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
-2026-05-24 12:29:23 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
-INFO:     100.101.209.68:44712 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44720 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44736 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:29:27 [debug    ] upgrade_parts.ebay             buy=None part=RX 6700 XT sold=None
-2026-05-24 12:29:28 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
-2026-05-24 12:29:28 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
-INFO:     100.101.209.68:49120 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49126 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49130 - "GET /api/schedule HTTP/1.1" 200 OK
-[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
-INFO:     100.101.209.68:49150 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49146 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49152 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49168 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-2026-05-24 12:29:31 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
-INFO:     100.101.209.68:49182 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49186 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49196 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49204 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:29:31 [info     ] amazon.cases.done              found=10 search=mesh airflow case
-INFO:     100.101.209.68:49210 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49214 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49216 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-24 12:29:34 [info     ] amazon.cases.done              found=10 search=high airflow gaming case
-INFO:     100.101.209.68:42838 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42844 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:29:40 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
-INFO:     100.101.209.68:42842 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42852 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42872 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42882 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:42884 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42888 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42896 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42898 - "GET /api/sources/health HTTP/1.1" 200 OK
-[scraper] eBay playwright blocked term='pc build' title='Access Denied'
-2026-05-24 12:29:42 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=BargainHardware
-2026-05-24 12:29:42 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
-2026-05-24 12:29:42 [info     ] i-bidder.playwright.term_summary cards=23 kept=20 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:29:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=20 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=AMD Ryzen 7 7800X3D
-2026-05-24 12:29:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
-2026-05-24 12:29:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
-2026-05-24 12:29:44 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
-2026-05-24 12:29:44 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
-2026-05-24 12:29:44 [debug    ] upgrade_parts.ebay             buy=None part=RTX 4060 8GB sold=None
-2026-05-24 12:29:44 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
-2026-05-24 12:29:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
-2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10600K sold=None
-2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=RX 7600 8GB sold=None
-2026-05-24 12:29:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=desktop+pc&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:29:45 [debug    ] upgrade_parts.ebay             buy=None part=Intel i5-10400 sold=None
-2026-05-24 12:29:45 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
-2026-05-24 12:29:46 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=BargainHardware
-2026-05-24 12:29:46 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 12:29:46 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
-INFO:     100.101.209.68:53884 - "GET /api/listings/stats HTTP/1.1" 200 OK
-2026-05-24 12:29:49 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700 sold=None
-INFO:     100.101.209.68:53904 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53916 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53928 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:53944 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53896 - "GET /api/demand/summary HTTP/1.1" 200 OK
-2026-05-24 12:29:50 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
-INFO:     100.101.209.68:53950 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53946 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53954 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-24 12:29:50 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
-INFO:     100.101.209.68:53958 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53970 - "GET /api/sources/health HTTP/1.1" 200 OK
-[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
-2026-05-24 12:29:51 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-24 12:29:52 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
-2026-05-24 12:29:52 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
-2026-05-24 12:29:52 [info     ] temu.cases.done                found=0 search=high airflow gaming case
-2026-05-24 12:29:53 [info     ] temu.cases.done                found=0 search=mesh airflow case
-Future exception was never retrieved
-future: <Future finished exception=Error('Target crashed ')>
-playwright._impl._errors.Error: Target crashed 
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-[scraper] eBay 'pc build': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-2026-05-24 12:29:54 [info     ] gumtree.playwright.cards       count=29 term=desktop pc
-[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-2026-05-24 12:29:56 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
 [scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
-2026-05-24 12:29:57 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:47114 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47126 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47148 - "GET /api/config/search HTTP/1.1" 200 OK
-[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:47138 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47160 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:47170 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47186 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47176 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-INFO:     100.101.209.68:47196 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47202 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-24 12:30:02 [info     ] amazon.cases.done              found=10 search=premium aluminum pc case
-2026-05-24 12:30:03 [info     ] amazon.cases.done              found=10 search=luxury gaming case
-2026-05-24 12:30:03 [debug    ] upgrade_parts.ebay             buy=None part=Intel i7-10700K sold=None
-2026-05-24 12:30:05 [info     ] gumtree.playwright.cards       count=25 term=pc tower
-[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:43952 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43960 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43970 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43976 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43990 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43994 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44006 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:44022 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44026 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44036 - "GET /api/sources/health HTTP/1.1" 200 OK
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-2026-05-24 12:30:13 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
-2026-05-24 12:30:13 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
-[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-24 12:30:14 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=BargainHardware
-2026-05-24 12:30:15 [info     ] gumtree.playwright.done        total=0
-2026-05-24 12:30:15 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=BargainHardware
-2026-05-24 12:30:16 [info     ] source.done                    found=0 gems=0 source=Gumtree
-INFO:     100.101.209.68:47246 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47262 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47268 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47270 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
 [scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
-2026-05-24 12:30:18 [info     ] scheduler.stopped
-Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 160, in run_cases_swarm
-    r = await done
-        ^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
-    f = await done.get()
-        ^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
-    await getter
-asyncio.exceptions.CancelledError
-Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 158, in run_upgrade_parts_swarm
-    name, search, sold, buy = await done
-                              ^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 627, in _wait_for_one
-    f = await done.get()
-        ^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/queues.py", line 158, in get
-    await getter
-asyncio.exceptions.CancelledError
-Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-25 11:28:06 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 125, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 243, in run_accessories_swarm
-    await browser.close()
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/async_api/_generated.py", line 14176, in close
-    return mapping.from_maybe_impl(await self._impl_obj.close(reason=reason))
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_browser.py", line 189, in close
-    await self._channel.send("close", {"reason": reason})
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 61, in send
-    return await self._connection.wrap_api_call(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 526, in wrap_api_call
-    return await cb()
-           ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 92, in _inner_send
-    done, _ = await asyncio.wait(
-              ^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 464, in wait
-    return await _wait(fs, timeout, return_when, loop)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 550, in _wait
-    await waiter
-asyncio.exceptions.CancelledError
-2026-05-24 12:30:19 [info     ] app.shutdown
-INFO:     Application shutdown complete.
-INFO:     Finished server process [1941745]
-INFO:     Stopping reloader process [1941741]
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50144 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50148 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50154 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50168 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50172 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50202 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50186 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50216 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50226 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-24 12:32:50 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=BargainHardware
+INFO:     100.101.209.68:50238 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50246 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:51 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=BargainHardware
+INFO:     100.101.209.68:50262 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-24 12:32:52 [info     ] apex.playwright.lots           count=24 href=#!/auctions/a3eb3a58-ceeb-48c9-bc40-e42085b168fb
+INFO:     100.101.209.68:50266 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:32:54 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+[scraper] eBay playwright blocked term='pc base unit' title='Access Denied'
+2026-05-24 12:32:56 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+2026-05-24 12:32:57 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
+2026-05-24 12:32:57 [info     ] aliexpress.cases.done          found=0 search=rgb airflow case
+2026-05-24 12:32:57 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
+2026-05-24 12:32:58 [debug    ] upgrade_parts.ebay             buy=None part=RX 570 8GB sold=None
+INFO:     100.101.209.68:57478 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57488 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57500 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 12:32:58 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+2026-05-24 12:32:58 [info     ] temu.cases.done                found=0 search=argb gaming case
+INFO:     100.101.209.68:57508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 12:32:58 [info     ] temu.cases.done                found=0 search=rgb airflow case
+INFO:     100.101.209.68:57510 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57520 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57526 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57532 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57536 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57538 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57550 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57566 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57568 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57580 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 12:33:03 [debug    ] upgrade_parts.ebay             buy=None part=RX 580 8GB sold=None
