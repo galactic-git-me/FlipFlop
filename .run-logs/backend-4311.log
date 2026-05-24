@@ -5239,3 +5239,28 @@ Call log:
 [scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 74)
 2026-05-24 13:23:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
 2026-05-24 13:23:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+2026-05-24 13:23:51 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:24:16 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-24 13:24:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-24 13:24:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+2026-05-24 13:24:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=office+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:24:23 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+2026-05-24 13:24:26 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-24 13:24:26 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=office pc
+2026-05-24 13:24:28 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay retry 'i7 tower': 0 found, 0 new (total 74)
+2026-05-24 13:24:53 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=office pc
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+2026-05-24 13:24:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=office pc
+2026-05-24 13:24:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=office pc
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 74)
+2026-05-24 13:24:57 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=AMD+Ryzen+7+7800X3D&country=gb
+2026-05-24 13:24:58 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=refurbished+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:25:00 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-24 13:25:02 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-24 13:25:02 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=refurbished pc
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+2026-05-24 13:25:04 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay retry 'HP Z640': 0 found, 0 new (total 74)
+2026-05-24 13:25:08 [info     ] BidSpotter.playwright.cards    count=60 term=AMD Ryzen 7 7800X3D
