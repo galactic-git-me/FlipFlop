@@ -5772,3 +5772,179 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 2026-05-24 14:17:46 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
 2026-05-24 14:17:47 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
 2026-05-24 14:17:47 [info     ] temu.cases.done                found=0 search=high airflow gaming case
+[scraper] eBay playwright blocked term='gaming pc no graphics card' title='Access Denied'
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gaming pc water cooled' title='Access Denied'
+2026-05-24 14:17:56 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-24 14:17:59 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-24 14:17:59 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-24 14:18:01 [debug    ] upgrade_parts.ebay             buy=None part=16GB DDR5 Kit sold=None
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-24 14:18:02 [info     ] amazon.cases.done              found=0 search=premium aluminum pc case
+2026-05-24 14:18:02 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=desktop pc
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-24 14:18:03 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=desktop pc
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-24 14:18:04 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR5 Kit sold=None
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-24 14:18:04 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 14:18:04 [debug    ] upgrade_parts.ebay             buy=None part=256GB SATA SSD sold=None
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-24 14:18:05 [debug    ] upgrade_parts.ebay             buy=None part=480GB SATA SSD sold=None
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+2026-05-24 14:18:06 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 14:18:06 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+2026-05-24 14:18:06 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+2026-05-24 14:18:08 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+2026-05-24 14:18:09 [debug    ] upgrade_parts.ebay             buy=None part=1TB SATA SSD sold=None
+2026-05-24 14:18:09 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-24 14:18:09 [debug    ] upgrade_parts.ebay             buy=None part=500GB NVMe SSD sold=None
+2026-05-24 14:18:09 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-24 14:18:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-24 14:18:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+2026-05-24 14:18:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 14:18:12 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='premium aluminum pc case' title='Access Denied'
+2026-05-24 14:18:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=desktop pc
+2026-05-24 14:18:16 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+2026-05-24 14:18:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=desktop pc
+2026-05-24 14:18:18 [info     ] amazon.cases.done              found=0 search=luxury gaming case
+2026-05-24 14:18:19 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+[scraper] eBay playwright blocked term='premium aluminum pc case' title='Access Denied'
+2026-05-24 14:18:23 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=1 source=Temu
+2026-05-24 14:18:24 [info     ] source.done                    found=0 gems=0 source=Temu
+[scraper] eBay playwright blocked term='luxury gaming case' title='Access Denied'
+[scraper] eBay playwright blocked term='optical mouse' title='Access Denied'
+2026-05-24 14:18:35 [debug    ] upgrade_parts.ebay             buy=None part=1TB NVMe SSD sold=None
+[scraper] eBay playwright blocked term='luxury gaming case' title='Access Denied'
+2026-05-24 14:18:36 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-24 14:18:37 [debug    ] upgrade_parts.ebay             buy=None part=2TB NVMe SSD sold=None
+2026-05-24 14:18:38 [debug    ] upgrade_parts.ebay             buy=None part=2TB HDD sold=None
+2026-05-24 14:18:38 [debug    ] upgrade_parts.ebay             buy=None part=550W PSU 80+ Bronze sold=None
+2026-05-24 14:18:39 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-24 14:18:40 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-24 14:18:41 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-24 14:18:41 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=gaming pc
+2026-05-24 14:18:42 [debug    ] upgrade_parts.ebay             buy=None part=750W PSU 80+ Gold sold=None
+2026-05-24 14:18:42 [debug    ] upgrade_parts.ebay             buy=None part=650W PSU 80+ Bronze sold=None
+2026-05-24 14:18:42 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 14:18:43 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-24 14:18:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=gaming pc
+2026-05-24 14:18:43 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-24 14:18:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+2026-05-24 14:18:45 [info     ] temu.cases.done                found=0 search=premium aluminum pc case
+2026-05-24 14:18:45 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-24 14:18:45 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-24 14:18:45 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-24 14:18:45 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+2026-05-24 14:18:46 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+2026-05-24 14:18:47 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 14:18:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-24 14:18:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+2026-05-24 14:18:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-24 14:18:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+2026-05-24 14:18:50 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 14:18:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-24 14:18:52 [info     ] source.done                    found=0 gems=0 source=Alibaba
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-24 14:18:56 [info     ] source.done                    found=0 gems=0 source=Alibaba
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+Compaq+tower&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+Compaq+tower&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
