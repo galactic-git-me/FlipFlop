@@ -12787,3 +12787,211 @@ INFO:     100.101.209.68:39022 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39030 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 [scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
 2026-05-25 00:02:39 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+INFO:     100.101.209.68:39032 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39042 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39044 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39054 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39072 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39076 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39080 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39084 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39094 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39104 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39124 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:02:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+[scraper] eBay playwright blocked term='gaming pc no gpu' title='Access Denied'
+2026-05-25 00:02:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+INFO:     100.101.209.68:43100 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43112 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43128 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43134 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43142 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43146 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43162 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43148 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43166 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+INFO:     100.101.209.68:43176 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43186 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43198 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43202 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43208 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43220 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43230 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43244 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+INFO:     100.101.209.68:59638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59648 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59650 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59664 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59662 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59678 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59682 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59690 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59692 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59700 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59708 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59714 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59722 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+2026-05-25 00:02:59 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-25 00:03:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+2026-05-25 00:03:01 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:59738 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59752 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no graphics card': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:38858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38866 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38884 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38890 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38888 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38900 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38908 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38924 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:06 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=computer tower
+INFO:     100.101.209.68:38932 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38948 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38962 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38964 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+2026-05-25 00:03:08 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
+2026-05-25 00:03:08 [info     ] BidSpotter.playwright.cards    count=60 term=HP EliteDesk
+2026-05-25 00:03:09 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=computer tower
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+INFO:     100.101.209.68:38968 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38970 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:12 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=pc+build&country=gb&priceFrom=0&priceTo=500
+2026-05-25 00:03:13 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=HP EliteDesk
+INFO:     100.101.209.68:38978 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38988 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39018 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39034 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39046 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39050 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39062 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39072 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39078 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39080 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Dell+OptiPlex&country=gb
+[scraper] eBay playwright blocked term='pc tower no graphics' title='Access Denied'
+INFO:     100.101.209.68:52928 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52942 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:21 [info     ] source.done                    found=0 gems=0 source=Temu
+INFO:     100.101.209.68:52944 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52958 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52964 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52974 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52986 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52984 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52996 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52998 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53000 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53020 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53032 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+INFO:     100.101.209.68:58188 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58204 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+INFO:     100.101.209.68:58210 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58218 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58222 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58238 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58260 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58244 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58264 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58272 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58286 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58296 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58300 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58316 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58320 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming pc no gpu' title='Access Denied'
+INFO:     100.101.209.68:48604 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48608 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:36 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
+2026-05-25 00:03:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
+2026-05-25 00:03:38 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-25 00:03:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+INFO:     100.101.209.68:48614 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48634 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48620 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48656 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48650 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48668 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48682 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48688 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48692 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48702 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48712 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48720 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48726 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-25 00:03:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-25 00:03:42 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+2026-05-25 00:03:44 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+INFO:     100.101.209.68:48738 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48746 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:03:44 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-25 00:03:47 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-25 00:03:47 [info     ] source.done                    found=0 gems=0 source=Alibaba
+INFO:     100.101.209.68:57822 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57830 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57834 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57846 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57850 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57866 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57874 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57868 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57880 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57886 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57902 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57916 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57926 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 00:03:48 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=pc build
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+2026-05-25 00:03:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:57930 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57938 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='office pc lot' title='Access Denied'
+INFO:     100.101.209.68:34128 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34136 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34140 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34152 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34144 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34164 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34158 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34186 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34174 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34194 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34216 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34228 - "GET /api/sources/health HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 60)
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34236 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34244 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
