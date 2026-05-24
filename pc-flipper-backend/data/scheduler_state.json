@@ -10,5 +10,8 @@
   },
   "external_demand": {
     "last_success_at": "2026-05-24T06:59:02.242639+00:00"
+  },
+  "compliant_market_ingestion": {
+    "last_success_at": "2026-05-24T07:05:04.158343+00:00"
   }
 }
