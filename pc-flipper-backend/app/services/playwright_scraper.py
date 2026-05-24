@@ -1139,6 +1139,8 @@ async def _scrape_auction_site(
             kept = 0
             skipped_no_title = 0
             skipped_keyword = 0
+            skipped_no_href = 0
+            skipped_href_filter = 0
 
             for card in cards:
                 try:
@@ -1177,18 +1179,22 @@ async def _scrape_auction_site(
                         continue
 
                     # URL
-                    href = ""
+                    href = (await card.get_attribute("href") or "").strip()
                     for sel in link_selectors:
+                        if href:
+                            break
                         el = await card.query_selector(sel)
                         if el:
                             href = await el.get_attribute("href") or ""
                             if href:
                                 break
                     if not href:
+                        skipped_no_href += 1
                         continue
                     if not href.startswith("http"):
                         href = base_url + href
                     if required_href_tokens and not any(tok in href for tok in required_href_tokens):
+                        skipped_href_filter += 1
                         continue
 
                     slug = href.rstrip("/").split("/")[-1].split("?")[0]
@@ -1237,6 +1243,8 @@ async def _scrape_auction_site(
                 kept=kept,
                 skipped_no_title=skipped_no_title,
                 skipped_keyword=skipped_keyword,
+                skipped_no_href=skipped_no_href,
+                skipped_href_filter=skipped_href_filter,
             )
             record_term_result(term=term, found=len(cards), new=kept)
 
