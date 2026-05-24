@@ -23,6 +23,7 @@ settings = get_settings()
 ua = UserAgent()
 _EBAY_TOKEN: str | None = None
 _EBAY_TOKEN_EXP_TS: float = 0.0
+_EBAY_PLAYWRIGHT_SEM = asyncio.Semaphore(1)
 
 
 def _ebay_base_url() -> str:
@@ -363,42 +364,47 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
     title = ""
     blocked = False
     listings: list[RawListing] = []
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--disable-dev-shm-usage",
-                "--disable-infobars",
-                "--window-size=1366,768",
-                "--lang=en-GB",
-            ],
-        )
-        context = await browser.new_context(
-            user_agent=ua.random,
-            locale="en-GB",
-            viewport={"width": 1366, "height": 768},
-        )
-        await context.add_init_script(stealth_js)
-        page = await context.new_page()
-        try:
-            for url in urls:
-                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-                await page.wait_for_timeout(1800)
-                await page.evaluate("window.scrollBy(0, 900)")
-                await page.wait_for_timeout(1200)
-                html = await page.content()
-                title = (await page.title()) or ""
-                blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
-                blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
-                if blocked:
-                    continue
-                listings = _parse_ebay_html(html, term) if html else []
-                if listings:
-                    break
-        finally:
-            await context.close()
-            await browser.close()
+    async with _EBAY_PLAYWRIGHT_SEM:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(
+                headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-dev-shm-usage",
+                    "--disable-infobars",
+                    "--window-size=1366,768",
+                    "--lang=en-GB",
+                ],
+            )
+            context = await browser.new_context(
+                user_agent=ua.random,
+                locale="en-GB",
+                viewport={"width": 1366, "height": 768},
+            )
+            await context.add_init_script(stealth_js)
+            page = await context.new_page()
+            try:
+                for url in urls:
+                    try:
+                        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                        await page.wait_for_timeout(1500)
+                        # Avoid page.evaluate crashes seen under heavy anti-bot pages.
+                        await page.mouse.wheel(0, 900)
+                        await page.wait_for_timeout(900)
+                        html = await page.content()
+                        title = (await page.title()) or ""
+                    except Exception:
+                        continue
+                    blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
+                    blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
+                    if blocked:
+                        continue
+                    listings = _parse_ebay_html(html, term) if html else []
+                    if listings:
+                        break
+            finally:
+                await context.close()
+                await browser.close()
     return listings, blocked
 
 
