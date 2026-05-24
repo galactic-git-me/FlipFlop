@@ -6,8 +6,15 @@ import time
 import structlog
 from fastapi import APIRouter, Request, Response
 import httpx
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import ec
+try:
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import ec
+    _CRYPTO_OK = True
+except Exception:
+    hashes = None
+    serialization = None
+    ec = None
+    _CRYPTO_OK = False
 
 from app.config import get_settings
 
@@ -222,3 +229,6 @@ async def marketplace_account_deletion_notification(request: Request):
         )
 
     return Response(status_code=200)
+    if not _CRYPTO_OK:
+        log.error("ebay.compliance.cryptography_missing")
+        return False
