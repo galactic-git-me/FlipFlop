@@ -7976,3 +7976,246 @@ INFO:     100.101.209.68:46760 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:46770 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:46776 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:46784 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+INFO:     100.101.209.68:46792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46808 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+INFO:     100.101.209.68:44408 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44414 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44424 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44452 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44466 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44494 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44480 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44504 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44536 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44538 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 26)
+INFO:     100.101.209.68:44544 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44548 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen 5 desktop' title='Access Denied'
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37778 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37782 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37798 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37812 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37820 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37848 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37836 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37852 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37860 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37870 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37884 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37900 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37910 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37920 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc no longer needed' title='Access Denied'
+INFO:     100.101.209.68:39378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39392 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39396 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39400 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39406 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39422 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39432 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39430 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39440 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39446 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39454 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39462 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39468 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+INFO:     100.101.209.68:39482 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39484 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 26)
+[scraper] eBay playwright blocked term='workstation joblot' title='Access Denied'
+INFO:     100.101.209.68:39498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39500 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39502 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39528 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39516 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39536 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39542 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39548 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39546 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39562 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39564 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39570 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'workstation joblot': HTTP blocked/empty (status=200), Playwright returned 86
+[scraper] eBay 'workstation joblot': 86 found, 86 new (total 112)
+INFO:     100.101.209.68:44084 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44098 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=office+tower+pc&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=office+tower+pc&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+[scraper] eBay playwright blocked term='i5 tower' title='Access Denied'
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44108 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44114 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44120 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44128 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44140 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44154 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44160 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44164 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44170 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44186 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44204 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44210 - "GET /api/sources/health HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+INFO:     100.101.209.68:60516 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 112)
+INFO:     100.101.209.68:60524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60528 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60538 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60554 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60548 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60566 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60556 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60582 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60588 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+[scraper] eBay playwright blocked term='office pc lot' title='Access Denied'
+INFO:     100.101.209.68:60594 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60604 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60614 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60624 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 112)
+INFO:     100.101.209.68:60630 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60634 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc untested' title='Access Denied'
+INFO:     100.101.209.68:55194 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55200 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55204 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55218 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55210 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55230 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55224 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55232 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55236 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55250 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55252 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55256 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55258 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+INFO:     100.101.209.68:55272 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55280 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 112)
+[scraper] eBay playwright blocked term='old computer quick sale' title='Access Denied'
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44060 - "GET /api/config/search HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=old+computer+quick+sale&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=old+computer+quick+sale&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"
+
+INFO:     100.101.209.68:44076 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44086 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44100 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44114 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44118 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44130 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44162 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44174 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44190 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44194 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44204 - "GET /api/sources/health HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+liquid+cooler&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+liquid+cooler&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"
+
+[scraper] eBay playwright blocked term='pc liquid cooler' title='Access Denied'
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44210 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44224 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=AMD+Ryzen+7+7800X3D&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=AMD+Ryzen+7+7800X3D&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60634 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60638 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60646 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60654 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60664 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60674 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60700 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60684 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60702 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60708 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60712 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60726 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60740 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='old pc clearing out' title='Access Denied'
+INFO:     100.101.209.68:60752 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60764 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+spares+or+repair&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+spares+or+repair&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 112)
+[scraper] eBay playwright blocked term='pc no display' title='Access Denied'
+INFO:     100.101.209.68:60774 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60786 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60796 - "GET /api/listings/stats HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:60806 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60820 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60830 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60844 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60842 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60848 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60862 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60876 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60882 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60886 - "GET /api/sources/health HTTP/1.1" 200 OK
