@@ -2316,8 +2316,8 @@ INFO:     100.101.209.68:36964 - "GET /api/sources/ HTTP/1.1" 200 OK
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
-2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026Run time of job "Model Retraining (trigger: interval[1:00:00], next run at: 2026-05-24 14:29:05 UTC)" was missed by 0:05:24.713584
+44 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=4.99 median=497.99 query=gaming PC rtx 3060
 2026-05-24 14:10:44 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
@@ -6129,3 +6129,146 @@ playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
 Call log:
   - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=white+rgb+case&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=1&_udhi=350&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
 
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='white rgb case' title='Access Denied'
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='desktop no gpu' title='Access Denied'
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+2026-05-24 14:20:32 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+[scraper] eBay playwright blocked term='desktop computer no SSD' title='Access Denied'
+2026-05-24 14:20:34 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
+2026-05-24 14:20:35 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+[scraper] eBay 'gaming keyboard rgb': 0 found, 0 new (total 0)
+2026-05-24 14:20:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
+2026-05-24 14:20:37 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+2026-05-24 14:20:37 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+2026-05-24 14:20:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-24 14:20:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 14:20:38 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+2026-05-24 14:20:38 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-24 14:20:38 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-24 14:20:40 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+no+psu&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+no+psu&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+2026-05-24 14:20:40 [info     ] amazon.cases.done              found=0 search=white rgb case
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+2026-05-24 14:20:40 [info     ] amazon.cases.done              found=0 search=white fish tank case
+2026-05-24 14:20:40 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-24 14:20:40 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-24 14:20:41 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-24 14:20:45 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+2026-05-24 14:20:46 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+2026-05-24 14:20:48 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-24 14:20:49 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+2026-05-24 14:20:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='white fish tank case' title='Access Denied'
+[scraper] eBay playwright blocked term='rtx 3060' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop untested' title='Access Denied'
+2026-05-24 14:21:07 [info     ] temu.cases.done                found=0 search=white rgb case
+2026-05-24 14:21:07 [info     ] temu.cases.done                found=0 search=white fish tank case
+2026-05-24 14:21:09 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+[scraper] eBay playwright blocked term='white fish tank case' title='Access Denied'
+2026-05-24 14:21:12 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-24 14:21:12 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-24 14:21:13 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-24 14:21:14 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+2026-05-24 14:21:14 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='desktop spares or repair' title='Access Denied'
+2026-05-24 14:21:15 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-24 14:21:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 14:21:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 14:21:16 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-24 14:21:17 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 14:21:17 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 14:21:17 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+2026-05-24 14:21:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 14:21:19 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 14:21:19 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
+[scraper] eBay retry error for 'luxury gaming case': 
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry error for 'premium aluminum pc case': 
+[scraper] eBay 'budget gaming keyboard': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay 'white fish tank case': 0 found, 0 new (total 0)
+2026-05-24 14:21:58 [info     ] aliexpress.cases.done          found=0 search=white rgb case
