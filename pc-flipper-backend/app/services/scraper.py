@@ -530,11 +530,14 @@ async def scrape_ebay(
                         if not blocked and new_listings:
                             break
 
-                        pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
+                        pw_listings, pw_blocked = await asyncio.wait_for(
+                            _scrape_ebay_playwright_term(
                             term=term,
                             min_price=min_price,
                             max_price=max_price,
                             auction_mode=auction_mode,
+                            ),
+                            timeout=45,
                         )
                         if pw_listings:
                             new_listings = pw_listings
@@ -610,11 +613,14 @@ async def scrape_ebay(
                     new_listings = _parse_ebay_html(resp.text, term)
                     blocked = _is_ebay_blocked(resp.status_code, resp.text)
                     if not new_listings:
-                        pw_listings, pw_blocked = await _scrape_ebay_playwright_term(
+                        pw_listings, pw_blocked = await asyncio.wait_for(
+                            _scrape_ebay_playwright_term(
                             term=term,
                             min_price=min_price,
                             max_price=max_price,
                             auction_mode=auction_mode,
+                            ),
+                            timeout=45,
                         )
                         blocked = blocked or pw_blocked
                         new_listings = pw_listings
