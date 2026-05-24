@@ -36,3 +36,4 @@ aiofiles==24.1.0
 tenacity==9.0.0
 structlog==24.4.0
 rich==13.9.4
+cryptography>=43.0.0
