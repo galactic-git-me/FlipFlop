@@ -9,9 +9,12 @@
     "last_success_at": "2026-05-24T06:12:57.043471+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-05-24T05:37:38.649716+00:00"
+    "last_success_at": "2026-05-24T06:43:18.565530+00:00"
   },
   "retrain_checkpoint_watchdog": {
     "last_success_at": "2026-05-24T05:57:29.110333+00:00"
+  },
+  "flip_opportunities": {
+    "last_success_at": "2026-05-24T06:43:42.948963+00:00"
   }
 }

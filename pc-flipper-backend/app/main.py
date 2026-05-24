@@ -596,6 +596,22 @@ async def _seed_default_data():
                 cfg.max_price = 500
                 log.info("migrated.search_config.keywords")
 
+            # Remove typo/noise terms that generate low-quality requests and
+            # disproportionately trigger anti-bot blocks on eBay.
+            _noise_terms = {
+                "gamng pc", "gmaing pc", "gamnig pc", "gaiming pc",
+                "deskptop pc", "compter tower", "pc towre", "destop pc",
+                "destkop computer", "gameing pc", "computre tower",
+            }
+            if cfg and cfg.keywords:
+                cleaned = [k for k in cfg.keywords if str(k).strip().lower() not in _noise_terms]
+                if len(cleaned) != len(cfg.keywords):
+                    cfg.keywords = cleaned
+                    log.info(
+                        "migrated.search_config.removed_noise_terms",
+                        removed=len(cfg.keywords) - len(cleaned),
+                    )
+
         # Seed app settings
         settings_count = await db.scalar(select(func.count()).select_from(AppSettings))
         if settings_count == 0:
