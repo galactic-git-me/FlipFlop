@@ -13754,3 +13754,470 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 [scraper] eBay playwright blocked term='Lenovo ThinkStation' title='Access Denied'
 INFO:     100.101.209.68:42080 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42094 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:08:49 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+INFO:     100.101.209.68:42106 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42120 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42128 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42142 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42172 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42156 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42174 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42186 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42202 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42212 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 00:08:51 [info     ] i-bidder.playwright.cards      count=23 term=office pc
+INFO:     100.101.209.68:42228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42232 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+2026-05-25 00:08:52 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=office pc
+2026-05-25 00:08:54 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:51474 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51480 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:08:57 [info     ] BidSpotter.playwright.cards    count=60 term=graphics card
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+INFO:     100.101.209.68:51494 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51500 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51508 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51514 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51532 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51548 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51554 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51568 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51578 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51584 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51586 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51600 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:09:00 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=graphics card
+2026-05-25 00:09:02 [info     ] BidSpotter.playwright.done     total=60
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] auction_price.fallback         current_bid=0.0 fallback=0.0 query=pc tower
+2026-05-25 00:09:03 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [info     ] resale_scraper.fallback_buy_price buy_price=0.0 median=492.0 query=gaming PC rtx 3060
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-witham10190 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-camauc10106 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-h-and-10305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wbs10045 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-maze10066 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-capita10563 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-hgda10024 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-joseph10131 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-select10087 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-univer10305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11341 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11350 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11462 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-vf-auc10786 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-univer10306 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-jps-tr10028 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18265 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18464 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18463 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18444 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18465 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18446 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18447 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18448 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18460 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18461 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18437 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-h-and-10306 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-camauc10107 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ramco-11494 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eddiso12625 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibgi11290 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11359 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11473 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11377 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-eama-g11445 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-vf-auc10787 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibgi11291 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ncm-au11412 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18491 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wbs10046 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-maze10067 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibcw10843 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-land-h10272 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wi416696 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18305 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18466 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18467 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18495 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-suprem18492 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-h-and-10304 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-wi310128 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-dunn-b10041 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ncm-au11360 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ibgi11293 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [warning  ] listing.duplicate_match        duplicate_rows=59 external_id=bidspotter_catalogue-id-ncm-au11373 fingerprint=timed auction|||0 source=BidSpotter
+2026-05-25 00:09:03 [info     ] source.done                    found=60 gems=0 source=BidSpotter
+INFO:     100.101.209.68:51612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51618 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43116 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Dell workstation' title='Access Denied'
+INFO:     100.101.209.68:43136 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43124 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43150 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43176 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43188 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43196 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43202 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43210 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 00:09:08 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=refurbished pc
+INFO:     100.101.209.68:43216 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43220 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 60)
+2026-05-25 00:09:10 [info     ] Wilsons Auctions.playwright.cards count=1 term=refurbished pc
+2026-05-25 00:09:10 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=refurbished pc
+INFO:     100.101.209.68:43224 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43238 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Acer Veriton tower' title='Access Denied'
+2026-05-25 00:09:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:57920 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57922 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57930 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57944 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57942 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57954 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57966 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57980 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57996 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58008 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58012 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+INFO:     100.101.209.68:58032 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58034 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP ProDesk' title='Access Denied'
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:58038 - "GET /api/listings/stats HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+ProDesk&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+ProDesk&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"
+
+INFO:     100.101.209.68:58044 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36220 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36228 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36240 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36250 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36260 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36262 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36276 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36280 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36284 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36294 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+2026-05-25 00:09:26 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
+2026-05-25 00:09:28 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
+INFO:     100.101.209.68:36300 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36314 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:09:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=refurbished pc
+2026-05-25 00:09:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='desktop no gpu' title='Access Denied'
+INFO:     100.101.209.68:36320 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36344 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36334 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36358 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36378 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36366 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36386 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36400 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36408 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36412 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36416 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36428 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36430 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 60)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38402 - "GET /api/config/search HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:38418 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Lenovo ThinkStation' title='Access Denied'
+INFO:     100.101.209.68:38428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38450 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38468 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38474 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38490 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38506 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38512 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:38526 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38528 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38550 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+2026-05-25 00:09:45 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
+INFO:     100.101.209.68:32870 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32872 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:09:47 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
+2026-05-25 00:09:47 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard
+2026-05-25 00:09:49 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+INFO:     100.101.209.68:32880 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32894 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32900 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32904 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32920 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32914 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32932 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32934 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32940 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32954 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32968 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32984 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32994 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+INFO:     100.101.209.68:33004 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33018 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50202 - "GET /api/listings/stats HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:50208 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50224 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50226 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50238 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50250 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50262 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50274 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50288 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50296 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50314 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='desktop computer no SSD' title='Access Denied'
+INFO:     100.101.209.68:50316 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50322 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:10:03 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard
+[scraper] eBay playwright blocked term='Acer Veriton tower' title='Access Denied'
+2026-05-25 00:10:06 [info     ] i-bidder.playwright.cards      count=23 term=motherboard
+INFO:     100.101.209.68:58898 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58916 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58910 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58920 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58918 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58922 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58932 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58942 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58944 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58960 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58968 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58970 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58984 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:10:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=motherboard
+2026-05-25 00:10:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='pc no hard drive' title='Access Denied'
+INFO:     100.101.209.68:58998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59008 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+INFO:     100.101.209.68:53904 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53914 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53946 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53952 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53964 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53976 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53984 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53986 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53994 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54008 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54010 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54026 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54032 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54040 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+2026-05-25 00:10:22 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=cpu bundle
+INFO:     100.101.209.68:54050 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54060 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54066 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54078 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54098 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54108 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54116 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54126 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54128 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54136 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54140 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54154 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:10:24 [info     ] Wilsons Auctions.playwright.cards count=1 term=cpu bundle
+2026-05-25 00:10:24 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=cpu bundle
+[scraper] eBay playwright blocked term='pc no power supply' title='Access Denied'
+2026-05-25 00:10:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard+cpu+combo&priceMin=0&priceMax=500&categoryId=65
+Task exception was never retrieved
+future: <Task finished name='Task-29895' coro=<Connection.run() done, defined at /home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:272> exception=InvalidStateError('invalid state')>
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 281, in run
+    await self._transport.run()
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 171, in run
+    self._stopped_future.set_result(None)
+asyncio.exceptions.InvalidStateError: invalid state
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 60)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60492 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60508 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='desktop no gpu' title='Access Denied'
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:60514 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60536 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60524 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60544 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60552 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60562 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60566 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60580 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60596 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60610 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60622 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60638 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay playwright blocked term='pc no psu' title='Access Denied'
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:59958 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59968 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='lga1700 motherboard' title='Access Denied'
+INFO:     100.101.209.68:59970 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59984 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60000 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60016 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60034 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60044 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60058 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60060 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60064 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60072 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60084 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:10:41 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+2026-05-25 00:10:44 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+INFO:     100.101.209.68:57956 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57972 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 00:10:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=cpu bundle
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-25 00:10:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:57980 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='am4 motherboard' title='Access Denied'
+INFO:     100.101.209.68:57996 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58006 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58030 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58052 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58064 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58078 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58088 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58096 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58104 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58110 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='desktop computer no SSD' title='Access Denied'
+INFO:     100.101.209.68:58114 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58124 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52084 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52098 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52110 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52116 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52132 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52142 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52156 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52164 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52166 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52170 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52180 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52196 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
