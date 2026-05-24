@@ -331,16 +331,14 @@ start_frontend() {
     echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
     echo "============================================================"
     if [[ "$FRONTEND_MODE" == "dev" ]]; then
-      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- "$dev_flag" -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
-      _frontend_child=$!
       echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
-      wait "$_frontend_child"
+      exec env NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
+        npm run dev -- "$dev_flag" -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
     else
       NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run build
-      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
-      _frontend_child=$!
       echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
-      wait "$_frontend_child"
+      exec env NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
+        npm run start -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST"
     fi
   ) >"$FRONTEND_LOG" 2>&1 &
   FRONTEND_PID=$!
@@ -350,6 +348,10 @@ force_clear_frontend_port() {
   # Kill known Next.js launchers that may not yet show as LISTEN in lsof.
   pkill -f "next dev -p $FRONTEND_PORT" >/dev/null 2>&1 || true
   pkill -f "next start -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "node .*next dev .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "node .*next start .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "$FRONTEND_DIR/node_modules/.bin/next dev .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "$FRONTEND_DIR/node_modules/.bin/next start .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
   pkill -f "pc-flipper@0.1.0 dev" >/dev/null 2>&1 || true
   pkill -f "pc-flipper@0.1.0 start" >/dev/null 2>&1 || true
   sleep 0.3

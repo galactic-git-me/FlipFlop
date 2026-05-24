@@ -9,7 +9,8 @@ Tailscale URL (live): andromeda-ts:4310
 
 ⨯ Failed to start server
 Error: listen EADDRINUSE: address already in use 0.0.0.0:4310
-    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:4310) {
+    at <unknown> (Error: listen EADDRINUSE: address already in [?25h
+.0.0:4310) {
   code: 'EADDRINUSE',
   errno: -98,
   syscall: 'listen',
