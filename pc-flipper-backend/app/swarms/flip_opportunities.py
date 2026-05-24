@@ -34,6 +34,24 @@ SOURCE_FAILURE_THRESHOLD = 3
 _DB_WRITE_LOCK = asyncio.Lock()
 _settings = get_settings()
 _ENRICH_CONCURRENCY = max(1, min(24, int(getattr(_settings, "max_concurrent_scrapers", 8) or 8)))
+_COOLDOWN_BYPASS_SOURCES = {
+    "eBay UK",
+    "eBay UK Auctions",
+    "Facebook Marketplace",
+    "Gumtree",
+    "Preloved",
+    "BidSpotter",
+    "i-bidder",
+    "Wilsons Auctions",
+    "Apex Auctions",
+    "John Pye",
+    "Amazon",
+    "Temu",
+    "AliExpress",
+    "Alibaba",
+    "BargainHardware",
+    "CherryTree Inc",
+}
 
 
 def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
@@ -135,10 +153,12 @@ async def _scan_source(source, search_terms: list, config) -> dict:
     try:
         src_cfg_pre = dict((source.config or {}))
         skip, reason = should_skip_due_to_cooldown(src_cfg_pre)
-        if skip:
+        if skip and source.name not in _COOLDOWN_BYPASS_SOURCES:
             scan_state.site_done(source.name, 0, 0)
             log.info("source.skipped", source=source.name, reason=reason)
             return result
+        if skip and source.name in _COOLDOWN_BYPASS_SOURCES:
+            log.info("source.cooldown_ignored", source=source.name, reason=reason)
 
         run_id = begin_source_run(source.name)
         raw_listings = await fetch_listings(
