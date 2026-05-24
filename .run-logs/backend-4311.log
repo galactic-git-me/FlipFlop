@@ -5389,3 +5389,102 @@ Call log:
 [scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 74)
 2026-05-24 13:30:02 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
 2026-05-24 13:30:05 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+[scraper] eBay playwright blocked term='asus tuf b650' title='Access Denied'
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 74)
+2026-05-24 13:30:28 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-24 13:30:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+2026-05-24 13:30:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+[scraper] eBay playwright blocked term='msi gaming plus b650' title='Access Denied'
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 74)
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:37 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=409.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=333.1 fallback=449.69 query=i7 12700k pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=449.69 median=1031.63 query=gaming PC i7 12700k rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=409.62 query=gaming PC rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=260.7 fallback=351.94 query=i7-6950x pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=351.94 median=914.33 query=gaming PC i7-6950x rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=19.36 fallback=26.14 query=intel i7 5820k pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=26.14 median=523.37 query=gaming PC intel i7 5820k rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=10.8 fallback=14.58 query=i5-4460 pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=14.58 median=509.5 query=gaming PC i5-4460 rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=148.37 fallback=200.3 query=i5-10600 pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=200.3 median=732.36 query=gaming PC i5-10600 rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=104.7 fallback=141.35 query=i5-2500k pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=141.35 median=661.62 query=gaming PC i5-2500k rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=5.21 fallback=7.03 query=xeon e3110 pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=7.03 median=500.44 query=gaming PC xeon e3110 rtx 3060
+2026-05-24 13:30:38 [info     ] auction_price.fallback         current_bid=57.9 fallback=78.17 query=i5-4440 pc tower
+2026-05-24 13:30:38 [info     ] resale_scraper.fallback_buy_price buy_price=78.17 median=585.8 query=gaming PC i5-4440 rtx 3060
+2026-05-24 13:30:38 [warning  ] source.retry.partial           retried_terms=1 source=eBay UK Auctions still_failed_terms=31
+2026-05-24 13:30:38 [info     ] source.done                    found=74 gems=0 source=eBay UK Auctions
+2026-05-24 13:30:56 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-24 13:30:59 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+2026-05-24 13:31:01 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-24 13:31:24 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-24 13:31:28 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+2026-05-24 13:31:30 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
