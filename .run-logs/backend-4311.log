@@ -1888,11 +1888,9 @@ Call log:
 Run time of job "External Demand Signals (trigger: interval[1:00:00], next run at: 2026-05-24 12:57:41 UTC)" was missed by 0:02:30.846274
 Run time of job "Compliant Market Ingestion (trigger: interval[1:00:00], next run at: 2026-05-24 13:05:03 UTC)" was missed by 0:00:35.924255
 Run time of job "Model Retraining (trigger: interval[1:00:00], next run at: 2026-05-24 13:29:05 UTC)" was missed by 0:00:01.225803
-.1" 200 OK
-INFO:     100.101.209.68:59814 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59834 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:59840 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59854 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 13:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 12:51:17 UTC)" skipped: maximum number of running instances reached (1)
+00.101.209.68:59854 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59870 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59872 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59886 - "GET /api/config/search HTTP/1.1" 200 OK
@@ -1939,10 +1937,9 @@ INFO:     100.101.209.68:54796 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54810 - "GET /api/schedu2026-05-24 12:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 Run time of job "External Demand Signals (trigger: interval[1:00:00], next run at: 2026-05-24 12:57:41 UTC)" was missed by 0:02:30.846246
 Run time of job "Compliant Market Ingestion (trigger: interval[1:00:00], next run at: 2026-05-24 13:05:03 UTC)" was missed by 0:00:49.116108
-s/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54870 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54884 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-[scraper] eBay playwright blocked term='asus tuf b650' title='Access Denied'
+2026-05-24 13:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 12:51:17 UTC)" skipped: maximum number of running instances reached (1)
+le='Access Denied'
 INFO:     100.101.209.68:54898 - "GET /api/sources/health HTTP/1.1" 200 OK
 2026-05-24 12:55:42 [info     ] i-bidder.playwright.cards      count=23 term=computer tower
 2026-05-24 12:55:42 [info     ] amazon.cases.done              found=0 search=biomechanical spaceship pc
@@ -2198,7 +2195,9 @@ Call log:
  source=amazon
 2026-05-24 13:06:54 [debug    ] upgrade_parts.playwright_fetch.error error=BrowserType.launch: Timeout 180000ms exceeded.
 Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --disable-dev-shm-usage --disable-extensions --disable-infobars --window-size=1366,768 --lang=en-GB --user-data-dir=/tmp/playwright_chromiumdev_profile-ruErZJ --remote-debugging-pipe --no-startup-window
+  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-dev2026-05-24 13:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 12:51:17 UTC)" skipped: maximum number of running instances reached (1)
+e-dev-shm-usage --disable-extensions --disable-infobars --window-size=1366,768 --lang=en-GB --user-data-dir=/tmp/playwright_chromiumdev_profile-ruErZJ --remote-debugging-pipe --no-startup-window
   -   - <launched> pid=3060863
  source=temu
 2026-05-24 13:06:54 [debug    ] upgrade_parts.playwright_fetch.error error=BrowserType.launch: Timeout 180000ms exceeded.
@@ -2240,7 +2239,9 @@ Call log:
 2026-05-24 13:06:54 [debug    ] upgrade_parts.playwright_fetch.error error=BrowserType.launch: Timeout 180000ms exceeded.
 Call log:
   - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AccRun time of job "Model Retraining (trigger: interval[1:00:00], next run at: 2026-05-24 13:12:02 UTC)" was missed by 0:00:01.670647
-grades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --disable-dev-shm-usage --disable-extensions --disable-infobars --window-size=1366,768 --lang=en-GB --user-data-dir=/tmp/playwright_chromiumdev_profile-AM0LX0 --remote-debugging-pipe --no-startup-window
+2026-05-24 13:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 12:51:17 UTC)" skipped: maximum number of running instances reached (1)
+-force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --disable-dev-shm-usage --disable-extensions --disable-infobars --window-size=1366,768 --lang=en-GB --user-data-dir=/tmp/playwright_chromiumdev_profile-AM0LX0 --remote-debugging-pipe --no-startup-window
   -   - <launched> pid=3060077
  source=amazon
 2026-05-24 13:06:54 [debug    ] upgrade_parts.playwright_fetch.error error=BrowserType.launch: Timeout 180000ms exceeded.
