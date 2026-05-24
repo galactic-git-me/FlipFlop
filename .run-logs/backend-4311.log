@@ -20573,3 +20573,35 @@ Call log:
 2026-05-24 09:09:01 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=pc build
 2026-05-24 09:09:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=pc build
 2026-05-24 09:09:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+2026-05-24 09:09:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=HP+EliteDesk&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 09:09:10 [info     ] BidSpotter.playwright.cards    count=60 term=Dell OptiPlex
+2026-05-24 09:09:14 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+2026-05-24 09:09:16 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=workstation&country=gb
+2026-05-24 09:09:25 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=pc build
+2026-05-24 09:09:27 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-24 09:09:28 [info     ] i-bidder.playwright.cards      count=23 term=pc build
+2026-05-24 09:09:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=pc build
+2026-05-24 09:09:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=pc build
+2026-05-24 09:09:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:09:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=HP+EliteDesk&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:09:37 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-24 09:09:39 [info     ] Wilsons Auctions.playwright.cards count=1 term=HP EliteDesk
+2026-05-24 09:09:39 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=HP EliteDesk
+2026-05-24 09:09:40 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-24 09:09:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Dell+OptiPlex&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 09:09:43 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 09:09:45 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-24 09:10:03 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=HP EliteDesk
+2026-05-24 09:10:05 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-24 09:10:06 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-24 09:10:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+2026-05-24 09:10:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+2026-05-24 09:10:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:10:09 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+2026-05-24 09:10:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:10:12 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 09:10:14 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-24 09:10:14 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+2026-05-24 09:10:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-24 09:10:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+2026-05-24 09:10:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
