@@ -398,8 +398,15 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
                     blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
                     if blocked:
+                        print(f"[scraper] eBay playwright blocked term={term!r} title={title[:80]!r}")
                         continue
                     listings = _parse_ebay_html(html, term) if html else []
+                    if not listings:
+                        card_markers = html.count("s-card") + html.count("s-item")
+                        print(
+                            f"[scraper] eBay playwright empty term={term!r} "
+                            f"title={title[:80]!r} html_len={len(html)} markers={card_markers}"
+                        )
                     if listings:
                         break
             finally:
