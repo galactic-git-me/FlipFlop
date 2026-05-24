@@ -444,3 +444,378 @@ INFO:     100.101.209.68:57276 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:57284 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:57288 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-24 01:35:04 [info     ] apex.playwright.lots           count=0 href=#!/auctions/2d74fc5a-84ab-4fa1-bb0b-c5a6bdfa79ff
+2026-05-24 01:35:06 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-24 01:35:07 [info     ] facebook.playwright.items      count=0 term=pc build
+2026-05-24 01:35:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bbuild%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc build title=Facebook
+2026-05-24 01:35:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Lenovo%20ThinkCentre&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:51246 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51248 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51264 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51266 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:07 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-24 01:35:07 [info     ] facebook.playwright.items      count=0 term=Dell OptiPlex
+2026-05-24 01:35:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2BOptiPlex%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell OptiPlex title=Facebook
+INFO:     100.101.209.68:51276 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51292 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51296 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:07 [info     ] facebook.playwright.items      count=0 term=HP EliteDesk
+2026-05-24 01:35:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:35:07 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2BEliteDesk%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP EliteDesk title=Facebook
+2026-05-24 01:35:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20workstation&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:51308 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51322 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51326 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51332 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51346 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51356 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51372 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51388 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:35:09 [info     ] i-bidder.playwright.cards      count=23 term=AMD Ryzen 7 7800X3D
+2026-05-24 01:35:09 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 01:35:09 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:51404 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51418 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51432 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:10 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=AMD Ryzen 7 7800X3D
+2026-05-24 01:35:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 01:35:12 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:51434 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51442 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51452 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:13 [info     ] apex.playwright.lots           count=0 href=#!/auctions/23b8b7fb-4dd4-40ab-abbf-6ce1a7b6fdab
+INFO:     100.101.209.68:51462 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51470 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51476 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51478 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51490 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51494 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51502 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51506 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51514 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51518 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51520 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51526 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:14 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900
+2026-05-24 01:35:16 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:35290 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35298 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35314 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35326 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-24 01:35:17 [info     ] facebook.playwright.items      count=0 term=Lenovo ThinkCentre
+2026-05-24 01:35:17 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DLenovo%2BThinkCentre%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Lenovo ThinkCentre title=Facebook
+2026-05-24 01:35:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:35336 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35344 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35352 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:18 [info     ] facebook.playwright.items      count=0 term=Dell workstation
+2026-05-24 01:35:18 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DDell%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=Dell workstation title=Facebook
+2026-05-24 01:35:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20tower%20no%20graphics&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:35366 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:18 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+INFO:     100.101.209.68:35368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35382 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35396 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35406 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35414 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35420 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35422 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:35:19 [info     ] facebook.playwright.items      count=0 term=HP workstation
+2026-05-24 01:35:19 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3DHP%2Bworkstation%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=HP workstation title=Facebook
+2026-05-24 01:35:19 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:35424 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35432 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35446 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-24 01:35:21 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+INFO:     100.101.209.68:35454 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35468 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35476 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35478 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35484 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35492 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35498 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35512 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35514 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35530 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35540 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35552 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35558 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35568 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35574 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:35582 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35584 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35588 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35590 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:28 [info     ] facebook.playwright.items      count=0 term=gaming pc no gpu
+2026-05-24 01:35:28 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bpc%2Bno%2Bgpu%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=gaming pc no gpu title=Facebook
+2026-05-24 01:35:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:60122 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60126 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60142 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60156 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60158 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60174 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60184 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60188 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60190 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60200 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60202 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60206 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60212 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60216 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:30 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+2026-05-24 01:35:30 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+2026-05-24 01:35:30 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+2026-05-24 01:35:30 [info     ] facebook.playwright.items      count=0 term=pc tower no graphics
+2026-05-24 01:35:30 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:35:30 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Btower%2Bno%2Bgraphics%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc tower no graphics title=Facebook
+2026-05-24 01:35:30 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:60230 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60236 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60254 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60268 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60270 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60274 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60286 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60296 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60298 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60300 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60308 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60318 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60322 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60336 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60344 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60354 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60358 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:39 [info     ] apex.playwright.lots           count=0 href=#!/auctions/6e9457b6-241a-4dbf-90a7-266eedef5adc
+2026-05-24 01:35:39 [info     ] apex.playwright.done           total=0
+INFO:     100.101.209.68:56542 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56550 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56560 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:39 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-24 01:35:39 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+INFO:     100.101.209.68:56568 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 01:35:39 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:56576 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56584 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56598 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56602 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56608 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56624 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56634 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56638 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56640 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56646 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:35:40 [info     ] auction_scraper.apex.done      total=0
+2026-05-24 01:35:40 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-24 01:35:41 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-24 01:35:41 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-24 01:35:41 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:35:41 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+2026-05-24 01:35:41 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+INFO:     100.101.209.68:56660 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 01:35:42 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+INFO:     100.101.209.68:56668 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56678 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56686 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:44 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+INFO:     100.101.209.68:56700 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56706 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56710 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:45 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-24 01:35:45 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+INFO:     100.101.209.68:56724 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56734 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56742 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56752 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56764 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56768 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56776 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56788 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56794 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56810 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56826 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56838 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:46 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-24 01:35:46 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 01:35:47 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+2026-05-24 01:35:47 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-24 01:35:48 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 01:35:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+INFO:     100.101.209.68:34264 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34272 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34282 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34298 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34300 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34316 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34324 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:35:50 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-24 01:35:50 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-24 01:35:50 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:34326 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34336 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34346 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34356 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34372 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34376 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34384 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34392 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34406 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34420 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34436 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34450 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:35:52 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-24 01:35:52 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-24 01:35:52 [info     ] facebook.playwright.done       total=0
+2026-05-24 01:35:52 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:34464 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34474 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34480 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34482 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34498 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34502 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34508 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34512 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34520 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34534 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34550 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34558 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34570 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34578 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34592 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39548 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39556 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39560 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39572 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39582 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39596 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:36:01 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.101.209.68:39606 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39616 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39626 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39634 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39636 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39652 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39668 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39682 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39696 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39704 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39720 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39732 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39740 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39756 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39762 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39768 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39774 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39776 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39786 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39796 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39804 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39808 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39824 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39836 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39842 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39844 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38550 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38564 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38566 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38576 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38588 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-24 01:36:10 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+INFO:     100.101.209.68:38600 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38616 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38632 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38654 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38666 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38672 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38686 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38694 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38696 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38706 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38716 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38722 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38736 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:36:13 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:38746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38762 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38764 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38766 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:36:15 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+INFO:     100.101.209.68:38770 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38786 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38792 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53356 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53358 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53360 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53372 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53384 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53392 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53412 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53416 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53426 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53438 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53454 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:36:20 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:53464 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53478 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53490 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53492 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53496 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53510 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53512 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53514 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53520 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53526 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53540 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53546 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53556 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53566 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53570 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:36:23 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-24 01:36:23 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+2026-05-24 01:36:23 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:53584 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53586 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53600 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53602 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:36:25 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+2026-05-24 01:36:25 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 01:36:26 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+INFO:     100.101.209.68:53606 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53618 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53624 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42650 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42666 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42662 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42668 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42674 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42684 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42694 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42700 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42708 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:36:28 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:42714 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42718 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42728 - "GET /api/sources/health HTTP/1.1" 200 OK
