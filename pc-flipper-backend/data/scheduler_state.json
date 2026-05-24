@@ -1,14 +1,5 @@
 {
-  "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-05-24T08:57:29.115177+00:00"
-  },
-  "outcome_capture": {
-    "last_success_at": "2026-05-24T08:56:47.652700+00:00"
-  },
-  "playbook_evolution": {
-    "last_success_at": "2026-05-24T08:59:55.280794+00:00"
-  },
-  "external_demand": {
-    "last_success_at": "2026-05-24T08:57:49.176537+00:00"
+  "compliant_market_ingestion": {
+    "last_success_at": "2026-05-24T09:05:03.671736+00:00"
   }
 }
