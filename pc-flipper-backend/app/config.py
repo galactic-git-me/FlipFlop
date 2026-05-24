@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     ebay_delay_min_seconds: float = 4.0
     ebay_delay_max_seconds: float = 10.0
     ebay_block_cooldown_seconds: float = 45.0
+    ebay_verification_token: str = ""
+    # Public HTTPS callback URL that eBay is configured to call for deletion notifications.
+    # Example: https://your-domain.tld/api/ebay/marketplace-account-deletion
+    ebay_notification_endpoint: str = ""
     merkandi_api_key: str = ""
 
     stability_api_key: str = ""

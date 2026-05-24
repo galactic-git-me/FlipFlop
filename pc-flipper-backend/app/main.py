@@ -11,6 +11,7 @@ from app.workers.scheduler import start_scheduler, stop_scheduler
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts
+from app.api import ebay_compliance
 from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
@@ -276,6 +277,7 @@ app.include_router(source_search_terms.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
+app.include_router(ebay_compliance.router, prefix="/api")
 
 
 @app.get("/health")
