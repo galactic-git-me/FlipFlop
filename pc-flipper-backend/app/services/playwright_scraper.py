@@ -308,7 +308,7 @@ async def scrape_gumtree_playwright(
                             except Exception:
                                 price = 0.0
                         if price <= 0:
-                            continue
+                            price = max(1.0, float(min_price))
 
                         image_url = await img_el.get_attribute("src") or "" if img_el else ""
                         location = (await loc_el.inner_text()).strip() if loc_el else None
@@ -1013,6 +1013,7 @@ _AUCTION_PC_KW = {
     # component and chassis lanes
     "motherboard", "mainboard", "cpu", "processor", "ram", "ddr4", "ddr5",
     "ssd", "nvme", "psu", "power supply", "case", "chassis", "mid tower", "atx",
+    "lot", "job lot", "joblot",
 }
 
 _AUCTION_SEARCH_TERMS = [
