@@ -2065,101 +2065,166 @@ Call log:
 [scraper] eBay retry 'pc powers up untested': 0 found, 0 new (total 0)
 2026-05-24 09:02:29 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=21
 2026-05-24 09:02:29 [info     ] source.done                    found=0 gems=0 source=eBay UK
-new (total 0)
-[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
-[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
-[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
-[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
-[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
-[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
-[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
-[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
-[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
-[scraper] eBay error for 'Lenovo ThinkCentre': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Lenovo+ThinkCentre&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay error for 'HP Z440': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-zwRlIE --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=4112808
-
-[scraper] eBay error for 'ryzen bundle': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-1oxlfj --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=4105160
-
-[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
-[scraper] eBay error for 'ddr5 bundle': Page.evaluate: Target crashed 
-[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
-[scraper] eBay error for 'Dell OptiPlex': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-H91F1I --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=4179869
-  -   - [pid=4179869][err] [0524/073443.150357:ERROR:file_path_watcher_inotify.cc(337)] inotify_init() failed: Too many open files (24)
-
-[scraper] eBay error for 'HP Z640': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-lM2eB7 --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=4188945
-  -   - [pid=4188945][err] [0524/073510.349188:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-
-[scraper] eBay error for 'b650 tomahawk': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-gvSkwH --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=30564
-
-[scraper] eBay error for '7900 bundle': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-OioNzy --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=32999
-
-[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
-[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
-[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
-[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
-[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
-[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
-[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
-[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
-[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
-[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
-[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 0)
-[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
-[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
-[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
-2026-05-24 07:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
-Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 06:51:17 UTC)" skipped: maximum number of running instances reached (1)
-[scraper] eBay error for 'msi gaming plus b650': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=msi+gaming+plus+b650&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
-[scraper] eBay error for 'HP Compaq tower': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+Compaq+tower&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
-2026-05-24 07:57:42 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
-Run time of job "External Demand Signals (trigger: interval[1:00:00], next run at: 2026-05-24 07:57:41 UTC)" was missed by 0:00:05.495494
-[scraper] eBay retry error for 'AMD Ryzen 7 7800X3D': 
-[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
-[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
-[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 0)
-[scraper] eBay error for 'xeon tower': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-qEb7lK --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=487349
-  -   - [pid=487349][err] [0524/080612.218695:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=487349][err] [0524/080625.540409:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=487349][err] [0524/080628.423370:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=487349][err] [0524/080629.720558:ERROR:file_path_watcher_inotify.cc(337)] inotify_init() failed: Too many open files (24)
-
-[scraper] eBay retry error for 'Ryzen 9 7900': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-TGuay0 --remote-debugging-pipe --no-startup-window
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 111)
+[scraper] eBay retry 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc no graphics card': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 111)
+[scraper] eBay retry 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay retry 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 111)
+[scraper] eBay retry 'Fujitsu Esprimo': 43 found, 43 new (total 43)
+[scraper] eBay retry 'pc no hard drive': 0 found, 0 new (total 43)
+[scraper] eBay retry 'desktop spares or repair': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc no display': 0 found, 0 new (total 43)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 111)
+[scraper] eBay retry 'pc untested': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc boots no display': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc powers on no signal': 0 found, 0 new (total 43)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 111)
+[scraper] eBay retry 'pc faulty': 0 found, 0 new (total 43)
+[scraper] eBay retry 'desktop no os': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc no os': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc powers up untested': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc no operating system': 0 found, 0 new (total 43)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 111)
+[scraper] eBay retry 'ryzen 5 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'i9 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 43)
+[scraper] eBay retry 'ryzen 7 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'ryzen 9 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'xeon desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'i5 10400 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 43)
+[scraper] eBay retry 'i7 10700 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'ryzen 7 5800 desktop': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc job lot': 0 found, 0 new (total 43)
+[scraper] eBay retry 'gameing pc': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc quick sale': 0 found, 0 new (total 43)
+[scraper] eBay retry 'computre tower': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc need gone today': 0 found, 0 new (total 43)
+[scraper] eBay retry 'son old pc': 0 found, 0 new (total 43)
+[scraper] eBay retry 'old pc clearing out': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc collect today': 0 found, 0 new (total 43)
+[scraper] eBay retry 'unused pc': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc free to good home': 0 found, 0 new (total 43)
+[scraper] eBay retry 'pc no longer needed': 42 found, 42 new (total 85)
+[scraper] eBay retry 'old computer quick sale': 49 found, 49 new (total 134)
+[scraper] eBay retry 'pc liquid cooler': 50 found, 50 new (total 184)
+[scraper] eBay retry 'desktop liquid cooled': 0 found, 0 new (total 184)
+2026-05-24 09:10:43 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-7700 rtx 3060 status=403
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=132.0 median=650.4 query=gaming PC i7-7700 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=228.95 median=682.74 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC xeon e3-1225 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=72.0 median=494.4 query=gaming PC i3-8100 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=516.0 query=gaming PC i3-10100 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=229.16 median=682.99 query=gaming PC i7-11700 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=47.38 median=548.86 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=47.38 median=548.86 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=54.14 median=556.97 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=89.95 median=515.94 query=gaming PC i7-4790 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=167.1 median=692.52 query=gaming PC i3-9100 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=75.09 median=498.11 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=77.99 median=501.59 query=gaming PC i5-9400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=107.99 median=621.59 query=gaming PC xeon e3-1225 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=47.82 median=465.38 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=64.39 median=569.27 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=69.0 median=490.8 query=gaming PC i5-2320 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=486.0 query=gaming PC core i5 6400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=49.95 median=551.94 query=gaming PC intel pentium e5300 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=37.9 median=537.48 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=17.22 median=512.66 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=54.99 median=557.99 query=gaming PC i5-7400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=129.99 median=563.99 query=gaming PC i5-9400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=105.0 median=534.0 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=189.0 median=346.8 query=gaming PC
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=462.0 query=gaming PC i3-4130 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=160.83 median=601.0 query=gaming PC i5 8400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=45.95 median=463.14 query=gaming PC i5-6400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=96.0 median=607.2 query=gaming PC i5-6600 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=658.44 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=84.95 median=509.94 query=gaming PC i5-9400 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=119.08 median=550.9 query=gaming PC i3-8100 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=85.62 median=594.74 query=gaming PC i5-2310 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=148.89 median=586.67 query=gaming PC i3-10105 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=81.3 median=589.56 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=81.3 median=589.56 query=gaming PC xeon e3-1220 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=123.46 median=640.15 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=177.5 median=705.0 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=49.95 median=551.94 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=671.99 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=1.36 median=493.63 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.85 median=587.82 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=83.21 median=507.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=124.87 median=557.84 query=gaming PC i5-9500 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=187.37 median=632.84 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=270.71 median=732.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=104.04 median=532.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=83.21 median=507.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=143.3 median=663.96 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=104.04 median=532.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=208.21 median=657.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=464.14 median=1048.97 query=gaming PC ryzen 5 4500 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=99.99 median=611.99 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.85 median=587.82 query=gaming PC i5-9500 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=399.4 median=971.28 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=281.5 median=829.8 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=145.71 median=582.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=229.04 median=682.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=291.54 median=757.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=166.54 median=607.85 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=39.89 median=455.87 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=1050.84 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=39.95 median=455.94 query=gaming PC i3-6100 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=115.1 median=546.12 query=gaming PC i7 4790k rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=375.0 median=942.0 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=373.9 median=940.68 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=31.9 median=530.28 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=928.44 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=343.3 median=615.96 query=gaming PC rtx 2080
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=86.38 median=595.66 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=229.5 median=767.4 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=10.8 median=504.96 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=172.3 median=698.76 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=124.7 median=269.64 query=gaming PC gtx950
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=41.6 median=541.92 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=35.62 median=534.74 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=37.9 median=537.48 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=146.3 median=583.56 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.5 median=671.4 query=gaming PC intel i5 4460 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=496.3 median=1087.56 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=312.69 median=867.23 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=124.7 median=641.64 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=928.44 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=124.7 median=641.64 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC i7 4790k rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=389.2 median=959.04 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=414.7 median=989.64 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=50.3 median=552.36 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=124.7 median=641.64 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=1050.84 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=182.7 median=711.24 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=4.69 median=497.63 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=34.56 median=533.47 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=62.7 median=567.24 query=gaming PC rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-12500 rtx 3060 status=403
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=623.99 query=gaming PC i5-12500 rtx 3060
+2026-05-24 09:10:43 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i5-6500 rtx 3060 status=403
+2026-05-24 09:10:43 [info     ] resale_scraper.fallback_buy_price buy_price=149.99 median=587.99 query=gaming PC i5-6500 rtx 3060
+2026-05-24 09:10:43 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
+ading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-TGuay0 --remote-debugging-pipe --no-startup-window
   -   - <launched> pid=486371
   -   - [pid=486371][err] [0524/080523.312245:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
   -   - [pid=486371][err] [0524/080526.915835:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
@@ -20605,3 +20670,34 @@ Call log:
 2026-05-24 09:10:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
 2026-05-24 09:10:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
 2026-05-24 09:10:18 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 09:10:37 [info     ] BidSpotter.playwright.cards    count=60 term=gaming computer
+2026-05-24 09:10:41 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+2026-05-24 09:10:41 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+2026-05-24 09:10:43 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i7+desktop&country=gb
+2026-05-24 09:10:44 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-24 09:10:44 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-24 09:10:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+2026-05-24 09:10:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+2026-05-24 09:10:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:10:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:10:51 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+2026-05-24 09:10:53 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-24 09:10:53 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 09:10:56 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 09:11:07 [info     ] BidSpotter.playwright.cards    count=60 term=i7 desktop
+2026-05-24 09:11:10 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+2026-05-24 09:11:12 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=i5+desktop&country=gb
+2026-05-24 09:11:19 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-24 09:11:22 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-24 09:11:22 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+2026-05-24 09:11:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=workstation
+2026-05-24 09:11:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=workstation
+2026-05-24 09:11:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:11:26 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-24 09:11:28 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-24 09:11:31 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 09:11:31 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 09:11:33 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 09:11:36 [info     ] BidSpotter.playwright.cards    count=60 term=i5 desktop
+2026-05-24 09:11:40 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
+2026-05-24 09:11:41 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=office+pc&country=gb
