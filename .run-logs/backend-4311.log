@@ -1182,3 +1182,1393 @@ INFO:     100.101.209.68:33452 - "GET /api/schedule/accessories/runs HTTP/1.1" 2
 INFO:     100.101.209.68:33454 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
 INFO:     100.101.209.68:33456 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
 2026-05-24 01:19:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20spares%20or%20repair&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:33462 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33472 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33486 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-24 01:19:24 [info     ] facebook.playwright.items      count=0 term=pc no hard drive
+INFO:     100.101.209.68:33498 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33510 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33512 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:19:24 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bno%2Bhard%2Bdrive%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc no hard drive title=Facebook
+INFO:     100.101.209.68:33520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20quick%20sale&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:33526 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33542 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33546 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33552 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33558 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33572 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33588 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33592 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33608 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33620 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33622 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33624 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33638 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33646 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33650 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33666 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33676 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33692 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33694 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33710 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33712 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33716 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33728 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33738 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33754 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33758 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33762 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33776 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33778 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33790 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40788 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40816 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40830 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40826 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40850 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40854 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40868 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40874 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40886 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40902 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40918 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40932 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40936 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40944 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40956 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40964 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40968 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40976 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40982 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40988 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41002 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41010 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41022 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41030 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41046 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41048 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41052 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41060 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41066 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41078 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41082 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41088 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41096 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41100 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:28 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+2026-05-24 01:19:29 [info     ] facebook.playwright.items      count=0 term=pc untested
+2026-05-24 01:19:29 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-24 01:19:29 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:41114 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41118 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41122 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41134 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41162 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41166 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:30 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:41174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41176 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41186 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41192 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41198 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41212 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41224 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:19:31 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+INFO:     100.101.209.68:41232 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41246 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41258 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41264 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:31 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+INFO:     100.101.209.68:41274 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41280 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41286 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41298 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41302 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41312 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41328 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41344 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41348 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41364 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41380 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41386 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41398 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41406 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41418 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:31 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+INFO:     100.101.209.68:41426 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41440 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41444 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:31 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+INFO:     100.101.209.68:41456 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:19:31 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 01:19:31 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+INFO:     100.101.209.68:41458 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41460 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41474 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41464 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41484 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41492 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:19:32 [info     ] facebook.playwright.items      count=0 term=pc untested
+INFO:     100.101.209.68:41500 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:32 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Buntested%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc untested title=Facebook
+2026-05-24 01:19:32 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+2026-05-24 01:19:32 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-24 01:19:32 [info     ] apex.playwright.lots           count=0 href=#!/auctions/a9757344-1c24-42e0-ad91-e22f7225a6fa
+2026-05-24 01:19:32 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20need%20gone&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:19:33 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+2026-05-24 01:19:33 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-24 01:19:33 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 01:19:33 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41518 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41526 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41542 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41544 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41552 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41562 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41572 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41576 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41590 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41600 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41612 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41626 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41638 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41650 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41654 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41656 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41666 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41678 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41684 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41700 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41712 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41728 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41738 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41748 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41764 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41772 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41778 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41790 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41792 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Ryzen+9+7900X&country=gb
+INFO:     100.101.209.68:41802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41826 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:19:35 [info     ] facebook.playwright.items      count=0 term=pc spares or repair
+INFO:     100.101.209.68:41820 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41842 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41856 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41840 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:35 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bspares%2Bor%2Brepair%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc spares or repair title=Facebook
+2026-05-24 01:19:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=old%20pc%20clearing%20out&minPrice=0&maxPrice=500&exact=false
+2026-05-24 01:19:35 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:41872 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41888 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41890 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41902 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41918 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41920 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41936 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41940 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41954 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41964 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41970 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41972 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41978 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41980 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41986 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42002 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42018 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42024 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42026 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42028 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42032 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42042 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42052 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42058 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42072 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42074 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42078 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42090 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42098 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42106 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46524 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46530 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46544 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46558 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:19:37 [info     ] facebook.playwright.items      count=0 term=pc quick sale
+INFO:     100.101.209.68:46570 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46572 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:38 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bquick%2Bsale%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc quick sale title=Facebook
+2026-05-24 01:19:38 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+INFO:     100.101.209.68:46574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46586 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46598 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46614 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46616 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46620 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46634 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46642 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46646 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46658 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46662 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46676 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46684 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46696 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46698 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46712 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46720 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46722 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46742 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46748 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46760 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46776 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46780 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46792 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46802 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46804 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46806 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46808 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46814 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46816 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46822 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46838 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46852 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46868 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46886 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:40 [info     ] facebook.playwright.items      count=0 term=pc need gone
+2026-05-24 01:19:40 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+2026-05-24 01:19:41 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+INFO:     100.101.209.68:46894 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46910 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46920 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46928 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46944 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46950 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46960 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46976 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46982 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46996 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47004 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47008 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47016 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47018 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47024 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47030 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47044 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47052 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47060 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47070 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47080 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47094 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47108 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47118 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47120 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47136 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47144 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47158 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47162 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47180 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47196 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47204 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47212 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47230 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47240 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:19:42 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
+2026-05-24 01:19:43 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+2026-05-24 01:19:43 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+2026-05-24 01:19:43 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+2026-05-24 01:19:43 [info     ] facebook.playwright.done       total=0
+2026-05-24 01:19:43 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:47254 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47270 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47282 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47298 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47314 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47330 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47338 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47354 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47370 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47372 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47374 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47380 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47384 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47400 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47410 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47414 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47420 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:43 [info     ] facebook.playwright.items      count=0 term=pc need gone
+INFO:     100.101.209.68:47422 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47430 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47436 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47452 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:44 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dpc%2Bneed%2Bgone%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=pc need gone title=Facebook
+INFO:     100.101.209.68:47462 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47474 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47480 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47494 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47504 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47510 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47512 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47518 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:44 [info     ] apex.playwright.lots           count=16 href=#!/auctions/197da1bc-fb5a-4fc5-981d-ee72c875046b
+INFO:     100.101.209.68:47520 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47530 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47544 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47540 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47560 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-24 01:19:45 [info     ] apex.playwright.lots           count=0 href=#!/auctions/6e9457b6-241a-4dbf-90a7-266eedef5adc
+INFO:     100.101.209.68:47568 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+2026-05-24 01:19:45 [info     ] apex.playwright.done           total=0
+2026-05-24 01:19:45 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:47570 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47574 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47576 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47586 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47594 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47606 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47616 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47628 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47636 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47646 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47656 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47660 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47668 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47674 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47678 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47682 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47686 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47694 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47698 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-24 01:19:46 [info     ] auction_scraper.apex.done      total=0
+INFO:     100.101.209.68:47704 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47714 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55336 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55346 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55348 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55360 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:46 [info     ] facebook.playwright.items      count=0 term=old pc clearing out
+INFO:     100.101.209.68:55362 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55368 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55380 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55382 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:46 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dold%2Bpc%2Bclearing%2Bout%26minPrice%3D0%26maxPrice%3D500%26exact%3Dfalse item_links=0 term=old pc clearing out title=Facebook
+INFO:     100.101.209.68:55388 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:46 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-24 01:19:47 [info     ] facebook.playwright.done       total=0
+2026-05-24 01:19:47 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:55390 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 01:19:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900
+INFO:     100.101.209.68:55404 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55420 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55436 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55442 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55456 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55470 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55492 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55498 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55510 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55522 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55538 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55546 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55554 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55570 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55586 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55594 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55602 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55608 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55618 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55634 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55636 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55638 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55654 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55666 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55672 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55676 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55682 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55696 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55712 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55724 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55738 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55742 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55756 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55760 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:49 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:55770 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55784 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55810 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55836 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 51)
+INFO:     100.101.209.68:55852 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55858 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55864 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55870 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55882 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55896 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55910 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55918 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55934 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55946 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55958 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55964 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55972 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55986 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56000 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56016 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56028 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56030 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56046 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56060 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56070 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56078 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56090 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56096 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56110 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56126 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56138 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56152 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56166 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56168 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56170 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56174 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56192 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56180 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56208 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56224 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56240 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 51)
+INFO:     100.101.209.68:56252 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56254 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56286 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56292 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56302 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56306 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56308 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56314 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56322 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56334 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56348 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56354 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56368 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56374 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56382 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56384 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56398 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56414 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56426 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56428 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56436 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56452 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56462 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56464 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56466 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56480 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56484 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56494 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56502 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56504 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56508 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56510 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56518 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56532 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56540 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 51)
+INFO:     100.101.209.68:56552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56556 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56566 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56574 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56590 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56600 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56610 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56620 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56622 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56636 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56646 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56650 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56656 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56668 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56678 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56682 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56696 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56698 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56714 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56724 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56726 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56732 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56736 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56738 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56752 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56766 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56772 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56788 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56800 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56806 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:19:56 [info     ] apex.playwright.lots           count=0 href=#!/auctions/6e9457b6-241a-4dbf-90a7-266eedef5adc
+2026-05-24 01:19:56 [info     ] apex.playwright.done           total=0
+INFO:     100.101.209.68:56822 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56828 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39446 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39450 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39456 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39466 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+2026-05-24 01:19:57 [info     ] auction_scraper.apex.done      total=0
+2026-05-24 01:19:57 [info     ] source.done                    found=0 gems=0 source=Apex Auctions
+2026-05-24 01:19:57 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+INFO:     100.101.209.68:39470 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39492 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39500 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39506 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39520 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39524 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39538 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39544 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39560 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39564 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39578 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39586 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39600 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39604 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39614 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39630 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39632 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39634 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39646 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39652 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39662 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39664 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39674 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39684 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39686 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39692 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39694 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39696 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39702 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39718 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39726 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39740 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39748 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39756 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39774 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39758 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39806 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39808 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39816 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39832 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39860 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39842 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39868 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39882 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39916 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39930 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39892 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39940 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39902 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39948 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39952 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39960 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39970 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39984 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39998 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40010 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40014 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40018 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:02 [info     ] BidSpotter.playwright.cards    count=60 term=Ryzen 9 7900X
+INFO:     100.101.209.68:40030 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40040 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40044 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40058 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40072 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40074 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40084 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40094 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40106 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40110 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40118 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40134 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:02 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:40138 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40146 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40148 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40150 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40164 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40182 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40190 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40192 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40198 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40200 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40212 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40224 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40228 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40240 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40246 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40252 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40262 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40268 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40282 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40298 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40312 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40318 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40334 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40346 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40354 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40362 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40374 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40376 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40382 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40388 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40402 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40410 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40420 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40430 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40438 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40440 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:04 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+[scraper] eBay 'motherboard cpu combo': 60 found, 60 new (total 60)
+2026-05-24 01:20:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:40446 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40448 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-24 01:20:06 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:40462 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40464 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40470 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40482 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40486 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40490 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40494 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40502 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40504 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40520 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43496 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43506 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43508 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43524 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43532 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43538 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43548 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43558 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43570 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43576 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43584 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43594 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43596 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43600 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43616 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43618 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43628 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43632 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43646 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43650 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43664 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43670 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43678 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43684 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:07 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=desktop+pc&country=gb
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-24 01:20:08 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+2026-05-24 01:20:08 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:43690 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43694 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43696 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43712 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43714 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43730 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43742 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43746 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43764 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43778 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43780 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43788 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43802 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43812 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43814 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43820 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43834 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43848 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43856 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43860 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43864 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43872 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43888 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43896 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43898 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43912 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43926 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43940 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43950 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43958 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43968 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43974 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43990 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43992 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44002 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44006 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-24 01:20:11 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:44018 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44038 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44022 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44042 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44050 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44060 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44074 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44100 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44114 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44118 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44132 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-24 01:20:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
+INFO:     100.101.209.68:44134 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44148 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44158 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44174 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44176 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44178 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44182 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44188 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44198 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44208 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44224 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:11 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=Ryzen 9 7900X
+INFO:     100.101.209.68:44228 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44232 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44238 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44254 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44268 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44282 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44288 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44294 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44306 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44310 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44318 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44324 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44330 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44342 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44350 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44354 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44370 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44394 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44406 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44410 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44420 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44424 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44436 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44444 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-24 01:20:14 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:44458 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44462 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44474 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44480 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44496 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44502 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44510 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44522 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44524 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44534 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44548 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44558 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44562 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44574 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44590 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44598 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44612 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44620 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44630 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44634 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44644 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44654 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44662 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44664 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:15 [info     ] source.done                    found=0 gems=0 source=AliExpress
+INFO:     100.101.209.68:44680 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44682 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44688 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44702 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44714 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44716 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44720 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44734 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44742 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44754 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44764 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44776 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44790 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44792 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44802 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44806 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44812 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44822 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44832 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44848 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44860 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44874 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44886 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44892 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44906 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44918 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44926 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44940 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44948 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44960 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44972 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44984 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44994 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44996 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44998 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45012 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33908 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33916 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33926 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33940 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33944 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33950 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33966 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:18 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
+INFO:     100.101.209.68:33980 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33992 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33996 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33998 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34010 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34022 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34036 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34052 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34060 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34076 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34090 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34092 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34096 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34098 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34114 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34126 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34142 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34148 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34164 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34178 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34186 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34196 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34202 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34212 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34216 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34232 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34236 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34252 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34258 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34262 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34264 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34278 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34280 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34296 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34302 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34318 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34320 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:20 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+INFO:     100.101.209.68:34336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34338 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34340 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34346 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34356 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34362 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34366 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34372 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34380 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34384 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34390 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34400 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34402 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34406 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34422 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34434 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34436 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34448 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34454 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34458 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34462 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34468 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34480 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34494 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34496 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34508 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34520 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34532 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34536 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34544 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+[scraper] eBay error for 'pc build': Page.evaluate: Target crashed 
+INFO:     100.101.209.68:34546 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34550 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34562 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34582 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34576 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34608 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:22 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-24 01:20:23 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+INFO:     100.101.209.68:34610 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34622 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34626 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34632 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34634 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34642 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34648 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34652 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34654 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34670 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34678 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34692 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34702 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34704 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34708 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34724 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34730 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34742 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34746 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34760 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34766 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34776 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34784 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34800 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34802 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34812 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34826 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34842 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34854 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34870 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:24 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
+INFO:     100.101.209.68:34882 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34888 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34908 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34922 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34944 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:25 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 01:20:25 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=Ryzen 9 7900X
+INFO:     100.101.209.68:34956 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34976 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34992 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34996 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35010 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35020 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35034 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35036 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35050 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35064 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35068 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35082 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35094 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35102 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35112 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35126 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35140 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35150 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35154 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35170 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35180 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35188 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35196 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35198 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35210 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35226 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35238 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35254 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35258 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37586 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37596 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37612 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37628 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37656 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:27 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 01:20:28 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37664 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37680 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37690 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37704 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37718 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37722 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37734 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37738 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37744 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37754 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37770 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37778 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37780 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37786 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37796 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37808 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37812 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37816 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37832 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37836 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37852 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37854 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37858 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37868 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37870 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37884 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37886 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37902 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37874 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37916 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37926 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37930 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37946 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37962 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37978 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37994 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:30 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:38000 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38004 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38012 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38020 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38030 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38034 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38036 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38058 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38062 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38076 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38080 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38094 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38052 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38106 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38132 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38136 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38120 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38152 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38164 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38182 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38190 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38204 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38218 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38226 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38240 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38242 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38248 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38258 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38274 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38288 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38298 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38308 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38316 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38332 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:31 [info     ] BidSpotter.playwright.cards    count=60 term=desktop pc
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-24 01:20:33 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+INFO:     100.101.209.68:38338 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38352 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38366 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38368 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38372 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38396 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38386 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38414 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38404 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38424 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38436 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38442 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38454 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38466 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38472 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38476 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38484 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38486 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38500 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38516 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38532 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38536 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38544 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38546 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38548 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38552 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38566 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38572 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38578 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38584 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38592 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38606 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38622 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38624 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38626 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38632 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:34 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-24 01:20:34 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-24 01:20:35 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=60 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:38644 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38650 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38652 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38662 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38672 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38674 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38682 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38690 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38702 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38706 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38712 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38716 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38718 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38732 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38736 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38750 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38754 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38770 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38776 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38786 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38794 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38804 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38808 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38822 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38824 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38840 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43942 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43946 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43958 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43962 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43966 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43978 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43984 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43992 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43998 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:37 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+pc&country=gb
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44010 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44016 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44024 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44040 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44052 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44066 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44080 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'pc build': 0 found, 0 new (total 60)
+INFO:     100.101.209.68:44088 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44094 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44098 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44112 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44122 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44136 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44150 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44156 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44164 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44166 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44180 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44184 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44190 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44196 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44204 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44218 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44222 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44230 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44234 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44246 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44252 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44258 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44272 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44274 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44284 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44290 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44292 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44300 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44304 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44308 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44320 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44324 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44332 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44340 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44350 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44362 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44370 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44386 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44388 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44396 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44400 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44408 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44422 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44428 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44446 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44448 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44456 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44472 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44484 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44490 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44492 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44500 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44502 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44514 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44520 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44526 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44534 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44536 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44538 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44540 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44544 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44554 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44566 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44580 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44588 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44592 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 51)
+INFO:     100.101.209.68:44604 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44620 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44618 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44636 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44644 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44662 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44674 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44690 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44698 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44710 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44722 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44724 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44730 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44744 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44760 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44766 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44768 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44770 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44778 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44780 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44784 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44798 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44810 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44818 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44828 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44842 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44850 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44854 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44864 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44872 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44874 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44876 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44880 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44896 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:43 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+INFO:     100.101.209.68:44912 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44918 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44926 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44936 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44944 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44960 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44984 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44994 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45004 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45010 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45026 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45034 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45050 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45052 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45064 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45072 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45080 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45088 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45096 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45100 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45108 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45124 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45140 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45146 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45158 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45172 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45178 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45180 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45194 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45208 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45212 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45220 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45222 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45226 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45242 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45246 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+2026-05-24 01:20:46 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-24 01:20:46 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
+INFO:     100.101.209.68:47638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47652 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47662 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47676 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47684 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47700 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-24 01:20:48 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:47706 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47728 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47742 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47758 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47772 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47788 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47796 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47802 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47804 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47816 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47828 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47830 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47832 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47834 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47838 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47854 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47870 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47890 - "GET /api/schedule/retrain_checkpoint_watchdog/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47894 - "GET /api/schedule/outcome_capture/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47898 - "GET /api/schedule/playbook_evolution/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47910 - "GET /api/schedule/external_demand/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47918 - "GET /api/schedule/compliant_market_ingestion/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47924 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47936 - "GET /api/schedule/flip_opportunities/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47942 - "GET /api/schedule/model_retraining/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47946 - "GET /api/schedule/accessories/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47954 - "GET /api/schedule/upgrade_parts/runs HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47962 - "GET /api/schedule/cases/runs HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 51)
+2026-05-24 01:20:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 60)
+2026-05-24 01:20:48 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=desktop pc
