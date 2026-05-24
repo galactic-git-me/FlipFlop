@@ -1837,89 +1837,174 @@ Call log:
 2026-05-24 09:06:55 [info     ] resale_scraper.fallback_buy_price buy_price=11.52 median=505.82 query=gaming PC rtx 3060
 2026-05-24 09:06:56 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=54
 2026-05-24 09:06:56 [info     ] source.done                    found=59 gems=0 source=eBay UK Auctions
-late,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-JqoSzM --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=940551
-
-[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
-[scraper] eBay error for 'HP Z640': BrowserType.launch: Timeout 180000ms exceeded.
-[scraper] eBay error for 'desktop untested': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-ZomUfX --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=948631
-
-[scraper] eBay error for 'b650 tomahawk': [Errno -3] Temporary failure in name resolution
-[scraper] eBay error for 'HP EliteDesk': [Errno -3] Temporary failure in name resolution
-[scraper] eBay error for 'Dell OptiPlex': [Errno -3] Temporary failure in name resolution
-2026-05-24 08:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
-d
-[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
-[scraper] eBay retry 'HP Z440': 0 found, 0 new (total 0)
-[scraper] eBay error for 'gaming pc no hard drive': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+no+hard+drive&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay retry error for 'pc no hard drive': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-th
-[scraper] eBay error for 'pc no psu': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+no+psu&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
-[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
-[scraper] eBay error for 'ryzen desktop': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-9T2q5B --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=32969
-
-[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
-[scraper] eBay retry 'compter tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
 [scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
-[scraper] eBay retry error for 'pc towre': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=pc+towre&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
-
-[scraper] eBay retry 'destop pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
-[scraper] eBay retry 'destkop computer': 0 found, 0 new (total 0)
-[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
-[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
-[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
-[scraper] eBay retry 'computre tower': 0 found, 0 new (total 0)
-[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
-[scraper] eBay retry 'gameing pc': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc quick sale': 0 found, 0 new (total 0)
-[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 54 found, 54 new (total 54)
+[scraper] eBay 'am5 bundle': 60 found, 60 new (total 60)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 54)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 54)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 54)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 54)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 60)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 54)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'pc boots no display': 0 found, 0 new (total 54)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 60)
+[scraper] eBay 'pc powers on no signal': HTTP blocked/empty (status=200), Playwright returned 40
+[scraper] eBay 'pc powers on no signal': 40 found, 39 new (total 93)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 60)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 93)
+[scraper] eBay error for 'desktop faulty': Page.evaluate: Target crashed 
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 60)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 93)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 60)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 93)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 93)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 60)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 93)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 60)
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 93)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 93)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 93)
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 93)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 93)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 93)
+[s[scraper] eBay error for 'proart am5': [Errno -3] Temporary failure in name resolution
+[scraper] eBay error for 'Dell OptiPlex': [Errno -3] Temporary failure in name resolution
+[scraper] eBay error for 'Dell workstation': [Errno -3] Temporary failure in name resolution
+[scraper] eBay error for '7900 bundle': [Errno -3] Temporary failure in name resolution
+[scraper] eBay error for 'HP workstation': [Errno -3] Temporary failure in name resolution
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 0)
+[scraper] eBay 'Acer Veriton toExecution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 08:51:17 UTC)" skipped: maximum number of running instances reached (1)
+7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no hard drive': 0 found, 0 new (total 0)
 [scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
-[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
-[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc need gone today': 0 found, 0 new (total 0)
-2026-05-24 07:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
-Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 06:51:17 UTC)" skipped: maximum number of running instances reached (1)
-[scraper] eBay retry error for 'old pc clearing out': BrowserType.launch: Timeout 180000ms exceeded.
-Call log:
-  - <launching> /home/mac/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-PFBCSP --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=294558
-
-[scraper] eBay retry 'son old pc': 0 found, 0 new (total 0)
-2026-05-24 07:56:58 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
-[scraper] eBay retry 'unused pc': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop no os': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no power supply': 0 found, 0 new (total 0)
 [scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
-[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
-[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc collect today': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
 [scraper] eBay 'ryzen 7 cpu': 0 found, 0 new (total 0)
-[scraper] eBay 'i5 desktop': 0 found, 0 new (total 0)
-[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc free to good home': 0 found, 0 new (total 0)
-[scraper] eBay retry 'old computer quick sale': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc no longer needed': 0 found, 0 new (total 0)
-[scraper] eBay error for 'i7 tower': Page.goto: Timeout 30000ms exceeded.
-Call log:
-  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay error for 'desktop untested': Page.evaluate: Target crashed 
+[scraper] eBay 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'nvme ssd': 60 found, 60 new (total 60)
+[scraper] eBay 'pc boots no display': 45 found, 45 new (total 45)
+[scraper] eBay 'pc power supply': 0 found, 0 new (total 60)
+[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 45)
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 60)
+[scraper] eBay 'pc faulty': 0 found, 0 new (total 45)
+[scraper] eBay '7700x b650': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop faulty': 0 found, 0 new (total 45)
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'pc no os': 0 found, 0 new (total 45)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 60)
+[scraper] eBay 'desktop no os': 0 found, 0 new (total 45)
+[scraper] eBay 'pc no operating system': 0 found, 0 new (total 45)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 60)
+[scraper] eBay 'i5 desktop': 0 found, 0 new (total 45)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 60)
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 60)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 60)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 60)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 60)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 45)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 60)
+[scraper] eBay error for 'ryzen 5 desktop': Page.evaluate: Target crashed 
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 60)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 60)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 45)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 45)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 45)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 45)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 45)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 45)
+[scraper] eBay error for 'workstation joblot': Page.evaluate: Target crashed 
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 45)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 45)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 45)
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 45)
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 45)
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 45)
+[scraper] eBay 'compter tower': 0 found, 0 new (total 45)
+[scraper] eBay 'pc towre': 0 found, 0 new (total 45)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 45)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 45)
+[scraper] eBay 'gameing pc': 0 found, 0 new (total 45)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 45)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 45)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 45)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 45)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 45)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 45)
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 45)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 45)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 45)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 45)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 45)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 45)
+2026-05-24 09:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 08:51:17 UTC)" skipped: maximum number of running instances reached (1)
+000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
 
 [scraper] eBay error for 'rtx 3060': Page.goto: Timeout 30000ms exceeded.
 Call log:
@@ -2270,11 +2355,9 @@ Call log:
 [scraper] eBay retry 'desktop no gpu': 0 found, 0 new (total 0)
 2026-05-24 09:29:35 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=22
 2026-05-24 09:29:35 [info     ] source.done                    found=184 gems=1 source=eBay UK
-try 'bulk desktops': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
-[scraper] eBay 'am4 motherboard': 0 found, 0 new (total 0)
-[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop computer no SSD': 0 found, 0 new (total 0)
+2026-05-24 09:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 08:51:17 UTC)" skipped: maximum number of running instances reached (1)
+top computer no SSD': 0 found, 0 new (total 0)
 [scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
 [scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 0)
 [scraper] eBay retry 'pc untested': 0 found, 0 new (total 0)
@@ -2351,42 +2434,63 @@ Call log:
 [scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
 2026-05-24 08:57:45 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=45
 2026-05-24 08:57:45 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
-rType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-1NFYSf --remote-debugging-pipe --no-startup-window
-  -   - <launched> pid=28144
-  -   - [pid=28144][err] [0524/073618.504231:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=28144][err] [0524/073618.839075:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=28144][err] [0524/073618.843960:ERROR:bus.cc(407)] Failed to connect to the bus: The maximum number of active connections for UID 1000 has been reached
-  -   - [pid=28144][err] [0524/073618.848699:ERROR:file_path_watcher_inotify.cc(337)] inotify_init() failed: Too many open files (24)
-
-[scraper] eBay retry 'bulk desktops': 0 found, 0 new (total 0)
-2026-05-24 07:41:01 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=17 term=motherboard
-[scraper] eBay 'intel i7 cpu': 0 found, 0 new (total 0)
-[scraper] eBay error for 'ddr5 ram lot': Page.evaluate: Target crashed 
-2026-05-24 07:41:04 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=cpu+bundle&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
-2026-05-24 07:42:17 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
-2026-05-24 07:43:13 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
-2026-05-24 07:43:21 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=cpu bundle
-[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
-2026-05-24 07:43:23 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay retry 'pc untested': 0 found, 0 new (total 0)
-[scraper] eBay retry 'workstation joblot': 0 found, 0 new (total 0)
-[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
-[scraper] eBay 'nvme ssd': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop spares or repair': 0 found, 0 new (total 0)
-2026-05-24 07:43:56 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
-2026-05-24 07:43:59 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
-[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
-2026-05-24 07:44:13 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=4 skipped_no_title=18 term=motherboard cpu combo
-2026-05-24 07:44:15 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
-[scraper] eBay retry 'pc no display': 0 found, 0 new (total 0)
-[scraper] eBay 'pc power supply': 0 found, 0 new (total 0)
-[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
-[scraper] eBay retry 'desktop untested': 52 found, 52 new (total 52)
-2026-05-24 07:44:58 [info     ] i-bidder.playwright.no_result
-[scraper] eBay retry 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
-[scraper] eBay error for 'i7 tower': Page.goto: net::ERR_SOCKET_NOT_CONNECTED at https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
+[scraper] eBay 'i5 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay 'i5 10400 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay 'i7 10700 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'office tower pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gamng pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gmaing pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'destkop computer': 0 found, 0 new (total 0)
+[scraper] eBay error for 'gameing pc': Page.evaluate: Target crashed 
+[scraper] eBay 'computre tower': 60 found, 60 new (total 60)
+[scraper] eBay 'pc quick sale': 69 found, 68 new (total 128)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 128)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 128)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 128)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 128)
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 128)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 128)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 128)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 128)
+[scraper] eBay 'pc liquid cooler': 0 found, 0 new (total 128)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 128)
+2026-05-24 09:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 08:51:17 UTC)" skipped: maximum number of running instances reached (1)
+D at https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60
 Call log:
   - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=i7+tower&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
 
