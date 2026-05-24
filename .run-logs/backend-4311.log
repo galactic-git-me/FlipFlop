@@ -21015,3 +21015,5 @@ Call log:
 2026-05-24 09:17:44 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
 2026-05-24 09:17:44 [info     ] source.retry.success           retried_terms=15 source=i-bidder
 2026-05-24 09:17:44 [info     ] source.done                    found=40 gems=0 source=i-bidder
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 08:43:18 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-24 08:43:18 UTC)" skipped: maximum number of running instances reached (1)
