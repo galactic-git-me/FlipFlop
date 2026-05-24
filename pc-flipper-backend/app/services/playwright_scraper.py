@@ -124,9 +124,18 @@ def _is_pc_listing(title: str) -> bool:
 
 # ── Shared browser context factory ──────────────────────────────────────────
 
-async def _make_context(playwright, cookies: list | None = None):
+async def _make_context(
+    playwright,
+    cookies: list | None = None,
+    *,
+    force_persistent_profile: bool = False,
+):
     headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
+    # Persistent FB profile mode works best in headed mode unless explicitly overridden.
+    if force_persistent_profile and os.getenv("FB_HEADLESS") is None:
+        headless = False
     use_persistent_profile = os.getenv("FB_USE_PROFILE", "0").lower() in {"1", "true", "yes"}
+    use_persistent_profile = use_persistent_profile or force_persistent_profile
 
     if use_persistent_profile:
         FB_PROFILE_DIR.mkdir(parents=True, exist_ok=True)
@@ -387,7 +396,13 @@ async def scrape_facebook_playwright(
 
     async with async_playwright() as p:
         try:
-            browser, context = await _make_context(p, cookies)
+            # Facebook is most stable with a persistent browser profile; this
+            # preserves authenticated session state across runs.
+            browser, context = await _make_context(
+                p,
+                cookies,
+                force_persistent_profile=True,
+            )
         except Exception as exc:
             msg = str(exc)
             if "Executable doesn't exist" in msg or "chromium" in msg.lower():
