@@ -13,5 +13,8 @@
   },
   "external_demand": {
     "last_success_at": "2026-05-24T13:09:04.313100+00:00"
+  },
+  "upgrade_parts": {
+    "last_success_at": "2026-05-24T13:57:19.535956+00:00"
   }
 }
