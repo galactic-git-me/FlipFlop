@@ -221,7 +221,6 @@ async def scrape_gumtree_playwright(
                 url = (
                     "https://www.gumtree.com/search"
                     f"?q={term.replace(' ', '+')}"
-                    f"&search_category=desktop-pcs-towers-computers"
                     f"&max_price={int(max_price)}"
                     f"&min_price={int(min_price)}"
                     "&sort=date"
@@ -1043,6 +1042,7 @@ async def _scrape_auction_site(
     wait_selector: str | None = None,
     base_url: str = "",
     required_href_tokens: list[str] | None = None,
+    enforce_pc_keywords: bool = True,
 ) -> list[RawListing]:
     """
     Generic Playwright scraper for auction lot search pages.
@@ -1147,7 +1147,7 @@ async def _scrape_auction_site(
                             skipped_no_title += 1
                             continue
                     t = title.lower()
-                    if not any(kw in t for kw in _AUCTION_PC_KW):
+                    if enforce_pc_keywords and not any(kw in t for kw in _AUCTION_PC_KW):
                         skipped_keyword += 1
                         continue
                     if _is_mini_pc(title):
@@ -1280,6 +1280,7 @@ async def scrape_wilsons_playwright(
             wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
             base_url="https://www.wilsonsauctions.com",
             required_href_tokens=["/lot/", "/lots/"],
+            enforce_pc_keywords=False,
         )
 
 
@@ -1340,6 +1341,7 @@ async def scrape_ibidder_playwright(
             wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
             base_url="https://www.i-bidder.com",
             required_href_tokens=["/lot/", "/catalogue/"],
+            enforce_pc_keywords=False,
         )
 
 
@@ -1399,6 +1401,7 @@ async def scrape_bidspotter_playwright(
             wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
             base_url="https://www.bidspotter.co.uk",
             required_href_tokens=["/lot/", "/lots/"],
+            enforce_pc_keywords=False,
         )
 
 
