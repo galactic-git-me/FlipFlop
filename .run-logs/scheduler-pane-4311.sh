@@ -168,18 +168,6 @@ try:
 except Exception:
     sources_health = []
 
-last_run_meta = {}
-for _j in rows:
-    _jid = str((_j or {}).get("id") or "")
-    if not _jid:
-        continue
-    try:
-        with urllib.request.urlopen(f"{base_url}/api/schedule/{_jid}/runs", timeout=2) as rr:
-            _runs = json.load(rr) or []
-        last_run_meta[_jid] = _runs[0] if _runs else {}
-    except Exception:
-        last_run_meta[_jid] = {}
-
 flip_source_names = {
     "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
     "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
@@ -207,18 +195,6 @@ try:
     sources_health = sh.get("items", []) or []
 except Exception:
     sources_health = []
-
-last_run_meta = {}
-for _j in rows:
-    _jid = str((_j or {}).get("id") or "")
-    if not _jid:
-        continue
-    try:
-        with urllib.request.urlopen(f"{base_url}/api/schedule/{_jid}/runs", timeout=2) as rr:
-            _runs = json.load(rr) or []
-        last_run_meta[_jid] = _runs[0] if _runs else {}
-    except Exception:
-        last_run_meta[_jid] = {}
 
 flip_source_names = {
     "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
@@ -278,7 +254,6 @@ for j in rows:
     else:
         last = completed_since(j.get("last_run_at"))
 
-    run_msg = str((last_run_meta.get(jid) or {}).get("message") or "")
     if st_raw == "success":
         if jid == "flip_opportunities":
             if flip_found_total <= 0 and flip_error_count > 0:
@@ -292,15 +267,7 @@ for j in rows:
     elif st_raw == "running":
         st = "[yellow]running[/yellow]"
     elif st_raw == "skipped":
-        msg_l = run_msg.lower()
-        if "already running" in msg_l:
-            st = "[yellow]skipped busy[/yellow]"
-        elif "not_ready" in msg_l or "not ready" in msg_l:
-            st = "[red]no data[/red]"
-        elif "cooldown" in msg_l:
-            st = "[yellow]cooldown[/yellow]"
-        else:
-            st = "[yellow]skipped[/yellow]"
+        st = "[yellow]skipped[/yellow]"
     elif st_raw in {"failed", "error"}:
         st = f"[red]{st_raw}[/red]"
     elif st_raw in {"—", "", "None", "null"}:
@@ -316,7 +283,7 @@ for j in rows:
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
 PY
-    sleep 2
+    sleep 5
   done
 else
   while true; do
@@ -472,7 +439,6 @@ for j in rows:
         term = "—"
 
     st = str(j.get("last_status") or "—")
-    run_msg = str((last_run_meta.get(jid) or {}).get("message") or "")
     if st == "running":
         if jid == "flip_opportunities":
             last = term_progress_cell(j.get("last_run_at"), telem_source_items, FLIP_SOURCE_PREFIXES, flip_expected_terms)
@@ -495,15 +461,7 @@ for j in rows:
         else:
             st_disp = "success"
     elif st == "skipped":
-        msg_l = run_msg.lower()
-        if "already running" in msg_l:
-            st_disp = "skipped busy"
-        elif "not_ready" in msg_l or "not ready" in msg_l:
-            st_disp = "no data"
-        elif "cooldown" in msg_l:
-            st_disp = "cooldown"
-        else:
-            st_disp = "skipped"
+        st_disp = "skipped"
     elif st in {"—", "", "None", "null"}:
         if jid == "flip_opportunities" and flip_cooldown_count > 0 and flip_found_total <= 0:
             st_disp = "cooldown"
@@ -514,7 +472,7 @@ for j in rows:
 
     print(f"{jid:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
 PY
-    sleep 2
+    sleep 5
   done
 fi
 

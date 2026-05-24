@@ -77,5 +77,5 @@ print(f"  listings: {total}   gems: {gems}   gem-rate: {gem_rate:.1f}%   avg-pro
 print(f"  scan: {'running' if running else 'idle'}   progress: {done}/{scan_total}   found: {live_found}   live-gems: {live_gems}")
 print(f"  next scan: [{bar}]  T-{remain_txt}")
 PY
-  sleep 2
+  sleep 3
 done
