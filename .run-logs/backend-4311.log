@@ -1924,8 +1924,8 @@ Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 202
 2026-05-24 10:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 2026-05-24 11:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 10:51:17 UTC)" skipped: maximum number of running instances reached (1)
-'desktop spares or repair': 0 found, 0 new (total 0)
-[scraper] eBay 'ddr5 ram lot': 0 found, 0 new (total 0)
+2026-05-24 11:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+ew (total 0)
 [scraper] eBay 'pc no display': 0 found, 0 new (total 0)
 [scraper] eBay 'nvme ssd': 60 found, 60 new (total 60)
 [scraper] eBay 'pc boots no display': 45 found, 45 new (total 45)
@@ -2004,9 +2004,8 @@ Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 202
 2026-05-24 10:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 2026-05-24 11:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 10:51:17 UTC)" skipped: maximum number of running instances reached (1)
-, 0 new (total 0)
-[scraper] eBay retry 'pc liquid cooler': 0 found, 0 new (total 0)
-[scraper] eBay retry 'desktop liquid cooled': 0 found, 0 new (total 0)
+2026-05-24 11:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+ay retry 'desktop liquid cooled': 0 found, 0 new (total 0)
 2026-05-24 08:15:29 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 07:51:17 UTC)" skipped: maximum number of running instances reached (1)
 Run time of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-24 08:51:10 UTC)" was missed by 0:05:28.324599
@@ -2353,9 +2352,8 @@ Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 202
 2026-05-24 10:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 2026-05-24 11:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 10:51:17 UTC)" skipped: maximum number of running instances reached (1)
-ew (total 0)
-[scraper] eBay 'gtx 1660': 0 found, 0 new (total 0)
-[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 0)
+2026-05-24 11:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+: 0 found, 0 new (total 0)
 [scraper] eBay 'pc no psu': 0 found, 0 new (total 0)
 [scraper] eBay retry 'pc power supply': 0 found, 0 new (total 0)
 [scraper] eBay 'pc untested': 0 found, 0 new (total 0)
@@ -2481,9 +2479,8 @@ Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 202
 2026-05-24 10:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
 2026-05-24 11:51:10 [warning  ] job.skipped.already_running    job_id=flip_opportunities
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 10:51:17 UTC)" skipped: maximum number of running instances reached (1)
- (total 0)
-[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
-[scraper] eBay retry 'ex office pc': 0 found, [scraper] eBay retry 'HP workstation': 0 found, 0 new (total 52)
+2026-05-24 11:56:49 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=1
+': 0 found, [scraper] eBay retry 'HP workstation': 0 found, 0 new (total 52)
 2026-05-24 07:51:11 [warning  ] job.skipped.already_running    job_id=flip_opportunities
 Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-24 06:51:17 UTC)" skipped: maximum number of running instances reached (1)
 Run time of job "Retrain Checkpoint Watchdog (trigger: interval[1:00:00], next run at: 2026-05-24 07:56:46 UTC)" was missed by 0:00:01.191896
