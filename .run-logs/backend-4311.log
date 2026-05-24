@@ -5175,3 +5175,67 @@ Call log:
 2026-05-24 13:21:17 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
 [scraper] eBay playwright blocked term='proart am5' title='Access Denied'
 2026-05-24 13:21:20 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay 'proart am5': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+2026-05-24 13:21:48 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+[scraper] eBay playwright blocked term='asus tuf b650' title='Access Denied'
+2026-05-24 13:21:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-24 13:21:51 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 13:21:52 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-24 13:21:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:21:55 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 13:21:55 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+2026-05-24 13:21:57 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 74)
+2026-05-24 13:22:26 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+[scraper] eBay playwright blocked term='asus tuf b650' title='Access Denied'
+2026-05-24 13:22:28 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 13:22:28 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 13:22:29 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-24 13:22:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+2026-05-24 13:22:32 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-24 13:22:32 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 74)
+2026-05-24 13:22:34 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='asus tuf b650' title='Access Denied'
+[scraper] eBay 'asus tuf b650': 0 found, 0 new (total 74)
+[scraper] eBay playwright blocked term='msi gaming plus b650' title='Access Denied'
+2026-05-24 13:23:03 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+2026-05-24 13:23:05 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-24 13:23:05 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming computer
+2026-05-24 13:23:07 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+2026-05-24 13:23:08 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-24 13:23:11 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-24 13:23:11 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+2026-05-24 13:23:13 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='msi gaming plus b650' title='Access Denied'
+[scraper] eBay playwright blocked term='gigabyte aorus elite b650' title='Access Denied'
+[scraper] eBay 'gigabyte aorus elite b650': 0 found, 0 new (total 74)
+2026-05-24 13:23:40 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-24 13:23:42 [info     ] Wilsons Auctions.playwright.cards count=1 term=i7 desktop
+2026-05-24 13:23:42 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i7 desktop
+[scraper] eBay playwright blocked term='msi gaming plus b650' title='Access Denied'
+2026-05-24 13:23:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i5+desktop&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:23:46 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=i5 desktop
+[scraper] eBay 'msi gaming plus b650': 0 found, 0 new (total 74)
+2026-05-24 13:23:48 [info     ] Wilsons Auctions.playwright.cards count=1 term=i5 desktop
+2026-05-24 13:23:49 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=i5 desktop
