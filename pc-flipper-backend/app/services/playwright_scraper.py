@@ -1042,6 +1042,7 @@ async def _scrape_auction_site(
     max_price: float,
     wait_selector: str | None = None,
     base_url: str = "",
+    required_href_tokens: list[str] | None = None,
 ) -> list[RawListing]:
     """
     Generic Playwright scraper for auction lot search pages.
@@ -1156,6 +1157,8 @@ async def _scrape_auction_site(
                         continue
                     if not href.startswith("http"):
                         href = base_url + href
+                    if required_href_tokens and not any(tok in href for tok in required_href_tokens):
+                        continue
 
                     slug = href.rstrip("/").split("/")[-1].split("?")[0]
                     external_id = f"{site_name.lower().replace(' ', '_')}_{slug}"
@@ -1268,6 +1271,7 @@ async def scrape_wilsons_playwright(
             max_price=max_price,
             wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
             base_url="https://www.wilsonsauctions.com",
+            required_href_tokens=["/lot/", "/lots/"],
         )
 
 
@@ -1327,6 +1331,7 @@ async def scrape_ibidder_playwright(
             max_price=max_price,
             wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
             base_url="https://www.i-bidder.com",
+            required_href_tokens=["/lot/", "/catalogue/"],
         )
 
 
@@ -1385,6 +1390,7 @@ async def scrape_bidspotter_playwright(
             max_price=max_price,
             wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
             base_url="https://www.bidspotter.co.uk",
+            required_href_tokens=["/lot/", "/lots/"],
         )
 
 

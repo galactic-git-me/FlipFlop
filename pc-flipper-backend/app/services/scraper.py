@@ -1517,8 +1517,8 @@ async def fetch_listings(
         return await scrape_ebay(_prioritize_ebay_flip_terms(search_terms), min_price, max_price)
 
     if "gumtree" in name:
-        # Gumtree is blocked by Reblaze WAF — disabled
-        return []
+        pl_results = await scrape_gumtree_playwright(prioritized_gumtree_fb_terms, min_price, max_price)
+        return [_convert(r) for r in pl_results]
 
     if "facebook" in name or "marketplace" in name:
         pl_results = await scrape_facebook_playwright(prioritized_gumtree_fb_terms, min_price, max_price)
