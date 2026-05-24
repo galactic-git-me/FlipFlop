@@ -895,7 +895,48 @@ INFO:     Waiting for background tasks to complete. (CTRL+C to force quit)
 2026-05-24 05:33:25 [info     ] source.done                    found=0 gems=0 source=AliExpress
 [scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
 2026-05-24 05:33:44 [info     ] source.done                    found=0 gems=0 source=Alibaba
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                [scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 0)
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 0)
+[scraper] eBay error for 'ex office pc lot': Page.evaluate: Target crashed 
+[scraper] eBay 'gaming pc quick sale': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc water cooled': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc with aio': 0 found, 0 new (total 0)
+[scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+[scraper] eBay 'computer tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z240': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'desktop pc': All connection attempts failed
+[scraper] John Pye error for 'gaming pc': All connection attempts failed
+[scraper] John Pye error for 'computer tower': All connection attempts failed
+[scraper] John Pye error for 'pc build': All connection attempts failed
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] John Pye error for 'HP EliteDesk': All connection attempts failed
+[scraper] John Pye error for 'Dell OptiPlex': All connection attempts failed
+2026-05-24 05:38:00 [warning  ] source.retry.partial           retried_terms=6 source=John Pye still_failed_terms=6
+2026-05-24 05:38:00 [info     ] source.done                    found=0 gems=0 source=John Pye
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                [scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
 [scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
 [scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
 [scraper] eBay 'HP Z440': 0 found, 0 new (total 0)
@@ -1154,76 +1195,96 @@ INFO:     Waiting for background tasks to complete. (CTRL+C to force quit)
 2026-05-24 05:36:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=graphics+card&priceMin=0&priceMax=500&categoryId=65
 [scraper] eBay retry 'ex office pc lot': 0 found, 0 new (total 0)
 2026-05-24 05:36:49 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
-:39 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
-2026-05-24 05:30:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
-2026-05-24 05:30:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=1 skipped_no_title=0 term=graphics card
-2026-05-24 05:30:44 [info     ] Wilsons Auctions.playwright.done total=0
-2026-05-24 05:30:44 [info     ] source.retry.success           retried_terms=18 source=Wilsons Auctions
-2026-05-24 05:30:44 [info     ] source.done                    found=0 gems=0 source=Wilsons Auctions
-2026-05-24 05:30:46 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=cpu bundle
-2026-05-24 05:30:49 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
-[scraper] eBay 'gaiming pc': 0 found, 0 new (total 60)
-2026-05-24 05:30:51 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=21 skipped_no_title=1 term=cpu bundle
+2026-05-24 05:36:51 [info     ] i-bidder.playwright.cards      count=23 term=cpu bundle
+[scraper] eBay 'gamnig pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaiming pc': 0 found, 0 new (total 0)
+2026-05-24 05:36:53 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=cpu bundle
+2026-05-24 05:36:56 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay retry 'pc untested': 0 found, 0 new (total 0)
 [scraper] eBay retry 'desktop untested': 0 found, 0 new (total 0)
-2026-05-24 05:30:53 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard+cpu+combo&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'deskptop pc': 0 found, 0 new (total 0)
+2026-05-24 05:37:14 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-24 05:37:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=graphics card
+2026-05-24 05:37:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=graphics card
+[scraper] eBay retry 'pc spares or repair': 0 found, 0 new (total 0)
+2026-05-24 05:37:18 [info     ] Wilsons Auctions.playwright.done total=1
+2026-05-24 05:37:18 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-24 05:37:18 [info     ] resale_scraper.fallback_buy_price buy_price=1.35 median=493.62 query=gaming PC rtx 3060
+2026-05-24 05:37:18 [info     ] source.retry.success           retried_terms=18 source=Wilsons Auctions
+2026-05-24 05:37:18 [info     ] source.done                    found=2 gems=0 source=Wilsons Auctions
+2026-05-24 05:37:28 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
+[scraper] eBay 'compter tower': 0 found, 0 new (total 0)
+2026-05-24 05:37:31 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
 [scraper] eBay retry 'pc no display': 0 found, 0 new (total 0)
+2026-05-24 05:37:32 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=motherboard cpu combo
+2026-05-24 05:37:35 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'pc towre': 0 found, 0 new (total 0)
 [scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 0)
-[scraper] eBay 'deskptop pc': 0 found, 0 new (total 60)
-[scraper] eBay 'compter tower': 0 found, 0 new (total 60)
-2026-05-24 05:31:25 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=motherboard cpu combo
-2026-05-24 05:31:28 [info     ] i-bidder.playwright.cards      count=23 term=motherboard cpu combo
 [scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 0)
-2026-05-24 05:31:30 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=21 skipped_no_title=1 term=motherboard cpu combo
-2026-05-24 05:31:33 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=graphics+card&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay 'pc towre': 0 found, 0 new (total 60)
+[scraper] eBay 'destop pc': 0 found, 0 new (total 0)
 [scraper] eBay retry 'HP workstation': 0 found, 0 new (total 0)
+2026-05-24 05:38:07 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
+2026-05-24 05:38:09 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
 [scraper] eBay retry 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
-[scraper] eBay 'destkop computer': 0 found, 0 new (total 60)
-[scraper] eBay 'destop pc': 0 found, 0 new (total 60)
-2026-05-24 05:32:05 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=graphics card
-[scraper] eBay error for 'gameing pc': Page.evaluate: Target crashed 
-2026-05-24 05:32:08 [info     ] i-bidder.playwright.cards      count=23 term=graphics card
-[scraper] eBay retry 'Dell Precision tower': 0 found, 0 new (total 0)
-2026-05-24 05:32:09 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=21 skipped_no_title=1 term=graphics card
-2026-05-24 05:32:12 [info     ] i-bidder.playwright.done       total=0
-2026-05-24 05:32:12 [info     ] source.retry.success           retried_terms=18 source=i-bidder
-2026-05-24 05:32:12 [info     ] source.done                    found=0 gems=0 source=i-bidder
-mmary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=AMD Ryzen 7 7800X3D
-2026-05-24 05:31:20 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay 'am5 bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'pc boots no display': 0 found, 0 new (total 0)
-[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'pc powers on no signal': 0 found, 0 new (total 0)
-2026-05-24 05:31:49 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
-[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 0)
-2026-05-24 05:31:51 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
-2026-05-24 05:31:51 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=Ryzen 9 7900
-2026-05-24 05:31:53 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 05:31:53 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
-2026-05-24 05:31:56 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900
-[scraper] eBay 'pc faulty': 0 found, 0 new (total 0)
-2026-05-24 05:31:59 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=Ryzen 9 7900
-2026-05-24 05:32:00 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Ryzen+9+7900X&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 0)
-[scraper] eBay 'desktop faulty': 0 found, 0 new (total 0)
-2026-05-24 05:32:25 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
-2026-05-24 05:32:27 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900X
-2026-05-24 05:32:28 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=Ryzen 9 7900X
-2026-05-24 05:32:30 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=desktop+pc&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 05:32:33 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Ryzen 9 7900X
-2026-05-24 05:32:35 [info     ] i-bidder.playwright.cards      count=23 term=Ryzen 9 7900X
-[scraper] eBay 'pc powers up untested': 0 found, 0 new (total 0)
-[scraper] eBay '7900 bundle': 0 found, 0 new (total 0)
-[scraper] eBay 'proart am5': 0 found, 0 new (total 0)
-2026-05-24 05:32:39 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=Ryzen 9 7900X
-[scraper] eBay 'pc no os': 0 found, 0 new (total 0)
-2026-05-24 05:32:41 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=desktop+pc&country=gb&priceFrom=0&priceTo=500
-[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 0)
-2026-05-24 05:33:03 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
-2026-05-24 05:33:05 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
-2026-05-24 05:33:05 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=desktop pc
-2026-05-24 05:33:07 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
-[scraper] eBay 'desktop no os': 0 found, 0 new (total 0)
+2026-05-24 05:38:11 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=graphics card
+2026-05-24 05:38:13 [info     ] i-bidder.playwright.done       total=0
+2026-05-24 05:38:13 [info     ] source.retry.success           retried_terms=19 source=i-bidder
+2026-05-24 05:38:13 [info     ] source.done                    found=0 gems=0 source=i-bidder
+y 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'computre tower': 0 found, 0 new (total 60)
+[scraper] eBay 'pc need gone today': 0 found, 0 new (total 60)
+[scraper] eBay retry 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc quick sale': 0 found, 0 new (total 60)
+[scraper] eBay retry 'ryzen desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'xeon tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'i7 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'old pc clearing out': 0 found, 0 new (total 60)
+[scraper] eBay 'son old pc': 0 found, 0 new (total 60)
+[scraper] eBay retry 'lga1700 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'unused pc': 0 found, 0 new (total 60)
+[scraper] eBay retry 'am4 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay retry 'intel i7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'pc collect today': 0 found, 0 new (total 60)
+[scraper] eBay retry 'ryzen 7 cpu': 0 found, 0 new (total 0)
+[scraper] eBay 'old computer quick sale': 0 found, 0 new (total 60)
+[scraper] eBay retry 'rtx 3060': 0 found, 0 new (total 0)
+[scraper] eBay 'pc free to good home': 0 found, 0 new (total 60)
+[scraper] eBay retry 'gtx 1660': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr4 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ddr5 ram lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc no longer needed': 0 found, 0 new (total 60)
+[scraper] eBay retry 'nvme ssd': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop liquid cooled': 0 found, 0 new (total 60)
+[scraper] eBay 'pc liquid cooler': 59 found, 59 new (total 119)
+[scraper] eBay retry 'pc power supply': 0 found, 0 new (total 0)
+[scraper] eBay retry '7700x b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay retry 'am5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'ryzen bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 119)
+[scraper] eBay retry 'ddr5 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 119)
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 119)
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc base unit no graphics': 0 found, 0 new (total 119)
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 0)
+[scraper] eBay retry 'motherboard cpu combo': 0 found, 0 new (total 119)
+[scraper] eBay retry 'ryzen 7700': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc base unit': 0 found, 0 new (total 119)
+[scraper] eBay retry 'ryzen 7700x': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 119)
+[scraper] eBay retry 'ryzen 9700x': 0 found, 0 new (total 0)
+[scraper] eBay retry 'desktop pc': 0 found, 0 new (total 119)
+[scraper] eBay retry 'ryzen 7900': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 119)
+[scraper] eBay retry 'asus tuf b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower no storage': 0 found, 0 new (total 119)
+[scraper] eBay retry 'gigabyte aorus elite b650': 0 found, 0 new (total 0)
+[scraper] eBay retry 'pc tower no graphics': 0 found, 0 new (total 119)
+[scraper] eBay retry 'msi gaming plus b650': 0 found, 0 new (total 0)
+2026-05-24 05:38:00 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
+new (total 0)
 2026-05-24 05:33:13 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
 2026-05-24 05:33:16 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
 2026-05-24 05:33:18 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=desktop pc
@@ -1301,33 +1362,34 @@ mmary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=AMD Ryzen 7 7800
 2026-05-24 05:36:47 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=workstation
 [scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 0)
 2026-05-24 05:36:49 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
-ywright.fetch url=https://www.wilsonsauctions.com/lots?query=motherboard&priceMin=0&priceMax=500&categoryId=65
-2026-05-24 05:32:34 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=0 skipped_no_title=0 term=motherboard
-2026-05-24 05:32:36 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=cpu+bundle&country=gb
+[scraper] eBay retry 'pc tower': 0 found, 0 new (total 0)
+2026-05-24 05:37:04 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+2026-05-24 05:37:06 [info     ] i-bidder.playwright.cards      count=23 term=workstation
 [scraper] eBay retry 'gaming pc untested': 0 found, 0 new (total 0)
-[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
-2026-05-24 05:32:52 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=office pc
+2026-05-24 05:37:08 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=workstation
+2026-05-24 05:37:10 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'ryzen 5 3600 desktop': 0 found, 0 new (total 0)
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 0)
 [scraper] eBay retry 'gaming pc faulty': 0 found, 0 new (total 0)
-2026-05-24 05:32:54 [info     ] i-bidder.playwright.cards      count=23 term=office pc
-2026-05-24 05:32:56 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=office pc
-[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
-2026-05-24 05:32:58 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=refurbished+pc&country=gb&priceFrom=0&priceTo=500
-2026-05-24 05:33:00 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
-[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
-[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
-2026-05-24 05:33:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=0 skipped_no_title=0 term=cpu bundle
-2026-05-24 05:33:06 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=motherboard
-2026-05-24 05:33:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
-2026-05-24 05:33:08 [info     ] Wilsons Auctions.playwright.cards count=1 term=motherboard
-2026-05-24 05:33:09 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=motherboard
-2026-05-24 05:33:10 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=cpu+bundle&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 05:37:22 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+[scraper] eBay 'ryzen 7 5800 desktop': 0 found, 0 new (total 0)
+2026-05-24 05:37:24 [info     ] Wilsons Auctions.playwright.cards count=1 term=Lenovo ThinkCentre
+2026-05-24 05:37:24 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 05:37:27 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+computer&priceMin=0&priceMax=500&categoryId=65
 [scraper] eBay retry 'pc job lot': 0 found, 0 new (total 0)
-[scraper] eBay retry 'office computers clearance': 0 found, 0 new (total 0)
-2026-05-24 05:33:31 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=refurbished pc
-2026-05-24 05:33:31 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
-2026-05-24 05:33:33 [info     ] i-bidder.playwright.cards      count=23 term=refurbished pc
-2026-05-24 05:33:36 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=refurbished pc
-[scraper] eBay 'bulk pcs desktop': 0 found, 0 new (total 0)
+[scraper] eBay retry 'gaming pc': 0 found, 0 new (total 0)
+2026-05-24 05:37:42 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Lenovo ThinkCentre
+2026-05-24 05:37:45 [info     ] i-bidder.playwright.cards      count=23 term=Lenovo ThinkCentre
+2026-05-24 05:37:47 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_keyword=0 skipped_no_title=1 term=Lenovo ThinkCentre
+2026-05-24 05:37:49 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+computer&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay retry 'it clearance desktop': 0 found, 0 new (total 0)
+2026-05-24 05:37:59 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming computer
+[scraper] eBay retry 'office pc lot': 0 found, 0 new (total 0)
+2026-05-24 05:38:01 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming computer
+2026-05-24 05:38:01 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_keyword=0 skipped_no_title=0 term=gaming computer
+[scraper] eBay 'ex office pc': 0 found, 0 new (total 0)
+2026-05-24 05:38:03 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=i7+desktop&priceMin=0&priceMax=500&categoryId=65
+desktop': 0 found, 0 new (total 0)
 2026-05-24 05:33:37 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_keyword=0 skipped_no_title=0 term=motherboard cpu combo
 2026-05-24 05:33:38 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=motherboard&country=gb&priceFrom=0&priceTo=500
 [scraper] eBay 'workstation joblot': 0 found, 0 new (total 0)
