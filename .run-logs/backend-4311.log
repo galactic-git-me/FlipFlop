@@ -4533,3 +4533,92 @@ Call log:
 [scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
 2026-05-24 13:15:25 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=Alibaba
 2026-05-24 13:15:25 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
+2026-05-24 13:15:30 [info     ] aliexpress.cases.done          found=0 search=batcomputer workstation
+2026-05-24 13:15:30 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
+2026-05-24 13:15:32 [info     ] temu.cases.done                found=0 search=dark knight pc
+2026-05-24 13:15:32 [info     ] temu.cases.done                found=0 search=batcomputer workstation
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+2026-05-24 13:15:34 [info     ] amazon.cases.done              found=10 search=kryptonian workstation
+2026-05-24 13:15:38 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+2026-05-24 13:15:40 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-24 13:15:41 [info     ] BidSpotter.playwright.cards    count=60 term=cpu bundle
+2026-05-24 13:15:42 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+2026-05-24 13:15:42 [info     ] BidSpotter.playwright.cards    count=60 term=workstation
+2026-05-24 13:15:43 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:15:43 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:15:43 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=AMD+Ryzen+7+7800X3D&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+2026-05-24 13:15:44 [info     ] amazon.cases.done              found=0 search=fortress of solitude build
+2026-05-24 13:15:45 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:15:45 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=i7 desktop
+2026-05-24 13:15:46 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=Alibaba
+2026-05-24 13:15:47 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-24 13:15:47 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=cpu bundle
+2026-05-24 13:15:48 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=Alibaba
+2026-05-24 13:15:48 [info     ] i-bidder.playwright.cards      count=23 term=i7 desktop
+2026-05-24 13:15:48 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-24 13:15:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i7 desktop
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+2026-05-24 13:15:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i7 desktop
+2026-05-24 13:15:50 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=motherboard+cpu+combo&country=gb
+2026-05-24 13:15:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:15:51 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=Lenovo+ThinkCentre&country=gb
+2026-05-24 13:15:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=i5+desktop&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+2026-05-24 13:15:55 [info     ] temu.cases.done                found=0 search=kryptonian workstation
+2026-05-24 13:15:56 [info     ] aliexpress.cases.done          found=0 search=fortress of solitude build
+2026-05-24 13:15:56 [info     ] aliexpress.cases.done          found=0 search=kryptonian workstation
+2026-05-24 13:15:56 [info     ] amazon.cases.done              found=10 search=hyte y60 style case
+2026-05-24 13:15:56 [info     ] temu.cases.done                found=0 search=fortress of solitude build
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+2026-05-24 13:16:00 [info     ] cases.generic_market.done      found=0 search=lian li style case source=BargainHardware
+2026-05-24 13:16:05 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=BargainHardware
+2026-05-24 13:16:05 [info     ] amazon.cases.done              found=0 search=lian li style case
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+2026-05-24 13:16:09 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+2026-05-24 13:16:09 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+2026-05-24 13:16:14 [info     ] BidSpotter.playwright.cards    count=60 term=motherboard cpu combo
+2026-05-24 13:16:15 [info     ] BidSpotter.playwright.cards    count=60 term=Lenovo ThinkCentre
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+2026-05-24 13:16:16 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=AMD Ryzen 7 7800X3D
+2026-05-24 13:16:17 [info     ] amazon.cases.done              found=10 search=Montech panoramic case
+2026-05-24 13:16:17 [info     ] amazon.cases.done              found=10 search=darkFlash fish tank
+2026-05-24 13:16:18 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Ryzen 9 7900
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-24 13:16:19 [info     ] Wilsons Auctions.playwright.cards count=1 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:16:19 [info     ] aliexpress.cases.done          found=0 search=lian li style case
+2026-05-24 13:16:19 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=1 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=AMD Ryzen 7 7800X3D
+2026-05-24 13:16:20 [info     ] aliexpress.cases.done          found=0 search=hyte y60 style case
+2026-05-24 13:16:20 [info     ] temu.cases.done                found=0 search=hyte y60 style case
+2026-05-24 13:16:20 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=motherboard cpu combo
+2026-05-24 13:16:20 [info     ] Wilsons Auctions.playwright.cards count=1 term=Ryzen 9 7900
+2026-05-24 13:16:20 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Ryzen 9 7900
+2026-05-24 13:16:21 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Lenovo ThinkCentre
+2026-05-24 13:16:21 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+2026-05-24 13:16:22 [info     ] temu.cases.done                found=0 search=lian li style case
+2026-05-24 13:16:22 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Ryzen+9+7900X&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:16:22 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=graphics+card&country=gb
+2026-05-24 13:16:23 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=i5 desktop
+2026-05-24 13:16:23 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=gaming+computer&country=gb
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 0)
+2026-05-24 13:16:25 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=BargainHardware
+2026-05-24 13:16:26 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+2026-05-24 13:16:26 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=BargainHardware
+2026-05-24 13:16:26 [info     ] i-bidder.playwright.cards      count=23 term=i5 desktop
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+2026-05-24 13:16:28 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=Alibaba
+2026-05-24 13:16:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i5 desktop
+2026-05-24 13:16:29 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=i5 desktop
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+2026-05-24 13:16:30 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=Alibaba
+2026-05-24 13:16:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+2026-05-24 13:16:31 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=office+pc&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+2026-05-24 13:16:37 [info     ] amazon.cases.done              found=10 search=showcase build
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+2026-05-24 13:16:38 [info     ] amazon.cases.done              found=0 search=custom gaming pc
