@@ -380,12 +380,23 @@ async def _upsert_listings(
 
         with db.no_autoflush:
             existing = await db.execute(
-                select(Listing).where(
-                    (Listing.external_id == raw.external_id) |
-                    (Listing.dedupe_fingerprint == fp)
+                select(Listing)
+                .where(
+                    (Listing.external_id == raw.external_id)
+                    | (Listing.dedupe_fingerprint == fp)
                 )
+                .order_by(Listing.id.desc())
             )
-            listing = existing.scalar_one_or_none()
+            dup_rows = existing.scalars().all()
+            listing = dup_rows[0] if dup_rows else None
+            if len(dup_rows) > 1:
+                log.warning(
+                    "listing.duplicate_match",
+                    external_id=raw.external_id,
+                    fingerprint=fp,
+                    duplicate_rows=len(dup_rows),
+                    source=raw.source_name,
+                )
 
         if listing:
             listing.last_seen_at = datetime.utcnow()

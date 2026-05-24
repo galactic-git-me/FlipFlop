@@ -1302,7 +1302,7 @@ async def scrape_wilsons_playwright(
             max_price=max_price,
             wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
             base_url="https://www.wilsonsauctions.com",
-            required_href_tokens=["/lot/", "/lots/"],
+            required_href_tokens=None,
             enforce_pc_keywords=False,
             strict_price_cap=False,
         )
@@ -1364,7 +1364,7 @@ async def scrape_ibidder_playwright(
             max_price=max_price,
             wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
             base_url="https://www.i-bidder.com",
-            required_href_tokens=["/lot/", "/catalogue/", "/auction-catalogues/"],
+            required_href_tokens=None,
             enforce_pc_keywords=False,
             strict_price_cap=False,
         )
@@ -1425,7 +1425,7 @@ async def scrape_bidspotter_playwright(
             max_price=max_price,
             wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
             base_url="https://www.bidspotter.co.uk",
-            required_href_tokens=["/lot/", "/lots/", "/lot-details/", "/auction-catalogues/"],
+            required_href_tokens=None,
             enforce_pc_keywords=False,
             strict_price_cap=False,
         )

@@ -185,9 +185,19 @@ async def _scrape_source_bg(source_id: int):
                 score_result = item["score_result"]
 
                 existing = await db.execute(
-                    select(Listing).where(Listing.external_id == raw.external_id)
+                    select(Listing)
+                    .where(Listing.external_id == raw.external_id)
+                    .order_by(Listing.id.desc())
                 )
-                listing = existing.scalar_one_or_none()
+                existing_rows = existing.scalars().all()
+                listing = existing_rows[0] if existing_rows else None
+                if len(existing_rows) > 1:
+                    log.warning(
+                        "source.scrape.duplicate_external_id",
+                        source=source.name,
+                        external_id=raw.external_id,
+                        duplicate_rows=len(existing_rows),
+                    )
                 if listing:
                     listing.last_seen_at = datetime.utcnow()
                     listing.price = raw.price

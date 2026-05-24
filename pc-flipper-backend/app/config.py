@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     scrape_delay_min: float = 2.0
     scrape_delay_max: float = 5.0
-    max_concurrent_scrapers: int = 3
+    max_concurrent_scrapers: int = 8
     source_retry_delay_minutes: int = 8
     source_retry_max_terms: int = 20
 
