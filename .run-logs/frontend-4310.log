@@ -59,3 +59,7 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  GET /styles.css.map 404 in 41ms (next.js: 1646µs, application-code: 39ms)
  GET /settings 200 in 44ms (next.js: 1830µs, application-code: 42ms)
  GET /styles.css.map 404 in 43ms (next.js: 1700µs, application-code: 41ms)
+ GET /settings 200 in 61ms (next.js: 1929µs, application-code: 59ms)
+ GET /styles.css.map 404 in 66ms (next.js: 3ms, application-code: 63ms)
+ GET /settings 200 in 53ms (next.js: 2ms, application-code: 51ms)
+ GET /styles.css.map 404 in 61ms (next.js: 5ms, application-code: 56ms)
