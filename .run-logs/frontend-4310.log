@@ -28,3 +28,4 @@ module.exports = {
 Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
  GET /settings 200 in 1635ms (next.js: 1295ms, application-code: 340ms)
  GET /settings 200 in 57ms (next.js: 3ms, application-code: 55ms)
+ GET /settings 200 in 108ms (next.js: 7ms, application-code: 101ms)
