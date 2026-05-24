@@ -5842,3 +5842,92 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 Future exception was never retrieved
 future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
 playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc base unit' title='Access Denied'
+[scraper] eBay 'pc base unit': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc base unit no graphics' title='Access Denied'
+[scraper] eBay 'pc base unit no graphics': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-24 13:36:00 [info     ] BidSpotter.playwright.cards    count=60 term=gaming pc
+2026-05-24 13:36:00 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=desktop pc
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+2026-05-24 13:36:03 [info     ] Wilsons Auctions.playwright.cards count=1 term=desktop pc
+2026-05-24 13:36:03 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=desktop pc
+2026-05-24 13:36:04 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=desktop pc
+2026-05-24 13:36:04 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+2026-05-24 13:36:05 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=gaming+pc&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:36:06 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=computer+tower&country=gb
+2026-05-24 13:36:06 [info     ] i-bidder.playwright.cards      count=23 term=desktop pc
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+2026-05-24 13:36:07 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=desktop pc
+2026-05-24 13:36:09 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=gaming+pc&country=gb&priceFrom=0&priceTo=500
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=desktop+pcs+lot&_sacat=0&LH_Auction=1&_udlo=0&_udhi=2000&_sop=1&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=desktop+pcs+lot&_sacat=0&LH_Auction=1&_udlo=0&_udhi=2000&_sop=1&_ipg=120", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+2026-05-24 13:36:32 [info     ] BidSpotter.playwright.cards    count=60 term=computer tower
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 0)
+2026-05-24 13:36:36 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+[scraper] eBay playwright blocked term='pc tower no graphics' title='Access Denied'
+2026-05-24 13:36:38 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=pc+build&country=gb
+2026-05-24 13:36:38 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=gaming pc
+2026-05-24 13:36:40 [info     ] Wilsons Auctions.playwright.cards count=1 term=gaming pc
+2026-05-24 13:36:40 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=gaming pc
+2026-05-24 13:36:41 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=gaming pc
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+2026-05-24 13:36:42 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=computer+tower&priceMin=0&priceMax=500&categoryId=65
+2026-05-24 13:36:44 [info     ] i-bidder.playwright.cards      count=23 term=gaming pc
+2026-05-24 13:36:45 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=gaming pc
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+2026-05-24 13:36:47 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=computer+tower&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+2026-05-24 13:37:02 [info     ] BidSpotter.playwright.cards    count=60 term=pc build
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+2026-05-24 13:37:05 [info     ] BidSpotter.playwright.term_summary cards=60 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=pc build
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+2026-05-24 13:37:08 [info     ] BidSpotter.playwright.fetch    url=https://www.bidspotter.co.uk/en-us/auction-catalogues?search=HP+EliteDesk&country=gb
+[scraper] eBay 'pc build': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='office computers clearance' title='Access Denied'
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-24 13:37:14 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=computer tower
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+2026-05-24 13:37:16 [info     ] Wilsons Auctions.playwright.cards count=1 term=computer tower
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-24 13:37:16 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=computer tower
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 0)
+2026-05-24 13:37:19 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=pc+build&priceMin=0&priceMax=500&categoryId=65
