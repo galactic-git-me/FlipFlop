@@ -5,11 +5,11 @@ Tailscale URL: andromeda-ts:4310
 Tailscale URL (live): andromeda-ts:4310
 
 > pc-flipper@0.1.0 dev
-> next dev -p 4310 -H 0.0.0.0
+> next dev --turbopack -p 4310 -H 0.0.0.0
 
 ▲ Next.js 16.2.4 (Turbopack)
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
 - Environments: .env.local
-✓ Ready in 495ms
+✓ Ready in 398ms
 
