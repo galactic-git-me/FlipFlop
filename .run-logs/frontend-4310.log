@@ -38,3 +38,5 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  GET /settings 200 in 983ms (next.js: 677ms, application-code: 306ms)
  GET /settings 200 in 75ms (next.js: 5ms, application-code: 70ms)
  GET /settings 200 in 55ms (next.js: 2ms, application-code: 53ms)
+ GET /settings 200 in 101ms (next.js: 3ms, application-code: 98ms)
+ GET /settings 200 in 81ms (next.js: 1960µs, application-code: 79ms)
