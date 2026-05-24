@@ -14,6 +14,7 @@ BACKEND_BIND_HOST="${BACKEND_BIND_HOST:-0.0.0.0}"
 PUBLIC_HOST="${PUBLIC_HOST:-andromeda-ts}"
 TMUX_SESSION="${TMUX_SESSION:-flipflop-dev-logs}"
 FRONTEND_MODE="${FRONTEND_MODE:-dev}" # dev | prod
+FRONTEND_DEV_BUNDLER="${FRONTEND_DEV_BUNDLER:-turbo}" # turbo | webpack
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
 ATTACH_TMUX="${ATTACH_TMUX:-1}"
@@ -199,6 +200,10 @@ free_port "$FRONTEND_PORT"
 
 echo "Starting frontend on http://$PUBLIC_HOST:$FRONTEND_PORT ..."
 start_frontend() {
+  local dev_flag="--turbopack"
+  if [[ "$FRONTEND_DEV_BUNDLER" == "webpack" ]]; then
+    dev_flag="--webpack"
+  fi
   (
     cd "$FRONTEND_DIR"
     # Guard against EMFILE from recursive file watching in larger repos.
@@ -211,7 +216,7 @@ start_frontend() {
     echo "Tailscale URL: $PUBLIC_HOST:$FRONTEND_PORT"
     echo "============================================================"
     if [[ "$FRONTEND_MODE" == "dev" ]]; then
-      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
+      NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" npm run dev -- "$dev_flag" -p "$FRONTEND_PORT" -H "$FRONTEND_BIND_HOST" &
       _frontend_child=$!
       echo "Tailscale URL (live): $PUBLIC_HOST:$FRONTEND_PORT"
       wait "$_frontend_child"
@@ -239,6 +244,7 @@ force_clear_frontend_port() {
 start_frontend_with_retry() {
   local attempt=1
   local max_attempts=3
+  local emfile_fallback_used=0
   while (( attempt <= max_attempts )); do
     force_clear_frontend_port
     : >"$FRONTEND_LOG"
@@ -249,6 +255,19 @@ start_frontend_with_retry() {
       echo "Frontend attempt $attempt/$max_attempts hit EADDRINUSE on $FRONTEND_PORT; retrying..."
       kill "$FRONTEND_PID" >/dev/null 2>&1 || true
       wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+      attempt=$((attempt + 1))
+      continue
+    fi
+    if grep -q "EMFILE\\|Watchpack Error (watcher)" "$FRONTEND_LOG" 2>/dev/null; then
+      echo "Frontend attempt $attempt/$max_attempts hit EMFILE watcher exhaustion."
+      kill "$FRONTEND_PID" >/dev/null 2>&1 || true
+      wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+
+      if (( emfile_fallback_used == 0 )); then
+        echo "Switching frontend to production mode fallback for stability."
+        FRONTEND_MODE="prod"
+        emfile_fallback_used=1
+      fi
       attempt=$((attempt + 1))
       continue
     fi
