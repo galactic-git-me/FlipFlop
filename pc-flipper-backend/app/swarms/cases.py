@@ -27,22 +27,11 @@ ua = UserAgent()
 
 # Themes with practical search terms that actually appear on eBay/Amazon/AliExpress
 CASE_THEMES = [
-    # Generic gaming cases — highest stock, most results
-    {"theme": "Gaming RGB", "terms": ["rgb gaming pc case atx", "gaming pc case rgb mid tower", "atx gaming case rgb"]},
-    {"theme": "Tempered Glass", "terms": ["tempered glass gaming case atx", "pc case tempered glass rgb"]},
-    {"theme": "Mini ITX", "terms": ["mini itx pc case gaming", "small form factor pc case gaming"]},
-
-    # Sci-fi / themed — genuine products but search broadly
-    {"theme": "Cyberpunk", "terms": ["cyberpunk gaming case", "neon pc case rgb", "cyberpunk atx case"]},
-    {"theme": "Space / Astronaut", "terms": ["astronaut pc case", "space gaming case", "planet pc case rgb"]},
-    {"theme": "Star Wars", "terms": ["star wars pc case", "darth vader pc case", "stormtrooper pc case"]},
-    {"theme": "Alien", "terms": ["alien pc case gaming", "xenomorph pc case"]},
-    {"theme": "Anime / Gaming Art", "terms": ["anime gaming pc case", "gaming pc case custom art", "custom printed pc case"]},
-
-    # Novelty / eye-catching — these are real products on AliExpress / Temu
-    {"theme": "Skull / Dark", "terms": ["skull pc case gaming", "dark gaming case skull"]},
-    {"theme": "Transparent / Open Frame", "terms": ["open frame pc case atx", "transparent pc case gaming"]},
-    {"theme": "Compact / Desktop", "terms": ["desktop gaming case compact atx", "slim gaming pc case", "pc build case"]},
+    {"theme": "Fish Tank", "terms": ["fish tank pc case"]},
+    {"theme": "Airflow RGB", "terms": ["rgb airflow case"]},
+    {"theme": "White", "terms": ["white gaming case"]},
+    {"theme": "Micro ATX", "terms": ["micro atx case"]},
+    {"theme": "O11 Style", "terms": ["Lian Li O11 style case"]},
 ]
 
 SOURCES = [
@@ -124,61 +113,54 @@ async def run_cases_swarm() -> dict:
     all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
 
-    # Fan out scraping concurrently (network-bound), but keep writes controlled.
-    max_scrape_concurrency = 6
-    sem = asyncio.Semaphore(max_scrape_concurrency)
-
     async def _scrape_one(source: dict, theme: str, term: str):
         fn_key = source["fn"].replace("-", "_").replace(" ", "_")
         scrape_fn = globals().get(f"_scrape_{fn_key}")
         if not scrape_fn:
             log.warning("cases.no_scraper", source=source["name"])
             return {"source_name": source["name"], "term": term, "cases": [], "error": None}
-        async with sem:
-            try:
-                cases = await scrape_fn(term, theme)
-                return {"source_name": source["name"], "term": term, "cases": cases, "error": None}
-            except Exception as exc:
-                return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
+        try:
+            cases = await scrape_fn(term, theme)
+            return {"source_name": source["name"], "term": term, "cases": cases, "error": None}
+        except Exception as exc:
+            return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
-    scrape_tasks: list[asyncio.Task] = []
     enabled_sources = [s for s in SOURCES if not source_allowlist or s["name"] in source_allowlist]
-    source_once_done: set[str] = set()
-    for theme_def in all_themes:
-        for source in enabled_sources:
-            # CherryTree should ingest from its cases catalogue once, not per search term.
-            if source["fn"] == "cherrytree":
-                if source["fn"] in source_once_done:
-                    continue
-                source_once_done.add(source["fn"])
-                scrape_tasks.append(asyncio.create_task(_scrape_one(source, "Catalogue", "catalogue")))
-                continue
+    async def _scrape_source_seq(source: dict) -> list[dict]:
+        rows: list[dict] = []
+        # CherryTree should ingest from its cases catalogue once, not per search term.
+        if source["fn"] == "cherrytree":
+            rows.append(await _scrape_one(source, "Catalogue", "catalogue"))
+            return rows
+        for theme_def in all_themes:
             for term in theme_def["terms"][:2]:
-                scrape_tasks.append(asyncio.create_task(_scrape_one(source, theme_def["theme"], term)))
+                rows.append(await _scrape_one(source, theme_def["theme"], term))
+        return rows
 
     scrape_results: list[dict] = []
-    for done in asyncio.as_completed(scrape_tasks):
-        r = await done
-        scrape_results.append(r)
-        source_name = r.get("source_name") or "unknown"
-        term = r.get("term") or ""
-        err = r.get("error")
-        if err:
-            stats["errors"] += 1
-            record_term_result(
-                source_name=f"Cases:{source_name}",
-                term=term,
-                error=err,
-            )
-            log.error("cases.scrape.error", source=source_name, term=term, error=err)
-        else:
-            cases = r.get("cases") or []
-            record_term_result(
-                source_name=f"Cases:{source_name}",
-                term=term,
-                found=len(cases),
-                new=0,
-            )
+    source_batches = await asyncio.gather(*[asyncio.create_task(_scrape_source_seq(source)) for source in enabled_sources])
+    for batch in source_batches:
+        for r in batch:
+            scrape_results.append(r)
+            source_name = r.get("source_name") or "unknown"
+            term = r.get("term") or ""
+            err = r.get("error")
+            if err:
+                stats["errors"] += 1
+                record_term_result(
+                    source_name=f"Cases:{source_name}",
+                    term=term,
+                    error=err,
+                )
+                log.error("cases.scrape.error", source=source_name, term=term, error=err)
+            else:
+                cases = r.get("cases") or []
+                record_term_result(
+                    source_name=f"Cases:{source_name}",
+                    term=term,
+                    found=len(cases),
+                    new=0,
+                )
 
     async with AsyncSessionLocal() as db:
         for r in scrape_results:

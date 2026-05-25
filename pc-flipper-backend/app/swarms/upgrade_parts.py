@@ -61,69 +61,16 @@ _EBAY_HEADERS = {
 
 
 TRACKED_PARTS = [
-    # ── Generic market lane (especially useful for Temu/AliExpress discovery) ─
-    {"name": "PC Build Bundle", "category": PartCategory.accessory, "ebay_search": "pc build", "bh_search": "pc+build"},
-
-    # ── GPUs — budget / mid tier ─────────────────────────────────────────────
-    {"name": "GTX 1060 6GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1060 6GB used",    "bh_search": "gtx+1060+6gb"},
-    {"name": "GTX 1060 3GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1060 3GB used",    "bh_search": "gtx+1060+3gb"},
-    {"name": "GTX 1650 4GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1650 4GB used",    "bh_search": "gtx+1650"},
-    {"name": "GTX 1660 Super", "category": PartCategory.gpu, "ebay_search": "GTX 1660 Super used",  "bh_search": "gtx+1660+super"},
-    {"name": "GTX 1070 8GB",   "category": PartCategory.gpu, "ebay_search": "GTX 1070 8GB used",    "bh_search": "gtx+1070"},
-    {"name": "RX 570 8GB",     "category": PartCategory.gpu, "ebay_search": "RX 570 8GB used",      "bh_search": "rx+570+8gb"},
-    {"name": "RX 580 8GB",     "category": PartCategory.gpu, "ebay_search": "RX 580 8GB used",      "bh_search": "rx+580+8gb"},
-    # ── GPUs — mid-high ──────────────────────────────────────────────────────
-    {"name": "RTX 2060 6GB",   "category": PartCategory.gpu, "ebay_search": "RTX 2060 6GB used",    "bh_search": "rtx+2060"},
-    {"name": "RTX 2070 8GB",   "category": PartCategory.gpu, "ebay_search": "RTX 2070 8GB used",    "bh_search": "rtx+2070"},
-    {"name": "RTX 2080 8GB",   "category": PartCategory.gpu, "ebay_search": "RTX 2080 8GB used",    "bh_search": "rtx+2080"},
-    {"name": "RTX 3060 12GB",  "category": PartCategory.gpu, "ebay_search": "RTX 3060 12GB used",   "bh_search": "rtx+3060"},
-    {"name": "RTX 3060 Ti",    "category": PartCategory.gpu, "ebay_search": "RTX 3060 Ti used",     "bh_search": "rtx+3060+ti"},
-    {"name": "RTX 3070 8GB",   "category": PartCategory.gpu, "ebay_search": "RTX 3070 8GB used",    "bh_search": "rtx+3070"},
-    {"name": "RTX 3080 10GB",  "category": PartCategory.gpu, "ebay_search": "RTX 3080 10GB used",   "bh_search": "rtx+3080"},
-    {"name": "RX 6600 8GB",    "category": PartCategory.gpu, "ebay_search": "RX 6600 8GB used",     "bh_search": "rx+6600"},
-    {"name": "RX 6650 XT",     "category": PartCategory.gpu, "ebay_search": "RX 6650 XT used",      "bh_search": "rx+6650+xt"},
-    {"name": "RX 6700 XT",     "category": PartCategory.gpu, "ebay_search": "RX 6700 XT used",      "bh_search": "rx+6700+xt"},
-    # ── GPUs — current gen ───────────────────────────────────────────────────
-    {"name": "RTX 4060 8GB",   "category": PartCategory.gpu, "ebay_search": "RTX 4060 8GB used",    "bh_search": "rtx+4060"},
-    {"name": "RX 7600 8GB",    "category": PartCategory.gpu, "ebay_search": "RX 7600 8GB used",     "bh_search": "rx+7600"},
-
-    # ── CPUs — Intel ─────────────────────────────────────────────────────────
-    {"name": "Intel i5-10400",  "category": PartCategory.cpu, "ebay_search": "Intel Core i5-10400",  "bh_search": "i5+10400"},
-    {"name": "Intel i5-10600K", "category": PartCategory.cpu, "ebay_search": "Intel Core i5-10600K", "bh_search": "i5+10600k"},
-    {"name": "Intel i7-10700",  "category": PartCategory.cpu, "ebay_search": "Intel Core i7-10700",  "bh_search": "i7+10700"},
-    {"name": "Intel i7-10700K", "category": PartCategory.cpu, "ebay_search": "Intel Core i7-10700K", "bh_search": "i7+10700k"},
-    {"name": "Intel i9-10900K", "category": PartCategory.cpu, "ebay_search": "Intel Core i9-10900K", "bh_search": "i9+10900k"},
-    {"name": "Intel i5-12400",  "category": PartCategory.cpu, "ebay_search": "Intel Core i5-12400",  "bh_search": "i5+12400"},
-    {"name": "Intel i7-12700",  "category": PartCategory.cpu, "ebay_search": "Intel Core i7-12700",  "bh_search": "i7+12700"},
-    # ── CPUs — AMD ───────────────────────────────────────────────────────────
-    {"name": "Ryzen 5 3600",   "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 5 3600",     "bh_search": "ryzen+5+3600"},
-    {"name": "Ryzen 5 5600",   "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 5 5600",     "bh_search": "ryzen+5+5600"},
-    {"name": "Ryzen 5 5600X",  "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 5 5600X",    "bh_search": "ryzen+5+5600x"},
-    {"name": "Ryzen 7 5700X",  "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 7 5700X",    "bh_search": "ryzen+7+5700x"},
-    {"name": "Ryzen 7 5800X",  "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 7 5800X",    "bh_search": "ryzen+7+5800x"},
-    {"name": "Ryzen 9 5900X",  "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 9 5900X",    "bh_search": "ryzen+9+5900x"},
-
-    # ── RAM ──────────────────────────────────────────────────────────────────
-    {"name": "8GB DDR4",       "category": PartCategory.ram, "ebay_search": "8GB DDR4 2666",        "bh_search": "8gb+ddr4"},
-    {"name": "16GB DDR4 Kit",  "category": PartCategory.ram, "ebay_search": "16GB DDR4 3200 kit",   "bh_search": "16gb+ddr4"},
-    {"name": "32GB DDR4 Kit",  "category": PartCategory.ram, "ebay_search": "32GB DDR4 3200 kit",   "bh_search": "32gb+ddr4"},
-    {"name": "16GB DDR5 Kit",  "category": PartCategory.ram, "ebay_search": "16GB DDR5 5200 kit",   "bh_search": "16gb+ddr5"},
-    {"name": "32GB DDR5 Kit",  "category": PartCategory.ram, "ebay_search": "32GB DDR5 5200 kit",   "bh_search": "32gb+ddr5"},
-
-    # ── Storage ──────────────────────────────────────────────────────────────
-    {"name": "256GB SATA SSD", "category": PartCategory.ssd, "ebay_search": "256GB SATA SSD",       "bh_search": "256gb+ssd"},
-    {"name": "480GB SATA SSD", "category": PartCategory.ssd, "ebay_search": "480GB SATA SSD",       "bh_search": "480gb+ssd"},
-    {"name": "1TB SATA SSD",   "category": PartCategory.ssd, "ebay_search": "1TB SATA SSD",         "bh_search": "1tb+sata+ssd"},
-    {"name": "500GB NVMe SSD", "category": PartCategory.ssd, "ebay_search": "500GB NVMe M.2 SSD",   "bh_search": "500gb+nvme"},
-    {"name": "1TB NVMe SSD",   "category": PartCategory.ssd, "ebay_search": "1TB NVMe M.2 SSD",     "bh_search": "1tb+nvme"},
-    {"name": "2TB NVMe SSD",   "category": PartCategory.ssd, "ebay_search": "2TB NVMe M.2 SSD",     "bh_search": "2tb+nvme"},
-    {"name": "2TB HDD",        "category": PartCategory.ssd, "ebay_search": "2TB internal hard drive", "bh_search": "2tb+hdd"},
-
-    # ── PSU ───────────────────────────────────────────────────────────────────
-    {"name": "550W PSU 80+ Bronze", "category": PartCategory.psu, "ebay_search": "550W ATX PSU 80 bronze", "bh_search": "550w+psu"},
-    {"name": "650W PSU 80+ Bronze", "category": PartCategory.psu, "ebay_search": "650W ATX PSU 80 bronze", "bh_search": "650w+psu"},
-    {"name": "750W PSU 80+ Gold",   "category": PartCategory.psu, "ebay_search": "750W ATX PSU 80 gold",   "bh_search": "750w+psu"},
-    {"name": "850W PSU 80+ Gold",   "category": PartCategory.psu, "ebay_search": "850W ATX PSU 80 gold",   "bh_search": "850w+psu"},
+    {"name": "RTX 3060 12GB",        "category": PartCategory.gpu, "ebay_search": "RTX 3060 12GB used",      "bh_search": "rtx+3060"},
+    {"name": "RTX 3070 8GB",         "category": PartCategory.gpu, "ebay_search": "RTX 3070 8GB used",       "bh_search": "rtx+3070"},
+    {"name": "Ryzen 5 5600",         "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 5 5600",        "bh_search": "ryzen+5+5600"},
+    {"name": "Ryzen 7 5700X",        "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 7 5700X",       "bh_search": "ryzen+7+5700x"},
+    {"name": "B550 Motherboard",     "category": PartCategory.motherboard, "ebay_search": "B550 motherboard", "bh_search": "b550+motherboard"},
+    {"name": "X570 Motherboard",     "category": PartCategory.motherboard, "ebay_search": "X570 motherboard", "bh_search": "x570+motherboard"},
+    {"name": "32GB DDR4 2x16",       "category": PartCategory.ram, "ebay_search": "32GB DDR4 2x16 3200",     "bh_search": "32gb+ddr4+kit"},
+    {"name": "1TB NVMe SSD",         "category": PartCategory.ssd, "ebay_search": "1TB NVMe M.2 SSD",        "bh_search": "1tb+nvme"},
+    {"name": "650W PSU 80+ Bronze",  "category": PartCategory.psu, "ebay_search": "650W ATX PSU 80 bronze",  "bh_search": "650w+psu"},
+    {"name": "AM4 CPU Motherboard Combo", "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo", "bh_search": "am4+motherboard+cpu+combo"},
 ]
 
 
@@ -136,26 +83,18 @@ async def run_upgrade_parts_swarm() -> dict:
         "amazon": 0, "temu": 0, "aliexpress": 0,
     }
 
-    # ── Phase 1: eBay — bounded concurrent fetches per part ───────────────────
+    # ── Phase 1: eBay — sequential within vendor ─────────────────────────────
     ebay_sold_map:  dict[str, float | None] = {}
     ebay_buy_map:   dict[str, float | None] = {}
-    ebay_concurrency = 6
-    sem = asyncio.Semaphore(ebay_concurrency)
 
-    async def _fetch_ebay_for_part(client: httpx.AsyncClient, part_def: dict):
-        async with sem:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
+        for part_def in TRACKED_PARTS:
             name = part_def["name"]
             search = part_def["ebay_search"]
             sold = await _ebay_sold_median(client, search)
             await asyncio.sleep(random.uniform(0.2, 0.6))
             buy = await _ebay_buy_price(client, search)
             await asyncio.sleep(random.uniform(0.2, 0.6))
-            return name, search, sold, buy
-
-    async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
-        ebay_tasks = [asyncio.create_task(_fetch_ebay_for_part(client, p)) for p in TRACKED_PARTS]
-        for done in asyncio.as_completed(ebay_tasks):
-            name, search, sold, buy = await done
             ebay_sold_map[name] = sold
             if sold:
                 stats["ebay_sold"] += 1
@@ -202,10 +141,21 @@ async def run_upgrade_parts_swarm() -> dict:
         log.error("upgrade_parts.bh.error", error=str(exc))
         bh_map = {p["name"]: bh_map.get(p["name"]) for p in TRACKED_PARTS}
 
-    # ── Phase 3: Scan / Overclockers / Box — concurrent httpx ────────────────
-    scan_r  = await asyncio.gather(*[_fetch_scan(p["ebay_search"])        for p in TRACKED_PARTS], return_exceptions=True)
-    oc_r    = await asyncio.gather(*[_fetch_overclockers(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True)
-    box_r   = await asyncio.gather(*[_fetch_box(p["ebay_search"])         for p in TRACKED_PARTS], return_exceptions=True)
+    async def _fetch_lane_seq(fn):
+        lane = []
+        for p in TRACKED_PARTS:
+            try:
+                lane.append(await fn(p["ebay_search"]))
+            except Exception as exc:
+                lane.append(exc)
+        return lane
+
+    # ── Phase 3: each vendor sequential, vendors in parallel ──────────────────
+    scan_r, oc_r, box_r = await asyncio.gather(
+        _fetch_lane_seq(_fetch_scan),
+        _fetch_lane_seq(_fetch_overclockers),
+        _fetch_lane_seq(_fetch_box),
+    )
     for v in scan_r:
         if v and not isinstance(v, Exception):
             stats["scan"] += 1
@@ -216,11 +166,11 @@ async def run_upgrade_parts_swarm() -> dict:
         if v and not isinstance(v, Exception):
             stats["box"] += 1
 
-    # ── Phase 3b: Amazon / Temu / AliExpress — run all 3 lanes in parallel ───
+    # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
     amz_r, temu_r, ali_r = await asyncio.gather(
-        asyncio.gather(*[_fetch_amazon(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
-        asyncio.gather(*[_fetch_temu(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
-        asyncio.gather(*[_fetch_aliexpress(p["ebay_search"]) for p in TRACKED_PARTS], return_exceptions=True),
+        _fetch_lane_seq(_fetch_amazon),
+        _fetch_lane_seq(_fetch_temu),
+        _fetch_lane_seq(_fetch_aliexpress),
     )
     for v in amz_r:
         if v and not isinstance(v, Exception):

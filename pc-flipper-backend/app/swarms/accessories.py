@@ -26,29 +26,11 @@ MAX_PRICE = 80.0  # Max price for accessories
 MAX_SOURCE_URL_LEN = 1900  # DB column is VARCHAR(2000); keep safety headroom
 
 ACCESSORY_SEARCHES = [
-    # Mice
-    {"theme": "Mouse",      "term": "gaming mouse wired",    "condition": "1000"},  # New
-    {"theme": "Mouse",      "term": "budget gaming mouse",   "condition": "1000"},
-    {"theme": "Mouse",      "term": "optical mouse",         "condition": "3000"},  # Used
-    # Keyboards
-    {"theme": "Keyboard",   "term": "gaming keyboard rgb",   "condition": "1000"},
-    {"theme": "Keyboard",   "term": "budget gaming keyboard","condition": "1000"},
-    {"theme": "Keyboard",   "term": "mechanical keyboard",   "condition": "3000"},
-    # Headsets
-    {"theme": "Headset",    "term": "gaming headset usb",    "condition": "1000"},
-    {"theme": "Headset",    "term": "pc headset microphone", "condition": "3000"},
-    # Mousepads
-    {"theme": "Mousepad",   "term": "gaming mousepad xl",    "condition": "1000"},
-    {"theme": "Mousepad",   "term": "large desk mat",        "condition": "1000"},
-    # Controllers
-    {"theme": "Controller", "term": "pc controller usb",     "condition": "3000"},
-    {"theme": "Controller", "term": "gamepad pc usb",        "condition": "3000"},
-    # Webcams
-    {"theme": "Webcam",     "term": "webcam 1080p usb",      "condition": "1000"},
-    {"theme": "Webcam",     "term": "hd webcam pc",          "condition": "3000"},
-    # Monitor Arms
-    {"theme": "Monitor Arm","term": "monitor arm single",    "condition": "3000"},
-    {"theme": "Monitor Arm","term": "monitor stand adjustable","condition": "3000"},
+    {"theme": "Keyboard",   "term": "gaming keyboard", "condition": "1000"},
+    {"theme": "Mouse",      "term": "gaming mouse", "condition": "1000"},
+    {"theme": "Headset",    "term": "gaming headset", "condition": "1000"},
+    {"theme": "Microphone", "term": "usb microphone", "condition": "1000"},
+    {"theme": "Mousepad",   "term": "xl mouse pad", "condition": "1000"},
 ]
 
 
