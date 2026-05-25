@@ -11,7 +11,7 @@ Tailscale URL (live): andromeda-ts:4310
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
 - Environments: .env.local
-✓ Ready in 493ms
+✓ Ready in 490ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.

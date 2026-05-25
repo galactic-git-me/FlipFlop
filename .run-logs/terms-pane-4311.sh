@@ -7,6 +7,7 @@ import urllib.request
 from pathlib import Path
 from math import ceil
 from datetime import datetime, timezone
+import time
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -32,6 +33,12 @@ VENDOR_ALIAS = {
     "eBay": "eB",
     "eBay (Worldwide)": "eBW",
     "CherryTree Inc": "CTI",
+}
+FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
+FLIP_SOURCE_NAMES = {
+    "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
+    "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
+    "Amazon", "Alibaba", "AliExpress", "Temu", "BargainHardware", "CherryTree Inc",
 }
 
 base_url = "http://andromeda-ts:4311"
@@ -153,12 +160,7 @@ def scope_runs_progress(scope: str) -> str:
         return f"{done}/{total_runs}"
 
     # Keep flip progress aligned with scheduler pane semantics and current run window.
-    flip_sources = {
-        "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
-        "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
-        "Amazon", "Alibaba", "AliExpress", "Temu", "BargainHardware", "CherryTree Inc",
-    }
-    src_count = len([s for s in enabled_source_names if s in flip_sources]) or len(flip_sources)
+    src_count = len([s for s in enabled_source_names if s in FLIP_SOURCE_NAMES]) or len(FLIP_SOURCE_NAMES)
     kw_count = max(1, len(cfg_keywords))
     expected = max(1, kw_count * src_count)
     run_started = None
@@ -175,7 +177,8 @@ def scope_runs_progress(scope: str) -> str:
                 run_started = None
     hit = 0
     for src, rows in (telem_by_source or {}).items():
-        if str(src) not in flip_sources:
+        src_s = str(src)
+        if not any(src_s.startswith(pref) for pref in FLIP_SOURCE_PREFIXES):
             continue
         for row in (rows or []):
             if run_started is not None:
@@ -202,7 +205,14 @@ tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", wi
 base_w = 16 + 12 + 28 + 8
 vendor_col_w = 4
 max_vendor_cols = max(1, min(len(all_vendors), (pane_w - base_w) // vendor_col_w))
-all_vendors = all_vendors[:max_vendor_cols]
+if len(all_vendors) > max_vendor_cols:
+    page_count = int(ceil(len(all_vendors) / float(max_vendor_cols)))
+    page = int(time.time() // 4) % max(1, page_count)
+    start = page * max_vendor_cols
+    all_vendors = all_vendors[start:start + max_vendor_cols]
+else:
+    page_count = 1
+    page = 0
 for v in all_vendors:
     lbl = VENDOR_ALIAS.get(v, (v[:4] if len(v) > 4 else v))
     tbl.add_column(lbl, justify="center", no_wrap=True, width=vendor_col_w)
@@ -236,7 +246,7 @@ for scope in SCOPES:
 
 console.clear()
 legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
-console.print(Panel(tbl, title=f"Search Terms by Catalogue x Vendor ({len(all_vendors)} shown)", subtitle=legend, border_style="bright_blue"))
+console.print(Panel(tbl, title=f"Search Terms by Catalogue x Vendor ({len(all_vendors)} shown, page {page+1}/{page_count})", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4
 done
