@@ -6,6 +6,7 @@ import json
 import urllib.request
 from pathlib import Path
 from math import ceil
+from datetime import datetime, timezone
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -17,6 +18,20 @@ SCOPE_LABELS = {
     "upgrade_parts": "upgrade_parts",
     "cases": "cases",
     "accessories": "accessories",
+}
+VENDOR_ALIAS = {
+    "eBay UK": "eUK",
+    "eBay UK Auctions": "eAuc",
+    "Facebook Marketplace": "FB",
+    "BidSpotter": "BSp",
+    "Amazon": "Amz",
+    "Temu": "Tem",
+    "AliExpress": "AliX",
+    "Alibaba": "AliB",
+    "BargainHardware": "BHW",
+    "eBay": "eB",
+    "eBay (Worldwide)": "eBW",
+    "CherryTree Inc": "CTI",
 }
 
 base_url = "http://andromeda-ts:4311"
@@ -72,6 +87,13 @@ try:
                 enabled_source_names.add(str((s or {}).get("name") or ""))
 except Exception:
     enabled_source_names = set()
+
+schedule_rows = []
+try:
+    with urllib.request.urlopen(f"{base_url}/api/schedule", timeout=4) as rs:
+        schedule_rows = json.load(rs) or []
+except Exception:
+    schedule_rows = []
 
 latest_term_state = {}
 for src, rows in (telem_by_source or {}).items():
@@ -130,7 +152,7 @@ def scope_runs_progress(scope: str) -> str:
     if scope != "flip_opportunities":
         return f"{done}/{total_runs}"
 
-    # Keep flip progress aligned with scheduler pane semantics.
+    # Keep flip progress aligned with scheduler pane semantics and current run window.
     flip_sources = {
         "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
         "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
@@ -139,11 +161,33 @@ def scope_runs_progress(scope: str) -> str:
     src_count = len([s for s in enabled_source_names if s in flip_sources]) or len(flip_sources)
     kw_count = max(1, len(cfg_keywords))
     expected = max(1, kw_count * src_count)
+    run_started = None
+    flip_job = next((j for j in (schedule_rows or []) if str((j or {}).get("id")) == "flip_opportunities"), None)
+    if flip_job:
+        ts = str((flip_job or {}).get("last_run_at") or "")
+        if ts:
+            try:
+                run_started = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                if run_started.tzinfo is None:
+                    run_started = run_started.replace(tzinfo=timezone.utc)
+                run_started = run_started.astimezone(timezone.utc)
+            except Exception:
+                run_started = None
     hit = 0
     for src, rows in (telem_by_source or {}).items():
         if str(src) not in flip_sources:
             continue
-        for _ in (rows or []):
+        for row in (rows or []):
+            if run_started is not None:
+                try:
+                    ts = datetime.fromisoformat(str((row or {}).get("ts") or "").replace("Z", "+00:00"))
+                    if ts.tzinfo is None:
+                        ts = ts.replace(tzinfo=timezone.utc)
+                    ts = ts.astimezone(timezone.utc)
+                    if ts < run_started:
+                        continue
+                except Exception:
+                    continue
             hit += 1
     pct = int(max(0.0, min(100.0, (100.0 * float(hit) / float(expected)))))
     return f"{done}/{total_runs} {pct}%"
@@ -151,12 +195,17 @@ def scope_runs_progress(scope: str) -> str:
 console = Console()
 tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False, pad_edge=False)
 all_vendors = sorted(set().union(*[vendors_by_scope[s] for s in SCOPES]))
+pane_w = max(80, int(getattr(console.size, "width", 120)))
 tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=16)
 tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=12)
 tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", width=28)
+base_w = 16 + 12 + 28 + 8
+vendor_col_w = 4
+max_vendor_cols = max(1, min(len(all_vendors), (pane_w - base_w) // vendor_col_w))
+all_vendors = all_vendors[:max_vendor_cols]
 for v in all_vendors:
-    lbl = v if len(v) <= 10 else v[:10]
-    tbl.add_column(lbl, justify="center", no_wrap=True, width=5)
+    lbl = VENDOR_ALIAS.get(v, (v[:4] if len(v) > 4 else v))
+    tbl.add_column(lbl, justify="center", no_wrap=True, width=vendor_col_w)
 
 for scope in SCOPES:
     rows = by_scope.get(scope, [])
@@ -187,7 +236,7 @@ for scope in SCOPES:
 
 console.clear()
 legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
-console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor", subtitle=legend, border_style="bright_blue"))
+console.print(Panel(tbl, title=f"Search Terms by Catalogue x Vendor ({len(all_vendors)} shown)", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4
 done
