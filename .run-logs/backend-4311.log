@@ -1870,3 +1870,307 @@ INFO:     100.101.209.68:51078 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51072 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51088 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
 INFO:     100.101.209.68:51092 - "GET /api/sources/ HTTP/1.1" 200 OK
+[scraper] eBay 'pc no display': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51102 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51106 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51114 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51126 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51140 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+2026-05-25 15:19:48 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+[scraper] eBay 'Lenovo ThinkStation': 0 found, 0 new (total 0)
+2026-05-25 15:19:48 [info     ] i-bidder.playwright.cards      count=23 term=HP EliteDesk
+2026-05-25 15:19:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+2026-05-25 15:19:49 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=HP EliteDesk
+INFO:     127.0.0.1:50694 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51152 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51164 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP ProDesk' title='Access Denied'
+2026-05-25 15:19:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+2026-05-25 15:19:51 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Dell+OptiPlex&country=gb&priceFrom=0&priceTo=500
+INFO:     100.101.209.68:51170 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51178 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53702 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53712 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53714 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53722 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53734 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:53740 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53754 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51546 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53758 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53762 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='pc spares or repair' title='Access Denied'
+INFO:     100.101.209.68:53770 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53772 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51556 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+[scraper] eBay 'pc spares or repair': 0 found, 0 new (total 0)
+INFO:     127.0.0.1:51562 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 15:20:01 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+INFO:     100.101.209.68:53780 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53784 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53786 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53796 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53814 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53816 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53824 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53826 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53834 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53836 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53844 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53848 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='desktop untested' title='Access Denied'
+2026-05-25 15:20:04 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-25 15:20:04 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+INFO:     127.0.0.1:41168 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 15:20:05 [info     ] Wilsons Auctions.playwright.cards count=1 term=Dell OptiPlex
+2026-05-25 15:20:05 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=Dell OptiPlex
+2026-05-25 15:20:06 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-25 15:20:06 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=workstation&priceMin=0&priceMax=500&categoryId=65
+INFO:     100.101.209.68:38612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38624 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming mouse wired' title='Access Denied'
+INFO:     127.0.0.1:41172 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38634 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38642 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38650 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38656 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38682 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38666 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38684 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38690 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38700 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38704 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38712 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38714 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38724 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+INFO:     127.0.0.1:46596 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52584 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52598 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52606 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+INFO:     100.101.209.68:52610 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52622 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52638 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52648 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52664 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52666 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52676 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52684 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52686 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46604 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52698 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52708 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 15:20:23 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=Dell OptiPlex
+INFO:     100.101.209.68:52712 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52726 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP Compaq tower' title='Access Denied'
+INFO:     127.0.0.1:59834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 15:20:26 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-25 15:20:26 [info     ] i-bidder.playwright.cards      count=23 term=Dell OptiPlex
+2026-05-25 15:20:27 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+INFO:     100.101.209.68:52056 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52068 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52074 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52082 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52100 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 15:20:28 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=Dell OptiPlex
+INFO:     100.101.209.68:52094 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52104 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52116 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52128 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52142 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52154 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52160 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52174 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 15:20:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+INFO:     127.0.0.1:59844 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 15:20:30 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=workstation&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:52184 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Lenovo+ThinkCentre&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Lenovo+ThinkCentre&_sacat=179&LH_Auction=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=1&_ipg=60", waiting until "domcontentloaded"
+
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 0)
+[scraper] eBay 'HP Compaq tower': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+INFO:     127.0.0.1:32994 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50726 - "GET /api/listings/stats HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+INFO:     100.101.209.68:50740 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50744 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50758 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50772 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50782 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50786 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50798 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50812 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50814 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50820 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50826 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Dell Vostro tower': 0 found, 0 new (total 0)
+2026-05-25 15:20:38 [info     ] Wilsons Auctions.playwright.no_results mode=fallback_parse term=workstation
+INFO:     127.0.0.1:33004 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Fujitsu+Esprimo&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=Fujitsu+Esprimo&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
+
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+[scraper] eBay 'Fujitsu Esprimo': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop no gpu': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50840 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50842 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 15:20:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 0)
+2026-05-25 15:20:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Acer Veriton tower': 0 found, 0 new (total 0)
+2026-05-25 15:20:41 [info     ] Wilsons Auctions.playwright.cards count=1 term=workstation
+2026-05-25 15:20:41 [info     ] Wilsons Auctions.playwright.term_summary cards=1 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=0 term=workstation
+2026-05-25 15:20:43 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+2026-05-25 15:20:44 [info     ] Wilsons Auctions.playwright.fetch url=https://www.wilsonsauctions.com/lots?query=Lenovo+ThinkCentre&priceMin=0&priceMax=500&categoryId=65
+[scraper] eBay playwright blocked term='desktop computer no SSD' title='Access Denied'
+INFO:     100.101.209.68:50858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50864 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42954 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42974 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42964 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42984 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42988 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43004 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43014 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43026 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49534 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43030 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43044 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+INFO:     100.101.209.68:43056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43066 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49540 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'i7 desktop': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43076 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43084 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43090 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43096 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43112 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43130 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43136 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43142 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43152 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43162 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43170 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43176 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='HP ProDesk' title='Access Denied'
+[scraper] eBay 'HP ProDesk': 0 found, 0 new (total 0)
+INFO:     127.0.0.1:56842 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+ProDesk&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=HP+ProDesk&_sacat=0&LH_BIN=1&_udlo=0&_udhi=2000&_sop=10&_ipg=120", waiting until "domcontentloaded"
+
+[scraper] eBay playwright blocked term='desktop untested' title='Access Denied'
+INFO:     100.101.209.68:38202 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56858 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38212 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38228 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38230 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38246 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38258 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38276 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38288 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38292 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38302 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 15:21:02 [info     ] i-bidder.playwright.no_results mode=fallback_parse term=workstation
+INFO:     100.101.209.68:38306 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38314 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming mouse wired' title='Access Denied'
+2026-05-25 15:21:05 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+INFO:     127.0.0.1:36834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 15:21:05 [info     ] i-bidder.playwright.cards      count=23 term=workstation
+[scraper] eBay 'gaming mouse wired': 0 found, 0 new (total 0)
+2026-05-25 15:21:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=workstation
+2026-05-25 15:21:06 [info     ] i-bidder.playwright.term_summary cards=23 kept=0 skipped_href_filter=0 skipped_keyword=0 skipped_no_href=0 skipped_no_title=1 term=workstation
+INFO:     100.101.209.68:38050 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38052 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-25 15:21:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+2026-05-25 15:21:08 [info     ] i-bidder.playwright.fetch      url=https://www.i-bidder.com/en-gb/auction-catalogues/all/search?q=Lenovo+ThinkCentre&country=gb&priceFrom=0&priceTo=500
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+INFO:     100.101.209.68:38058 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38066 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38064 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38070 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38072 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38080 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38082 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38092 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38106 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38118 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38120 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36836 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
