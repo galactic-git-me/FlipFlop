@@ -1582,10 +1582,12 @@ async def fetch_listings(
         )
 
     name = source_name.lower()
-    prioritized_ebay_auction_terms = _prioritize_terms(_EBAY_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
-    prioritized_gumtree_fb_terms = _prioritize_terms(_GUMTREE_FB_TERMS, _REQUIRED_CPU_TERMS)
-    prioritized_preloved_terms = _prioritize_terms(_PRELOVED_TERMS, _REQUIRED_CPU_TERMS)
-    prioritized_auction_terms = _prioritize_terms(_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
+    input_terms = [t for t in (search_terms or []) if str(t).strip()]
+    prioritized_input_terms = _prioritize_terms(input_terms, _REQUIRED_CPU_TERMS)
+    prioritized_ebay_auction_terms = prioritized_input_terms or _prioritize_terms(_EBAY_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_gumtree_fb_terms = prioritized_input_terms or _prioritize_terms(_GUMTREE_FB_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_preloved_terms = prioritized_input_terms or _prioritize_terms(_PRELOVED_TERMS, _REQUIRED_CPU_TERMS)
+    prioritized_auction_terms = prioritized_input_terms or _prioritize_terms(_AUCTION_TERMS, _REQUIRED_CPU_TERMS)
 
     if "ebay" in name and "auction" in name:
         return await scrape_ebay(_prioritize_ebay_flip_terms(prioritized_ebay_auction_terms), min_price, max_price, auction_mode=True)
