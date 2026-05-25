@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Database, Plus, RefreshCw, Trash2, CheckCircle, XCircle, Globe, Code } from "lucide-react";
+import { Database, Plus, RefreshCw, Trash2, CheckCircle, XCircle, Globe, Code, AlertTriangle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/empty-state";
 import { DataSource } from "@/lib/types";
-import { api, SearchTelemetryItem, SearchTelemetrySourceSummary } from "@/lib/api";
+import { api, SearchTelemetryItem } from "@/lib/api";
 import { formatRelativeTime } from "@/lib/utils";
 
 export default function SourcesPage() {
@@ -16,7 +16,6 @@ export default function SourcesPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
   const [scrapingId, setScrapingId] = useState<number | null>(null);
-  const [telemetrySummary, setTelemetrySummary] = useState<Record<string, SearchTelemetrySourceSummary>>({});
   const [telemetryItems, setTelemetryItems] = useState<Record<string, SearchTelemetryItem[]>>({});
   const [telemetryLoading, setTelemetryLoading] = useState(true);
   const [newSource, setNewSource] = useState({ name: "", url: "", type: "scrape" as "api" | "scrape" });
@@ -42,10 +41,8 @@ export default function SourcesPage() {
     setTelemetryLoading(true);
     try {
       const data = await api.searchTelemetry.bySource(1200);
-      setTelemetrySummary(data.summary || {});
       setTelemetryItems(data.items || {});
     } catch {
-      setTelemetrySummary({});
       setTelemetryItems({});
     } finally {
       setTelemetryLoading(false);
@@ -102,6 +99,29 @@ export default function SourcesPage() {
 
   const enabledCount = sources.filter(s => s.enabled).length;
   const totalListings = sources.reduce((sum, s) => sum + (s.listings_found_total ?? 0), 0);
+  const vendors = Object.keys(telemetryItems).sort((a, b) => a.localeCompare(b));
+  const matrix = new Map<string, SearchTelemetryItem>();
+  const terms = new Set<string>();
+
+  for (const [vendor, items] of Object.entries(telemetryItems)) {
+    for (const item of items) {
+      terms.add(item.term);
+      const key = `${item.term}::${vendor}`;
+      const prev = matrix.get(key);
+      const prevTs = prev ? Date.parse(prev.ts) : Number.NEGATIVE_INFINITY;
+      const nextTs = Date.parse(item.ts);
+      if (!prev || Number.isNaN(prevTs) || (!Number.isNaN(nextTs) && nextTs >= prevTs)) {
+        matrix.set(key, item);
+      }
+    }
+  }
+
+  const sortedTerms = Array.from(terms).sort((a, b) => a.localeCompare(b));
+  const isRetryLaterError = (error?: string | null) => {
+    if (!error) return false;
+    const v = error.toLowerCase();
+    return ["retry", "backoff", "rate limit", "429", "timeout", "temporar", "cooldown"].some((p) => v.includes(p));
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -165,35 +185,58 @@ export default function SourcesPage() {
           </div>
           {telemetryLoading ? (
             <div className="text-xs text-slate-500">Loading telemetry…</div>
-          ) : Object.keys(telemetrySummary).length === 0 ? (
+          ) : vendors.length === 0 || sortedTerms.length === 0 ? (
             <div className="text-xs text-slate-500">No telemetry yet. Run a source scrape first.</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-[#1e2d45]">
-                    {["Source", "Terms", "Found", "New", "Errors", "Recent Error Terms"].map(h => (
+                    {["Search Term", ...vendors].map(h => (
                       <th key={h} className="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#1e2d45]">
-                  {Object.entries(telemetrySummary).map(([source, summary]) => {
-                    const rows = telemetryItems[source] || [];
-                    const recentErrorTerms = rows.filter(r => r.error).slice(-3).map(r => r.term);
-                    return (
-                      <tr key={source} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="px-3 py-2 text-slate-200 font-medium">{source}</td>
-                        <td className="px-3 py-2 text-slate-300">{summary.terms}</td>
-                        <td className="px-3 py-2 text-slate-300">{summary.found_total}</td>
-                        <td className="px-3 py-2 text-[#00dc82]">{summary.new_total}</td>
-                        <td className={`px-3 py-2 ${summary.errors > 0 ? "text-amber-400" : "text-slate-400"}`}>{summary.errors}</td>
-                        <td className="px-3 py-2 text-xs text-slate-400">
-                          {recentErrorTerms.length > 0 ? recentErrorTerms.join(" · ") : "—"}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {sortedTerms.map((term) => (
+                    <tr key={term} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="px-3 py-2 text-slate-200 font-medium">{term}</td>
+                      {vendors.map((vendor) => {
+                        const row = matrix.get(`${term}::${vendor}`);
+                        if (!row) {
+                          return <td key={vendor} className="px-3 py-2 text-slate-600"> </td>;
+                        }
+                        if (row.error) {
+                          if (isRetryLaterError(row.error)) {
+                            return (
+                              <td key={vendor} className="px-3 py-2 text-amber-400">
+                                <span className="inline-flex items-center gap-1">
+                                  <AlertTriangle className="w-3.5 h-3.5" />
+                                  retry
+                                </span>
+                              </td>
+                            );
+                          }
+                          return (
+                            <td key={vendor} className="px-3 py-2 text-red-400">
+                              <span className="inline-flex items-center gap-1">
+                                <XCircle className="w-3.5 h-3.5" />
+                                fail
+                              </span>
+                            </td>
+                          );
+                        }
+                        return (
+                          <td key={vendor} className="px-3 py-2 text-[#00dc82]">
+                            <span className="inline-flex items-center gap-1">
+                              <CheckCircle className="w-3.5 h-3.5" />
+                              {row.found}
+                            </span>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
