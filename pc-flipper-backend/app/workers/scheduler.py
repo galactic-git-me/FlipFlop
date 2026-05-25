@@ -168,9 +168,11 @@ def start_scheduler():
 
     now = datetime.now(timezone.utc)
     flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
-    upgrade_start = _next_run_for("upgrade_parts", max(1, int(settings.parts_update_interval_hours * 60)), now)
-    cases_start = _next_run_for("cases", 24 * 60, now)
-    accessories_start = _next_run_for("accessories", 24 * 60, now)
+    # Force a startup seed pass for long-interval catalogues so their term cycles
+    # become active immediately after backend boot.
+    upgrade_start = now
+    cases_start = now
+    accessories_start = now
     external_demand_start = _next_run_for("external_demand", 60, now)
     playbook_evolution_start = _next_run_for("playbook_evolution", 60, now)
     autonomous_cycle_start = _next_run_for("autonomous_cycle", 60, now)

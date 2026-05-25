@@ -42,31 +42,31 @@
     }
   },
   "cases": {
-    "active": false,
+    "active": true,
     "batch_size": 5,
     "vendors": {
       "eBay": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "eBay (Worldwide)": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "Amazon": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "Temu": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "AliExpress": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "BargainHardware": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "CherryTree Inc": {
@@ -74,7 +74,7 @@
         "total": 1
       },
       "Alibaba": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       }
     }
@@ -106,6 +106,44 @@
       "BargainHardware": {
         "cursor": 5,
         "total": 5
+      }
+    }
+  },
+  "upgrade_parts": {
+    "active": false,
+    "batch_size": 5,
+    "vendors": {
+      "eBay": {
+        "cursor": 3,
+        "total": 3
+      },
+      "BargainHardware": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Scan": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Overclockers": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Box": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Amazon": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Temu": {
+        "cursor": 3,
+        "total": 3
+      },
+      "AliExpress": {
+        "cursor": 3,
+        "total": 3
       }
     }
   }
