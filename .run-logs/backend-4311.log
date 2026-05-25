@@ -9632,13 +9632,12 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 00:39:47 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_397962326704 fingerprint=new listing|||2 source=eBay UK Auctions
 2026-05-26 00:39:47 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_168402819973 fingerprint=new listing|||313 source=eBay UK Auctions
 2026-05-26 00:39:47 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
- HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40216 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40232 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40244 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40248 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40254 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40256 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-25 23:45:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-26 00:45:24 [info     ] accessories_swarm.start
+2026-05-26 00:45:24 [info     ] cases_swarm.start
+2026-05-26 00:45:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 00:45:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+Temporary Redirect
 INFO:     100.101.209.68:40258 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40264 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40272 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
