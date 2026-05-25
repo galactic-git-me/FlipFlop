@@ -37554,3 +37554,440 @@ INFO:     100.101.209.68:43470 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:43472 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43482 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43502 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43504 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43520 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43522 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43532 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43536 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43548 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43562 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43572 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43574 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43578 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43590 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43594 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43596 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43606 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43622 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43626 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43628 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43640 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45466 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45480 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45492 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45506 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45536 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45552 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45562 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45572 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45582 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45586 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45602 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45618 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45634 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45648 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45662 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45674 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45684 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45702 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45718 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45734 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45744 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45752 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45768 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45778 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45782 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60226 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60238 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60262 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60266 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60282 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60294 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60308 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60314 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60316 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60320 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60326 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60342 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60358 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60360 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60362 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60364 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60370 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60374 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60382 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60394 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60406 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60408 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60420 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60432 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60436 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60440 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60446 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43496 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43498 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43508 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43514 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43516 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43528 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43544 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43548 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43550 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43558 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43560 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43570 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43574 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43584 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43588 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43592 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43598 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43606 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43616 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56288 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56292 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56300 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56314 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56324 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56332 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56342 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56344 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56352 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56368 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56380 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56410 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56420 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56424 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56440 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56446 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56450 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56454 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56462 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56470 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56376 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56382 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56396 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56410 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56424 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56430 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56440 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56452 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56458 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56470 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56476 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56484 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56500 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56512 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56522 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56528 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56536 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56544 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56558 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56564 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56572 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56580 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56582 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56592 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56608 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56620 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56628 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56638 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56650 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56652 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56660 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56664 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45030 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45044 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45048 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45056 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45066 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45078 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45092 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45106 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45110 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45116 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45120 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45126 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45136 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45166 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45168 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45184 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45196 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45210 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45212 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42684 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42690 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42692 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42714 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42716 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42730 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42744 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42752 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42756 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42768 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42780 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42784 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42796 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42804 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42808 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42810 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42816 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42828 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42840 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42848 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 50)
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=213.9 median=748.68 query=gaming PC rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=349.49 median=911.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=286.7 median=836.04 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=455.23 median=1038.28 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=316.15 median=871.38 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=299.85 median=851.82 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=232.35 median=770.82 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=255.5 median=798.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=325.25 median=594.3 query=gaming PC ryzen 9 7900
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=346.65 median=619.98 query=gaming PC ryzen 9 7900x
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=335.15 median=894.18 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=438.15 median=1017.78 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=438.15 median=1017.78 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=333.1 median=891.72 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [info     ] resale_scraper.fallback_buy_price buy_price=336.01 median=895.21 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-25 22:03:34 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_198352712442 fingerprint=amd ryzen 9 7900 processor 3 7 ghz|Amd Ryzen 9 7900||438 source=eBay UK
+2026-05-25 22:03:34 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_318297315067 fingerprint=amd ryzen 9 7900 processor 3 7 ghz|Amd Ryzen 9 7900||438 source=eBay UK
+2026-05-25 22:03:34 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=1 source=eBay UK
+INFO:     100.101.209.68:42852 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42868 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42884 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42892 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36148 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36156 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36170 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36178 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36194 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36206 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36218 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36222 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36238 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36254 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36270 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36272 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36274 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36284 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36288 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36302 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36312 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36326 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36332 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36342 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36346 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36348 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36350 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36358 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50806 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50824 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50834 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50844 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50852 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50864 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50878 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50894 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50910 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50914 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50930 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50938 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50948 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50962 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50976 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50982 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50992 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51008 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51012 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37828 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37830 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37838 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37844 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37850 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37866 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37872 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37878 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37890 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37906 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37922 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37936 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37948 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37964 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37970 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37984 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37998 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38000 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38008 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38024 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38034 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38042 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38052 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38058 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38074 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38090 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38106 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57896 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57900 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57910 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57926 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57932 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57938 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57942 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57944 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57958 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57974 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57976 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57988 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58002 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58008 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58026 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58036 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58044 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58046 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58050 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58066 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58074 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58078 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58088 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58100 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57372 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57384 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57386 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57388 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57394 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57402 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57404 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57414 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57424 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57426 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57430 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57434 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57442 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57444 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57460 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57464 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57470 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57502 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57510 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37020 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37034 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37040 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37070 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37076 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37078 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37092 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37134 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37148 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37154 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37164 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37166 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37180 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37196 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37208 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37216 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37228 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37242 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37258 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37262 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37270 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37284 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37294 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37304 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37312 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37320 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59726 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59736 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59752 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59756 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59764 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59776 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59790 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59802 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59816 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59838 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59852 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59854 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59866 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59872 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59882 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59892 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59916 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58756 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58758 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58760 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58770 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58780 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58782 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58796 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58800 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58822 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58824 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=214.99 median=665.99 query=gaming PC i7-8700 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=178.0 median=621.6 query=gaming PC i5-6500 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=114.0 median=544.8 query=gaming PC i3-6100 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=229.0 median=682.8 query=gaming PC i5-6500 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=670.8 query=gaming PC i5 6500t rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=180.5 median=624.6 query=gaming PC rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=194.9 median=641.88 query=gaming PC i7-7700 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=189.1 median=634.92 query=gaming PC i5-4570 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=295.0 median=762.0 query=gaming PC i5-8500t rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=114.99 median=545.99 query=gaming PC core i5 6500 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=224.99 median=677.99 query=gaming PC rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=247.0 median=704.4 query=gaming PC rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=792.0 query=gaming PC rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=159.9 median=599.88 query=gaming PC i5-6500 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=265.0 median=726.0 query=gaming PC i7-9700 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=182.2 median=626.64 query=gaming PC i5 6500 rtx 3060
+2026-05-25 22:04:47 [info     ] resale_scraper.fallback_buy_price buy_price=217.67 median=669.2 query=gaming PC rtx 3060
+2026-05-25 22:04:47 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_1244047042481026305 fingerprint=hp elitedesk 800 g3 sff desktop computer pc|Intel Core I5-6500||178 source=Amazon
+2026-05-25 22:04:47 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_902396406993873970 fingerprint=hp elitedesk 800 g2 sff desktop pc intel|Intel Core I3-6100||114 source=Amazon
+2026-05-25 22:04:47 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8655475252792563403 fingerprint=hp elitedesk 800 g3 sff desktop computer pc|Intel Core I7-7700||195 source=Amazon
+2026-05-25 22:04:47 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8682878983712498465 fingerprint=hp prodesk 400 g6 sff desktop pc intel|||218 source=Amazon
+2026-05-25 22:04:47 [info     ] source.retry.success           retried_terms=1 source=Amazon
+2026-05-25 22:04:47 [info     ] source.done                    found=158 gems=0 source=Amazon
+2026-05-25 22:04:50 [info     ] source.retry.success           retried_terms=4 source=BargainHardware
+2026-05-25 22:04:50 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.101.209.68:58836 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58840 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58844 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58848 - "GET /api/schedule HTTP/1.1" 200 OK
