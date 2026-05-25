@@ -1159,14 +1159,15 @@ EOF
   chmod +x "$alerts_tail_script"
 
   # Layout:
-  # - Left: compact FlipFlop ASCII header, then frontend/backend logs
+  # - Left: compact FlipFlop ASCII header, then scheduler + backend logs
   # - Right: scheduler + search terms
   local left_top_pane right_top_pane left_bottom_pane left_bottom_bottom_pane right_bottom_pane
   left_top_pane="$(tmux new-session -d -P -F "#{pane_id}" -s "$TMUX_SESSION" "bash '$title_pane_script'")"
   right_top_pane="$(tmux split-window -h -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
   # Keep title pane only as tall as needed for ASCII art.
-  left_bottom_pane="$(tmux split-window -v -l 78% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$frontend_tail_script'")"
-  left_bottom_bottom_pane="$(tmux split-window -v -l 50% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
+  left_bottom_pane="$(tmux split-window -v -l 82% -P -F "#{pane_id}" -t "$left_top_pane" "bash '$scheduler_pane_script'")"
+  # Give scheduler extra vertical room by shrinking backend log height.
+  left_bottom_bottom_pane="$(tmux split-window -v -l 36% -P -F "#{pane_id}" -t "$left_bottom_pane" "bash '$backend_tail_script'")"
   # Give Search Terms 2 extra lines by taking them from Scheduler.
   right_h="$(tmux display-message -p -t "$right_top_pane" "#{pane_height}")"
   right_bottom_lines=$(( right_h / 2 + 2 ))
