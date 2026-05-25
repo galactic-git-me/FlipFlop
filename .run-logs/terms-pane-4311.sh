@@ -4,150 +4,104 @@ while true; do
   python3 - <<'PY'
 import json
 import urllib.request
+from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich import box
 
-VENDOR_ALIASES = {
-    "eBay UK Auctions": "eBayAuc",
-    "eBay UK": "eBay",
-    "Facebook Marketplace": "FB",
-    "BidSpotter": "BidSp",
-    "Amazon": "Amz",
-    "AliExpress": "AliX",
-    "Alibaba": "AliB",
-    "Temu": "Temu",
-    "Gumtree": "Gum",
-    "Preloved": "Prev",
-    "BargainHardware": "BHW",
-    "John Pye": "JP",
-    "i-bidder": "iBid",
-    "Apex Auctions": "Apex",
-    "Wilsons Auctions": "Wilsons",
+SCOPES = ["flip_opportunities", "upgrade_parts", "cases", "accessories"]
+SCOPE_LABELS = {
+    "flip_opportunities": "flip_opportunities",
+    "upgrade_parts": "upgrade_parts",
+    "cases": "cases",
+    "accessories": "accessories",
 }
 
-def alias_vendor(name: str) -> str:
-    s = str(name or "").strip()
-    return VENDOR_ALIASES.get(s, s[:7] if len(s) > 7 else s)
-
-def classify_status(item):
-    err = str((item or {}).get("error") or "").strip().lower()
-    found = int((item or {}).get("found") or 0)
-    new = int((item or {}).get("new") or 0)
-    if err:
-        if "retry" in err or "blocked" in err:
-            return "retry"
-        return "error"
-    if found > 0 or new > 0:
-        return "success"
-    return "no_data"
-
 base_url = "http://andromeda-ts:4311"
-cfg_keywords, taxonomy_rows, by_source = [], [], {}
+taxonomy_rows = []
 try:
-    with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as r:
-        cfg = json.load(r) or {}
-    cfg_keywords = [str(k).strip() for k in (cfg.get("keywords") or []) if str(k).strip()]
     with urllib.request.urlopen(f"{base_url}/api/source-search-terms", timeout=4) as r2:
         t_payload = json.load(r2) or {}
     taxonomy_rows = t_payload.get("items", []) or []
-    with urllib.request.urlopen(f"{base_url}/api/search-telemetry/by-source?limit=2500", timeout=4) as r3:
-        s_payload = json.load(r3) or {}
-    by_source = s_payload.get("items", {}) or {}
 except Exception:
-    cfg_keywords, taxonomy_rows, by_source = [], [], {}
+    taxonomy_rows = []
 
-term_info = {}
-for t in cfg_keywords:
-    k = t.lower()
-    if k not in term_info:
-        term_info[k] = {"term": t, "vendors": set()}
-for row in taxonomy_rows:
-    term = str((row or {}).get("term") or "").strip()
-    if not term:
-        continue
-    if not bool((row or {}).get("enabled", True)):
-        continue
-    k = term.lower()
-    if k not in term_info:
-        term_info[k] = {"term": term, "vendors": set()}
-    srcs = (row or {}).get("source_names") or []
-    for src in srcs:
-        s = str(src).strip()
-        if s:
-            term_info[k]["vendors"].add(s)
-
-matrix = {}
-vendors = set()
-for source, rows in by_source.items():
-    src = str(source or "").strip()
-    if not src:
-        continue
-    vendors.add(src)
-    for it in rows or []:
-        term = str((it or {}).get("term") or "").strip()
-        if not term:
-            continue
-        key = (term.lower(), src)
-        if key in matrix:
-            continue
-        matrix[key] = it
-        if term.lower() not in term_info:
-            term_info[term.lower()] = {"term": term, "vendors": set()}
-        term_info[term.lower()]["vendors"].add(src)
-
-if not term_info:
+if not taxonomy_rows:
     console = Console()
     console.clear()
-    console.print(Panel("[dim]No search terms available[/dim]", title="Search Terms by Vendor", border_style="bright_blue"))
+    console.print(Panel("[dim]No search terms available[/dim]", title="Current 5 Terms per Catalogue", border_style="bright_blue"))
     raise SystemExit(0)
 
-term_keys = sorted(term_info.keys(), key=lambda x: term_info[x]["term"].lower())
-vendors = sorted(vendors)
-if not vendors:
-    vendor_pool = set()
-    for item in term_info.values():
-        vendor_pool.update(item["vendors"])
-    vendors = sorted(vendor_pool)
+by_scope = {s: [] for s in SCOPES}
+for row in taxonomy_rows:
+    scope = str((row or {}).get("scope") or "").strip()
+    term = str((row or {}).get("term") or "").strip()
+    if scope not in by_scope or not term or not bool((row or {}).get("enabled", True)):
+        continue
+    by_scope[scope].append({
+        "term": term,
+        "source_names": [str(x).strip() for x in ((row or {}).get("source_names") or []) if str(x).strip()],
+    })
+
+cycle_state_path = Path("/home/mac/CODING/FlipFlop/pc-flipper-backend/data/term_cycle_state.json")
+cycle_state = {}
+try:
+    if cycle_state_path.exists():
+        cycle_state = json.loads(cycle_state_path.read_text(encoding="utf-8"))
+except Exception:
+    cycle_state = {}
+
+def current_terms_for_scope(scope: str) -> tuple[str, list[str]]:
+    rows = by_scope.get(scope, [])
+    terms_by_vendor: dict[str, list[str]] = {}
+    for r in rows:
+        term = r["term"]
+        srcs = r["source_names"]
+        if not srcs:
+            terms_by_vendor.setdefault("all", []).append(term)
+        else:
+            for s in srcs:
+                terms_by_vendor.setdefault(s, []).append(term)
+    for v in list(terms_by_vendor.keys()):
+        terms_by_vendor[v] = list(dict.fromkeys(terms_by_vendor[v]))
+    rec = cycle_state.get(scope) if isinstance(cycle_state, dict) else None
+    if not isinstance(rec, dict):
+        return ("idle", [])
+    active = bool(rec.get("active"))
+    batch_size = max(1, int(rec.get("batch_size") or 5))
+    vendors = rec.get("vendors") or {}
+    cur: list[str] = []
+    seen: set[str] = set()
+    for vendor, vrec in vendors.items():
+        cursor = max(0, int((vrec or {}).get("cursor") or 0))
+        terms = terms_by_vendor.get(vendor, terms_by_vendor.get("all", []))
+        start = max(0, cursor - batch_size)
+        for t in terms[start:cursor]:
+            if t not in seen:
+                seen.add(t)
+                cur.append(t)
+    if not cur and active:
+        for terms in terms_by_vendor.values():
+            for t in terms[:batch_size]:
+                if t not in seen:
+                    seen.add(t)
+                    cur.append(t)
+    return ("running" if active else "idle", cur[:5])
 
 console = Console()
-pane_width = max(70, int(getattr(console.size, "width", 120)))
-term_col_w = 30
-status_col_w = 4
-max_vendor_cols = max(1, min(len(vendors), (pane_width - term_col_w - 6) // status_col_w))
-vendors = vendors[:max_vendor_cols]
-
 tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False, pad_edge=False)
-tbl.add_column("Search Term", style="bold cyan", no_wrap=False, overflow="fold", width=term_col_w)
-for v in vendors:
-    tbl.add_column(alias_vendor(v), justify="center", no_wrap=True, width=status_col_w)
-
-def render_cell(term_key: str, vendor: str) -> str:
-    allowed = term_info[term_key]["vendors"]
-    if allowed and vendor not in allowed:
-        return ""
-    item = matrix.get((term_key, vendor))
-    if not item:
-        return ""
-    st = classify_status(item)
-    found = int((item or {}).get("found") or 0)
-    if st == "success":
-        return f"[green]{min(found,99):>2}[/green]"
-    if st == "retry":
-        return "[yellow] ![/yellow]"
-    if st == "error":
-        return "[red] x[/red]"
-    return "[dim] .[/dim]"
-
-for k in term_keys:
-    term = term_info[k]["term"]
-    row = [term] + [render_cell(k, v) for v in vendors]
-    tbl.add_row(*row)
+tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=20)
+tbl.add_column("Status", justify="center", no_wrap=True, width=9)
+tbl.add_column("Current 5 Terms", style="yellow", no_wrap=False, overflow="fold")
+for scope in SCOPES:
+    status, terms = current_terms_for_scope(scope)
+    st = "[green]running[/green]" if status == "running" else "[dim]idle[/dim]"
+    txt = ", ".join(terms) if terms else "[dim]-[/dim]"
+    tbl.add_row(SCOPE_LABELS[scope], st, txt)
 
 console.clear()
-legend = "[green]NN[/green]=success count  [yellow]![/yellow]=retry  [red]x[/red]=fail  [dim].[/dim]=0  blank=not searched"
-console.print(Panel(tbl, title="Search Terms x Vendor", subtitle=legend, border_style="bright_blue"))
+console.print(Panel(tbl, title="Current 5 Terms per Catalogue", border_style="bright_blue"))
 PY
   sleep 4
 done
