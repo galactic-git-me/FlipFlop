@@ -111,7 +111,10 @@ export default function SettingsPage() {
   }
 
   useEffect(() => {
-    loadAll().catch(() => setLoading(false));
+    const t = setTimeout(() => {
+      void loadAll();
+    }, 0);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

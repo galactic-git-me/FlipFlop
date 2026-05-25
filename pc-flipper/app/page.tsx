@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -66,6 +66,8 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
     );
   });
 }
+
+const TRENDING_CATEGORIES_BASE_NOW_MS = Date.now();
 
 // ── Dashboard page ────────────────────────────────────────────────────────────
 export default function DashboardPage() {
@@ -1154,6 +1156,7 @@ function LatestListingsCarousel({
 // ── Seller badge ── (imported from @/components/seller-badge) ────────────────
 
 // ── Gem of the Day / Gem of the Week card ────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function GemOfPeriod({
   period, listing: l, onFlip, flippingId,
 }: {
@@ -1958,7 +1961,10 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: TrendDir }) {
 
 // ── Trending Build Categories card ────────────────────────────────────────────
 function TrendingCategoriesCard({ listings }: { listings: Listing[] }) {
-  const categories = computeBuildCategories(listings, Date.now());
+  const categories = useMemo(
+    () => computeBuildCategories(listings, TRENDING_CATEGORIES_BASE_NOW_MS),
+    [listings],
+  );
 
   const trendIcon = (t: TrendDir) =>
     t === "rising" ? "↑" : t === "falling" ? "↓" : "→";

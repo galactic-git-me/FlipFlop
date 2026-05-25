@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -37,7 +38,7 @@ export function Sidebar() {
   return (
     <aside className="node-sidebar">
       <div className="node-brand-wrap">
-        <img src="/pics/logo.png" alt="FlipFlop" className="h-[120px] w-auto object-contain" />
+        <Image src="/pics/logo.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
         <p className="node-version">Operational v1.0.4</p>
       </div>
 
