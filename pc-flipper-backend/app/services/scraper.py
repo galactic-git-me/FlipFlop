@@ -7,6 +7,8 @@ import base64
 import random
 import re
 import os
+import time
+from pathlib import Path
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
@@ -24,6 +26,33 @@ ua = UserAgent()
 _EBAY_TOKEN: str | None = None
 _EBAY_TOKEN_EXP_TS: float = 0.0
 _EBAY_PLAYWRIGHT_SEM = asyncio.Semaphore(1)
+_EBAY_VENDOR_BLOCK_UNTIL_TS: float = 0.0
+
+
+def _ebay_state_path() -> Path:
+    p = Path(settings.ebay_playwright_state_path)
+    if not p.is_absolute():
+        p = Path(__file__).resolve().parents[2] / p
+    p.parent.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def _shape_retry_term(term: str) -> str:
+    t = str(term or "").strip()
+    if not t:
+        return t
+    replacements = {
+        "pc tower": "desktop tower pc",
+        "desktop pcs lot": "desktop pc bundle",
+        "gaming pc untested": "untested gaming desktop",
+        "office pc tower": "office desktop computer",
+        "motherboard cpu combo": "cpu motherboard bundle",
+    }
+    low = t.lower()
+    for k, v in replacements.items():
+        if k in low:
+            return re.sub(re.escape(k), v, t, flags=re.IGNORECASE)
+    return t
 
 
 def _ebay_base_url() -> str:
@@ -389,11 +418,15 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     "--lang=en-GB",
                 ],
             )
-            context = await browser.new_context(
-                user_agent=ua.random,
-                locale="en-GB",
-                viewport={"width": 1366, "height": 768},
-            )
+            state_path = _ebay_state_path()
+            context_kwargs = {
+                "user_agent": ua.random,
+                "locale": "en-GB",
+                "viewport": {"width": 1366, "height": 768},
+            }
+            if state_path.exists():
+                context_kwargs["storage_state"] = str(state_path)
+            context = await browser.new_context(**context_kwargs)
             await context.add_init_script(stealth_js)
             page = await context.new_page()
             try:
@@ -423,6 +456,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     if listings:
                         break
             finally:
+                try:
+                    await context.storage_state(path=str(state_path))
+                except Exception:
+                    pass
                 await context.close()
                 await browser.close()
     return listings, blocked
@@ -463,6 +500,7 @@ async def scrape_ebay(
     """
     results: list[RawListing] = []
     seen_ids: set[str] = set()
+    global _EBAY_VENDOR_BLOCK_UNTIL_TS
     component_markers = (
         "motherboard",
         "cpu",
@@ -480,6 +518,12 @@ async def scrape_ebay(
         client_kwargs["proxy"] = settings.ebay_proxy_url
 
     async with httpx.AsyncClient(**client_kwargs) as client:
+        if _EBAY_VENDOR_BLOCK_UNTIL_TS > time.monotonic():
+            wait_s = int(_EBAY_VENDOR_BLOCK_UNTIL_TS - time.monotonic())
+            for term in search_terms:
+                record_term_result(term=term, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{wait_s}s")
+            return []
+
         async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
             await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
             try:
@@ -590,7 +634,8 @@ async def scrape_ebay(
                     return term, [], True, 0, None
                 return term, [], False, 0, msg
 
-        for term in search_terms:
+        consecutive_blocked_terms = 0
+        for idx, term in enumerate(search_terms):
             term, new_listings, blocked, last_status, err = await _fetch_term(term)
             if err:
                 record_term_result(term=term, error=err)
@@ -612,9 +657,22 @@ async def scrape_ebay(
                     error=f"ebay_blocked(status={last_status})",
                 )
                 blocked_terms.append(term)
+                consecutive_blocked_terms += 1
+                # Extra jitter when blocked to reduce repeated bot signatures.
+                await asyncio.sleep(random.uniform(8.0, 25.0))
             else:
                 record_term_result(term=term, found=len(new_listings), new=added)
+                consecutive_blocked_terms = 0
             print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
+
+            if consecutive_blocked_terms >= max(2, int(settings.ebay_block_circuit_breaker_threshold)):
+                cooldown_s = max(60, int(settings.ebay_block_circuit_breaker_cooldown_minutes) * 60)
+                _EBAY_VENDOR_BLOCK_UNTIL_TS = time.monotonic() + cooldown_s
+                # Mark remaining terms as retry-later for this pass.
+                remaining = search_terms[idx + 1:]
+                for rt in remaining:
+                    record_term_result(term=rt, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{cooldown_s}s")
+                break
 
         second_pass = False
         if blocked_terms and not second_pass:
@@ -624,11 +682,12 @@ async def scrape_ebay(
             blocked_terms.clear()
             while queue:
                 term = queue.pop(0)
+                retry_term = _shape_retry_term(term)
                 await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
                 try:
-                    is_component_term = any(m in term.lower() for m in component_markers)
+                    is_component_term = any(m in retry_term.lower() for m in component_markers)
                     params = {
-                        "_nkw": term,
+                        "_nkw": retry_term,
                         "_sacat": "0" if is_component_term else "179",
                         "LH_Auction": "1" if auction_mode else None,
                         "LH_BIN": None if auction_mode else "1",
@@ -644,7 +703,7 @@ async def scrape_ebay(
                     if not new_listings:
                         pw_listings, pw_blocked = await asyncio.wait_for(
                             _scrape_ebay_playwright_term(
-                            term=term,
+                            term=retry_term,
                             min_price=min_price,
                             max_price=max_price,
                             auction_mode=auction_mode,
