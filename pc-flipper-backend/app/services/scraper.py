@@ -581,7 +581,14 @@ async def scrape_ebay(
                             l.source_name = "eBay UK Auctions"
                     return term, new_listings, blocked, last_status, None
             except Exception as exc:
-                return term, [], False, 0, str(exc)
+                msg = str(exc)
+                low = msg.lower()
+                # Intermittent browser/runtime transport faults should be treated like
+                # temporary anti-bot blocks so they retry in the same pass instead of
+                # surfacing as hard term errors.
+                if isinstance(exc, OSError) or "invalid argument" in low or "unknown error -1" in low:
+                    return term, [], True, 0, None
+                return term, [], False, 0, msg
 
         for term in search_terms:
             term, new_listings, blocked, last_status, err = await _fetch_term(term)
