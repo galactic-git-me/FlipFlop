@@ -1013,6 +1013,23 @@ try:
 except Exception:
     telem_by_source = {}
 
+cfg_keywords = []
+try:
+    with urllib.request.urlopen(f"{base_url}/api/config/search", timeout=4) as rcfg:
+        cfg_keywords = [str(k).strip() for k in ((json.load(rcfg) or {}).get("keywords") or []) if str(k).strip()]
+except Exception:
+    cfg_keywords = []
+
+enabled_source_names = set()
+try:
+    with urllib.request.urlopen(f"{base_url}/api/sources/health", timeout=4) as rsh:
+        items = (json.load(rsh) or {}).get("items") or []
+        for s in items:
+            if bool((s or {}).get("enabled", False)):
+                enabled_source_names.add(str((s or {}).get("name") or ""))
+except Exception:
+    enabled_source_names = set()
+
 latest_term_state = {}
 for src, rows in (telem_by_source or {}).items():
     for r in rows or []:
@@ -1040,7 +1057,9 @@ def classify_cell(item):
         if ("retry" in err) or ("blocked" in err) or ("backoff" in err) or ("429" in err):
             return "[yellow]🚦[/yellow]"
         return "[red]✗[/red]"
-    return f"[green]✓{found}[/green]"
+    if found > 0:
+        return f"[green]✓{found}[/green]"
+    return "[dim]0[/dim]"
 
 def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     if scope == "cases":
@@ -1065,13 +1084,32 @@ def scope_runs_progress(scope: str) -> str:
         cursor = max(0, int((vrec or {}).get("cursor") or 0))
         done = max(done, int(ceil(cursor / float(batch_size))))
     done = min(done, total_runs)
-    return f"{done}/{total_runs}"
+    if scope != "flip_opportunities":
+        return f"{done}/{total_runs}"
+
+    # Keep flip progress aligned with scheduler pane semantics.
+    flip_sources = {
+        "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
+        "Preloved", "Apex Auctions", "Wilsons Auctions", "i-bidder", "John Pye",
+        "Amazon", "Alibaba", "AliExpress", "Temu", "BargainHardware", "CherryTree Inc",
+    }
+    src_count = len([s for s in enabled_source_names if s in flip_sources]) or len(flip_sources)
+    kw_count = max(1, len(cfg_keywords))
+    expected = max(1, kw_count * src_count)
+    hit = 0
+    for src, rows in (telem_by_source or {}).items():
+        if str(src) not in flip_sources:
+            continue
+        for _ in (rows or []):
+            hit += 1
+    pct = int(max(0.0, min(100.0, (100.0 * float(hit) / float(expected)))))
+    return f"{done}/{total_runs} {pct}%"
 
 console = Console()
 tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False, pad_edge=False)
 all_vendors = sorted(set().union(*[vendors_by_scope[s] for s in SCOPES]))
 tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=16)
-tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=7)
+tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=12)
 tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", width=28)
 for v in all_vendors:
     lbl = v if len(v) <= 10 else v[:10]
@@ -1105,7 +1143,7 @@ for scope in SCOPES:
     tbl.add_section()
 
 console.clear()
-legend = "[green]✓N[/green]=success+items  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
+legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4
