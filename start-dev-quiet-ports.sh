@@ -17,7 +17,9 @@ FRONTEND_MODE="${FRONTEND_MODE:-dev}" # dev | prod
 FRONTEND_DEV_BUNDLER="${FRONTEND_DEV_BUNDLER:-webpack}" # webpack | turbo
 BACKEND_TZ="${BACKEND_TZ:-Europe/London}"
 LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
-ATTACH_TMUX="${ATTACH_TMUX:-1}"
+# Always auto-attach to tmux dashboard for this workflow.
+# (Only skipped automatically when no interactive TTY is available.)
+ATTACH_TMUX="1"
 ENABLE_NGROK="${ENABLE_NGROK:-1}"
 NGROK_TUNNEL_PORT="${NGROK_TUNNEL_PORT:-$BACKEND_PORT}"
 NGROK_API_PORT="${NGROK_API_PORT:-4048}"
@@ -991,6 +993,11 @@ VENDOR_ALIAS = {
     "eBay (Worldwide)": "eBW",
     "CherryTree Inc": "CTI",
 }
+VENDOR_GROUPS = {
+    "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
+    "Marketplaces": ["Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "CherryTree Inc", "Facebook Marketplace"],
+    "Auctions": ["BidSpotter", "eBay UK Auctions"],
+}
 FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
 FLIP_SOURCE_NAMES = {
     "eBay UK", "eBay UK Auctions", "BidSpotter", "Facebook Marketplace", "Gumtree",
@@ -1090,6 +1097,19 @@ def classify_cell(item):
         return f"[green]✓{found}[/green]"
     return "[dim]0[/dim]"
 
+def _cell_state(item):
+    if not item:
+        return ("blank", 0)
+    err = str((item or {}).get("error") or "").strip().lower()
+    found = int((item or {}).get("found") or 0)
+    if err:
+        if ("retry" in err) or ("blocked" in err) or ("backoff" in err) or ("429" in err):
+            return ("retry", found)
+        return ("error", found)
+    if found > 0:
+        return ("success", found)
+    return ("zero", 0)
+
 def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     if scope == "cases":
         return [f"Cases:{vendor}"]
@@ -1154,25 +1174,13 @@ def scope_runs_progress(scope: str) -> str:
 
 console = Console()
 tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False, pad_edge=False)
-all_vendors = sorted(set().union(*[vendors_by_scope[s] for s in SCOPES]))
 pane_w = max(80, int(getattr(console.size, "width", 120)))
 tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=16)
 tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=12)
 tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", width=28)
-base_w = 16 + 12 + 28 + 8
-vendor_col_w = 4
-max_vendor_cols = max(1, min(len(all_vendors), (pane_w - base_w) // vendor_col_w))
-if len(all_vendors) > max_vendor_cols:
-    page_count = int(ceil(len(all_vendors) / float(max_vendor_cols)))
-    page = int(time.time() // 4) % max(1, page_count)
-    start = page * max_vendor_cols
-    all_vendors = all_vendors[start:start + max_vendor_cols]
-else:
-    page_count = 1
-    page = 0
-for v in all_vendors:
-    lbl = VENDOR_ALIAS.get(v, (v[:4] if len(v) > 4 else v))
-    tbl.add_column(lbl, justify="center", no_wrap=True, width=vendor_col_w)
+group_names = ["eBay", "Marketplaces", "Auctions"]
+for g in group_names:
+    tbl.add_column(g, justify="center", no_wrap=True, width=12)
 
 for scope in SCOPES:
     rows = by_scope.get(scope, [])
@@ -1185,25 +1193,45 @@ for scope in SCOPES:
         term = str(r.get("term") or "").strip()
         allowed = set(r.get("source_names") or [])
         out = [SCOPE_LABELS[scope] if first else "", progress if first else "", term]
-        for v in all_vendors:
-            if allowed and v not in allowed:
+        for group in group_names:
+            members = VENDOR_GROUPS.get(group, [])
+            seen_any = False
+            status = "blank"
+            total_found = 0
+            for v in members:
+                if allowed and v not in allowed:
+                    continue
+                seen_any = True
+                candidates = scope_vendor_sources(scope, v)
+                for src in candidates:
+                    item = latest_term_state.get((src, term.lower()))
+                    st, found = _cell_state(item)
+                    total_found += max(0, int(found or 0))
+                    if st == "error":
+                        status = "error"
+                    elif st == "retry" and status not in ("error",):
+                        status = "retry"
+                    elif st == "success" and status not in ("error", "retry"):
+                        status = "success"
+                    elif st == "zero" and status == "blank":
+                        status = "zero"
+            if not seen_any:
                 out.append("")
-                continue
-            candidates = scope_vendor_sources(scope, v)
-            cell = ""
-            for src in candidates:
-                item = latest_term_state.get((src, term.lower()))
-                cell = classify_cell(item)
-                if cell:
-                    break
-            out.append(cell)
+            elif status == "error":
+                out.append("[red]✗[/red]")
+            elif status == "retry":
+                out.append("[yellow]🚦[/yellow]")
+            elif status == "success":
+                out.append(f"[green]✓{total_found}[/green]")
+            else:
+                out.append("[dim]0[/dim]")
         tbl.add_row(*out)
         first = False
     tbl.add_section()
 
 console.clear()
 legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
-console.print(Panel(tbl, title=f"Search Terms by Catalogue x Vendor ({len(all_vendors)} shown, page {page+1}/{page_count})", subtitle=legend, border_style="bright_blue"))
+console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4
 done
