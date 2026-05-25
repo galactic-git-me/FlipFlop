@@ -814,4 +814,29 @@ async def _seed_default_data():
             db.add_all(rows)
             log.info("seeded.source_search_terms", scope="accessories", count=len(rows))
 
+        # Normalize legacy/alias source names so eBay + Amazon route correctly
+        # across all catalogues.
+        _source_aliases = {
+            "ebay": "eBay",
+            "ebay uk": "eBay UK",
+            "ebay uk auctions": "eBay UK Auctions",
+            "amazon uk": "Amazon",
+            "bargain hardware": "BargainHardware",
+        }
+        rows = (await db.execute(select(SourceSearchTerm))).scalars().all()
+        updated_rows = 0
+        for row in rows:
+            names = [str(s).strip() for s in (row.source_names or []) if str(s).strip()]
+            if not names:
+                continue
+            normalized = []
+            for s in names:
+                normalized.append(_source_aliases.get(s.lower(), s))
+            deduped = list(dict.fromkeys(normalized))
+            if deduped != names:
+                row.source_names = deduped
+                updated_rows += 1
+        if updated_rows:
+            log.info("migrated.source_search_terms.source_aliases", rows=updated_rows)
+
         await db.commit()

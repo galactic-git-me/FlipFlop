@@ -37,6 +37,18 @@ ACCESSORY_SEARCHES = [
     {"theme": "Mousepad",   "term": "xl mouse pad", "condition": "1000"},
 ]
 
+_SOURCE_ALIASES: dict[str, str] = {
+    "ebay uk": "eBay",
+    "ebay uk auctions": "eBay",
+    "amazon uk": "Amazon",
+    "bargain hardware": "BargainHardware",
+}
+
+
+def _canonical_source_name(name: str) -> str:
+    raw = str(name or "").strip()
+    return _SOURCE_ALIASES.get(raw.lower(), raw)
+
 
 @dataclass
 class RawAccessory:
@@ -152,7 +164,12 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
             )
         ).scalars().all()
     if rows:
-        search_defs = [{"theme": str(r.group_name or "Accessory"), "term": str(r.term), "condition": "1000", "source_names": list(r.source_names or [])} for r in rows if str(r.term or "").strip()]
+        search_defs = [{
+            "theme": str(r.group_name or "Accessory"),
+            "term": str(r.term),
+            "condition": "1000",
+            "source_names": [_canonical_source_name(str(s)) for s in list(r.source_names or [])],
+        } for r in rows if str(r.term or "").strip()]
     terms_by_vendor: dict[str, list[str]] = {}
     for d in search_defs:
         srcs = d.get("source_names") or ["eBay", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]

@@ -77,6 +77,21 @@ TRACKED_PARTS = [
     {"name": "AM4 CPU Motherboard Combo", "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo", "bh_search": "am4+motherboard+cpu+combo"},
 ]
 
+_VENDOR_ALIASES: dict[str, str] = {
+    "ebay": "eBay",
+    "ebay uk": "eBay",
+    "ebay uk auctions": "eBay",
+    "amazon": "Amazon",
+    "amazon uk": "Amazon",
+    "bargain hardware": "BargainHardware",
+}
+
+
+def _canonical_vendor(name: str) -> str:
+    raw = str(name or "").strip()
+    key = raw.lower()
+    return _VENDOR_ALIASES.get(key, raw)
+
 
 async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     log.info("upgrade_parts_swarm.start", total_parts=len(TRACKED_PARTS))
@@ -98,10 +113,24 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
             )
         ).scalars().all()
     if rows:
-        wanted = {str(r.term or "").strip().lower() for r in rows if str(r.term or "").strip()}
+        wanted: set[str] = set()
+        wanted_for_ebay = False
+        wanted_for_amazon = False
+        for r in rows:
+            term = str(r.term or "").strip().lower()
+            if term:
+                wanted.add(term)
+            sources = [_canonical_vendor(s) for s in (r.source_names or [])]
+            if not sources or "eBay" in sources:
+                wanted_for_ebay = True
+            if not sources or "Amazon" in sources:
+                wanted_for_amazon = True
         filtered = [p for p in TRACKED_PARTS if str(p.get("ebay_search") or "").strip().lower() in wanted]
         if filtered:
             parts = filtered
+        if wanted and (not wanted_for_ebay or not wanted_for_amazon):
+            # Keep lanes active for terms even when row source names used aliases.
+            parts = filtered or parts
     terms_by_vendor = {
         "eBay": [p["ebay_search"] for p in parts],
         "BargainHardware": [p["ebay_search"] for p in parts],

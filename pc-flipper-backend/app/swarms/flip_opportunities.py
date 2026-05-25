@@ -59,6 +59,21 @@ _NO_RETRY_SOURCES = {
     "John Pye",
 }
 
+_SOURCE_ALIASES: dict[str, tuple[str, ...]] = {
+    "ebay": ("eBay UK", "eBay UK Auctions"),
+    "ebay uk": ("eBay UK",),
+    "ebay uk auctions": ("eBay UK Auctions",),
+    "amazon": ("Amazon",),
+    "amazon uk": ("Amazon",),
+}
+
+
+def _expand_source_aliases(source_name: str) -> tuple[str, ...]:
+    key = str(source_name or "").strip().lower()
+    if not key:
+        return tuple()
+    return _SOURCE_ALIASES.get(key, (source_name,))
+
 
 def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
     t = re.sub(r"[^a-z0-9]+", " ", (title or "").lower()).strip()
@@ -103,7 +118,8 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
                 src_names = row.source_names or []
                 if src_names:
                     for s in src_names:
-                        terms_by_source.setdefault(str(s), []).append(term)
+                        for canonical in _expand_source_aliases(str(s)):
+                            terms_by_source.setdefault(canonical, []).append(term)
                 else:
                     for src in sources:
                         terms_by_source.setdefault(src.name, []).append(term)

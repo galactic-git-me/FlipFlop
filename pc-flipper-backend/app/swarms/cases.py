@@ -47,6 +47,18 @@ SOURCES = [
     {"name": "Alibaba",           "fn": "alibaba"},
 ]
 
+_SOURCE_ALIASES: dict[str, str] = {
+    "ebay uk": "eBay",
+    "ebay uk auctions": "eBay",
+    "amazon uk": "Amazon",
+    "bargain hardware": "BargainHardware",
+}
+
+
+def _canonical_source_name(name: str) -> str:
+    raw = str(name or "").strip()
+    return _SOURCE_ALIASES.get(raw.lower(), raw)
+
 
 @dataclass
 class RawCase:
@@ -224,7 +236,7 @@ async def _dynamic_case_themes_from_db() -> tuple[list[dict], set[str]]:
         for row in rows:
             grouped.setdefault(row.group_name or "Custom", []).append(row.term)
             for s in row.source_names or []:
-                source_allowlist.add(str(s))
+                source_allowlist.add(_canonical_source_name(str(s)))
         themes = [{"theme": g, "terms": list(dict.fromkeys(ts))} for g, ts in grouped.items() if ts]
         return themes, source_allowlist
     except Exception as exc:
