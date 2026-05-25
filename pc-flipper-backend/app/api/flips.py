@@ -11,6 +11,7 @@ from app.models.flip_intelligence import FlipIntelligence
 from app.schemas.flip import FlipOut, FlipCreate, FlipUpdate
 from app.services.selling_toolkit import generate_titles, generate_description
 from app.services import ai_service
+from app.services.alerts import emit_alert
 from app.config import get_settings
 
 settings = get_settings()
@@ -92,6 +93,20 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
 
     await db.flush()
     await db.refresh(flip)
+
+    if flip.stage == FlipStage.sold and flip.actual_profit is not None:
+        try:
+            await emit_alert(
+                code="flip_resale_detected",
+                source="flips",
+                severity="info",
+                message=(
+                    f"Resale detected: Flip #{flip.id} sold on {flip.sale_platform or 'unknown'} "
+                    f"with profit £{float(flip.actual_profit):.2f}."
+                ),
+            )
+        except Exception:
+            pass
     return flip
 
 
@@ -144,6 +159,19 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     )
     db.add(intel)
     await db.flush()
+
+    try:
+        await emit_alert(
+            code="flip_resale_detected",
+            source="flips",
+            severity="info",
+            message=(
+                f"Resale detected: Flip #{flip.id} sold on {flip.sale_platform or 'unknown'} "
+                f"with profit £{float(flip.actual_profit or 0.0):.2f}."
+            ),
+        )
+    except Exception:
+        pass
 
     return {
         "status": "sold",

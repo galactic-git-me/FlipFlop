@@ -11,6 +11,8 @@ from sqlalchemy import delete, select
 
 from app.database import AsyncSessionLocal
 from app.models.search_telemetry import SearchTelemetry
+from app.models.source_search_term import SourceSearchTerm
+from app.services.alerts import emit_alert
 
 _ctx_source: ContextVar[str | None] = ContextVar("telemetry_source", default=None)
 _ctx_run_id: ContextVar[str | None] = ContextVar("telemetry_run_id", default=None)
@@ -18,6 +20,7 @@ _ctx_run_id: ContextVar[str | None] = ContextVar("telemetry_run_id", default=Non
 _records: deque[dict[str, Any]] = deque(maxlen=12000)
 _lock = Lock()
 _last_prune_ts: datetime | None = None
+_last_zero_term_cleanup_ts: datetime | None = None
 
 
 def begin_source_run(source_name: str) -> str:
@@ -98,6 +101,7 @@ async def _persist_entry(entry: dict[str, Any]) -> None:
             )
             db.add(row)
             await db.commit()
+        await _maybe_cleanup_zero_terms()
     except Exception:
         # Never block the scrape path on telemetry persistence errors.
         return
@@ -122,6 +126,97 @@ async def _prune_old(retention_days: int) -> None:
         async with AsyncSessionLocal() as db:
             await db.execute(delete(SearchTelemetry).where(SearchTelemetry.ts < cutoff))
             await db.commit()
+    except Exception:
+        return
+
+
+def _scope_prefix(scope: str) -> str:
+    if scope == "cases":
+        return "Cases:"
+    if scope == "accessories":
+        return "Accessories:"
+    if scope == "upgrade_parts":
+        return "UpgradeParts:"
+    return ""
+
+
+def _row_sources(row: SourceSearchTerm) -> list[str]:
+    scope = str(row.scope or "").strip().lower()
+    prefix = _scope_prefix(scope)
+    out: list[str] = []
+    for src in (row.source_names or []):
+        s = str(src or "").strip()
+        if not s:
+            continue
+        out.append(f"{prefix}{s}" if prefix else s)
+    return list(dict.fromkeys(out))
+
+
+async def _maybe_cleanup_zero_terms(window_days: int = 3, cadence_minutes: int = 60) -> None:
+    global _last_zero_term_cleanup_ts
+    now = datetime.utcnow()
+    if _last_zero_term_cleanup_ts and (now - _last_zero_term_cleanup_ts) < timedelta(minutes=cadence_minutes):
+        return
+    _last_zero_term_cleanup_ts = now
+    await _cleanup_zero_terms(window_days=window_days)
+
+
+async def _cleanup_zero_terms(window_days: int = 3) -> None:
+    cutoff = datetime.utcnow() - timedelta(days=window_days)
+    try:
+        async with AsyncSessionLocal() as db:
+            terms = (
+                await db.execute(
+                    select(SourceSearchTerm).where(SourceSearchTerm.enabled == True)  # noqa: E712
+                )
+            ).scalars().all()
+
+            deleted_rows: list[SourceSearchTerm] = []
+            for row in terms:
+                term_txt = str(row.term or "").strip()
+                if not term_txt:
+                    continue
+                sources = _row_sources(row)
+                if not sources:
+                    continue
+
+                telem_rows = (
+                    await db.execute(
+                        select(SearchTelemetry).where(
+                            SearchTelemetry.ts >= cutoff,
+                            SearchTelemetry.term == term_txt,
+                            SearchTelemetry.source.in_(sources),
+                        )
+                    )
+                ).scalars().all()
+
+                if not telem_rows:
+                    continue
+
+                covered_sources = {str(t.source or "") for t in telem_rows if str(t.source or "")}
+                if not set(sources).issubset(covered_sources):
+                    continue
+
+                has_positive = any(int(t.found or 0) > 0 for t in telem_rows)
+                has_error = any(str(t.error or "").strip() for t in telem_rows)
+                if has_positive or has_error:
+                    continue
+
+                await db.delete(row)
+                deleted_rows.append(row)
+
+            await db.commit()
+
+        for row in deleted_rows:
+            await emit_alert(
+                code="auto_deleted_zero_search_term",
+                source="search_terms",
+                severity="warning",
+                message=(
+                    f"Auto-deleted search term '{row.term}' ({row.scope}) after "
+                    f"{window_days} days of zero results across all configured vendors."
+                ),
+            )
     except Exception:
         return
 

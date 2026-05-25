@@ -32,6 +32,7 @@ from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.playbook import Playbook, PlaybookProposal
+from app.services.alerts import emit_alert
 from app.models.flip_intelligence import FlipIntelligence
 from app.schemas.playbook import (
     PlaybookCreate, PlaybookUpdate, PlaybookOut,
@@ -331,6 +332,22 @@ async def approve_proposal(
     proposal.resolved_by = body.resolved_by or "user"
     await db.flush()
     await db.refresh(pb)
+
+    ds = dict(proposal.demand_signals or {})
+    demand_source = str(ds.get("source") or "").strip()
+    if demand_source:
+        try:
+            await emit_alert(
+                code="playbook_demand_change_applied",
+                source="playbooks",
+                severity="info",
+                message=(
+                    f"Playbook '{pb.name}' {proposal.action.lower()} applied "
+                    f"(proposal #{proposal.id}) from demand signal source '{demand_source}'."
+                ),
+            )
+        except Exception:
+            pass
 
     log.info("proposal.approved", id=proposal_id, action=proposal.action, playbook_id=pb.id)
     return pb

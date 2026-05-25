@@ -8,6 +8,7 @@ from sqlalchemy import and_, select
 from app.database import AsyncSessionLocal
 from app.models.flip import Flip, FlipStage
 from app.models.playbook import Playbook, PlaybookProposal
+from app.services.alerts import emit_alert
 from app.services.demand_service import compute_demand
 from app.services.external_demand import latest_external_signal_snapshot
 
@@ -349,4 +350,17 @@ async def run_playbook_evolution() -> dict:
         await db.commit()
 
     log.info("playbook_evolution.done", proposals_created=proposals_created, sold_flips=len(sold_flips))
+    if proposals_created > 0:
+        try:
+            await emit_alert(
+                code="demand_playbook_proposals_created",
+                source="playbook_evolution",
+                severity="info",
+                message=(
+                    f"Demand engine created {proposals_created} playbook proposal(s) "
+                    f"from observed demand changes."
+                ),
+            )
+        except Exception:
+            pass
     return {"ok": True, "proposals_created": proposals_created, "sold_flips": len(sold_flips)}
