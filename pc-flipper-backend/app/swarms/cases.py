@@ -20,6 +20,7 @@ from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.term_cycle import start_cycle, next_batch
+from app.services.proxy import playwright_proxy_config
 import structlog
 from sqlalchemy import select as sa_select
 
@@ -475,7 +476,11 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
 
 async def _make_pw_context(playwright):
     """Launch a stealthy Chromium context. Returns (browser, context)."""
-    browser = await playwright.chromium.launch(headless=True, args=_STEALTH_ARGS)
+    browser = await playwright.chromium.launch(
+        headless=True,
+        args=_STEALTH_ARGS,
+        proxy=playwright_proxy_config(),
+    )
     context = await browser.new_context(
         user_agent=_STEALTH_UA,
         viewport={"width": 1366, "height": 768},
@@ -1053,6 +1058,7 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
         browser = await p.chromium.launch(
             headless=True,
             args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+            proxy=playwright_proxy_config(),
         )
         ctx = await browser.new_context(user_agent=ua.random, locale="en-GB", timezone_id="Europe/London")
         await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")

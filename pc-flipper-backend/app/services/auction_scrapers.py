@@ -13,6 +13,7 @@ from fake_useragent import UserAgent
 import structlog
 
 from app.config import get_settings
+from app.services.proxy import apply_httpx_proxy
 
 _ua = UserAgent()
 log = structlog.get_logger(__name__)
@@ -118,7 +119,7 @@ async def scrape_wilsons(search_terms: list[str], min_price: float = 0, max_pric
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept": "application/json,text/plain,*/*"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:6]:
             for page_idx in range(0, 3):
                 params = {
@@ -199,7 +200,7 @@ async def scrape_ibidder(search_terms: list[str], min_price: float = 0, max_pric
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept-Language": "en-GB,en;q=0.9"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:6]:
             for page in range(1, 3):
                 try:
@@ -263,7 +264,7 @@ async def scrape_bidspotter(search_terms: list[str], min_price: float = 0, max_p
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept-Language": "en-GB,en;q=0.9"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:6]:
             for page in range(1, 3):
                 try:
@@ -324,7 +325,7 @@ async def scrape_apex(search_terms: list[str], min_price: float = 0, max_price: 
         "Referer": "https://www.apexauctions.co.uk/",
     }
 
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:8]:
             for page in range(1, 4):
                 try:
@@ -425,7 +426,7 @@ async def scrape_wholesale_clearance(search_terms: list[str], min_price: float =
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept-Language": "en-GB,en;q=0.9"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:5]:
             try:
                 resp = await client.get(f"{WHOLESALE_CLEARANCE_URL}/", params={"s": term, "post_type": "product"})
@@ -474,7 +475,7 @@ async def scrape_merkandi(search_terms: list[str], min_price: float = 0, max_pri
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept": "application/json", "Authorization": f"Bearer {api_key}"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:6]:
             try:
                 r = await client.get(MERKANDI_API_URL, params={"q": term, "country": "GB", "category": "electronics"})
@@ -513,7 +514,7 @@ async def scrape_john_pye(search_terms: list[str], min_price: float = 0, max_pri
     results: list[AuctionLot] = []
     seen: set[str] = set()
     headers = {"User-Agent": _ua.random, "Accept-Language": "en-GB,en;q=0.9"}
-    async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=headers) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True, "headers": headers})) as client:
         for term in search_terms[:5]:
             try:
                 resp = await client.get(JOHN_PYE_SEARCH_URL, params={"q": term})

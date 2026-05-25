@@ -18,6 +18,7 @@ from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.term_cycle import start_cycle, next_batch
+from app.services.proxy import playwright_proxy_config
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -181,6 +182,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                     browser = await p.chromium.launch(
                         headless=True,
                         args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+                        proxy=playwright_proxy_config(),
                     )
                     ctx = await browser.new_context(
                         user_agent=ua.random,

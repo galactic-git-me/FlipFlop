@@ -33,6 +33,7 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.term_cycle import start_cycle, next_batch
+from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -123,7 +124,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     ebay_sold_map:  dict[str, float | None] = {}
     ebay_buy_map:   dict[str, float | None] = {}
 
-    async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"follow_redirects": True, "timeout": 25})) as client:
         for part_def in parts:
             name = part_def["name"]
             search = part_def["ebay_search"]
@@ -151,7 +152,11 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     try:
         from playwright.async_api import async_playwright
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True, args=_STEALTH_ARGS)
+            browser = await p.chromium.launch(
+                headless=True,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+            )
             ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
             await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
             page = await ctx.new_page()
@@ -369,7 +374,7 @@ async def _fetch_scan(search_term: str) -> float | None:
     url = f"https://www.scan.co.uk/search?q={search_term.replace(' ', '+')}"
     headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": True})) as client:
             resp = await client.get(url, headers=headers)
         if resp.status_code != 200 or len(resp.text) < 500:
             return None
@@ -385,7 +390,7 @@ async def _fetch_overclockers(search_term: str) -> float | None:
     url = f"https://www.overclockers.co.uk/search?q={search_term.replace(' ', '+')}"
     headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": True})) as client:
             resp = await client.get(url, headers=headers)
         if resp.status_code != 200 or len(resp.text) < 500:
             return None
@@ -401,7 +406,7 @@ async def _fetch_box(search_term: str) -> float | None:
     url = f"https://www.box.co.uk/search?search={search_term.replace(' ', '+')}"
     headers = {"User-Agent": ua.random, "Accept-Language": "en-GB", "Accept": "text/html"}
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+        async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 20, "follow_redirects": True})) as client:
             resp = await client.get(url, headers=headers)
         if resp.status_code != 200 or len(resp.text) < 500:
             return None
@@ -469,7 +474,11 @@ async def _fetch_playwright_lowest_price(
     prices: list[float] = []
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True, args=_STEALTH_ARGS)
+            browser = await p.chromium.launch(
+                headless=True,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+            )
             ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
             await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
             page = await ctx.new_page()

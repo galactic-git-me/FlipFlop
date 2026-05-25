@@ -20,6 +20,7 @@ from fake_useragent import UserAgent
 from app.config import get_settings
 from app.services.search_telemetry import record_term_result
 from app.services.spec_parser import parse_specs
+from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
 
 settings = get_settings()
 ua = UserAgent()
@@ -417,6 +418,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     "--window-size=1366,768",
                     "--lang=en-GB",
                 ],
+                proxy=playwright_proxy_config(),
             )
             state_path = _ebay_state_path()
             context_kwargs = {
@@ -513,9 +515,7 @@ async def scrape_ebay(
     )
 
     blocked_terms: list[str] = []
-    client_kwargs = {"timeout": 30, "follow_redirects": True}
-    if settings.ebay_proxy_url:
-        client_kwargs["proxy"] = settings.ebay_proxy_url
+    client_kwargs = apply_httpx_proxy({"timeout": 30, "follow_redirects": True})
 
     async with httpx.AsyncClient(**client_kwargs) as client:
         if _EBAY_VENDOR_BLOCK_UNTIL_TS > time.monotonic():
@@ -926,7 +926,7 @@ async def scrape_gumtree(search_terms: list[str], max_price: float) -> list[RawL
     headless browser (Playwright) integration is added.
     """
     results: list[RawListing] = []
-    async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 30, "follow_redirects": True})) as client:
         for term in search_terms:
             await _delay()
             try:
@@ -1078,7 +1078,7 @@ async def scrape_preloved(search_terms: list[str], min_price: float, max_price: 
     seen: set[str] = set()
 
     # Preloved uses keyword search — try up to 10 terms
-    async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 30, "follow_redirects": True})) as client:
         for term in search_terms[:10]:
             await _delay()
             try:
@@ -1257,7 +1257,7 @@ async def scrape_john_pye(min_price: float, max_price: float) -> list[RawListing
     results: list[RawListing] = []
     seen: set[str] = set()
 
-    async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 30, "follow_redirects": True})) as client:
         for term in _JOHN_PYE_TERMS[:6]:
             await _delay()
             try:
@@ -1830,6 +1830,7 @@ async def _scrape_generic_marketplace_listings(
                 "--no-sandbox",
                 "--disable-dev-shm-usage",
             ],
+            proxy=playwright_proxy_config(),
         )
         ctx = await browser.new_context(
             user_agent=(

@@ -28,6 +28,7 @@ from typing import Optional
 
 import structlog
 from app.services.search_telemetry import record_term_result
+from app.services.proxy import playwright_proxy_config
 
 log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
@@ -157,6 +158,7 @@ async def _make_context(
             user_data_dir=str(FB_PROFILE_DIR),
             headless=headless,
             args=_STEALTH_ARGS,
+            proxy=playwright_proxy_config(),
             user_agent=_USER_AGENT,
             viewport={"width": 1366, "height": 768},
             locale="en-GB",
@@ -174,6 +176,7 @@ async def _make_context(
     browser = await playwright.chromium.launch(
         headless=headless,
         args=_STEALTH_ARGS,
+        proxy=playwright_proxy_config(),
     )
     context = await browser.new_context(
         user_agent=_USER_AGENT,

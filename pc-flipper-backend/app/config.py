@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     # Use official eBay API as primary path; scraper is fallback.
     ebay_use_api: bool = True
     ebay_proxy_url: str = ""
+    outbound_proxy_url: str = ""
     ebay_delay_min_seconds: float = 4.0
     ebay_delay_max_seconds: float = 10.0
     ebay_block_cooldown_seconds: float = 45.0
