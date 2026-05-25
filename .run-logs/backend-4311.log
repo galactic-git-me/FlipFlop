@@ -406,3 +406,235 @@ INFO:     100.101.209.68:48442 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:48458 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48460 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48472 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 16:50:54 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+[scraper] eBay playwright blocked term='gaming keyboard' title='Access Denied'
+INFO:     100.101.209.68:45554 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45570 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45582 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45596 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45604 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45618 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45624 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45630 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45636 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45646 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45654 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45660 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45674 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45686 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45698 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45710 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45724 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45736 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45738 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+INFO:     100.101.209.68:44858 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44866 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44876 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44882 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44890 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44912 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44922 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44936 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44896 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44942 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44972 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44976 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44956 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44978 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44992 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:44998 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45014 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45022 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45030 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 60 found, 60 new (total 60)
+2026-05-25 16:51:11 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:45034 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45050 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45064 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45068 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45070 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 60 found, 60 new (total 60)
+INFO:     100.101.209.68:35384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35388 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35396 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35410 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35420 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35424 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35426 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35432 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35442 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35446 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:35452 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35454 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35460 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35476 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35478 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 16:51:18 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 61 found, 61 new (total 61)
+INFO:     100.101.209.68:35494 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35506 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35514 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35530 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35534 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35546 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35562 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35572 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35574 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35576 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35588 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35602 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:35616 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35618 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35628 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35630 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 60 found, 60 new (total 60)
+INFO:     100.101.209.68:58714 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58720 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58732 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58738 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58740 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+[scraper] eBay 'micro atx case': 60 found, 60 new (total 60)
+INFO:     100.101.209.68:58748 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58762 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58774 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58778 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58802 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58814 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58828 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58840 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58846 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58852 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58856 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58870 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58880 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58894 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming keyboard' title='Access Denied'
+2026-05-25 16:51:34 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+INFO:     100.101.209.68:37986 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37996 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38010 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38022 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming keyboard': 50 found, 50 new (total 50)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:38036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38040 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38048 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38060 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38062 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38052 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38074 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38088 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38092 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38110 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38100 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38120 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38134 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38138 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38140 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38152 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+INFO:     100.101.209.68:38166 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38176 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38188 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38200 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38208 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 16:51:44 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+[scraper] eBay 'micro atx case': 50 found, 50 new (total 50)
+INFO:     100.101.209.68:44040 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44072 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44092 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44108 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44122 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44134 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44148 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44162 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44176 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44188 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44198 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44202 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44208 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:44210 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44234 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44244 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44248 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:50500 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50514 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50524 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50526 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50540 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50556 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50570 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50578 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50608 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50620 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50636 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50594 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50654 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50638 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50666 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+INFO:     100.101.209.68:50672 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50676 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50688 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50702 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50708 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+INFO:     100.101.209.68:49862 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49870 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49872 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49874 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49890 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49900 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49902 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49918 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49926 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49938 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49954 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49958 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49972 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49986 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49990 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50008 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50022 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+INFO:     100.101.209.68:50038 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50040 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50046 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50062 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50070 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50074 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50084 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50092 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50098 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50104 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50118 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50120 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50132 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50148 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50156 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50160 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33682 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33692 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33694 - "GET /api/schedule HTTP/1.1" 200 OK
