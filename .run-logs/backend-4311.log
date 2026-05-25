@@ -355,3 +355,424 @@ INFO:     100.101.209.68:44190 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44204 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-25 17:31:49 [info     ] source.done                    found=0 gems=0 source=Alibaba
 2026-05-25 17:31:50 [info     ] source.done                    found=0 gems=0 source=Alibaba
+INFO:     100.101.209.68:44220 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44234 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44238 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44254 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39256 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39266 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39286 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39298 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39262 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39328 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39320 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39342 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39352 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39354 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39362 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39364 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39376 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39388 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39394 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39402 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39418 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39420 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58810 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58818 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58812 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58826 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58828 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58834 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58850 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58860 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58864 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58874 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58886 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58898 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58906 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58914 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58930 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58934 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58944 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58954 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58966 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58978 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58992 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59000 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58994 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59018 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59016 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59044 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59072 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59084 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59086 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53804 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53816 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53832 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53836 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53840 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53844 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53862 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53874 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53892 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53904 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53920 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53936 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53940 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53882 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53956 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53958 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53966 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53978 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53986 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53992 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54012 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56556 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56560 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56572 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56586 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56592 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56606 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56616 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56628 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56642 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56614 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56656 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56660 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56688 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56676 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56694 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56698 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56704 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56708 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56716 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56732 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56744 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33254 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33256 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33268 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33278 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33292 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33294 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33306 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33320 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33352 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33336 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33366 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33374 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33378 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33394 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33406 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33416 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33430 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33442 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37286 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37290 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37296 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37308 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37326 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37338 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37352 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37356 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37386 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37390 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37392 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37404 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37420 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37424 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37438 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37448 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37462 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37478 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:37484 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37494 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37500 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37506 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58976 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58992 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59002 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59004 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59008 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59012 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59024 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59034 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59036 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59052 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59054 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59058 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59074 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59078 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59092 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:59096 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59112 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59116 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59124 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59134 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59142 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59158 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59184 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59174 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59186 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59196 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59214 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59226 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38298 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38312 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38316 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38318 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38330 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38338 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38342 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38346 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38354 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38368 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38382 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38402 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38392 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38416 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38412 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38428 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38430 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38436 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38442 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38446 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38448 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52528 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52538 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52552 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52556 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52572 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52578 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52588 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52592 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52596 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52598 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52612 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52628 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52636 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52652 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52682 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52666 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52694 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52710 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52726 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52732 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52744 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52754 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52766 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52780 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52796 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53790 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53794 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53822 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53838 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53848 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53850 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53864 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53874 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53892 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53890 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53908 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53920 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53924 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53938 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53954 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53970 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53986 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53988 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53990 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59164 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59176 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59188 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59198 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59204 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59220 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59228 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59234 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59244 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59256 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59250 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59262 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59264 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59266 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59268 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59274 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:59284 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59290 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59294 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59298 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59306 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': HTTP blocked/empty (status=200), Playwright returned 54
+[scraper] eBay 'gaming pc untested': 54 found, 54 new (total 54)
+INFO:     100.101.209.68:47738 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47754 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47760 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47766 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47778 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47786 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47788 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47802 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47814 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47818 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47822 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47768 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47828 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47842 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47858 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47874 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47884 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47892 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47894 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47896 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47902 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47916 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47926 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47938 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47948 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47952 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47904 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47990 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47978 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47964 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48016 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48018 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48034 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53668 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53670 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53690 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53700 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53716 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53722 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53734 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53748 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53760 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53756 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53772 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53788 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53804 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53806 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53824 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53836 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53848 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53860 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36286 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36294 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36302 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36316 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36318 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36330 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36340 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36346 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36360 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36322 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36368 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36370 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36372 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36382 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36390 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36404 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36412 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36414 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36426 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36430 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55286 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55296 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55312 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55328 - "GET /api/schedule HTTP/1.1" 200 OK
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             [scraper] eBay error for 'gaming pc fault': BrowserContext.close: Target page, context or browser has been closed
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-25 17:32:23 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-25 17:32:31 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-25 17:32:40 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=1 source=eBay UK
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-25 17:32:54 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-25 17:32:54 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=102 new_gems=0 sources_scanned=8
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-25 17:32:57 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-25 17:33:07 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-25 17:33:07 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=157 new_gems=0 sources_scanned=8
+INFO:     100.101.209.68:51718 - "POST /api/schedule/flip_opportunities_cycle/run HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+2026-05-25 17:33:07 [info     ] scheduler.stopped
+Job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-25 17:25:31 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 130, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/autonomous_loop.py", line 18, in run_autonomous_cycle
+    sourcing = await run_flip_opportunities_swarm()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 129, in run_flip_opportunities_swarm
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-25 17:33:07 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2694464]
