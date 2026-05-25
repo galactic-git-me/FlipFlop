@@ -5,39 +5,39 @@
     "vendors": {
       "eBay UK": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "eBay UK Auctions": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "Facebook Marketplace": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "BidSpotter": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "Amazon": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "Temu": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "AliExpress": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "Alibaba": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       },
       "BargainHardware": {
         "cursor": 5,
-        "total": 22
+        "total": 17
       }
     }
   },
