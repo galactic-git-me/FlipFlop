@@ -4,69 +4,69 @@
     "batch_size": 5,
     "vendors": {
       "eBay UK": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "eBay UK Auctions": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "Facebook Marketplace": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "BidSpotter": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "Amazon": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "Temu": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "AliExpress": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "Alibaba": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       },
       "BargainHardware": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 17
       }
     }
   },
   "cases": {
-    "active": true,
+    "active": false,
     "batch_size": 5,
     "vendors": {
       "eBay": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "eBay (Worldwide)": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "Amazon": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "Temu": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "AliExpress": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "BargainHardware": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       },
       "CherryTree Inc": {
@@ -74,7 +74,7 @@
         "total": 1
       },
       "Alibaba": {
-        "cursor": 5,
+        "cursor": 10,
         "total": 10
       }
     }

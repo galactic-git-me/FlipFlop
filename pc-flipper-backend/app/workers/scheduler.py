@@ -354,13 +354,21 @@ def stop_scheduler():
 async def trigger_swarm(swarm_id: str) -> dict:
     """Manually trigger a swarm by ID."""
     if swarm_id == "flip_opportunities":
-        return await _run_job_with_history("flip_opportunities", run_flip_opportunities_swarm)
+        return await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "main"))
+    if swarm_id == "flip_opportunities_cycle":
+        return await _run_job_with_history("flip_opportunities_cycle", partial(run_flip_opportunities_swarm, "cycle"))
     if swarm_id == "upgrade_parts":
-        return await _run_job_with_history("upgrade_parts", run_upgrade_parts_swarm)
+        return await _run_job_with_history("upgrade_parts", partial(run_upgrade_parts_swarm, "main"))
+    if swarm_id == "upgrade_parts_cycle":
+        return await _run_job_with_history("upgrade_parts_cycle", partial(run_upgrade_parts_swarm, "cycle"))
     if swarm_id == "cases":
-        return await _run_job_with_history("cases", run_cases_swarm)
+        return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
+    if swarm_id == "cases_cycle":
+        return await _run_job_with_history("cases_cycle", partial(run_cases_swarm, "cycle"))
     if swarm_id == "accessories":
-        return await _run_job_with_history("accessories", run_accessories_swarm)
+        return await _run_job_with_history("accessories", partial(run_accessories_swarm, "main"))
+    if swarm_id == "accessories_cycle":
+        return await _run_job_with_history("accessories_cycle", partial(run_accessories_swarm, "cycle"))
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":
