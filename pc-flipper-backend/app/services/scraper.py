@@ -456,7 +456,7 @@ async def scrape_ebay(
     worldwide: bool = False,
 ) -> list[RawListing]:
     """
-    Searches eBay UK with bounded term concurrency.
+    Searches eBay UK with sequential term execution (per-vendor ordering).
     auction_mode=True → returns ending-soonest auctions (LH_Auction=1, _sop=1).
     auction_mode=False → returns Buy It Now listings (LH_BIN=1, _sop=10 newest).
     Deduplicates within run. Per-term jitter/delays are still applied.
@@ -480,13 +480,9 @@ async def scrape_ebay(
         client_kwargs["proxy"] = settings.ebay_proxy_url
 
     async with httpx.AsyncClient(**client_kwargs) as client:
-        term_concurrency = max(1, min(6, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
-        sem = asyncio.Semaphore(term_concurrency)
-
         async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
-            async with sem:
-                await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
-                try:
+            await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+            try:
                     is_component_term = any(m in term.lower() for m in component_markers)
                     sacat = "0" if is_component_term else "179"
                     token = await _get_ebay_access_token(client) if settings.ebay_use_api else None
@@ -584,12 +580,11 @@ async def scrape_ebay(
                                 l.listing_type = "auction"
                             l.source_name = "eBay UK Auctions"
                     return term, new_listings, blocked, last_status, None
-                except Exception as exc:
-                    return term, [], False, 0, str(exc)
+            except Exception as exc:
+                return term, [], False, 0, str(exc)
 
-        term_tasks = [asyncio.create_task(_fetch_term(term)) for term in search_terms]
-        for done in asyncio.as_completed(term_tasks):
-            term, new_listings, blocked, last_status, err = await done
+        for term in search_terms:
+            term, new_listings, blocked, last_status, err = await _fetch_term(term)
             if err:
                 record_term_result(term=term, error=err)
                 print(f"[scraper] eBay error for {term!r}: {err}")
@@ -1737,6 +1732,28 @@ async def _scrape_generic_marketplace_listings(
     results: list[RawListing] = []
     seen: set[str] = set()
 
+    def _with_page(url: str, page_num: int) -> str:
+        if page_num <= 1:
+            return url
+        joiner = "&" if "?" in url else "?"
+        src = source_name.lower()
+        if "amazon" in src:
+            return f"{url}{joiner}page={page_num}"
+        if "aliexpress" in src:
+            return f"{url}{joiner}page={page_num}"
+        if "alibaba" in src:
+            return f"{url}{joiner}page={page_num}"
+        if "bargainhardware" in src:
+            # Magento pagination key.
+            return f"{url}{joiner}p={page_num}"
+        if "temu" in src:
+            return f"{url}{joiner}page={page_num}"
+        if "cherrytree" in src:
+            return f"{url}{joiner}page={page_num}"
+        return f"{url}{joiner}page={page_num}"
+
+    max_pages = max(1, int(getattr(settings, "marketplace_max_pages_per_term", 2) or 2))
+
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
@@ -1760,18 +1777,20 @@ async def _scrape_generic_marketplace_listings(
         page = await ctx.new_page()
         for term in search_terms:
             try:
-                url = build_url(term)
-                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-                try:
-                    await page.wait_for_selector(item_selector, timeout=10000)
-                except Exception:
-                    pass
-                await asyncio.sleep(1.0)
-                await page.evaluate("window.scrollBy(0, 800)")
-                await asyncio.sleep(0.8)
+                added = 0
+                for page_num in range(1, max_pages + 1):
+                    url = _with_page(build_url(term), page_num)
+                    await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                    try:
+                        await page.wait_for_selector(item_selector, timeout=10000)
+                    except Exception:
+                        pass
+                    await asyncio.sleep(1.0)
+                    await page.evaluate("window.scrollBy(0, 800)")
+                    await asyncio.sleep(0.8)
 
-                raw = await page.evaluate(
-                    """({itemSelector, linkSelector, titleSelector}) => {
+                    raw = await page.evaluate(
+                        """({itemSelector, linkSelector, titleSelector}) => {
                         const out = [];
                         const seen = new Set();
                         const nodes = document.querySelectorAll(itemSelector);
@@ -1809,37 +1828,41 @@ async def _scrape_generic_marketplace_listings(
                         }
                         return out;
                     }""",
-                    {"itemSelector": item_selector, "linkSelector": link_selector, "titleSelector": title_selector},
-                )
-
-                added = 0
-                for item in raw or []:
-                    try:
-                        price = float(item.get("price") or 0)
-                    except Exception:
-                        continue
-                    if price < float(min_price) or price > float(max_price):
-                        continue
-                    href = str(item.get("href") or "")
-                    external_id = f"{source_name.lower()}_{abs(hash(href))}"
-                    if external_id in seen:
-                        continue
-                    seen.add(external_id)
-                    results.append(
-                        RawListing(
-                            external_id=external_id,
-                            title=str(item.get("title") or "")[:240],
-                            price=price,
-                            url=href,
-                            location=None,
-                            condition="unknown",
-                            description="",
-                            image_urls=[item.get("image")] if item.get("image") else [],
-                            source_name=source_name,
-                            listing_type="classified",
-                        )
+                        {"itemSelector": item_selector, "linkSelector": link_selector, "titleSelector": title_selector},
                     )
-                    added += 1
+
+                    page_added = 0
+                    for item in raw or []:
+                        try:
+                            price = float(item.get("price") or 0)
+                        except Exception:
+                            continue
+                        if price < float(min_price) or price > float(max_price):
+                            continue
+                        href = str(item.get("href") or "")
+                        external_id = f"{source_name.lower()}_{abs(hash(href))}"
+                        if external_id in seen:
+                            continue
+                        seen.add(external_id)
+                        results.append(
+                            RawListing(
+                                external_id=external_id,
+                                title=str(item.get("title") or "")[:240],
+                                price=price,
+                                url=href,
+                                location=None,
+                                condition="unknown",
+                                description="",
+                                image_urls=[item.get("image")] if item.get("image") else [],
+                                source_name=source_name,
+                                listing_type="classified",
+                            )
+                        )
+                        added += 1
+                        page_added += 1
+                    # Keep sequential pagination, but stop early when no new rows are parsed.
+                    if page_added == 0:
+                        break
                 record_term_result(term=term, found=added, new=added, source_name=source_name)
             except Exception as exc:
                 record_term_result(term=term, error=str(exc), source_name=source_name)
