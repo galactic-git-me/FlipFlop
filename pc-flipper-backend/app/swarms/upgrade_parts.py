@@ -32,6 +32,9 @@ from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
+from app.services.term_cycle import start_cycle, next_batch
+from app.models.source_search_term import SourceSearchTerm
+from sqlalchemy import select as sa_select
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -74,7 +77,7 @@ TRACKED_PARTS = [
 ]
 
 
-async def run_upgrade_parts_swarm() -> dict:
+async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     log.info("upgrade_parts_swarm.start", total_parts=len(TRACKED_PARTS))
     stats = {
         "updated": 0, "errors": 0,
@@ -83,12 +86,45 @@ async def run_upgrade_parts_swarm() -> dict:
         "amazon": 0, "temu": 0, "aliexpress": 0,
     }
 
+    parts = list(TRACKED_PARTS)
+    async with AsyncSessionLocal() as db:
+        rows = (
+            await db.execute(
+                sa_select(SourceSearchTerm).where(
+                    SourceSearchTerm.scope == "upgrade_parts",
+                    SourceSearchTerm.enabled == True,
+                )
+            )
+        ).scalars().all()
+    if rows:
+        wanted = {str(r.term or "").strip().lower() for r in rows if str(r.term or "").strip()}
+        filtered = [p for p in TRACKED_PARTS if str(p.get("ebay_search") or "").strip().lower() in wanted]
+        if filtered:
+            parts = filtered
+    terms_by_vendor = {
+        "eBay": [p["ebay_search"] for p in parts],
+        "BargainHardware": [p["ebay_search"] for p in parts],
+        "Scan": [p["ebay_search"] for p in parts],
+        "Overclockers": [p["ebay_search"] for p in parts],
+        "Box": [p["ebay_search"] for p in parts],
+        "Amazon": [p["ebay_search"] for p in parts],
+        "Temu": [p["ebay_search"] for p in parts],
+        "AliExpress": [p["ebay_search"] for p in parts],
+    }
+    if mode == "main":
+        start_cycle("upgrade_parts", batch_size=5, terms_by_vendor=terms_by_vendor)
+    active, batch_terms, done = next_batch("upgrade_parts", terms_by_vendor)
+    if not active:
+        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
+    allowed = set(batch_terms.get("eBay", []))
+    parts = [p for p in parts if p["ebay_search"] in allowed]
+
     # ── Phase 1: eBay — sequential within vendor ─────────────────────────────
     ebay_sold_map:  dict[str, float | None] = {}
     ebay_buy_map:   dict[str, float | None] = {}
 
     async with httpx.AsyncClient(follow_redirects=True, timeout=25) as client:
-        for part_def in TRACKED_PARTS:
+        for part_def in parts:
             name = part_def["name"]
             search = part_def["ebay_search"]
             sold = await _ebay_sold_median(client, search)
@@ -119,7 +155,7 @@ async def run_upgrade_parts_swarm() -> dict:
             ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
             await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
             page = await ctx.new_page()
-            for part_def in TRACKED_PARTS:
+            for part_def in parts:
                 name = part_def["name"]
                 price = await _bh_price(page, part_def["bh_search"])
                 bh_map[name] = price
@@ -136,14 +172,14 @@ async def run_upgrade_parts_swarm() -> dict:
             await browser.close()
     except ImportError:
         log.warning("upgrade_parts.playwright_missing")
-        bh_map = {p["name"]: None for p in TRACKED_PARTS}
+        bh_map = {p["name"]: None for p in parts}
     except Exception as exc:
         log.error("upgrade_parts.bh.error", error=str(exc))
-        bh_map = {p["name"]: bh_map.get(p["name"]) for p in TRACKED_PARTS}
+        bh_map = {p["name"]: bh_map.get(p["name"]) for p in parts}
 
     async def _fetch_lane_seq(fn):
         lane = []
-        for p in TRACKED_PARTS:
+        for p in parts:
             try:
                 lane.append(await fn(p["ebay_search"]))
             except Exception as exc:
@@ -184,7 +220,7 @@ async def run_upgrade_parts_swarm() -> dict:
 
     # ── Phase 4: Persist ──────────────────────────────────────────────────────
     async with AsyncSessionLocal() as db:
-        for i, part_def in enumerate(TRACKED_PARTS):
+        for i, part_def in enumerate(parts):
             name = part_def["name"]
             try:
                 ebay_used = ebay_buy_map.get(name)

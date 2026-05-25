@@ -17,6 +17,9 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
+from app.services.term_cycle import start_cycle, next_batch
+from app.models.source_search_term import SourceSearchTerm
+from sqlalchemy import select as sa_select
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -134,20 +137,44 @@ async def _upsert_accessory(db, acc: RawAccessory):
     ))
 
 
-async def run_accessories_swarm() -> dict:
+async def run_accessories_swarm(mode: str = "main") -> dict:
     log.info("accessories_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
+    search_defs = list(ACCESSORY_SEARCHES)
+    async with AsyncSessionLocal() as db:
+        rows = (
+            await db.execute(
+                sa_select(SourceSearchTerm).where(
+                    SourceSearchTerm.scope == "accessories",
+                    SourceSearchTerm.enabled == True,
+                )
+            )
+        ).scalars().all()
+    if rows:
+        search_defs = [{"theme": str(r.group_name or "Accessory"), "term": str(r.term), "condition": "1000", "source_names": list(r.source_names or [])} for r in rows if str(r.term or "").strip()]
+    terms_by_vendor: dict[str, list[str]] = {}
+    for d in search_defs:
+        srcs = d.get("source_names") or ["eBay", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+        for s in srcs:
+            terms_by_vendor.setdefault(str(s), []).append(d["term"])
+    terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
+    if mode == "main":
+        start_cycle("accessories", batch_size=5, terms_by_vendor=terms_by_vendor)
+    active, batch_terms, done = next_batch("accessories", terms_by_vendor)
+    if not active:
+        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
 
     async with AsyncSessionLocal() as db:
-        for search_def in ACCESSORY_SEARCHES:
+        for search_def in search_defs:
             try:
                 source_batches: list[tuple[str, list[RawAccessory]]] = []
-                ebay_results = await _scrape_ebay_accessories(
-                    search_def["term"],
-                    search_def["theme"],
-                    search_def["condition"],
-                )
-                source_batches.append(("Accessories:eBay", ebay_results))
+                if search_def["term"] in set(batch_terms.get("eBay", [])):
+                    ebay_results = await _scrape_ebay_accessories(
+                        search_def["term"],
+                        search_def["theme"],
+                        search_def["condition"],
+                    )
+                    source_batches.append(("Accessories:eBay", ebay_results))
 
                 from playwright.async_api import async_playwright
                 async with async_playwright() as p:
@@ -163,21 +190,26 @@ async def run_accessories_swarm() -> dict:
                     await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
                     page = await ctx.new_page()
 
-                    source_batches.append(
-                        ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
-                    )
-                    source_batches.append(
-                        ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
-                    )
-                    source_batches.append(
-                        ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
-                    )
-                    source_batches.append(
-                        ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
-                    )
-                    source_batches.append(
-                        ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
-                    )
+                    if search_def["term"] in set(batch_terms.get("Amazon", [])):
+                        source_batches.append(
+                            ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
+                        )
+                    if search_def["term"] in set(batch_terms.get("Temu", [])):
+                        source_batches.append(
+                            ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
+                        )
+                    if search_def["term"] in set(batch_terms.get("AliExpress", [])):
+                        source_batches.append(
+                            ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
+                        )
+                    if search_def["term"] in set(batch_terms.get("Alibaba", [])):
+                        source_batches.append(
+                            ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
+                        )
+                    if search_def["term"] in set(batch_terms.get("BargainHardware", [])):
+                        source_batches.append(
+                            ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
+                        )
                     await browser.close()
 
                 for source_name, results in source_batches:

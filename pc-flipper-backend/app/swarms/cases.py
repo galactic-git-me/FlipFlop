@@ -19,6 +19,7 @@ from app.models.price_history import PriceHistory, PriceHistoryType
 from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
+from app.services.term_cycle import start_cycle, next_batch
 import structlog
 from sqlalchemy import select as sa_select
 
@@ -104,7 +105,7 @@ async def _playbook_extra_themes() -> list[dict]:
     return extra
 
 
-async def run_cases_swarm() -> dict:
+async def run_cases_swarm(mode: str = "main") -> dict:
     log.info("cases_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
 
@@ -112,6 +113,22 @@ async def run_cases_swarm() -> dict:
     playbook_themes = await _playbook_extra_themes()
     all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
+    terms_by_vendor: dict[str, list[str]] = {}
+    for source in SOURCES:
+        if source_allowlist and source["name"] not in source_allowlist:
+            continue
+        if source["fn"] == "cherrytree":
+            terms_by_vendor[source["name"]] = ["catalogue"]
+            continue
+        terms: list[str] = []
+        for theme_def in all_themes:
+            terms.extend(theme_def["terms"][:2])
+        terms_by_vendor[source["name"]] = list(dict.fromkeys(terms))
+    if mode == "main":
+        start_cycle("cases", batch_size=5, terms_by_vendor=terms_by_vendor)
+    active, batch_terms, done = next_batch("cases", terms_by_vendor)
+    if not active:
+        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
 
     async def _scrape_one(source: dict, theme: str, term: str):
         fn_key = source["fn"].replace("-", "_").replace(" ", "_")
@@ -125,16 +142,15 @@ async def run_cases_swarm() -> dict:
         except Exception as exc:
             return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
-    enabled_sources = [s for s in SOURCES if not source_allowlist or s["name"] in source_allowlist]
+    enabled_sources = [s for s in SOURCES if s["name"] in batch_terms]
     async def _scrape_source_seq(source: dict) -> list[dict]:
         rows: list[dict] = []
         # CherryTree should ingest from its cases catalogue once, not per search term.
         if source["fn"] == "cherrytree":
             rows.append(await _scrape_one(source, "Catalogue", "catalogue"))
             return rows
-        for theme_def in all_themes:
-            for term in theme_def["terms"][:2]:
-                rows.append(await _scrape_one(source, theme_def["theme"], term))
+        for term in batch_terms.get(source["name"], []):
+            rows.append(await _scrape_one(source, "Dynamic", term))
         return rows
 
     scrape_results: list[dict] = []

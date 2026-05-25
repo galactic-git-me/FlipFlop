@@ -14,6 +14,7 @@ from app.models.listing import Listing, ListingStatus, Classification
 from app.models.source import DataSource
 from app.models.search_config import SearchConfig
 from app.models.search_telemetry import SearchTelemetry
+from app.models.source_search_term import SourceSearchTerm
 from app.services.scraper import fetch_listings
 from app.services.spec_parser import parse_specs
 from app.services.classifier import score_listing
@@ -28,6 +29,7 @@ from app.services.source_health import (
     should_skip_due_to_cooldown,
 )
 from app.config import get_settings
+from app.services.term_cycle import start_cycle, next_batch
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
@@ -65,7 +67,7 @@ def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> 
     return f"{t}|{cpu or ''}|{gpu or ''}|{p}"
 
 
-async def run_flip_opportunities_swarm() -> dict:
+async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
     log.info("flip_opportunities_swarm.start")
     stats = {"sources_scanned": 0, "listings_found": 0, "new_gems": 0, "errors": 0}
 
@@ -83,7 +85,38 @@ async def run_flip_opportunities_swarm() -> dict:
         )
         sources = sources_result.scalars().all()
 
-        search_terms = config.keywords or ["PC tower", "desktop computer", "gaming PC"]
+        fallback_terms = config.keywords or ["PC tower", "desktop computer", "gaming PC"]
+        rows = (
+            await db.execute(
+                select(SourceSearchTerm).where(
+                    SourceSearchTerm.scope == "flip_opportunities",
+                    SourceSearchTerm.enabled == True,
+                )
+            )
+        ).scalars().all()
+        terms_by_source: dict[str, list[str]] = {}
+        if rows:
+            for row in rows:
+                term = str(row.term or "").strip()
+                if not term:
+                    continue
+                src_names = row.source_names or []
+                if src_names:
+                    for s in src_names:
+                        terms_by_source.setdefault(str(s), []).append(term)
+                else:
+                    for src in sources:
+                        terms_by_source.setdefault(src.name, []).append(term)
+        else:
+            for src in sources:
+                terms_by_source[src.name] = list(fallback_terms)
+
+        terms_by_source = {k: list(dict.fromkeys(v)) for k, v in terms_by_source.items()}
+        if mode == "main":
+            start_cycle("flip_opportunities", batch_size=5, terms_by_vendor=terms_by_source)
+        active, batch_terms_by_source, done = next_batch("flip_opportunities", terms_by_source)
+        if not active:
+            return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
 
     # Announce scan started
     scan_state.scan_started(sources)
@@ -92,7 +125,7 @@ async def run_flip_opportunities_swarm() -> dict:
     clear_component_cache()   # flush stale component price cache
 
     # Run all sources in parallel
-    tasks = [_scan_source(source, search_terms, config) for source in sources]
+    tasks = [_scan_source(source, batch_terms_by_source.get(source.name, []), config) for source in sources]
     results = await asyncio.gather(*tasks, return_exceptions=True)
 
     scan_state.scan_finished()
@@ -155,6 +188,9 @@ async def _scan_source(source, search_terms: list, config) -> dict:
     result = {"scanned": 0, "found": 0, "gems": 0}
 
     try:
+        if not search_terms:
+            scan_state.site_done(source.name, 0, 0)
+            return result
         src_cfg_pre = dict((source.config or {}))
         skip, reason = should_skip_due_to_cooldown(src_cfg_pre)
         if skip and source.name not in _COOLDOWN_BYPASS_SOURCES:

@@ -340,6 +340,21 @@ _FLIP_SEARCH_TERMS = [
     "Dell OptiPlex",
     "HP EliteDesk",
 ]
+_FLIP_SEARCH_TERMS_EXTENDED = [
+    "gaming pc", "gaming pc untested", "gaming pc fault", "gaming pc no gpu", "gaming pc no hard drive",
+    "pc tower", "pc tower no graphics", "pc tower no storage", "desktop pc", "desktop pcs lot",
+    "Dell OptiPlex", "HP EliteDesk", "HP workstation", "office pc tower",
+    "AM4 motherboard cpu combo", "B550 motherboard", "X570 motherboard",
+    "Ryzen 5 5600", "Ryzen 7 5700X", "32GB DDR4 2x16", "1TB NVMe SSD", "650W PSU",
+]
+_UPGRADE_SEARCH_TERMS = [
+    "RTX 3060 12GB used", "RTX 3070 8GB used", "AMD Ryzen 5 5600", "AMD Ryzen 7 5700X",
+    "B550 motherboard", "X570 motherboard", "32GB DDR4 2x16 3200", "1TB NVMe M.2 SSD",
+    "650W ATX PSU 80 bronze", "AM4 motherboard cpu combo",
+]
+_ACCESSORY_SEARCH_TERMS = [
+    "gaming keyboard", "gaming mouse", "gaming headset", "usb microphone", "xl mouse pad",
+]
 
 
 async def _seed_default_data():
@@ -730,9 +745,9 @@ async def _seed_default_data():
                 _pb.upsell_strategy = _upsell
                 log.info("migrated.playbook.upsell_strategy", name=_pb_name)
 
-        # ── Seed source-linked case taxonomy terms (dynamic settings UX) ─────
-        taxonomy_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm))
-        if taxonomy_count == 0:
+        # ── Seed source-linked search terms (dynamic settings UX) ─────────────
+        case_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "cases"))
+        if case_terms_count == 0:
             rows: list[SourceSearchTerm] = []
             for group_name, terms in _CASE_TAXONOMY.items():
                 for term in terms:
@@ -749,5 +764,54 @@ async def _seed_default_data():
                     )
             db.add_all(rows)
             log.info("seeded.source_search_terms", scope="cases", count=len(rows))
+        flip_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "flip_opportunities"))
+        if flip_terms_count == 0:
+            rows: list[SourceSearchTerm] = []
+            for term in _FLIP_SEARCH_TERMS_EXTENDED:
+                rows.append(
+                    SourceSearchTerm(
+                        scope="flip_opportunities",
+                        group_name="PC Flip Opportunities",
+                        term=term,
+                        source_names=["eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                        attributes={},
+                        notes="seeded_flip_terms",
+                        enabled=True,
+                    )
+                )
+            db.add_all(rows)
+            log.info("seeded.source_search_terms", scope="flip_opportunities", count=len(rows))
+        upgrade_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "upgrade_parts"))
+        if upgrade_terms_count == 0:
+            rows = [
+                SourceSearchTerm(
+                    scope="upgrade_parts",
+                    group_name="Upgrade Components",
+                    term=term,
+                    source_names=["eBay", "BargainHardware", "Amazon", "Temu", "AliExpress"],
+                    attributes={},
+                    notes="seeded_upgrade_terms",
+                    enabled=True,
+                )
+                for term in _UPGRADE_SEARCH_TERMS
+            ]
+            db.add_all(rows)
+            log.info("seeded.source_search_terms", scope="upgrade_parts", count=len(rows))
+        accessories_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "accessories"))
+        if accessories_terms_count == 0:
+            rows = [
+                SourceSearchTerm(
+                    scope="accessories",
+                    group_name="Gaming Accessories",
+                    term=term,
+                    source_names=["eBay", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                    attributes={},
+                    notes="seeded_accessory_terms",
+                    enabled=True,
+                )
+                for term in _ACCESSORY_SEARCH_TERMS
+            ]
+            db.add_all(rows)
+            log.info("seeded.source_search_terms", scope="accessories", count=len(rows))
 
         await db.commit()

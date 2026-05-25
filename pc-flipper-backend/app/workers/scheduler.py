@@ -7,6 +7,7 @@ from time import perf_counter
 from typing import Awaitable, Callable
 import json
 from pathlib import Path
+from functools import partial
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app.config import get_settings
@@ -30,8 +31,12 @@ _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
     "flip_opportunities": deque(maxlen=50),
     "upgrade_parts": deque(maxlen=50),
+    "upgrade_parts_cycle": deque(maxlen=50),
     "cases": deque(maxlen=50),
+    "cases_cycle": deque(maxlen=50),
     "accessories": deque(maxlen=50),
+    "accessories_cycle": deque(maxlen=50),
+    "flip_opportunities_cycle": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous_cycle": deque(maxlen=50),
@@ -179,10 +184,20 @@ def start_scheduler():
         trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
         id="flip_opportunities",
         name="Flip Opportunities Swarm",
-        kwargs={"job_id": "flip_opportunities", "fn": run_flip_opportunities_swarm},
+        kwargs={"job_id": "flip_opportunities", "fn": partial(run_flip_opportunities_swarm, "main")},
         replace_existing=True,
         max_instances=1,
         next_run_time=flip_next,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=10),
+        id="flip_opportunities_cycle",
+        name="Flip Opportunities Cycle Tick",
+        kwargs={"job_id": "flip_opportunities_cycle", "fn": partial(run_flip_opportunities_swarm, "cycle")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
     )
 
     scheduler.add_job(
@@ -190,10 +205,20 @@ def start_scheduler():
         trigger=IntervalTrigger(hours=settings.parts_update_interval_hours),
         id="upgrade_parts",
         name="Upgrade Parts Swarm",
-        kwargs={"job_id": "upgrade_parts", "fn": run_upgrade_parts_swarm},
+        kwargs={"job_id": "upgrade_parts", "fn": partial(run_upgrade_parts_swarm, "main")},
         replace_existing=True,
         max_instances=1,
         next_run_time=upgrade_start,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=10),
+        id="upgrade_parts_cycle",
+        name="Upgrade Parts Cycle Tick",
+        kwargs={"job_id": "upgrade_parts_cycle", "fn": partial(run_upgrade_parts_swarm, "cycle")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
     )
 
     scheduler.add_job(
@@ -201,10 +226,20 @@ def start_scheduler():
         trigger=IntervalTrigger(hours=24),
         id="cases",
         name="Cases Catalogue Swarm",
-        kwargs={"job_id": "cases", "fn": run_cases_swarm},
+        kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
         replace_existing=True,
         max_instances=1,
         next_run_time=cases_start,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=10),
+        id="cases_cycle",
+        name="Cases Cycle Tick",
+        kwargs={"job_id": "cases_cycle", "fn": partial(run_cases_swarm, "cycle")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
     )
 
     scheduler.add_job(
@@ -212,10 +247,20 @@ def start_scheduler():
         trigger=IntervalTrigger(hours=24),
         id="accessories",
         name="Accessories Swarm",
-        kwargs={"job_id": "accessories", "fn": run_accessories_swarm},
+        kwargs={"job_id": "accessories", "fn": partial(run_accessories_swarm, "main")},
         replace_existing=True,
         max_instances=1,
         next_run_time=accessories_start,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=10),
+        id="accessories_cycle",
+        name="Accessories Cycle Tick",
+        kwargs={"job_id": "accessories_cycle", "fn": partial(run_accessories_swarm, "cycle")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
     )
 
     scheduler.add_job(
