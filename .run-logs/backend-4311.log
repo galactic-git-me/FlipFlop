@@ -1,296 +1,326 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [316296] using WatchFiles
-INFO:     Started server process [316319]
+INFO:     Started reloader process [413506] using WatchFiles
+INFO:     Started server process [413823]
 INFO:     Waiting for application startup.
-2026-05-25 16:29:20 [info     ] app.startup
-2026-05-25 16:29:20 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-25 16:29:20 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-25 16:29:20 [info     ] scheduler.started              jobs=15
+2026-05-25 16:31:33 [info     ] app.startup
+2026-05-25 16:31:33 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-25 16:31:33 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-25 16:31:33 [info     ] scheduler.started              jobs=15
 INFO:     Application startup complete.
-2026-05-25 16:29:20 [info     ] accessories_swarm.start
-2026-05-25 16:29:20 [info     ] flip_opportunities_swarm.start
-2026-05-25 16:29:20 [info     ] cases_swarm.start
-2026-05-25 16:29:20 [info     ] flip_opportunities_swarm.start
-2026-05-25 16:29:21 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5352s source=Facebook Marketplace
-2026-05-25 16:29:21 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5291s source=AliExpress
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5295s source=Alibaba
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5288s source=Temu
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5394s source=BargainHardware
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5352s source=Facebook Marketplace
-2026-05-25 16:29:21 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5291s source=AliExpress
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5295s source=Alibaba
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5288s source=Temu
-2026-05-25 16:29:21 [info     ] source.cooldown_ignored        reason=cooldown_active_5394s source=BargainHardware
-2026-05-25 16:29:22 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-25 16:29:22 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-25 16:29:22 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-25 16:29:23 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-25 16:29:23 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-25 16:29:23 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-25 16:29:24 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-25 16:29:24 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-25 16:29:25 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-25 16:29:25 [info     ] cases.generic_market.done      found=0 search=micro atx case source=Alibaba
-2026-05-25 16:29:26 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-25 16:29:28 [info     ] cases.generic_market.done      found=0 search=micro atx case source=BargainHardware
-2026-05-25 16:29:29 [info     ] amazon.cases.done              found=10 search=micro atx case
-[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-25 16:29:31 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=Alibaba
-2026-05-25 16:29:35 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=BargainHardware
-INFO:     100.101.209.68:53088 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53110 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53120 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53136 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53102 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53148 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:53138 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53164 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53178 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53194 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53196 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:53180 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53192 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53218 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53206 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53230 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53220 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53240 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-2026-05-25 16:29:37 [info     ] amazon.cases.done              found=10 search=Lian Li O11 style case
-INFO:     100.101.209.68:53242 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53254 - "GET /api/sources/health HTTP/1.1" 200 OK
-[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-25 16:29:39 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
-INFO:     100.101.209.68:53256 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-2026-05-25 16:29:41 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
-INFO:     100.101.209.68:53268 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53284 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53286 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-25 16:31:33 [info     ] accessories_swarm.start
+2026-05-25 16:31:33 [info     ] flip_opportunities_swarm.start
+2026-05-25 16:31:33 [info     ] cases_swarm.start
+2026-05-25 16:31:33 [info     ] flip_opportunities_swarm.start
+2026-05-25 16:31:34 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5269s source=Facebook Marketplace
+2026-05-25 16:31:34 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5332s source=AliExpress
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5337s source=Alibaba
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5329s source=Temu
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5310s source=BargainHardware
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5268s source=Facebook Marketplace
+2026-05-25 16:31:34 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5332s source=AliExpress
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5336s source=Alibaba
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5329s source=Temu
+2026-05-25 16:31:34 [info     ] source.cooldown_ignored        reason=cooldown_active_5309s source=BargainHardware
+2026-05-25 16:31:35 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-25 16:31:35 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-25 16:31:35 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-25 16:31:35 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-25 16:31:35 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-25 16:31:35 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-25 16:31:37 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-25 16:31:37 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-25 16:31:38 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-25 16:31:38 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-25 16:31:40 [info     ] cases.generic_market.done      found=0 search=micro atx case source=Alibaba
+2026-05-25 16:31:41 [info     ] amazon.cases.done              found=10 search=micro atx case
+2026-05-25 16:31:42 [info     ] cases.generic_market.done      found=0 search=micro atx case source=BargainHardware
 [scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
-INFO:     100.101.209.68:43466 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43470 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-25 16:29:44 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
-INFO:     100.101.209.68:43476 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43488 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43490 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43494 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43506 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43514 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43526 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43536 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43554 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43538 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-2026-05-25 16:29:45 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
-INFO:     100.101.209.68:43558 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43564 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43580 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43592 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43606 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43616 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:29:46 [info     ] aliexpress.cases.done          found=0 search=micro atx case
-2026-05-25 16:29:49 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
-2026-05-25 16:29:49 [info     ] temu.cases.done                found=0 search=micro atx case
-INFO:     100.101.209.68:43620 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43624 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:29:51 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
-[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-25 16:29:53 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
-INFO:     100.101.209.68:43640 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43654 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43662 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43668 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-25 16:29:53 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
-INFO:     100.101.209.68:43680 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43682 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43690 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43706 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43716 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43712 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43726 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43736 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43732 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43750 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43752 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43762 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43772 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43788 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41044 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41052 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:31:46 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=Alibaba
+2026-05-25 16:31:47 [info     ] amazon.cases.done              found=10 search=Lian Li O11 style case
+INFO:     100.101.209.68:45474 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45470 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45492 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45456 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45494 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45484 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:31:50 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=BargainHardware
+INFO:     100.101.209.68:45506 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45496 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45522 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45538 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45546 - "GET /api/schedule HTTP/1.1" 200 OK
 [scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
-INFO:     100.101.209.68:41054 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41066 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:30:00 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
-INFO:     100.101.209.68:41074 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41080 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41086 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41098 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41102 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41112 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41116 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:41118 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41130 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41142 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41148 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41164 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41168 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41172 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:41186 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41196 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41198 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41208 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-25 16:30:03 [info     ] source.done                    found=0 gems=0 source=BargainHardware
-INFO:     100.101.209.68:41210 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:30:04 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.101.209.68:45542 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 16:31:52 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+INFO:     100.101.209.68:45556 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45570 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:31:55 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
 [scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-INFO:     100.101.209.68:38582 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38596 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38606 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38614 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38626 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38642 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-25 16:31:58 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-25 16:31:58 [info     ] aliexpress.cases.done          found=0 search=micro atx case
+INFO:     100.101.209.68:54804 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54832 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54846 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54820 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54860 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54864 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54868 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54884 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-25 16:31:59 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+INFO:     100.101.209.68:54906 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54896 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54910 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 16:32:02 [info     ] temu.cases.done                found=0 search=micro atx case
+2026-05-25 16:32:03 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+INFO:     100.101.209.68:54916 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54932 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:05 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+2026-05-25 16:32:06 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+INFO:     100.101.209.68:40976 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40990 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41000 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41008 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41042 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41046 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41054 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41034 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41058 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41062 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41078 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-25 16:32:11 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+2026-05-25 16:32:11 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
 [scraper] eBay playwright blocked term='gaming keyboard' title='Access Denied'
-INFO:     100.101.209.68:38658 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38660 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38672 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:38682 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38696 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38710 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38718 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38734 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38748 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38756 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:38770 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38778 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38782 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38796 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-25 16:30:11 [info     ] aliexpress.cases.done          found=0 search=Lian Li O11 style case
-2026-05-25 16:30:13 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=289.0 median=466.8 query=gaming PC gtx 750
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=265.0 median=438.0 query=gaming PC gtx 750
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=761.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=209.95 median=371.94 query=gaming PC gtx 750
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=429.0 median=922.8 query=gaming PC ryzen 5 5600g rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=464.95 median=677.94 query=gaming PC ryzen 3 3200g
-2026-05-25 16:30:13 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 5600g status=403
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3050 status=403
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
-2026-05-25 16:30:13 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3060 status=403
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=899.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=334.95 median=809.94 query=gaming PC athlon 3000 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=755.94 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=175.99 median=619.19 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC athlon 9600 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=695.99 query=gaming PC rtx 3050
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=25.91 median=439.09 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=56.99 median=476.39 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=459.59 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=44.99 median=461.99 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=32.79 median=447.35 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=779.94 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC i7-4770 gtx 1050 ti
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=34.0 median=448.8 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=118.99 median=550.79 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=127.99 median=561.59 query=gaming PC rtx 3060
-2026-05-25 16:30:13 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 3400g status=403
-2026-05-25 16:30:13 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6434652172451109704 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5562228994961282805 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
-INFO:     100.101.209.68:38812 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8122699671508819105 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7474263734524723092 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5611250431529660487 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5670395266968247191 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
-INFO:     100.101.209.68:38814 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:30:13 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_855612763069289919 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
-2026-05-25 16:30:13 [info     ] source.done                    found=87 gems=0 source=Amazon
+INFO:     100.101.209.68:41092 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41106 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45028 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45030 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45038 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45072 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45078 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45090 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45094 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45100 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45102 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45116 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 [scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-25 16:30:17 [info     ] temu.cases.done                found=0 search=Lian Li O11 style case
-INFO:     100.101.209.68:57060 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57072 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57074 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57098 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57108 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57082 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57130 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57110 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57116 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57140 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57142 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:57156 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:57162 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57174 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57194 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57180 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57210 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57216 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57224 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57236 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57240 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57244 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-25 16:32:20 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.101.209.68:45118 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45128 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:23 [info     ] aliexpress.cases.done          found=0 search=Lian Li O11 style case
 [scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
-2026-05-25 16:30:24 [info     ] source.done                    found=0 gems=0 source=Temu
-2026-05-25 16:30:24 [info     ] source.done                    found=0 gems=0 source=Temu
-INFO:     100.101.209.68:59652 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59660 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-2026-05-25 16:30:27 [info     ] source.done                    found=0 gems=0 source=AliExpress
-2026-05-25 16:30:27 [info     ] source.done                    found=0 gems=0 source=AliExpress
-INFO:     100.101.209.68:59666 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59682 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59686 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59692 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59702 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59710 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59726 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59728 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59742 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:59750 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:59774 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59764 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59792 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59788 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59798 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59800 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59816 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59824 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35104 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35108 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35118 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35124 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35126 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35140 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35156 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35172 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35180 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35186 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35194 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35206 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35216 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:26 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3060 status=403
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=289.0 median=466.8 query=gaming PC gtx 750
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 5600g status=403
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=695.99 query=gaming PC i7-4770 rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=761.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=429.0 median=922.8 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=464.95 median=677.94 query=gaming PC ryzen 3 3200g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=899.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=334.95 median=809.94 query=gaming PC athlon 3000 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 3400g status=403
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=755.94 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=175.99 median=619.19 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC athlon 9600 rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=695.99 query=gaming PC rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=56.99 median=476.39 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=25.91 median=439.09 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=459.59 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=383.0 median=867.6 query=gaming PC ryzen 7 7735hs rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=44.99 median=461.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=779.94 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=32.79 median=447.35 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=491.94 query=gaming PC athlon 3000
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=34.0 median=448.8 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=118.99 median=550.79 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=983.99 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=127.99 median=561.59 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=23.14 median=435.77 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=69.91 median=491.89 query=gaming PC rtx 3060
+2026-05-25 16:32:26 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3050 status=403
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:26 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:27 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-25 16:32:27 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:27 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:27 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2318704026729675406 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6447587082366543036 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8010770564559539105 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4314770449881517708 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4737468621791734652 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2352969253943425561 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:27 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_635983460171337349 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-25 16:32:27 [info     ] source.done                    found=89 gems=0 source=Amazon
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:28 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC ryzen 5 3400g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=899.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=755.94 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=334.95 median=809.94 query=gaming PC athlon 3000 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC athlon 9600 rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=175.99 median=619.19 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=527.99 query=gaming PC i7-4770 gtx 1050 ti
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=695.99 query=gaming PC rtx 3050
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=56.99 median=476.39 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=25.91 median=439.09 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=42.99 median=459.59 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=491.94 query=gaming PC athlon 3000
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=118.99 median=550.79 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=479.99 median=983.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=779.94 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=44.99 median=461.99 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [info     ] resale_scraper.fallback_buy_price buy_price=127.99 median=561.59 query=gaming PC rtx 3060
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8022253804050906604 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3917693370308899488 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4041278591469392952 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1020150059183168962 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5960015699382405265 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-25 16:32:29 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7475267008984620416 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-25 16:32:29 [info     ] source.done                    found=72 gems=0 source=Amazon
+2026-05-25 16:32:30 [info     ] temu.cases.done                found=0 search=Lian Li O11 style case
+INFO:     100.101.209.68:35222 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35234 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 [scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
-2026-05-25 16:30:29 [info     ] source.done                    found=0 gems=0 source=Alibaba
+INFO:     100.101.209.68:35248 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35264 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35250 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35280 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35278 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35288 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35290 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35296 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35298 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35314 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35330 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44364 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44380 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+2026-05-25 16:32:37 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-25 16:32:37 [info     ] source.done                    found=0 gems=0 source=Temu
+INFO:     100.101.209.68:44386 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44398 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:40 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-25 16:32:41 [info     ] source.done                    found=0 gems=0 source=AliExpress
+INFO:     100.101.209.68:44414 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44422 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44424 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44452 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44436 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44454 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44458 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44464 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44466 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44474 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:44486 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44496 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-25 16:32:44 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-25 16:32:44 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-25 16:32:46 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+INFO:     100.101.209.68:41040 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41056 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+INFO:     100.101.209.68:41060 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41068 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41088 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41094 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41098 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41110 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41114 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41128 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41138 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41144 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41150 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
