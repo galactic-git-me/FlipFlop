@@ -4043,3 +4043,5 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay 'AMD Ryzen 7 7800X3D': 50 found, 50 new (total 50)
 [scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
 2026-05-26 09:26:25 [info     ] source.done                    found=0 gems=0 source=Temu
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+2026-05-26 09:26:32 [info     ] source.done                    found=0 gems=0 source=Alibaba
