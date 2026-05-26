@@ -11660,16 +11660,14 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 04:10:51 [info     ] source.done                    found=274 gems=0 source=eBay UK Auctions
 2026-05-26 04:10:51 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=444 new_gems=0 sources_scanned=8
 2026-05-26 04:10:51 [info     ] ghost_lifecycle.updated        missing_cutoff_days=3 moved_to_missing=55 moved_to_removed=0 removed_cutoff_days=14
-tus HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44192 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44202 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44218 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44224 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:44232 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44244 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44248 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44258 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44260 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-26 03:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-26 03:15:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-26 04:15:24 [info     ] accessories_swarm.start
+2026-05-26 04:15:24 [info     ] cases_swarm.start
+2026-05-26 04:15:24 [info     ] flip_opportunities_swarm.start
+2026-05-26 04:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 04:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+ - "GET /api/source-search-terms HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44272 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44284 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:44286 - "GET /api/sources/health HTTP/1.1" 200 OK
