@@ -20951,39 +20951,37 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
 [scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
 2026-05-26 16:16:23 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47700 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47712 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35766 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35784 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35792 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35804 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35782 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35818 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35830 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35840 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35844 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35858 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35862 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35872 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:35888 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35896 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35900 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35908 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35916 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35920 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35934 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35942 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35946 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42056 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42066 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42082 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42096 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42108 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42120 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42132 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42144 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42160 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+[scraper] eBay retry 'b650 tomahawk': 0 found, 0 new (total 313)
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-26 16:16:35 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+[scraper] eBay playwright blocked term='gaming keyboard' title='Access Denied'
+2026-05-26 16:16:39 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+[scraper] eBay 'gaming keyboard': 60 found, 60 new (total 60)
+2026-05-26 16:16:41 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-26 16:16:46 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+[scraper] eBay 'mini tower desktop case': 86 found, 86 new (total 86)
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+[scraper] eBay 'micro atx case': 50 found, 50 new (total 50)
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay retry 'proart am5': 0 found, 0 new (total 313)
+2026-05-26 16:16:58 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+[scraper] eBay 'micro atx case': 50 found, 50 new (total 50)
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-26 16:17:05 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-26 16:17:06 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+[scraper] eBay 'mini tower desktop case': 85 found, 85 new (total 85)
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay retry '7900 bundle': 0 found, 0 new (total 313)
+[scraper] eBay playwright blocked term='gaming mouse' title='Access Denied'
+2026-05-26 16:17:30 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+2026-05-26 16:17:30 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42168 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42176 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42184 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
