@@ -21332,47 +21332,45 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 16:20:56 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=58
 2026-05-26 16:20:56 [info     ] source.done                    found=532 gems=0 source=eBay UK Auctions
 2026-05-26 16:20:56 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=785 new_gems=0 sources_scanned=8
-8:53768 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53778 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55286 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55294 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55296 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55308 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55312 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55310 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55324 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:55326 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55334 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55344 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55358 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55372 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55386 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55394 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55398 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55402 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55416 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55420 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55434 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55446 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55452 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55460 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55468 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55474 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55484 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55506 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55496 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55520 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:55528 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55532 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55538 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55546 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40576 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40590 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40602 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40608 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40624 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40636 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40642 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': 57 found, 57 new (total 57)
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay playwright blocked term='usb microphone' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay 'gaming pc case mid tower': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay 'gaming pc case mid tower': 50 found, 50 new (total 50)
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': 48 found, 48 new (total 48)
+[scraper] eBay playwright blocked term='usb microphone' title='Access Denied'
+[scraper] eBay 'usb microphone': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay 'slim htpc case living room': HTTP blocked/empty (status=200), Playwright returned 120
+[scraper] eBay 'slim htpc case living room': 120 found, 120 new (total 120)
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay 'slim micro atx case office': 59 found, 59 new (total 59)
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay 'slim micro atx case office': 49 found, 49 new (total 49)
+2026-05-26 16:22:53 [info     ] cases_swarm.done               errors=0 found=152 upserted=128
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay 'slim htpc case living room': 50 found, 50 new (total 50)
+2026-05-26 16:23:01 [info     ] cases_swarm.done               errors=0 found=145 upserted=123
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay 'xl mouse pad': 60 found, 60 new (total 60)
+2026-05-26 16:23:27 [info     ] accessories_swarm.done         errors=0 found=100 upserted=80
+rce?limit=2500 HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40654 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40658 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40664 - "GET /api/schedule HTTP/1.1" 200 OK
