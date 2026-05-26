@@ -11207,54 +11207,52 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 03:05:24 [info     ] cases_swarm.start
 2026-05-26 03:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-26 03:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-P/1.1" 200 OK
-INFO:     100.101.209.68:53236 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:53252 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53254 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53264 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53280 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53286 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53288 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53292 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53300 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53306 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53312 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53322 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53334 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53346 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34228 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34234 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34242 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34252 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34254 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34268 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34282 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34296 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:34298 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34300 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34306 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34308 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34314 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34324 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34336 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34340 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34354 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34356 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34368 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34370 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34382 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-25 19:28:41 [info     ] accessories_swarm.start
-2026-05-25 19:28:41 [info     ] cases_swarm.start
-2026-05-25 19:28:41 [info     ] flip_opportunities_swarm.start
-2026-05-25 19:28:41 [info     ] upgrade_parts_swarm.start      total_parts=10
-2026-05-25 19:28:41 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-INFO:     100.101.209.68:47748 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47764 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47766 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47780 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47794 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47810 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47814 - "GET /api/config/search HTTP/1.1" 200 OK
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-26 02:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-26 02:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 02:15:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 53 found, 53 new (total 53)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc build': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 53)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+2026-05-26 03:15:24 [info     ] accessories_swarm.start
+2026-05-26 03:15:24 [info     ] cases_swarm.start
+2026-05-26 03:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 03:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+0 OK
 INFO:     100.101.209.68:47820 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
 INFO:     100.101.209.68:47834 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47836 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
