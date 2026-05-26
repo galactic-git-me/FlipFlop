@@ -10515,32 +10515,33 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 02:01:13 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178158800302 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
 2026-05-26 02:01:13 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178154037382 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
 2026-05-26 02:01:13 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=4 source=eBay UK
-urces/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58818 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58820 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58826 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38862 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38876 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38890 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38894 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38900 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38906 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38910 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38918 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38924 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38938 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38946 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38962 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38974 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38984 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38986 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:38998 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39010 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:39020 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39028 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39042 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39056 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39058 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc build': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay 'pc tower': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+2026-05-26 02:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 01:05:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+2026-05-26 02:05:24 [info     ] accessories_swarm.start
+2026-05-26 02:05:24 [info     ] cases_swarm.start
+2026-05-26 02:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 02:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+0 OK
 INFO:     100.101.209.68:39070 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39080 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39082 - "GET /api/sources/health HTTP/1.1" 200 OK
