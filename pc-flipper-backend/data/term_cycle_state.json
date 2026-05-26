@@ -1,42 +1,42 @@
 {
   "flip_opportunities": {
-    "active": true,
+    "active": false,
     "batch_size": 5,
     "vendors": {
       "eBay UK": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "eBay UK Auctions": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "Facebook Marketplace": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "BidSpotter": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "Amazon": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "Temu": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "AliExpress": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "Alibaba": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       },
       "BargainHardware": {
-        "cursor": 15,
+        "cursor": 17,
         "total": 17
       }
     }
