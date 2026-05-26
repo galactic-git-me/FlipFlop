@@ -658,14 +658,14 @@ for j in rows:
     elif st_raw == "running":
         st = "[yellow]running[/yellow]"
     elif st_raw == "skipped":
-        st = "[yellow]skipped[/yellow]"
+        st = "[yellow]waiting for next main run[/yellow]"
     elif st_raw in {"failed", "error"}:
         st = f"[red]{st_raw}[/red]"
     elif st_raw in {"—", "", "None", "null"}:
         if jid == "flip_opportunities" and flip_cooldown_count > 0 and flip_found_total <= 0:
             st = "[yellow]cooldown[/yellow]"
         else:
-            st = "[red]no data[/red]"
+            st = "[yellow]waiting for next main run[/yellow]"
     else:
         st = st_raw
 
@@ -852,12 +852,12 @@ for j in rows:
         else:
             st_disp = "success"
     elif st == "skipped":
-        st_disp = "skipped"
+        st_disp = "waiting for next main run"
     elif st in {"—", "", "None", "null"}:
         if jid == "flip_opportunities" and flip_cooldown_count > 0 and flip_found_total <= 0:
             st_disp = "cooldown"
         else:
-            st_disp = "no data"
+            st_disp = "waiting for next main run"
     else:
         st_disp = st
 
@@ -908,7 +908,7 @@ schedule = get("/schedule") or []
 total = int(stats.get("total_listings") or demand.get("total_listings") or 0)
 gems = int(stats.get("gems_count") or demand.get("total_gems") or 0)
 avg_profit = float(stats.get("avg_profit") or 0.0)
-gem_rate = float(demand.get("gem_rate_pct") or 0.0)
+gem_rate = (float(gems) / float(total) * 100.0) if total > 0 else 0.0
 running = bool(scan.get("running"))
 done = int(scan.get("completed") or 0)
 scan_total = int(scan.get("total") or 0)
