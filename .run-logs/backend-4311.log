@@ -20728,30 +20728,28 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 15:55:24 [info     ] cases_swarm.start
 2026-05-26 15:55:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-26 15:55:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-34524 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34526 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34542 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34558 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34560 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34572 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:34574 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34588 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34602 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34612 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34622 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34632 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34648 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34656 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34660 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47586 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47596 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47612 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47620 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47624 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47630 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47632 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47644 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47654 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 178)
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 178)
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+2026-05-26 15:57:09 [info     ] upgrade_parts_swarm.start      total_parts=10
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+2026-05-26 15:57:21 [debug    ] upgrade_parts.ebay             buy=85.0 part=B550 Motherboard sold=83.78
+2026-05-26 15:57:24 [debug    ] upgrade_parts.ebay             buy=145.0 part=X570 Motherboard sold=146.3
+2026-05-26 15:57:28 [debug    ] upgrade_parts.ebay             buy=44.99 part=AM4 CPU Motherboard Combo sold=133.65
+2026-05-26 15:57:32 [debug    ] upgrade_parts.bh               part=B550 Motherboard price_gbp=3.07
+2026-05-26 15:57:36 [debug    ] upgrade_parts.bh               part=X570 Motherboard price_gbp=3.07
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+2026-05-26 15:57:39 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 178)
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+2026-05-26 15:58:19 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=3 box=0 ebay_buy=3 ebay_sold=3 errors=0 overclockers=0 scan=0 temu=0 updated=3
+P/1.1" 200 OK
 INFO:     100.101.209.68:47660 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47666 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47674 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
