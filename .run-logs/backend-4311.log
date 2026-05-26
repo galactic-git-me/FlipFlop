@@ -3266,3 +3266,43 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 08:27:22 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
 [scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
 2026-05-26 08:27:27 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay 'cheap atx pc case': 70 found, 70 new (total 70)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay 'pc tower': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay 'budget gaming case atx': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay 'budget gaming case atx': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': 57 found, 57 new (total 57)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': 57 found, 57 new (total 57)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay 'slim htpc case living room': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay 'slim htpc case living room': 60 found, 60 new (total 60)
+2026-05-26 08:30:19 [info     ] cases_swarm.done               errors=0 found=133 upserted=115
