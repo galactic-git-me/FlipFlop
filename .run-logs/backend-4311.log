@@ -11201,14 +11201,13 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 02:59:16 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178161139362 fingerprint=asus gaming pc desktop great condition amd 5500xt|||209 source=eBay UK
 2026-05-26 02:59:16 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_336593051691 fingerprint=gaming pc gtx 1080 ryzen 5 3600|Ryzen 5 3600|GTX 1080|313 source=eBay UK
 2026-05-26 02:59:16 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK Auctions
-TP/1.1" 200 OK
-INFO:     100.101.209.68:53182 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53194 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53196 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53206 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53212 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53216 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:53220 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-26 03:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 02:05:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-26 03:05:24 [info     ] accessories_swarm.start
+2026-05-26 03:05:24 [info     ] cases_swarm.start
+2026-05-26 03:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 03:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+P/1.1" 200 OK
 INFO:     100.101.209.68:53236 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
 INFO:     100.101.209.68:53252 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:53254 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
