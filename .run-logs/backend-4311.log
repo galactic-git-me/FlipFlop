@@ -19838,37 +19838,34 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178158800302 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
 2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178154037382 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
 2026-05-26 14:11:41 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=4 source=eBay UK
- HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58606 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58610 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58616 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34970 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34978 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34982 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34990 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34992 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35002 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35012 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35024 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:35036 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35046 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35056 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35060 - "GET /api/sources/health HTTP/1.1" 200 OK
-[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:35070 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35086 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35092 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35100 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35104 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35112 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35128 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35140 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35156 - "GET /api/schedule HTTP/1.1" 200 OK
-[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:35172 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35186 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35190 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-26 13:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-26 13:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 13:15:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay 'pc tower': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc untested' title='Access Denied'
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc faulty' title='Access Denied'
+[scraper] eBay 'gaming pc faulty': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='gaming pc' title='Access Denied'
+2026-05-26 14:15:24 [info     ] accessories_swarm.start
+2026-05-26 14:15:24 [info     ] cases_swarm.start
+2026-05-26 14:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 14:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+T /api/sources HTTP/1.1" 307 Temporary Redirect
 INFO:     100.101.209.68:35200 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35204 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35216 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
