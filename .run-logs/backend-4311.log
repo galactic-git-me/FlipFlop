@@ -3188,3 +3188,67 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
 [scraper] eBay 'slim htpc case living room': 50 found, 50 new (total 50)
 2026-05-26 08:20:05 [info     ] cases_swarm.done               errors=0 found=157 upserted=131
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 07:25:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 24 found, 15 new (total 68)
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc build': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+2026-05-26 08:25:24 [info     ] accessories_swarm.start
+2026-05-26 08:25:24 [info     ] cases_swarm.start
+2026-05-26 08:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 08:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+2026-05-26 08:25:28 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+2026-05-26 08:25:28 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+2026-05-26 08:25:29 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-26 08:25:31 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+2026-05-26 08:25:31 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-26 08:25:33 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+2026-05-26 08:25:34 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+2026-05-26 08:25:35 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-26 08:25:37 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
+2026-05-26 08:25:37 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-26 08:25:39 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
+2026-05-26 08:25:40 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=BargainHardware
+2026-05-26 08:25:42 [info     ] amazon.cases.done              found=10 search=mini itx htpc case
+2026-05-26 08:25:43 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=Alibaba
+2026-05-26 08:25:46 [info     ] amazon.cases.done              found=3 search=slim htpc case living room
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+2026-05-26 08:25:49 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-26 08:25:50 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+2026-05-26 08:26:13 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-26 08:26:13 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+[scraper] eBay 'mini tower desktop case': 103 found, 103 new (total 103)
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+[scraper] eBay 'mini tower desktop case': 85 found, 85 new (total 85)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+2026-05-26 08:26:36 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
