@@ -17,7 +17,6 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
-from app.services.term_cycle import start_cycle, next_batch
 from app.services.proxy import playwright_proxy_config
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
@@ -176,11 +175,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
         for s in srcs:
             terms_by_vendor.setdefault(str(s), []).append(d["term"])
     terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
-    if mode == "main":
-        start_cycle("accessories", batch_size=5, terms_by_vendor=terms_by_vendor)
-    active, batch_terms, done = next_batch("accessories", terms_by_vendor)
-    if not active:
-        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
+    batch_terms = terms_by_vendor
 
     async with AsyncSessionLocal() as db:
         for search_def in search_defs:

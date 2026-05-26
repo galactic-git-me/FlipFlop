@@ -29,7 +29,6 @@ from app.services.source_health import (
     should_skip_due_to_cooldown,
 )
 from app.config import get_settings
-from app.services.term_cycle import start_cycle, next_batch
 
 log = structlog.get_logger(__name__)
 SOURCE_FAILURE_THRESHOLD = 3
@@ -128,11 +127,7 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
                 terms_by_source[src.name] = list(fallback_terms)
 
         terms_by_source = {k: list(dict.fromkeys(v)) for k, v in terms_by_source.items()}
-        if mode == "main":
-            start_cycle("flip_opportunities", batch_size=5, terms_by_vendor=terms_by_source)
-        active, batch_terms_by_source, done = next_batch("flip_opportunities", terms_by_source)
-        if not active:
-            return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
+        batch_terms_by_source = terms_by_source
 
     # Announce scan started
     scan_state.scan_started(sources)

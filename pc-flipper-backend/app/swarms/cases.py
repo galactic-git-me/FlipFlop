@@ -19,7 +19,6 @@ from app.models.price_history import PriceHistory, PriceHistoryType
 from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
-from app.services.term_cycle import start_cycle, next_batch
 from app.services.proxy import playwright_proxy_config
 import structlog
 from sqlalchemy import select as sa_select
@@ -138,11 +137,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         for theme_def in all_themes:
             terms.extend(theme_def["terms"][:2])
         terms_by_vendor[source["name"]] = list(dict.fromkeys(terms))
-    if mode == "main":
-        start_cycle("cases", batch_size=5, terms_by_vendor=terms_by_vendor)
-    active, batch_terms, done = next_batch("cases", terms_by_vendor)
-    if not active:
-        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
+    batch_terms = terms_by_vendor
 
     async def _scrape_one(source: dict, theme: str, term: str):
         fn_key = source["fn"].replace("-", "_").replace(" ", "_")

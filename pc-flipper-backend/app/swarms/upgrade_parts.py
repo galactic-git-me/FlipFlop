@@ -32,7 +32,6 @@ from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
-from app.services.term_cycle import start_cycle, next_batch
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
@@ -146,12 +145,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         "AliExpress": [p["ebay_search"] for p in parts],
         "Alibaba": [p["ebay_search"] for p in parts],
     }
-    if mode == "main":
-        start_cycle("upgrade_parts", batch_size=5, terms_by_vendor=terms_by_vendor)
-    active, batch_terms, done = next_batch("upgrade_parts", terms_by_vendor)
-    if not active:
-        return {"ok": False, "reason": "idle_waiting_for_next_main_run"}
-    allowed = set(batch_terms.get("eBay", []))
+    allowed = set(terms_by_vendor.get("eBay", []))
     parts = [p for p in parts if p["ebay_search"] in allowed]
 
     # ── Phase 1: eBay — sequential within vendor ─────────────────────────────
