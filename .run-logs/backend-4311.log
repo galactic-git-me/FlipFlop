@@ -4045,3 +4045,119 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 09:26:25 [info     ] source.done                    found=0 gems=0 source=Temu
 [scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
 2026-05-26 09:26:32 [info     ] source.done                    found=0 gems=0 source=Alibaba
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 60 found, 60 new (total 110)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='AM4 motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='AM4 motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='AM4 motherboard cpu combo' title='Access Denied'
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc build': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay playwright blocked term='AM4 motherboard cpu combo' title='Access Denied'
+[scraper] eBay retry 'AM4 motherboard cpu combo': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='pc tower no storage' title='Access Denied'
+[scraper] eBay retry 'pc tower no storage': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 50)
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay retry 'Dell OptiPlex': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay retry 'HP EliteDesk': 0 found, 0 new (total 110)
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay retry 'HP workstation': 0 found, 0 new (total 110)
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=299.06 median=850.87 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=208.33 median=742.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=299.18 median=851.02 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=307.29 median=860.75 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=285.0 median=834.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=299.18 median=851.02 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=851.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=291.9 median=842.28 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=786.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=377.62 median=945.14 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=309.37 median=863.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=276.54 median=823.85 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=259.99 median=803.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=213.9 median=748.68 query=gaming PC rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=349.49 median=911.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=286.7 median=836.04 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=263.46 median=808.15 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=249.87 median=791.84 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=231.95 median=770.34 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=255.5 median=798.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=271.04 median=529.25 query=gaming PC ryzen 9 7900
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=288.87 median=550.64 query=gaming PC ryzen 9 7900x
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=208.7 median=742.44 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=279.29 median=827.15 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=461.21 median=1045.45 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=333.1 median=891.72 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=335.42 median=894.5 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=359.47 median=923.36 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=442.72 median=1023.26 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=360.62 median=924.74 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=331.56 median=889.87 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-26 09:34:09 [info     ] resale_scraper.fallback_buy_price buy_price=250.3 median=792.36 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-26 09:34:09 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_188423126711 fingerprint=amd ryzen 7 7800x3d processor 5 ghz 8|Amd Ryzen 7 7800X||260 source=eBay UK
+2026-05-26 09:34:09 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178158800302 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
+2026-05-26 09:34:09 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178154037382 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
+2026-05-26 09:34:09 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=6 source=eBay UK
