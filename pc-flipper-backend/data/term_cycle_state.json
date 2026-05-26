@@ -4,39 +4,39 @@
     "batch_size": 5,
     "vendors": {
       "eBay UK": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "eBay UK Auctions": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "Facebook Marketplace": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "BidSpotter": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "Amazon": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "Temu": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "AliExpress": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "Alibaba": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       },
       "BargainHardware": {
-        "cursor": 10,
+        "cursor": 15,
         "total": 17
       }
     }
