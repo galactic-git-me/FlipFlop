@@ -19755,103 +19755,90 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 14:05:49 [info     ] source.done                    found=0 gems=0 source=Temu
 2026-05-26 14:05:50 [info     ] source.done                    found=0 gems=0 source=AliExpress
 2026-05-26 14:05:52 [info     ] source.done                    found=0 gems=0 source=Alibaba
- - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43184 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43200 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43224 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43234 - "GET /api/sources/health HTTP/1.1" 200 OK
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Amazon still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Amazon
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Temu still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Temu
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=BargainHardware still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=BargainHardware
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=AliExpress still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=AliExpress
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=AliExpress still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=AliExpress
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Amazon still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Amazon
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Alibaba still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Alibaba
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Alibaba still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Alibaba
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=Temu still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=Temu
-2026-05-26 12:12:43 [warning  ] source.retry.partial           retried_terms=17 source=BargainHardware still_failed_terms=17
-2026-05-26 12:12:43 [info     ] source.done                    found=0 gems=0 source=BargainHardware
-INFO:     100.101.209.68:56884 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56898 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56902 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56918 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56920 - "GET /api/schedule HTTP/1.1" 200 OK
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:56928 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56932 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56948 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56962 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56964 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56980 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:56990 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57004 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57010 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57022 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57032 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57044 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:57058 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57068 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57074 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57084 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57090 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57106 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:57122 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57124 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:57126 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43828 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43834 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43844 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43858 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43860 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43866 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43878 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43884 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43886 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43894 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43908 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43918 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:43922 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43926 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43942 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43944 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43946 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43954 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43968 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43978 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43984 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43992 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:43998 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44004 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44014 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58424 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58440 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58454 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58470 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58482 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58488 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58494 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58498 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:58506 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58522 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58538 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58554 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58568 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58580 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58584 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58588 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:58596 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 57 found, 57 new (total 57)
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard cpu combo' title='Access Denied'
+[scraper] eBay 'motherboard cpu combo': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='motherboard bundle' title='Access Denied'
+[scraper] eBay 'motherboard bundle': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='7700 motherboard bundle' title='Access Denied'
+[scraper] eBay '7700 motherboard bundle': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay playwright blocked term='Ryzen 9 7900' title='Access Denied'
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='Ryzen 9 7900X' title='Access Denied'
+[scraper] eBay retry 'Ryzen 9 7900X': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='pc build' title='Access Denied'
+[scraper] eBay 'pc build': 0 found, 0 new (total 57)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay retry 'desktop pcs lot': 0 found, 0 new (total 60)
+[scraper] eBay playwright blocked term='desktop pcs lot' title='Access Denied'
+[scraper] eBay playwright blocked term='office pc tower' title='Access Denied'
+[scraper] eBay retry 'office pc tower': 0 found, 0 new (total 60)
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=779.99 query=gaming PC rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=299.06 median=850.87 query=gaming PC rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=239.9 median=779.88 query=gaming PC rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=299.18 median=851.02 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=307.29 median=860.75 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=285.0 median=834.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=299.18 median=851.02 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=851.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=291.9 median=842.28 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=786.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=377.62 median=945.14 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=309.37 median=863.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=276.54 median=823.85 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=259.99 median=803.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=250.3 median=792.36 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=375.55 median=942.66 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=372.79 median=939.35 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=257.99 median=801.59 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=790.8 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_406952351296 fingerprint=new listing|||240 source=eBay UK
+2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_127884873030 fingerprint=new listing|||250 source=eBay UK
+2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_188423126711 fingerprint=new listing|||240 source=eBay UK
+2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178158800302 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
+2026-05-26 14:11:41 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_178154037382 fingerprint=amd ryzen 7 7800x3d 4 2ghz 8 core|Amd Ryzen 7 7800X||299 source=eBay UK
+2026-05-26 14:11:41 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=4 source=eBay UK
+ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58606 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58610 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58616 - "GET /api/schedule HTTP/1.1" 200 OK
