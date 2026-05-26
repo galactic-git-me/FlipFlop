@@ -1,72 +1,72 @@
 {
   "flip_opportunities": {
-    "active": false,
+    "active": true,
     "batch_size": 5,
     "vendors": {
       "eBay UK": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "eBay UK Auctions": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "Facebook Marketplace": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "BidSpotter": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "Amazon": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "Temu": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "AliExpress": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "Alibaba": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       },
       "BargainHardware": {
-        "cursor": 17,
+        "cursor": 10,
         "total": 17
       }
     }
   },
   "cases": {
-    "active": false,
+    "active": true,
     "batch_size": 5,
     "vendors": {
       "eBay": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "eBay (Worldwide)": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "Amazon": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "Temu": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "AliExpress": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "BargainHardware": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       },
       "CherryTree Inc": {
@@ -74,7 +74,7 @@
         "total": 1
       },
       "Alibaba": {
-        "cursor": 10,
+        "cursor": 5,
         "total": 10
       }
     }
@@ -117,6 +117,10 @@
         "cursor": 3,
         "total": 3
       },
+      "Gumtree": {
+        "cursor": 3,
+        "total": 3
+      },
       "BargainHardware": {
         "cursor": 3,
         "total": 3
@@ -142,6 +146,10 @@
         "total": 3
       },
       "AliExpress": {
+        "cursor": 3,
+        "total": 3
+      },
+      "Alibaba": {
         "cursor": 3,
         "total": 3
       }

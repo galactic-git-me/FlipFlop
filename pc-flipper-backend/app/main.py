@@ -22,6 +22,7 @@ settings = get_settings()
 _CASE_DEFAULT_SOURCES = [
     "eBay",
     "eBay (Worldwide)",
+    "Gumtree",
     "Amazon",
     "Temu",
     "AliExpress",
@@ -773,7 +774,7 @@ async def _seed_default_data():
                         scope="flip_opportunities",
                         group_name="PC Flip Opportunities",
                         term=term,
-                        source_names=["eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                        source_names=["eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
                         attributes={},
                         notes="seeded_flip_terms",
                         enabled=True,
@@ -788,7 +789,7 @@ async def _seed_default_data():
                     scope="upgrade_parts",
                     group_name="Upgrade Components",
                     term=term,
-                    source_names=["eBay", "BargainHardware", "Amazon", "Temu", "AliExpress"],
+                    source_names=["eBay", "Gumtree", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"],
                     attributes={},
                     notes="seeded_upgrade_terms",
                     enabled=True,
@@ -804,7 +805,7 @@ async def _seed_default_data():
                     scope="accessories",
                     group_name="Gaming Accessories",
                     term=term,
-                    source_names=["eBay", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                    source_names=["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
                     attributes={},
                     notes="seeded_accessory_terms",
                     enabled=True,
@@ -825,6 +826,11 @@ async def _seed_default_data():
         }
         rows = (await db.execute(select(SourceSearchTerm))).scalars().all()
         updated_rows = 0
+        flip_allowed = {"eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
+        common_allowed = {"eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
+        cases_allowed = set(common_allowed) | {"eBay (Worldwide)", "CherryTree Inc"}
+        upgrade_allowed = set(common_allowed)
+        accessories_allowed = set(common_allowed)
         for row in rows:
             names = [str(s).strip() for s in (row.source_names or []) if str(s).strip()]
             if not names:
@@ -833,6 +839,23 @@ async def _seed_default_data():
             for s in names:
                 normalized.append(_source_aliases.get(s.lower(), s))
             deduped = list(dict.fromkeys(normalized))
+            scope = str(row.scope or "").strip().lower()
+            if scope == "flip_opportunities":
+                deduped = [s for s in deduped if s in flip_allowed]
+                if not deduped:
+                    deduped = ["eBay UK", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+            elif scope == "cases":
+                deduped = [s for s in deduped if s in cases_allowed]
+                if not deduped:
+                    deduped = list(_CASE_DEFAULT_SOURCES)
+            elif scope == "upgrade_parts":
+                deduped = [s for s in deduped if s in upgrade_allowed]
+                if not deduped:
+                    deduped = ["eBay", "Gumtree", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"]
+            elif scope == "accessories":
+                deduped = [s for s in deduped if s in accessories_allowed]
+                if not deduped:
+                    deduped = ["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
             if deduped != names:
                 row.source_names = deduped
                 updated_rows += 1

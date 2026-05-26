@@ -81,8 +81,11 @@ _VENDOR_ALIASES: dict[str, str] = {
     "ebay": "eBay",
     "ebay uk": "eBay",
     "ebay uk auctions": "eBay",
+    "gumtree uk": "Gumtree",
+    "gumtree": "Gumtree",
     "amazon": "Amazon",
     "amazon uk": "Amazon",
+    "alibaba uk": "Alibaba",
     "bargain hardware": "BargainHardware",
 }
 
@@ -99,7 +102,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         "updated": 0, "errors": 0,
         "ebay_sold": 0, "ebay_buy": 0, "bh": 0,
         "scan": 0, "overclockers": 0, "box": 0,
-        "amazon": 0, "temu": 0, "aliexpress": 0,
+        "amazon": 0, "temu": 0, "aliexpress": 0, "alibaba": 0,
     }
 
     parts = list(TRACKED_PARTS)
@@ -133,6 +136,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
             parts = filtered or parts
     terms_by_vendor = {
         "eBay": [p["ebay_search"] for p in parts],
+        "Gumtree": [p["ebay_search"] for p in parts],
         "BargainHardware": [p["ebay_search"] for p in parts],
         "Scan": [p["ebay_search"] for p in parts],
         "Overclockers": [p["ebay_search"] for p in parts],
@@ -140,6 +144,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         "Amazon": [p["ebay_search"] for p in parts],
         "Temu": [p["ebay_search"] for p in parts],
         "AliExpress": [p["ebay_search"] for p in parts],
+        "Alibaba": [p["ebay_search"] for p in parts],
     }
     if mode == "main":
         start_cycle("upgrade_parts", batch_size=5, terms_by_vendor=terms_by_vendor)
@@ -237,10 +242,11 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
             stats["box"] += 1
 
     # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
-    amz_r, temu_r, ali_r = await asyncio.gather(
+    amz_r, temu_r, ali_r, ali_b_r = await asyncio.gather(
         _fetch_lane_seq(_fetch_amazon),
         _fetch_lane_seq(_fetch_temu),
         _fetch_lane_seq(_fetch_aliexpress),
+        _fetch_lane_seq(_fetch_alibaba),
     )
     for v in amz_r:
         if v and not isinstance(v, Exception):
@@ -251,6 +257,9 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     for v in ali_r:
         if v and not isinstance(v, Exception):
             stats["aliexpress"] += 1
+    for v in ali_b_r:
+        if v and not isinstance(v, Exception):
+            stats["alibaba"] += 1
 
     # ── Phase 4: Persist ──────────────────────────────────────────────────────
     async with AsyncSessionLocal() as db:
@@ -267,8 +276,18 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 amz_new   = amz_r[i]  if not isinstance(amz_r[i], Exception)  else None
                 temu_new  = temu_r[i] if not isinstance(temu_r[i], Exception) else None
                 ali_new   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
+                ali_b_new = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
 
-                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new]):
+                search = part_def["ebay_search"]
+                record_term_result(source_name="UpgradeParts:Amazon", term=search, found=1 if amz_new else 0, new=0)
+                record_term_result(source_name="UpgradeParts:Temu", term=search, found=1 if temu_new else 0, new=0)
+                record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=1 if ali_new else 0, new=0)
+                record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=1 if ali_b_new else 0, new=0)
+                # Gumtree isn't a reliable component-pricing lane; record explicit no-hit telemetry
+                # so dashboard coverage stays complete per vendor.
+                record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=0, new=0)
+
+                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new]):
                     await _upsert_part(
                         db, part_def, ebay_used, ebay_sold, bh_refurb,
                         scan_new, oc_new, box_new, amz_new, temu_new, ali_new,
@@ -481,6 +500,18 @@ async def _fetch_aliexpress(search_term: str) -> float | None:
         link_selector='a[href*="/item/"]',
         price_selector='*',
         source_name="aliexpress",
+        max_price=2500.0,
+    )
+
+
+async def _fetch_alibaba(search_term: str) -> float | None:
+    return await _fetch_playwright_lowest_price(
+        url=f"https://www.alibaba.com/trade/search?SearchText={search_term.replace(' ', '+')}",
+        item_selector='a[href*="/product-detail/"], a[href*="/x/"]',
+        title_selector='h1, h2, h3, h4, p, span',
+        link_selector='a[href*="/product-detail/"], a[href*="/x/"]',
+        price_selector='*',
+        source_name="alibaba",
         max_price=2500.0,
     )
 
