@@ -99,6 +99,52 @@ def _next_run_for(job_id: str, interval_minutes: int, now: datetime) -> datetime
     return now
 
 
+def _last_success_at(job_id: str) -> datetime | None:
+    state = _load_state()
+    rec = state.get(job_id) if isinstance(state, dict) else None
+    if not isinstance(rec, dict):
+        return None
+    ts = rec.get("last_success_at")
+    if not isinstance(ts, str):
+        return None
+    try:
+        dt = datetime.fromisoformat(ts)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except Exception:
+        return None
+
+
+def _is_due(job_id: str, interval_minutes: int) -> bool:
+    last = _last_success_at(job_id)
+    if last is None:
+        return True
+    elapsed = datetime.now(timezone.utc) - last
+    return elapsed >= timedelta(minutes=max(1, int(interval_minutes)))
+
+
+async def _run_cycle_with_auto_seed(
+    *,
+    cycle_job_id: str,
+    cycle_fn: Callable[[], Awaitable[dict]],
+    main_job_id: str,
+    main_fn: Callable[[], Awaitable[dict]],
+    main_interval_minutes: int,
+) -> dict:
+    result = await _run_job_with_history(cycle_job_id, cycle_fn)
+    if not (isinstance(result, dict) and result.get("ok") is False and str(result.get("reason")) == "idle_waiting_for_next_main_run"):
+        return result
+
+    if not _is_due(main_job_id, main_interval_minutes):
+        return result
+
+    log.info("cycle.auto_seed_main", cycle_job_id=cycle_job_id, main_job_id=main_job_id)
+    await _run_job_with_history(main_job_id, main_fn)
+    # Try cycle again immediately after seeding.
+    return await _run_job_with_history(cycle_job_id, cycle_fn)
+
+
 def _push_history(job_id: str, status: str, started_at: datetime, finished_at: datetime | None, message: str):
     duration_ms = None
     if finished_at is not None:
@@ -192,11 +238,17 @@ def start_scheduler():
         next_run_time=flip_next,
     )
     scheduler.add_job(
-        _run_job_with_history,
+        _run_cycle_with_auto_seed,
         trigger=IntervalTrigger(minutes=10),
         id="flip_opportunities_cycle",
         name="Flip Opportunities Cycle Tick",
-        kwargs={"job_id": "flip_opportunities_cycle", "fn": partial(run_flip_opportunities_swarm, "cycle")},
+        kwargs={
+            "cycle_job_id": "flip_opportunities_cycle",
+            "cycle_fn": partial(run_flip_opportunities_swarm, "cycle"),
+            "main_job_id": "flip_opportunities",
+            "main_fn": partial(run_flip_opportunities_swarm, "main"),
+            "main_interval_minutes": max(1, int(settings.flip_scan_interval_minutes)),
+        },
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=10),
@@ -213,11 +265,17 @@ def start_scheduler():
         next_run_time=upgrade_start,
     )
     scheduler.add_job(
-        _run_job_with_history,
+        _run_cycle_with_auto_seed,
         trigger=IntervalTrigger(minutes=10),
         id="upgrade_parts_cycle",
         name="Upgrade Parts Cycle Tick",
-        kwargs={"job_id": "upgrade_parts_cycle", "fn": partial(run_upgrade_parts_swarm, "cycle")},
+        kwargs={
+            "cycle_job_id": "upgrade_parts_cycle",
+            "cycle_fn": partial(run_upgrade_parts_swarm, "cycle"),
+            "main_job_id": "upgrade_parts",
+            "main_fn": partial(run_upgrade_parts_swarm, "main"),
+            "main_interval_minutes": max(1, int(settings.parts_update_interval_hours * 60)),
+        },
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=10),
@@ -234,11 +292,17 @@ def start_scheduler():
         next_run_time=cases_start,
     )
     scheduler.add_job(
-        _run_job_with_history,
+        _run_cycle_with_auto_seed,
         trigger=IntervalTrigger(minutes=10),
         id="cases_cycle",
         name="Cases Cycle Tick",
-        kwargs={"job_id": "cases_cycle", "fn": partial(run_cases_swarm, "cycle")},
+        kwargs={
+            "cycle_job_id": "cases_cycle",
+            "cycle_fn": partial(run_cases_swarm, "cycle"),
+            "main_job_id": "cases",
+            "main_fn": partial(run_cases_swarm, "main"),
+            "main_interval_minutes": 24 * 60,
+        },
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=10),
@@ -255,11 +319,17 @@ def start_scheduler():
         next_run_time=accessories_start,
     )
     scheduler.add_job(
-        _run_job_with_history,
+        _run_cycle_with_auto_seed,
         trigger=IntervalTrigger(minutes=10),
         id="accessories_cycle",
         name="Accessories Cycle Tick",
-        kwargs={"job_id": "accessories_cycle", "fn": partial(run_accessories_swarm, "cycle")},
+        kwargs={
+            "cycle_job_id": "accessories_cycle",
+            "cycle_fn": partial(run_accessories_swarm, "cycle"),
+            "main_job_id": "accessories",
+            "main_fn": partial(run_accessories_swarm, "main"),
+            "main_interval_minutes": 24 * 60,
+        },
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=10),
