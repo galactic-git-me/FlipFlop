@@ -3306,3 +3306,30 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
 [scraper] eBay 'slim htpc case living room': 60 found, 60 new (total 60)
 2026-05-26 08:30:19 [info     ] cases_swarm.done               errors=0 found=133 upserted=115
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 07:35:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+[scraper] eBay playwright blocked term='pc job lot' title='Access Denied'
+[scraper] eBay 'pc job lot': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='office computers clearance' title='Access Denied'
+[scraper] eBay playwright blocked term='office computers clearance' title='Access Denied'
+[scraper] eBay playwright blocked term='office computers clearance' title='Access Denied'
+[scraper] eBay 'office computers clearance': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='it clearance desktop' title='Access Denied'
+[scraper] eBay 'it clearance desktop': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='office pc lot' title='Access Denied'
+[scraper] eBay playwright blocked term='office pc lot' title='Access Denied'
+[scraper] eBay playwright blocked term='office pc lot' title='Access Denied'
+[scraper] eBay 'office pc lot': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+[scraper] eBay playwright blocked term='bulk desktops' title='Access Denied'
+[scraper] eBay 'bulk desktops': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='ex office pc lot' title='Access Denied'
+[scraper] eBay playwright blocked term='ex office pc lot' title='Access Denied'
+2026-05-26 08:35:24 [info     ] accessories_swarm.start
+2026-05-26 08:35:24 [info     ] cases_swarm.start
+2026-05-26 08:35:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 08:35:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
