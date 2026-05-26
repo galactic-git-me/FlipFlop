@@ -21370,12 +21370,12 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
 [scraper] eBay 'xl mouse pad': 60 found, 60 new (total 60)
 2026-05-26 16:23:27 [info     ] accessories_swarm.done         errors=0 found=100 upserted=80
-rce?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40654 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40658 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40664 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40670 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:40684 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-26 16:25:24 [info     ] accessories_swarm.start
+2026-05-26 16:25:24 [info     ] cases_swarm.start
+2026-05-26 16:25:24 [info     ] flip_opportunities_swarm.start
+2026-05-26 16:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 16:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+ 100.101.209.68:40684 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40688 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40698 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:40728 - "GET /api/schedule HTTP/1.1" 200 OK
