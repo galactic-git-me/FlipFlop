@@ -239,14 +239,14 @@ for j in rows:
     elif st_raw == "running":
         st = "[yellow]running[/yellow]"
     elif st_raw == "skipped":
-        st = "[yellow]skipped[/yellow]"
+        st = "[yellow]waiting for next main run[/yellow]"
     elif st_raw in {"failed", "error"}:
         st = f"[red]{st_raw}[/red]"
     elif st_raw in {"—", "", "None", "null"}:
         if jid == "flip_opportunities" and flip_cooldown_count > 0 and flip_found_total <= 0:
             st = "[yellow]cooldown[/yellow]"
         else:
-            st = "[red]no data[/red]"
+            st = "[yellow]waiting for next main run[/yellow]"
     else:
         st = st_raw
 
@@ -433,12 +433,12 @@ for j in rows:
         else:
             st_disp = "success"
     elif st == "skipped":
-        st_disp = "skipped"
+        st_disp = "waiting for next main run"
     elif st in {"—", "", "None", "null"}:
         if jid == "flip_opportunities" and flip_cooldown_count > 0 and flip_found_total <= 0:
             st_disp = "cooldown"
         else:
-            st_disp = "no data"
+            st_disp = "waiting for next main run"
     else:
         st_disp = st
 
