@@ -9845,53 +9845,59 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 01:25:24 [info     ] cases_swarm.start
 2026-05-26 01:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-26 01:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-01.209.68:44938 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44952 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44966 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:44978 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44980 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44984 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44992 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45000 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45010 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45018 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45020 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45024 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45038 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45040 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45056 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45062 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-25 19:16:42 [warning  ] source.retry.partial           retried_terms=5 source=eBay UK Auctions still_failed_terms=5
-2026-05-25 19:16:42 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
-2026-05-25 19:16:42 [warning  ] source.retry.partial           retried_terms=5 source=eBay UK still_failed_terms=4
-2026-05-25 19:16:42 [info     ] source.done                    found=0 gems=0 source=eBay UK
-2026-05-25 19:16:42 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=82 new_gems=0 sources_scanned=8
-INFO:     100.101.209.68:45066 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45070 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45084 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45088 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32814 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32828 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32834 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:32836 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32846 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32856 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32872 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32876 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32880 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32888 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32900 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32904 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32918 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32928 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32940 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32954 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32960 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32974 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32988 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:32992 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33008 - "GET /api/schedule HTTP/1.1" 200 OK
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 00:35:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+[scraper] eBay playwright blocked term='atx pc case' title='Access Denied'
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='7700x b650' title='Access Denied'
+[scraper] eBay playwright blocked term='7700x b650' title='Access Denied'
+[scraper] eBay playwright blocked term='7700x b650' title='Access Denied'
+[scraper] eBay '7700x b650': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='am5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='am5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='am5 bundle' title='Access Denied'
+[scraper] eBay 'am5 bundle': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen bundle' title='Access Denied'
+[scraper] eBay 'ryzen bundle': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='ddr5 bundle' title='Access Denied'
+[scraper] eBay 'ddr5 bundle': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+[scraper] eBay playwright blocked term='b650 tomahawk' title='Access Denied'
+[scraper] eBay 'b650 tomahawk': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay playwright blocked term='proart am5' title='Access Denied'
+[scraper] eBay 'proart am5': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay playwright blocked term='7900 bundle' title='Access Denied'
+[scraper] eBay '7900 bundle': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700' title='Access Denied'
+[scraper] eBay 'ryzen 7700': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7700x' title='Access Denied'
+[scraper] eBay 'ryzen 7700x': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 9700x' title='Access Denied'
+[scraper] eBay 'ryzen 9700x': 0 found, 0 new (total 235)
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen 7900' title='Access Denied'
+[scraper] eBay 'ryzen 7900': 0 found, 0 new (total 235)
+2026-05-26 01:35:24 [info     ] accessories_swarm.start
+2026-05-26 01:35:24 [info     ] cases_swarm.start
+2026-05-26 01:35:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 01:35:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+0.101.209.68:33008 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:33022 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:33028 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:33042 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
