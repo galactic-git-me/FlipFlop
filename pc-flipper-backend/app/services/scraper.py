@@ -552,40 +552,20 @@ async def scrape_ebay(
                     if auction_mode:
                         params = {
                             "_nkw": term,
-                            "_sacat": sacat,
-                            "LH_Auction": "1",
-                            "_udlo": str(int(min_price)),
-                            "_udhi": str(int(max_price)),
-                            "LH_PrefLoc": "2" if worldwide else "1",
-                            "_sop": "1",
-                            "_ipg": "60",
+                            "_sacat": "0",
+                            "_ipg": "120",
                         }
                     else:
                         params = {
                             "_nkw": term,
-                            "_sacat": sacat,
-                            "LH_BIN": "1",
-                            "_udlo": str(int(min_price)),
-                            "_udhi": str(int(max_price)),
-                            "LH_PrefLoc": "2" if worldwide else "1",
-                            "_sop": "10",
-                            "_ipg": "60",
+                            "_sacat": "0",
+                            "_ipg": "120",
                         }
-                        if condition_code:
-                            params["LH_ItemCondition"] = condition_code
-                        elif not is_component_term:
-                            params["LH_ItemCondition"] = "3000"
 
                     new_listings: list[RawListing] = []
                     blocked = False
                     last_status = 0
                     query_variants = [params]
-                    relaxed = dict(params)
-                    relaxed["_sacat"] = "0"
-                    relaxed.pop("LH_ItemCondition", None)
-                    relaxed.pop("LH_PrefLoc", None)
-                    relaxed["_udhi"] = str(max(int(max_price), 2000))
-                    query_variants.append(relaxed)
 
                     for attempt in range(1, 4):
                         variant = query_variants[min(attempt - 1, len(query_variants) - 1)]
@@ -688,13 +668,8 @@ async def scrape_ebay(
                     is_component_term = any(m in retry_term.lower() for m in component_markers)
                     params = {
                         "_nkw": retry_term,
-                        "_sacat": "0" if is_component_term else "179",
-                        "LH_Auction": "1" if auction_mode else None,
-                        "LH_BIN": None if auction_mode else "1",
-                        "_udlo": str(int(min_price)),
-                        "_udhi": str(max(int(max_price), 2000)),
-                        "_sop": "1" if auction_mode else "10",
-                        "_ipg": "60",
+                        "_sacat": "0",
+                        "_ipg": "120",
                     }
                     params = {k: v for k, v in params.items() if v is not None}
                     resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_headers())
