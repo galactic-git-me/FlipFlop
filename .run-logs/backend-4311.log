@@ -10414,30 +10414,27 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 01:49:54 [info     ] source.done                    found=608 gems=0 source=eBay UK Auctions
 2026-05-26 01:49:54 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=866 new_gems=0 sources_scanned=8
 2026-05-26 01:49:54 [info     ] ghost_lifecycle.updated        missing_cutoff_days=3 moved_to_missing=24 moved_to_removed=0 removed_cutoff_days=14
-    100.101.209.68:47594 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47598 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47600 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47606 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47618 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47628 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47636 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51068 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51078 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51088 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51090 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51102 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51114 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51128 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51142 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51158 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51174 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51176 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:51188 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51190 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51196 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51208 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:51212 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-26 01:55:24 [info     ] accessories_swarm.start
+2026-05-26 01:55:24 [info     ] cases_swarm.start
+2026-05-26 01:55:24 [info     ] flip_opportunities_swarm.start
+2026-05-26 01:55:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 01:55:24 [info     ] source.cooldown_ignored        reason=cooldown_active_72s source=Facebook Marketplace
+2026-05-26 01:55:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-26 01:55:24 [info     ] source.cooldown_ignored        reason=cooldown_active_97s source=Alibaba
+2026-05-26 01:55:24 [info     ] source.cooldown_ignored        reason=cooldown_active_97s source=AliExpress
+2026-05-26 01:55:24 [info     ] source.cooldown_ignored        reason=cooldown_active_97s source=BargainHardware
+2026-05-26 01:55:24 [info     ] source.cooldown_ignored        reason=cooldown_active_97s source=Temu
+2026-05-26 01:55:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+2026-05-26 01:55:25 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-26 01:55:25 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+2026-05-26 01:55:36 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+[scraper] eBay playwright blocked term='AMD Ryzen 7 7800X3D' title='Access Denied'
+2026-05-26 01:55:49 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-26 01:55:49 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-26 01:55:49 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-26 01:55:52 [info     ] source.done                    found=0 gems=0 source=Alibaba
+101.209.68:51212 - "GET /api/source-search-terms HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51228 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51232 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51242 - "GET /api/sources/health HTTP/1.1" 200 OK
