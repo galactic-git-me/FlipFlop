@@ -10672,57 +10672,60 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 2026-05-26 02:15:24 [info     ] cases_swarm.start
 2026-05-26 02:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-26 02:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-   100.101.209.68:59614 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59626 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59634 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59642 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59652 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59662 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59674 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59680 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59694 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59698 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59708 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59724 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:59726 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59730 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59740 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59742 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35582 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35594 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35608 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35620 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35624 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35632 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35636 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35646 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35658 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35666 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35672 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35682 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35698 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35706 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35716 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35728 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35736 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:35740 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35748 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35764 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35768 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35784 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35792 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35796 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35812 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35828 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49204 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49210 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49226 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49238 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49252 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49258 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49266 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49268 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49276 - "GET /api/schedule HTTP/1.1" 200 OK
+Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], next run at: 2026-05-26 01:25:24 UTC)" skipped: maximum number of running instances reached (1)
+[scraper] eBay playwright blocked term='desktop untested' title='Access Denied'
+[scraper] eBay 'desktop untested': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay playwright blocked term='HP EliteDesk' title='Access Denied'
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 59)
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay playwright blocked term='Dell OptiPlex' title='Access Denied'
+[scraper] eBay 'Dell OptiPlex': HTTP blocked/empty (status=200), Playwright returned 47
+[scraper] eBay 'Dell OptiPlex': 47 found, 47 new (total 106)
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay playwright blocked term='HP workstation' title='Access Denied'
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+[scraper] eBay playwright blocked term='Lenovo ThinkCentre' title='Access Denied'
+[scraper] eBay 'Lenovo ThinkCentre': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='Dell Precision tower' title='Access Denied'
+[scraper] eBay playwright blocked term='Dell Precision tower' title='Access Denied'
+[scraper] eBay playwright blocked term='Dell Precision tower' title='Access Denied'
+[scraper] eBay 'Dell Precision tower': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='HP Z440' title='Access Denied'
+[scraper] eBay playwright blocked term='HP Z440' title='Access Denied'
+[scraper] eBay playwright blocked term='HP Z440' title='Access Denied'
+[scraper] eBay 'HP Z440': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+[scraper] eBay playwright blocked term='HP Z640' title='Access Denied'
+[scraper] eBay 'HP Z640': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 tower' title='Access Denied'
+[scraper] eBay 'i7 tower': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay playwright blocked term='i9 tower' title='Access Denied'
+[scraper] eBay 'i9 tower': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='ryzen desktop' title='Access Denied'
+[scraper] eBay 'ryzen desktop': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+[scraper] eBay playwright blocked term='xeon tower' title='Access Denied'
+[scraper] eBay 'xeon tower': 0 found, 0 new (total 106)
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+[scraper] eBay playwright blocked term='i7 desktop' title='Access Denied'
+2026-05-26 02:25:24 [info     ] accessories_swarm.start
+2026-05-26 02:25:24 [info     ] cases_swarm.start
+2026-05-26 02:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-26 02:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+NFO:     100.101.209.68:49276 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49280 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49294 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49308 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
