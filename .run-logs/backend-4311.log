@@ -3252,3 +3252,17 @@ Execution of job "Flip Opportunities Cycle Tick (trigger: interval[0:10:00], nex
 [scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
 [scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
 2026-05-26 08:26:36 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-26 08:26:38 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+[scraper] eBay playwright blocked term='desktop pc' title='Access Denied'
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 68)
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+2026-05-26 08:26:59 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+2026-05-26 08:27:02 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay 'cheap atx pc case': 70 found, 70 new (total 70)
+[scraper] eBay playwright blocked term='pc tower' title='Access Denied'
+2026-05-26 08:27:22 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+2026-05-26 08:27:27 [info     ] temu.cases.done                found=0 search=slim htpc case living room
