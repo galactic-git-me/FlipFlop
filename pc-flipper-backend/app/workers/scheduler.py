@@ -331,6 +331,21 @@ def start_scheduler():
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
 
+async def run_startup_bootstrap() -> dict:
+    """
+    One-shot startup bootstrap:
+      1) pull external demand immediately
+      2) run playbook evolution after demand completes
+    Runs asynchronously alongside catalogue jobs.
+    """
+    log.info("startup_bootstrap.start")
+    demand = await _run_job_with_history("external_demand", ingest_external_demand_signals)
+    evolution = await _run_job_with_history("playbook_evolution", run_playbook_evolution)
+    out = {"ok": True, "steps": {"external_demand": demand, "playbook_evolution": evolution}}
+    log.info("startup_bootstrap.done")
+    return out
+
+
 def stop_scheduler():
     scheduler = get_scheduler()
     if scheduler.running:

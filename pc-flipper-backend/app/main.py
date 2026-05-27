@@ -1,4 +1,5 @@
 import structlog
+import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI
@@ -7,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
-from app.workers.scheduler import start_scheduler, stop_scheduler
+from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts
@@ -206,6 +207,7 @@ async def lifespan(app: FastAPI):
     if not chromium_available():
         log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
     start_scheduler()
+    asyncio.create_task(run_startup_bootstrap())
     yield
     stop_scheduler()
     await engine.dispose()
