@@ -22383,13 +22383,13 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 17:55:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 17:55:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 17:55:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-200 OK
-INFO:     100.101.209.68:49796 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49804 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49816 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34998 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35000 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:35012 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 18:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+2026-05-27 18:05:24 [info     ] accessories_swarm.start
+2026-05-27 18:05:24 [info     ] cases_swarm.start
+2026-05-27 18:05:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 18:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 18:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+P/1.1" 200 OK
 INFO:     100.101.209.68:35022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35038 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35036 - "GET /api/config/search HTTP/1.1" 200 OK
