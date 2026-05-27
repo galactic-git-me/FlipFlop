@@ -22335,11 +22335,12 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 16:25:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 16:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 16:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-     100.101.209.68:34416 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34424 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34440 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34452 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:34464 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 16:35:24 [info     ] accessories_swarm.start
+2026-05-27 16:35:24 [info     ] cases_swarm.start
+2026-05-27 16:35:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 16:35:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 16:35:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+0.101.209.68:34464 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34466 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34468 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34478 - "GET /api/schedule HTTP/1.1" 200 OK
