@@ -2240,3 +2240,53 @@ INFO:     100.101.209.68:41776 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:41782 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:41798 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:41808 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41820 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41826 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41828 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41832 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'galactic empire build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41838 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41842 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41858 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54696 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54700 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54702 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54708 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54710 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54720 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54722 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54732 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54748 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54764 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54768 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54778 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54784 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54798 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54806 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54812 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'galactic empire build': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54814 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54830 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54836 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54840 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54856 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58094 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58106 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58122 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58134 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58148 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58150 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58166 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58168 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58172 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58188 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58194 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58204 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58208 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58222 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58234 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58248 - "GET /api/schedule HTTP/1.1" 200 OK

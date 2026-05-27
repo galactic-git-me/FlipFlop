@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FRONTEND_DIR="$ROOT_DIR/pc-flipper"
 BACKEND_DIR="$ROOT_DIR/pc-flipper-backend"
 LOG_DIR="$ROOT_DIR/.run-logs"
+ROOT_ENV_LOCAL="$ROOT_DIR/.env.local"
 
 # Quieter dev ports (override with env if needed)
 FRONTEND_PORT="${FRONTEND_PORT:-4310}"
@@ -50,7 +51,12 @@ NGROK_MONITOR_PID=""
 NGROK_PUBLIC_URL=""
 NGROK_LOG="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.log"
 NGROK_URL_FILE="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.url"
-BACKEND_ENV_LOCAL="$BACKEND_DIR/.env.local"
+BACKEND_ENV_LOCAL="$ROOT_ENV_LOCAL"
+
+COMPOSE_ENV_ARGS=()
+if [[ -f "$ROOT_ENV_LOCAL" ]]; then
+  COMPOSE_ENV_ARGS=(--env-file "$ROOT_ENV_LOCAL")
+fi
 
 start_ngrok_supervisor() {
   if [[ "$ENABLE_NGROK" != "1" ]]; then
@@ -246,30 +252,20 @@ read_env_local_value() {
 infer_startup_mode() {
   # Priority:
   # 1) explicit env STARTUP_MODE
-  # 2) BACKEND .env.local (APP_MODE/ENVIRONMENT/NODE_ENV)
-  # 3) FRONTEND .env.local (APP_MODE/ENVIRONMENT/NODE_ENV)
+  # 2) ROOT .env.local (APP_MODE/ENVIRONMENT/NODE_ENV)
   local explicit="${STARTUP_MODE:-}"
   local mode=""
   if [[ -n "$explicit" ]]; then
     mode="$explicit"
   fi
   if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "APP_MODE" "$BACKEND_DIR/.env.local")"
+    mode="$(read_env_local_value "APP_MODE" "$ROOT_ENV_LOCAL")"
   fi
   if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "ENVIRONMENT" "$BACKEND_DIR/.env.local")"
+    mode="$(read_env_local_value "ENVIRONMENT" "$ROOT_ENV_LOCAL")"
   fi
   if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "NODE_ENV" "$BACKEND_DIR/.env.local")"
-  fi
-  if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "APP_MODE" "$FRONTEND_DIR/.env.local")"
-  fi
-  if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "ENVIRONMENT" "$FRONTEND_DIR/.env.local")"
-  fi
-  if [[ -z "$mode" ]]; then
-    mode="$(read_env_local_value "NODE_ENV" "$FRONTEND_DIR/.env.local")"
+    mode="$(read_env_local_value "NODE_ENV" "$ROOT_ENV_LOCAL")"
   fi
   mode="$(echo "${mode:-dev}" | tr '[:upper:]' '[:lower:]')"
   if [[ "$mode" == "prod" ]]; then
@@ -293,12 +289,12 @@ start_postgres() {
   echo "Ensuring local Postgres container is running..."
   (
     cd "$BACKEND_DIR"
-    docker compose up -d db >/dev/null
+    docker compose "${COMPOSE_ENV_ARGS[@]}" up -d db >/dev/null
   )
 
   # Resolve DB container id for health/readiness checks
   local db_cid
-  db_cid="$(cd "$BACKEND_DIR" && docker compose ps -q db)"
+  db_cid="$(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q db)"
   if [[ -z "$db_cid" ]]; then
     echo "Could not resolve db container id from docker compose."
     exit 1
@@ -339,7 +335,7 @@ restart_project_containers_if_running() {
   local services=()
   while IFS= read -r svc; do
     [[ -n "$svc" ]] && services+=("$svc")
-  done < <(cd "$BACKEND_DIR" && docker compose config --services 2>/dev/null || true)
+  done < <(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" config --services 2>/dev/null || true)
 
   if [[ ${#services[@]} -eq 0 ]]; then
     return 0
@@ -348,7 +344,7 @@ restart_project_containers_if_running() {
   local running_services=()
   local svc cid status
   for svc in "${services[@]}"; do
-    cid="$(cd "$BACKEND_DIR" && docker compose ps -q "$svc" 2>/dev/null || true)"
+    cid="$(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q "$svc" 2>/dev/null || true)"
     if [[ -z "$cid" ]]; then
       continue
     fi
@@ -360,7 +356,7 @@ restart_project_containers_if_running() {
 
   if [[ ${#running_services[@]} -gt 0 ]]; then
     echo "Detected running project containers. Restarting to avoid stale builds: ${running_services[*]}"
-    (cd "$BACKEND_DIR" && docker compose restart "${running_services[@]}" >/dev/null)
+    (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" restart "${running_services[@]}" >/dev/null)
   fi
 }
 
@@ -391,7 +387,7 @@ compose_service_running() {
   local compose_dir="$1"
   local service="$2"
   local cid status
-  cid="$(cd "$compose_dir" && docker compose ps -q "$service" 2>/dev/null || true)"
+  cid="$(cd "$compose_dir" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q "$service" 2>/dev/null || true)"
   if [[ -z "$cid" ]]; then
     return 1
   fi
@@ -440,7 +436,7 @@ smart_refresh_project_containers() {
   frontend_cur_hash="$(project_tree_hash "$FRONTEND_DIR")"
 
   echo "Ensuring backend infra containers are up (db, redis)..."
-  (cd "$BACKEND_DIR" && docker compose up -d db redis >/dev/null)
+  (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d db redis >/dev/null)
 
   local backend_api_buildable="0"
   if compose_service_buildable "$BACKEND_DIR" "Dockerfile"; then
@@ -452,13 +448,13 @@ smart_refresh_project_containers() {
     free_port "$BACKEND_PORT"
     if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
       echo "Backend code changed -> rebuilding api container..."
-      (cd "$BACKEND_DIR" && docker compose up -d --build api >/dev/null)
+      (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d --build api >/dev/null)
     else
       if compose_service_running "$BACKEND_DIR" "api"; then
         echo "Backend code unchanged and api is running -> leaving backend container running."
       else
         echo "Backend api not running -> starting api container..."
-        (cd "$BACKEND_DIR" && docker compose up -d api >/dev/null)
+        (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d api >/dev/null)
       fi
     fi
   else
@@ -480,7 +476,7 @@ smart_refresh_project_containers() {
         cd "$FRONTEND_DIR"
         FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
         NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-          docker compose up -d --build web >/dev/null
+          docker compose "${COMPOSE_ENV_ARGS[@]}" up -d --build web >/dev/null
       )
     else
       if compose_service_running "$FRONTEND_DIR" "web"; then
@@ -489,7 +485,7 @@ smart_refresh_project_containers() {
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
           NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-            docker compose restart web >/dev/null
+            docker compose "${COMPOSE_ENV_ARGS[@]}" restart web >/dev/null
         )
       else
         echo "Frontend web not running -> starting web container..."
@@ -497,7 +493,7 @@ smart_refresh_project_containers() {
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
           NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-            docker compose up -d web >/dev/null
+            docker compose "${COMPOSE_ENV_ARGS[@]}" up -d web >/dev/null
         )
       fi
     fi
