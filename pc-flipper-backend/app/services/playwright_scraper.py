@@ -60,6 +60,15 @@ def _log_playwright_missing_once(error: str | None = None) -> None:
     )
 
 
+def _is_missing_chromium_error(message: str) -> bool:
+    msg = (message or "").lower()
+    return (
+        "executable doesn't exist" in msg
+        or ("browser_type.launch" in msg and "executable" in msg and "playwright install" in msg)
+        or ("failed to launch" in msg and "chromium" in msg and "playwright install" in msg)
+    )
+
+
 def chromium_available() -> bool:
     """
     Fast preflight to avoid repeated launch crashes when Chromium is missing.
@@ -239,7 +248,7 @@ async def _launch_browser(playwright):
         return await _make_context(playwright)
     except Exception as exc:
         msg = str(exc)
-        if "Executable doesn't exist" in msg or "chromium" in msg.lower():
+        if _is_missing_chromium_error(msg):
             _log_playwright_missing_once(msg)
         raise
 
@@ -457,11 +466,13 @@ async def scrape_facebook_playwright(
             )
         except Exception as exc:
             msg = str(exc)
-            if "Executable doesn't exist" in msg or "chromium" in msg.lower():
+            if _is_missing_chromium_error(msg):
                 log.error(
                     "playwright.chromium_not_installed",
                     fix="Run: playwright install chromium",
                 )
+            else:
+                log.error("facebook.playwright.launch_failed", error=msg[:500])
             return []
 
         sem = asyncio.Semaphore(term_concurrency)
