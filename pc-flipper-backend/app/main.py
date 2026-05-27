@@ -360,7 +360,14 @@ _UPGRADE_SEARCH_TERMS = [
     "650W ATX PSU 80 bronze", "AM4 motherboard cpu combo",
 ]
 _ACCESSORY_SEARCH_TERMS = [
-    "gaming keyboard", "gaming mouse", "gaming headset", "usb microphone", "xl mouse pad",
+    "gaming keyboard",
+    "gaming mouse",
+    "gaming headset",
+    "usb microphone",
+    "pc speakers",
+    "gaming controller",
+    "24 inch monitor",
+    "xl mouse pad",
 ]
 
 

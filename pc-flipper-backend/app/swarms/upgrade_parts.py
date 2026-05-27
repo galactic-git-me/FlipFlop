@@ -65,16 +65,14 @@ _EBAY_HEADERS = {
 
 
 TRACKED_PARTS = [
-    {"name": "RTX 3060 12GB",        "category": PartCategory.gpu, "ebay_search": "RTX 3060 12GB used",      "bh_search": "rtx+3060"},
-    {"name": "RTX 3070 8GB",         "category": PartCategory.gpu, "ebay_search": "RTX 3070 8GB used",       "bh_search": "rtx+3070"},
-    {"name": "Ryzen 5 5600",         "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 5 5600",        "bh_search": "ryzen+5+5600"},
-    {"name": "Ryzen 7 5700X",        "category": PartCategory.cpu, "ebay_search": "AMD Ryzen 7 5700X",       "bh_search": "ryzen+7+5700x"},
-    {"name": "B550 Motherboard",     "category": PartCategory.motherboard, "ebay_search": "B550 motherboard", "bh_search": "b550+motherboard"},
-    {"name": "X570 Motherboard",     "category": PartCategory.motherboard, "ebay_search": "X570 motherboard", "bh_search": "x570+motherboard"},
-    {"name": "32GB DDR4 2x16",       "category": PartCategory.ram, "ebay_search": "32GB DDR4 2x16 3200",     "bh_search": "32gb+ddr4+kit"},
-    {"name": "1TB NVMe SSD",         "category": PartCategory.ssd, "ebay_search": "1TB NVMe M.2 SSD",        "bh_search": "1tb+nvme"},
-    {"name": "650W PSU 80+ Bronze",  "category": PartCategory.psu, "ebay_search": "650W ATX PSU 80 bronze",  "bh_search": "650w+psu"},
-    {"name": "AM4 CPU Motherboard Combo", "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo", "bh_search": "am4+motherboard+cpu+combo"},
+    {"name": "Generic GPU",                  "category": PartCategory.gpu,         "ebay_search": "used GPU",                    "bh_search": "graphics+card"},
+    {"name": "AM4 CPU",                      "category": PartCategory.cpu,         "ebay_search": "AM4 CPU",                     "bh_search": "am4+cpu"},
+    {"name": "AM4 Motherboard",              "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard",             "bh_search": "am4+motherboard"},
+    {"name": "AM4 CPU Motherboard Combo",    "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo",   "bh_search": "am4+motherboard+cpu+combo"},
+    {"name": "DDR4 RAM",                     "category": PartCategory.ram,         "ebay_search": "DDR4 RAM",                    "bh_search": "ddr4+ram"},
+    {"name": "DDR4 RAM 2x16",                "category": PartCategory.ram,         "ebay_search": "DDR4 RAM 2x16",               "bh_search": "32gb+ddr4+kit"},
+    {"name": "1TB NVMe SSD",                 "category": PartCategory.ssd,         "ebay_search": "1TB NVMe SSD",                "bh_search": "1tb+nvme"},
+    {"name": "650W PSU",                     "category": PartCategory.psu,         "ebay_search": "650W PSU",                    "bh_search": "650w+psu"},
 ]
 
 _VENDOR_ALIASES: dict[str, str] = {

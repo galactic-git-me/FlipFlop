@@ -9,9 +9,12 @@
     "last_success_at": "2026-05-27T20:35:10.928642+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-27T20:35:22.220577+00:00"
+    "last_success_at": "2026-05-27T20:46:12.895659+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-05-27T20:35:22.095732+00:00"
+    "last_success_at": "2026-05-27T20:46:12.720500+00:00"
+  },
+  "upgrade_parts": {
+    "last_success_at": "2026-05-27T20:47:00.371229+00:00"
   }
 }

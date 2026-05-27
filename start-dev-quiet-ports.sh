@@ -506,6 +506,9 @@ smart_refresh_project_containers() {
 }
 
 if [[ "$START_MODE" == "production" ]]; then
+  echo "Mode summary: PRODUCTION (Docker app containers enabled)"
+  echo "App runtime: api/web in Docker"
+  echo "Infra runtime: db/redis in Docker"
   smart_refresh_project_containers
   echo "Production mode: using Docker app containers (api/web)."
   echo "Skipping local uvicorn/npm process launch."
@@ -513,6 +516,10 @@ if [[ "$START_MODE" == "production" ]]; then
   echo "Frontend container port is defined by compose (\$FRONTEND_PORT->\$FRONTEND_CONTAINER_PORT)."
   exit 0
 fi
+
+echo "Mode summary: DEV (hot reload enabled)"
+echo "App runtime: local uvicorn + local next dev (NO api/web Docker containers)"
+echo "Infra runtime: db/redis in Docker"
 
 free_port "$FRONTEND_PORT"
 free_port "$BACKEND_PORT"
