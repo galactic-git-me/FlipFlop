@@ -22247,34 +22247,30 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 [scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
 2026-05-27 16:16:42 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
 2026-05-27 16:16:44 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gaming mouse
-OK
-INFO:     100.101.209.68:54436 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54460 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54462 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54470 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:54452 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54484 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54494 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54518 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54504 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54524 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54540 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54546 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54558 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54572 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54586 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54588 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48764 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48772 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48774 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48788 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48798 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48814 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48834 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48848 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48856 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:48820 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48868 - "GET /api/sources/ HTTP/1.1" 200 OK
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+[scraper] eBay 'cheap atx pc case': HTTP blocked/empty (status=403), Playwright returned 110
+[scraper] eBay 'cheap atx pc case': 110 found, 110 new (total 110)
+[scraper] eBay playwright blocked term='gaming atx case rgb' title='Access Denied'
+[scraper] eBay 'gaming atx case rgb': HTTP blocked/empty (status=403), Playwright returned 103
+[scraper] eBay 'gaming atx case rgb': 103 found, 103 new (total 103)
+2026-05-27 16:17:01 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
+2026-05-27 16:17:01 [info     ] aliexpress.cases.done          found=0 search=mini itx htpc case
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+2026-05-27 16:17:05 [info     ] temu.cases.done                found=0 search=mini itx htpc case
+2026-05-27 16:17:08 [info     ] temu.cases.done                found=0 search=gaming pc case mid tower
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay 'budget gaming case atx': HTTP blocked/empty (status=403), Playwright returned 119
+[scraper] eBay 'budget gaming case atx': 119 found, 119 new (total 119)
+[scraper] eBay playwright blocked term='gaming headset' title='Access Denied'
+2026-05-27 16:17:24 [info     ] aliexpress.cases.done          found=0 search=slim htpc case living room
+2026-05-27 16:17:24 [info     ] aliexpress.cases.done          found=0 search=slim micro atx case office
+[scraper] eBay 'gaming headset': HTTP blocked/empty (status=403), Playwright returned 120
+[scraper] eBay 'gaming headset': 120 found, 120 new (total 120)
+2026-05-27 16:17:30 [info     ] temu.cases.done                found=0 search=slim htpc case living room
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+2026-05-27 16:17:33 [info     ] temu.cases.done                found=0 search=slim micro atx case office
+ources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48876 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48898 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48892 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
