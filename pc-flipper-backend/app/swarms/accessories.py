@@ -242,12 +242,14 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                             source_batches.append((f"Accessories:{vendor}", []))
 
                 for source_name, results in source_batches:
-                    stats["found"] += len(results)
+                    raw_found = len(results)
+                    saved_count = min(8, raw_found)
+                    stats["found"] += raw_found
                     record_term_result(
                         source_name=source_name,
                         term=search_def["term"],
-                        found=len(results),
-                        new=0,
+                        found=raw_found,
+                        new=saved_count,
                     )
                     for acc in results[:8]:
                         try:

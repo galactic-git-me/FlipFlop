@@ -37,7 +37,10 @@ VENDOR_ALIAS = {
 VENDOR_GROUPS = {
     "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
     "Marketplaces": ["Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "CherryTree Inc", "Facebook Marketplace"],
-    "Auctions": ["BidSpotter", "eBay UK Auctions"],
+    "Other": [
+        "BidSpotter", "eBay UK Auctions", "Apex Auctions", "Wilsons Auctions", "i-bidder",
+        "Gumtree", "Temu", "AliExpress", "Alibaba", "CherryTree Inc", "BargainHardware",
+    ],
 }
 FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
 FLIP_SOURCE_NAMES = {
@@ -140,16 +143,17 @@ def classify_cell(item):
 
 def _cell_state(item):
     if not item:
-        return ("blank", 0)
+        return ("blank", 0, 0)
     err = str((item or {}).get("error") or "").strip().lower()
     found = int((item or {}).get("found") or 0)
+    saved = int((item or {}).get("new") or 0)
     if err:
         if ("retry" in err) or ("blocked" in err) or ("backoff" in err) or ("429" in err):
-            return ("retry", found)
-        return ("error", found)
+            return ("retry", found, saved)
+        return ("error", found, saved)
     if found > 0:
-        return ("success", found)
-    return ("zero", 0)
+        return ("success", found, saved)
+    return ("zero", 0, saved)
 
 def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     if scope == "cases":
@@ -219,7 +223,7 @@ pane_w = max(80, int(getattr(console.size, "width", 120)))
 tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=16)
 tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=12)
 tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", width=28)
-group_names = ["eBay", "Marketplaces", "Auctions"]
+group_names = ["eBay", "Marketplaces", "Other"]
 for g in group_names:
     tbl.add_column(g, justify="center", no_wrap=True, width=12)
 
@@ -239,6 +243,7 @@ for scope in SCOPES:
             seen_any = False
             status = "blank"
             total_found = 0
+            total_saved = 0
             for v in members:
                 if allowed and v not in allowed:
                     continue
@@ -246,8 +251,9 @@ for scope in SCOPES:
                 candidates = scope_vendor_sources(scope, v)
                 for src in candidates:
                     item = latest_term_state.get((src, term.lower()))
-                    st, found = _cell_state(item)
+                    st, found, saved = _cell_state(item)
                     total_found += max(0, int(found or 0))
+                    total_saved += max(0, int(saved or 0))
                     if st == "error":
                         status = "error"
                     elif st == "retry" and status not in ("error",):
@@ -263,7 +269,10 @@ for scope in SCOPES:
             elif status == "retry":
                 out.append("[yellow]🚦[/yellow]")
             elif status == "success":
-                out.append(f"[green]✓{total_found}[/green]")
+                if total_saved > 0 and total_saved != total_found:
+                    out.append(f"[green]✓{total_found}/{total_saved}[/green]")
+                else:
+                    out.append(f"[green]✓{total_found}[/green]")
             else:
                 out.append("[dim]0[/dim]")
         tbl.add_row(*out)
@@ -271,7 +280,7 @@ for scope in SCOPES:
     tbl.add_section()
 
 console.clear()
-legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
+legend = "[green]✓raw/saved[/green]=scraped/persisted  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4

@@ -202,11 +202,13 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                 log.error("cases.scrape.error", source=source_name, term=term, error=err)
             else:
                 cases = r.get("cases") or []
+                raw_found = len(cases)
+                saved_count = min(8, raw_found)
                 record_term_result(
                     source_name=f"Cases:{source_name}",
                     term=term,
-                    found=len(cases),
-                    new=0,
+                    found=raw_found,
+                    new=saved_count,
                 )
 
     async with AsyncSessionLocal() as db:

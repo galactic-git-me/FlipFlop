@@ -280,6 +280,40 @@ start_postgres() {
   exit 1
 }
 
+restart_project_containers_if_running() {
+  if ! command -v docker >/dev/null 2>&1; then
+    return 0
+  fi
+
+  local services=()
+  while IFS= read -r svc; do
+    [[ -n "$svc" ]] && services+=("$svc")
+  done < <(cd "$BACKEND_DIR" && docker compose config --services 2>/dev/null || true)
+
+  if [[ ${#services[@]} -eq 0 ]]; then
+    return 0
+  fi
+
+  local running_services=()
+  local svc cid status
+  for svc in "${services[@]}"; do
+    cid="$(cd "$BACKEND_DIR" && docker compose ps -q "$svc" 2>/dev/null || true)"
+    if [[ -z "$cid" ]]; then
+      continue
+    fi
+    status="$(docker inspect -f '{{.State.Status}}' "$cid" 2>/dev/null || true)"
+    if [[ "$status" == "running" ]]; then
+      running_services+=("$svc")
+    fi
+  done
+
+  if [[ ${#running_services[@]} -gt 0 ]]; then
+    echo "Detected running project containers. Restarting to avoid stale builds: ${running_services[*]}"
+    (cd "$BACKEND_DIR" && docker compose restart "${running_services[@]}" >/dev/null)
+  fi
+}
+
+restart_project_containers_if_running
 start_postgres
 
 PYTHON_BIN="python3"
@@ -1102,16 +1136,17 @@ def classify_cell(item):
 
 def _cell_state(item):
     if not item:
-        return ("blank", 0)
+        return ("blank", 0, 0)
     err = str((item or {}).get("error") or "").strip().lower()
     found = int((item or {}).get("found") or 0)
+    saved = int((item or {}).get("new") or 0)
     if err:
         if ("retry" in err) or ("blocked" in err) or ("backoff" in err) or ("429" in err):
-            return ("retry", found)
-        return ("error", found)
+            return ("retry", found, saved)
+        return ("error", found, saved)
     if found > 0:
-        return ("success", found)
-    return ("zero", 0)
+        return ("success", found, saved)
+    return ("zero", 0, saved)
 
 def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     if scope == "cases":
@@ -1201,6 +1236,7 @@ for scope in SCOPES:
             seen_any = False
             status = "blank"
             total_found = 0
+            total_saved = 0
             for v in members:
                 if allowed and v not in allowed:
                     continue
@@ -1208,8 +1244,9 @@ for scope in SCOPES:
                 candidates = scope_vendor_sources(scope, v)
                 for src in candidates:
                     item = latest_term_state.get((src, term.lower()))
-                    st, found = _cell_state(item)
+                    st, found, saved = _cell_state(item)
                     total_found += max(0, int(found or 0))
+                    total_saved += max(0, int(saved or 0))
                     if st == "error":
                         status = "error"
                     elif st == "retry" and status not in ("error",):
@@ -1225,7 +1262,10 @@ for scope in SCOPES:
             elif status == "retry":
                 out.append("[yellow]🚦[/yellow]")
             elif status == "success":
-                out.append(f"[green]✓{total_found}[/green]")
+                if total_saved > 0 and total_saved != total_found:
+                    out.append(f"[green]✓{total_found}/{total_saved}[/green]")
+                else:
+                    out.append(f"[green]✓{total_found}[/green]")
             else:
                 out.append("[dim]0[/dim]")
         tbl.add_row(*out)
@@ -1233,7 +1273,7 @@ for scope in SCOPES:
     tbl.add_section()
 
 console.clear()
-legend = "[green]✓N[/green]=success+items  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
+legend = "[green]✓raw/saved[/green]=scraped/persisted  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
   sleep 4
