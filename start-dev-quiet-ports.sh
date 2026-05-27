@@ -29,6 +29,7 @@ DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-pcflipper}"
 DB_USER="${DB_USER:-flipper}"
 DB_PASSWORD="${DB_PASSWORD:-flipper}"
+FRONTEND_CONTAINER_PORT="${FRONTEND_CONTAINER_PORT:-3000}"
 
 mkdir -p "$LOG_DIR"
 
@@ -313,7 +314,102 @@ restart_project_containers_if_running() {
   fi
 }
 
-restart_project_containers_if_running
+project_tree_hash() {
+  local dir="$1"
+  if [[ ! -d "$dir" ]]; then
+    echo ""
+    return 0
+  fi
+  (
+    cd "$dir"
+    find . -type f \
+      -not -path "./.git/*" \
+      -not -path "./.venv/*" \
+      -not -path "./node_modules/*" \
+      -not -path "./.next/*" \
+      -not -path "./dist/*" \
+      -not -path "./build/*" \
+      -print0 \
+      | sort -z \
+      | xargs -0 sha256sum 2>/dev/null \
+      | sha256sum \
+      | awk '{print $1}'
+  )
+}
+
+compose_service_running() {
+  local compose_dir="$1"
+  local service="$2"
+  local cid status
+  cid="$(cd "$compose_dir" && docker compose ps -q "$service" 2>/dev/null || true)"
+  if [[ -z "$cid" ]]; then
+    return 1
+  fi
+  status="$(docker inspect -f '{{.State.Status}}' "$cid" 2>/dev/null || true)"
+  [[ "$status" == "running" ]]
+}
+
+smart_refresh_project_containers() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker is required to rebuild project containers."
+    exit 1
+  fi
+
+  local backend_hash_file="$LOG_DIR/backend-container-tree.sha"
+  local frontend_hash_file="$LOG_DIR/frontend-container-tree.sha"
+  local backend_prev_hash="" frontend_prev_hash=""
+  [[ -f "$backend_hash_file" ]] && backend_prev_hash="$(cat "$backend_hash_file" 2>/dev/null || true)"
+  [[ -f "$frontend_hash_file" ]] && frontend_prev_hash="$(cat "$frontend_hash_file" 2>/dev/null || true)"
+
+  local backend_cur_hash frontend_cur_hash
+  backend_cur_hash="$(project_tree_hash "$BACKEND_DIR")"
+  frontend_cur_hash="$(project_tree_hash "$FRONTEND_DIR")"
+
+  echo "Ensuring backend infra containers are up (db, redis)..."
+  (cd "$BACKEND_DIR" && docker compose up -d db redis >/dev/null)
+
+  if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
+    echo "Backend code changed -> rebuilding api container..."
+    (cd "$BACKEND_DIR" && docker compose up -d --build api >/dev/null)
+  else
+    if compose_service_running "$BACKEND_DIR" "api"; then
+      echo "Backend code unchanged and api is running -> leaving backend container running."
+    else
+      echo "Backend api not running -> starting api container..."
+      (cd "$BACKEND_DIR" && docker compose up -d api >/dev/null)
+    fi
+  fi
+
+  if [[ -z "$frontend_prev_hash" || "$frontend_cur_hash" != "$frontend_prev_hash" ]]; then
+    echo "Frontend code changed -> rebuilding web container..."
+    (
+      cd "$FRONTEND_DIR"
+      FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+        docker compose up -d --build web >/dev/null
+    )
+  else
+    if compose_service_running "$FRONTEND_DIR" "web"; then
+      echo "Frontend code unchanged -> restarting web container..."
+      (
+        cd "$FRONTEND_DIR"
+        FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+          docker compose restart web >/dev/null
+      )
+    else
+      echo "Frontend web not running -> starting web container..."
+      (
+        cd "$FRONTEND_DIR"
+        FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+          docker compose up -d web >/dev/null
+      )
+    fi
+  fi
+
+  printf "%s\n" "$backend_cur_hash" > "$backend_hash_file"
+  printf "%s\n" "$frontend_cur_hash" > "$frontend_hash_file"
+}
+
+smart_refresh_project_containers
 start_postgres
 
 PYTHON_BIN="python3"
