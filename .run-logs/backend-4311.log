@@ -22363,12 +22363,12 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 17:15:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 17:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 17:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
- OK
-INFO:     100.101.209.68:49632 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49644 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49656 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:49664 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49678 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-27 17:25:24 [info     ] accessories_swarm.start
+2026-05-27 17:25:24 [info     ] cases_swarm.start
+2026-05-27 17:25:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 17:25:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 17:25:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49628 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49688 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49708 - "GET /api/schedule HTTP/1.1" 200 OK
