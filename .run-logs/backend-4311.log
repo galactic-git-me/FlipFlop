@@ -1385,3 +1385,220 @@ INFO:     100.101.209.68:42824 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42828 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42836 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:42844 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42858 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42872 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42878 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42884 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42886 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56964 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56976 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56986 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57010 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57014 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57026 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57028 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57038 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57046 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57058 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57062 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57076 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57096 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57112 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57124 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57138 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57154 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57156 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57162 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57176 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57190 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57206 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57208 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57214 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57228 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57230 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57244 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57250 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57262 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57266 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57278 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54674 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54690 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54706 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54708 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'compact gaming case': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54718 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54726 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54730 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54738 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54752 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54778 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54794 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54810 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54818 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54822 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54832 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54838 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54850 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58266 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58278 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58306 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58312 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58322 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58328 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58344 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58352 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58368 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58382 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58388 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58404 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58412 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58426 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'compact gaming case': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58432 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58434 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58444 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58452 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58468 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56318 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56330 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56336 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56344 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56356 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56372 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56386 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56392 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56396 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56402 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56410 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56418 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56434 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56448 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56460 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56468 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56478 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56488 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56492 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56500 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56516 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58634 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58644 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58656 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58664 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58680 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58684 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58686 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58690 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58694 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58714 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58728 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58732 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58748 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58756 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58760 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58764 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58770 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58782 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58792 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58814 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58820 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33564 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33580 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33582 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33596 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33608 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33614 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33620 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33628 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33648 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33658 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33666 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33682 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33688 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33704 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33720 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33732 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33738 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33748 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33760 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33774 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33790 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33804 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33810 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33812 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33818 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33830 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33838 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33842 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33856 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33866 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33872 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51282 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51294 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51302 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51308 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51318 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51322 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51328 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51330 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51338 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51356 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51372 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51384 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51386 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51390 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51404 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51420 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51428 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51436 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51450 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56144 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56156 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56170 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56182 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56196 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56198 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56210 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56224 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56232 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56238 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56254 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56274 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56288 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56302 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56314 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56320 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56324 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56332 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56338 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56342 - "GET /api/schedule HTTP/1.1" 200 OK
