@@ -21776,11 +21776,12 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 04:35:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 04:35:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 04:35:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-9.68:55578 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47824 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47826 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:47854 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 04:45:24 [info     ] accessories_swarm.start
+2026-05-27 04:45:24 [info     ] cases_swarm.start
+2026-05-27 04:45:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 04:45:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 04:45:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+/1.1" 200 OK
 INFO:     100.101.209.68:47870 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47840 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47874 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
