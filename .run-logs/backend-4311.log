@@ -21753,13 +21753,13 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 03:55:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 03:55:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 03:55:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-chedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55436 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55440 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55450 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:55466 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55470 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:55474 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-27 04:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+2026-05-27 04:05:24 [info     ] accessories_swarm.start
+2026-05-27 04:05:24 [info     ] cases_swarm.start
+2026-05-27 04:05:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 04:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 04:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+55474 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:55418 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:55484 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:55488 - "GET /api/schedule HTTP/1.1" 200 OK
