@@ -349,6 +349,12 @@ compose_service_running() {
   [[ "$status" == "running" ]]
 }
 
+compose_service_buildable() {
+  local compose_dir="$1"
+  local dockerfile_rel="$2"
+  [[ -n "$dockerfile_rel" && -f "$compose_dir/$dockerfile_rel" ]]
+}
+
 smart_refresh_project_containers() {
   if ! command -v docker >/dev/null 2>&1; then
     echo "Docker is required to rebuild project containers."
@@ -368,41 +374,59 @@ smart_refresh_project_containers() {
   echo "Ensuring backend infra containers are up (db, redis)..."
   (cd "$BACKEND_DIR" && docker compose up -d db redis >/dev/null)
 
-  if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
-    echo "Backend code changed -> rebuilding api container..."
-    (cd "$BACKEND_DIR" && docker compose up -d --build api >/dev/null)
-  else
-    if compose_service_running "$BACKEND_DIR" "api"; then
-      echo "Backend code unchanged and api is running -> leaving backend container running."
-    else
-      echo "Backend api not running -> starting api container..."
-      (cd "$BACKEND_DIR" && docker compose up -d api >/dev/null)
-    fi
+  local backend_api_buildable="0"
+  if compose_service_buildable "$BACKEND_DIR" "Dockerfile"; then
+    backend_api_buildable="1"
   fi
 
-  if [[ -z "$frontend_prev_hash" || "$frontend_cur_hash" != "$frontend_prev_hash" ]]; then
-    echo "Frontend code changed -> rebuilding web container..."
-    (
-      cd "$FRONTEND_DIR"
-      FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
-        docker compose up -d --build web >/dev/null
-    )
+  if [[ "$backend_api_buildable" == "1" ]]; then
+    if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
+      echo "Backend code changed -> rebuilding api container..."
+      (cd "$BACKEND_DIR" && docker compose up -d --build api >/dev/null)
+    else
+      if compose_service_running "$BACKEND_DIR" "api"; then
+        echo "Backend code unchanged and api is running -> leaving backend container running."
+      else
+        echo "Backend api not running -> starting api container..."
+        (cd "$BACKEND_DIR" && docker compose up -d api >/dev/null)
+      fi
+    fi
   else
-    if compose_service_running "$FRONTEND_DIR" "web"; then
-      echo "Frontend code unchanged -> restarting web container..."
+    echo "Backend api Dockerfile missing -> skipping api container build/start (using local backend process)."
+  fi
+
+  local frontend_web_buildable="0"
+  if compose_service_buildable "$FRONTEND_DIR" "Dockerfile"; then
+    frontend_web_buildable="1"
+  fi
+
+  if [[ "$frontend_web_buildable" == "1" ]]; then
+    if [[ -z "$frontend_prev_hash" || "$frontend_cur_hash" != "$frontend_prev_hash" ]]; then
+      echo "Frontend code changed -> rebuilding web container..."
       (
         cd "$FRONTEND_DIR"
         FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
-          docker compose restart web >/dev/null
+          docker compose up -d --build web >/dev/null
       )
     else
-      echo "Frontend web not running -> starting web container..."
-      (
-        cd "$FRONTEND_DIR"
-        FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
-          docker compose up -d web >/dev/null
-      )
+      if compose_service_running "$FRONTEND_DIR" "web"; then
+        echo "Frontend code unchanged -> restarting web container..."
+        (
+          cd "$FRONTEND_DIR"
+          FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+            docker compose restart web >/dev/null
+        )
+      else
+        echo "Frontend web not running -> starting web container..."
+        (
+          cd "$FRONTEND_DIR"
+          FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+            docker compose up -d web >/dev/null
+        )
+      fi
     fi
+  else
+    echo "Frontend web Dockerfile missing -> skipping web container build/start (using local frontend process)."
   fi
 
   printf "%s\n" "$backend_cur_hash" > "$backend_hash_file"
