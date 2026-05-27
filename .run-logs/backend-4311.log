@@ -22056,16 +22056,14 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 13:05:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 13:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 13:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-:39148 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39152 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39168 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39184 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39186 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39198 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39230 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39214 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39236 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:39250 - "GET /api/sources/ HTTP/1.1" 200 OK
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-27 12:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-27 12:15:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-27 13:15:24 [info     ] accessories_swarm.start
+2026-05-27 13:15:24 [info     ] cases_swarm.start
+2026-05-27 13:15:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 13:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 13:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+.209.68:39250 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39262 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39278 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39280 - "GET /api/sources/health HTTP/1.1" 200 OK
