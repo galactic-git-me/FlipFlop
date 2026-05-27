@@ -231,8 +231,56 @@ if ! command -v python3 >/dev/null 2>&1 && ! command -v python >/dev/null 2>&1; 
   exit 1
 fi
 
-free_port "$FRONTEND_PORT"
-free_port "$BACKEND_PORT"
+read_env_local_value() {
+  local key="$1"
+  local file="$2"
+  if [[ ! -f "$file" ]]; then
+    echo ""
+    return 0
+  fi
+  grep -E "^[[:space:]]*${key}[[:space:]]*=" "$file" 2>/dev/null | tail -n1 | cut -d'=' -f2- | tr -d '"' | tr -d "'" | xargs || true
+}
+
+infer_startup_mode() {
+  # Priority:
+  # 1) explicit env STARTUP_MODE
+  # 2) BACKEND .env.local (APP_MODE/ENVIRONMENT/NODE_ENV)
+  # 3) FRONTEND .env.local (APP_MODE/ENVIRONMENT/NODE_ENV)
+  local explicit="${STARTUP_MODE:-}"
+  local mode=""
+  if [[ -n "$explicit" ]]; then
+    mode="$explicit"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "APP_MODE" "$BACKEND_DIR/.env.local")"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "ENVIRONMENT" "$BACKEND_DIR/.env.local")"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "NODE_ENV" "$BACKEND_DIR/.env.local")"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "APP_MODE" "$FRONTEND_DIR/.env.local")"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "ENVIRONMENT" "$FRONTEND_DIR/.env.local")"
+  fi
+  if [[ -z "$mode" ]]; then
+    mode="$(read_env_local_value "NODE_ENV" "$FRONTEND_DIR/.env.local")"
+  fi
+  mode="$(echo "${mode:-dev}" | tr '[:upper:]' '[:lower:]')"
+  if [[ "$mode" == "prod" ]]; then
+    mode="production"
+  fi
+  if [[ "$mode" != "production" ]]; then
+    mode="dev"
+  fi
+  echo "$mode"
+}
+
+START_MODE="$(infer_startup_mode)"
+echo "Startup mode: $START_MODE"
 
 start_postgres() {
   if ! command -v docker >/dev/null 2>&1; then
@@ -433,7 +481,17 @@ smart_refresh_project_containers() {
   printf "%s\n" "$frontend_cur_hash" > "$frontend_hash_file"
 }
 
-smart_refresh_project_containers
+if [[ "$START_MODE" == "production" ]]; then
+  smart_refresh_project_containers
+  echo "Production mode: using Docker app containers (api/web)."
+  echo "Skipping local uvicorn/npm process launch."
+  echo "Backend container port is defined by compose (default 8001->8000)."
+  echo "Frontend container port is defined by compose (\$FRONTEND_PORT->\$FRONTEND_CONTAINER_PORT)."
+  exit 0
+fi
+
+free_port "$FRONTEND_PORT"
+free_port "$BACKEND_PORT"
 start_postgres
 
 PYTHON_BIN="python3"
