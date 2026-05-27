@@ -1,129 +1,498 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [2013647] using WatchFiles
-INFO:     Started server process [2013671]
+INFO:     Started reloader process [2149692] using WatchFiles
+INFO:     Started server process [2149715]
 INFO:     Waiting for application startup.
-2026-05-27 21:30:51 [info     ] app.startup
-2026-05-27 21:30:51 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-27 21:30:51 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-27 21:30:51 [warning  ] playwright.chromium_not_installed error=It looks like you are using Playwright Sync API inside the asyncio loop.
-Please use the Async API instead. fix=Run this command once: playwright install chromium
-2026-05-27 21:30:51 [warning  ] runtime.preflight.chromium_missing impact=playwright-backed vendors will return errors/zero until Chromium is installed
-2026-05-27 21:30:51 [info     ] scheduler.started              jobs=11
-2026-05-27 21:30:51 [info     ] startup_bootstrap.start
+2026-05-27 21:35:09 [info     ] app.startup
+2026-05-27 21:35:10 [info     ] seeded.sources
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=eBay UK Auctions
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=John Pye
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=Amazon
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=Temu
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=AliExpress
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=Alibaba
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=BargainHardware
+2026-05-27 21:35:10 [info     ] seeded.new_source              name=CherryTree Inc
+2026-05-27 21:35:10 [info     ] seeded.manual_source           name=Manual Submission
+2026-05-27 21:35:10 [info     ] seeded.manual_source           name=Manual Photo
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=Apex Auctions
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=BidSpotter
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=Wilsons Auctions
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=i-bidder
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=Merkandi
+2026-05-27 21:35:10 [info     ] seeded.auction_source          name=Wholesale Clearance UK
+2026-05-27 21:35:10 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-27 21:35:10 [info     ] seeded.search_config
+2026-05-27 21:35:10 [info     ] seeded.app_settings            model=gemma3:4b
+2026-05-27 21:35:10 [info     ] seeded.playbooks               count=4
+2026-05-27 21:35:10 [info     ] seeded.source_search_terms     count=236 scope=cases
+2026-05-27 21:35:10 [info     ] seeded.source_search_terms     count=22 scope=flip_opportunities
+2026-05-27 21:35:10 [info     ] seeded.source_search_terms     count=10 scope=upgrade_parts
+2026-05-27 21:35:10 [info     ] seeded.source_search_terms     count=5 scope=accessories
+2026-05-27 21:35:10 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-27 21:35:10 [info     ] scheduler.started              jobs=11
+2026-05-27 21:35:10 [info     ] startup_bootstrap.start
 INFO:     Application startup complete.
-2026-05-27 21:30:51 [info     ] accessories_swarm.start
-2026-05-27 21:30:51 [info     ] cases_swarm.start
-2026-05-27 21:30:51 [info     ] upgrade_parts_swarm.start      total_parts=10
-2026-05-27 21:30:51 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-2026-05-27 21:31:00 [info     ] startup_bootstrap.done
-INFO:     100.101.209.68:42674 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42676 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42680 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42684 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42694 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42706 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42710 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42718 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42724 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:42720 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42732 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42736 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42750 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42748 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42752 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42756 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42766 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42774 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42784 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42788 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42804 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42814 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42822 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42842 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42848 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42862 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42874 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:42884 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42898 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42904 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42914 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42926 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42932 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42940 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42950 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:42958 - "GET /api/schedule HTTP/1.1" 200 OK
-[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:46220 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46228 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46242 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46248 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46262 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-27 21:31:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
-INFO:     100.101.209.68:46272 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46278 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46292 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46302 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46312 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46320 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46336 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:46348 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46360 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46362 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46366 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46374 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46378 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46382 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46384 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:46390 - "GET /api/schedule HTTP/1.1" 200 OK
-2026-05-27 21:31:25 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
-2026-05-27 21:31:25 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
-2026-05-27 21:31:26 [info     ] gumtree.playwright.done        total=0
-2026-05-27 21:31:26 [info     ] facebook.playwright.cookies_loaded count=8
-INFO:     100.101.209.68:59812 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-2026-05-27 21:31:26 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-INFO:     100.101.209.68:59822 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59836 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59842 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59858 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:10 [info     ] accessories_swarm.start
+2026-05-27 21:35:10 [info     ] flip_opportunities_swarm.start
+2026-05-27 21:35:10 [info     ] cases_swarm.start
+2026-05-27 21:35:10 [warning  ] job.skipped.already_running    job_id=external_demand
+2026-05-27 21:35:10 [info     ] flip_opportunities_swarm.start
+2026-05-27 21:35:10 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 21:35:10 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-27 21:35:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:12 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:12 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:12 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 21:35:12 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-27 21:35:13 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:13 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 21:35:13 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:35:13 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:35:13 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-27 21:35:13 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:14 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 21:35:14 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 21:35:14 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:16 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:16 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 21:35:16 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:16 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 21:35:17 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+2026-05-27 21:35:17 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=BargainHardware
+2026-05-27 21:35:18 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:19 [info     ] amazon.cases.done              found=10 search=fish tank pc case
+[scraper] eBay playwright blocked term='fish tank pc case' title='Access Denied'
+2026-05-27 21:35:20 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:20 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:22 [info     ] startup_bootstrap.done
+2026-05-27 21:35:22 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:23 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-27 21:35:23 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
+2026-05-27 21:35:24 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-27 21:35:24 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:24 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:48648 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48650 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48660 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48668 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48652 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 21:35:25 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=BargainHardware
+INFO:     100.101.209.68:48672 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48682 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48690 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48710 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48702 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48728 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48712 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48734 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48736 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48752 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:35:26 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:26 [info     ] amazon.cases.done              found=10 search=panoramic pc case
+2026-05-27 21:35:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:35:29 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:29 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:48764 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48768 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48770 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-27 21:35:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:48778 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48782 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:32 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
+2026-05-27 21:35:32 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:32 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:48796 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48798 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48806 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48822 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:34 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:34 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:48824 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48830 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48842 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48852 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48862 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48870 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48874 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:35:35 [info     ] amazon.cases.done              found=10 search=argb gaming case
+INFO:     100.101.209.68:36114 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36124 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36130 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36146 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36162 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:35 [info     ] aliexpress.cases.done          found=0 search=fish tank pc case
+2026-05-27 21:35:36 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:36 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:37 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+2026-05-27 21:35:38 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:38 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:39 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-27 21:35:39 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+INFO:     100.101.209.68:36170 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36174 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36182 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36190 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36200 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:40 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:40 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:40 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+INFO:     100.101.209.68:36212 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36226 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36232 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36244 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:42 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:42 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:36258 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36268 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36276 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36282 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36292 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36302 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36304 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:35:43 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:36308 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36320 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-27 21:35:44 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=BargainHardware
+INFO:     100.101.209.68:36334 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-27 21:35:44 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+INFO:     100.101.209.68:36336 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36338 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:44 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:44 [info     ] amazon.cases.done              found=10 search=rgb airflow case
+2026-05-27 21:35:45 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3060 12GB sold=None
+2026-05-27 21:35:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:35:46 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:46 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:50512 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50514 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50530 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50540 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50556 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:49 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
+2026-05-27 21:35:49 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:49 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:50564 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50566 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50570 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50592 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50608 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50618 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50628 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50644 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50646 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:35:51 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:51 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-27 21:35:53 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:53 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:50656 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50662 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50668 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50682 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50690 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:54 [info     ] amazon.cases.done              found=10 search=mesh airflow case
+2026-05-27 21:35:55 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:55 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=BargainHardware
+2026-05-27 21:35:56 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:35:56 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:35:56 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:35:56 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
+2026-05-27 21:35:58 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+INFO:     100.101.209.68:49800 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49834 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49842 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:35:58 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:49850 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49860 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49886 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49900 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49902 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49910 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49916 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49918 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:36:00 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:02 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:02 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+INFO:     100.101.209.68:49924 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49926 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49928 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49944 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49948 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:02 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
+2026-05-27 21:36:03 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=BargainHardware
+2026-05-27 21:36:03 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=Alibaba
+2026-05-27 21:36:03 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+2026-05-27 21:36:04 [info     ] amazon.cases.done              found=10 search=high airflow gaming case
+2026-05-27 21:36:04 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:04 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:55624 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 21:36:07 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+INFO:     100.101.209.68:55608 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55634 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-27 21:36:07 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:55654 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55648 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55656 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55670 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55684 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:07 [info     ] temu.cases.done                found=0 search=panoramic pc case
+INFO:     100.101.209.68:55698 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55708 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55718 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55720 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55724 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55738 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55746 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:36:08 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=BargainHardware
+2026-05-27 21:36:09 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:36:10 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=Alibaba
+2026-05-27 21:36:11 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+INFO:     100.101.209.68:55762 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 21:36:11 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:55768 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55784 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55786 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55794 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:12 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=BargainHardware
+2026-05-27 21:36:12 [info     ] amazon.cases.done              found=10 search=premium aluminum pc case
+2026-05-27 21:36:13 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:15 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:15 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:44100 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44116 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44120 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44132 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44140 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44144 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44158 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44172 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44164 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44188 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44186 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44214 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44222 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:36:16 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=BargainHardware
+2026-05-27 21:36:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:36:17 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:17 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:17 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=Alibaba
+2026-05-27 21:36:19 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:19 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:20 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
+2026-05-27 21:36:20 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:20 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:44228 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44240 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44254 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44262 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44274 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:21 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=BargainHardware
+2026-05-27 21:36:21 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+2026-05-27 21:36:22 [info     ] amazon.cases.done              found=10 search=luxury gaming case
+2026-05-27 21:36:22 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:23 [info     ] cases.generic_market.done      found=0 search=white rgb case source=Alibaba
+2026-05-27 21:36:24 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:24 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:44284 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44300 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-27 21:36:24 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+INFO:     100.101.209.68:44302 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44318 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:40364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40380 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40386 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40402 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40414 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40420 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40434 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 21:36:25 [info     ] cases.generic_market.done      found=0 search=white rgb case source=BargainHardware
+INFO:     100.101.209.68:40450 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40462 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40476 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40478 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:25 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:27 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:28 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:28 [info     ] facebook.playwright.cookies_loaded count=8
 [scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
-INFO:     100.101.209.68:59868 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59876 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59880 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59896 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59898 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59904 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59914 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:59922 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59938 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59944 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59956 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59970 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59980 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:59992 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:60008 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:60014 - "GET /api/schedule HTTP/1.1" 200 OK
-[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
-[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
-2026-05-27 21:31:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
-2026-05-27 21:31:59 [debug    ] upgrade_parts.ebay             buy=None part=RTX 3070 8GB sold=None
-[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
-2026-05-27 21:32:03 [info     ] gumtree.playwright.cards       count=25 term=gaming mouse
+2026-05-27 21:36:29 [info     ] amazon.cases.done              found=10 search=white fish tank case
+2026-05-27 21:36:29 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=Alibaba
+2026-05-27 21:36:29 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
+2026-05-27 21:36:30 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+INFO:     100.101.209.68:40482 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40492 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40500 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40510 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:31 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=BargainHardware
+2026-05-27 21:36:31 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:31 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:32 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+INFO:     100.101.209.68:40518 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40528 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40534 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40550 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40562 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40576 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40584 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40588 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40602 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40606 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:36:33 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:33 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:33 [info     ] gumtree.playwright.done        total=0
+2026-05-27 21:36:34 [info     ] source.done                    found=0 gems=0 source=Gumtree
+INFO:     100.101.209.68:40622 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40626 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39930 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39944 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39950 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:35 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:35 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:35 [info     ] temu.cases.done                found=0 search=argb gaming case
+2026-05-27 21:36:35 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=BargainHardware
+2026-05-27 21:36:35 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=Alibaba
+2026-05-27 21:36:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 21:36:36 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:36 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:37 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:37 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:37 [info     ] amazon.cases.done              found=10 search=white rgb case
+2026-05-27 21:36:39 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:39 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39962 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39970 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39982 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39990 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:40 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=BargainHardware
+2026-05-27 21:36:40 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:40 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39998 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40014 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40018 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40038 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40044 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40060 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40066 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-27 21:36:42 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=Alibaba
+INFO:     100.101.209.68:40068 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40074 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40084 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 21:36:42 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:42 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:40100 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40102 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40108 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40110 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40112 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:43 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:43 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:45 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:45 [info     ] facebook.playwright.cookies_loaded count=8
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-27 21:36:46 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+2026-05-27 21:36:47 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:47 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:47 [info     ] amazon.cases.done              found=10 search=micro atx fish tank
+2026-05-27 21:36:47 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=Alibaba
+INFO:     100.101.209.68:43950 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43960 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43978 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43984 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 21:36:48 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:36:48 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:36:48 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=BargainHardware
 INFO:     Shutting down
-[scraper] eBay error for 'panoramic pc case': BrowserContext.close: Target page, context or browser has been closed
-2026-05-27 21:32:04 [info     ] facebook.playwright.cookies_loaded count=8
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-INFO:     Finished server process [2013671]
-INFO:     Stopping reloader process [2013647]
+INFO:     Waiting for application shutdown.
+2026-05-27 21:36:48 [info     ] scheduler.stopped
+2026-05-27 21:36:48 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2149715]
+INFO:     Stopping reloader process [2149692]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0

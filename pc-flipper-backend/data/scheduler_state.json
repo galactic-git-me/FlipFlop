@@ -1,35 +1,17 @@
 {
-  "cases": {
-    "last_success_at": "2026-05-27T19:22:09.578084+00:00"
-  },
-  "upgrade_parts": {
-    "last_success_at": "2026-05-27T20:08:02.455993+00:00"
-  },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-05-27T20:04:52.405182+00:00"
+    "last_success_at": "2026-05-27T20:35:10.438742+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-05-27T20:04:52.752568+00:00"
+    "last_success_at": "2026-05-27T20:35:10.665324+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-05-27T20:04:53.207926+00:00"
+    "last_success_at": "2026-05-27T20:35:10.928642+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-27T20:32:35.331646+00:00"
+    "last_success_at": "2026-05-27T20:35:22.220577+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-05-27T20:32:35.208696+00:00"
-  },
-  "accessories": {
-    "last_success_at": "2026-05-27T20:13:03.389832+00:00"
-  },
-  "flip_opportunities": {
-    "last_success_at": "2026-05-27T19:59:23.474422+00:00"
-  },
-  "autonomous_cycle": {
-    "last_success_at": "2026-05-27T19:59:32.328233+00:00"
-  },
-  "autonomous": {
-    "last_success_at": "2026-05-27T20:31:59.875985+00:00"
+    "last_success_at": "2026-05-27T20:35:22.095732+00:00"
   }
 }
