@@ -479,6 +479,7 @@ smart_refresh_project_containers() {
       (
         cd "$FRONTEND_DIR"
         FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+        NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
           docker compose up -d --build web >/dev/null
       )
     else
@@ -487,6 +488,7 @@ smart_refresh_project_containers() {
         (
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+          NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
             docker compose restart web >/dev/null
         )
       else
@@ -494,6 +496,7 @@ smart_refresh_project_containers() {
         (
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+          NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
             docker compose up -d web >/dev/null
         )
       fi
