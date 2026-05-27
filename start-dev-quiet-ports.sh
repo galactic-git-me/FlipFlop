@@ -30,6 +30,8 @@ DB_NAME="${DB_NAME:-pcflipper}"
 DB_USER="${DB_USER:-flipper}"
 DB_PASSWORD="${DB_PASSWORD:-flipper}"
 FRONTEND_CONTAINER_PORT="${FRONTEND_CONTAINER_PORT:-3000}"
+# Global startup mode override (dev|production). Defaults to dev.
+STARTUP_MODE="${STARTUP_MODE:-dev}"
 
 mkdir -p "$LOG_DIR"
 
@@ -403,6 +405,24 @@ compose_service_buildable() {
   [[ -n "$dockerfile_rel" && -f "$compose_dir/$dockerfile_rel" ]]
 }
 
+stop_docker_containers_binding_port() {
+  local port="$1"
+  if ! command -v docker >/dev/null 2>&1; then
+    return 0
+  fi
+
+  local ids
+  ids="$(
+    docker ps --format '{{.ID}} {{.Ports}}' \
+      | awk -v p=":${port}->" 'index($0,p){print $1}' \
+      | tr '\n' ' '
+  )"
+  if [[ -n "${ids// }" ]]; then
+    echo "Stopping container(s) already bound to host port $port: $ids"
+    docker stop $ids >/dev/null 2>&1 || true
+  fi
+}
+
 smart_refresh_project_containers() {
   if ! command -v docker >/dev/null 2>&1; then
     echo "Docker is required to rebuild project containers."
@@ -428,6 +448,8 @@ smart_refresh_project_containers() {
   fi
 
   if [[ "$backend_api_buildable" == "1" ]]; then
+    stop_docker_containers_binding_port "$BACKEND_PORT"
+    free_port "$BACKEND_PORT"
     if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
       echo "Backend code changed -> rebuilding api container..."
       (cd "$BACKEND_DIR" && docker compose up -d --build api >/dev/null)
@@ -449,6 +471,9 @@ smart_refresh_project_containers() {
   fi
 
   if [[ "$frontend_web_buildable" == "1" ]]; then
+    # Avoid "address already in use" on host bind when stale containers/processes hold the port.
+    stop_docker_containers_binding_port "$FRONTEND_PORT"
+    free_port "$FRONTEND_PORT"
     if [[ -z "$frontend_prev_hash" || "$frontend_cur_hash" != "$frontend_prev_hash" ]]; then
       echo "Frontend code changed -> rebuilding web container..."
       (
