@@ -22270,53 +22270,50 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 16:17:30 [info     ] temu.cases.done                found=0 search=slim htpc case living room
 [scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
 2026-05-27 16:17:33 [info     ] temu.cases.done                found=0 search=slim micro atx case office
-ources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48876 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48898 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48892 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48900 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48906 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48916 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48922 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48934 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48946 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48956 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44742 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44756 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44770 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44764 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44772 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44790 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44800 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44784 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44804 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44808 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44812 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:44820 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44828 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44844 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44858 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44872 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44888 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44898 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44900 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44908 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44922 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44928 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44942 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44946 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44934 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44952 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44960 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44948 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44992 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44976 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45002 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45018 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:45034 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45048 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45058 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:45060 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py:667: MarkupResemblesLocatorWarning: The input looks more like a filename than markup. You may want to open this file and pass the filehandle into Beautiful Soup.
+  try:
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': HTTP blocked/empty (status=403), Playwright returned 91
+[scraper] eBay 'mini itx htpc case': 91 found, 91 new (total 91)
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+[scraper] eBay 'Lian Li O11 style case': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay playwright blocked term='slim htpc case living room' title='Access Denied'
+[scraper] eBay 'slim htpc case living room': HTTP blocked/empty (status=403), Playwright returned 100
+[scraper] eBay 'slim htpc case living room': 100 found, 100 new (total 100)
+[scraper] eBay playwright blocked term='usb microphone' title='Access Denied'
+[scraper] eBay playwright blocked term='budget gaming case atx' title='Access Denied'
+[scraper] eBay 'budget gaming case atx': 60 found, 60 new (total 60)
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay 'gaming pc case mid tower': HTTP blocked/empty (status=200), Playwright returned 100
+[scraper] eBay 'gaming pc case mid tower': 100 found, 100 new (total 100)
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='usb microphone' title='Access Denied'
+[scraper] eBay 'usb microphone': HTTP blocked/empty (status=200), Playwright returned 120
+[scraper] eBay 'usb microphone': 120 found, 120 new (total 120)
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay retry 'Lian Li O11 style case': 5 found, 5 new (total 5)
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming atx case rgb' title='Access Denied'
+[scraper] eBay 'gaming atx case rgb': HTTP blocked/empty (status=403), Playwright returned 103
+[scraper] eBay 'gaming atx case rgb': 103 found, 103 new (total 103)
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay playwright blocked term='mini itx htpc case' title='Access Denied'
+[scraper] eBay 'mini itx htpc case': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay playwright blocked term='slim micro atx case office' title='Access Denied'
+[scraper] eBay 'slim micro atx case office': 0 found, 0 new (total 0)
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay playwright blocked term='xl mouse pad' title='Access Denied'
+[scraper] eBay 'xl mouse pad': 50 found, 50 new (total 50)
+[scraper] eBay playwright blocked term='gaming pc case mid tower' title='Access Denied'
+[scraper] eBay 'gaming pc case mid tower': 0 found, 0 new (total 0)
+[scraper] eBay retry 'mini itx htpc case': 48 found, 48 new (total 48)
+2026-05-27 16:20:09 [info     ] accessories_swarm.done         errors=0 found=100 upserted=80
+0 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:45068 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43484 - "GET /api/source-search-terms HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43488 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
