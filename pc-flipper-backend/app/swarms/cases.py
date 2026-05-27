@@ -20,6 +20,7 @@ from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.proxy import playwright_proxy_config
+from app.services.playwright_scraper import chromium_available
 import structlog
 from sqlalchemy import select as sa_select
 
@@ -46,6 +47,7 @@ SOURCES = [
     {"name": "CherryTree Inc",    "fn": "cherrytree"},
     {"name": "Alibaba",           "fn": "alibaba"},
 ]
+_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "amazon", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
 
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
@@ -151,7 +153,14 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         except Exception as exc:
             return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
-    enabled_sources = [s for s in SOURCES if s["name"] in batch_terms]
+    has_chromium = chromium_available()
+    enabled_sources = []
+    for s in SOURCES:
+        if s["name"] not in batch_terms:
+            continue
+        if s["fn"] in _PLAYWRIGHT_CASE_SOURCES and not has_chromium:
+            continue
+        enabled_sources.append(s)
     async def _scrape_source_seq(source: dict) -> list[dict]:
         rows: list[dict] = []
         # CherryTree should ingest from its cases catalogue once, not per search term.
@@ -163,6 +172,18 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         return rows
 
     scrape_results: list[dict] = []
+    if not has_chromium:
+        for source in SOURCES:
+            if source["name"] not in batch_terms:
+                continue
+            if source["fn"] not in _PLAYWRIGHT_CASE_SOURCES:
+                continue
+            for term in batch_terms.get(source["name"], []):
+                record_term_result(
+                    source_name=f"Cases:{source['name']}",
+                    term=term,
+                    error="playwright.chromium_not_installed",
+                )
     source_batches = await asyncio.gather(*[asyncio.create_task(_scrape_source_seq(source)) for source in enabled_sources])
     for batch in source_batches:
         for r in batch:

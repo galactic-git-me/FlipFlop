@@ -33,6 +33,7 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
+from app.services.playwright_scraper import chromium_available
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -175,40 +176,53 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 new=0,
             )
 
+    has_chromium = chromium_available()
+
     # ── Phase 2: BargainHardware.co.uk via Playwright ────────────────────────
     bh_map: dict[str, float | None] = {}
-    try:
-        from playwright.async_api import async_playwright
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=True,
-                args=_STEALTH_ARGS,
-                proxy=playwright_proxy_config(),
-            )
-            ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
-            await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
-            page = await ctx.new_page()
-            for part_def in parts:
-                name = part_def["name"]
-                price = await _bh_price(page, part_def["bh_search"])
-                bh_map[name] = price
-                if price:
-                    stats["bh"] += 1
-                    log.debug("upgrade_parts.bh", part=name, price_gbp=price)
-                await asyncio.sleep(random.uniform(0.6, 1.0))
-                record_term_result(
-                    source_name="UpgradeParts:BargainHardware",
-                    term=part_def["bh_search"],
-                    found=1 if price else 0,
-                    new=0,
+    if has_chromium:
+        try:
+            from playwright.async_api import async_playwright
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(
+                    headless=True,
+                    args=_STEALTH_ARGS,
+                    proxy=playwright_proxy_config(),
                 )
-            await browser.close()
-    except ImportError:
-        log.warning("upgrade_parts.playwright_missing")
+                ctx = await browser.new_context(user_agent=_STEALTH_UA, locale="en-GB", timezone_id="Europe/London")
+                await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+                page = await ctx.new_page()
+                for part_def in parts:
+                    name = part_def["name"]
+                    price = await _bh_price(page, part_def["bh_search"])
+                    bh_map[name] = price
+                    if price:
+                        stats["bh"] += 1
+                        log.debug("upgrade_parts.bh", part=name, price_gbp=price)
+                    await asyncio.sleep(random.uniform(0.6, 1.0))
+                    record_term_result(
+                        source_name="UpgradeParts:BargainHardware",
+                        term=part_def["bh_search"],
+                        found=1 if price else 0,
+                        new=0,
+                    )
+                await browser.close()
+        except ImportError:
+            log.warning("upgrade_parts.playwright_missing")
+            bh_map = {p["name"]: None for p in parts}
+        except Exception as exc:
+            log.error("upgrade_parts.bh.error", error=str(exc))
+            bh_map = {p["name"]: bh_map.get(p["name"]) for p in parts}
+    else:
         bh_map = {p["name"]: None for p in parts}
-    except Exception as exc:
-        log.error("upgrade_parts.bh.error", error=str(exc))
-        bh_map = {p["name"]: bh_map.get(p["name"]) for p in parts}
+        for part_def in parts:
+            record_term_result(
+                source_name="UpgradeParts:BargainHardware",
+                term=part_def["bh_search"],
+                found=0,
+                new=0,
+                error="playwright.chromium_not_installed",
+            )
 
     async def _fetch_lane_seq(fn):
         lane = []
@@ -236,12 +250,18 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
             stats["box"] += 1
 
     # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
-    amz_r, temu_r, ali_r, ali_b_r = await asyncio.gather(
-        _fetch_lane_seq(_fetch_amazon),
-        _fetch_lane_seq(_fetch_temu),
-        _fetch_lane_seq(_fetch_aliexpress),
-        _fetch_lane_seq(_fetch_alibaba),
-    )
+    if has_chromium:
+        amz_r, temu_r, ali_r, ali_b_r = await asyncio.gather(
+            _fetch_lane_seq(_fetch_amazon),
+            _fetch_lane_seq(_fetch_temu),
+            _fetch_lane_seq(_fetch_aliexpress),
+            _fetch_lane_seq(_fetch_alibaba),
+        )
+    else:
+        amz_r = [None for _ in parts]
+        temu_r = [None for _ in parts]
+        ali_r = [None for _ in parts]
+        ali_b_r = [None for _ in parts]
     for v in amz_r:
         if v and not isinstance(v, Exception):
             stats["amazon"] += 1

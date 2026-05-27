@@ -15,6 +15,7 @@ from app.api import ebay_compliance
 from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
+from app.services.playwright_scraper import chromium_available
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -201,6 +202,8 @@ async def lifespan(app: FastAPI):
     await _migrate_add_columns()
     await _seed_default_data()
     await _load_db_settings_into_config()
+    if not chromium_available():
+        log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
     start_scheduler()
     yield
     stop_scheduler()

@@ -18,6 +18,7 @@ from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.proxy import playwright_proxy_config
+from app.services.playwright_scraper import chromium_available
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -193,42 +194,47 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                         ("Accessories:Gumtree", await _scrape_gumtree_accessories(search_def["term"], search_def["theme"]))
                     )
 
-                from playwright.async_api import async_playwright
-                async with async_playwright() as p:
-                    browser = await p.chromium.launch(
-                        headless=True,
-                        args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
-                        proxy=playwright_proxy_config(),
-                    )
-                    ctx = await browser.new_context(
-                        user_agent=ua.random,
-                        locale="en-GB",
-                        timezone_id="Europe/London",
-                    )
-                    await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
-                    page = await ctx.new_page()
+                if chromium_available():
+                    from playwright.async_api import async_playwright
+                    async with async_playwright() as p:
+                        browser = await p.chromium.launch(
+                            headless=True,
+                            args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+                            proxy=playwright_proxy_config(),
+                        )
+                        ctx = await browser.new_context(
+                            user_agent=ua.random,
+                            locale="en-GB",
+                            timezone_id="Europe/London",
+                        )
+                        await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+                        page = await ctx.new_page()
 
-                    if search_def["term"] in set(batch_terms.get("Amazon", [])):
-                        source_batches.append(
-                            ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
-                        )
-                    if search_def["term"] in set(batch_terms.get("Temu", [])):
-                        source_batches.append(
-                            ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
-                        )
-                    if search_def["term"] in set(batch_terms.get("AliExpress", [])):
-                        source_batches.append(
-                            ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
-                        )
-                    if search_def["term"] in set(batch_terms.get("Alibaba", [])):
-                        source_batches.append(
-                            ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
-                        )
-                    if search_def["term"] in set(batch_terms.get("BargainHardware", [])):
-                        source_batches.append(
-                            ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
-                        )
-                    await browser.close()
+                        if search_def["term"] in set(batch_terms.get("Amazon", [])):
+                            source_batches.append(
+                                ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
+                            )
+                        if search_def["term"] in set(batch_terms.get("Temu", [])):
+                            source_batches.append(
+                                ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
+                            )
+                        if search_def["term"] in set(batch_terms.get("AliExpress", [])):
+                            source_batches.append(
+                                ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
+                            )
+                        if search_def["term"] in set(batch_terms.get("Alibaba", [])):
+                            source_batches.append(
+                                ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
+                            )
+                        if search_def["term"] in set(batch_terms.get("BargainHardware", [])):
+                            source_batches.append(
+                                ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
+                            )
+                        await browser.close()
+                else:
+                    for vendor in ("Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"):
+                        if search_def["term"] in set(batch_terms.get(vendor, [])):
+                            source_batches.append((f"Accessories:{vendor}", []))
 
                 for source_name, results in source_batches:
                     stats["found"] += len(results)

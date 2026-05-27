@@ -33,6 +33,7 @@ from app.services.proxy import playwright_proxy_config
 log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
 _PLAYWRIGHT_MISSING_WARNED = False
+_CHROMIUM_AVAILABLE: bool | None = None
 
 
 def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -57,6 +58,29 @@ def _log_playwright_missing_once(error: str | None = None) -> None:
         error=error or "",
         fix="Run this command once: playwright install chromium",
     )
+
+
+def chromium_available() -> bool:
+    """
+    Fast preflight to avoid repeated launch crashes when Chromium is missing.
+    Cached for process lifetime.
+    """
+    global _CHROMIUM_AVAILABLE
+    if _CHROMIUM_AVAILABLE is not None:
+        return _CHROMIUM_AVAILABLE
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            exe = p.chromium.executable_path or ""
+        ok = bool(exe) and Path(exe).exists()
+        if not ok:
+            _log_playwright_missing_once(f"chromium executable missing: {exe}")
+        _CHROMIUM_AVAILABLE = ok
+        return ok
+    except Exception as exc:
+        _log_playwright_missing_once(str(exc))
+        _CHROMIUM_AVAILABLE = False
+        return False
 
 # Path to optional Facebook session cookies
 FB_COOKIES_PATH = Path(__file__).parent.parent.parent / "fb_cookies.json"
