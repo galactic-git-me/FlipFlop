@@ -2310,3 +2310,30 @@ INFO:     100.101.209.68:58248 - "GET /api/schedule HTTP/1.1" 200 OK
 [scraper] eBay 'battlestar inspired workstation': 0 found, 0 new (total 0)
 [scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
 2026-05-27 20:57:22 [debug    ] upgrade_parts.ebay             buy=None part=X570 Motherboard sold=None
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay 'station command build': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay 'station command build': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'diplomatic station workstation': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'diplomatic station workstation': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-27 20:58:41 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'leviathan inspired build': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-27 20:59:14 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-27 20:59:23 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-27 20:59:23 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=9
+[scraper] eBay 'leviathan inspired build': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-27 20:59:24 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-27 20:59:24 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=9
+2026-05-27 20:59:32 [info     ] autonomous_cycle.done          duration_ms=1089457
+[scraper] eBay 'biomechanical spaceship pc': 0 found, 0 new (total 0)
+2026-05-27 21:00:01 [debug    ] upgrade_parts.ebay             buy=None part=32GB DDR4 2x16 sold=None
