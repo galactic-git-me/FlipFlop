@@ -196,6 +196,8 @@ table.add_column("Status", style="magenta")
 
 for j in rows:
     jid = str(j.get("id", ""))
+    if "_cycle" in jid:
+        continue
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
     elif jid == "upgrade_parts":
@@ -206,8 +208,8 @@ for j in rows:
         term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
-    elif jid == "autonomous_cycle":
-        term = "multi-source cycle"
+    elif jid == "autonomous":
+        term = "multi-source run"
     else:
         term = "—"
 
@@ -394,6 +396,8 @@ print(f"{'JOB':30} {'CURRENT TERM SEARCH':28} {'LAST':28} STATUS")
 print("-" * 115)
 for j in rows:
     jid = str(j.get("id", ""))[:30]
+    if "_cycle" in jid:
+        continue
 
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
@@ -405,8 +409,8 @@ for j in rows:
         term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
-    elif jid == "autonomous_cycle":
-        term = "multi-source cycle"
+    elif jid == "autonomous":
+        term = "multi-source run"
     else:
         term = "—"
 

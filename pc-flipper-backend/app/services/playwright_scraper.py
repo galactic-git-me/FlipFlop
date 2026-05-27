@@ -69,12 +69,27 @@ def chromium_available() -> bool:
     if _CHROMIUM_AVAILABLE is not None:
         return _CHROMIUM_AVAILABLE
     try:
-        from playwright.sync_api import sync_playwright
-        with sync_playwright() as p:
-            exe = p.chromium.executable_path or ""
-        ok = bool(exe) and Path(exe).exists()
+        # Async-safe preflight: avoid Playwright Sync API usage inside running asyncio loop.
+        # Probe the browser cache directly (default Playwright install location).
+        browsers_root = os.getenv("PLAYWRIGHT_BROWSERS_PATH", "").strip()
+        candidates: list[Path] = []
+        if browsers_root:
+            candidates.append(Path(browsers_root).expanduser())
+        candidates.append(Path.home() / ".cache" / "ms-playwright")
+
+        executable_hits: list[Path] = []
+        for root in candidates:
+            if not root.exists():
+                continue
+            for d in root.glob("chromium-*"):
+                for rel in ("chrome-linux/chrome", "chrome-win/chrome.exe", "chrome-mac/Chromium.app/Contents/MacOS/Chromium"):
+                    exe = d / rel
+                    if exe.exists():
+                        executable_hits.append(exe)
+
+        ok = len(executable_hits) > 0
         if not ok:
-            _log_playwright_missing_once(f"chromium executable missing: {exe}")
+            _log_playwright_missing_once("chromium executable not found in Playwright cache")
         _CHROMIUM_AVAILABLE = ok
         return ok
     except Exception as exc:
