@@ -40,6 +40,7 @@ ACCESSORY_SEARCHES = [
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
     "ebay uk auctions": "eBay",
+    "facebook marketplace": "Facebook Marketplace",
     "amazon uk": "Amazon",
     "bargain hardware": "BargainHardware",
 }
@@ -172,7 +173,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
         } for r in rows if str(r.term or "").strip()]
     terms_by_vendor: dict[str, list[str]] = {}
     for d in search_defs:
-        srcs = d.get("source_names") or ["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+        srcs = d.get("source_names") or ["eBay", "Gumtree", "Facebook Marketplace", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
         for s in srcs:
             terms_by_vendor.setdefault(str(s), []).append(d["term"])
     terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
@@ -192,6 +193,10 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                 if search_def["term"] in set(batch_terms.get("Gumtree", [])):
                     source_batches.append(
                         ("Accessories:Gumtree", await _scrape_gumtree_accessories(search_def["term"], search_def["theme"]))
+                    )
+                if search_def["term"] in set(batch_terms.get("Facebook Marketplace", [])):
+                    source_batches.append(
+                        ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
                     )
 
                 if chromium_available():
@@ -336,6 +341,31 @@ async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessor
                     name=str(r.title or "")[:200],
                     price=float(r.price or 0),
                     source_site="Gumtree",
+                    source_url=str(r.url or ""),
+                    image_url=(r.image_urls[0] if getattr(r, "image_urls", None) else ""),
+                    theme=theme,
+                    condition=PartCondition.used,
+                )
+            )
+    except Exception:
+        return []
+    return out
+
+
+async def _scrape_facebook_accessories(term: str, theme: str) -> list[RawAccessory]:
+    try:
+        from app.services.playwright_scraper import scrape_facebook_playwright
+    except Exception:
+        return []
+    out: list[RawAccessory] = []
+    try:
+        rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
+        for r in rows[:8]:
+            out.append(
+                RawAccessory(
+                    name=str(r.title or "")[:200],
+                    price=float(r.price or 0),
+                    source_site="Facebook Marketplace",
                     source_url=str(r.url or ""),
                     image_url=(r.image_urls[0] if getattr(r, "image_urls", None) else ""),
                     theme=theme,

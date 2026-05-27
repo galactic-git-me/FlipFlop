@@ -83,6 +83,7 @@ _VENDOR_ALIASES: dict[str, str] = {
     "ebay uk auctions": "eBay",
     "gumtree uk": "Gumtree",
     "gumtree": "Gumtree",
+    "facebook marketplace": "Facebook Marketplace",
     "amazon": "Amazon",
     "amazon uk": "Amazon",
     "alibaba uk": "Alibaba",
@@ -137,6 +138,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     terms_by_vendor = {
         "eBay": [p["ebay_search"] for p in parts],
         "Gumtree": [p["ebay_search"] for p in parts],
+        "Facebook Marketplace": [p["ebay_search"] for p in parts],
         "BargainHardware": [p["ebay_search"] for p in parts],
         "Scan": [p["ebay_search"] for p in parts],
         "Overclockers": [p["ebay_search"] for p in parts],
@@ -300,6 +302,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 # Gumtree isn't a reliable component-pricing lane; record explicit no-hit telemetry
                 # so dashboard coverage stays complete per vendor.
                 record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=0, new=0)
+                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=0, new=0)
 
                 if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new]):
                     await _upsert_part(

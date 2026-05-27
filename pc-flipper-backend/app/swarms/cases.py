@@ -40,6 +40,7 @@ SOURCES = [
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Gumtree",           "fn": "gumtree"},
+    {"name": "Facebook Marketplace", "fn": "facebook"},
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
@@ -47,7 +48,7 @@ SOURCES = [
     {"name": "CherryTree Inc",    "fn": "cherrytree"},
     {"name": "Alibaba",           "fn": "alibaba"},
 ]
-_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "amazon", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
+_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "facebook", "amazon", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
 
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
@@ -290,6 +291,30 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
 async def _scrape_gumtree(search: str, theme: str) -> list[RawCase]:
     try:
         from app.services.playwright_scraper import scrape_gumtree_playwright
+    except Exception:
+        return []
+
+
+async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
+    try:
+        from app.services.playwright_scraper import scrape_facebook_playwright
+    except Exception:
+        return []
+    try:
+        listings = await scrape_facebook_playwright([search], min_price=1, max_price=350)
+        out: list[RawCase] = []
+        for l in listings[:8]:
+            out.append(
+                RawCase(
+                    name=str(l.title or "")[:200],
+                    price=float(l.price or 0),
+                    source_site="Facebook Marketplace",
+                    source_url=str(l.url or ""),
+                    image_url=(l.image_urls[0] if getattr(l, "image_urls", None) else ""),
+                    theme=theme,
+                )
+            )
+        return out
     except Exception:
         return []
     try:
