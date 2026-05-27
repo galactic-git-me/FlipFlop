@@ -22157,13 +22157,13 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 15:57:28 [debug    ] upgrade_parts.bh               part=X570 Motherboard price_gbp=3.07
 2026-05-27 15:57:33 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
 2026-05-27 15:58:11 [info     ] upgrade_parts_swarm.done       aliexpress=0 amazon=0 bh=3 box=0 ebay_buy=3 ebay_sold=3 errors=0 overclockers=0 scan=0 temu=0 updated=3
- OK
-INFO:     100.101.209.68:44544 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:44560 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49140 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49154 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49168 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49182 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 16:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+2026-05-27 16:05:24 [info     ] accessories_swarm.start
+2026-05-27 16:05:24 [info     ] cases_swarm.start
+2026-05-27 16:05:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 16:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 16:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+ - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49186 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49190 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49210 - "GET /api/schedule HTTP/1.1" 200 OK
