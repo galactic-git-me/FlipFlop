@@ -1472,3 +1472,34 @@ INFO:     Application startup complete.
 [scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 125)
 [scraper] eBay 'rgb airflow case': 105 found, 105 new (total 105)
 2026-05-27 21:10:35 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 125)
+[scraper] eBay 'rgb airflow case': 120 found, 120 new (total 120)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 125)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 125)
+2026-05-27 21:11:07 [info     ] source.done                    found=0 gems=0 source=Temu
+[scraper] eBay 'mesh airflow case': 214 found, 214 new (total 214)
+[scraper] eBay 'mesh airflow case': 243 found, 243 new (total 243)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 125)
+2026-05-27 21:11:33 [info     ] source.done                    found=0 gems=0 source=Alibaba
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 125)
+[scraper] eBay 'high airflow gaming case': 70 found, 62 new (total 62)
+[scraper] eBay 'gaming headset': 144 found, 141 new (total 141)
+2026-05-27 21:12:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-27 21:12:08 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+[scraper] eBay 'pc tower': 0 found, 0 new (total 125)
+2026-05-27 21:12:12 [info     ] gumtree.playwright.done        total=0
+2026-05-27 21:12:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:12:12 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+[scraper] eBay 'high airflow gaming case': 70 found, 61 new (total 61)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 125)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 125)
+[scraper] eBay 'premium aluminum pc case': 125 found, 123 new (total 123)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 125)
+[scraper] eBay 'usb microphone': 0 found, 0 new (total 0)
+2026-05-27 21:12:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-27 21:12:58 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
+[scraper] eBay 'premium aluminum pc case': 0 found, 0 new (total 0)
+2026-05-27 21:13:02 [info     ] gumtree.playwright.done        total=0
+2026-05-27 21:13:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 21:13:03 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 21:13:03 [info     ] accessories_swarm.done         errors=0 found=24 upserted=24
