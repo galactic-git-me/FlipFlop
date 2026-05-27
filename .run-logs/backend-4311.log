@@ -1,61 +1,293 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [2950627] using WatchFiles
-INFO:     Started server process [2950635]
+INFO:     Started reloader process [3322116] using WatchFiles
+INFO:     Started server process [3322150]
 INFO:     Waiting for application startup.
-2026-05-27 20:50:19 [info     ] app.startup
-2026-05-27 20:50:19 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-27 20:50:19 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-27 20:50:19 [info     ] scheduler.started              jobs=11
-2026-05-27 20:50:19 [info     ] startup_bootstrap.start
+2026-05-27 22:04:54 [info     ] app.startup
+2026-05-27 22:04:54 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-27 22:04:54 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-27 22:04:54 [info     ] scheduler.started              jobs=11
+2026-05-27 22:04:54 [info     ] startup_bootstrap.start
 INFO:     Application startup complete.
-2026-05-27 20:50:19 [info     ] accessories_swarm.start
-2026-05-27 20:50:19 [info     ] flip_opportunities_swarm.start
-2026-05-27 20:50:19 [info     ] cases_swarm.start
-2026-05-27 20:50:19 [info     ] flip_opportunities_swarm.start
-2026-05-27 20:50:19 [info     ] upgrade_parts_swarm.start      total_parts=8
-2026-05-27 20:50:20 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-2026-05-27 20:50:20 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:20 [info     ] source.cooldown_ignored        reason=cooldown_active_5223s source=Gumtree
-2026-05-27 20:50:20 [info     ] source.cooldown_ignored        reason=cooldown_active_5353s source=Facebook Marketplace
-2026-05-27 20:50:20 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:20 [info     ] source.cooldown_ignored        reason=cooldown_active_5223s source=Gumtree
-2026-05-27 20:50:20 [info     ] source.cooldown_ignored        reason=cooldown_active_5353s source=Facebook Marketplace
-2026-05-27 20:50:20 [info     ] facebook.playwright.cookies_loaded count=8
-INFO:     127.0.0.1:50594 - "GET /api/demand/summary HTTP/1.1" 200 OK
-2026-05-27 20:50:21 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:21 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:21 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:21 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 20:50:21 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-27 20:50:21 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:21 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 20:50:21 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-27 20:50:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-27 20:50:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-27 20:50:22 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:22 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:23 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 20:50:23 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 20:50:24 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:24 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:25 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 20:50:25 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 20:50:25 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:25 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:27 [info     ] cases.generic_market.done      found=0 search=atx pc case source=Alibaba
-2026-05-27 20:50:28 [info     ] amazon.cases.done              found=10 search=atx pc case
-2026-05-27 20:50:28 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:28 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:30 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:30 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:30 [info     ] cases.generic_market.done      found=0 search=atx pc case source=BargainHardware
-2026-05-27 20:50:32 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:32 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 20:50:32 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
-2026-05-27 20:50:32 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
-2026-05-27 20:50:33 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
-2026-05-27 20:50:34 [info     ] cases.generic_market.done      found=0 search=mid tower case source=Alibaba
-2026-05-27 20:50:34 [info     ] startup_bootstrap.done
-INFO:     127.0.0.1:50598 - "POST /api/demand/external-signals/refresh HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53252 - "GET /api/demand/external-signals?limit_per_source=100 HTTP/1.1" 200 OK
+2026-05-27 22:04:54 [info     ] accessories_swarm.start
+2026-05-27 22:04:54 [info     ] flip_opportunities_swarm.start
+2026-05-27 22:04:54 [info     ] cases_swarm.start
+2026-05-27 22:04:54 [info     ] flip_opportunities_swarm.start
+2026-05-27 22:04:54 [info     ] upgrade_parts_swarm.start      total_parts=8
+2026-05-27 22:04:54 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-27 22:04:54 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:55 [info     ] source.cooldown_ignored        reason=cooldown_active_4348s source=Gumtree
+2026-05-27 22:04:55 [info     ] source.cooldown_ignored        reason=cooldown_active_4526s source=Facebook Marketplace
+2026-05-27 22:04:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:55 [info     ] source.cooldown_ignored        reason=cooldown_active_4348s source=Gumtree
+2026-05-27 22:04:55 [info     ] source.cooldown_ignored        reason=cooldown_active_4526s source=Facebook Marketplace
+2026-05-27 22:04:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:56 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:04:56 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:56 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:04:56 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 22:04:56 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:04:56 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-27 22:04:56 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:04:56 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:04:56 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 22:04:57 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:04:57 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-27 22:04:57 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:58 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:04:58 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:04:59 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 22:04:59 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 22:05:00 [info     ] cases.generic_market.done      found=0 search=atx pc case source=Alibaba
+2026-05-27 22:05:00 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:05:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:05:01 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 22:05:01 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 22:05:02 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:05:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:05:03 [info     ] amazon.cases.done              found=10 search=atx pc case
+2026-05-27 22:05:03 [info     ] cases.generic_market.done      found=0 search=atx pc case source=BargainHardware
+2026-05-27 22:05:04 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:05:04 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:05:05 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:05:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-27 22:05:06 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-27 22:05:07 [info     ] cases.generic_market.done      found=0 search=mid tower case source=Alibaba
+2026-05-27 22:05:07 [info     ] startup_bootstrap.done
+2026-05-27 22:05:07 [error    ] playwright.chromium_not_installed fix=Run: playwright install chromium
+2026-05-27 22:05:09 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:50032 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50036 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50038 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50042 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:50054 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50064 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50068 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50080 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50082 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:50084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50096 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50102 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50108 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50118 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50120 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50128 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:05:11 [info     ] amazon.cases.done              found=10 search=mid tower case
+2026-05-27 22:05:13 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+2026-05-27 22:05:14 [info     ] cases.generic_market.done      found=0 search=mid tower case source=BargainHardware
+INFO:     100.101.209.68:50142 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50148 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50162 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50166 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50182 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:17 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+2026-05-27 22:05:17 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-27 22:05:18 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+INFO:     100.101.209.68:55124 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55134 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55136 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55148 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55164 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55172 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55184 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55200 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55216 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55240 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55230 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55250 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55276 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55260 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:05:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:05:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:05:19 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-27 22:05:20 [info     ] aliexpress.cases.done          found=0 search=atx pc case
+2026-05-27 22:05:22 [info     ] temu.cases.done                found=0 search=atx pc case
+INFO:     100.101.209.68:55278 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55284 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55304 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55320 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:24 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+2026-05-27 22:05:24 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-27 22:05:25 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-27 22:05:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:56112 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56122 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56134 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56144 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56150 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56156 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56170 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56178 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56186 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56194 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56210 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56216 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56232 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56236 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56246 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56256 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:29 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+2026-05-27 22:05:29 [debug    ] upgrade_parts.ebay             buy=None part=Generic GPU sold=None
+2026-05-27 22:05:29 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-27 22:05:30 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+INFO:     100.101.209.68:56266 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56270 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56282 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56294 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56310 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:32 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-27 22:05:32 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+INFO:     100.101.209.68:56316 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56330 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38314 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38326 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38342 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38346 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38352 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38368 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38376 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38384 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38388 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38390 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38398 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38408 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38420 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38434 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:37 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-27 22:05:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+desktop&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:05:38 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+2026-05-27 22:05:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:05:39 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+INFO:     100.101.209.68:38450 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38464 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38478 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38494 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38518 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38524 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38534 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38536 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:43 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+INFO:     100.101.209.68:38548 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38560 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38576 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38592 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38594 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38610 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38622 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:05:44 [info     ] gumtree.playwright.cards       count=26 term=gaming desktop
+2026-05-27 22:05:45 [info     ] aliexpress.cases.done          found=0 search=mid tower case
+INFO:     100.101.209.68:58890 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58906 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58908 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58920 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58924 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:46 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+2026-05-27 22:05:48 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+2026-05-27 22:05:48 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-27 22:05:48 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+INFO:     100.101.209.68:58932 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 22:05:49 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+INFO:     100.101.209.68:58938 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58954 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58958 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58964 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:50 [info     ] temu.cases.done                found=0 search=mid tower case
+INFO:     100.101.209.68:58966 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58968 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58976 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58988 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58990 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59018 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59020 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59028 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59044 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59056 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:05:53 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+INFO:     100.101.209.68:59066 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-27 22:05:54 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+INFO:     100.101.209.68:59070 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59072 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59082 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59098 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:55 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+2026-05-27 22:05:56 [info     ] gumtree.playwright.done        total=0
+2026-05-27 22:05:56 [info     ] source.done                    found=0 gems=0 source=Gumtree
+INFO:     100.101.209.68:59804 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59818 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59824 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59836 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59850 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59864 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59874 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:05:59 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+INFO:     100.101.209.68:59882 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59898 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59902 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59918 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59920 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59930 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59942 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+2026-05-27 22:06:02 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+INFO:     100.101.209.68:59950 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59964 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59980 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59990 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59992 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-27 22:06:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+desktop&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:44646 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44658 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44670 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44686 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44688 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44696 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44700 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44702 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44716 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44724 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44730 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44736 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44746 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44750 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:06:09 [info     ] gumtree.playwright.cards       count=26 term=gaming desktop
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-27 22:06:10 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+INFO:     100.101.209.68:44756 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44758 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44764 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44780 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44782 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34402 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34418 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34434 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34442 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34450 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34454 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34458 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34470 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34484 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34496 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34504 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34516 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34522 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34530 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 22:06:18 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34544 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34556 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34572 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34574 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34586 - "GET /api/schedule HTTP/1.1" 200 OK
