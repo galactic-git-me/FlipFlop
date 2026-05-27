@@ -22050,13 +22050,13 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 12:55:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 12:55:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 12:55:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
-1" 200 OK
-INFO:     100.101.209.68:39112 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39114 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39126 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39132 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39134 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:39148 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-27 13:04:54 [info     ] playbook_evolution.done        proposals_created=0 sold_flips=2
+2026-05-27 13:05:24 [info     ] accessories_swarm.start
+2026-05-27 13:05:24 [info     ] cases_swarm.start
+2026-05-27 13:05:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 13:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 13:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+:39148 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39152 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39168 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39184 - "GET /api/demand/summary HTTP/1.1" 200 OK
