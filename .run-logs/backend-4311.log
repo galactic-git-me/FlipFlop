@@ -22163,113 +22163,91 @@ Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run
 2026-05-27 16:05:24 [info     ] flip_opportunities_swarm.start
 2026-05-27 16:05:24 [info     ] upgrade_parts_swarm.start      total_parts=10
 2026-05-27 16:05:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
- - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49186 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49190 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49210 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49224 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49240 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:49244 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49250 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49200 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49266 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49286 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49270 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49290 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49296 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49302 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49314 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49322 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49326 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49342 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49354 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49370 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49378 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:49392 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48364 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48380 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48390 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48400 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:48406 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48420 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48378 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48434 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48442 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48430 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48456 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48464 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48480 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48488 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48490 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48500 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48502 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48518 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48534 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48544 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48554 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48568 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48592 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48606 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48610 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:48618 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48624 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48580 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48646 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48656 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48630 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:48670 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33302 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33306 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33322 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33326 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33340 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33356 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33360 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33366 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33380 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33386 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33400 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33420 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33428 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33430 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:33438 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33410 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33450 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33456 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33440 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33470 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:33486 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41064 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41070 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41086 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41092 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41102 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41116 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41132 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41142 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41148 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41150 - "GET /api/listings/stats HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41156 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41158 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41174 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
-INFO:     100.101.209.68:41154 - "GET /api/demand/summary HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41180 - "GET /api/sources/ HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41188 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41200 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41196 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41214 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41216 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41232 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41240 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41244 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41252 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:41256 - "GET /api/schedule HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54400 - "GET /api/source-search-terms HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54416 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54418 - "GET /api/config/search HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54426 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     100.101.209.68:54434 - "GET /api/schedule HTTP/1.1" 200 OK
+Execution of job "Autonomous Cycle (trigger: interval[1:00:00], next run at: 2026-05-27 15:15:24 UTC)" skipped: maximum number of running instances reached (1)
+Execution of job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-27 15:15:24 UTC)" skipped: maximum number of running instances reached (1)
+2026-05-27 16:15:24 [info     ] accessories_swarm.start
+2026-05-27 16:15:24 [info     ] accessories_swarm.start
+2026-05-27 16:15:24 [info     ] cases_swarm.start
+2026-05-27 16:15:24 [info     ] cases_swarm.start
+2026-05-27 16:15:24 [info     ] flip_opportunities_swarm.start
+2026-05-27 16:15:24 [info     ] upgrade_parts_swarm.start      total_parts=10
+2026-05-27 16:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+2026-05-27 16:15:24 [info     ] cases_swarm.themes             base=5 playbook_extra=8
+2026-05-27 16:15:25 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 16:15:26 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 16:15:26 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 16:15:26 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 16:15:27 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-27 16:15:27 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-27 16:15:29 [info     ] cases.generic_market.done      found=0 search=micro atx case source=Alibaba
+2026-05-27 16:15:30 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+2026-05-27 16:15:30 [info     ] cases.generic_market.done      found=0 search=micro atx case source=BargainHardware
+2026-05-27 16:15:31 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+2026-05-27 16:15:31 [info     ] amazon.cases.done              found=10 search=micro atx case
+[scraper] eBay playwright blocked term='gaming keyboard' title='Access Denied'
+2026-05-27 16:15:34 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=Alibaba
+2026-05-27 16:15:34 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-27 16:15:35 [info     ] cases.generic_market.done      found=0 search=Lian Li O11 style case source=BargainHardware
+2026-05-27 16:15:36 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+[scraper] eBay 'gaming keyboard': HTTP blocked/empty (status=403), Playwright returned 100
+[scraper] eBay 'gaming keyboard': 100 found, 100 new (total 100)
+2026-05-27 16:15:38 [info     ] amazon.cases.done              found=10 search=Lian Li O11 style case
+2026-05-27 16:15:38 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+2026-05-27 16:15:39 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-27 16:15:40 [info     ] amazon.cases.done              found=0 search=mini tower desktop case
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+2026-05-27 16:15:41 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+2026-05-27 16:15:43 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-27 16:15:43 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=Alibaba
+2026-05-27 16:15:45 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+[scraper] eBay 'micro atx case': HTTP blocked/empty (status=403), Playwright returned 100
+[scraper] eBay 'micro atx case': 100 found, 100 new (total 100)
+2026-05-27 16:15:47 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+2026-05-27 16:15:47 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-27 16:15:48 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=Alibaba
+2026-05-27 16:15:49 [info     ] aliexpress.cases.done          found=0 search=mini tower desktop case
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-27 16:15:49 [info     ] aliexpress.cases.done          found=0 search=micro atx case
+2026-05-27 16:15:50 [info     ] temu.cases.done                found=0 search=mini tower desktop case
+2026-05-27 16:15:50 [info     ] cases.generic_market.done      found=0 search=mini itx htpc case source=BargainHardware
+2026-05-27 16:15:51 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+2026-05-27 16:15:51 [info     ] temu.cases.done                found=0 search=micro atx case
+2026-05-27 16:15:53 [info     ] amazon.cases.done              found=0 search=gaming atx case rgb
+2026-05-27 16:15:55 [info     ] cases.generic_market.done      found=0 search=slim htpc case living room source=BargainHardware
+2026-05-27 16:15:56 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
+[scraper] eBay 'mini tower desktop case': HTTP blocked/empty (status=403), Playwright returned 164
+[scraper] eBay 'mini tower desktop case': 164 found, 164 new (total 164)
+[scraper] eBay playwright blocked term='micro atx case' title='Access Denied'
+[scraper] eBay 'micro atx case': HTTP blocked/empty (status=403), Playwright returned 119
+[scraper] eBay 'micro atx case': 119 found, 119 new (total 119)
+[scraper] eBay playwright blocked term='mini tower desktop case' title='Access Denied'
+2026-05-27 16:16:08 [info     ] amazon.cases.done              found=0 search=gaming pc case mid tower
+2026-05-27 16:16:11 [info     ] amazon.cases.done              found=0 search=budget gaming case atx
+2026-05-27 16:16:13 [info     ] aliexpress.cases.done          found=0 search=cheap atx pc case
+[scraper] eBay 'mini tower desktop case': HTTP blocked/empty (status=403), Playwright returned 145
+[scraper] eBay 'mini tower desktop case': 145 found, 145 new (total 145)
+2026-05-27 16:16:14 [info     ] aliexpress.cases.done          found=0 search=Lian Li O11 style case
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+2026-05-27 16:16:16 [info     ] temu.cases.done                found=0 search=cheap atx pc case
+2026-05-27 16:16:18 [info     ] temu.cases.done                found=0 search=Lian Li O11 style case
+[scraper] eBay 'Lian Li O11 style case': HTTP blocked/empty (status=403), Playwright returned 116
+[scraper] eBay 'Lian Li O11 style case': 116 found, 116 new (total 116)
+2026-05-27 16:16:22 [info     ] amazon.cases.done              found=0 search=slim micro atx case office
+[scraper] eBay playwright blocked term='cheap atx pc case' title='Access Denied'
+2026-05-27 16:16:26 [info     ] amazon.cases.done              found=0 search=mini itx htpc case
+[scraper] eBay 'cheap atx pc case': HTTP blocked/empty (status=403), Playwright returned 131
+[scraper] eBay 'cheap atx pc case': 131 found, 131 new (total 131)
+2026-05-27 16:16:31 [info     ] amazon.cases.done              found=3 search=slim htpc case living room
+[scraper] eBay playwright blocked term='gaming mouse' title='Access Denied'
+2026-05-27 16:16:36 [info     ] aliexpress.cases.done          found=0 search=budget gaming case atx
+2026-05-27 16:16:37 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+[scraper] eBay 'gaming mouse': HTTP blocked/empty (status=403), Playwright returned 120
+[scraper] eBay 'gaming mouse': 120 found, 120 new (total 120)
+2026-05-27 16:16:40 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+[scraper] eBay playwright blocked term='Lian Li O11 style case' title='Access Denied'
+2026-05-27 16:16:42 [info     ] temu.cases.done                found=0 search=gaming atx case rgb
+2026-05-27 16:16:44 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gaming mouse
+OK
 INFO:     100.101.209.68:54436 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54460 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54462 - "GET /api/config/search HTTP/1.1" 200 OK
