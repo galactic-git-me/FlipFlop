@@ -27,7 +27,7 @@ async def trigger(swarm_id: str, background_tasks: BackgroundTasks):
         "accessories",
         "external_demand",
         "playbook_evolution",
-        "autonomous_cycle",
+        "autonomous",
         "outcome_capture",
         "model_retraining",
         "compliant_market_ingestion",

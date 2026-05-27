@@ -851,6 +851,8 @@ table.add_column("Status", style="magenta")
 
 for j in rows:
     jid = str(j.get("id", ""))
+    if "_cycle" in jid:
+        continue
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
     elif jid == "upgrade_parts":
@@ -861,8 +863,8 @@ for j in rows:
         term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
-    elif jid == "autonomous_cycle":
-        term = "multi-source cycle"
+    elif jid == "autonomous":
+        term = "multi-source run"
     else:
         term = "—"
 
@@ -1049,6 +1051,8 @@ print(f"{'JOB':30} {'CURRENT TERM SEARCH':28} {'LAST':28} STATUS")
 print("-" * 115)
 for j in rows:
     jid = str(j.get("id", ""))[:30]
+    if "_cycle" in jid:
+        continue
 
     if jid == "flip_opportunities":
         term = latest_term_by_source.get("eBay UK Auctions") or latest_term_by_source.get("Facebook Marketplace") or latest_term_by_source.get("BidSpotter") or "—"
@@ -1060,8 +1064,8 @@ for j in rows:
         term = latest_term_by_source.get("Accessories:eBay") or latest_term_by_source.get("Accessories:Amazon") or latest_term_by_source.get("Accessories:Temu") or latest_term_by_source.get("Accessories:AliExpress") or "—"
     elif jid == "external_demand":
         term = "demand signals"
-    elif jid == "autonomous_cycle":
-        term = "multi-source cycle"
+    elif jid == "autonomous":
+        term = "multi-source run"
     else:
         term = "—"
 
@@ -1199,8 +1203,6 @@ while true; do
   python3 - <<'PY'
 import json
 import urllib.request
-from pathlib import Path
-from math import ceil
 from datetime import datetime, timezone
 import time
 from rich.console import Console
@@ -1315,14 +1317,6 @@ for src, rows in (telem_by_source or {}).items():
         if key not in latest_term_state:
             latest_term_state[key] = r
 
-cycle_state_path = Path("$ROOT_DIR/pc-flipper-backend/data/term_cycle_state.json")
-cycle_state = {}
-try:
-    if cycle_state_path.exists():
-        cycle_state = json.loads(cycle_state_path.read_text(encoding="utf-8"))
-except Exception:
-    cycle_state = {}
-
 def classify_cell(item):
     if not item:
         return ""
@@ -1343,6 +1337,8 @@ def _cell_state(item):
     found = int((item or {}).get("found") or 0)
     saved = int((item or {}).get("new") or 0)
     if err:
+        if "chromium_not_installed" in err:
+            return ("retry", found, saved)
         if ("retry" in err) or ("blocked" in err) or ("backoff" in err) or ("429" in err):
             return ("retry", found, saved)
         return ("error", found, saved)
@@ -1351,32 +1347,25 @@ def _cell_state(item):
     return ("zero", 0, saved)
 
 def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
+    aliases = {
+        "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
+        "Amazon": ["Amazon", "Amazon UK"],
+    }
+    names = aliases.get(vendor, [vendor])
     if scope == "cases":
-        return [f"Cases:{vendor}"]
+        return [f"Cases:{n}" for n in names]
     if scope == "accessories":
-        return [f"Accessories:{vendor}"]
+        return [f"Accessories:{n}" for n in names]
     if scope == "upgrade_parts":
-        return [f"UpgradeParts:{vendor}"]
-    return [vendor]
+        return [f"UpgradeParts:{n}" for n in names]
+    return names
 
 def scope_runs_progress(scope: str) -> str:
-    terms = [str(r.get("term") or "").strip() for r in by_scope.get(scope, []) if str(r.get("term") or "").strip()]
-    unique_terms = list(dict.fromkeys(terms))
-    total_runs = max(1, int(ceil(len(unique_terms) / 5.0))) if unique_terms else 1
-    rec = cycle_state.get(scope) if isinstance(cycle_state, dict) else None
-    if not isinstance(rec, dict):
-        return f"0/{total_runs}"
-    batch_size = max(1, int(rec.get("batch_size") or 5))
-    vendors = rec.get("vendors") or {}
-    done = 0
-    for _, vrec in vendors.items():
-        cursor = max(0, int((vrec or {}).get("cursor") or 0))
-        done = max(done, int(ceil(cursor / float(batch_size))))
-    done = min(done, total_runs)
+    # No in-catalogue cycle model: each catalogue runs terms sequentially in one pass.
     if scope != "flip_opportunities":
-        return f"{done}/{total_runs}"
+        return "seq"
 
-    # Keep flip progress aligned with scheduler pane semantics and current run window.
+    # For flip, show live completion percent for current pass.
     src_count = len([s for s in enabled_source_names if s in FLIP_SOURCE_NAMES]) or len(FLIP_SOURCE_NAMES)
     kw_count = max(1, len(cfg_keywords))
     expected = max(1, kw_count * src_count)
@@ -1410,7 +1399,42 @@ def scope_runs_progress(scope: str) -> str:
                     continue
             hit += 1
     pct = int(max(0.0, min(100.0, (100.0 * float(hit) / float(expected)))))
-    return f"{done}/{total_runs} {pct}%"
+    return f"seq {pct}%"
+
+def active_term_rows(scope: str, rows: list[dict]) -> list[dict]:
+    """Show recent active terms for each catalogue without cycle/cursor state."""
+    if not rows:
+        return []
+    term_to_row = {}
+    for r in rows:
+        t = str((r or {}).get("term") or "").strip()
+        if t and t not in term_to_row:
+            term_to_row[t] = r
+
+    prefixes = {
+        "flip_opportunities": [""],
+        "cases": ["Cases:"],
+        "accessories": ["Accessories:"],
+        "upgrade_parts": ["UpgradeParts:"],
+    }.get(scope, [""])
+
+    ranked = []
+    seen = set()
+    for src, items in (telem_by_source or {}).items():
+        if prefixes != [""] and not any(str(src).startswith(p) for p in prefixes):
+            continue
+        for it in (items or []):
+            term = str((it or {}).get("term") or "").strip()
+            if not term or term in seen or term not in term_to_row:
+                continue
+            seen.add(term)
+            ranked.append((str((it or {}).get("ts") or ""), term))
+
+    ranked.sort(reverse=True)
+    chosen = [term_to_row[t] for _, t in ranked[:12]]
+    if chosen:
+        return chosen
+    return list(term_to_row.values())[:12]
 
 console = Console()
 tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False, pad_edge=False)
@@ -1427,7 +1451,7 @@ for scope in SCOPES:
     if not rows:
         continue
     progress = scope_runs_progress(scope)
-    term_rows = sorted(rows, key=lambda r: str(r.get("term") or "").lower())
+    term_rows = sorted(active_term_rows(scope, rows), key=lambda r: str(r.get("term") or "").lower())
     first = True
     for r in term_rows:
         term = str(r.get("term") or "").strip()

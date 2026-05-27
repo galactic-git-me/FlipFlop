@@ -22,7 +22,7 @@ def _job_category(job_id: str) -> str:
         return "scraping"
     if job_id == "playbook_evolution":
         return "analysis"
-    if job_id == "autonomous_cycle":
+    if job_id == "autonomous":
         return "maintenance"
     if job_id == "outcome_capture":
         return "analysis"
@@ -39,7 +39,7 @@ _JOB_DESCRIPTIONS: dict[str, str] = {
     "accessories": "Updates accessory pricing and inventory candidates used for upsell opportunities.",
     "external_demand": "Collects external demand signals (Reddit + scaffolded Google Trends/Steam) for playbook intelligence.",
     "playbook_evolution": "Creates pending playbook update proposals from sold-flip outcomes for human approval.",
-    "autonomous_cycle": "Runs end-to-end autonomous loop (sourcing, external demand ingestion, playbook evolution).",
+    "autonomous": "Runs end-to-end autonomous loop (sourcing, external demand ingestion, playbook evolution).",
     "outcome_capture": "Captures sold outcomes and raises retrain-ready checkpoints once enough new results accumulate.",
     "model_retraining": "Trains candidate model versions when checkpoint thresholds are met, with promote/rollback support.",
     "retrain_checkpoint_watchdog": "Raises alerts when retrain checkpoints stay ready too long without training/promotion.",

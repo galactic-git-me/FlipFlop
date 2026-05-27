@@ -31,15 +31,11 @@ _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
     "flip_opportunities": deque(maxlen=50),
     "upgrade_parts": deque(maxlen=50),
-    "upgrade_parts_cycle": deque(maxlen=50),
     "cases": deque(maxlen=50),
-    "cases_cycle": deque(maxlen=50),
     "accessories": deque(maxlen=50),
-    "accessories_cycle": deque(maxlen=50),
-    "flip_opportunities_cycle": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
-    "autonomous_cycle": deque(maxlen=50),
+    "autonomous": deque(maxlen=50),
     "outcome_capture": deque(maxlen=50),
     "model_retraining": deque(maxlen=50),
     "retrain_checkpoint_watchdog": deque(maxlen=50),
@@ -200,7 +196,7 @@ def start_scheduler():
     accessories_start = now
     external_demand_start = _next_run_for("external_demand", 60, now)
     playbook_evolution_start = _next_run_for("playbook_evolution", 60, now)
-    autonomous_cycle_start = _next_run_for("autonomous_cycle", 60, now)
+    autonomous_start = _next_run_for("autonomous", 60, now)
     outcome_capture_start = _next_run_for("outcome_capture", 60, now)
     model_retraining_start = _next_run_for("model_retraining", 60, now)
     retrain_watchdog_start = _next_run_for("retrain_checkpoint_watchdog", 60, now)
@@ -275,12 +271,12 @@ def start_scheduler():
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(hours=1),
-        id="autonomous_cycle",
-        name="Autonomous Cycle",
-        kwargs={"job_id": "autonomous_cycle", "fn": run_autonomous_cycle},
+        id="autonomous",
+        name="Autonomous",
+        kwargs={"job_id": "autonomous", "fn": run_autonomous_cycle},
         replace_existing=True,
         max_instances=1,
-        next_run_time=autonomous_cycle_start,
+        next_run_time=autonomous_start,
     )
 
     scheduler.add_job(
@@ -357,26 +353,18 @@ async def trigger_swarm(swarm_id: str) -> dict:
     """Manually trigger a swarm by ID."""
     if swarm_id == "flip_opportunities":
         return await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "main"))
-    if swarm_id == "flip_opportunities_cycle":
-        return await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "main"))
     if swarm_id == "upgrade_parts":
-        return await _run_job_with_history("upgrade_parts", partial(run_upgrade_parts_swarm, "main"))
-    if swarm_id == "upgrade_parts_cycle":
         return await _run_job_with_history("upgrade_parts", partial(run_upgrade_parts_swarm, "main"))
     if swarm_id == "cases":
         return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
-    if swarm_id == "cases_cycle":
-        return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
     if swarm_id == "accessories":
-        return await _run_job_with_history("accessories", partial(run_accessories_swarm, "main"))
-    if swarm_id == "accessories_cycle":
         return await _run_job_with_history("accessories", partial(run_accessories_swarm, "main"))
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":
         return await _run_job_with_history("playbook_evolution", run_playbook_evolution)
-    if swarm_id == "autonomous_cycle":
-        return await _run_job_with_history("autonomous_cycle", run_autonomous_cycle)
+    if swarm_id == "autonomous":
+        return await _run_job_with_history("autonomous", run_autonomous_cycle)
     if swarm_id == "outcome_capture":
         return await _run_job_with_history("outcome_capture", capture_outcomes_and_check_retrain)
     if swarm_id == "model_retraining":
