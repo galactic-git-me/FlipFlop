@@ -2290,3 +2290,23 @@ INFO:     100.101.209.68:58208 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:58222 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58234 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58248 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'rebel alliance gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'rebel alliance gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'cylon red eye pc': 0 found, 0 new (total 0)
+[scraper] eBay 'cylon red eye pc': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'battlestar inspired workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'battlestar inspired workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+2026-05-27 20:57:22 [debug    ] upgrade_parts.ebay             buy=None part=X570 Motherboard sold=None
