@@ -358,6 +358,8 @@ _UPGRADE_SEARCH_TERMS = [
     "RTX 3060 12GB used", "RTX 3070 8GB used", "AMD Ryzen 5 5600", "AMD Ryzen 7 5700X",
     "B550 motherboard", "X570 motherboard", "32GB DDR4 2x16 3200", "1TB NVMe M.2 SSD",
     "650W ATX PSU 80 bronze", "AM4 motherboard cpu combo",
+    "AM4 motherboard", "AM4 CPU", "i7 CPU", "i9 CPU", "DDR4 RAM", "DDR4 RAM 32GB 2x16GB",
+    "NVMe 1TB", "PSU", "NVIDIA GPU", "CPU cooler", "RGB fans",
 ]
 _ACCESSORY_SEARCH_TERMS = [
     "gaming keyboard",

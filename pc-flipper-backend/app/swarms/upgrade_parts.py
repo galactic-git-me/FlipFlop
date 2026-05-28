@@ -65,14 +65,18 @@ _EBAY_HEADERS = {
 
 
 TRACKED_PARTS = [
-    {"name": "Generic GPU",                  "category": PartCategory.gpu,         "ebay_search": "used GPU",                    "bh_search": "graphics+card"},
+    {"name": "NVIDIA GPU",                   "category": PartCategory.gpu,         "ebay_search": "NVIDIA GPU",                  "bh_search": "nvidia+gpu"},
     {"name": "AM4 CPU",                      "category": PartCategory.cpu,         "ebay_search": "AM4 CPU",                     "bh_search": "am4+cpu"},
+    {"name": "i7 CPU",                       "category": PartCategory.cpu,         "ebay_search": "i7 CPU",                      "bh_search": "intel+i7+cpu"},
+    {"name": "i9 CPU",                       "category": PartCategory.cpu,         "ebay_search": "i9 CPU",                      "bh_search": "intel+i9+cpu"},
     {"name": "AM4 Motherboard",              "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard",             "bh_search": "am4+motherboard"},
     {"name": "AM4 CPU Motherboard Combo",    "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo",   "bh_search": "am4+motherboard+cpu+combo"},
     {"name": "DDR4 RAM",                     "category": PartCategory.ram,         "ebay_search": "DDR4 RAM",                    "bh_search": "ddr4+ram"},
-    {"name": "DDR4 RAM 2x16",                "category": PartCategory.ram,         "ebay_search": "DDR4 RAM 2x16",               "bh_search": "32gb+ddr4+kit"},
-    {"name": "1TB NVMe SSD",                 "category": PartCategory.ssd,         "ebay_search": "1TB NVMe SSD",                "bh_search": "1tb+nvme"},
-    {"name": "650W PSU",                     "category": PartCategory.psu,         "ebay_search": "650W PSU",                    "bh_search": "650w+psu"},
+    {"name": "DDR4 RAM 32GB 2x16GB",         "category": PartCategory.ram,         "ebay_search": "DDR4 RAM 32GB 2x16GB",        "bh_search": "32gb+ddr4+kit"},
+    {"name": "NVMe 1TB",                     "category": PartCategory.ssd,         "ebay_search": "NVMe 1TB",                    "bh_search": "1tb+nvme"},
+    {"name": "PSU",                          "category": PartCategory.psu,         "ebay_search": "PSU",                         "bh_search": "atx+psu"},
+    {"name": "CPU Cooler",                   "category": PartCategory.accessory,   "ebay_search": "CPU cooler",                  "bh_search": "cpu+cooler"},
+    {"name": "RGB Fans",                     "category": PartCategory.accessory,   "ebay_search": "RGB fans",                    "bh_search": "rgb+fans"},
 ]
 
 _VENDOR_ALIASES: dict[str, str] = {
@@ -251,17 +255,21 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
 
     # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
     if has_chromium:
-        amz_r, temu_r, ali_r, ali_b_r = await asyncio.gather(
+        amz_r, temu_r, ali_r, ali_b_r, gum_r, fb_r = await asyncio.gather(
             _fetch_lane_seq(_fetch_amazon),
             _fetch_lane_seq(_fetch_temu),
             _fetch_lane_seq(_fetch_aliexpress),
             _fetch_lane_seq(_fetch_alibaba),
+            _fetch_lane_seq(_fetch_gumtree_component),
+            _fetch_lane_seq(_fetch_facebook_component),
         )
     else:
         amz_r = [None for _ in parts]
         temu_r = [None for _ in parts]
         ali_r = [None for _ in parts]
         ali_b_r = [None for _ in parts]
+        gum_r = [None for _ in parts]
+        fb_r = [None for _ in parts]
     for v in amz_r:
         if v and not isinstance(v, Exception):
             stats["amazon"] += 1
@@ -291,18 +299,18 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 temu_new  = temu_r[i] if not isinstance(temu_r[i], Exception) else None
                 ali_new   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
                 ali_b_new = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
+                gum_new   = gum_r[i] if not isinstance(gum_r[i], Exception) else None
+                fb_new    = fb_r[i] if not isinstance(fb_r[i], Exception) else None
 
                 search = part_def["ebay_search"]
                 record_term_result(source_name="UpgradeParts:Amazon", term=search, found=1 if amz_new else 0, new=0)
                 record_term_result(source_name="UpgradeParts:Temu", term=search, found=1 if temu_new else 0, new=0)
                 record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=1 if ali_new else 0, new=0)
                 record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=1 if ali_b_new else 0, new=0)
-                # Gumtree isn't a reliable component-pricing lane; record explicit no-hit telemetry
-                # so dashboard coverage stays complete per vendor.
-                record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=0, new=0)
-                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=0, new=0)
+                record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=1 if gum_new else 0, new=0)
+                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=1 if fb_new else 0, new=0)
 
-                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new]):
+                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new, gum_new, fb_new]):
                     await _upsert_part(
                         db, part_def, ebay_used, ebay_sold, bh_refurb,
                         scan_new, oc_new, box_new, amz_new, temu_new, ali_new,

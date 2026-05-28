@@ -31,6 +31,9 @@ DB_NAME="${DB_NAME:-pcflipper}"
 DB_USER="${DB_USER:-flipper}"
 DB_PASSWORD="${DB_PASSWORD:-flipper}"
 FRONTEND_CONTAINER_PORT="${FRONTEND_CONTAINER_PORT:-3000}"
+SCHEDULER_POLL_SECONDS="${SCHEDULER_POLL_SECONDS:-15}"
+TERMS_POLL_SECONDS="${TERMS_POLL_SECONDS:-12}"
+DEV_CLEAR_DATA_ON_START="${DEV_CLEAR_DATA_ON_START:-1}"
 # Global startup mode override (dev|production). Defaults to dev.
 STARTUP_MODE="${STARTUP_MODE:-dev}"
 
@@ -327,6 +330,27 @@ start_postgres() {
   exit 1
 }
 
+clear_dev_data_first() {
+  if [[ "$DEV_CLEAR_DATA_ON_START" != "1" ]]; then
+    return 0
+  fi
+  echo "DEV mode: clearing local runtime data first..."
+  if command -v docker >/dev/null 2>&1; then
+    (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" down -v --remove-orphans >/dev/null 2>&1 || true)
+    # Frontend compose may require port vars; pass them explicitly.
+    (
+      cd "$FRONTEND_DIR" && \
+      FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+      docker compose "${COMPOSE_ENV_ARGS[@]}" down -v --remove-orphans >/dev/null 2>&1 || true
+    )
+    docker rm -f pc-flipper-web pc-flipper-backend-api-1 pc-flipper-backend-db-1 pc-flipper-backend-redis-1 >/dev/null 2>&1 || true
+  fi
+  rm -rf "$LOG_DIR"/* "$BACKEND_DIR/data"/*
+  mkdir -p "$LOG_DIR" "$BACKEND_DIR/data"
+  # Keep sqlite out of dev runs to avoid stale state confusion.
+  rm -f "$BACKEND_DIR/pcflipper.db"
+}
+
 restart_project_containers_if_running() {
   if ! command -v docker >/dev/null 2>&1; then
     return 0
@@ -520,6 +544,8 @@ fi
 echo "Mode summary: DEV (hot reload enabled)"
 echo "App runtime: local uvicorn + local next dev (NO api/web Docker containers)"
 echo "Infra runtime: db/redis in Docker"
+
+clear_dev_data_first
 
 free_port "$FRONTEND_PORT"
 free_port "$BACKEND_PORT"
@@ -914,12 +940,13 @@ for j in rows:
     else:
         st = st_raw
 
-    table.add_row(jid, term, last, st)
+    jid_disp = "components" if jid == "upgrade_parts" else jid
+    table.add_row(jid_disp, term, last, st)
 
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
 PY
-    sleep 8
+    sleep "$SCHEDULER_POLL_SECONDS"
   done
 else
   while true; do
@@ -1108,9 +1135,10 @@ for j in rows:
     else:
         st_disp = st
 
-    print(f"{jid:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
+    jid_disp = "components" if jid == "upgrade_parts" else jid
+    print(f"{jid_disp:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
 PY
-    sleep 8
+    sleep "$SCHEDULER_POLL_SECONDS"
   done
 fi
 
@@ -1220,7 +1248,7 @@ from rich import box
 SCOPES = ["flip_opportunities", "upgrade_parts", "cases", "accessories"]
 SCOPE_LABELS = {
     "flip_opportunities": "flip_opportunities",
-    "upgrade_parts": "upgrade_parts",
+    "upgrade_parts": "components",
     "cases": "cases",
     "accessories": "accessories",
 }
@@ -1509,7 +1537,7 @@ console.clear()
 legend = "[green]✓raw/saved[/green]=scraped/persisted  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
-  sleep 4
+  sleep "$TERMS_POLL_SECONDS"
 done
 EOF
   chmod +x "$terms_pane_script"
