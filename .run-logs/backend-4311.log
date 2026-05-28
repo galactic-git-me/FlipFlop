@@ -21414,3 +21414,245 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+cube+pc", waiting until "domcontentloaded"
  search=borg cube pc source=BargainHardware
 2026-05-29 00:02:41 [info     ] cases.generic_market.done      found=0 search=borg cube pc source=BargainHardware
+INFO:     100.101.209.68:55026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55028 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55036 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55050 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:02:49 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+collective+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+collective+build", waiting until "domcontentloaded"
+ search=borg collective build source=BargainHardware
+2026-05-29 00:02:49 [info     ] cases.generic_market.done      found=0 search=borg collective build source=BargainHardware
+INFO:     100.101.209.68:55054 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55066 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55082 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55090 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55102 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55114 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55132 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55134 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55142 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55152 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55166 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57156 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57168 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57172 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57184 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:02:58 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=galactic+empire+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=galactic+empire+build", waiting until "domcontentloaded"
+ search=galactic empire build source=BargainHardware
+2026-05-29 00:02:58 [info     ] cases.generic_market.done      found=0 search=galactic empire build source=BargainHardware
+INFO:     100.101.209.68:57190 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57194 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57206 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57220 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57228 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57238 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57252 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57258 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57270 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:03:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=rebel+alliance+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=rebel+alliance+gaming+pc", waiting until "domcontentloaded"
+ search=rebel alliance gaming pc source=BargainHardware
+2026-05-29 00:03:06 [info     ] cases.generic_market.done      found=0 search=rebel alliance gaming pc source=BargainHardware
+INFO:     100.101.209.68:42044 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42054 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42068 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42070 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42080 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42088 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42104 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42112 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42120 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42130 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42144 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:03:15 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cylon+red+eye+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cylon+red+eye+pc", waiting until "domcontentloaded"
+ search=cylon red eye pc source=BargainHardware
+2026-05-29 00:03:15 [info     ] cases.generic_market.done      found=0 search=cylon red eye pc source=BargainHardware
+INFO:     100.101.209.68:41950 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41966 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41976 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41980 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41992 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42006 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42030 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42042 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42050 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42060 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42072 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42080 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:03:23 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=battlestar+inspired+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=battlestar+inspired+workstation", waiting until "domcontentloaded"
+ search=battlestar inspired workstation source=BargainHardware
+2026-05-29 00:03:23 [info     ] cases.generic_market.done      found=0 search=battlestar inspired workstation source=BargainHardware
+INFO:     100.101.209.68:41350 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41366 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41380 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41396 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41400 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41408 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41414 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41412 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41428 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:03:32 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=station+command+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=station+command+build", waiting until "domcontentloaded"
+ search=station command build source=BargainHardware
+2026-05-29 00:03:32 [info     ] cases.generic_market.done      found=0 search=station command build source=BargainHardware
+INFO:     100.101.209.68:39800 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39816 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39826 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39842 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39846 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39858 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39868 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39872 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39884 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39892 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39902 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39912 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39914 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39916 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39924 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39930 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:03:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=diplomatic+station+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=diplomatic+station+workstation", waiting until "domcontentloaded"
+ search=diplomatic station workstation source=BargainHardware
+2026-05-29 00:03:40 [info     ] cases.generic_market.done      found=0 search=diplomatic station workstation source=BargainHardware
+2026-05-29 00:03:40 [info     ] flip_opportunities_swarm.start
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=AliExpress
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Alibaba
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Temu
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Amazon
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1825s source=Gumtree
+2026-05-29 00:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_2273s source=eBay UK
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_2287s source=eBay UK Auctions
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=BargainHardware
+2026-05-29 00:03:41 [info     ] flip_opportunities_swarm.start
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=AliExpress
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Alibaba
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Temu
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Amazon
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1825s source=Gumtree
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_2272s source=eBay UK
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_2287s source=eBay UK Auctions
+2026-05-29 00:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=BargainHardware
+2026-05-29 00:03:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:39944 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39948 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39950 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39964 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:03:49 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=leviathan+inspired+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=leviathan+inspired+build", waiting until "domcontentloaded"
+ search=leviathan inspired build source=BargainHardware
+2026-05-29 00:03:49 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=BargainHardware
+2026-05-29 00:03:49 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-29 00:03:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-29 00:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-29 00:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-29 00:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:46108 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46116 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46128 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46138 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46150 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46152 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46160 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46162 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46176 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46190 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46194 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46204 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46212 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46222 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46234 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46244 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:03:57 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=biomechanical+spaceship+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=biomechanical+spaceship+pc", waiting until "domcontentloaded"
+ search=biomechanical spaceship pc source=BargainHardware
+2026-05-29 00:03:57 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=BargainHardware
+2026-05-29 00:03:57 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-29 00:03:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-29 00:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-29 00:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-29 00:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:57746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57750 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57758 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57772 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57782 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57790 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57808 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57814 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-29 00:04:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-29 00:04:06 [info     ] gumtree.playwright.done        total=0
+2026-05-29 00:04:06 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-29 00:04:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=autobot+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=autobot+gaming+pc", waiting until "domcontentloaded"
+ search=autobot gaming pc source=BargainHardware
+2026-05-29 00:04:06 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=BargainHardware
+2026-05-29 00:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-29 00:04:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 00:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-29 00:04:06 [info     ] gumtree.playwright.done        total=0
+2026-05-29 00:04:06 [info     ] source.done                    found=0 gems=0 source=Gumtree
