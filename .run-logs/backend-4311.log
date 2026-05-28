@@ -21656,3 +21656,256 @@ Call log:
  term=gaming pc fault
 2026-05-29 00:04:06 [info     ] gumtree.playwright.done        total=0
 2026-05-29 00:04:06 [info     ] source.done                    found=0 gems=0 source=Gumtree
+INFO:     100.101.209.68:49888 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49890 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49898 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49906 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49910 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49914 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49924 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49938 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49942 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49946 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49954 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:04:14 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=decepticon+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=decepticon+workstation", waiting until "domcontentloaded"
+ search=decepticon workstation source=BargainHardware
+2026-05-29 00:04:14 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=BargainHardware
+INFO:     100.101.209.68:56436 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56442 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56448 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56450 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56462 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56472 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56488 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56496 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56502 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-29 00:04:23 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=anime+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=anime+gaming+pc", waiting until "domcontentloaded"
+ search=anime gaming pc source=BargainHardware
+2026-05-29 00:04:23 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=BargainHardware
+INFO:     100.101.209.68:56506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56520 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56522 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56538 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56540 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56548 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56558 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56562 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56576 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56586 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56598 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56796 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56804 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56828 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56834 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:04:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=manga+aesthetic+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=manga+aesthetic+workstation", waiting until "domcontentloaded"
+ search=manga aesthetic workstation source=BargainHardware
+2026-05-29 00:04:31 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=BargainHardware
+INFO:     100.101.209.68:56850 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56872 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56876 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58102 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58110 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58122 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58128 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58144 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58156 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58162 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:04:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=hidden+leaf+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=hidden+leaf+gaming+pc", waiting until "domcontentloaded"
+ search=hidden leaf gaming pc source=BargainHardware
+2026-05-29 00:04:40 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=BargainHardware
+INFO:     100.101.209.68:58172 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58174 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58178 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58192 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58204 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58208 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58222 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58232 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58234 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:04:48 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=hokage+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=hokage+workstation", waiting until "domcontentloaded"
+ search=hokage workstation source=BargainHardware
+2026-05-29 00:04:48 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=BargainHardware
+INFO:     100.101.209.68:40302 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40312 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40314 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40326 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40338 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40352 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40374 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40386 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40392 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40396 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40426 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40410 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40436 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40442 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35732 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35742 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35744 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35752 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:04:57 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=pokedex+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=pokedex+workstation", waiting until "domcontentloaded"
+ search=pokedex workstation source=BargainHardware
+2026-05-29 00:04:57 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=BargainHardware
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Amazon
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=AliExpress
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Alibaba
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Temu
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=BargainHardware
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Alibaba
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Temu
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=AliExpress
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=BargainHardware
+2026-05-29 00:05:02 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Amazon
+INFO:     100.101.209.68:39850 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39854 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39858 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39870 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-29 00:05:05 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=pikachu+yellow+rgb+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=pikachu+yellow+rgb+build", waiting until "domcontentloaded"
+ search=pikachu yellow rgb build source=BargainHardware
+2026-05-29 00:05:05 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=BargainHardware
+INFO:     100.101.209.68:39884 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39898 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39912 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39926 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39938 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39942 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39954 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39966 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39978 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39982 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39990 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40002 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:40016 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40028 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40044 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40050 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-29 00:05:14 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=super+saiyan+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=super+saiyan+gaming+pc", waiting until "domcontentloaded"
+ search=super saiyan gaming pc source=BargainHardware
+2026-05-29 00:05:14 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=BargainHardware
+INFO:     100.101.209.68:36360 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36362 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36370 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36384 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36398 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36408 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36410 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36420 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36426 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:05:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=dragon+radar+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=dragon+radar+workstation", waiting until "domcontentloaded"
+ search=dragon radar workstation source=BargainHardware
+2026-05-29 00:05:22 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=BargainHardware
+INFO:     100.101.209.68:36440 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36448 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36454 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36464 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36474 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36482 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36496 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58582 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58596 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58608 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58618 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58620 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58634 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58644 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58654 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58662 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:05:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=avengers+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=avengers+workstation", waiting until "domcontentloaded"
+ search=avengers workstation source=BargainHardware
+2026-05-29 00:05:31 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=BargainHardware
+INFO:     100.101.209.68:50636 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50642 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50648 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50654 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-29 00:05:39 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=shield+tactical+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=shield+tactical+pc", waiting until "domcontentloaded"
+ search=shield tactical pc source=BargainHardware
+2026-05-29 00:05:39 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=BargainHardware
+INFO:     100.101.209.68:50658 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50674 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50686 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50694 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50702 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50716 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50742 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50756 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50764 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50778 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35898 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35908 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35924 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35936 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:05:48 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=jarvis+ai+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=jarvis+ai+workstation", waiting until "domcontentloaded"
+ search=jarvis ai workstation source=BargainHardware
+2026-05-29 00:05:48 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=BargainHardware
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:35938 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35952 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35968 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35982 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44622 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44644 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44650 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44658 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44670 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44686 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44698 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44710 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44724 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44728 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-29 00:05:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=stark+industries+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=stark+industries+pc", waiting until "domcontentloaded"
+ search=stark industries pc source=BargainHardware
+2026-05-29 00:05:56 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=BargainHardware
+INFO:     100.101.209.68:44730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44740 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44756 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44770 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:06:05 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gamma+core+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gamma+core+build", waiting until "domcontentloaded"
+ search=gamma core build source=BargainHardware
+2026-05-29 00:06:05 [info     ] cases.generic_market.done      found=0 search=gamma core build source=BargainHardware
