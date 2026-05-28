@@ -21909,3 +21909,173 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gamma+core+build", waiting until "domcontentloaded"
  search=gamma core build source=BargainHardware
 2026-05-29 00:06:05 [info     ] cases.generic_market.done      found=0 search=gamma core build source=BargainHardware
+INFO:     100.101.209.68:38620 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38624 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38636 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38646 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38658 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38672 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38680 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38684 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38700 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38714 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38730 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38742 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38748 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38752 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:06:13 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=radioactive+green+rgb+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=radioactive+green+rgb+pc", waiting until "domcontentloaded"
+ search=radioactive green rgb pc source=BargainHardware
+2026-05-29 00:06:13 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=BargainHardware
+INFO:     100.101.209.68:51422 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51426 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51440 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51444 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51450 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51454 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51458 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51474 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51488 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:06:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cerebro+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cerebro+workstation", waiting until "domcontentloaded"
+ search=cerebro workstation source=BargainHardware
+2026-05-29 00:06:22 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=BargainHardware
+INFO:     100.101.209.68:44018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44024 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44026 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44032 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44042 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44048 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44054 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44056 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44082 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44094 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 00:06:30 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=mutant+tactical+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=mutant+tactical+pc", waiting until "domcontentloaded"
+ search=mutant tactical pc source=BargainHardware
+2026-05-29 00:06:30 [info     ] cases.generic_market.done      found=0 search=mutant tactical pc source=BargainHardware
+INFO:     100.101.209.68:44106 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44132 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44144 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44158 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44168 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44178 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44190 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44198 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 00:06:39 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=spiderverse+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=spiderverse+gaming+pc", waiting until "domcontentloaded"
+ search=spiderverse gaming pc source=BargainHardware
+2026-05-29 00:06:39 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
+INFO:     100.101.209.68:48086 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48094 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48106 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48108 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48112 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48118 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48122 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48128 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48130 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48142 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48156 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41186 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41196 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41208 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41210 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41214 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:06:47 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=red+blue+rgb+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=red+blue+rgb+build", waiting until "domcontentloaded"
+ search=red blue rgb build source=BargainHardware
+2026-05-29 00:06:47 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
+INFO:     100.101.209.68:41228 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41238 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41254 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41258 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:06:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=batcomputer+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=batcomputer+workstation", waiting until "domcontentloaded"
+ search=batcomputer workstation source=BargainHardware
+2026-05-29 00:06:56 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=BargainHardware
+INFO:     100.101.209.68:36932 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36936 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36946 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36954 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36970 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36984 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36988 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37004 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37018 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37024 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37040 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37056 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37062 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37084 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37098 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:07:04 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=dark+knight+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=dark+knight+pc", waiting until "domcontentloaded"
+ search=dark knight pc source=BargainHardware
+2026-05-29 00:07:04 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=BargainHardware
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:57096 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57110 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57126 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57140 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:57142 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57148 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57156 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57168 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57176 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57190 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57202 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57214 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57216 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57226 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:07:13 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=kryptonian+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=kryptonian+workstation", waiting until "domcontentloaded"
+ search=kryptonian workstation source=BargainHardware
+2026-05-29 00:07:13 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+INFO:     100.101.209.68:39558 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39574 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39588 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39600 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-29 00:07:21 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=fortress+of+solitude+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=fortress+of+solitude+build", waiting until "domcontentloaded"
+ search=fortress of solitude build source=BargainHardware
+2026-05-29 00:07:21 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+INFO:     100.101.209.68:39604 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39612 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39618 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39624 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39638 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39640 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39642 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39654 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39660 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41440 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41450 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41466 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41470 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41486 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41502 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41504 - "GET /api/sources/health HTTP/1.1" 200 OK
