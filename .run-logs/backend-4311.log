@@ -22426,3 +22426,164 @@ INFO:     100.101.209.68:57144 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:57156 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:57162 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:57164 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:10:20 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=high+airflow+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=high+airflow+gaming+case", waiting until "domcontentloaded"
+ search=high airflow gaming case source=Alibaba
+2026-05-29 00:10:20 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
+INFO:     100.101.209.68:57166 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57176 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57186 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38904 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38912 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38924 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38936 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38952 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:10:28 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=premium+aluminum+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=premium+aluminum+pc+case", waiting until "domcontentloaded"
+ search=premium aluminum pc case source=Alibaba
+2026-05-29 00:10:28 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=Alibaba
+INFO:     100.101.209.68:38962 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38968 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38972 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38980 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38988 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39002 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39018 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39022 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39034 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39038 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39042 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:10:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=luxury+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=luxury+gaming+case", waiting until "domcontentloaded"
+ search=luxury gaming case source=Alibaba
+2026-05-29 00:10:37 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=Alibaba
+INFO:     100.101.209.68:38760 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38776 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38786 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38792 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38796 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38804 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38808 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38834 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50178 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50180 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50188 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50200 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50210 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50222 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 00:10:45 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=white+fish+tank+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=white+fish+tank+case", waiting until "domcontentloaded"
+ search=white fish tank case source=Alibaba
+2026-05-29 00:10:45 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=Alibaba
+INFO:     100.101.209.68:50236 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50238 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50260 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50268 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50270 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50286 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50292 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50306 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50310 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50318 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-29 00:10:54 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=white+rgb+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=white+rgb+case", waiting until "domcontentloaded"
+ search=white rgb case source=Alibaba
+INFO:     100.101.209.68:50326 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:10:54 [info     ] cases.generic_market.done      found=0 search=white rgb case source=Alibaba
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56548 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56550 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56564 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56574 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56582 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56590 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56592 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56598 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56608 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56610 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56614 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:11:02 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=micro+atx+fish+tank
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=micro+atx+fish+tank", waiting until "domcontentloaded"
+ search=micro atx fish tank source=Alibaba
+2026-05-29 00:11:02 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=Alibaba
+INFO:     100.101.209.68:56616 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56622 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56638 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56640 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56374 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56376 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56378 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56388 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:11:11 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=compact+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=compact+gaming+case", waiting until "domcontentloaded"
+ search=compact gaming case source=Alibaba
+2026-05-29 00:11:11 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=Alibaba
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54250 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54262 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54264 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54278 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54294 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54296 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54308 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54316 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54330 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54344 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54370 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54378 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54390 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54398 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:11:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=cyberpunk+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=cyberpunk+pc+case", waiting until "domcontentloaded"
+ search=cyberpunk pc case source=Alibaba
+2026-05-29 00:11:19 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=Alibaba
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38400 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38412 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38442 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:11:28 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=futuristic+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=futuristic+gaming+case", waiting until "domcontentloaded"
+ search=futuristic gaming case source=Alibaba
+2026-05-29 00:11:28 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=Alibaba
+INFO:     100.101.209.68:38448 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38458 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38460 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38468 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38478 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38482 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38496 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38512 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38528 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38544 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38548 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38554 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38568 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38582 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38594 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 00:11:36 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=federation+command+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=federation+command+build", waiting until "domcontentloaded"
+ search=federation command build source=Alibaba
+2026-05-29 00:11:36 [info     ] cases.generic_market.done      found=0 search=federation command build source=Alibaba
