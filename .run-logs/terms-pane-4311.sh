@@ -14,7 +14,7 @@ from rich import box
 SCOPES = ["flip_opportunities", "upgrade_parts", "cases", "accessories"]
 SCOPE_LABELS = {
     "flip_opportunities": "flip_opportunities",
-    "upgrade_parts": "upgrade_parts",
+    "upgrade_parts": "components",
     "cases": "cases",
     "accessories": "accessories",
 }
@@ -303,5 +303,5 @@ console.clear()
 legend = "[green]✓raw/saved[/green]=scraped/persisted  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
-  sleep 4
+  sleep "12"
 done

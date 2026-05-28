@@ -378,6 +378,8 @@ async def _scrape_facebook_accessories(term: str, theme: str) -> list[RawAccesso
                 )
             )
     except Exception as exc:
+        if "facebook_login_required" in str(exc):
+            raise
         log.warning("facebook.accessories.error", term=term, error=str(exc))
         return []
     return out

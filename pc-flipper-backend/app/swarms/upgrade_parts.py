@@ -33,7 +33,11 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.services.search_telemetry import record_term_result
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
-from app.services.playwright_scraper import chromium_available
+from app.services.playwright_scraper import (
+    chromium_available,
+    scrape_facebook_playwright,
+    scrape_gumtree_playwright,
+)
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -542,6 +546,26 @@ async def _fetch_alibaba(search_term: str) -> float | None:
         source_name="alibaba",
         max_price=2500.0,
     )
+
+
+async def _fetch_gumtree_component(search_term: str) -> float | None:
+    try:
+        rows = await scrape_gumtree_playwright([search_term], 1, 2500)
+        prices = [float(getattr(r, "price", 0) or 0) for r in rows if float(getattr(r, "price", 0) or 0) > 0]
+        return round(min(prices), 2) if prices else None
+    except Exception as exc:
+        log.warning("upgrade_parts.gumtree_fetch.error", search=search_term, error=str(exc))
+        return None
+
+
+async def _fetch_facebook_component(search_term: str) -> float | None:
+    try:
+        rows = await scrape_facebook_playwright([search_term], 1, 2500)
+        prices = [float(getattr(r, "price", 0) or 0) for r in rows if float(getattr(r, "price", 0) or 0) > 0]
+        return round(min(prices), 2) if prices else None
+    except Exception as exc:
+        log.warning("upgrade_parts.facebook_fetch.error", search=search_term, error=str(exc))
+        return None
 
 
 async def _fetch_playwright_lowest_price(

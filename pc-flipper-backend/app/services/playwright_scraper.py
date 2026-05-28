@@ -47,6 +47,10 @@ def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> N
     log.info(event, **kwargs)
 
 
+def _interactive_scraper_mode() -> bool:
+    return os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+
+
 def _log_playwright_missing_once(error: str | None = None) -> None:
     """Avoid spamming the same missing-Chromium guidance across parallel scrapers."""
     global _PLAYWRIGHT_MISSING_WARNED
@@ -193,24 +197,43 @@ async def _make_context(
     *,
     force_persistent_profile: bool = False,
 ):
+    interactive = _interactive_scraper_mode()
     headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
+    if interactive:
+        headless = False
     # Keep headless by default in server environments; explicit FB_HEADLESS=0 can opt into headed mode.
     use_persistent_profile = os.getenv("FB_USE_PROFILE", "0").lower() in {"1", "true", "yes"}
     use_persistent_profile = use_persistent_profile or force_persistent_profile
 
     if use_persistent_profile:
         FB_PROFILE_DIR.mkdir(parents=True, exist_ok=True)
-        context = await playwright.chromium.launch_persistent_context(
-            user_data_dir=str(FB_PROFILE_DIR),
-            headless=headless,
-            args=_STEALTH_ARGS,
-            proxy=playwright_proxy_config(),
-            user_agent=_USER_AGENT,
-            viewport={"width": 1366, "height": 768},
-            locale="en-GB",
-            timezone_id="Europe/London",
-            java_script_enabled=True,
-        )
+        try:
+            context = await playwright.chromium.launch_persistent_context(
+                user_data_dir=str(FB_PROFILE_DIR),
+                headless=headless,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+                user_agent=_USER_AGENT,
+                viewport={"width": 1366, "height": 768},
+                locale="en-GB",
+                timezone_id="Europe/London",
+                java_script_enabled=True,
+            )
+        except Exception as exc:
+            if headless:
+                raise
+            log.warning("playwright.fb_headed_launch_failed_fallback_headless", error=str(exc))
+            context = await playwright.chromium.launch_persistent_context(
+                user_data_dir=str(FB_PROFILE_DIR),
+                headless=True,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+                user_agent=_USER_AGENT,
+                viewport={"width": 1366, "height": 768},
+                locale="en-GB",
+                timezone_id="Europe/London",
+                java_script_enabled=True,
+            )
         await context.add_init_script(_STEALTH_JS)
         if cookies:
             try:
@@ -219,11 +242,21 @@ async def _make_context(
                 log.warning("playwright.cookies.add_failed", error=str(exc))
         return None, context
 
-    browser = await playwright.chromium.launch(
-        headless=headless,
-        args=_STEALTH_ARGS,
-        proxy=playwright_proxy_config(),
-    )
+    try:
+        browser = await playwright.chromium.launch(
+            headless=headless,
+            args=_STEALTH_ARGS,
+            proxy=playwright_proxy_config(),
+        )
+    except Exception as exc:
+        if headless:
+            raise
+        log.warning("playwright.headed_launch_failed_fallback_headless", error=str(exc))
+        browser = await playwright.chromium.launch(
+            headless=True,
+            args=_STEALTH_ARGS,
+            proxy=playwright_proxy_config(),
+        )
     context = await browser.new_context(
         user_agent=_USER_AGENT,
         viewport={"width": 1366, "height": 768},
@@ -460,7 +493,7 @@ async def scrape_facebook_playwright(
             browser, context = await _make_context(
                 p,
                 cookies,
-                force_persistent_profile=True,
+                force_persistent_profile=False,
             )
         except Exception as exc:
             msg = str(exc)
@@ -492,6 +525,9 @@ async def scrape_facebook_playwright(
                     )
                     log.info("facebook.playwright.fetch", url=url)
                     await page.goto(url, wait_until="domcontentloaded", timeout=25000)
+                    if "/login/" in (page.url or ""):
+                        login_required.set()
+                        return term, [], "login_required"
 
                     for selector in [
                         "div[aria-label='Close']",
@@ -509,12 +545,26 @@ async def scrape_facebook_playwright(
                         "input[name='email'], form[data-testid='royal_login_form']"
                     )
                     if login_wall:
-                        login_required.set()
-                        log.warning(
-                            "facebook.playwright.login_required",
-                            hint="Save fb_cookies.json — see playwright_scraper.py instructions",
-                        )
-                        return term, [], "login_required"
+                        if _interactive_scraper_mode():
+                            log.warning(
+                                "facebook.playwright.manual_login_required",
+                                term=term,
+                                wait_seconds=180,
+                            )
+                            for _ in range(18):
+                                await asyncio.sleep(10)
+                                login_wall = await page.query_selector(
+                                    "input[name='email'], form[data-testid='royal_login_form']"
+                                )
+                                if not login_wall:
+                                    break
+                        if login_wall:
+                            login_required.set()
+                            log.warning(
+                                "facebook.playwright.login_required",
+                                hint="Save fb_cookies.json — see playwright_scraper.py instructions",
+                            )
+                            return term, [], "login_required"
 
                     try:
                         await page.wait_for_selector(
@@ -612,10 +662,12 @@ async def scrape_facebook_playwright(
                 finally:
                     await page.close()
 
+        login_required_seen = False
         tasks = [asyncio.create_task(_fetch_term(term)) for term in search_terms[:20]]
         for done in asyncio.as_completed(tasks):
             term, term_items, err = await done
             if err == "login_required":
+                login_required_seen = True
                 record_term_result(
                     term=term,
                     found=0,
@@ -642,6 +694,13 @@ async def scrape_facebook_playwright(
                 new=term_new,
                 source_name="Facebook Marketplace",
             )
+
+        if login_required_seen and not results:
+            if browser is not None:
+                await browser.close()
+            else:
+                await context.close()
+            raise RuntimeError("facebook_login_required")
 
         if browser is not None:
             await browser.close()

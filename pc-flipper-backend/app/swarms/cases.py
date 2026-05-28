@@ -7,6 +7,7 @@ Cases are a key part of the flip — they transform a bare PC into a themed prod
 """
 import re
 import asyncio
+import os
 import httpx
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -338,6 +339,8 @@ async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
             )
         return out
     except Exception as exc:
+        if "facebook_login_required" in str(exc):
+            raise
         log.warning("facebook.cases.error", term=search, error=str(exc))
         return []
 
@@ -558,13 +561,28 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
 """
 
 
+def _interactive_scraper_mode() -> bool:
+    return os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+
+
 async def _make_pw_context(playwright):
     """Launch a stealthy Chromium context. Returns (browser, context)."""
-    browser = await playwright.chromium.launch(
-        headless=True,
-        args=_STEALTH_ARGS,
-        proxy=playwright_proxy_config(),
-    )
+    headless = not _interactive_scraper_mode()
+    try:
+        browser = await playwright.chromium.launch(
+            headless=headless,
+            args=_STEALTH_ARGS,
+            proxy=playwright_proxy_config(),
+        )
+    except Exception as exc:
+        if headless:
+            raise
+        log.warning("cases.playwright.headed_launch_failed_fallback_headless", error=str(exc))
+        browser = await playwright.chromium.launch(
+            headless=True,
+            args=_STEALTH_ARGS,
+            proxy=playwright_proxy_config(),
+        )
     context = await browser.new_context(
         user_agent=_STEALTH_UA,
         viewport={"width": 1366, "height": 768},
@@ -846,6 +864,12 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
         page = await context.new_page()
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            if "bgn_verification" in (page.url or ""):
+                if _interactive_scraper_mode():
+                    log.warning("temu.challenge.manual_required", search=search, url=page.url, wait_seconds=120)
+                    await asyncio.sleep(120)
+                if "bgn_verification" in (page.url or ""):
+                    raise RuntimeError("temu_verification_challenge")
 
             # Dismiss cookie/region modals
             for selector in [
@@ -872,6 +896,12 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
             await asyncio.sleep(random.uniform(1.0, 2.0))
             await page.evaluate("window.scrollBy(0, 800)")
             await asyncio.sleep(0.8)
+            if "bgn_verification" in (page.url or ""):
+                if _interactive_scraper_mode():
+                    log.warning("temu.challenge.manual_required", search=search, url=page.url, wait_seconds=120)
+                    await asyncio.sleep(120)
+                if "bgn_verification" in (page.url or ""):
+                    raise RuntimeError("temu_verification_challenge")
 
             # Use JS evaluation — Temu rotates hashed class names so selectors break
             raw = await page.evaluate("""() => {
@@ -1139,11 +1169,22 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
     except Exception:
         return cases
     async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=True,
-            args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
-            proxy=playwright_proxy_config(),
-        )
+        headless = not _interactive_scraper_mode()
+        try:
+            browser = await p.chromium.launch(
+                headless=headless,
+                args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+                proxy=playwright_proxy_config(),
+            )
+        except Exception as exc:
+            if headless:
+                raise
+            log.warning("cases.generic_market.headed_launch_failed_fallback_headless", source=source_site, error=str(exc))
+            browser = await p.chromium.launch(
+                headless=True,
+                args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
+                proxy=playwright_proxy_config(),
+            )
         ctx = await browser.new_context(user_agent=ua.random, locale="en-GB", timezone_id="Europe/London")
         await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
         page = await ctx.new_page()
@@ -1152,10 +1193,12 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
             await asyncio.sleep(1.0)
             await page.evaluate("window.scrollBy(0, 700)")
             await asyncio.sleep(0.7)
+            await page.evaluate("window.scrollBy(0, 1200)")
+            await asyncio.sleep(0.8)
             raw = await page.evaluate(
                 """() => {
                     const out = [];
-                    const re = /([£$€])\\s*([\\d,]+\\.?\\d*)/;
+                    const re = /(?:US\\$|[£$€])\\s*([\\d,]+\\.?\\d*)/i;
                     const anchors = Array.from(document.querySelectorAll('a[href]')).slice(0, 700);
                     const seen = new Set();
                     for (const a of anchors) {
@@ -1169,12 +1212,52 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
                         if (!title || title.length < 8) continue;
                         const m = re.exec(node.textContent || '');
                         if (!m) continue;
-                        const price = parseFloat((m[2] || '').replace(/,/g, ''));
+                        const price = parseFloat((m[1] || '').replace(/,/g, ''));
                         if (!Number.isFinite(price)) continue;
                         const img = (node.querySelector('img')?.src || '');
                         seen.add(key);
                         out.push({title, href, price, img});
                         if (out.length >= 14) break;
+                    }
+                    // Source-specific fallbacks for sites with structured cards.
+                    const host = location.hostname;
+                    if (out.length === 0 && host.includes('bargainhardware')) {
+                        const cards = document.querySelectorAll('[data-price-amount], .product-item, li.product-item');
+                        cards.forEach(card => {
+                            if (out.length >= 20) return;
+                            const priceAttr = card.getAttribute('data-price-amount') || card.querySelector('[data-price-amount]')?.getAttribute('data-price-amount') || '';
+                            let price = parseFloat((priceAttr || '').replace(/,/g, ''));
+                            if (!Number.isFinite(price) || price <= 0) {
+                                const m = re.exec(card.textContent || '');
+                                price = m ? parseFloat((m[1] || '').replace(/,/g, '')) : 0;
+                            }
+                            const linkEl = card.querySelector('a[href]') || null;
+                            let href = linkEl ? (linkEl.href || linkEl.getAttribute('href') || '') : '';
+                            if (href.startsWith('/')) href = location.origin + href;
+                            const titleEl = card.querySelector('.product-item-link, h2, h3, a[href]');
+                            const title = ((titleEl?.textContent || card.textContent || '').replace(/\\s+/g, ' ').trim());
+                            if (!href || !title || !Number.isFinite(price) || price <= 0) return;
+                            out.push({title, href, price, img: (card.querySelector('img')?.src || '')});
+                        });
+                    }
+                    if (out.length === 0 && host.includes('alibaba')) {
+                        const cards = document.querySelectorAll("a[href*='/product-detail/'], a[href*='/x/'], a[href*='offer/']");
+                        const seenAli = new Set();
+                        cards.forEach(a => {
+                            if (out.length >= 20) return;
+                            let href = a.href || a.getAttribute('href') || '';
+                            if (!href) return;
+                            if (href.startsWith('/')) href = location.origin + href;
+                            const key = href.split('?')[0];
+                            if (seenAli.has(key)) return;
+                            seenAli.add(key);
+                            const node = a.closest('article,li,div') || a;
+                            const title = ((a.textContent || node.textContent || '').replace(/\\s+/g, ' ').trim());
+                            const m = re.exec(node.textContent || '');
+                            const price = m ? parseFloat((m[1] || '').replace(/,/g, '')) : 0;
+                            if (!title || title.length < 6 || !Number.isFinite(price) || price <= 0) return;
+                            out.push({title, href, price, img: (node.querySelector('img')?.src || '')});
+                        });
                     }
                     return out;
                 }"""
@@ -1184,7 +1267,8 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
                     title = str(item.get("title", "")).strip()[:200]
                     price = float(item.get("price", 0) or 0)
                     href = str(item.get("href", ""))
-                    if not title or len(title) < 5 or price <= 0 or price > 350 or not href.startswith("http"):
+                    max_price = 2000 if source_site in {"Alibaba", "BargainHardware", "CherryTree Inc"} else 350
+                    if not title or len(title) < 5 or price <= 0 or price > max_price or not href.startswith("http"):
                         continue
                     cases.append(
                         RawCase(
@@ -1198,6 +1282,29 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
                     )
                 except Exception:
                     continue
+            page_title = ""
+            body_text = ""
+            try:
+                page_title = await page.title()
+            except Exception:
+                page_title = ""
+            try:
+                body_text = (await page.content()).lower()
+            except Exception:
+                body_text = ""
+            title_l = page_title.lower()
+            if "captcha interception" in title_l or "captcha interception" in body_text:
+                raise RuntimeError(f"{source_site.lower()}_captcha_interception")
+            if "429 too many requests" in title_l or "too many requests" in body_text:
+                raise RuntimeError(f"{source_site.lower()}_rate_limited_429")
+            if not cases:
+                log.info(
+                    "cases.generic_market.empty",
+                    source=source_site,
+                    search=search,
+                    url=page.url,
+                    title=page_title,
+                )
         except Exception as exc:
             msg = str(exc)
             if "ERR_NAME_NOT_RESOLVED" in msg and source_site == "CherryTree Inc":

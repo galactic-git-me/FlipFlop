@@ -252,6 +252,28 @@ read_env_local_value() {
   grep -E "^[[:space:]]*${key}[[:space:]]*=" "$file" 2>/dev/null | tail -n1 | cut -d'=' -f2- | tr -d '"' | tr -d "'" | xargs || true
 }
 
+export_root_env_local() {
+  if [[ ! -f "$ROOT_ENV_LOCAL" ]]; then
+    return 0
+  fi
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" ]] && continue
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=(.*)$ ]]; then
+      local key="${BASH_REMATCH[1]}"
+      local val="${BASH_REMATCH[2]}"
+      val="${val%"${val##*[![:space:]]}"}"
+      val="${val#"${val%%[![:space:]]*}"}"
+      if [[ "$val" =~ ^\".*\"$ ]]; then
+        val="${val:1:${#val}-2}"
+      elif [[ "$val" =~ ^\'.*\'$ ]]; then
+        val="${val:1:${#val}-2}"
+      fi
+      export "$key=$val"
+    fi
+  done < "$ROOT_ENV_LOCAL"
+}
+
 infer_startup_mode() {
   # Priority:
   # 1) explicit env STARTUP_MODE
@@ -544,6 +566,7 @@ fi
 echo "Mode summary: DEV (hot reload enabled)"
 echo "App runtime: local uvicorn + local next dev (NO api/web Docker containers)"
 echo "Infra runtime: db/redis in Docker"
+export_root_env_local
 
 clear_dev_data_first
 

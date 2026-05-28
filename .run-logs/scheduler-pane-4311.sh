@@ -252,12 +252,13 @@ for j in rows:
     else:
         st = st_raw
 
-    table.add_row(jid, term, last, st)
+    jid_disp = "components" if jid == "upgrade_parts" else jid
+    table.add_row(jid_disp, term, last, st)
 
 console.clear()
 console.print(Panel(table, border_style="bright_blue"))
 PY
-    sleep 8
+    sleep "15"
   done
 else
   while true; do
@@ -446,9 +447,10 @@ for j in rows:
     else:
         st_disp = st
 
-    print(f"{jid:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
+    jid_disp = "components" if jid == "upgrade_parts" else jid
+    print(f"{jid_disp:30} {term[:28]:28} {str(last)[:28]:28} {st_disp}")
 PY
-    sleep 8
+    sleep "15"
   done
 fi
 
