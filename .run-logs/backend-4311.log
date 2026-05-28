@@ -1,28 +1,24 @@
 INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [3612509] using WatchFiles
-INFO:     Started server process [3612521]
+INFO:     Started reloader process [285302] using WatchFiles
+INFO:     Started server process [285583]
 INFO:     Waiting for application startup.
-2026-05-27 22:11:42 [info     ] app.startup
-2026-05-27 22:11:42 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-27 22:11:42 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-27 22:11:42 [info     ] scheduler.started              jobs=11
-2026-05-27 22:11:42 [info     ] startup_bootstrap.start
+2026-05-28 01:57:00 [info     ] app.startup
+2026-05-28 01:57:00 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-28 01:57:00 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-28 01:57:00 [info     ] scheduler.started              jobs=11
+2026-05-28 01:57:00 [info     ] startup_bootstrap.start
 INFO:     Application startup complete.
-2026-05-27 22:11:42 [info     ] accessories_swarm.start
-2026-05-27 22:11:42 [info     ] flip_opportunities_swarm.start
-2026-05-27 22:11:42 [info     ] cases_swarm.start
-2026-05-27 22:11:42 [info     ] flip_opportunities_swarm.start
-2026-05-27 22:11:42 [info     ] upgrade_parts_swarm.start      total_parts=8
-2026-05-27 22:11:42 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-2026-05-27 22:11:42 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:43 [info     ] source.cooldown_ignored        reason=cooldown_active_4993s source=Facebook Marketplace
-2026-05-27 22:11:43 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:43 [info     ] source.cooldown_ignored        reason=cooldown_active_5096s source=Gumtree
-2026-05-27 22:11:43 [info     ] source.cooldown_ignored        reason=cooldown_active_4993s source=Facebook Marketplace
-2026-05-27 22:11:43 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:43 [info     ] source.cooldown_ignored        reason=cooldown_active_5096s source=Gumtree
-2026-05-27 22:11:44 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:00 [info     ] accessories_swarm.start
+2026-05-28 01:57:00 [info     ] flip_opportunities_swarm.start
+2026-05-28 01:57:00 [info     ] cases_swarm.start
+2026-05-28 01:57:00 [info     ] flip_opportunities_swarm.start
+2026-05-28 01:57:00 [info     ] upgrade_parts_swarm.start      total_parts=8
+2026-05-28 01:57:00 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-28 01:57:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:01 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:01 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -30,8 +26,8 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-2026-05-27 22:11:44 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:44 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:02 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -39,9 +35,7 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-2026-05-27 22:11:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-27 22:11:44 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 22:11:44 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:02 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -49,11 +43,13 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-2026-05-27 22:11:44 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-27 22:11:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-27 22:11:44 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 22:11:45 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
-2026-05-27 22:11:45 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:02 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-28 01:57:02 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-28 01:57:02 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-28 01:57:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:57:03 [info     ] source.done                    found=0 gems=0 source=Facebook Marketplace
+2026-05-28 01:57:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:57:03 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -61,10 +57,10 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-2026-05-27 22:11:45 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:46 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 22:11:46 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 22:11:46 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:03 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:04 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-28 01:57:04 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-28 01:57:04 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -72,10 +68,9 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-2026-05-27 22:11:47 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:48 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
-2026-05-27 22:11:48 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
-2026-05-27 22:11:49 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+2026-05-28 01:57:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:06 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-05-28 01:57:06 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
 Browser logs:
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -83,280 +78,277 @@ Browser logs:
 ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
 ║                                                                                                ║
 ║
-INFO:     Shutting down
-2026-05-27 22:11:49 [warning  ] cases.generic_market.error     error=Page.goto: Target page, context or browser has been closed
+2026-05-28 01:57:07 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:07 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-28 01:57:07 [info     ] cases.generic_market.done      found=0 search=atx pc case source=Alibaba
+2026-05-28 01:57:08 [info     ] cases.generic_market.done      found=0 search=atx pc case source=BargainHardware
+2026-05-28 01:57:08 [info     ] amazon.cases.done              found=10 search=atx pc case
+2026-05-28 01:57:09 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Looks like you launched a headed browser without having a XServer running.                     ║
+║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+║                                                                                                ║
+║
+2026-05-28 01:57:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:10 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Looks like you launched a headed browser without having a XServer running.                     ║
+║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+║                                                                                                ║
+║
+2026-05-28 01:57:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 01:57:11 [info     ] startup_bootstrap.done
+2026-05-28 01:57:13 [debug    ] upgrade_parts.ebay             buy=30.0 part=Generic GPU sold=129.08
+2026-05-28 01:57:13 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Looks like you launched a headed browser without having a XServer running.                     ║
+║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+║                                                                                                ║
+║
+2026-05-28 01:57:13 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39184 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-28 01:57:15 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:39194 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39208 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39218 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39232 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39236 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39244 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39252 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-28 01:57:17 [debug    ] upgrade_parts.ebay             buy=10.99 part=AM4 CPU sold=87.49
+INFO:     100.101.209.68:39268 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39262 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-28 01:57:19 [error    ] facebook.playwright.launch_failed error=BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Looks like you launched a headed browser without having a XServer running.                     ║
+║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+║                                                                                                ║
+║
+INFO:     100.101.209.68:39270 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-28 01:57:19 [info     ] cases.generic_market.done      found=0 search=mid tower case source=Alibaba
+INFO:     100.101.209.68:39278 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-28 01:57:19 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:39284 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39294 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39290 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-28 01:57:19 [info     ] amazon.cases.done              found=10 search=mid tower case
+INFO:     100.101.209.68:39310 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 01:57:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:57:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+[scraper] eBay 'AMD Ryzen 7 7800X3D': HTTP blocked/empty (status=403), Playwright returned 66
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 66 found, 66 new (total 66)
+2026-05-28 01:57:22 [debug    ] upgrade_parts.ebay             buy=32.49 part=AM4 Motherboard sold=77.37
+2026-05-28 01:57:22 [info     ] cases.generic_market.done      found=0 search=mid tower case source=BargainHardware
+INFO:     100.101.209.68:39320 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39330 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39344 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39354 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39368 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39380 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39390 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39398 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:26 [debug    ] upgrade_parts.ebay             buy=47.5 part=AM4 CPU Motherboard Combo sold=129.99
+INFO:     100.101.209.68:49264 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:28 [info     ] aliexpress.cases.done          found=0 search=atx pc case
+INFO:     100.101.209.68:49282 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49276 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49292 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49296 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-28 01:57:28 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+INFO:     100.101.209.68:49294 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49322 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49306 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49328 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49346 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49334 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49352 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 01:57:29 [info     ] temu.cases.done                found=0 search=atx pc case
+2026-05-28 01:57:30 [info     ] amazon.cases.done              found=10 search=gaming atx case rgb
+2026-05-28 01:57:30 [debug    ] upgrade_parts.ebay             buy=9.95 part=DDR4 RAM sold=53.51
+INFO:     100.101.209.68:49356 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49366 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49376 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49388 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49400 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-28 01:57:34 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+2026-05-28 01:57:34 [info     ] gumtree.playwright.cards       count=3 term=Ryzen 9 7900
+INFO:     100.101.209.68:49414 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49426 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49428 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49440 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'atx pc case': HTTP blocked/empty (status=403), Playwright returned 57
+[scraper] eBay 'atx pc case': 57 found, 57 new (total 57)
+2026-05-28 01:57:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:57:36 [debug    ] upgrade_parts.ebay             buy=94.29 part=DDR4 RAM 2x16 sold=135.9
+2026-05-28 01:57:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:50288 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50314 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-28 01:57:38 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+INFO:     100.101.209.68:50316 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50334 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50322 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50346 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50350 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50362 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50368 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50378 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50388 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:39 [info     ] amazon.cases.done              found=10 search=gaming pc case mid tower
+INFO:     100.101.209.68:50396 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50404 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50420 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50430 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:40 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+2026-05-28 01:57:40 [debug    ] upgrade_parts.ebay             buy=49.99 part=1TB NVMe SSD sold=94.06
+INFO:     100.101.209.68:50434 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50438 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50444 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50446 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50460 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:43 [debug    ] upgrade_parts.ebay             buy=22.34 part=650W PSU sold=29.65
+2026-05-28 01:57:44 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-28 01:57:44 [info     ] gumtree.playwright.cards       count=2 term=Ryzen 9 7900X
+2026-05-28 01:57:45 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-28 01:57:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+[scraper] eBay 'AMD Ryzen 7 7800X3D': HTTP blocked/empty (status=403), Playwright returned 7
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 7 found, 7 new (total 7)
+2026-05-28 01:57:46 [info     ] amazon.cases.done              found=10 search=slim micro atx case office
+2026-05-28 01:57:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:58806 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58816 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58826 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58834 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58838 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58842 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58844 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58854 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58858 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58860 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58874 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58888 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58892 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58898 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58908 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58922 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:51 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+2026-05-28 01:57:51 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+INFO:     100.101.209.68:58936 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58948 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58962 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58978 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58984 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:53 [debug    ] upgrade_parts.bh               part=Generic GPU price_gbp=2.05
+2026-05-28 01:57:53 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+Future exception was never retrieved
+future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=AMD+Ryzen+7+7800X3D&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"\n')>
+playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
 Call log:
-  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=atx+pc+case", waiting until "domcontentloaded"
- search=atx pc case source=BargainHardware
-2026-05-27 22:11:49 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-27 22:11:49 [warning  ] cases.generic_market.error     error=Page.evaluate: unable to perform operation on <WriteUnixTransport closed=True reading=False 0x777455234040>; the handler is closed search=atx pc case source=Alibaba
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-Future exception was never retrieved
-future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
-playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
-INFO:     Waiting for application shutdown.
-2026-05-27 22:11:49 [error    ] gumtree.playwright.error       error=Page.title: Target page, context or browser has been closed term=AMD Ryzen 7 7800X3D
-2026-05-27 22:11:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
-2026-05-27 22:11:49 [info     ] scheduler.stopped
-2026-05-27 22:11:49 [error    ] gumtree.playwright.error       error=Page.title: Target page, context or browser has been closed term=AMD Ryzen 7 7800X3D
-2026-05-27 22:11:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
-Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-28 21:11:42 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 160, in run_upgrade_parts_swarm
-    sold = await _ebay_sold_median(client, search)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 341, in _ebay_sold_median
-    await asyncio.sleep(2.5 * (attempt + 1))
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
-    return await future
-           ^^^^^^^^^^^^
-asyncio.exceptions.CancelledError
-Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-28 21:11:42 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 188, in run_cases_swarm
-    source_batches = await asyncio.gather(*[asyncio.create_task(_scrape_source_seq(source)) for source in enabled_sources])
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 172, in _scrape_source_seq
-    rows.append(await _scrape_one(source, "Dynamic", term))
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 152, in _scrape_one
-    cases = await scrape_fn(term, theme)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 269, in _scrape_ebay
-    listings = await scrape_ebay(
-               ^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 619, in scrape_ebay
-    term, new_listings, blocked, last_status, err = await _fetch_term(term)
-                                                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 580, in _fetch_term
-    pw_listings, pw_blocked = await asyncio.wait_for(
-                              ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
-    return await fut
-           ^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 410, in _scrape_ebay_playwright_term
-    async with _EBAY_PLAYWRIGHT_SEM:
-  File "/usr/lib/python3.12/asyncio/locks.py", line 14, in __aenter__
-    await self.acquire()
-  File "/usr/lib/python3.12/asyncio/locks.py", line 386, in acquire
-    await fut
-asyncio.exceptions.CancelledError
-Task exception was never retrieved
-future: <Task finished name='Task-160' coro=<Connection.run() done, defined at /home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:272> exception=InvalidStateError('invalid state')>
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 281, in run
-    await self._transport.run()
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 171, in run
-    self._stopped_future.set_result(None)
-asyncio.exceptions.InvalidStateError: invalid state
-Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-28 21:11:42 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 187, in run_accessories_swarm
-    ebay_results = await _scrape_ebay_accessories(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 69, in _scrape_ebay_accessories
-    listings = await scrape_ebay(
-               ^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 619, in scrape_ebay
-    term, new_listings, blocked, last_status, err = await _fetch_term(term)
-                                                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 580, in _fetch_term
-    pw_listings, pw_blocked = await asyncio.wait_for(
-                              ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
-    return await fut
-           ^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 410, in _scrape_ebay_playwright_term
-    async with _EBAY_PLAYWRIGHT_SEM:
-  File "/usr/lib/python3.12/asyncio/locks.py", line 14, in __aenter__
-    await self.acquire()
-  File "/usr/lib/python3.12/asyncio/locks.py", line 386, in acquire
-    await fut
-asyncio.exceptions.CancelledError
-Task exception was never retrieved
-future: <Task finished name='Task-34' coro=<Connection.run() done, defined at /home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py:272> exception=InvalidStateError('invalid state')>
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 281, in run
-    await self._transport.run()
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 171, in run
-    self._stopped_future.set_result(None)
-asyncio.exceptions.InvalidStateError: invalid state
-Job "Autonomous (trigger: interval[1:00:00], next run at: 2026-05-27 22:11:42 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/autonomous_loop.py", line 27, in run_autonomous_cycle
-    sourcing = await _safe_step("sourcing", run_flip_opportunities_swarm)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/autonomous_loop.py", line 21, in _safe_step
-    return await fn()
-           ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 140, in run_flip_opportunities_swarm
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-asyncio.exceptions.CancelledError
-Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-27 22:11:42 UTC)" raised an exception
-Traceback (most recent call last):
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
-    retval = await job.func(*job.args, **job.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
-    result = await fn()
-             ^^^^^^^^^^
-  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 140, in run_flip_opportunities_swarm
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-asyncio.exceptions.CancelledError
-2026-05-27 22:11:49 [info     ] app.shutdown
-INFO:     Application shutdown complete.
-INFO:     Finished server process [3612521]
-INFO:     Stopping reloader process [3612509]
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=AMD+Ryzen+7+7800X3D&_sacat=179&LH_BIN=1&LH_ItemCondition=3000&_udlo=0&_udhi=500&LH_PrefLoc=1&_sop=10&_ipg=60", waiting until "domcontentloaded"
 
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
-node:events:496
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: write EPIPE
-    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
-    at writeGeneric (node:internal/stream_base_commons:150:3)
-    at Socket._writeGeneric (node:net:957:11)
-    at Socket._write (node:net:969:8)
-    at writeOrBuffer (node:internal/streams/writable:572:12)
-    at _write (node:internal/streams/writable:501:10)
-    at Writable.write (node:internal/streams/writable:510:10)
-    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
-    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
-    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
-Emitted 'error' event on Socket instance at:
-    at emitErrorNT (node:internal/streams/destroy:170:8)
-    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  errno: -32,
-  code: 'EPIPE',
-  syscall: 'write'
-}
-
-Node.js v22.11.0
+2026-05-28 01:57:55 [info     ] aliexpress.cases.done          found=0 search=mid tower case
+2026-05-28 01:57:55 [info     ] amazon.cases.done              found=10 search=mini tower desktop case
+2026-05-28 01:57:55 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+INFO:     100.101.209.68:48170 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48186 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48188 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48190 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48200 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48212 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48224 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 01:57:56 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+INFO:     100.101.209.68:48228 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48234 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48250 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48266 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48288 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48304 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48278 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48320 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48334 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:57:58 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-28 01:58:00 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+2026-05-28 01:58:02 [info     ] temu.cases.done                found=0 search=mid tower case
+INFO:     100.101.209.68:48340 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48352 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48376 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48382 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:58:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+desktop&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:48394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48408 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48412 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48424 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-28 01:58:04 [info     ] amazon.cases.done              found=10 search=cheap atx pc case
+INFO:     100.101.209.68:48430 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48446 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33016 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-28 01:58:05 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+2026-05-28 01:58:05 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+INFO:     100.101.209.68:33018 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33022 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33034 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33042 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-28 01:58:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+desktop&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:33046 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33050 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33058 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33062 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33078 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:58:09 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+2026-05-28 01:58:09 [info     ] gumtree.playwright.cards       count=26 term=gaming desktop
+INFO:     100.101.209.68:33102 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33086 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33110 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33130 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33114 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33134 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33150 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33156 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33172 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33174 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33196 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33212 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 01:58:13 [info     ] amazon.cases.done              found=10 search=budget gaming case atx
+INFO:     100.101.209.68:33214 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33230 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33232 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:58:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:58:15 [info     ] gumtree.playwright.cards       count=26 term=gaming desktop
+INFO:     100.101.209.68:34534 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34536 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34552 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34562 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34564 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 01:58:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 01:58:21 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+2026-05-28 01:58:21 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+INFO:     100.101.209.68:34580 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34578 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34586 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34612 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34596 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34620 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34630 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34646 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34636 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34650 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34656 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51674 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34664 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51682 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51694 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51698 - "GET /api/schedule HTTP/1.1" 200 OK
