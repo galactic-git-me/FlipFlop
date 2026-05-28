@@ -672,9 +672,8 @@ async def scrape_facebook_playwright(
                     await page.close()
 
         login_required_seen = False
-        tasks = [asyncio.create_task(_fetch_term(term)) for term in search_terms[:20]]
-        for done in asyncio.as_completed(tasks):
-            term, term_items, err = await done
+        for term in search_terms[:20]:
+            term, term_items, err = await _fetch_term(term)
             if err == "login_required":
                 login_required_seen = True
                 record_term_result(
@@ -703,13 +702,6 @@ async def scrape_facebook_playwright(
                 new=term_new,
                 source_name="Facebook Marketplace",
             )
-
-        if login_required_seen and not results:
-            if browser is not None:
-                await browser.close()
-            else:
-                await context.close()
-            raise RuntimeError("facebook_login_required")
 
         if browser is not None:
             await browser.close()
