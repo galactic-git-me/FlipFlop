@@ -11964,3 +11964,134 @@ INFO:     100.101.209.68:48086 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48102 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48112 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:48128 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56554 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56556 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56564 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56566 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56570 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56582 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56596 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56606 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56616 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56620 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56632 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56646 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56662 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56664 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56672 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56684 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:32:49 [warning  ] scan.fetch.error               error= search=AM4 motherboard cpu combo
+2026-05-28 22:32:49 [warning  ] overclockers.fetch.error       error= search=AM4 motherboard cpu combo
+2026-05-28 22:32:49 [warning  ] box.fetch.error                error= search=AM4 motherboard cpu combo
+INFO:     100.101.209.68:59046 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59060 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59070 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59076 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59078 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59092 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59104 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59116 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59124 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59134 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59138 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59154 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59160 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59162 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59176 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59188 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52150 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52152 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52160 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52162 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'lian li style case': 0 found, 0 new (total 0)
+2026-05-28 22:33:09 [warning  ] scan.fetch.error               error= search=DDR4 RAM
+2026-05-28 22:33:09 [warning  ] overclockers.fetch.error       error= search=DDR4 RAM
+2026-05-28 22:33:09 [warning  ] box.fetch.error                error= search=DDR4 RAM
+INFO:     100.101.209.68:52172 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52188 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52192 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52196 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52202 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52208 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52214 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52216 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49746 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49752 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49760 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49764 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49776 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49778 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49788 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49790 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49818 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49830 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49842 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49858 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49860 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49876 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49880 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33736 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33748 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33758 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33760 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:33:29 [warning  ] scan.fetch.error               error= search=DDR4 RAM 32GB 2x16GB
+2026-05-28 22:33:29 [warning  ] overclockers.fetch.error       error= search=DDR4 RAM 32GB 2x16GB
+2026-05-28 22:33:29 [warning  ] box.fetch.error                error= search=DDR4 RAM 32GB 2x16GB
+INFO:     100.101.209.68:33764 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33778 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33790 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33806 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33814 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33822 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33838 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59216 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59226 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59236 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59248 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59260 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59262 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59278 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59286 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43456 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43466 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43470 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43484 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43492 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43504 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43516 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43520 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43532 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'hyte y60 style case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43540 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43546 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43554 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43570 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43584 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:33:49 [warning  ] scan.fetch.error               error= search=NVMe 1TB
+2026-05-28 22:33:49 [warning  ] overclockers.fetch.error       error= search=NVMe 1TB
+2026-05-28 22:33:50 [warning  ] box.fetch.error                error= search=NVMe 1TB
+INFO:     100.101.209.68:43588 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43594 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43604 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51026 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51034 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51044 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51054 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51064 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51070 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51072 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51088 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51090 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51094 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51108 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51122 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51126 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51136 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51150 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51160 - "GET /api/sources/health HTTP/1.1" 200 OK
