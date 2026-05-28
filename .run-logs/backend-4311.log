@@ -19044,3 +19044,260 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=mini+tower+desktop+case&i=computers", waiting until "domcontentloaded"
 
 2026-05-28 23:42:24 [info     ] amazon.cases.done              found=0 search=mini tower desktop case
+INFO:     100.101.209.68:54124 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54126 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54128 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54134 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54138 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54148 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54156 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54172 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54176 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54184 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54194 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54196 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54212 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54216 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:42:32 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cheap+atx+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cheap+atx+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:42:32 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
+INFO:     100.101.209.68:60008 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60020 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60024 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60028 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60036 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60048 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60062 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60068 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:42:41 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=budget+gaming+case+atx&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=budget+gaming+case+atx&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:42:41 [info     ] amazon.cases.done              found=0 search=budget gaming case atx
+INFO:     100.101.209.68:51128 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51136 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51150 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51162 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51168 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51180 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51192 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51194 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51198 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51208 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51220 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:42:49 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:42:49 [info     ] temu.cases.done                found=0 search=fish tank pc case
+INFO:     100.101.209.68:51232 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51240 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51260 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51266 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51274 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51278 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51294 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51310 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:42:58 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:42:58 [info     ] temu.cases.done                found=0 search=panoramic pc case
+INFO:     100.101.209.68:59124 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59128 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59134 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59146 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59158 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59160 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59174 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59178 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59180 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59184 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56176 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56190 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56206 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56218 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56224 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:43:06 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=argb+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=argb+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:06 [info     ] temu.cases.done                found=0 search=argb gaming case
+INFO:     100.101.209.68:56234 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56238 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56240 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56244 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:43:15 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:15 [info     ] temu.cases.done                found=0 search=rgb airflow case
+INFO:     100.101.209.68:49786 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49796 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49802 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49806 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49812 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49824 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49832 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49838 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49844 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49856 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49862 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49876 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49892 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49898 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49902 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49914 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:43:23 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:23 [info     ] temu.cases.done                found=0 search=mesh airflow case
+INFO:     100.101.209.68:57024 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57026 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57036 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57068 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57080 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57092 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57108 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57124 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57138 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57166 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57178 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57188 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57192 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57204 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:43:32 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=high+airflow+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=high+airflow+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:32 [info     ] temu.cases.done                found=0 search=high airflow gaming case
+INFO:     100.101.209.68:57214 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57228 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57234 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57242 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:43:40 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=premium+aluminum+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=premium+aluminum+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:40 [info     ] temu.cases.done                found=0 search=premium aluminum pc case
+INFO:     100.101.209.68:41926 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41928 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41938 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41944 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41948 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41958 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41964 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41970 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41984 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35622 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35636 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35644 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35648 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35662 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35674 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35690 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:43:49 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=luxury+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=luxury+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:49 [info     ] temu.cases.done                found=0 search=luxury gaming case
+INFO:     100.101.209.68:35694 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35706 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35714 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35722 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35736 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35746 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35752 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35754 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35768 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:43:57 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=white+fish+tank+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=white+fish+tank+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:43:57 [info     ] temu.cases.done                found=0 search=white fish tank case
+INFO:     100.101.209.68:57416 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57424 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57432 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57458 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57460 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57468 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57480 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57488 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57498 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57514 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:44:06 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=white+rgb+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=white+rgb+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:44:06 [info     ] temu.cases.done                found=0 search=white rgb case
+INFO:     100.101.209.68:57868 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57884 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57896 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57906 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57916 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57926 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57936 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57946 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:44:15 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=micro+atx+fish+tank&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=micro+atx+fish+tank&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:44:15 [info     ] temu.cases.done                found=0 search=micro atx fish tank
+INFO:     100.101.209.68:53720 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53736 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53752 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53760 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53780 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53792 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53796 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53800 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53804 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53814 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53828 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53840 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53842 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53856 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53884 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53896 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53912 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53920 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:44:23 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=compact+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=compact+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:44:23 [info     ] temu.cases.done                found=0 search=compact gaming case
+INFO:     100.101.209.68:44746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44750 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44766 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44772 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44774 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44776 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44796 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44798 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:44:32 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=cyberpunk+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=cyberpunk+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-28 23:44:32 [info     ] temu.cases.done                found=0 search=cyberpunk pc case
+INFO:     100.101.209.68:44800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44802 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44812 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44820 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44826 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44842 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44848 - "GET /api/sources/health HTTP/1.1" 200 OK
