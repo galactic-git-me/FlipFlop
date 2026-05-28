@@ -2643,3 +2643,181 @@ INFO:     100.101.209.68:32922 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-28 02:52:10 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
 [scraper] eBay 'gaming headset': 0 found, 0 new (total 0)
 2026-05-28 02:52:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41208 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41214 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41220 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41232 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 02:52:15 [debug    ] upgrade_parts.bh               part=CPU Cooler price_gbp=5.12
+/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py:263: RuntimeWarning: coroutine 'run_upgrade_parts_swarm.<locals>._fetch_lane_seq' was never awaited
+  _fetch_lane_seq(_fetch_gumtree_component),
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-29 01:49:02 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 263, in run_upgrade_parts_swarm
+    _fetch_lane_seq(_fetch_gumtree_component),
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name '_fetch_gumtree_component' is not defined
+2026-05-28 02:52:16 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+2026-05-28 02:52:18 [info     ] gumtree.playwright.done        total=0
+2026-05-28 02:52:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 02:52:19 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:48214 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48220 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48222 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48238 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'mini tower desktop case': 0 found, 0 new (total 0)
+2026-05-28 02:52:21 [info     ] temu.cases.done                found=0 search=budget gaming case atx
+[scraper] eBay 'mini tower desktop case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:35340 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35354 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35368 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35382 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 02:52:30 [info     ] facebook.playwright.items      count=0 term=gaming headset
+2026-05-28 02:52:30 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dgaming%2Bheadset%26minPrice%3D1%26maxPrice%3D80%26exact%3Dfalse item_links=0 term=gaming headset title=Facebook
+2026-05-28 02:52:30 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:42932 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42940 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42942 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42958 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42966 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42972 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46502 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46510 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46520 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46534 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'cheap atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'cheap atx pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55732 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55748 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55752 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55768 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48274 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48286 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48302 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48306 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55618 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55632 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55644 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55654 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'budget gaming case atx': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34804 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34806 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34820 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34836 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'usb microphone': 0 found, 0 new (total 0)
+2026-05-28 02:53:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'budget gaming case atx': 0 found, 0 new (total 0)
+2026-05-28 02:53:33 [info     ] cases_swarm.done               errors=0 found=60 upserted=48
+INFO:     100.101.209.68:34844 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34846 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34854 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34866 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 02:53:35 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
+2026-05-28 02:53:37 [info     ] gumtree.playwright.done        total=0
+2026-05-28 02:53:37 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 02:53:37 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=usb%20microphone&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:44302 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44306 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44314 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44328 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 02:53:49 [info     ] facebook.playwright.items      count=0 term=usb microphone
+2026-05-28 02:53:49 [warning  ] facebook.playwright.no_cards   current_url=https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Flondon%2Fsearch%2F%3Fquery%3Dusb%2Bmicrophone%26minPrice%3D1%26maxPrice%3D80%26exact%3Dfalse item_links=0 term=usb microphone title=Facebook
+2026-05-28 02:53:49 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:47808 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47810 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47814 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53994 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53998 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50500 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50510 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50524 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50532 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41642 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41648 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41664 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41678 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41686 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41688 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41704 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40958 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40966 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40978 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40990 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45514 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45526 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45530 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45542 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc speakers': 0 found, 0 new (total 0)
+2026-05-28 02:54:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-28 02:54:44 [error    ] gumtree.playwright.error       error=Page.title: Target page, context or browser has been closed term=pc speakers
+2026-05-28 02:54:44 [info     ] gumtree.playwright.done        total=0
+2026-05-28 02:54:44 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 02:54:44 [info     ] scheduler.stopped
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-29 01:49:02 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 199, in run_accessories_swarm
+    ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 364, in _scrape_facebook_accessories
+    rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/playwright_scraper.py", line 456, in scrape_facebook_playwright
+    async with async_playwright() as p:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/async_api/_context_manager.py", line 40, in __aenter__
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 464, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 550, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+2026-05-28 02:54:44 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2024782]
+INFO:     Stopping reloader process [1568669]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0

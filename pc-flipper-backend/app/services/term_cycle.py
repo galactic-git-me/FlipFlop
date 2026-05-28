@@ -3,8 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
+import structlog
 
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "term_cycle_state.json"
+log = structlog.get_logger(__name__)
 
 
 def _load() -> dict[str, Any]:
@@ -20,8 +22,8 @@ def _save(state: dict[str, Any]) -> None:
     try:
         _STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
         _STATE_FILE.write_text(json.dumps(state, ensure_ascii=True, indent=2), encoding="utf-8")
-    except Exception:
-        pass
+    except Exception as exc:
+        log.warning("term_cycle.state_save_failed", error=str(exc))
 
 
 def start_cycle(scope: str, batch_size: int, terms_by_vendor: dict[str, list[str]]) -> None:
@@ -62,4 +64,3 @@ def next_batch(scope: str, terms_by_vendor: dict[str, list[str]]) -> tuple[bool,
     state[scope] = rec
     _save(state)
     return True, out, all_done
-

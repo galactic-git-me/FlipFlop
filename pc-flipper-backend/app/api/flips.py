@@ -13,9 +13,11 @@ from app.services.selling_toolkit import generate_titles, generate_description
 from app.services import ai_service
 from app.services.alerts import emit_alert
 from app.config import get_settings
+import structlog
 
 settings = get_settings()
 router = APIRouter(prefix="/flips", tags=["flips"])
+log = structlog.get_logger(__name__)
 
 
 @router.get("/", response_model=list[FlipOut])
@@ -105,8 +107,8 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
                     f"with profit £{float(flip.actual_profit):.2f}."
                 ),
             )
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("flips.alert.emit_failed", code="flip_resale_detected", error=str(exc))
     return flip
 
 
@@ -139,6 +141,7 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     roi = (flip.actual_profit / flip.total_cost * 100) if flip.total_cost else 0
     cpu_tier = _extract_cpu_tier(listing.cpu if listing else None)
 
+    case_theme = await _derive_case_theme(flip, db)
     intel = FlipIntelligence(
         flip_id=flip.id,
         source_site=listing.source_name if listing else "unknown",
@@ -148,7 +151,7 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
         had_gpu=bool(listing.gpu) if listing else False,
         had_storage=bool(listing.storage_gb) if listing else False,
         ram_gb=listing.ram_gb if listing else None,
-        case_theme=None,  # TODO: pull from selected case part
+        case_theme=case_theme,
         upgrade_cost=flip.upgrade_cost,
         total_cost=flip.total_cost,
         sell_price=body.actual_sale_price,
@@ -170,8 +173,8 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
                 f"with profit £{float(flip.actual_profit or 0.0):.2f}."
             ),
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        log.warning("flips.alert.emit_failed", code="flip_resale_detected", error=str(exc))
 
     return {
         "status": "sold",
@@ -267,3 +270,35 @@ def _extract_cpu_tier(cpu: str | None) -> str | None:
     if "ryzen 3" in cpu_lower:
         return "Ryzen 3"
     return cpu.split()[0] if cpu else None
+
+
+async def _derive_case_theme(flip: Flip, db: AsyncSession) -> str | None:
+    """
+    Resolve case theme from selected upgrades, if a case part is selected.
+    Supports both keyed JSON (e.g. {"case": 123}) and arbitrary value maps.
+    """
+    selected = dict(flip.selected_upgrade_ids or {})
+    if not selected:
+        return None
+
+    candidate_ids: list[int] = []
+    if "case" in selected:
+        try:
+            candidate_ids.append(int(selected["case"]))
+        except Exception:
+            pass
+    for _, v in selected.items():
+        try:
+            iv = int(v)
+            if iv not in candidate_ids:
+                candidate_ids.append(iv)
+        except Exception:
+            continue
+
+    for part_id in candidate_ids:
+        part = await db.get(Part, part_id)
+        if not part:
+            continue
+        if str(part.category.value) == "case":
+            return (part.theme or part.name or "").strip() or None
+    return None

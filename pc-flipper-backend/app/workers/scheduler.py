@@ -58,9 +58,9 @@ def _save_state(state: dict) -> None:
     try:
         _STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
         _STATE_FILE.write_text(json.dumps(state, ensure_ascii=True, indent=2), encoding="utf-8")
-    except Exception:
+    except Exception as exc:
         # Best-effort persistence only; scheduler should still run if this fails.
-        pass
+        log.warning("scheduler.state_save_failed", error=str(exc))
 
 
 def _mark_success(job_id: str, finished_at: datetime) -> None:
