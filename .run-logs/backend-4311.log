@@ -9781,3 +9781,147 @@ Call log:
   - navigating to "https://www.aliexpress.com/wholesale?SearchText=xl+mouse+pad&g=y&SortType=price_asc", waiting until "domcontentloaded"
  site=AliExpress term=xl mouse pad
 2026-05-28 22:09:02 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 motherboard
+INFO:     100.101.209.68:51008 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51024 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51038 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51046 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51052 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51064 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51076 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51090 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51104 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51106 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51116 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:09:09 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=xl+mouse+pad
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=xl+mouse+pad", waiting until "domcontentloaded"
+ site=Alibaba term=xl mouse pad
+INFO:     100.101.209.68:51120 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51126 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51142 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51156 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51166 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60214 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60222 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60230 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60244 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:09:17 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=xl+mouse+pad
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=xl+mouse+pad", waiting until "domcontentloaded"
+ site=BargainHardware term=xl mouse pad
+2026-05-28 22:09:17 [info     ] accessories_swarm.done         errors=0 found=0 upserted=0
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60254 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60270 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60280 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60288 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60290 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60292 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60302 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60310 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60326 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60342 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60344 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60352 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37958 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37968 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37978 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37988 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-28 22:09:28 [debug    ] ebay_buy.request_retry         attempt=1 error= search=AM4 motherboard
+INFO:     100.101.209.68:38002 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38010 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43202 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43218 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43220 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43224 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43230 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43258 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43268 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43284 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43300 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43314 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43320 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'borg collective build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43322 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43332 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43344 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43354 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48276 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48288 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48304 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48314 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48330 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48344 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48360 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48374 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48376 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48390 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48404 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48416 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48424 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48432 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48438 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-28 22:09:55 [debug    ] ebay_buy.request_retry         attempt=2 error= search=AM4 motherboard
+INFO:     100.101.209.68:54366 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54368 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54380 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54386 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54398 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54414 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54426 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54432 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54434 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33082 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33098 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33106 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33122 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33126 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33128 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33142 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33146 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33162 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33174 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33186 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33198 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33206 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33210 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33224 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33230 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33246 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33254 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'galactic empire build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-28 22:10:21 [debug    ] ebay_buy.request_retry         attempt=3 error= search=AM4 motherboard
+INFO:     100.101.209.68:34644 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34660 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34684 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34706 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34716 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34726 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34736 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34742 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:10:23 [debug    ] upgrade_parts.ebay             buy=None part=AM4 Motherboard sold=None
+INFO:     100.101.209.68:34748 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34760 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34784 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34786 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48298 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48310 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48322 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48332 - "GET /api/schedule HTTP/1.1" 200 OK
