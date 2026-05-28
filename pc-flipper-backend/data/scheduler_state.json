@@ -22,5 +22,11 @@
   },
   "accessories": {
     "last_success_at": "2026-05-28T01:13:59.750257+00:00"
+  },
+  "autonomous": {
+    "last_success_at": "2026-05-28T01:21:48.773950+00:00"
+  },
+  "flip_opportunities": {
+    "last_success_at": "2026-05-28T01:21:59.832901+00:00"
   }
 }
