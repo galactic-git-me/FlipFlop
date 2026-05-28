@@ -3638,3 +3638,130 @@ INFO:     100.101.209.68:43780 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:43784 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43790 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43810 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43820 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43824 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43830 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:08:00 [debug    ] ebay_sold.request_retry        attempt=3 error= search=NVMe 1TB
+INFO:     100.101.209.68:43840 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43856 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43868 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43884 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43900 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43916 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43930 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57922 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57932 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57944 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57960 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57970 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57974 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57976 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57982 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54934 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54942 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54954 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54956 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54986 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54988 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54996 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55006 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55022 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55036 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55044 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55056 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55068 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55082 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55100 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55110 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55124 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55128 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:08:27 [debug    ] ebay_buy.request_retry         attempt=1 error= search=NVMe 1TB
+INFO:     100.101.209.68:33396 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33412 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33418 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33424 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33436 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33452 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33456 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33472 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33484 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33486 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33502 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33504 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33512 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33528 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33540 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45762 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45766 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45768 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45782 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pokedex workstation': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39134 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39142 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39170 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39184 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39188 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39204 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39208 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39220 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39222 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39236 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39250 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39264 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39268 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39282 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:08:53 [debug    ] ebay_buy.request_retry         attempt=2 error= search=NVMe 1TB
+INFO:     100.101.209.68:56922 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56924 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56928 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56940 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56948 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56962 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56968 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56972 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56988 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57006 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57008 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57018 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57024 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57034 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57046 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51660 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51670 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51678 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51682 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51690 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51698 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51706 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51712 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51726 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51742 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51750 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47132 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47138 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47142 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47154 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47168 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47172 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 21:09:20 [debug    ] ebay_buy.request_retry         attempt=3 error= search=NVMe 1TB
+INFO:     100.101.209.68:47182 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47188 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47204 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47218 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47220 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47230 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47236 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47250 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47258 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:09:22 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
