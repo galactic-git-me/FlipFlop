@@ -75,7 +75,7 @@ async def _scrape_ebay_accessories(term: str, theme: str, condition_code: str) -
             worldwide=False,
         )
         out: list[RawAccessory] = []
-        for l in listings[:8]:
+        for l in listings[:24]:
             out.append(
                 RawAccessory(
                     name=l.title[:200],
@@ -243,7 +243,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
 
                 for source_name, results in source_batches:
                     raw_found = len(results)
-                    saved_count = min(8, raw_found)
+                    saved_count = min(24, raw_found)
                     stats["found"] += raw_found
                     record_term_result(
                         source_name=source_name,
@@ -251,7 +251,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                         found=raw_found,
                         new=saved_count,
                     )
-                    for acc in results[:8]:
+                    for acc in results[:24]:
                         try:
                             await _upsert_accessory(db, acc)
                             stats["upserted"] += 1
@@ -307,7 +307,7 @@ async def _scrape_playwright_accessories(page, term: str, theme: str, site: str,
                     const img = (node.querySelector('img')?.src || '');
                     seen.add(href);
                     data.push({title: txt, href, price, img});
-                    if (data.length >= 12) break;
+                    if (data.length >= 60) break;
                 }
                 return data;
             }"""
@@ -337,7 +337,7 @@ async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessor
     out: list[RawAccessory] = []
     try:
         rows = await scrape_gumtree_playwright([term], 1, int(MAX_PRICE))
-        for r in rows[:8]:
+        for r in rows[:24]:
             out.append(
                 RawAccessory(
                     name=str(r.title or "")[:200],
@@ -362,7 +362,7 @@ async def _scrape_facebook_accessories(term: str, theme: str) -> list[RawAccesso
     out: list[RawAccessory] = []
     try:
         rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
-        for r in rows[:8]:
+        for r in rows[:24]:
             out.append(
                 RawAccessory(
                     name=str(r.title or "")[:200],

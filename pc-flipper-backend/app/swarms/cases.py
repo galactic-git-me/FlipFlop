@@ -203,7 +203,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
             else:
                 cases = r.get("cases") or []
                 raw_found = len(cases)
-                saved_count = min(8, raw_found)
+                saved_count = min(24, raw_found)
                 record_term_result(
                     source_name=f"Cases:{source_name}",
                     term=term,
@@ -283,7 +283,7 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
                 image_url=l.image_urls[0] if l.image_urls else "",
                 theme=theme,
             )
-            for l in listings[:8]
+            for l in listings[:24]
         ]
     except Exception as exc:
         log.warning("ebay.cases.error", error=str(exc))
@@ -305,7 +305,7 @@ async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
     try:
         listings = await scrape_facebook_playwright([search], min_price=1, max_price=350)
         out: list[RawCase] = []
-        for l in listings[:8]:
+        for l in listings[:24]:
             out.append(
                 RawCase(
                     name=str(l.title or "")[:200],
@@ -322,7 +322,7 @@ async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
     try:
         listings = await scrape_gumtree_playwright([search], min_price=1, max_price=350)
         out: list[RawCase] = []
-        for l in listings[:8]:
+        for l in listings[:24]:
             out.append(
                 RawCase(
                     name=str(l.title or "")[:200],

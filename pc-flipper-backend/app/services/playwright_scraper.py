@@ -194,9 +194,7 @@ async def _make_context(
     force_persistent_profile: bool = False,
 ):
     headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
-    # Persistent FB profile mode works best in headed mode unless explicitly overridden.
-    if force_persistent_profile and os.getenv("FB_HEADLESS") is None:
-        headless = False
+    # Keep headless by default in server environments; explicit FB_HEADLESS=0 can opt into headed mode.
     use_persistent_profile = os.getenv("FB_USE_PROFILE", "0").lower() in {"1", "true", "yes"}
     use_persistent_profile = use_persistent_profile or force_persistent_profile
 
