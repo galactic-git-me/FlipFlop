@@ -4481,3 +4481,155 @@ INFO:     100.101.209.68:52450 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52456 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52462 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52478 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52486 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52494 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52496 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33372 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33374 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33390 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33400 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:17:48 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu", waiting until "domcontentloaded"
+ search=intel+i7+cpu
+INFO:     100.101.209.68:33402 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33412 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33416 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33418 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:17:56 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu", waiting until "domcontentloaded"
+ search=intel+i9+cpu
+INFO:     100.101.209.68:53298 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53300 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53306 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53322 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53326 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53330 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53336 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53344 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53360 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53374 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53382 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53384 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53396 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53400 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53416 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53428 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'red blue rgb build': 0 found, 0 new (total 0)
+2026-05-28 21:18:05 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard", waiting until "domcontentloaded"
+ search=am4+motherboard
+INFO:     100.101.209.68:55156 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55170 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55176 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55178 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55180 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55194 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55204 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55208 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55216 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55226 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55234 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55250 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55256 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55272 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55288 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55290 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 21:18:14 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard+cpu+combo
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard+cpu+combo", waiting until "domcontentloaded"
+ search=am4+motherboard+cpu+combo
+INFO:     100.101.209.68:60750 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60760 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60768 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60770 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60774 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60786 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60796 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60802 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60818 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:18:23 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=ddr4+ram
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=ddr4+ram", waiting until "domcontentloaded"
+ search=ddr4+ram
+INFO:     100.101.209.68:60820 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60832 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60840 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60856 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58796 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58800 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58804 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58810 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58820 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58834 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 21:18:31 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=32gb+ddr4+kit
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=32gb+ddr4+kit", waiting until "domcontentloaded"
+ search=32gb+ddr4+kit
+INFO:     100.101.209.68:58846 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58852 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58862 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58892 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58898 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58914 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58928 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58936 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:18:40 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=1tb+nvme
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=1tb+nvme", waiting until "domcontentloaded"
+ search=1tb+nvme
+INFO:     100.101.209.68:39482 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39490 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39498 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39502 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'batcomputer workstation': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39504 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39520 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39524 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39526 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39538 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39542 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39556 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48668 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48680 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48690 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48706 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48718 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48726 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48740 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48746 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48758 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:18:49 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=atx+psu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=atx+psu", waiting until "domcontentloaded"
+ search=atx+psu
+INFO:     100.101.209.68:45760 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45772 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45782 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45796 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45808 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45822 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45834 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-28 21:18:58 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cpu+cooler
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cpu+cooler", waiting until "domcontentloaded"
+ search=cpu+cooler
+INFO:     100.101.209.68:45848 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45862 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45872 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45888 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45916 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45932 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60330 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60342 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60352 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60356 - "GET /api/schedule HTTP/1.1" 200 OK
