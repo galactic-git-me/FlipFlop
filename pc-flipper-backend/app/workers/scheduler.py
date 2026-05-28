@@ -170,8 +170,8 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
                 severity="critical",
                 message=f"Scheduled job '{job_id}' failed: {exc}",
             )
-        except Exception:
-            pass
+        except Exception as alert_exc:
+            log.warning("job.failed.alert_emit_error", job_id=job_id, error=str(alert_exc))
         raise
     finally:
         _running_jobs.discard(job_id)

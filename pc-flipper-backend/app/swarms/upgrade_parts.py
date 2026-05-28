@@ -352,7 +352,8 @@ async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> float | N
             if r.status_code == 403:
                 await asyncio.sleep(2.5 * (attempt + 1))
                 continue
-        except Exception:
+        except Exception as exc:
+            log.debug("ebay_sold.request_retry", search=search, attempt=attempt + 1, error=str(exc))
             await asyncio.sleep(1.5)
     return None
 
@@ -379,7 +380,8 @@ async def _ebay_buy_price(client: httpx.AsyncClient, search: str) -> float | Non
             if r.status_code == 403:
                 await asyncio.sleep(2.5 * (attempt + 1))
                 continue
-        except Exception:
+        except Exception as exc:
+            log.debug("ebay_buy.request_retry", search=search, attempt=attempt + 1, error=str(exc))
             await asyncio.sleep(1.5)
     return None
 
@@ -401,8 +403,8 @@ def _parse_ebay_prices(html: str) -> list[float]:
             p = float(m.replace(",", ""))
             if 1 < p < 2000:
                 prices.append(p)
-        except ValueError:
-            pass
+        except ValueError as exc:
+            log.debug("ebay_price.parse_skip", value=str(m), error=str(exc))
     return prices
 
 
@@ -428,8 +430,8 @@ async def _bh_price(page, search_term: str) -> float | None:
                 p = float(el.get("data-price-amount", 0))
                 if 1 < p < 5000:
                     prices_eur.append(p)
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as exc:
+                log.debug("bh.price.parse_skip", value=str(el.get("data-price-amount", 0)), error=str(exc))
         if not prices_eur:
             return None
         cheapest_eur = sorted(prices_eur)[0]
@@ -453,7 +455,8 @@ async def _fetch_scan(search_term: str) -> float | None:
         prices = [_parse_price(el.get_text(strip=True)) for el in soup.select(".c-product__price, [class*='price']")]
         prices = [p for p in prices if 1 < p < 2000]
         return round(sorted(prices)[0], 2) if prices else None
-    except Exception:
+    except Exception as exc:
+        log.warning("scan.fetch.error", search=search_term, error=str(exc))
         return None
 
 
@@ -469,7 +472,8 @@ async def _fetch_overclockers(search_term: str) -> float | None:
         prices = [_parse_price(el.get_text(strip=True)) for el in soup.select(".product-price, .price, [class*='price']")]
         prices = [p for p in prices if 1 < p < 2000]
         return round(sorted(prices)[0], 2) if prices else None
-    except Exception:
+    except Exception as exc:
+        log.warning("overclockers.fetch.error", search=search_term, error=str(exc))
         return None
 
 
@@ -485,7 +489,8 @@ async def _fetch_box(search_term: str) -> float | None:
         prices = [_parse_price(el.get_text(strip=True)) for el in soup.select(".price, .product-price, [class*='price']")]
         prices = [p for p in prices if 1 < p < 2000]
         return round(sorted(prices)[0], 2) if prices else None
-    except Exception:
+    except Exception as exc:
+        log.warning("box.fetch.error", search=search_term, error=str(exc))
         return None
 
 
@@ -568,8 +573,8 @@ async def _fetch_playwright_lowest_price(
             await page.goto(url, wait_until="domcontentloaded", timeout=30000)
             try:
                 await page.wait_for_selector(item_selector, timeout=10000)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("playwright.wait_selector_timeout", source=source_name, selector=item_selector, error=str(exc))
             await asyncio.sleep(random.uniform(0.8, 1.8))
             await page.evaluate("window.scrollBy(0, 700)")
             await asyncio.sleep(0.5)

@@ -332,7 +332,8 @@ async def _scrape_playwright_accessories(page, term: str, theme: str, site: str,
 async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessory]:
     try:
         from app.services.playwright_scraper import scrape_gumtree_playwright
-    except Exception:
+    except Exception as exc:
+        log.warning("gumtree.accessories.import_error", error=str(exc))
         return []
     out: list[RawAccessory] = []
     try:
@@ -349,7 +350,8 @@ async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessor
                     condition=PartCondition.used,
                 )
             )
-    except Exception:
+    except Exception as exc:
+        log.warning("gumtree.accessories.error", term=term, error=str(exc))
         return []
     return out
 
@@ -357,7 +359,8 @@ async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessor
 async def _scrape_facebook_accessories(term: str, theme: str) -> list[RawAccessory]:
     try:
         from app.services.playwright_scraper import scrape_facebook_playwright
-    except Exception:
+    except Exception as exc:
+        log.warning("facebook.accessories.import_error", error=str(exc))
         return []
     out: list[RawAccessory] = []
     try:
@@ -374,7 +377,8 @@ async def _scrape_facebook_accessories(term: str, theme: str) -> list[RawAccesso
                     condition=PartCondition.used,
                 )
             )
-    except Exception:
+    except Exception as exc:
+        log.warning("facebook.accessories.error", term=term, error=str(exc))
         return []
     return out
 

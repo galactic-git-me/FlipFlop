@@ -215,8 +215,8 @@ async def _make_context(
         if cookies:
             try:
                 await context.add_cookies(cookies)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.warning("playwright.cookies.add_failed", error=str(exc))
         return None, context
 
     browser = await playwright.chromium.launch(

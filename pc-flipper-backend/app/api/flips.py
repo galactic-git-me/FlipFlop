@@ -285,8 +285,8 @@ async def _derive_case_theme(flip: Flip, db: AsyncSession) -> str | None:
     if "case" in selected:
         try:
             candidate_ids.append(int(selected["case"]))
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("flips.case_id.invalid", value=selected.get("case"), error=str(exc))
     for _, v in selected.items():
         try:
             iv = int(v)

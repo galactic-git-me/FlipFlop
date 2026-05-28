@@ -293,31 +293,8 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
 async def _scrape_gumtree(search: str, theme: str) -> list[RawCase]:
     try:
         from app.services.playwright_scraper import scrape_gumtree_playwright
-    except Exception:
-        return []
-
-
-async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
-    try:
-        from app.services.playwright_scraper import scrape_facebook_playwright
-    except Exception:
-        return []
-    try:
-        listings = await scrape_facebook_playwright([search], min_price=1, max_price=350)
-        out: list[RawCase] = []
-        for l in listings[:24]:
-            out.append(
-                RawCase(
-                    name=str(l.title or "")[:200],
-                    price=float(l.price or 0),
-                    source_site="Facebook Marketplace",
-                    source_url=str(l.url or ""),
-                    image_url=(l.image_urls[0] if getattr(l, "image_urls", None) else ""),
-                    theme=theme,
-                )
-            )
-        return out
-    except Exception:
+    except Exception as exc:
+        log.warning("gumtree.cases.import_error", error=str(exc))
         return []
     try:
         listings = await scrape_gumtree_playwright([search], min_price=1, max_price=350)
@@ -334,7 +311,34 @@ async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
                 )
             )
         return out
-    except Exception:
+    except Exception as exc:
+        log.warning("gumtree.cases.error", term=search, error=str(exc))
+        return []
+
+
+async def _scrape_facebook(search: str, theme: str) -> list[RawCase]:
+    try:
+        from app.services.playwright_scraper import scrape_facebook_playwright
+    except Exception as exc:
+        log.warning("facebook.cases.import_error", error=str(exc))
+        return []
+    try:
+        listings = await scrape_facebook_playwright([search], min_price=1, max_price=350)
+        out: list[RawCase] = []
+        for l in listings[:24]:
+            out.append(
+                RawCase(
+                    name=str(l.title or "")[:200],
+                    price=float(l.price or 0),
+                    source_site="Facebook Marketplace",
+                    source_url=str(l.url or ""),
+                    image_url=(l.image_urls[0] if getattr(l, "image_urls", None) else ""),
+                    theme=theme,
+                )
+            )
+        return out
+    except Exception as exc:
+        log.warning("facebook.cases.error", term=search, error=str(exc))
         return []
 
 
@@ -413,8 +417,8 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
                     await page.click(selector, timeout=1500)
                     await asyncio.sleep(0.5)
                     break
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("google_shopping.consent.click_failed", selector=selector, error=str(exc))
 
             await asyncio.sleep(random.uniform(2.0, 3.0))
             await page.evaluate("window.scrollBy(0, 500)")
@@ -577,8 +581,8 @@ async def _pw_get_page_html(page, url: str, wait_selector: str, timeout: int = 1
     await page.goto(url, wait_until="domcontentloaded", timeout=25000)
     try:
         await page.wait_for_selector(wait_selector, timeout=timeout)
-    except Exception:
-        pass  # grab whatever rendered
+    except Exception as exc:
+        log.debug("playwright.wait_selector_timeout", selector=wait_selector, error=str(exc))
     await asyncio.sleep(random.uniform(0.8, 1.5))
     return await page.content()
 
@@ -615,8 +619,8 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
             await page.goto(url, wait_until="domcontentloaded", timeout=30000)
             try:
                 await page.wait_for_selector('[data-component-type="s-search-result"]', timeout=12000)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("amazon.wait_selector_timeout", selector='[data-component-type=\"s-search-result\"]', error=str(exc))
             await asyncio.sleep(random.uniform(1.5, 2.5))
 
             raw = await page.evaluate("""() => {
@@ -718,8 +722,8 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
                 try:
                     await page.click(selector, timeout=2000)
                     await asyncio.sleep(0.3)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("aliexpress.modal.dismiss_failed", selector=selector, error=str(exc))
 
             # Wait for product listing cards
             try:
@@ -727,8 +731,8 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
                     "a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']",
                     timeout=12000,
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("aliexpress.wait_selector_timeout", error=str(exc))
 
             await asyncio.sleep(random.uniform(1.0, 2.0))
 
@@ -851,8 +855,8 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
                 try:
                     await page.click(selector, timeout=2000)
                     await asyncio.sleep(0.3)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("temu.modal.dismiss_failed", selector=selector, error=str(exc))
 
             # Wait for product grid
             try:
@@ -861,8 +865,8 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
                     "[class*='product-item'], [class*='SearchResult']",
                     timeout=15000,
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("temu.wait_selector_timeout", error=str(exc))
 
             # Scroll to trigger lazy loading
             await asyncio.sleep(random.uniform(1.0, 2.0))
@@ -980,8 +984,8 @@ async def _scrape_etsy(search: str, theme: str) -> list[RawCase]:
                 try:
                     await page.click(selector, timeout=2000)
                     await asyncio.sleep(0.3)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("etsy.modal.dismiss_failed", selector=selector, error=str(exc))
 
             # Wait longer for Etsy's JS-rendered listing grid (5-6s)
             await asyncio.sleep(random.uniform(5.0, 6.0))
