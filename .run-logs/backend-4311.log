@@ -12095,3 +12095,232 @@ INFO:     100.101.209.68:51126 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51136 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51150 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51160 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:34:09 [warning  ] scan.fetch.error               error= search=PSU
+2026-05-28 22:34:10 [warning  ] overclockers.fetch.error       error= search=PSU
+2026-05-28 22:34:10 [warning  ] box.fetch.error                error= search=PSU
+INFO:     100.101.209.68:53848 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53862 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53876 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53890 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53892 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53894 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53906 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58866 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58880 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58888 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58894 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58900 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58904 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58910 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58926 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58938 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58940 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58952 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50662 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50666 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50694 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50716 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50720 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50736 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50738 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:34:29 [warning  ] scan.fetch.error               error= search=CPU cooler
+2026-05-28 22:34:30 [warning  ] overclockers.fetch.error       error= search=CPU cooler
+2026-05-28 22:34:30 [warning  ] box.fetch.error                error= search=CPU cooler
+INFO:     100.101.209.68:50746 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50756 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50770 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50774 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50784 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50796 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50802 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Montech panoramic case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50812 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50814 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50828 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50842 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34256 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34258 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34286 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34290 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34296 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34304 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34310 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34324 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37348 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37354 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37370 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37386 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37398 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37404 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:34:49 [warning  ] scan.fetch.error               error= search=RGB fans
+2026-05-28 22:34:50 [warning  ] overclockers.fetch.error       error= search=RGB fans
+2026-05-28 22:34:50 [warning  ] box.fetch.error                error= search=RGB fans
+2026-05-28 22:34:50 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:37420 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37426 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37442 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37458 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37474 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37478 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37482 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37488 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37492 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:34:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-28 22:34:50 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVIDIA GPU
+2026-05-28 22:34:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:51 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 CPU
+2026-05-28 22:34:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:51 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i7 CPU
+2026-05-28 22:34:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:52 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i9 CPU
+2026-05-28 22:34:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:52 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard
+2026-05-28 22:34:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:52 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard cpu combo
+2026-05-28 22:34:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:53 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM
+2026-05-28 22:34:53 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:53 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM 32GB 2x16GB
+2026-05-28 22:34:53 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:54 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVMe 1TB
+2026-05-28 22:34:54 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:54 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=PSU
+2026-05-28 22:34:54 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:55 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=CPU cooler
+2026-05-28 22:34:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:34:55 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=RGB fans
+2026-05-28 22:34:58 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=NVIDIA+GPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=NVIDIA+GPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-28 22:34:58 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=NVIDIA+GPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=NVIDIA+GPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-28 22:34:58 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=NVIDIA+GPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=NVIDIA+GPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-28 22:34:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=NVIDIA GPU
+2026-05-28 22:34:58 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=NVIDIA+GPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=NVIDIA+GPU", waiting until "domcontentloaded"
+ source=alibaba
+INFO:     100.101.209.68:41292 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41300 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41302 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41314 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:34:58 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:34:59 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41322 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41332 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41346 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41358 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41378 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41394 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41398 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41402 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41406 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41418 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41432 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52900 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52902 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52914 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52930 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:35:07 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=AM4+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AM4+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-28 22:35:07 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=AM4+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AM4+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-28 22:35:07 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=AM4+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=AM4+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-28 22:35:07 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=AM4+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=AM4+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-28 22:35:07 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AM4 CPU
+2026-05-28 22:35:07 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:35:07 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:58498 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58504 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58508 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58524 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58540 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58546 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58548 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58550 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58552 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:35:15 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=i7+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=i7+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-28 22:35:15 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=i7+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=i7+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-28 22:35:15 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=i7+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=i7+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-28 22:35:15 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=i7+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=i7+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-28 22:35:15 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=i7 CPU
+2026-05-28 22:35:16 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:35:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:58554 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58558 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58566 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58578 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58588 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58598 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58600 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'darkFlash fish tank': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58602 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58616 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58632 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58646 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:35:24 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=i9+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=i9+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-28 22:35:24 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=i9+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=i9+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-28 22:35:24 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=i9+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=i9+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-28 22:35:24 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=i9 CPU
+2026-05-28 22:35:24 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=i9+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=i9+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-28 22:35:24 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:35:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
