@@ -186,7 +186,9 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     term=term,
                     error="playwright.chromium_not_installed",
                 )
-    source_batches = await asyncio.gather(*[asyncio.create_task(_scrape_source_seq(source)) for source in enabled_sources])
+    source_batches: list[list[dict]] = []
+    for source in enabled_sources:
+        source_batches.append(await _scrape_source_seq(source))
     for batch in source_batches:
         for r in batch:
             scrape_results.append(r)
@@ -562,7 +564,9 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
 
 
 def _interactive_scraper_mode() -> bool:
-    return os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+    enabled = os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+    has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
+    return enabled and has_display
 
 
 async def _make_pw_context(playwright):

@@ -34,6 +34,8 @@ log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
 _PLAYWRIGHT_MISSING_WARNED = False
 _CHROMIUM_AVAILABLE: bool | None = None
+_PLAYWRIGHT_LAUNCH_SEM = asyncio.Semaphore(1)
+_FACEBOOK_SCRAPE_SEM = asyncio.Semaphore(1)
 
 
 def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -48,7 +50,9 @@ def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> N
 
 
 def _interactive_scraper_mode() -> bool:
-    return os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+    enabled = os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
+    has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
+    return enabled and has_display
 
 
 def _log_playwright_missing_once(error: str | None = None) -> None:
@@ -208,32 +212,34 @@ async def _make_context(
     if use_persistent_profile:
         FB_PROFILE_DIR.mkdir(parents=True, exist_ok=True)
         try:
-            context = await playwright.chromium.launch_persistent_context(
-                user_data_dir=str(FB_PROFILE_DIR),
-                headless=headless,
-                args=_STEALTH_ARGS,
-                proxy=playwright_proxy_config(),
-                user_agent=_USER_AGENT,
-                viewport={"width": 1366, "height": 768},
-                locale="en-GB",
-                timezone_id="Europe/London",
-                java_script_enabled=True,
-            )
+            async with _PLAYWRIGHT_LAUNCH_SEM:
+                context = await playwright.chromium.launch_persistent_context(
+                    user_data_dir=str(FB_PROFILE_DIR),
+                    headless=headless,
+                    args=_STEALTH_ARGS,
+                    proxy=playwright_proxy_config(),
+                    user_agent=_USER_AGENT,
+                    viewport={"width": 1366, "height": 768},
+                    locale="en-GB",
+                    timezone_id="Europe/London",
+                    java_script_enabled=True,
+                )
         except Exception as exc:
             if headless:
                 raise
             log.warning("playwright.fb_headed_launch_failed_fallback_headless", error=str(exc))
-            context = await playwright.chromium.launch_persistent_context(
-                user_data_dir=str(FB_PROFILE_DIR),
-                headless=True,
-                args=_STEALTH_ARGS,
-                proxy=playwright_proxy_config(),
-                user_agent=_USER_AGENT,
-                viewport={"width": 1366, "height": 768},
-                locale="en-GB",
-                timezone_id="Europe/London",
-                java_script_enabled=True,
-            )
+            async with _PLAYWRIGHT_LAUNCH_SEM:
+                context = await playwright.chromium.launch_persistent_context(
+                    user_data_dir=str(FB_PROFILE_DIR),
+                    headless=True,
+                    args=_STEALTH_ARGS,
+                    proxy=playwright_proxy_config(),
+                    user_agent=_USER_AGENT,
+                    viewport={"width": 1366, "height": 768},
+                    locale="en-GB",
+                    timezone_id="Europe/London",
+                    java_script_enabled=True,
+                )
         await context.add_init_script(_STEALTH_JS)
         if cookies:
             try:
@@ -243,20 +249,22 @@ async def _make_context(
         return None, context
 
     try:
-        browser = await playwright.chromium.launch(
-            headless=headless,
-            args=_STEALTH_ARGS,
-            proxy=playwright_proxy_config(),
-        )
+        async with _PLAYWRIGHT_LAUNCH_SEM:
+            browser = await playwright.chromium.launch(
+                headless=headless,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+            )
     except Exception as exc:
         if headless:
             raise
         log.warning("playwright.headed_launch_failed_fallback_headless", error=str(exc))
-        browser = await playwright.chromium.launch(
-            headless=True,
-            args=_STEALTH_ARGS,
-            proxy=playwright_proxy_config(),
-        )
+        async with _PLAYWRIGHT_LAUNCH_SEM:
+            browser = await playwright.chromium.launch(
+                headless=True,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
+            )
     context = await browser.new_context(
         user_agent=_USER_AGENT,
         viewport={"width": 1366, "height": 768},
@@ -486,25 +494,26 @@ async def scrape_facebook_playwright(
         settings = None
     term_concurrency = max(1, min(4, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
 
-    async with async_playwright() as p:
-        try:
-            # Facebook is most stable with a persistent browser profile; this
-            # preserves authenticated session state across runs.
-            browser, context = await _make_context(
-                p,
-                cookies,
-                force_persistent_profile=False,
-            )
-        except Exception as exc:
-            msg = str(exc)
-            if _is_missing_chromium_error(msg):
-                log.error(
-                    "playwright.chromium_not_installed",
-                    fix="Run: playwright install chromium",
+    async with _FACEBOOK_SCRAPE_SEM:
+        async with async_playwright() as p:
+            try:
+                # Facebook is most stable with a persistent browser profile; this
+                # preserves authenticated session state across runs.
+                browser, context = await _make_context(
+                    p,
+                    cookies,
+                    force_persistent_profile=False,
                 )
-            else:
-                log.error("facebook.playwright.launch_failed", error=msg[:500])
-            return []
+            except Exception as exc:
+                msg = str(exc)
+                if _is_missing_chromium_error(msg):
+                    log.error(
+                        "playwright.chromium_not_installed",
+                        fix="Run: playwright install chromium",
+                    )
+                else:
+                    log.error("facebook.playwright.launch_failed", error=msg[:500])
+                return []
 
         sem = asyncio.Semaphore(term_concurrency)
 
