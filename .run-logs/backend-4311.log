@@ -1933,3 +1933,160 @@ INFO:     100.101.209.68:50988 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:50996 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51004 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51010 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-28 20:50:55 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=usb microphone
+2026-05-28 20:50:55 [info     ] gumtree.playwright.done        total=0
+2026-05-28 20:50:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 20:50:55 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=usb microphone
+INFO:     100.101.209.68:42380 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42394 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42400 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42412 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42418 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42428 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42434 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42442 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42450 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:42456 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42468 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42476 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42490 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42492 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42502 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42508 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'luxury gaming case': 0 found, 0 new (total 0)
+2026-05-28 20:51:04 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=usb+microphone&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=usb+microphone&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=usb microphone
+INFO:     100.101.209.68:57086 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57088 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57104 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57114 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 20:51:07 [debug    ] ebay_sold.request_retry        attempt=1 error= search=i7 CPU
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:57116 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57128 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57142 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57146 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57156 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-28 20:51:12 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=usb+microphone&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=usb+microphone&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=usb microphone
+INFO:     100.101.209.68:57168 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57184 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57190 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41820 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41834 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41836 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41844 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41860 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41874 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 20:51:20 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=usb+microphone&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=usb+microphone&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=usb microphone
+INFO:     100.101.209.68:41880 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41884 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41888 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41902 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41918 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41924 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41926 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41934 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41936 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 20:51:28 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=usb+microphone
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=usb+microphone", waiting until "domcontentloaded"
+ site=Alibaba term=usb microphone
+INFO:     100.101.209.68:39458 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39460 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39468 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39474 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39490 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39502 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39506 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39518 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39520 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 20:51:34 [debug    ] ebay_sold.request_retry        attempt=2 error= search=i7 CPU
+INFO:     100.101.209.68:39530 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39532 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39546 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39550 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 20:51:36 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=usb+microphone
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=usb+microphone", waiting until "domcontentloaded"
+ site=BargainHardware term=usb microphone
+INFO:     100.101.209.68:49858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49872 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49878 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49892 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54604 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54612 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54616 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54622 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54626 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54628 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54640 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54652 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54664 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54666 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'white fish tank case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54672 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54680 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54710 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54718 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54734 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54746 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54750 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53512 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53518 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53528 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53534 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53550 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53560 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53568 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53570 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53586 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53594 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53600 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 20:52:00 [debug    ] ebay_sold.request_retry        attempt=3 error= search=i7 CPU
+INFO:     100.101.209.68:53606 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53610 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53618 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53620 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45170 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45184 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45200 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45210 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45224 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45232 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45242 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45250 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45262 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46810 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46822 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46836 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46844 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46846 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46850 - "GET /api/sources/health HTTP/1.1" 200 OK
