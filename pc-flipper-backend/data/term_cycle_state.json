@@ -38,39 +38,39 @@
     }
   },
   "accessories": {
-    "active": true,
+    "active": false,
     "batch_size": 5,
     "vendors": {
       "eBay": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "Gumtree": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "Facebook Marketplace": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "Amazon": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "Temu": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "AliExpress": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "Alibaba": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       },
       "BargainHardware": {
-        "cursor": 10,
+        "cursor": 11,
         "total": 11
       }
     }
