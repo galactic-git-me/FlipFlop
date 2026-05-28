@@ -567,6 +567,15 @@ echo "Mode summary: DEV (hot reload enabled)"
 echo "App runtime: local uvicorn + local next dev (NO api/web Docker containers)"
 echo "Infra runtime: db/redis in Docker"
 export_root_env_local
+if [[ "${SHOW_SCRAPER_BROWSER:-0}" =~ ^(1|true|yes)$ ]]; then
+  if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
+    echo "SHOW_SCRAPER_BROWSER=1 is set, but no GUI display is available (DISPLAY/WAYLAND_DISPLAY missing)."
+    echo "Interactive login/captcha windows cannot be shown in this session."
+    echo "Run this script from your desktop terminal session (with DISPLAY set) to get Facebook login windows."
+  else
+    echo "Interactive scraper browser mode enabled; login/captcha windows will be shown when needed."
+  fi
+fi
 
 clear_dev_data_first
 
