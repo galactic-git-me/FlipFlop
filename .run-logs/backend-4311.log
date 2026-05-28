@@ -17109,3 +17109,162 @@ INFO:     100.101.209.68:39458 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39474 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39488 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-28 23:27:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-28 23:27:11 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=borg collective build
+2026-05-28 23:27:11 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:45278 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45282 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45292 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45308 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:27:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:45312 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45324 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45334 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45338 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45348 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45358 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45362 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45378 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45382 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45394 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45402 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35308 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35320 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35326 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35340 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:27:20 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=galactic empire build
+2026-05-28 23:27:20 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:27:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:42266 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42280 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42292 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42308 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42318 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42326 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42338 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42346 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:27:28 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=rebel alliance gaming pc
+2026-05-28 23:27:28 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:42358 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42362 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42376 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42386 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42392 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42402 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42406 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:27:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:48978 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48988 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48998 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49002 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:27:37 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cylon red eye pc
+2026-05-28 23:27:37 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:27:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:49012 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49018 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49034 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49038 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49068 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49086 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49102 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49104 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49108 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49112 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49122 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49132 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49136 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49140 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:27:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=battlestar inspired workstation
+2026-05-28 23:27:45 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:27:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41172 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41182 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41198 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41210 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41218 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41234 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41238 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41260 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:27:54 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=station command build
+2026-05-28 23:27:54 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:27:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:45818 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45834 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45844 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45860 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45866 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45876 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45888 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45894 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45898 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45906 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45908 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:28:02 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=diplomatic station workstation
+2026-05-28 23:28:02 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:28:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:45914 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45922 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45934 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45944 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37710 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37724 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37736 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37744 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:28:11 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=leviathan inspired build
+2026-05-28 23:28:11 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:28:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:32854 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32858 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32870 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32880 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32894 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32910 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32924 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32932 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32936 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32942 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32944 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32950 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32952 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32962 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32974 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32986 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:28:19 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=biomechanical spaceship pc
+2026-05-28 23:28:19 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:28:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:35198 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35208 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35222 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35234 - "GET /api/schedule HTTP/1.1" 200 OK
