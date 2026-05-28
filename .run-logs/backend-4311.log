@@ -17796,3 +17796,277 @@ INFO:     100.101.209.68:49762 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49776 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49788 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:49804 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:32:43 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+atx+case+rgb&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+atx+case+rgb&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming atx case rgb
+2026-05-28 23:32:43 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:32:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:49808 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49816 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49832 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49844 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41424 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41436 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41442 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41456 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41470 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41484 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41486 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41494 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41500 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41508 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41516 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:32:52 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc case mid tower
+2026-05-28 23:32:52 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:32:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41522 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41538 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41548 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41554 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53662 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53670 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53686 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53700 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:00 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=slim micro atx case office
+2026-05-28 23:33:00 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:33:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:53706 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53720 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53728 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53730 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36260 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36266 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36274 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36282 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36288 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36298 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:33:09 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=mini tower desktop case
+2026-05-28 23:33:09 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:36306 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36312 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36320 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36326 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:36342 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36344 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36352 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36356 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36372 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38338 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38342 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38350 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38356 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:17 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cheap atx pc case
+2026-05-28 23:33:17 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:33:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:38362 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38390 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38398 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38404 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38408 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38416 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38430 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38440 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40014 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40026 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40042 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40048 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40054 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40066 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40068 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:26 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=budget gaming case atx
+2026-05-28 23:33:26 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:33:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:26 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=fish tank pc case
+2026-05-28 23:33:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:27 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=panoramic pc case
+2026-05-28 23:33:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:27 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=argb gaming case
+2026-05-28 23:33:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:27 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=rgb airflow case
+2026-05-28 23:33:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:28 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mesh airflow case
+2026-05-28 23:33:28 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:28 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=high airflow gaming case
+2026-05-28 23:33:28 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:29 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=premium aluminum pc case
+2026-05-28 23:33:29 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:29 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=luxury gaming case
+2026-05-28 23:33:29 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:30 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=white fish tank case
+2026-05-28 23:33:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:30 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=white rgb case
+2026-05-28 23:33:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:30 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=micro atx fish tank
+2026-05-28 23:33:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:31 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=compact gaming case
+2026-05-28 23:33:31 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:31 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cyberpunk pc case
+2026-05-28 23:33:31 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:32 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=futuristic gaming case
+2026-05-28 23:33:32 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:32 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=federation command build
+2026-05-28 23:33:32 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:33 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=starfleet workstation
+2026-05-28 23:33:33 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:40074 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40076 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40080 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40086 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:33 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=borg cube pc
+2026-05-28 23:33:33 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:34 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=borg collective build
+2026-05-28 23:33:34 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:34 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=galactic empire build
+2026-05-28 23:33:34 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:34 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=rebel alliance gaming pc
+2026-05-28 23:33:34 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:35 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cylon red eye pc
+2026-05-28 23:33:35 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:35 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=battlestar inspired workstation
+2026-05-28 23:33:35 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39542 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39552 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39562 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39566 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39578 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39590 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39604 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:33:36 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=station command build
+2026-05-28 23:33:36 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:36 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=diplomatic station workstation
+2026-05-28 23:33:36 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39612 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39628 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39644 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39652 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:37 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=leviathan inspired build
+2026-05-28 23:33:37 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:37 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=biomechanical spaceship pc
+2026-05-28 23:33:37 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:38 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=autobot gaming pc
+2026-05-28 23:33:38 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:38 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=decepticon workstation
+2026-05-28 23:33:38 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:39 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=anime gaming pc
+2026-05-28 23:33:39 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:39 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=manga aesthetic workstation
+2026-05-28 23:33:39 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:39 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hidden leaf gaming pc
+2026-05-28 23:33:39 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:40 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hokage workstation
+2026-05-28 23:33:40 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:40 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=pokedex workstation
+2026-05-28 23:33:40 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:41 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=pikachu yellow rgb build
+2026-05-28 23:33:41 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:39656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39658 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39668 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39670 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:41 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=super saiyan gaming pc
+2026-05-28 23:33:41 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:42 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=dragon radar workstation
+2026-05-28 23:33:42 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:42 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=avengers workstation
+2026-05-28 23:33:42 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:43 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=shield tactical pc
+2026-05-28 23:33:43 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:43 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=jarvis ai workstation
+2026-05-28 23:33:43 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:43 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=stark industries pc
+2026-05-28 23:33:43 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:44 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gamma core build
+2026-05-28 23:33:44 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:44 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=radioactive green rgb pc
+2026-05-28 23:33:44 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:45 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cerebro workstation
+2026-05-28 23:33:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:45 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mutant tactical pc
+2026-05-28 23:33:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:46 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=spiderverse gaming pc
+2026-05-28 23:33:46 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:46 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=red blue rgb build
+2026-05-28 23:33:46 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:46 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=batcomputer workstation
+2026-05-28 23:33:46 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:47 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=dark knight pc
+2026-05-28 23:33:47 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:47 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=kryptonian workstation
+2026-05-28 23:33:47 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:48 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=fortress of solitude build
+2026-05-28 23:33:48 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:48 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=lian li style case
+2026-05-28 23:33:48 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:49 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hyte y60 style case
+2026-05-28 23:33:49 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:36740 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36756 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36782 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36798 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:49 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=Montech panoramic case
+2026-05-28 23:33:49 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:36814 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36822 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36830 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36842 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:33:50 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=darkFlash fish tank
+2026-05-28 23:33:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:50 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=showcase build
+2026-05-28 23:33:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:51 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=custom gaming pc
+2026-05-28 23:33:51 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:36858 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36868 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36880 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36896 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36904 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36906 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36910 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:33:51 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming atx case rgb
+2026-05-28 23:33:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:52 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming pc case mid tower
+2026-05-28 23:33:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:52 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=slim micro atx case office
+2026-05-28 23:33:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:52 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mini tower desktop case
+2026-05-28 23:33:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:53 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cheap atx pc case
+2026-05-28 23:33:53 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 23:33:53 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=budget gaming case atx
+INFO:     100.101.209.68:33028 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33036 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33052 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33060 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33068 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33072 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33088 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33090 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33094 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:34:02 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=fish+tank+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=fish+tank+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:34:02 [info     ] amazon.cases.done              found=0 search=fish tank pc case
