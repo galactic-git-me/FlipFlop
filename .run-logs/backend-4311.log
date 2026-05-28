@@ -18718,3 +18718,174 @@ INFO:     100.101.209.68:43032 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:43034 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43044 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:43060 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43068 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43076 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43084 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43094 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:39:42 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gamma+core+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gamma+core+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:39:42 [info     ] amazon.cases.done              found=0 search=gamma core build
+INFO:     100.101.209.68:43100 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43102 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43108 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43114 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43116 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43128 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43130 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35244 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35246 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35250 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35262 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35276 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35280 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35296 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35310 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:39:51 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=radioactive+green+rgb+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=radioactive+green+rgb+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:39:51 [info     ] amazon.cases.done              found=0 search=radioactive green rgb pc
+INFO:     100.101.209.68:38382 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38394 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38398 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38414 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38418 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38428 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38438 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38444 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38452 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38468 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:39:59 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cerebro+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cerebro+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:39:59 [info     ] amazon.cases.done              found=0 search=cerebro workstation
+INFO:     100.101.209.68:38472 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38476 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38492 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38494 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38506 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38518 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38530 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38534 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:40:08 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=mutant+tactical+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=mutant+tactical+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:08 [info     ] amazon.cases.done              found=0 search=mutant tactical pc
+INFO:     100.101.209.68:33360 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33370 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33374 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33388 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33404 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33406 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33418 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33422 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33430 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33436 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33448 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33460 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33466 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33482 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33498 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33500 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:40:16 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=spiderverse+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=spiderverse+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:16 [info     ] amazon.cases.done              found=0 search=spiderverse gaming pc
+INFO:     100.101.209.68:60050 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60062 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60076 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60092 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60134 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60148 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:40:25 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=red+blue+rgb+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=red+blue+rgb+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:25 [info     ] amazon.cases.done              found=0 search=red blue rgb build
+INFO:     100.101.209.68:46050 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46054 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46058 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46068 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46082 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46088 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46092 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46104 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46106 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46114 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:40:33 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=batcomputer+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=batcomputer+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:33 [info     ] amazon.cases.done              found=0 search=batcomputer workstation
+INFO:     100.101.209.68:54684 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54690 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54704 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54712 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54724 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54734 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54744 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54754 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54770 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:40:42 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=dark+knight+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=dark+knight+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:42 [info     ] amazon.cases.done              found=0 search=dark knight pc
+INFO:     100.101.209.68:54780 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54788 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54796 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54806 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54828 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54830 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54840 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54846 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54858 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60600 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60602 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60618 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60632 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:40:50 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=kryptonian+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=kryptonian+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-28 23:40:50 [info     ] amazon.cases.done              found=0 search=kryptonian workstation
+INFO:     100.101.209.68:60634 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60646 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60662 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60674 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57342 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57358 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57374 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-28 23:40:59 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=fortress+of+solitude+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=fortress+of+solitude+build&i=computers", waiting until "domcontentloaded"
+
+INFO:     100.101.209.68:57390 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57396 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57410 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-28 23:40:59 [info     ] amazon.cases.done              found=0 search=fortress of solitude build
+INFO:     100.101.209.68:57420 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57430 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57438 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57450 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57456 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57464 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57490 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57504 - "GET /api/schedule HTTP/1.1" 200 OK
