@@ -1,0 +1,40 @@
+{
+  "upgrade_parts": {
+    "active": false,
+    "batch_size": 5,
+    "vendors": {
+      "eBay": {
+        "cursor": 1,
+        "total": 1
+      },
+      "BargainHardware": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Scan": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Overclockers": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Box": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Amazon": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Temu": {
+        "cursor": 1,
+        "total": 1
+      },
+      "AliExpress": {
+        "cursor": 1,
+        "total": 1
+      }
+    }
+  }
+}
