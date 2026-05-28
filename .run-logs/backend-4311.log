@@ -14789,3 +14789,205 @@ INFO:     100.101.209.68:39624 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39628 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39642 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:39644 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38042 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38048 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38072 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38098 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38102 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38110 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38126 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38140 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38150 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38152 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38168 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38180 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38182 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38192 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54530 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54536 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54550 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54562 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54568 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54584 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54586 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54602 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54610 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51620 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51636 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51646 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51662 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51666 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51676 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51684 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51688 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51704 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51720 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51734 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51742 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51752 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51760 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51764 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51774 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51780 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51792 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51808 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'hokage workstation': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54520 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54528 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54542 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54544 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54552 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54560 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54564 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54566 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54572 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54586 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47696 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47698 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47712 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47716 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47732 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47758 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47770 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47774 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:03:40 [info     ] flip_opportunities_swarm.start
+2026-05-28 23:03:40 [info     ] source.cooldown_ignored        reason=cooldown_active_1825s source=Gumtree
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=AliExpress
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=BargainHardware
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Alibaba
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Amazon
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1881s source=Temu
+2026-05-28 23:03:41 [info     ] flip_opportunities_swarm.start
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1825s source=Gumtree
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1880s source=AliExpress
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1880s source=BargainHardware
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1880s source=Alibaba
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1880s source=Amazon
+2026-05-28 23:03:41 [info     ] source.cooldown_ignored        reason=cooldown_active_1880s source=Temu
+2026-05-28 23:03:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:45628 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45644 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45652 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45668 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45670 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45682 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45694 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45706 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45714 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45730 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45732 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45736 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45750 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45762 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45770 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45774 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-28 23:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-28 23:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-28 23:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:50 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-28 23:03:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:39442 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39458 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39466 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39472 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-28 23:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-28 23:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-28 23:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:03:58 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-28 23:03:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:39482 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39492 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39504 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39506 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39530 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39546 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39556 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39562 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39578 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39594 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39602 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39608 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39622 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39634 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-28 23:04:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-28 23:04:06 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:04:06 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-28 23:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-28 23:04:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-28 23:04:06 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-28 23:04:06 [info     ] gumtree.playwright.done        total=0
+2026-05-28 23:04:06 [info     ] source.done                    found=0 gems=0 source=Gumtree
+INFO:     100.101.209.68:42456 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42470 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42494 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42504 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42510 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42516 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42528 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42534 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pokedex workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45158 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45172 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45184 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45186 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45200 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45204 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45220 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45224 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45236 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45244 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45248 - "GET /api/schedule HTTP/1.1" 200 OK
