@@ -40,7 +40,7 @@ def _push(entry: dict) -> None:
         try:
             _WAITERS.remove(q)
         except ValueError:
-            pass
+            continue
 
 
 def install_log_capture() -> None:
@@ -100,12 +100,12 @@ async def stream_logs():
                 except asyncio.TimeoutError:
                     yield ": keepalive\n\n"
         except asyncio.CancelledError:
-            pass
+            return
         finally:
             try:
                 _WAITERS.remove(q)
             except ValueError:
-                pass
+                return
 
     return StreamingResponse(
         generate(),

@@ -361,6 +361,6 @@ async def run_playbook_evolution() -> dict:
                     f"from observed demand changes."
                 ),
             )
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("playbook_evolution.alert_emit_error", error=str(exc))
     return {"ok": True, "proposals_created": proposals_created, "sold_flips": len(sold_flips)}

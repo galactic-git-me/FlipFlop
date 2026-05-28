@@ -205,7 +205,7 @@ def _parse_ebay_listing_date(text: str) -> Optional[datetime]:
             clean = re.sub(r"^[^a-z]*listed\s*:?\s*", "", t, flags=re.I).strip()
             return datetime.strptime(clean, fmt)
         except ValueError:
-            pass
+            continue
     return None
 
 
@@ -460,8 +460,8 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             finally:
                 try:
                     await context.storage_state(path=str(state_path))
-                except Exception:
-                    pass
+                except Exception as exc:
+                    print(f"[scraper] unable to persist eBay playwright state: {exc}")
                 await context.close()
                 await browser.close()
     return listings, blocked
@@ -834,14 +834,14 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
                     try:
                         seller_feedback_count = int(fc_m.group(1).replace(",", ""))
                     except ValueError:
-                        pass
+                        continue
                 # Extract positive % e.g. "99.8% positive"
                 pct_m = re.search(r"([\d.]+)%", raw_seller)
                 if pct_m:
                     try:
                         seller_feedback_pct = float(pct_m.group(1))
                     except ValueError:
-                        pass
+                        continue
 
             # eBay Shop indicator — seller URL contains /str/ or a shop icon exists
             shop_link = item.select_one("a[href*='/str/']") or item.select_one("[class*='store']")
@@ -1828,7 +1828,7 @@ async def _scrape_generic_marketplace_listings(
                     try:
                         await page.wait_for_selector(item_selector, timeout=10000)
                     except Exception:
-                        pass
+                        continue
                     await asyncio.sleep(1.0)
                     await page.evaluate("window.scrollBy(0, 800)")
                     await asyncio.sleep(0.8)

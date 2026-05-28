@@ -305,8 +305,8 @@ async def scrape_gumtree_playwright(
                         timeout=3000,
                     )
                     await asyncio.sleep(0.5)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("gumtree.cookie_click_skipped", term=term, error=str(exc))
 
                 # Wait for listing cards to appear
                 try:
@@ -502,8 +502,8 @@ async def scrape_facebook_playwright(
                         try:
                             await page.click(selector, timeout=2000)
                             await asyncio.sleep(0.3)
-                        except Exception:
-                            pass
+                        except Exception as exc:
+                            log.debug("facebook.cookie_click_skipped", selector=selector, error=str(exc))
 
                     login_wall = await page.query_selector(
                         "input[name='email'], form[data-testid='royal_login_form']"
@@ -523,8 +523,8 @@ async def scrape_facebook_playwright(
                             "div[class*='x3ct3a4']",
                             timeout=10000,
                         )
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        log.debug("facebook.results_wait_timeout", term=term, error=str(exc))
 
                     await asyncio.sleep(random.uniform(1.0, 2.0))
                     await page.evaluate("window.scrollBy(0, 800)")
@@ -700,8 +700,8 @@ async def scrape_preloved_playwright(
                 "[class*='cookie'] button, #cookie-accept",
                 timeout=3000,
             )
-        except Exception:
-            pass
+        except Exception as exc:
+            log.debug("preloved.cookie_click_skipped", error=str(exc))
         await asyncio.sleep(1)
 
         for term in search_terms[:8]:
@@ -887,8 +887,8 @@ async def scrape_apex_playwright(
                     try:
                         body = await response.json()
                         intercepted.append({"url": url, "data": body})
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        log.debug("apex.intercept_json_parse_failed", url=url, error=str(exc))
 
         context.on("response", on_response)
         page = await context.new_page()
@@ -909,15 +909,15 @@ async def scrape_apex_playwright(
                     timeout=3000,
                 )
                 await asyncio.sleep(1)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("apex.cookie_click_skipped", error=str(exc))
 
             # Filter to UK auctions using the country dropdown
             try:
                 await page.select_option("#countryFilter", "United Kingdom")
                 await asyncio.sleep(2)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("apex.country_filter_skipped", error=str(exc))
 
             # Collect UK auction links (click-based navigation works; hash eval causes SPA errors)
             auction_items = await page.query_selector_all(".upcoming-auctions-item")
@@ -1166,8 +1166,8 @@ async def _scrape_auction_site(
                     await page.click(btn, timeout=2000)
                     await asyncio.sleep(0.3)
                     break
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("generic_playwright.cookie_click_skipped", site=site_name, selector=btn, error=str(exc))
 
             if wait_selector:
                 try:

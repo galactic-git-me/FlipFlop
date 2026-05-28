@@ -63,7 +63,7 @@ def _to_datetime(value: str | None) -> Optional[datetime]:
             dt = datetime.fromisoformat(candidate)
             return dt.astimezone(UTC).replace(tzinfo=None) if dt.tzinfo else dt
         except ValueError:
-            pass
+            continue
     rel = re.search(r"(\d+)\s*(day|hour|minute|hr|min)", text, re.I)
     if rel:
         n = int(rel.group(1))

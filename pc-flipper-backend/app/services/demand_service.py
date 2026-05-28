@@ -141,7 +141,7 @@ def _assign_categories(listings: list[Listing]) -> dict[str, list[Listing]]:
                     buckets[cat["name"]].append(listing)
                     break
             except Exception:
-                pass
+                continue
     return buckets
 
 

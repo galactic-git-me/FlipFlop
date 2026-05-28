@@ -346,8 +346,8 @@ async def approve_proposal(
                     f"(proposal #{proposal.id}) from demand signal source '{demand_source}'."
                 ),
             )
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("playbooks.alert_emit_error", proposal_id=proposal.id, error=str(exc))
 
     log.info("proposal.approved", id=proposal_id, action=proposal.action, playbook_id=pb.id)
     return pb
