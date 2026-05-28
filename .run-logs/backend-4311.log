@@ -9622,3 +9622,162 @@ INFO:     100.101.209.68:36850 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36858 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36866 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36878 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'federation command build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50496 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50500 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50512 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50528 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:07:41 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=24+inch+monitor
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=24+inch+monitor", waiting until "domcontentloaded"
+ site=Alibaba term=24 inch monitor
+2026-05-28 22:07:42 [debug    ] ebay_buy.request_retry         attempt=3 error= search=i9 CPU
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-28 22:07:44 [debug    ] upgrade_parts.ebay             buy=None part=i9 CPU sold=None
+INFO:     100.101.209.68:50530 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50542 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50552 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50554 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50556 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43746 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43750 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43760 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43764 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43774 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43776 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43788 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43802 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43808 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:07:49 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=24+inch+monitor
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=24+inch+monitor", waiting until "domcontentloaded"
+ site=BargainHardware term=24 inch monitor
+INFO:     100.101.209.68:46308 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46324 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46328 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46338 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46342 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46354 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46364 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46366 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46370 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:46384 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46388 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46400 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46404 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46418 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46430 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46444 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46448 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46452 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46454 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46462 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:08:09 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 motherboard
+INFO:     100.101.209.68:52656 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52670 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52676 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52686 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52702 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52716 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52722 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52728 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52732 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'starfleet workstation': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38418 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38422 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38426 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38442 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38452 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38460 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38468 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38478 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38484 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38488 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38502 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38508 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38538 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38544 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'xl mouse pad': 0 found, 0 new (total 0)
+2026-05-28 22:08:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:60506 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60508 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60518 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60532 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:60536 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60552 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60560 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60562 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60564 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56114 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56122 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56126 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56142 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56152 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56164 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:08:35 [debug    ] ebay_sold.request_retry        attempt=2 error= search=AM4 motherboard
+2026-05-28 22:08:36 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=xl mouse pad
+2026-05-28 22:08:36 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:08:36 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:56176 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56190 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56206 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56222 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:08:36 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=xl mouse pad
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56232 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56246 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56254 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56268 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:08:45 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=xl+mouse+pad&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=xl+mouse+pad&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=xl mouse pad
+INFO:     100.101.209.68:32898 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32902 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32906 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32918 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32924 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:32930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32934 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32936 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32950 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32954 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32958 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32962 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32970 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32980 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32992 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33000 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:08:53 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=xl+mouse+pad&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=xl+mouse+pad&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=xl mouse pad
+INFO:     100.101.209.68:58830 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58834 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58848 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58856 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58858 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58872 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58878 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58882 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58892 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'borg cube pc': 0 found, 0 new (total 0)
+2026-05-28 22:09:01 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=xl+mouse+pad&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=xl+mouse+pad&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=xl mouse pad
+2026-05-28 22:09:02 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 motherboard
