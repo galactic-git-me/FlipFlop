@@ -4892,3 +4892,156 @@ INFO:     100.101.209.68:60492 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:60508 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:60514 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:60526 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52604 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52614 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52628 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52640 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52642 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52650 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52654 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52662 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52666 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52674 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52686 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52688 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52698 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52712 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52726 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52740 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52752 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52764 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52766 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:22:09 [warning  ] scan.fetch.error               error= search=NVMe 1TB
+2026-05-28 21:22:09 [warning  ] overclockers.fetch.error       error= search=NVMe 1TB
+2026-05-28 21:22:09 [warning  ] box.fetch.error                error= search=NVMe 1TB
+INFO:     100.101.209.68:58800 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58814 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58822 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42906 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42908 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42932 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42940 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42960 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42976 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42982 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42984 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43000 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43016 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'hyte y60 style case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:43026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43032 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43042 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43050 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44516 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44522 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44538 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44550 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44560 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44564 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44578 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44580 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44596 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:22:29 [warning  ] scan.fetch.error               error= search=PSU
+2026-05-28 21:22:29 [warning  ] overclockers.fetch.error       error= search=PSU
+2026-05-28 21:22:29 [warning  ] box.fetch.error                error= search=PSU
+INFO:     100.101.209.68:44604 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44616 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44624 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44626 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44640 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44656 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44410 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44416 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44428 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44444 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44458 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44472 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44494 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44496 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44504 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44512 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44526 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55166 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55176 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55178 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55190 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55204 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55218 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 21:22:49 [warning  ] scan.fetch.error               error= search=CPU cooler
+2026-05-28 21:22:49 [warning  ] overclockers.fetch.error       error= search=CPU cooler
+2026-05-28 21:22:49 [warning  ] box.fetch.error                error= search=CPU cooler
+INFO:     100.101.209.68:55222 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55228 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55238 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55248 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55252 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55266 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55278 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55288 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55296 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Montech panoramic case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55748 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55750 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55752 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55780 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55800 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55806 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55810 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55824 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55840 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55842 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55850 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55858 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55870 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55886 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50154 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50160 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50170 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50176 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:23:09 [warning  ] scan.fetch.error               error= search=RGB fans
+2026-05-28 21:23:09 [warning  ] overclockers.fetch.error       error= search=RGB fans
+2026-05-28 21:23:09 [warning  ] box.fetch.error                error= search=RGB fans
+2026-05-28 21:23:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:10 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVIDIA GPU
+2026-05-28 21:23:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-28 21:23:10 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 CPU
+2026-05-28 21:23:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:10 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i7 CPU
+2026-05-28 21:23:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:11 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i9 CPU
+2026-05-28 21:23:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:11 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard
+2026-05-28 21:23:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:12 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard cpu combo
+2026-05-28 21:23:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:12 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM
+2026-05-28 21:23:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:13 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM 32GB 2x16GB
+2026-05-28 21:23:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:13 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVMe 1TB
+2026-05-28 21:23:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:13 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=PSU
+2026-05-28 21:23:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:14 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=CPU cooler
+2026-05-28 21:23:14 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 21:23:14 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=RGB fans
+INFO:     100.101.209.68:43918 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43930 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43934 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43942 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43956 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43970 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43974 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43980 - "GET /api/schedule HTTP/1.1" 200 OK
