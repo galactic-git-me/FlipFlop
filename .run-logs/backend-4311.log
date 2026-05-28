@@ -11556,3 +11556,133 @@ INFO:     100.101.209.68:56754 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56758 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56774 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56782 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:28:34 [debug    ] ebay_buy.request_retry         attempt=2 error= search=RGB fans
+INFO:     100.101.209.68:44908 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44912 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44924 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44944 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44952 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44958 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44966 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44982 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45002 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45004 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45016 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45026 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45030 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45038 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'spiderverse gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:47134 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47146 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47150 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47164 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47174 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47186 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47204 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47218 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47232 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39250 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39264 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39286 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39298 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39304 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39314 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:29:00 [debug    ] ebay_buy.request_retry         attempt=3 error= search=RGB fans
+INFO:     100.101.209.68:39320 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39332 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39334 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39338 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:29:02 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
+INFO:     100.101.209.68:48398 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48412 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48428 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48458 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48464 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48468 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48474 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48478 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:29:11 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=nvidia+gpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=nvidia+gpu", waiting until "domcontentloaded"
+ search=nvidia+gpu
+INFO:     100.101.209.68:48482 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48486 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48496 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48502 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48508 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48512 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48518 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39008 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39012 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39018 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39024 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39040 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39042 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39046 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39058 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39068 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:29:20 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+cpu", waiting until "domcontentloaded"
+ search=am4+cpu
+INFO:     100.101.209.68:36730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36740 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36742 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36752 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'red blue rgb build': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36762 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36776 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36780 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36786 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36798 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36808 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36810 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:29:28 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu", waiting until "domcontentloaded"
+ search=intel+i7+cpu
+INFO:     100.101.209.68:36822 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36832 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36834 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36846 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36850 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36866 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36872 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36880 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:29:37 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu", waiting until "domcontentloaded"
+ search=intel+i9+cpu
+INFO:     100.101.209.68:40822 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40824 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40830 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40840 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40842 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40844 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40846 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40856 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40860 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40868 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40882 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40894 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40920 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40910 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40932 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40938 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 22:29:46 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard", waiting until "domcontentloaded"
+ search=am4+motherboard
+INFO:     100.101.209.68:51244 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51260 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51274 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51280 - "GET /api/schedule HTTP/1.1" 200 OK
