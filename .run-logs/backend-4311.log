@@ -8698,3 +8698,150 @@ INFO:     100.101.209.68:41674 - "GET /api/schedule HTTP/1.1" 200 OK
 Call log:
   - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+mouse&g=y&SortType=price_asc", waiting until "domcontentloaded"
  site=AliExpress term=gaming mouse
+INFO:     100.101.209.68:41466 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41472 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41484 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41500 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41502 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41516 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41528 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41544 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41550 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41556 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41568 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41582 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41586 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41588 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41604 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41606 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 21:59:58 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+mouse
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+mouse", waiting until "domcontentloaded"
+ site=Alibaba term=gaming mouse
+[scraper] eBay 'rgb airflow case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56660 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56672 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56688 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56700 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:00:06 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+mouse
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+mouse", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming mouse
+2026-05-28 22:00:09 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 CPU
+INFO:     100.101.209.68:56708 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56710 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56718 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56732 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56734 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56736 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56748 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56756 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56768 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56784 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56796 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56812 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56814 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56820 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56836 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56850 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53880 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53888 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53896 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53902 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53916 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53926 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53936 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53942 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33496 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33512 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33516 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33526 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33532 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33540 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33550 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33562 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33572 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33574 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33588 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33590 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33604 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33616 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33632 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:00:35 [debug    ] ebay_sold.request_retry        attempt=2 error= search=AM4 CPU
+INFO:     100.101.209.68:47142 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47150 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47162 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47168 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'mesh airflow case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:47174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47182 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47188 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47192 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47208 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47212 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53636 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53650 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53658 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53660 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming headset': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53666 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53668 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53676 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53692 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53698 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:00:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:53708 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53722 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53738 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53740 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:00:54 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming headset
+2026-05-28 22:00:54 [info     ] gumtree.playwright.done        total=0
+2026-05-28 22:00:54 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-28 22:00:55 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming headset
+INFO:     100.101.209.68:57490 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57494 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57498 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57526 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57536 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57542 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57554 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57558 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57564 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57578 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57606 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57620 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57622 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57630 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:01:02 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 CPU
+2026-05-28 22:01:03 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+headset&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+headset&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming headset
+INFO:     100.101.209.68:45762 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45768 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45782 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45796 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45802 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45818 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45832 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45846 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45860 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 22:01:11 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+headset&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+headset&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming headset
+INFO:     100.101.209.68:45874 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45888 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45904 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45920 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45934 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45942 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45948 - "GET /api/sources/health HTTP/1.1" 200 OK
