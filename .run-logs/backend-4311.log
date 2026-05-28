@@ -20113,3 +20113,170 @@ INFO:     100.101.209.68:58512 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58514 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58530 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:58540 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:51:37 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=fish+tank+pc+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=fish+tank+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:51:37 [info     ] aliexpress.cases.done          found=0 search=fish tank pc case
+INFO:     100.101.209.68:33690 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33706 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33714 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33726 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33736 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33750 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33762 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33776 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33784 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33790 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33804 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33816 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33826 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33842 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33858 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:51:45 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=panoramic+pc+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=panoramic+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:51:45 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
+INFO:     100.101.209.68:38460 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38472 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38482 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38488 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:51:54 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=argb+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=argb+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:51:54 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
+INFO:     100.101.209.68:46222 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46236 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46242 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46256 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46266 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46278 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46280 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46294 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46296 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46298 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46306 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46322 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46334 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46342 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46350 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:52:03 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=rgb+airflow+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=rgb+airflow+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:03 [info     ] aliexpress.cases.done          found=0 search=rgb airflow case
+INFO:     100.101.209.68:46864 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46866 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46880 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46884 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46896 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46904 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46908 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46916 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46924 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46930 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46942 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46956 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46966 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46970 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:52:11 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=mesh+airflow+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=mesh+airflow+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:11 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
+INFO:     100.101.209.68:46974 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46986 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46990 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46996 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:52:19 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=high+airflow+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=high+airflow+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:20 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
+INFO:     100.101.209.68:59602 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59604 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59626 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59632 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59646 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59660 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59664 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39908 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39926 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39938 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39952 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39960 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39974 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-28 23:52:28 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=premium+aluminum+pc+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=premium+aluminum+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:28 [info     ] aliexpress.cases.done          found=0 search=premium aluminum pc case
+INFO:     100.101.209.68:39980 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39982 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39984 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39994 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40010 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40026 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40036 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40048 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40056 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:52:37 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=luxury+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=luxury+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:37 [info     ] aliexpress.cases.done          found=0 search=luxury gaming case
+INFO:     100.101.209.68:37006 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37020 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37036 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37046 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37062 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37078 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37082 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37086 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37102 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37104 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37116 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37540 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37552 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37554 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37564 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37576 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:52:45 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=white+fish+tank+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=white+fish+tank+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:45 [info     ] aliexpress.cases.done          found=0 search=white fish tank case
+INFO:     100.101.209.68:37592 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37600 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37608 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37612 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-28 23:52:54 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=white+rgb+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=white+rgb+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-28 23:52:54 [info     ] aliexpress.cases.done          found=0 search=white rgb case
+INFO:     100.101.209.68:37618 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37624 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37632 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37646 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49796 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49806 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49814 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49828 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49832 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49834 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49848 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49854 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49866 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49876 - "GET /api/schedule HTTP/1.1" 200 OK
