@@ -3487,3 +3487,53 @@ Call log:
   - navigating to "https://www.alibaba.com/trade/search?SearchText=batcomputer+workstation", waiting until "domcontentloaded"
  search=batcomputer workstation source=Alibaba
 2026-05-29 13:34:42 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
+2026-05-29 13:34:51 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=dark+knight+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=dark+knight+pc", waiting until "domcontentloaded"
+ search=dark knight pc source=Alibaba
+2026-05-29 13:34:51 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=Alibaba
+2026-05-29 13:34:59 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=kryptonian+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=kryptonian+workstation", waiting until "domcontentloaded"
+ search=kryptonian workstation source=Alibaba
+2026-05-29 13:34:59 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=Alibaba
+2026-05-29 13:35:08 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=fortress+of+solitude+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=fortress+of+solitude+build", waiting until "domcontentloaded"
+ search=fortress of solitude build source=Alibaba
+2026-05-29 13:35:08 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=Alibaba
+2026-05-29 13:35:16 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=lian+li+style+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=lian+li+style+case", waiting until "domcontentloaded"
+ search=lian li style case source=Alibaba
+2026-05-29 13:35:16 [info     ] cases.generic_market.done      found=0 search=lian li style case source=Alibaba
+2026-05-29 13:35:25 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=hyte+y60+style+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=hyte+y60+style+case", waiting until "domcontentloaded"
+ search=hyte y60 style case source=Alibaba
+2026-05-29 13:35:25 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=Alibaba
+2026-05-29 13:35:33 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=Montech+panoramic+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=Montech+panoramic+case", waiting until "domcontentloaded"
+ search=Montech panoramic case source=Alibaba
+2026-05-29 13:35:33 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=Alibaba
+2026-05-29 13:35:42 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=darkFlash+fish+tank
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=darkFlash+fish+tank", waiting until "domcontentloaded"
+ search=darkFlash fish tank source=Alibaba
+2026-05-29 13:35:42 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=Alibaba
+2026-05-29 13:35:50 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=showcase+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=showcase+build", waiting until "domcontentloaded"
+ search=showcase build source=Alibaba
+2026-05-29 13:35:50 [info     ] cases.generic_market.done      found=0 search=showcase build source=Alibaba
+2026-05-29 13:35:59 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=custom+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=custom+gaming+pc", waiting until "domcontentloaded"
+ search=custom gaming pc source=Alibaba
+2026-05-29 13:35:59 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=Alibaba
+2026-05-29 13:36:07 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+atx+case+rgb
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+atx+case+rgb", waiting until "domcontentloaded"
+ search=gaming atx case rgb source=Alibaba
+2026-05-29 13:36:07 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
