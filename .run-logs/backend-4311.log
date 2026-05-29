@@ -2149,3 +2149,53 @@ Call log:
   - navigating to "https://www.temu.com/search_result.html?search_key=white+fish+tank+case&search_method=user", waiting until "domcontentloaded"
 
 2026-05-29 13:02:32 [info     ] temu.cases.done                found=0 search=white fish tank case
+2026-05-29 13:02:40 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=white+rgb+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=white+rgb+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:40 [info     ] temu.cases.done                found=0 search=white rgb case
+2026-05-29 13:02:49 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=micro+atx+fish+tank&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=micro+atx+fish+tank&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:49 [info     ] temu.cases.done                found=0 search=micro atx fish tank
+2026-05-29 13:02:57 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=compact+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=compact+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:57 [info     ] temu.cases.done                found=0 search=compact gaming case
+2026-05-29 13:03:06 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=cyberpunk+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=cyberpunk+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:06 [info     ] temu.cases.done                found=0 search=cyberpunk pc case
+2026-05-29 13:03:14 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=futuristic+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=futuristic+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:14 [info     ] temu.cases.done                found=0 search=futuristic gaming case
+2026-05-29 13:03:23 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=federation+command+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=federation+command+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:23 [info     ] temu.cases.done                found=0 search=federation command build
+2026-05-29 13:03:31 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=starfleet+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=starfleet+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:31 [info     ] temu.cases.done                found=0 search=starfleet workstation
+2026-05-29 13:03:40 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=borg+cube+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=borg+cube+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:40 [info     ] temu.cases.done                found=0 search=borg cube pc
+2026-05-29 13:03:48 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=borg+collective+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=borg+collective+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:48 [info     ] temu.cases.done                found=0 search=borg collective build
+2026-05-29 13:03:57 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=galactic+empire+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=galactic+empire+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:03:57 [info     ] temu.cases.done                found=0 search=galactic empire build
