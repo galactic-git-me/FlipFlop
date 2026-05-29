@@ -550,3 +550,23 @@ Call log:
 [scraper] eBay 'station command build': 0 found, 0 new (total 0)
 [scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
 2026-05-29 11:32:26 [debug    ] ebay_sold.request_retry        attempt=2 error= search=DDR4 RAM
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+2026-05-29 11:32:53 [debug    ] ebay_sold.request_retry        attempt=3 error= search=DDR4 RAM
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 11:33:04 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay 'diplomatic station workstation': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 11:33:06 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 11:33:14 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-29 11:33:14 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+2026-05-29 11:33:20 [debug    ] ebay_buy.request_retry         attempt=1 error= search=DDR4 RAM
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 11:33:38 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-29 11:33:38 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+2026-05-29 11:33:46 [info     ] autonomous_cycle.done          duration_ms=1089716
+2026-05-29 11:33:46 [debug    ] ebay_buy.request_retry         attempt=2 error= search=DDR4 RAM
+[scraper] eBay 'leviathan inspired build': 0 found, 0 new (total 0)
+2026-05-29 11:34:13 [debug    ] ebay_buy.request_retry         attempt=3 error= search=DDR4 RAM
+2026-05-29 11:34:15 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM sold=None
