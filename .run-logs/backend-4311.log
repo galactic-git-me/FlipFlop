@@ -2424,3 +2424,53 @@ Call log:
   - navigating to "https://www.aliexpress.com/wholesale?SearchText=panoramic+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
 
 2026-05-29 13:10:19 [info     ] aliexpress.cases.done          found=0 search=panoramic pc case
+2026-05-29 13:10:28 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=argb+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=argb+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:10:28 [info     ] aliexpress.cases.done          found=0 search=argb gaming case
+2026-05-29 13:10:36 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=rgb+airflow+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=rgb+airflow+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:10:36 [info     ] aliexpress.cases.done          found=0 search=rgb airflow case
+2026-05-29 13:10:45 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=mesh+airflow+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=mesh+airflow+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:10:45 [info     ] aliexpress.cases.done          found=0 search=mesh airflow case
+2026-05-29 13:10:53 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=high+airflow+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=high+airflow+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:10:53 [info     ] aliexpress.cases.done          found=0 search=high airflow gaming case
+2026-05-29 13:11:02 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=premium+aluminum+pc+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=premium+aluminum+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:02 [info     ] aliexpress.cases.done          found=0 search=premium aluminum pc case
+2026-05-29 13:11:10 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=luxury+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=luxury+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:10 [info     ] aliexpress.cases.done          found=0 search=luxury gaming case
+2026-05-29 13:11:19 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=white+fish+tank+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=white+fish+tank+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:19 [info     ] aliexpress.cases.done          found=0 search=white fish tank case
+2026-05-29 13:11:27 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=white+rgb+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=white+rgb+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:27 [info     ] aliexpress.cases.done          found=0 search=white rgb case
+2026-05-29 13:11:36 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=micro+atx+fish+tank&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=micro+atx+fish+tank&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:36 [info     ] aliexpress.cases.done          found=0 search=micro atx fish tank
+2026-05-29 13:11:44 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=compact+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=compact+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:44 [info     ] aliexpress.cases.done          found=0 search=compact gaming case
