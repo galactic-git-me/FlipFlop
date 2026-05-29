@@ -2274,3 +2274,53 @@ Call log:
   - navigating to "https://www.temu.com/search_result.html?search_key=pikachu+yellow+rgb+build&search_method=user", waiting until "domcontentloaded"
 
 2026-05-29 13:06:04 [info     ] temu.cases.done                found=0 search=pikachu yellow rgb build
+2026-05-29 13:06:13 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=super+saiyan+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=super+saiyan+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:13 [info     ] temu.cases.done                found=0 search=super saiyan gaming pc
+2026-05-29 13:06:21 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=dragon+radar+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=dragon+radar+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:21 [info     ] temu.cases.done                found=0 search=dragon radar workstation
+2026-05-29 13:06:30 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=avengers+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=avengers+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:30 [info     ] temu.cases.done                found=0 search=avengers workstation
+2026-05-29 13:06:38 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=shield+tactical+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=shield+tactical+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:38 [info     ] temu.cases.done                found=0 search=shield tactical pc
+2026-05-29 13:06:47 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=jarvis+ai+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=jarvis+ai+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:47 [info     ] temu.cases.done                found=0 search=jarvis ai workstation
+2026-05-29 13:06:55 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=stark+industries+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=stark+industries+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:55 [info     ] temu.cases.done                found=0 search=stark industries pc
+2026-05-29 13:07:04 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gamma+core+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gamma+core+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:04 [info     ] temu.cases.done                found=0 search=gamma core build
+2026-05-29 13:07:12 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=radioactive+green+rgb+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=radioactive+green+rgb+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:12 [info     ] temu.cases.done                found=0 search=radioactive green rgb pc
+2026-05-29 13:07:21 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=cerebro+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=cerebro+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:21 [info     ] temu.cases.done                found=0 search=cerebro workstation
+2026-05-29 13:07:29 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=mutant+tactical+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=mutant+tactical+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:29 [info     ] temu.cases.done                found=0 search=mutant tactical pc
