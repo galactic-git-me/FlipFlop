@@ -409,7 +409,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
-      {scanStatus && (scanStatus.running || (scanStatus.sites && scanStatus.sites.length > 0)) && (
+      {scanStatus?.running && (
         <ScanOverlay status={scanStatus} />
       )}
 
