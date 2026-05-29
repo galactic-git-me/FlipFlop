@@ -1899,3 +1899,58 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=cylon+red+eye+pc&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:55:26 [info     ] amazon.cases.done              found=0 search=cylon red eye pc
+2026-05-29 12:55:35 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=battlestar+inspired+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=battlestar+inspired+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:35 [info     ] amazon.cases.done              found=0 search=battlestar inspired workstation
+2026-05-29 12:55:43 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=station+command+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=station+command+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:43 [info     ] amazon.cases.done              found=0 search=station command build
+2026-05-29 12:55:52 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=diplomatic+station+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=diplomatic+station+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:52 [info     ] amazon.cases.done              found=0 search=diplomatic station workstation
+2026-05-29 12:56:00 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=leviathan+inspired+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=leviathan+inspired+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:00 [info     ] amazon.cases.done              found=0 search=leviathan inspired build
+2026-05-29 12:56:09 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=biomechanical+spaceship+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=biomechanical+spaceship+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:09 [info     ] amazon.cases.done              found=0 search=biomechanical spaceship pc
+2026-05-29 12:56:17 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=autobot+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=autobot+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:17 [info     ] amazon.cases.done              found=0 search=autobot gaming pc
+2026-05-29 12:56:26 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=decepticon+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=decepticon+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:26 [info     ] amazon.cases.done              found=0 search=decepticon workstation
+2026-05-29 12:56:34 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=anime+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=anime+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:34 [info     ] amazon.cases.done              found=0 search=anime gaming pc
+2026-05-29 12:56:43 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=manga+aesthetic+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=manga+aesthetic+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:43 [info     ] amazon.cases.done              found=0 search=manga aesthetic workstation
+2026-05-29 12:56:51 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=hidden+leaf+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=hidden+leaf+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:56:51 [info     ] amazon.cases.done              found=0 search=hidden leaf gaming pc
+2026-05-29 12:57:00 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=hokage+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=hokage+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:00 [info     ] amazon.cases.done              found=0 search=hokage workstation
