@@ -2199,3 +2199,78 @@ Call log:
   - navigating to "https://www.temu.com/search_result.html?search_key=galactic+empire+build&search_method=user", waiting until "domcontentloaded"
 
 2026-05-29 13:03:57 [info     ] temu.cases.done                found=0 search=galactic empire build
+2026-05-29 13:04:05 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=rebel+alliance+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=rebel+alliance+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:05 [info     ] temu.cases.done                found=0 search=rebel alliance gaming pc
+2026-05-29 13:04:14 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=cylon+red+eye+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=cylon+red+eye+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:14 [info     ] temu.cases.done                found=0 search=cylon red eye pc
+2026-05-29 13:04:22 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=battlestar+inspired+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=battlestar+inspired+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:22 [info     ] temu.cases.done                found=0 search=battlestar inspired workstation
+2026-05-29 13:04:31 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=station+command+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=station+command+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:31 [info     ] temu.cases.done                found=0 search=station command build
+2026-05-29 13:04:39 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=diplomatic+station+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=diplomatic+station+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:39 [info     ] temu.cases.done                found=0 search=diplomatic station workstation
+2026-05-29 13:04:48 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=leviathan+inspired+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=leviathan+inspired+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:48 [info     ] temu.cases.done                found=0 search=leviathan inspired build
+2026-05-29 13:04:56 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=biomechanical+spaceship+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=biomechanical+spaceship+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:04:56 [info     ] temu.cases.done                found=0 search=biomechanical spaceship pc
+2026-05-29 13:05:05 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=autobot+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=autobot+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:05 [info     ] temu.cases.done                found=0 search=autobot gaming pc
+2026-05-29 13:05:13 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=decepticon+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=decepticon+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:13 [info     ] temu.cases.done                found=0 search=decepticon workstation
+2026-05-29 13:05:22 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=anime+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=anime+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:22 [info     ] temu.cases.done                found=0 search=anime gaming pc
+2026-05-29 13:05:30 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=manga+aesthetic+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=manga+aesthetic+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:30 [info     ] temu.cases.done                found=0 search=manga aesthetic workstation
+2026-05-29 13:05:39 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=hidden+leaf+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=hidden+leaf+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:39 [info     ] temu.cases.done                found=0 search=hidden leaf gaming pc
+2026-05-29 13:05:47 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=hokage+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=hokage+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:47 [info     ] temu.cases.done                found=0 search=hokage workstation
+2026-05-29 13:05:56 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=pokedex+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=pokedex+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:05:56 [info     ] temu.cases.done                found=0 search=pokedex workstation
+2026-05-29 13:06:04 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=pikachu+yellow+rgb+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=pikachu+yellow+rgb+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:06:04 [info     ] temu.cases.done                found=0 search=pikachu yellow rgb build
