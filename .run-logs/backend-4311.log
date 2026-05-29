@@ -3155,3 +3155,61 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=showcase+build", waiting until "domcontentloaded"
  search=showcase build source=BargainHardware
 2026-05-29 13:26:37 [info     ] cases.generic_market.done      found=0 search=showcase build source=BargainHardware
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-29 13:26:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=custom+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=custom+gaming+pc", waiting until "domcontentloaded"
+ search=custom gaming pc source=BargainHardware
+2026-05-29 13:26:46 [info     ] cases.generic_market.done      found=0 search=custom gaming pc source=BargainHardware
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-29 13:26:54 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+atx+case+rgb
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+atx+case+rgb", waiting until "domcontentloaded"
+ search=gaming atx case rgb source=BargainHardware
+2026-05-29 13:26:54 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=BargainHardware
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-29 13:27:03 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+pc+case+mid+tower
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+pc+case+mid+tower", waiting until "domcontentloaded"
+ search=gaming pc case mid tower source=BargainHardware
+2026-05-29 13:27:03 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=BargainHardware
+2026-05-29 13:27:11 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=slim+micro+atx+case+office
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=slim+micro+atx+case+office", waiting until "domcontentloaded"
+ search=slim micro atx case office source=BargainHardware
+2026-05-29 13:27:11 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=BargainHardware
+2026-05-29 13:27:20 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=mini+tower+desktop+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=mini+tower+desktop+case", waiting until "domcontentloaded"
+ search=mini tower desktop case source=BargainHardware
+2026-05-29 13:27:20 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=BargainHardware
+2026-05-29 13:27:28 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cheap+atx+pc+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cheap+atx+pc+case", waiting until "domcontentloaded"
+ search=cheap atx pc case source=BargainHardware
+2026-05-29 13:27:28 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=BargainHardware
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-29 13:27:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=budget+gaming+case+atx
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=budget+gaming+case+atx", waiting until "domcontentloaded"
+ search=budget gaming case atx source=BargainHardware
+2026-05-29 13:27:37 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=BargainHardware
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-29 13:27:45 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.cherrytreeinc.com/collections/pc-cases
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/collections/pc-cases", waiting until "domcontentloaded"
+ search=catalogue source=CherryTree Inc
+2026-05-29 13:27:45 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-29 13:27:54 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.cherrytreeinc.com/collections/cases
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/collections/cases", waiting until "domcontentloaded"
+ search=catalogue source=CherryTree Inc
+2026-05-29 13:27:54 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-05-29 13:28:02 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.cherrytreeinc.com/cases
+Call log:
+  - navigating to "https://www.cherrytreeinc.com/cases", waiting until "domcontentloaded"
+ search=catalogue source=CherryTree Inc
+2026-05-29 13:28:02 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
