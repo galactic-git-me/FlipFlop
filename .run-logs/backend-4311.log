@@ -2099,3 +2099,53 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=cheap+atx+pc+case&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 13:01:07 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
+2026-05-29 13:01:15 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=budget+gaming+case+atx&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=budget+gaming+case+atx&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:01:15 [info     ] amazon.cases.done              found=0 search=budget gaming case atx
+2026-05-29 13:01:24 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:01:24 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-29 13:01:32 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:01:32 [info     ] temu.cases.done                found=0 search=panoramic pc case
+2026-05-29 13:01:41 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=argb+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=argb+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:01:41 [info     ] temu.cases.done                found=0 search=argb gaming case
+2026-05-29 13:01:49 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:01:49 [info     ] temu.cases.done                found=0 search=rgb airflow case
+2026-05-29 13:01:58 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:01:58 [info     ] temu.cases.done                found=0 search=mesh airflow case
+2026-05-29 13:02:06 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=high+airflow+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=high+airflow+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:06 [info     ] temu.cases.done                found=0 search=high airflow gaming case
+2026-05-29 13:02:15 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=premium+aluminum+pc+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=premium+aluminum+pc+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:15 [info     ] temu.cases.done                found=0 search=premium aluminum pc case
+2026-05-29 13:02:23 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=luxury+gaming+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=luxury+gaming+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:23 [info     ] temu.cases.done                found=0 search=luxury gaming case
+2026-05-29 13:02:32 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=white+fish+tank+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=white+fish+tank+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:02:32 [info     ] temu.cases.done                found=0 search=white fish tank case
