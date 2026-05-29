@@ -2474,3 +2474,53 @@ Call log:
   - navigating to "https://www.aliexpress.com/wholesale?SearchText=compact+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
 
 2026-05-29 13:11:44 [info     ] aliexpress.cases.done          found=0 search=compact gaming case
+2026-05-29 13:11:53 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=cyberpunk+pc+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=cyberpunk+pc+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:11:53 [info     ] aliexpress.cases.done          found=0 search=cyberpunk pc case
+2026-05-29 13:12:01 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=futuristic+gaming+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=futuristic+gaming+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:01 [info     ] aliexpress.cases.done          found=0 search=futuristic gaming case
+2026-05-29 13:12:10 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=federation+command+build&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=federation+command+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:10 [info     ] aliexpress.cases.done          found=0 search=federation command build
+2026-05-29 13:12:18 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=starfleet+workstation&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=starfleet+workstation&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:18 [info     ] aliexpress.cases.done          found=0 search=starfleet workstation
+2026-05-29 13:12:27 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=borg+cube+pc&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=borg+cube+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:27 [info     ] aliexpress.cases.done          found=0 search=borg cube pc
+2026-05-29 13:12:35 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=borg+collective+build&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=borg+collective+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:35 [info     ] aliexpress.cases.done          found=0 search=borg collective build
+2026-05-29 13:12:44 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=galactic+empire+build&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=galactic+empire+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:44 [info     ] aliexpress.cases.done          found=0 search=galactic empire build
+2026-05-29 13:12:52 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=rebel+alliance+gaming+pc&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=rebel+alliance+gaming+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:12:52 [info     ] aliexpress.cases.done          found=0 search=rebel alliance gaming pc
+2026-05-29 13:13:01 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=cylon+red+eye+pc&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=cylon+red+eye+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:13:01 [info     ] aliexpress.cases.done          found=0 search=cylon red eye pc
+2026-05-29 13:13:09 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=battlestar+inspired+workstation&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=battlestar+inspired+workstation&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:13:09 [info     ] aliexpress.cases.done          found=0 search=battlestar inspired workstation
