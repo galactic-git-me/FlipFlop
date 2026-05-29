@@ -3563,3 +3563,85 @@ Call log:
  search=budget gaming case atx source=Alibaba
 2026-05-29 13:36:50 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
 2026-05-29 13:36:50 [info     ] cases_swarm.done               errors=0 found=0 upserted=0
+2026-05-29 14:15:36 [info     ] flip_opportunities_swarm.start
+2026-05-29 14:15:36 [info     ] flip_opportunities_swarm.start
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=AliExpress
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Alibaba
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Temu
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1225s source=Gumtree
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_2262s source=eBay UK
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=BargainHardware
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_2266s source=eBay UK Auctions
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Amazon
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=AliExpress
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Alibaba
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Temu
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1225s source=Gumtree
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_2261s source=eBay UK
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=BargainHardware
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_2265s source=eBay UK Auctions
+2026-05-29 14:15:36 [info     ] source.cooldown_ignored        reason=cooldown_active_1281s source=Amazon
+2026-05-29 14:15:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-29 14:15:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-29 14:15:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-29 14:15:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900
+2026-05-29 14:15:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-29 14:15:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Ryzen 9 7900X
+2026-05-29 14:15:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-29 14:15:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:15:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc
+2026-05-29 14:15:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:16:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-29 14:16:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:16:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc untested
+2026-05-29 14:16:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-29 14:16:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-29 14:16:01 [info     ] gumtree.playwright.done        total=0
+2026-05-29 14:16:01 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-29 14:16:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc fault
+2026-05-29 14:16:01 [info     ] gumtree.playwright.done        total=0
+2026-05-29 14:16:01 [info     ] source.done                    found=0 gems=0 source=Gumtree
