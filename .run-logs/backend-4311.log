@@ -593,3 +593,8 @@ Call log:
 2026-05-29 11:39:35 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
 [scraper] eBay 'pokedex workstation': 0 found, 0 new (total 0)
 2026-05-29 11:40:00 [debug    ] ebay_sold.request_retry        attempt=1 error= search=PSU
+[scraper] eBay 'pikachu yellow rgb build': 0 found, 0 new (total 0)
+2026-05-29 11:40:26 [debug    ] ebay_sold.request_retry        attempt=2 error= search=PSU
+2026-05-29 11:40:53 [debug    ] ebay_sold.request_retry        attempt=3 error= search=PSU
+[scraper] eBay 'super saiyan gaming pc': 0 found, 0 new (total 0)
+2026-05-29 11:41:19 [debug    ] ebay_buy.request_retry         attempt=1 error= search=PSU
