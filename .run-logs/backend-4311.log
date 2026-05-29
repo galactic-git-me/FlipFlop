@@ -3213,3 +3213,61 @@ Call log:
   - navigating to "https://www.cherrytreeinc.com/cases", waiting until "domcontentloaded"
  search=catalogue source=CherryTree Inc
 2026-05-29 13:28:02 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-29 13:28:11 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=fish+tank+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=fish+tank+pc+case", waiting until "domcontentloaded"
+ search=fish tank pc case source=Alibaba
+2026-05-29 13:28:11 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-29 13:28:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=panoramic+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=panoramic+pc+case", waiting until "domcontentloaded"
+ search=panoramic pc case source=Alibaba
+2026-05-29 13:28:19 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-29 13:28:28 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=argb+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=argb+gaming+case", waiting until "domcontentloaded"
+ search=argb gaming case source=Alibaba
+2026-05-29 13:28:28 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-29 13:28:36 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=rgb+airflow+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=rgb+airflow+case", waiting until "domcontentloaded"
+ search=rgb airflow case source=Alibaba
+2026-05-29 13:28:36 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+2026-05-29 13:28:45 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=mesh+airflow+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=mesh+airflow+case", waiting until "domcontentloaded"
+ search=mesh airflow case source=Alibaba
+2026-05-29 13:28:45 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
+2026-05-29 13:28:53 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=high+airflow+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=high+airflow+gaming+case", waiting until "domcontentloaded"
+ search=high airflow gaming case source=Alibaba
+2026-05-29 13:28:53 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=Alibaba
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-29 13:29:02 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=premium+aluminum+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=premium+aluminum+pc+case", waiting until "domcontentloaded"
+ search=premium aluminum pc case source=Alibaba
+2026-05-29 13:29:02 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=Alibaba
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-29 13:29:10 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=luxury+gaming+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=luxury+gaming+case", waiting until "domcontentloaded"
+ search=luxury gaming case source=Alibaba
+2026-05-29 13:29:10 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=Alibaba
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-29 13:29:19 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=white+fish+tank+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=white+fish+tank+case", waiting until "domcontentloaded"
+ search=white fish tank case source=Alibaba
+2026-05-29 13:29:19 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=Alibaba
+2026-05-29 13:29:27 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=white+rgb+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=white+rgb+case", waiting until "domcontentloaded"
+ search=white rgb case source=Alibaba
+2026-05-29 13:29:27 [info     ] cases.generic_market.done      found=0 search=white rgb case source=Alibaba
