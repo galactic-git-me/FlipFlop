@@ -618,3 +618,22 @@ Call log:
 2026-05-29 11:45:46 [debug    ] ebay_sold.request_retry        attempt=2 error= search=RGB fans
 [scraper] eBay 'radioactive green rgb pc': 0 found, 0 new (total 0)
 2026-05-29 11:46:12 [debug    ] ebay_sold.request_retry        attempt=3 error= search=RGB fans
+[scraper] eBay 'cerebro workstation': 0 found, 0 new (total 0)
+2026-05-29 11:46:39 [debug    ] ebay_buy.request_retry         attempt=1 error= search=RGB fans
+2026-05-29 11:47:06 [debug    ] ebay_buy.request_retry         attempt=2 error= search=RGB fans
+[scraper] eBay 'mutant tactical pc': 0 found, 0 new (total 0)
+2026-05-29 11:47:32 [debug    ] ebay_buy.request_retry         attempt=3 error= search=RGB fans
+2026-05-29 11:47:34 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
+2026-05-29 11:47:43 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=nvidia+gpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=nvidia+gpu", waiting until "domcontentloaded"
+ search=nvidia+gpu
+2026-05-29 11:47:51 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+cpu", waiting until "domcontentloaded"
+ search=am4+cpu
+[scraper] eBay 'spiderverse gaming pc': 0 found, 0 new (total 0)
+2026-05-29 11:48:00 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu", waiting until "domcontentloaded"
+ search=intel+i7+cpu
