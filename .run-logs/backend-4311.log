@@ -1467,3 +1467,57 @@ Call log:
  term=decepticon workstation
 2026-05-29 12:47:11 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:47:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:19 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=anime gaming pc
+2026-05-29 12:47:19 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=manga+aesthetic+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:27 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=manga+aesthetic+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=manga+aesthetic+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=manga aesthetic workstation
+2026-05-29 12:47:28 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:36 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=hidden leaf gaming pc
+2026-05-29 12:47:36 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hokage+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:44 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=hokage+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=hokage+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=hokage workstation
+2026-05-29 12:47:45 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=pokedex workstation
+2026-05-29 12:47:53 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=pikachu yellow rgb build
+2026-05-29 12:48:01 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:10 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=super saiyan gaming pc
+2026-05-29 12:48:10 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:18 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=dragon radar workstation
+2026-05-29 12:48:18 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:27 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=avengers workstation
+2026-05-29 12:48:27 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
