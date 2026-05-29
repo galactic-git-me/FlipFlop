@@ -3537,3 +3537,29 @@ Call log:
   - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+atx+case+rgb", waiting until "domcontentloaded"
  search=gaming atx case rgb source=Alibaba
 2026-05-29 13:36:07 [info     ] cases.generic_market.done      found=0 search=gaming atx case rgb source=Alibaba
+2026-05-29 13:36:16 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+pc+case+mid+tower
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+pc+case+mid+tower", waiting until "domcontentloaded"
+ search=gaming pc case mid tower source=Alibaba
+2026-05-29 13:36:16 [info     ] cases.generic_market.done      found=0 search=gaming pc case mid tower source=Alibaba
+2026-05-29 13:36:24 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=slim+micro+atx+case+office
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=slim+micro+atx+case+office", waiting until "domcontentloaded"
+ search=slim micro atx case office source=Alibaba
+2026-05-29 13:36:24 [info     ] cases.generic_market.done      found=0 search=slim micro atx case office source=Alibaba
+2026-05-29 13:36:33 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=mini+tower+desktop+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=mini+tower+desktop+case", waiting until "domcontentloaded"
+ search=mini tower desktop case source=Alibaba
+2026-05-29 13:36:33 [info     ] cases.generic_market.done      found=0 search=mini tower desktop case source=Alibaba
+2026-05-29 13:36:41 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=cheap+atx+pc+case
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=cheap+atx+pc+case", waiting until "domcontentloaded"
+ search=cheap atx pc case source=Alibaba
+2026-05-29 13:36:41 [info     ] cases.generic_market.done      found=0 search=cheap atx pc case source=Alibaba
+2026-05-29 13:36:50 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=budget+gaming+case+atx
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=budget+gaming+case+atx", waiting until "domcontentloaded"
+ search=budget gaming case atx source=Alibaba
+2026-05-29 13:36:50 [info     ] cases.generic_market.done      found=0 search=budget gaming case atx source=Alibaba
+2026-05-29 13:36:50 [info     ] cases_swarm.done               errors=0 found=0 upserted=0
