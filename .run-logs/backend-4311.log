@@ -2966,3 +2966,61 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=biomechanical+spaceship+pc", waiting until "domcontentloaded"
  search=biomechanical spaceship pc source=BargainHardware
 2026-05-29 13:22:31 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=BargainHardware
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:22:39 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=autobot+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=autobot+gaming+pc", waiting until "domcontentloaded"
+ search=autobot gaming pc source=BargainHardware
+2026-05-29 13:22:39 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=BargainHardware
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:22:48 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=decepticon+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=decepticon+workstation", waiting until "domcontentloaded"
+ search=decepticon workstation source=BargainHardware
+2026-05-29 13:22:48 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=BargainHardware
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:22:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=anime+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=anime+gaming+pc", waiting until "domcontentloaded"
+ search=anime gaming pc source=BargainHardware
+2026-05-29 13:22:56 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=BargainHardware
+2026-05-29 13:23:05 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=manga+aesthetic+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=manga+aesthetic+workstation", waiting until "domcontentloaded"
+ search=manga aesthetic workstation source=BargainHardware
+2026-05-29 13:23:05 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=BargainHardware
+2026-05-29 13:23:13 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=hidden+leaf+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=hidden+leaf+gaming+pc", waiting until "domcontentloaded"
+ search=hidden leaf gaming pc source=BargainHardware
+2026-05-29 13:23:13 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=BargainHardware
+2026-05-29 13:23:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=hokage+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=hokage+workstation", waiting until "domcontentloaded"
+ search=hokage workstation source=BargainHardware
+2026-05-29 13:23:22 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=BargainHardware
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-29 13:23:30 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=pokedex+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=pokedex+workstation", waiting until "domcontentloaded"
+ search=pokedex workstation source=BargainHardware
+2026-05-29 13:23:30 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=BargainHardware
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+2026-05-29 13:23:39 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=pikachu+yellow+rgb+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=pikachu+yellow+rgb+build", waiting until "domcontentloaded"
+ search=pikachu yellow rgb build source=BargainHardware
+2026-05-29 13:23:39 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=BargainHardware
+2026-05-29 13:23:47 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=super+saiyan+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=super+saiyan+gaming+pc", waiting until "domcontentloaded"
+ search=super saiyan gaming pc source=BargainHardware
+2026-05-29 13:23:47 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=BargainHardware
+2026-05-29 13:23:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=dragon+radar+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=dragon+radar+workstation", waiting until "domcontentloaded"
+ search=dragon radar workstation source=BargainHardware
+2026-05-29 13:23:56 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=BargainHardware
