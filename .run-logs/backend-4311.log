@@ -674,3 +674,17 @@ Call log:
 Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=rgb+fans", waiting until "domcontentloaded"
  search=rgb+fans
+[scraper] eBay 'batcomputer workstation': 0 found, 0 new (total 0)
+2026-05-29 11:49:41 [warning  ] scan.fetch.error               error= search=NVIDIA GPU
+2026-05-29 11:49:41 [warning  ] overclockers.fetch.error       error= search=NVIDIA GPU
+2026-05-29 11:49:41 [warning  ] box.fetch.error                error= search=NVIDIA GPU
+2026-05-29 11:50:01 [warning  ] scan.fetch.error               error= search=AM4 CPU
+2026-05-29 11:50:01 [warning  ] overclockers.fetch.error       error= search=AM4 CPU
+2026-05-29 11:50:01 [warning  ] box.fetch.error                error= search=AM4 CPU
+[scraper] eBay 'dark knight pc': 0 found, 0 new (total 0)
+2026-05-29 11:50:21 [warning  ] scan.fetch.error               error= search=i7 CPU
+2026-05-29 11:50:21 [warning  ] overclockers.fetch.error       error= search=i7 CPU
+2026-05-29 11:50:21 [warning  ] box.fetch.error                error= search=i7 CPU
+2026-05-29 11:50:41 [warning  ] scan.fetch.error               error= search=i9 CPU
+2026-05-29 11:50:41 [warning  ] overclockers.fetch.error       error= search=i9 CPU
+2026-05-29 11:50:41 [warning  ] box.fetch.error                error= search=i9 CPU
