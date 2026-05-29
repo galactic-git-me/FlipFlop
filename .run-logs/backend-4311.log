@@ -1954,3 +1954,48 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=hokage+workstation&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:57:00 [info     ] amazon.cases.done              found=0 search=hokage workstation
+2026-05-29 12:57:08 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=pokedex+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=pokedex+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:08 [info     ] amazon.cases.done              found=0 search=pokedex workstation
+2026-05-29 12:57:17 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=pikachu+yellow+rgb+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=pikachu+yellow+rgb+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:17 [info     ] amazon.cases.done              found=0 search=pikachu yellow rgb build
+2026-05-29 12:57:26 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=super+saiyan+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=super+saiyan+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:26 [info     ] amazon.cases.done              found=0 search=super saiyan gaming pc
+2026-05-29 12:57:34 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=dragon+radar+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=dragon+radar+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:34 [info     ] amazon.cases.done              found=0 search=dragon radar workstation
+2026-05-29 12:57:43 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=avengers+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=avengers+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:43 [info     ] amazon.cases.done              found=0 search=avengers workstation
+2026-05-29 12:57:51 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=shield+tactical+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=shield+tactical+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:57:51 [info     ] amazon.cases.done              found=0 search=shield tactical pc
+2026-05-29 12:58:00 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=jarvis+ai+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=jarvis+ai+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:00 [info     ] amazon.cases.done              found=0 search=jarvis ai workstation
+2026-05-29 12:58:08 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=stark+industries+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=stark+industries+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:08 [info     ] amazon.cases.done              found=0 search=stark industries pc
+2026-05-29 12:58:16 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gamma+core+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gamma+core+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:17 [info     ] amazon.cases.done              found=0 search=gamma core build
