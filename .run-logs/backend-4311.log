@@ -2324,3 +2324,53 @@ Call log:
   - navigating to "https://www.temu.com/search_result.html?search_key=mutant+tactical+pc&search_method=user", waiting until "domcontentloaded"
 
 2026-05-29 13:07:29 [info     ] temu.cases.done                found=0 search=mutant tactical pc
+2026-05-29 13:07:38 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=spiderverse+gaming+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=spiderverse+gaming+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:38 [info     ] temu.cases.done                found=0 search=spiderverse gaming pc
+2026-05-29 13:07:46 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=red+blue+rgb+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=red+blue+rgb+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:46 [info     ] temu.cases.done                found=0 search=red blue rgb build
+2026-05-29 13:07:55 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=batcomputer+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=batcomputer+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:07:55 [info     ] temu.cases.done                found=0 search=batcomputer workstation
+2026-05-29 13:08:03 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=dark+knight+pc&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=dark+knight+pc&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:03 [info     ] temu.cases.done                found=0 search=dark knight pc
+2026-05-29 13:08:12 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=kryptonian+workstation&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=kryptonian+workstation&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:12 [info     ] temu.cases.done                found=0 search=kryptonian workstation
+2026-05-29 13:08:20 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=fortress+of+solitude+build&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=fortress+of+solitude+build&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:20 [info     ] temu.cases.done                found=0 search=fortress of solitude build
+2026-05-29 13:08:29 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=lian+li+style+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=lian+li+style+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:29 [info     ] temu.cases.done                found=0 search=lian li style case
+2026-05-29 13:08:37 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=hyte+y60+style+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=hyte+y60+style+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:37 [info     ] temu.cases.done                found=0 search=hyte y60 style case
+2026-05-29 13:08:46 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=Montech+panoramic+case&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=Montech+panoramic+case&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:46 [info     ] temu.cases.done                found=0 search=Montech panoramic case
+2026-05-29 13:08:54 [warning  ] temu.cases.scrape_error        error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=darkFlash+fish+tank&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=darkFlash+fish+tank&search_method=user", waiting until "domcontentloaded"
+
+2026-05-29 13:08:54 [info     ] temu.cases.done                found=0 search=darkFlash fish tank
