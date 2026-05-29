@@ -637,3 +637,40 @@ Call log:
 Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu", waiting until "domcontentloaded"
  search=intel+i7+cpu
+2026-05-29 11:48:09 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu", waiting until "domcontentloaded"
+ search=intel+i9+cpu
+2026-05-29 11:48:18 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard", waiting until "domcontentloaded"
+ search=am4+motherboard
+2026-05-29 11:48:26 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard+cpu+combo
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+motherboard+cpu+combo", waiting until "domcontentloaded"
+ search=am4+motherboard+cpu+combo
+2026-05-29 11:48:35 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=ddr4+ram
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=ddr4+ram", waiting until "domcontentloaded"
+ search=ddr4+ram
+[scraper] eBay 'red blue rgb build': 0 found, 0 new (total 0)
+2026-05-29 11:48:44 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=32gb+ddr4+kit
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=32gb+ddr4+kit", waiting until "domcontentloaded"
+ search=32gb+ddr4+kit
+2026-05-29 11:48:53 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=1tb+nvme
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=1tb+nvme", waiting until "domcontentloaded"
+ search=1tb+nvme
+2026-05-29 11:49:02 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=atx+psu
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=atx+psu", waiting until "domcontentloaded"
+ search=atx+psu
+2026-05-29 11:49:11 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cpu+cooler
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cpu+cooler", waiting until "domcontentloaded"
+ search=cpu+cooler
+2026-05-29 11:49:20 [debug    ] bh.pw.error                    error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=rgb+fans
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=rgb+fans", waiting until "domcontentloaded"
+ search=rgb+fans
