@@ -1347,3 +1347,63 @@ Call log:
  term=luxury gaming case
 2026-05-29 12:44:20 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:44:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:29 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=white fish tank case
+2026-05-29 12:44:29 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:37 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=white rgb case
+2026-05-29 12:44:37 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:38 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=micro+atx+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:46 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=micro+atx+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=micro+atx+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=micro atx fish tank
+2026-05-29 12:44:46 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=compact+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:54 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=compact+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=compact+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=compact gaming case
+2026-05-29 12:44:54 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cyberpunk+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:03 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cyberpunk+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cyberpunk+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cyberpunk pc case
+2026-05-29 12:45:03 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=futuristic+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:11 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=futuristic+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=futuristic+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=futuristic gaming case
+2026-05-29 12:45:11 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:20 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=federation command build
+2026-05-29 12:45:20 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:28 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=starfleet workstation
+2026-05-29 12:45:28 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:37 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=borg cube pc
+2026-05-29 12:45:37 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=borg collective build
+2026-05-29 12:45:45 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
