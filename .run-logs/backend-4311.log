@@ -2724,3 +2724,71 @@ Call log:
   - navigating to "https://www.aliexpress.com/wholesale?SearchText=dark+knight+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
 
 2026-05-29 13:16:50 [info     ] aliexpress.cases.done          found=0 search=dark knight pc
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Amazon
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=BargainHardware
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Alibaba
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Temu
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Amazon
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=AliExpress
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=BargainHardware
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Alibaba
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Temu
+2026-05-29 13:16:57 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=AliExpress
+2026-05-29 13:16:59 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=kryptonian+workstation&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=kryptonian+workstation&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:16:59 [info     ] aliexpress.cases.done          found=0 search=kryptonian workstation
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-29 13:17:07 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=fortress+of+solitude+build&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=fortress+of+solitude+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:07 [info     ] aliexpress.cases.done          found=0 search=fortress of solitude build
+2026-05-29 13:17:16 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=lian+li+style+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=lian+li+style+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:16 [info     ] aliexpress.cases.done          found=0 search=lian li style case
+2026-05-29 13:17:24 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=hyte+y60+style+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=hyte+y60+style+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:24 [info     ] aliexpress.cases.done          found=0 search=hyte y60 style case
+2026-05-29 13:17:33 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=Montech+panoramic+case&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=Montech+panoramic+case&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:33 [info     ] aliexpress.cases.done          found=0 search=Montech panoramic case
+2026-05-29 13:17:41 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=darkFlash+fish+tank&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=darkFlash+fish+tank&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:41 [info     ] aliexpress.cases.done          found=0 search=darkFlash fish tank
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-29 13:17:50 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=showcase+build&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=showcase+build&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:50 [info     ] aliexpress.cases.done          found=0 search=showcase build
+2026-05-29 13:17:58 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=custom+gaming+pc&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=custom+gaming+pc&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:17:58 [info     ] aliexpress.cases.done          found=0 search=custom gaming pc
+2026-05-29 13:18:07 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+atx+case+rgb&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+atx+case+rgb&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:18:07 [info     ] aliexpress.cases.done          found=0 search=gaming atx case rgb
+2026-05-29 13:18:15 [warning  ] aliexpress.cases.scrape_error  error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+pc+case+mid+tower&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+pc+case+mid+tower&g=y&SortType=price_asc", waiting until "domcontentloaded"
+
+2026-05-29 13:18:15 [info     ] aliexpress.cases.done          found=0 search=gaming pc case mid tower
