@@ -581,3 +581,8 @@ Call log:
 [scraper] eBay 'anime gaming pc': 0 found, 0 new (total 0)
 2026-05-29 11:36:53 [debug    ] ebay_buy.request_retry         attempt=3 error= search=DDR4 RAM 32GB 2x16GB
 2026-05-29 11:36:55 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM 32GB 2x16GB sold=None
+2026-05-29 11:37:20 [debug    ] ebay_sold.request_retry        attempt=1 error= search=NVMe 1TB
+[scraper] eBay 'manga aesthetic workstation': 0 found, 0 new (total 0)
+2026-05-29 11:37:46 [debug    ] ebay_sold.request_retry        attempt=2 error= search=NVMe 1TB
+[scraper] eBay 'hidden leaf gaming pc': 0 found, 0 new (total 0)
+2026-05-29 11:38:13 [debug    ] ebay_sold.request_retry        attempt=3 error= search=NVMe 1TB
