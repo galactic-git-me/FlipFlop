@@ -1641,3 +1641,166 @@ Call log:
  term=gaming atx case rgb
 2026-05-29 12:51:17 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:51:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:26 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming pc case mid tower
+2026-05-29 12:51:26 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:34 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=slim+micro+atx+case+office&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=slim micro atx case office
+2026-05-29 12:51:34 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:34 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:42 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=mini+tower+desktop+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=mini tower desktop case
+2026-05-29 12:51:43 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:43 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:51 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cheap+atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cheap atx pc case
+2026-05-29 12:51:51 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:52:00 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=budget+gaming+case+atx&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=budget gaming case atx
+2026-05-29 12:52:00 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:52:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:00 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=fish tank pc case
+2026-05-29 12:52:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:00 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=panoramic pc case
+2026-05-29 12:52:01 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:01 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=argb gaming case
+2026-05-29 12:52:01 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:01 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=rgb airflow case
+2026-05-29 12:52:01 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:02 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mesh airflow case
+2026-05-29 12:52:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:02 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=high airflow gaming case
+2026-05-29 12:52:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:03 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=premium aluminum pc case
+2026-05-29 12:52:03 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:03 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=luxury gaming case
+2026-05-29 12:52:03 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:04 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=white fish tank case
+2026-05-29 12:52:04 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:04 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=white rgb case
+2026-05-29 12:52:04 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:05 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=micro atx fish tank
+2026-05-29 12:52:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:05 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=compact gaming case
+2026-05-29 12:52:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:06 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cyberpunk pc case
+2026-05-29 12:52:06 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:06 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=futuristic gaming case
+2026-05-29 12:52:06 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:06 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=federation command build
+2026-05-29 12:52:06 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:07 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=starfleet workstation
+2026-05-29 12:52:07 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:07 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=borg cube pc
+2026-05-29 12:52:07 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:08 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=borg collective build
+2026-05-29 12:52:08 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:08 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=galactic empire build
+2026-05-29 12:52:08 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:09 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=rebel alliance gaming pc
+2026-05-29 12:52:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:09 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cylon red eye pc
+2026-05-29 12:52:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:10 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=battlestar inspired workstation
+2026-05-29 12:52:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:10 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=station command build
+2026-05-29 12:52:10 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:11 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=diplomatic station workstation
+2026-05-29 12:52:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:11 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=leviathan inspired build
+2026-05-29 12:52:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:11 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=biomechanical spaceship pc
+2026-05-29 12:52:11 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:12 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=autobot gaming pc
+2026-05-29 12:52:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:12 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=decepticon workstation
+2026-05-29 12:52:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:13 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=anime gaming pc
+2026-05-29 12:52:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:13 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=manga aesthetic workstation
+2026-05-29 12:52:13 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:14 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hidden leaf gaming pc
+2026-05-29 12:52:14 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:14 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hokage workstation
+2026-05-29 12:52:14 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:15 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=pokedex workstation
+2026-05-29 12:52:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:15 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=pikachu yellow rgb build
+2026-05-29 12:52:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:16 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=super saiyan gaming pc
+2026-05-29 12:52:16 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:16 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=dragon radar workstation
+2026-05-29 12:52:16 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:16 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=avengers workstation
+2026-05-29 12:52:17 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:17 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=shield tactical pc
+2026-05-29 12:52:17 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:17 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=jarvis ai workstation
+2026-05-29 12:52:17 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:18 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=stark industries pc
+2026-05-29 12:52:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:18 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gamma core build
+2026-05-29 12:52:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:19 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=radioactive green rgb pc
+2026-05-29 12:52:19 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:19 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cerebro workstation
+2026-05-29 12:52:19 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:20 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mutant tactical pc
+2026-05-29 12:52:20 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:20 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=spiderverse gaming pc
+2026-05-29 12:52:20 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:21 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=red blue rgb build
+2026-05-29 12:52:21 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:21 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=batcomputer workstation
+2026-05-29 12:52:21 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:21 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=dark knight pc
+2026-05-29 12:52:21 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:22 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=kryptonian workstation
+2026-05-29 12:52:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:22 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=fortress of solitude build
+2026-05-29 12:52:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:23 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=lian li style case
+2026-05-29 12:52:23 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:23 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=hyte y60 style case
+2026-05-29 12:52:23 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:24 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=Montech panoramic case
+2026-05-29 12:52:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:24 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=darkFlash fish tank
+2026-05-29 12:52:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:25 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=showcase build
+2026-05-29 12:52:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:25 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=custom gaming pc
+2026-05-29 12:52:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:26 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming atx case rgb
+2026-05-29 12:52:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:26 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming pc case mid tower
+2026-05-29 12:52:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:26 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=slim micro atx case office
+2026-05-29 12:52:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:27 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=mini tower desktop case
+2026-05-29 12:52:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:27 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=cheap atx pc case
+2026-05-29 12:52:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 12:52:28 [warning  ] facebook.cases.error           error=BrowserContext.new_page: Target page, context or browser has been closed term=budget gaming case atx
+2026-05-29 12:52:36 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=fish+tank+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=fish+tank+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:52:36 [info     ] amazon.cases.done              found=0 search=fish tank pc case
+2026-05-29 12:52:45 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=panoramic+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=panoramic+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:52:45 [info     ] amazon.cases.done              found=0 search=panoramic pc case
