@@ -830,3 +830,193 @@ Call log:
  source=aliexpress
 2026-05-29 11:53:56 [info     ] gumtree.playwright.done        total=0
 2026-05-29 11:53:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:54:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=AM4+motherboard&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AM4+motherboard&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=AM4+motherboard&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=AM4+motherboard&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=AM4+motherboard
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=AM4+motherboard", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:05 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AM4 motherboard
+2026-05-29 11:54:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=AM4+motherboard&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AM4+motherboard&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:05 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'darkFlash fish tank': 0 found, 0 new (total 0)
+2026-05-29 11:54:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=AM4+motherboard+cpu+combo&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=AM4+motherboard+cpu+combo&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=AM4+motherboard+cpu+combo&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AM4+motherboard+cpu+combo&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=AM4+motherboard+cpu+combo
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=AM4+motherboard+cpu+combo", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:13 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AM4 motherboard cpu combo
+2026-05-29 11:54:13 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=AM4+motherboard+cpu+combo&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AM4+motherboard+cpu+combo&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:14 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:54:22 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=DDR4+RAM&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=DDR4+RAM&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:22 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=DDR4+RAM
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=DDR4+RAM", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:22 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=DDR4+RAM&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=DDR4+RAM&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:22 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=DDR4 RAM
+2026-05-29 11:54:22 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=DDR4+RAM&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=DDR4+RAM&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:22 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:23 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:54:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=DDR4+RAM+32GB+2x16GB
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=DDR4+RAM+32GB+2x16GB", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=DDR4+RAM+32GB+2x16GB&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=DDR4+RAM+32GB+2x16GB&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=DDR4+RAM+32GB+2x16GB&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=DDR4+RAM+32GB+2x16GB&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:31 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=DDR4 RAM 32GB 2x16GB
+2026-05-29 11:54:31 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=DDR4+RAM+32GB+2x16GB&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=DDR4+RAM+32GB+2x16GB&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:31 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:54:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=NVMe+1TB&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=NVMe+1TB&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=NVMe+1TB
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=NVMe+1TB", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=NVMe+1TB&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=NVMe+1TB&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=NVMe+1TB&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=NVMe+1TB&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:39 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=NVMe 1TB
+2026-05-29 11:54:39 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:54:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=PSU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=PSU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=PSU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=PSU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=PSU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=PSU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:48 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=PSU
+2026-05-29 11:54:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=PSU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=PSU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:48 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:48 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'showcase build': 0 found, 0 new (total 0)
+2026-05-29 11:54:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=CPU+cooler&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=CPU+cooler&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:54:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=CPU+cooler
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=CPU+cooler", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:54:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=CPU+cooler&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=CPU+cooler&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:54:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=CPU+cooler&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=CPU+cooler&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:54:56 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=CPU cooler
+2026-05-29 11:54:56 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:54:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:55:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=RGB+fans&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=RGB+fans&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:55:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=RGB+fans
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=RGB+fans", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:55:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=RGB+fans&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=RGB+fans&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:55:05 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=RGB+fans&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=RGB+fans&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:55:05 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=RGB fans
+2026-05-29 11:55:05 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=NVIDIA GPU
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=AM4 CPU
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=i7 CPU
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=i9 CPU
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=AM4 Motherboard
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=AM4 CPU Motherboard Combo
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=DDR4 RAM
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=DDR4 RAM 32GB 2x16GB
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=NVMe 1TB
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=PSU
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=CPU Cooler
+2026-05-29 11:55:05 [debug    ] upgrade_parts.no_price         part=RGB Fans
+2026-05-29 11:55:05 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=0 box=0 ebay_buy=0 ebay_sold=0 errors=0 overclockers=0 scan=0 temu=0 updated=0
