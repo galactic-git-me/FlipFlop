@@ -1407,3 +1407,63 @@ Call log:
  term=borg collective build
 2026-05-29 12:45:45 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:45:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:45:54 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=galactic empire build
+2026-05-29 12:45:54 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:45:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:02 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=rebel alliance gaming pc
+2026-05-29 12:46:02 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:11 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cylon red eye pc
+2026-05-29 12:46:11 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:19 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=battlestar inspired workstation
+2026-05-29 12:46:19 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:28 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=station command build
+2026-05-29 12:46:28 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:36 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=diplomatic station workstation
+2026-05-29 12:46:36 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:45 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=leviathan inspired build
+2026-05-29 12:46:45 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:46:53 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=biomechanical spaceship pc
+2026-05-29 12:46:53 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:46:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:02 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=autobot gaming pc
+2026-05-29 12:47:02 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:47:10 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=decepticon workstation
+2026-05-29 12:47:11 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:47:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
