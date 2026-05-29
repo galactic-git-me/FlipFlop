@@ -5563,3 +5563,48 @@ INFO:     100.84.151.109:64889 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:56863 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:64889 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:56863 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:53766 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53766 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:63347 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54307 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54307 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64511 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64511 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64511 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59136 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64511 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59136 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51339 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51339 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49452 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49452 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52943 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52943 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52943 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52943 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50227 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52943 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52943 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52943 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52943 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55973 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55973 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64239 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64239 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64239 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64000 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62599 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64239 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62599 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:62599 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62599 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61615 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61615 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
