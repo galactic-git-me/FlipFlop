@@ -2049,3 +2049,53 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=lian+li+style+case&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:59:41 [info     ] amazon.cases.done              found=0 search=lian li style case
+2026-05-29 12:59:50 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=hyte+y60+style+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=hyte+y60+style+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:50 [info     ] amazon.cases.done              found=0 search=hyte y60 style case
+2026-05-29 12:59:58 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=Montech+panoramic+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=Montech+panoramic+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:58 [info     ] amazon.cases.done              found=0 search=Montech panoramic case
+2026-05-29 13:00:07 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=darkFlash+fish+tank&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=darkFlash+fish+tank&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:07 [info     ] amazon.cases.done              found=0 search=darkFlash fish tank
+2026-05-29 13:00:15 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=showcase+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=showcase+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:16 [info     ] amazon.cases.done              found=0 search=showcase build
+2026-05-29 13:00:24 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=custom+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=custom+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:24 [info     ] amazon.cases.done              found=0 search=custom gaming pc
+2026-05-29 13:00:32 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+atx+case+rgb&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+atx+case+rgb&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:33 [info     ] amazon.cases.done              found=0 search=gaming atx case rgb
+2026-05-29 13:00:41 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+pc+case+mid+tower&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+pc+case+mid+tower&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:41 [info     ] amazon.cases.done              found=0 search=gaming pc case mid tower
+2026-05-29 13:00:49 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=slim+micro+atx+case+office&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=slim+micro+atx+case+office&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:50 [info     ] amazon.cases.done              found=0 search=slim micro atx case office
+2026-05-29 13:00:58 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=mini+tower+desktop+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=mini+tower+desktop+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:00:58 [info     ] amazon.cases.done              found=0 search=mini tower desktop case
+2026-05-29 13:01:07 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cheap+atx+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cheap+atx+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 13:01:07 [info     ] amazon.cases.done              found=0 search=cheap atx pc case
