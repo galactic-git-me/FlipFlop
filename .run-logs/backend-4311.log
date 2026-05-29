@@ -1854,3 +1854,48 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=compact+gaming+case&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:54:10 [info     ] amazon.cases.done              found=0 search=compact gaming case
+2026-05-29 12:54:18 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cyberpunk+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cyberpunk+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:18 [info     ] amazon.cases.done              found=0 search=cyberpunk pc case
+2026-05-29 12:54:27 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=futuristic+gaming+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=futuristic+gaming+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:27 [info     ] amazon.cases.done              found=0 search=futuristic gaming case
+2026-05-29 12:54:35 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=federation+command+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=federation+command+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:35 [info     ] amazon.cases.done              found=0 search=federation command build
+2026-05-29 12:54:44 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=starfleet+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=starfleet+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:44 [info     ] amazon.cases.done              found=0 search=starfleet workstation
+2026-05-29 12:54:52 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=borg+cube+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=borg+cube+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:52 [info     ] amazon.cases.done              found=0 search=borg cube pc
+2026-05-29 12:55:01 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=borg+collective+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=borg+collective+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:01 [info     ] amazon.cases.done              found=0 search=borg collective build
+2026-05-29 12:55:09 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=galactic+empire+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=galactic+empire+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:09 [info     ] amazon.cases.done              found=0 search=galactic empire build
+2026-05-29 12:55:18 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=rebel+alliance+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=rebel+alliance+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:18 [info     ] amazon.cases.done              found=0 search=rebel alliance gaming pc
+2026-05-29 12:55:26 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cylon+red+eye+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cylon+red+eye+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:55:26 [info     ] amazon.cases.done              found=0 search=cylon red eye pc
