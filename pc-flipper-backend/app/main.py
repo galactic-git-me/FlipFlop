@@ -1,6 +1,5 @@
 import structlog
 import asyncio
-import os
 from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI
@@ -14,10 +13,12 @@ from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts
 from app.api import ebay_compliance
+from app.api import preflight
 from app.api.build_wizard import router as build_wizard_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
+from app.services.antibot_preflight import run_antibot_preflight
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -207,94 +208,13 @@ async def lifespan(app: FastAPI):
     await _load_db_settings_into_config()
     if not chromium_available():
         log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
-    await _run_manual_antibot_preflight()
+    await run_antibot_preflight()
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     yield
     stop_scheduler()
     await engine.dispose()
     log.info("app.shutdown")
-
-
-def _antibot_preflight_enabled() -> bool:
-    return os.getenv("ANTI_BOT_PREFLIGHT_ON_STARTUP", "1").lower() in {"1", "true", "yes"}
-
-
-def _interactive_scraper_mode() -> bool:
-    enabled = os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
-    has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
-    return enabled and has_display
-
-
-async def _run_manual_antibot_preflight() -> None:
-    """
-    Open challenge-prone vendor pages at startup so the operator can solve
-    anti-bot / login prompts once before catalogue scans begin.
-    """
-    if not _antibot_preflight_enabled():
-        log.info("runtime.preflight.antibot.disabled")
-        return
-    if not _interactive_scraper_mode():
-        log.info(
-            "runtime.preflight.antibot.skipped_no_gui",
-            hint="Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available to enable manual challenge solving",
-        )
-        return
-    if not chromium_available():
-        log.warning("runtime.preflight.antibot.skipped_no_chromium")
-        return
-
-    try:
-        from playwright.async_api import async_playwright
-    except Exception as exc:
-        log.warning("runtime.preflight.antibot.playwright_import_failed", error=str(exc))
-        return
-
-    wait_seconds = max(30, int(os.getenv("ANTI_BOT_PREFLIGHT_WAIT_SECONDS", "120")))
-    urls = [
-        "https://www.facebook.com/marketplace/",
-        "https://www.temu.com/",
-        "https://www.alibaba.com/",
-        "https://www.aliexpress.com/",
-        "https://www.gumtree.com/",
-        "https://www.bargainhardware.co.uk/",
-    ]
-
-    log.info(
-        "runtime.preflight.antibot.start",
-        pages=len(urls),
-        wait_seconds=wait_seconds,
-        note="Complete login/captcha challenges in opened browser tabs; startup will resume automatically",
-    )
-
-    browser = None
-    context = None
-    try:
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False, args=["--no-sandbox", "--disable-dev-shm-usage"])
-            context = await browser.new_context()
-            for url in urls:
-                try:
-                    page = await context.new_page()
-                    await page.goto(url, wait_until="domcontentloaded", timeout=45000)
-                    log.info("runtime.preflight.antibot.page_opened", url=url)
-                except Exception as page_exc:
-                    log.warning("runtime.preflight.antibot.page_open_failed", url=url, error=str(page_exc))
-            await asyncio.sleep(wait_seconds)
-    except Exception as exc:
-        log.warning("runtime.preflight.antibot.failed", error=str(exc))
-    finally:
-        try:
-            if context is not None:
-                await context.close()
-        except Exception:
-            pass
-        try:
-            if browser is not None:
-                await browser.close()
-        except Exception:
-            pass
-    log.info("runtime.preflight.antibot.done")
 
 
 async def _load_db_settings_into_config():
@@ -368,6 +288,7 @@ app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
+app.include_router(preflight.router, prefix="/api")
 
 
 @app.get("/health")

@@ -28,6 +28,7 @@ import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
 import CountUp from "@/components/CountUp";
 import { ManualSubmitModal } from "@/components/manual-submit-modal";
+import { AntiBotPreflightBanner } from "@/components/antibot-preflight-banner";
 
 // ── Column definitions ───────────────────────────────────────────────────────
 const ALL_COLS = [
@@ -421,6 +422,7 @@ export default function DashboardPage() {
         onClose={() => setShowManualSubmit(false)}
         onSuccess={() => { setShowManualSubmit(false); load(); }}
       />
+      <AntiBotPreflightBanner />
       {scanStatus && (scanStatus.running || (scanStatus.sites && scanStatus.sites.length > 0)) && (
         <ScanOverlay status={scanStatus} />
       )}

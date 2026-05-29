@@ -160,6 +160,20 @@ export interface SearchTelemetrySourceSummary {
   errors: number;
 }
 
+export interface AntiBotPreflightStatus {
+  enabled: boolean;
+  show_scraper_browser: string;
+  has_display: boolean;
+  interactive_mode: boolean;
+  chromium_available: boolean;
+  running: boolean;
+  last_result: string;
+  last_message: string;
+  last_run_at: string | null;
+  urls: string[];
+  wait_seconds: number;
+}
+
 export interface SourceSearchTerm {
   id: number;
   scope: string;
@@ -365,6 +379,12 @@ export const api = {
     updateCookies: (cookies_json: string) => request<{ok: boolean; message: string}>("/facebook/cookies", {
       method: "PUT",
       body: JSON.stringify({ cookies_json }),
+    }),
+  },
+  preflight: {
+    antibotStatus: () => request<AntiBotPreflightStatus>("/preflight/antibot"),
+    triggerAntibot: () => request<{ ok: boolean; started: boolean; reason?: string }>("/preflight/antibot/trigger", {
+      method: "POST",
     }),
   },
 
