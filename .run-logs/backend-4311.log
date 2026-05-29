@@ -6135,3 +6135,38 @@ INFO:     100.84.151.109:51084 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:56354 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:51084 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:56354 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50718 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50718 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61741 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63932 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63932 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58190 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58190 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58190 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58190 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60711 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60711 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61248 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61248 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51459 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51459 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51857 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51857 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51857 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51857 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64116 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51857 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64116 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64116 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64116 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54059 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54059 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62762 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62762 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62762 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63828 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62387 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62762 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62387 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62387 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62387 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
