@@ -1054,3 +1054,156 @@ Call log:
  term=gaming controller
 2026-05-29 10:47:20 [info     ] gumtree.playwright.done        total=0
 2026-05-29 10:47:20 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 10:47:20 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming controller
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:42304 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42310 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42314 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42326 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42328 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42340 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42350 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42358 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42370 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42382 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42404 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51502 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51504 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51514 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51518 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-29 10:47:29 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+controller&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+controller&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming controller
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'compact gaming case': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51528 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51532 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51536 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51542 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59584 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59594 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59600 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59612 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59628 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:47:37 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+controller&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+controller&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming controller
+INFO:     100.101.209.68:59644 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59660 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59664 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59668 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59672 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59676 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59680 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 10:47:40 [debug    ] ebay_sold.request_retry        attempt=2 error= search=i9 CPU
+INFO:     100.101.209.68:59690 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59692 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59708 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59712 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:47:45 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+controller&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+controller&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=gaming controller
+INFO:     100.101.209.68:39962 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39974 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39982 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39994 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40010 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40012 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40028 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40038 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:47:53 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+controller
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+controller", waiting until "domcontentloaded"
+ site=Alibaba term=gaming controller
+INFO:     100.101.209.68:40052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40058 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40070 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40082 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40094 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40110 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40116 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49762 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49778 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49784 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49800 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:48:01 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+controller
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+controller", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming controller
+INFO:     100.101.209.68:49816 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49836 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49844 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49854 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40994 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41008 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41020 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41036 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-29 10:48:07 [debug    ] ebay_sold.request_retry        attempt=3 error= search=i9 CPU
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41050 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41056 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41062 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41074 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41084 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41086 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41088 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41102 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41114 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41124 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41128 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41130 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41146 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41160 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41170 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54898 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54904 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54910 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47202 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47210 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47216 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47220 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47224 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47238 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47246 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47248 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47252 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47260 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47276 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47282 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47290 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47296 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47308 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47316 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:48:34 [debug    ] ebay_buy.request_retry         attempt=1 error= search=i9 CPU
+INFO:     100.101.209.68:52708 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52722 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52738 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52744 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52754 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52768 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52780 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52788 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52816 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52822 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52836 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52842 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52846 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52860 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52874 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '24 inch monitor': 0 found, 0 new (total 0)
+2026-05-29 10:48:43 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=24+inch+monitor&max_price=80&min_price=1&sort=date&distance=nationwide
