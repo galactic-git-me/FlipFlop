@@ -439,3 +439,56 @@ Call log:
 Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=24+inch+monitor", waiting until "domcontentloaded"
  site=BargainHardware term=24 inch monitor
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-29 11:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-29 11:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
+[scraper] eBay 'federation command build': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-29 11:26:40 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 motherboard
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'xl mouse pad': 0 found, 0 new (total 0)
+2026-05-29 11:27:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:27:07 [debug    ] ebay_sold.request_retry        attempt=2 error= search=AM4 motherboard
+2026-05-29 11:27:08 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=xl mouse pad
+2026-05-29 11:27:08 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:27:08 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:27:08 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=xl mouse pad
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'starfleet workstation': 0 found, 0 new (total 0)
+2026-05-29 11:27:17 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=xl+mouse+pad&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=xl+mouse+pad&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=xl mouse pad
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-29 11:27:25 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=xl+mouse+pad&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=xl+mouse+pad&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=xl mouse pad
+2026-05-29 11:27:33 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=xl+mouse+pad&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=xl+mouse+pad&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=xl mouse pad
+2026-05-29 11:27:33 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 motherboard
