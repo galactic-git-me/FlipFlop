@@ -10,7 +10,7 @@ Tailscale URL (live): andromeda-ts:4310
 ▲ Next.js 16.2.4 (webpack)
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 428ms
+✓ Ready in 408ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -19,27 +19,4 @@ Tailscale URL (live): andromeda-ts:4310
    * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
 
 
-⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "andromeda-ts".
-Cross-origin access to Next.js dev resources is blocked by default for safety.
-
-To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
-
-// next.config.js
-module.exports = {
-  allowedDevOrigins: ['andromeda-ts'],
-}
-
-Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
-▲ Next.js 16.2.4 (webpack)
-- Local:         http://localhost:4310
-- Network:       http://0.0.0.0:4310
-✓ Ready in 340ms
-⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
- We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
- To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
-   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
- Detected additional lockfiles: 
-   * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
-
-
+[browser] Uncaught Error: Internal Next.js error: Router action dispatched before initialization.
