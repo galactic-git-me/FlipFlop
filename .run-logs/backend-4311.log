@@ -3387,3 +3387,103 @@ Call log:
   - navigating to "https://www.alibaba.com/trade/search?SearchText=manga+aesthetic+workstation", waiting until "domcontentloaded"
  search=manga aesthetic workstation source=Alibaba
 2026-05-29 13:32:17 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=Alibaba
+2026-05-29 13:32:26 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=hidden+leaf+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=hidden+leaf+gaming+pc", waiting until "domcontentloaded"
+ search=hidden leaf gaming pc source=Alibaba
+2026-05-29 13:32:26 [info     ] cases.generic_market.done      found=0 search=hidden leaf gaming pc source=Alibaba
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+2026-05-29 13:32:35 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=hokage+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=hokage+workstation", waiting until "domcontentloaded"
+ search=hokage workstation source=Alibaba
+2026-05-29 13:32:35 [info     ] cases.generic_market.done      found=0 search=hokage workstation source=Alibaba
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+2026-05-29 13:32:43 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=pokedex+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=pokedex+workstation", waiting until "domcontentloaded"
+ search=pokedex workstation source=Alibaba
+2026-05-29 13:32:43 [info     ] cases.generic_market.done      found=0 search=pokedex workstation source=Alibaba
+2026-05-29 13:32:52 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=pikachu+yellow+rgb+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=pikachu+yellow+rgb+build", waiting until "domcontentloaded"
+ search=pikachu yellow rgb build source=Alibaba
+2026-05-29 13:32:52 [info     ] cases.generic_market.done      found=0 search=pikachu yellow rgb build source=Alibaba
+2026-05-29 13:33:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=super+saiyan+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=super+saiyan+gaming+pc", waiting until "domcontentloaded"
+ search=super saiyan gaming pc source=Alibaba
+2026-05-29 13:33:00 [info     ] cases.generic_market.done      found=0 search=super saiyan gaming pc source=Alibaba
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 13:33:08 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-29 13:33:09 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=dragon+radar+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=dragon+radar+workstation", waiting until "domcontentloaded"
+ search=dragon radar workstation source=Alibaba
+2026-05-29 13:33:09 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=Alibaba
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 13:33:16 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-29 13:33:16 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+2026-05-29 13:33:17 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=avengers+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=avengers+workstation", waiting until "domcontentloaded"
+ search=avengers workstation source=Alibaba
+2026-05-29 13:33:17 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=Alibaba
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 13:33:18 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 13:33:22 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-29 13:33:22 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+2026-05-29 13:33:26 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=shield+tactical+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=shield+tactical+pc", waiting until "domcontentloaded"
+ search=shield tactical pc source=Alibaba
+2026-05-29 13:33:26 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=Alibaba
+2026-05-29 13:33:27 [info     ] autonomous_cycle.done          duration_ms=1071173
+2026-05-29 13:33:34 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=jarvis+ai+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=jarvis+ai+workstation", waiting until "domcontentloaded"
+ search=jarvis ai workstation source=Alibaba
+2026-05-29 13:33:34 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=Alibaba
+2026-05-29 13:33:43 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=stark+industries+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=stark+industries+pc", waiting until "domcontentloaded"
+ search=stark industries pc source=Alibaba
+2026-05-29 13:33:43 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=Alibaba
+2026-05-29 13:33:51 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gamma+core+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gamma+core+build", waiting until "domcontentloaded"
+ search=gamma core build source=Alibaba
+2026-05-29 13:33:51 [info     ] cases.generic_market.done      found=0 search=gamma core build source=Alibaba
+2026-05-29 13:34:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=radioactive+green+rgb+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=radioactive+green+rgb+pc", waiting until "domcontentloaded"
+ search=radioactive green rgb pc source=Alibaba
+2026-05-29 13:34:00 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=Alibaba
+2026-05-29 13:34:08 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=cerebro+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=cerebro+workstation", waiting until "domcontentloaded"
+ search=cerebro workstation source=Alibaba
+2026-05-29 13:34:08 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=Alibaba
+2026-05-29 13:34:17 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=mutant+tactical+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=mutant+tactical+pc", waiting until "domcontentloaded"
+ search=mutant tactical pc source=Alibaba
+2026-05-29 13:34:17 [info     ] cases.generic_market.done      found=0 search=mutant tactical pc source=Alibaba
+2026-05-29 13:34:25 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=spiderverse+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=spiderverse+gaming+pc", waiting until "domcontentloaded"
+ search=spiderverse gaming pc source=Alibaba
+2026-05-29 13:34:25 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=Alibaba
+2026-05-29 13:34:34 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=red+blue+rgb+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=red+blue+rgb+build", waiting until "domcontentloaded"
+ search=red blue rgb build source=Alibaba
+2026-05-29 13:34:34 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=Alibaba
+2026-05-29 13:34:42 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=batcomputer+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=batcomputer+workstation", waiting until "domcontentloaded"
+ search=batcomputer workstation source=Alibaba
+2026-05-29 13:34:42 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=Alibaba
