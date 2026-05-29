@@ -31,5 +31,8 @@
   },
   "upgrade_parts_cycle": {
     "last_success_at": "2026-05-29T15:07:21.930415+00:00"
+  },
+  "cases_cycle": {
+    "last_success_at": "2026-05-29T15:27:38.728601+00:00"
   }
 }
