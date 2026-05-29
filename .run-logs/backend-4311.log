@@ -2908,3 +2908,61 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=starfleet+workstation", waiting until "domcontentloaded"
  search=starfleet workstation source=BargainHardware
 2026-05-29 13:21:06 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=BargainHardware
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 13:21:14 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+cube+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+cube+pc", waiting until "domcontentloaded"
+ search=borg cube pc source=BargainHardware
+2026-05-29 13:21:14 [info     ] cases.generic_market.done      found=0 search=borg cube pc source=BargainHardware
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 13:21:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+collective+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=borg+collective+build", waiting until "domcontentloaded"
+ search=borg collective build source=BargainHardware
+2026-05-29 13:21:23 [info     ] cases.generic_market.done      found=0 search=borg collective build source=BargainHardware
+2026-05-29 13:21:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=galactic+empire+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=galactic+empire+build", waiting until "domcontentloaded"
+ search=galactic empire build source=BargainHardware
+2026-05-29 13:21:31 [info     ] cases.generic_market.done      found=0 search=galactic empire build source=BargainHardware
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 13:21:39 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=rebel+alliance+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=rebel+alliance+gaming+pc", waiting until "domcontentloaded"
+ search=rebel alliance gaming pc source=BargainHardware
+2026-05-29 13:21:40 [info     ] cases.generic_market.done      found=0 search=rebel alliance gaming pc source=BargainHardware
+2026-05-29 13:21:48 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cylon+red+eye+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cylon+red+eye+pc", waiting until "domcontentloaded"
+ search=cylon red eye pc source=BargainHardware
+2026-05-29 13:21:48 [info     ] cases.generic_market.done      found=0 search=cylon red eye pc source=BargainHardware
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-29 13:21:56 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=battlestar+inspired+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=battlestar+inspired+workstation", waiting until "domcontentloaded"
+ search=battlestar inspired workstation source=BargainHardware
+2026-05-29 13:21:57 [info     ] cases.generic_market.done      found=0 search=battlestar inspired workstation source=BargainHardware
+2026-05-29 13:22:05 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=station+command+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=station+command+build", waiting until "domcontentloaded"
+ search=station command build source=BargainHardware
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-29 13:22:05 [info     ] cases.generic_market.done      found=0 search=station command build source=BargainHardware
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-29 13:22:13 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=diplomatic+station+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=diplomatic+station+workstation", waiting until "domcontentloaded"
+ search=diplomatic station workstation source=BargainHardware
+2026-05-29 13:22:14 [info     ] cases.generic_market.done      found=0 search=diplomatic station workstation source=BargainHardware
+2026-05-29 13:22:22 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=leviathan+inspired+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=leviathan+inspired+build", waiting until "domcontentloaded"
+ search=leviathan inspired build source=BargainHardware
+2026-05-29 13:22:22 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=BargainHardware
+2026-05-29 13:22:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=biomechanical+spaceship+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=biomechanical+spaceship+pc", waiting until "domcontentloaded"
+ search=biomechanical spaceship pc source=BargainHardware
+2026-05-29 13:22:31 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=BargainHardware
