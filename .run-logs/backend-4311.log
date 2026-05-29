@@ -1284,3 +1284,66 @@ Call log:
 2026-05-29 12:33:29 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
 2026-05-29 12:33:29 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
 2026-05-29 12:33:36 [info     ] autonomous_cycle.done          duration_ms=1079848
+[scraper] eBay 'kryptonian workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'fortress of solitude build': 0 found, 0 new (total 0)
+[scraper] eBay 'lian li style case': 0 found, 0 new (total 0)
+[scraper] eBay 'hyte y60 style case': 0 found, 0 new (total 0)
+[scraper] eBay 'Montech panoramic case': 0 found, 0 new (total 0)
+[scraper] eBay 'darkFlash fish tank': 0 found, 0 new (total 0)
+[scraper] eBay 'showcase build': 0 found, 0 new (total 0)
+[scraper] eBay 'custom gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming atx case rgb': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc case mid tower': 0 found, 0 new (total 0)
+[scraper] eBay 'slim micro atx case office': 0 found, 0 new (total 0)
+[scraper] eBay 'mini tower desktop case': 0 found, 0 new (total 0)
+[scraper] eBay 'cheap atx pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'budget gaming case atx': 0 found, 0 new (total 0)
+2026-05-29 12:43:13 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:43:21 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=fish tank pc case
+2026-05-29 12:43:21 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:43:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:43:29 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=panoramic pc case
+2026-05-29 12:43:29 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:43:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:43:38 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=argb gaming case
+2026-05-29 12:43:38 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:43:38 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rgb+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:43:46 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=rgb+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=rgb+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=rgb airflow case
+2026-05-29 12:43:46 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:43:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:43:55 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=mesh airflow case
+2026-05-29 12:43:55 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:43:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=high+airflow+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:03 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=high+airflow+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=high+airflow+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=high airflow gaming case
+2026-05-29 12:44:03 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:04 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=premium+aluminum+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:12 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=premium+aluminum+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=premium+aluminum+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=premium aluminum pc case
+2026-05-29 12:44:12 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=luxury+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:44:20 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=luxury+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=luxury+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=luxury gaming case
+2026-05-29 12:44:20 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:44:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide
