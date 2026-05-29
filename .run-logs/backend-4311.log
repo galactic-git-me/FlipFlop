@@ -179,3 +179,46 @@ Call log:
 [scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
 [scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
 2026-05-29 11:17:21 [debug    ] ebay_buy.request_retry         attempt=1 error= search=NVIDIA GPU
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'argb gaming case': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+2026-05-29 11:17:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:17:47 [debug    ] ebay_buy.request_retry         attempt=2 error= search=NVIDIA GPU
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-29 11:17:55 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming mouse
+2026-05-29 11:17:55 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:17:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:17:56 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming mouse
+2026-05-29 11:18:04 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+mouse&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+mouse&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming mouse
+2026-05-29 11:18:12 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+mouse&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+mouse&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming mouse
+2026-05-29 11:18:14 [debug    ] ebay_buy.request_retry         attempt=3 error= search=NVIDIA GPU
+2026-05-29 11:18:16 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 11:18:20 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+mouse&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+mouse&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=gaming mouse
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 11:18:28 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+mouse
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+mouse", waiting until "domcontentloaded"
+ site=Alibaba term=gaming mouse
+[scraper] eBay 'rgb airflow case': 0 found, 0 new (total 0)
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 11:18:36 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+mouse
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+mouse", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming mouse
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-29 11:18:41 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 CPU
