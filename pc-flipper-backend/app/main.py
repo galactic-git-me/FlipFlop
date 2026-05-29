@@ -817,9 +817,22 @@ async def _seed_default_data():
             ]
             db.add_all(rows)
             log.info("seeded.source_search_terms", scope="upgrade_parts", count=len(rows))
-        accessories_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "accessories"))
-        if accessories_terms_count == 0:
-            rows = [
+        # Ensure accessory scope cannot silently disappear from DB.
+        existing_accessory_terms = {
+            str(t).strip().lower()
+            for t in (
+                await db.execute(
+                    select(SourceSearchTerm.term).where(SourceSearchTerm.scope == "accessories")
+                )
+            ).scalars().all()
+            if str(t).strip()
+        }
+        accessory_rows_to_add = []
+        for term in _ACCESSORY_SEARCH_TERMS:
+            norm = term.strip().lower()
+            if norm in existing_accessory_terms:
+                continue
+            accessory_rows_to_add.append(
                 SourceSearchTerm(
                     scope="accessories",
                     group_name="Gaming Accessories",
@@ -829,10 +842,10 @@ async def _seed_default_data():
                     notes="seeded_accessory_terms",
                     enabled=True,
                 )
-                for term in _ACCESSORY_SEARCH_TERMS
-            ]
-            db.add_all(rows)
-            log.info("seeded.source_search_terms", scope="accessories", count=len(rows))
+            )
+        if accessory_rows_to_add:
+            db.add_all(accessory_rows_to_add)
+            log.info("seeded.source_search_terms", scope="accessories", count=len(accessory_rows_to_add))
 
         # Normalize legacy/alias source names so eBay + Amazon route correctly
         # across all catalogues.

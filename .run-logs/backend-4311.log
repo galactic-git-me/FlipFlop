@@ -3683,3 +3683,417 @@ INFO:     100.101.209.68:53890 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:53906 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:53908 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:53924 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42976 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42978 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43008 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42994 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43024 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43036 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43042 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43050 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43062 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43078 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43086 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43098 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'pc speakers': 0 found, 0 new (total 0)
+2026-05-29 11:09:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:50594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50598 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50614 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50616 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50630 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50644 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50654 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50668 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50676 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50688 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50698 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50714 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50716 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50730 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50746 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+2026-05-29 11:09:23 [debug    ] ebay_buy.request_retry         attempt=1 error= search=i7 CPU
+2026-05-29 11:09:23 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=pc speakers
+2026-05-29 11:09:23 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:09:23 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:09:24 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=pc speakers
+INFO:     100.101.209.68:46966 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46978 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46980 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46982 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46994 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46996 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47002 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47004 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47016 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-29 11:09:30 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-30 10:02:19 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 619, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 528, in _fetch_term
+    await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-30 10:02:19 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 170, in run_upgrade_parts_swarm
+    buy = await _ebay_buy_price(client, search)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 374, in _ebay_buy_price
+    r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1814, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1585, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1674, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1702, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1739, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1776, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_transports/default.py", line 377, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http_proxy.py", line 288, in handle_async_request
+    connect_response = await self._connection.handle_async_request(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_backends/anyio.py", line 115, in connect_tcp
+    stream: anyio.abc.ByteStream = await anyio.connect_tcp(
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/_core/_sockets.py", line 235, in connect_tcp
+    async with create_task_group() as tg:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 803, in __aexit__
+    raise exc_val
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 771, in __aexit__
+    await self._on_completed_fut
+asyncio.exceptions.CancelledError
+2026-05-29 11:09:30 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [608215]
+INFO:     Started server process [803903]
+INFO:     Waiting for application startup.
+2026-05-29 11:09:31 [info     ] app.startup
+2026-05-29 11:09:31 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-29 11:09:31 [info     ] seeded.source_search_terms     count=8 scope=accessories
+2026-05-29 11:09:31 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-29 11:09:31 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-29 11:09:31 [info     ] scheduler.started              jobs=11
+2026-05-29 11:09:31 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-29 11:09:31 [info     ] accessories_swarm.start
+2026-05-29 11:09:31 [info     ] cases_swarm.start
+2026-05-29 11:09:31 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.101.209.68:47022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47030 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47036 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-29 11:09:31 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+INFO:     100.101.209.68:47052 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47062 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47072 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47078 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44912 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44928 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44942 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44948 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:09:38 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:44954 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44958 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44972 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44980 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44990 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49016 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49030 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49032 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49044 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49058 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49068 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49082 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49086 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49092 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49102 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49110 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35908 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49114 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49126 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49142 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49154 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49170 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49174 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49188 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49198 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:09:56 [debug    ] ebay_sold.request_retry        attempt=1 error= search=NVIDIA GPU
+INFO:     100.101.209.68:36886 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36894 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36898 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36906 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36920 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36926 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36928 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36932 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36948 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36954 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36956 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46730 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50258 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50272 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50278 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50282 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50284 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50292 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50294 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50306 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-29 11:10:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:52888 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52902 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52918 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52928 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52938 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52940 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52950 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52962 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52964 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52974 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52976 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52980 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52988 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52996 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53008 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:10:22 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming keyboard
+2026-05-29 11:10:22 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:10:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:10:23 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming keyboard
+2026-05-29 11:10:23 [debug    ] ebay_sold.request_retry        attempt=2 error= search=NVIDIA GPU
+INFO:     100.101.209.68:45482 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45494 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45504 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45518 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45522 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45534 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45546 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45550 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45552 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:10:31 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+keyboard&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+keyboard&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming keyboard
+INFO:     100.101.209.68:45558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45574 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45578 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45592 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45594 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45610 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45616 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45626 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45636 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45648 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45654 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:10:39 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+keyboard&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+keyboard&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming keyboard
+INFO:     100.101.209.68:43484 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43490 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43500 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43514 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43520 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43526 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43536 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43544 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43554 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:10:47 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+keyboard&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+keyboard&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=gaming keyboard
+INFO:     100.101.209.68:58186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58196 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58202 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58206 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58210 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58220 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58232 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 11:10:49 [debug    ] ebay_sold.request_retry        attempt=3 error= search=NVIDIA GPU
+INFO:     100.101.209.68:58236 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58246 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58248 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58254 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:10:55 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+keyboard
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+keyboard", waiting until "domcontentloaded"
+ site=Alibaba term=gaming keyboard
+INFO:     100.101.209.68:35878 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35884 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35906 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35920 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:35934 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35946 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35956 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35970 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35974 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35984 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36000 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36004 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36006 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36016 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36020 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 11:11:03 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+keyboard
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+keyboard", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming keyboard
+INFO:     100.101.209.68:36856 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36872 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36874 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36884 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36898 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36914 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36916 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36930 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42662 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42674 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42686 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42688 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 11:11:16 [debug    ] ebay_buy.request_retry         attempt=1 error= search=NVIDIA GPU
+INFO:     100.101.209.68:42694 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42696 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42706 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42716 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42728 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42730 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42736 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42746 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42760 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42770 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42772 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42798 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42808 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42818 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46736 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46740 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46746 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46750 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46760 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46772 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46782 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46788 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46794 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46802 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46810 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46822 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46830 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'argb gaming case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54262 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54268 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54284 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54298 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+2026-05-29 11:11:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:11:43 [debug    ] ebay_buy.request_retry         attempt=2 error= search=NVIDIA GPU
+INFO:     100.101.209.68:57326 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57340 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57350 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57366 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57376 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57386 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57394 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57398 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57400 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57424 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57432 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57448 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57464 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57470 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57480 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-29 11:11:49 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming mouse
+2026-05-29 11:11:49 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:11:49 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:11:49 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming mouse
+INFO:     100.101.209.68:53632 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53634 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53636 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53648 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53658 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53664 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53676 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53690 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53704 - "GET /api/schedule HTTP/1.1" 200 OK

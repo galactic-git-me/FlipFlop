@@ -19,3 +19,17 @@ Tailscale URL (live): andromeda-ts:4310
    * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
 
 
+○ Compiling / ...
+ GET / 200 in 7.9s (next.js: 6.8s, application-code: 1091ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "andromeda-ts".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['andromeda-ts'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 71ms (next.js: 5ms, application-code: 66ms)
