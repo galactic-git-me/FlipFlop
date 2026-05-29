@@ -688,3 +688,21 @@ Call log:
 2026-05-29 11:50:41 [warning  ] scan.fetch.error               error= search=i9 CPU
 2026-05-29 11:50:41 [warning  ] overclockers.fetch.error       error= search=i9 CPU
 2026-05-29 11:50:41 [warning  ] box.fetch.error                error= search=i9 CPU
+[scraper] eBay 'kryptonian workstation': 0 found, 0 new (total 0)
+2026-05-29 11:51:01 [warning  ] scan.fetch.error               error= search=AM4 motherboard
+2026-05-29 11:51:01 [warning  ] overclockers.fetch.error       error= search=AM4 motherboard
+2026-05-29 11:51:01 [warning  ] box.fetch.error                error= search=AM4 motherboard
+2026-05-29 11:51:21 [warning  ] scan.fetch.error               error= search=AM4 motherboard cpu combo
+2026-05-29 11:51:21 [warning  ] overclockers.fetch.error       error= search=AM4 motherboard cpu combo
+2026-05-29 11:51:21 [warning  ] box.fetch.error                error= search=AM4 motherboard cpu combo
+[scraper] eBay 'fortress of solitude build': 0 found, 0 new (total 0)
+2026-05-29 11:51:41 [warning  ] scan.fetch.error               error= search=DDR4 RAM
+2026-05-29 11:51:41 [warning  ] overclockers.fetch.error       error= search=DDR4 RAM
+2026-05-29 11:51:41 [warning  ] box.fetch.error                error= search=DDR4 RAM
+2026-05-29 11:52:01 [warning  ] scan.fetch.error               error= search=DDR4 RAM 32GB 2x16GB
+2026-05-29 11:52:01 [warning  ] overclockers.fetch.error       error= search=DDR4 RAM 32GB 2x16GB
+2026-05-29 11:52:01 [warning  ] box.fetch.error                error= search=DDR4 RAM 32GB 2x16GB
+[scraper] eBay 'lian li style case': 0 found, 0 new (total 0)
+2026-05-29 11:52:21 [warning  ] scan.fetch.error               error= search=NVMe 1TB
+2026-05-29 11:52:22 [warning  ] overclockers.fetch.error       error= search=NVMe 1TB
+2026-05-29 11:52:22 [warning  ] box.fetch.error                error= search=NVMe 1TB
