@@ -1521,3 +1521,63 @@ Call log:
  term=avengers workstation
 2026-05-29 12:48:27 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:48:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:35 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=shield tactical pc
+2026-05-29 12:48:35 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:44 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=jarvis ai workstation
+2026-05-29 12:48:44 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:48:52 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=stark industries pc
+2026-05-29 12:48:52 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:48:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gamma core build
+2026-05-29 12:49:01 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:09 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=radioactive green rgb pc
+2026-05-29 12:49:10 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:18 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=cerebro workstation
+2026-05-29 12:49:18 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:26 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=mutant tactical pc
+2026-05-29 12:49:27 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:35 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=spiderverse gaming pc
+2026-05-29 12:49:35 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=red+blue+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:43 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=red+blue+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=red+blue+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=red blue rgb build
+2026-05-29 12:49:44 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=batcomputer+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:49:52 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=batcomputer+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=batcomputer+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=batcomputer workstation
+2026-05-29 12:49:52 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:49:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide
