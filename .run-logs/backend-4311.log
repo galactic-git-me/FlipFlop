@@ -1804,3 +1804,53 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=panoramic+pc+case&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:52:45 [info     ] amazon.cases.done              found=0 search=panoramic pc case
+2026-05-29 12:52:53 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=argb+gaming+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=argb+gaming+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:52:53 [info     ] amazon.cases.done              found=0 search=argb gaming case
+2026-05-29 12:53:02 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=rgb+airflow+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=rgb+airflow+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:02 [info     ] amazon.cases.done              found=0 search=rgb airflow case
+2026-05-29 12:53:10 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=mesh+airflow+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=mesh+airflow+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:10 [info     ] amazon.cases.done              found=0 search=mesh airflow case
+2026-05-29 12:53:19 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=high+airflow+gaming+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=high+airflow+gaming+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:19 [info     ] amazon.cases.done              found=0 search=high airflow gaming case
+2026-05-29 12:53:27 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=premium+aluminum+pc+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=premium+aluminum+pc+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:27 [info     ] amazon.cases.done              found=0 search=premium aluminum pc case
+2026-05-29 12:53:36 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=luxury+gaming+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=luxury+gaming+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:36 [info     ] amazon.cases.done              found=0 search=luxury gaming case
+2026-05-29 12:53:44 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=white+fish+tank+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=white+fish+tank+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:44 [info     ] amazon.cases.done              found=0 search=white fish tank case
+2026-05-29 12:53:53 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=white+rgb+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=white+rgb+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:53:53 [info     ] amazon.cases.done              found=0 search=white rgb case
+2026-05-29 12:54:01 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=micro+atx+fish+tank&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=micro+atx+fish+tank&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:01 [info     ] amazon.cases.done              found=0 search=micro atx fish tank
+2026-05-29 12:54:10 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=compact+gaming+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=compact+gaming+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:54:10 [info     ] amazon.cases.done              found=0 search=compact gaming case
