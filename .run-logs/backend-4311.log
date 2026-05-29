@@ -1581,3 +1581,63 @@ Call log:
  term=batcomputer workstation
 2026-05-29 12:49:52 [info     ] gumtree.playwright.done        total=0
 2026-05-29 12:49:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:01 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=dark knight pc
+2026-05-29 12:50:01 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=kryptonian+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:09 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=kryptonian+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=kryptonian+workstation&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=kryptonian workstation
+2026-05-29 12:50:09 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fortress+of+solitude+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:18 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=fortress+of+solitude+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=fortress+of+solitude+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=fortress of solitude build
+2026-05-29 12:50:18 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=lian+li+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:26 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=lian+li+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=lian+li+style+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=lian li style case
+2026-05-29 12:50:26 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hyte+y60+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:35 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=hyte+y60+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=hyte+y60+style+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=hyte y60 style case
+2026-05-29 12:50:35 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Montech+panoramic+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:43 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=Montech+panoramic+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=Montech+panoramic+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=Montech panoramic case
+2026-05-29 12:50:43 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=darkFlash+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:50:52 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=darkFlash+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=darkFlash+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=darkFlash fish tank
+2026-05-29 12:50:52 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:50:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=showcase+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:00 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=showcase+build&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=showcase+build&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=showcase build
+2026-05-29 12:51:00 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=custom+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:09 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=custom+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=custom+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=custom gaming pc
+2026-05-29 12:51:09 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+atx+case+rgb&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-29 12:51:17 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+atx+case+rgb&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+atx+case+rgb&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming atx case rgb
+2026-05-29 12:51:17 [info     ] gumtree.playwright.done        total=0
+2026-05-29 12:51:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+case+mid+tower&max_price=350&min_price=1&sort=date&distance=nationwide
