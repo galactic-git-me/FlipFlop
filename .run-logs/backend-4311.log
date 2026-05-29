@@ -598,3 +598,9 @@ Call log:
 2026-05-29 11:40:53 [debug    ] ebay_sold.request_retry        attempt=3 error= search=PSU
 [scraper] eBay 'super saiyan gaming pc': 0 found, 0 new (total 0)
 2026-05-29 11:41:19 [debug    ] ebay_buy.request_retry         attempt=1 error= search=PSU
+[scraper] eBay 'dragon radar workstation': 0 found, 0 new (total 0)
+2026-05-29 11:41:46 [debug    ] ebay_buy.request_retry         attempt=2 error= search=PSU
+2026-05-29 11:42:12 [debug    ] ebay_buy.request_retry         attempt=3 error= search=PSU
+2026-05-29 11:42:14 [debug    ] upgrade_parts.ebay             buy=None part=PSU sold=None
+[scraper] eBay 'avengers workstation': 0 found, 0 new (total 0)
+2026-05-29 11:42:39 [debug    ] ebay_sold.request_retry        attempt=1 error= search=CPU cooler
