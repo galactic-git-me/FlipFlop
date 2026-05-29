@@ -706,3 +706,127 @@ Call log:
 2026-05-29 11:52:21 [warning  ] scan.fetch.error               error= search=NVMe 1TB
 2026-05-29 11:52:22 [warning  ] overclockers.fetch.error       error= search=NVMe 1TB
 2026-05-29 11:52:22 [warning  ] box.fetch.error                error= search=NVMe 1TB
+2026-05-29 11:52:42 [warning  ] scan.fetch.error               error= search=PSU
+2026-05-29 11:52:42 [warning  ] overclockers.fetch.error       error= search=PSU
+2026-05-29 11:52:42 [warning  ] box.fetch.error                error= search=PSU
+[scraper] eBay 'hyte y60 style case': 0 found, 0 new (total 0)
+2026-05-29 11:53:02 [warning  ] scan.fetch.error               error= search=CPU cooler
+2026-05-29 11:53:02 [warning  ] overclockers.fetch.error       error= search=CPU cooler
+2026-05-29 11:53:02 [warning  ] box.fetch.error                error= search=CPU cooler
+2026-05-29 11:53:22 [warning  ] scan.fetch.error               error= search=RGB fans
+2026-05-29 11:53:22 [warning  ] overclockers.fetch.error       error= search=RGB fans
+2026-05-29 11:53:22 [warning  ] box.fetch.error                error= search=RGB fans
+2026-05-29 11:53:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:53:22 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVIDIA GPU
+2026-05-29 11:53:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:23 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 CPU
+2026-05-29 11:53:23 [info     ] facebook.playwright.cookies_loaded count=8
+[scraper] eBay 'Montech panoramic case': 0 found, 0 new (total 0)
+2026-05-29 11:53:23 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i7 CPU
+2026-05-29 11:53:23 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:24 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=i9 CPU
+2026-05-29 11:53:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:24 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard
+2026-05-29 11:53:24 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:25 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=AM4 motherboard cpu combo
+2026-05-29 11:53:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:25 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM
+2026-05-29 11:53:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:26 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=DDR4 RAM 32GB 2x16GB
+2026-05-29 11:53:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:26 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=NVMe 1TB
+2026-05-29 11:53:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:27 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=PSU
+2026-05-29 11:53:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:27 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=CPU cooler
+2026-05-29 11:53:27 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:53:27 [warning  ] upgrade_parts.facebook_fetch.error error=BrowserContext.new_page: Target page, context or browser has been closed search=RGB fans
+2026-05-29 11:53:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=NVIDIA+GPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=NVIDIA+GPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:53:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=NVIDIA+GPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=NVIDIA+GPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:53:30 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=NVIDIA GPU
+2026-05-29 11:53:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=NVIDIA+GPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=NVIDIA+GPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:53:30 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=NVIDIA+GPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=NVIDIA+GPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:53:30 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:53:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:53:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=AM4+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=AM4+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:53:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=AM4+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=AM4+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:53:39 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AM4 CPU
+2026-05-29 11:53:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=AM4+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=AM4+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:53:39 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=AM4+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=AM4+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:53:39 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:53:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:53:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=i7+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=i7+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:53:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=i7+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=i7+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:53:48 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=i7 CPU
+2026-05-29 11:53:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=i7+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=i7+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:53:48 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:53:48 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=i7+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=i7+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:53:48 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-29 11:53:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=i9+CPU&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=i9+CPU&i=computers", waiting until "domcontentloaded"
+ source=amazon
+2026-05-29 11:53:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=i9+CPU&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=i9+CPU&search_method=user", waiting until "domcontentloaded"
+ source=temu
+2026-05-29 11:53:56 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=i9 CPU
+2026-05-29 11:53:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=i9+CPU
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=i9+CPU", waiting until "domcontentloaded"
+ source=alibaba
+2026-05-29 11:53:56 [debug    ] upgrade_parts.playwright_fetch.error error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=i9+CPU&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=i9+CPU&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ source=aliexpress
+2026-05-29 11:53:56 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:53:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
