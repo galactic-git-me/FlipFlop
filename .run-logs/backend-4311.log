@@ -3329,3 +3329,61 @@ Call log:
   - navigating to "https://www.alibaba.com/trade/search?SearchText=rebel+alliance+gaming+pc", waiting until "domcontentloaded"
  search=rebel alliance gaming pc source=Alibaba
 2026-05-29 13:30:52 [info     ] cases.generic_market.done      found=0 search=rebel alliance gaming pc source=Alibaba
+2026-05-29 13:31:01 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=cylon+red+eye+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=cylon+red+eye+pc", waiting until "domcontentloaded"
+ search=cylon red eye pc source=Alibaba
+2026-05-29 13:31:01 [info     ] cases.generic_market.done      found=0 search=cylon red eye pc source=Alibaba
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+2026-05-29 13:31:09 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=battlestar+inspired+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=battlestar+inspired+workstation", waiting until "domcontentloaded"
+ search=battlestar inspired workstation source=Alibaba
+2026-05-29 13:31:09 [info     ] cases.generic_market.done      found=0 search=battlestar inspired workstation source=Alibaba
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+2026-05-29 13:31:18 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=station+command+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=station+command+build", waiting until "domcontentloaded"
+ search=station command build source=Alibaba
+2026-05-29 13:31:18 [info     ] cases.generic_market.done      found=0 search=station command build source=Alibaba
+2026-05-29 13:31:26 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=diplomatic+station+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=diplomatic+station+workstation", waiting until "domcontentloaded"
+ search=diplomatic station workstation source=Alibaba
+2026-05-29 13:31:26 [info     ] cases.generic_market.done      found=0 search=diplomatic station workstation source=Alibaba
+2026-05-29 13:31:35 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=leviathan+inspired+build
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=leviathan+inspired+build", waiting until "domcontentloaded"
+ search=leviathan inspired build source=Alibaba
+2026-05-29 13:31:35 [info     ] cases.generic_market.done      found=0 search=leviathan inspired build source=Alibaba
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+2026-05-29 13:31:43 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=biomechanical+spaceship+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=biomechanical+spaceship+pc", waiting until "domcontentloaded"
+ search=biomechanical spaceship pc source=Alibaba
+2026-05-29 13:31:43 [info     ] cases.generic_market.done      found=0 search=biomechanical spaceship pc source=Alibaba
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+2026-05-29 13:31:52 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=autobot+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=autobot+gaming+pc", waiting until "domcontentloaded"
+ search=autobot gaming pc source=Alibaba
+2026-05-29 13:31:52 [info     ] cases.generic_market.done      found=0 search=autobot gaming pc source=Alibaba
+2026-05-29 13:32:00 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=decepticon+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=decepticon+workstation", waiting until "domcontentloaded"
+ search=decepticon workstation source=Alibaba
+2026-05-29 13:32:00 [info     ] cases.generic_market.done      found=0 search=decepticon workstation source=Alibaba
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+2026-05-29 13:32:09 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=anime+gaming+pc
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=anime+gaming+pc", waiting until "domcontentloaded"
+ search=anime gaming pc source=Alibaba
+2026-05-29 13:32:09 [info     ] cases.generic_market.done      found=0 search=anime gaming pc source=Alibaba
+2026-05-29 13:32:17 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=manga+aesthetic+workstation
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=manga+aesthetic+workstation", waiting until "domcontentloaded"
+ search=manga aesthetic workstation source=Alibaba
+2026-05-29 13:32:17 [info     ] cases.generic_market.done      found=0 search=manga aesthetic workstation source=Alibaba
