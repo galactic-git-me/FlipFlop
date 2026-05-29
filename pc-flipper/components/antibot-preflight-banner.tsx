@@ -49,41 +49,22 @@ export function AntiBotPreflightBanner() {
               Launch backend from a desktop shell with DISPLAY, or run preflight manually from this panel after that.
             </div>
           )}
-          {noGui && status.urls?.length > 0 && (
-            <div className="opacity-90 mt-2 text-xs">
-              Challenge URLs: {status.urls.join("  |  ")}
-            </div>
-          )}
         </div>
-        <div className="flex items-center gap-2">
-          {noGui && status.urls?.length > 0 && (
-            <button
-              className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50"
-              onClick={() => {
-                for (const url of status.urls) {
-                  window.open(url, "_blank", "noopener,noreferrer");
-                }
-              }}
-            >
-              Open Challenge Tabs
-            </button>
-          )}
-          <button
-            className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50 disabled:opacity-60"
-            disabled={busy || status.running}
-            onClick={async () => {
-              setBusy(true);
-              try {
-                await api.preflight.triggerAntibot();
-                setTimeout(() => void load(), 1000);
-              } finally {
-                setBusy(false);
-              }
-            }}
-          >
-            {status.running || busy ? "Running…" : "Run Preflight"}
-          </button>
-        </div>
+        <button
+          className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50 disabled:opacity-60"
+          disabled={busy || status.running}
+          onClick={async () => {
+            setBusy(true);
+            try {
+              await api.preflight.triggerAntibot();
+              setTimeout(() => void load(), 1000);
+            } finally {
+              setBusy(false);
+            }
+          }}
+        >
+          {status.running || busy ? "Running…" : "Run Preflight"}
+        </button>
       </div>
     </div>
   );
