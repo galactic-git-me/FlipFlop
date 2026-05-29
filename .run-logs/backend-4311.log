@@ -604,3 +604,9 @@ Call log:
 2026-05-29 11:42:14 [debug    ] upgrade_parts.ebay             buy=None part=PSU sold=None
 [scraper] eBay 'avengers workstation': 0 found, 0 new (total 0)
 2026-05-29 11:42:39 [debug    ] ebay_sold.request_retry        attempt=1 error= search=CPU cooler
+2026-05-29 11:43:06 [debug    ] ebay_sold.request_retry        attempt=2 error= search=CPU cooler
+[scraper] eBay 'shield tactical pc': 0 found, 0 new (total 0)
+2026-05-29 11:43:32 [debug    ] ebay_sold.request_retry        attempt=3 error= search=CPU cooler
+[scraper] eBay 'jarvis ai workstation': 0 found, 0 new (total 0)
+2026-05-29 11:43:59 [debug    ] ebay_buy.request_retry         attempt=1 error= search=CPU cooler
+2026-05-29 11:44:26 [debug    ] ebay_buy.request_retry         attempt=2 error= search=CPU cooler
