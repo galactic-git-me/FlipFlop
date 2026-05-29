@@ -2850,3 +2850,61 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=high+airflow+gaming+case", waiting until "domcontentloaded"
  search=high airflow gaming case source=BargainHardware
 2026-05-29 13:19:40 [info     ] cases.generic_market.done      found=0 search=high airflow gaming case source=BargainHardware
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 13:19:49 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=premium+aluminum+pc+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=premium+aluminum+pc+case", waiting until "domcontentloaded"
+ search=premium aluminum pc case source=BargainHardware
+2026-05-29 13:19:49 [info     ] cases.generic_market.done      found=0 search=premium aluminum pc case source=BargainHardware
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 13:19:57 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=luxury+gaming+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=luxury+gaming+case", waiting until "domcontentloaded"
+ search=luxury gaming case source=BargainHardware
+2026-05-29 13:19:58 [info     ] cases.generic_market.done      found=0 search=luxury gaming case source=BargainHardware
+2026-05-29 13:20:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=white+fish+tank+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=white+fish+tank+case", waiting until "domcontentloaded"
+ search=white fish tank case source=BargainHardware
+2026-05-29 13:20:06 [info     ] cases.generic_market.done      found=0 search=white fish tank case source=BargainHardware
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 13:20:14 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=white+rgb+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=white+rgb+case", waiting until "domcontentloaded"
+ search=white rgb case source=BargainHardware
+2026-05-29 13:20:15 [info     ] cases.generic_market.done      found=0 search=white rgb case source=BargainHardware
+2026-05-29 13:20:23 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=micro+atx+fish+tank
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=micro+atx+fish+tank", waiting until "domcontentloaded"
+ search=micro atx fish tank source=BargainHardware
+2026-05-29 13:20:23 [info     ] cases.generic_market.done      found=0 search=micro atx fish tank source=BargainHardware
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:20:31 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=compact+gaming+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=compact+gaming+case", waiting until "domcontentloaded"
+ search=compact gaming case source=BargainHardware
+2026-05-29 13:20:32 [info     ] cases.generic_market.done      found=0 search=compact gaming case source=BargainHardware
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:20:40 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cyberpunk+pc+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cyberpunk+pc+case", waiting until "domcontentloaded"
+ search=cyberpunk pc case source=BargainHardware
+2026-05-29 13:20:40 [info     ] cases.generic_market.done      found=0 search=cyberpunk pc case source=BargainHardware
+2026-05-29 13:20:49 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=futuristic+gaming+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=futuristic+gaming+case", waiting until "domcontentloaded"
+ search=futuristic gaming case source=BargainHardware
+2026-05-29 13:20:49 [info     ] cases.generic_market.done      found=0 search=futuristic gaming case source=BargainHardware
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-29 13:20:57 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=federation+command+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=federation+command+build", waiting until "domcontentloaded"
+ search=federation command build source=BargainHardware
+2026-05-29 13:20:57 [info     ] cases.generic_market.done      found=0 search=federation command build source=BargainHardware
+2026-05-29 13:21:06 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=starfleet+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=starfleet+workstation", waiting until "domcontentloaded"
+ search=starfleet workstation source=BargainHardware
+2026-05-29 13:21:06 [info     ] cases.generic_market.done      found=0 search=starfleet workstation source=BargainHardware
