@@ -3077,3 +3077,81 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=spiderverse+gaming+pc", waiting until "domcontentloaded"
  search=spiderverse gaming pc source=BargainHardware
 2026-05-29 13:25:12 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
+2026-05-29 13:25:21 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=red+blue+rgb+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=red+blue+rgb+build", waiting until "domcontentloaded"
+ search=red blue rgb build source=BargainHardware
+2026-05-29 13:25:21 [info     ] cases.generic_market.done      found=0 search=red blue rgb build source=BargainHardware
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-29 13:25:29 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=batcomputer+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=batcomputer+workstation", waiting until "domcontentloaded"
+ search=batcomputer workstation source=BargainHardware
+2026-05-29 13:25:29 [info     ] cases.generic_market.done      found=0 search=batcomputer workstation source=BargainHardware
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-29 13:25:38 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=dark+knight+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=dark+knight+pc", waiting until "domcontentloaded"
+ search=dark knight pc source=BargainHardware
+2026-05-29 13:25:38 [info     ] cases.generic_market.done      found=0 search=dark knight pc source=BargainHardware
+2026-05-29 13:25:46 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=kryptonian+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=kryptonian+workstation", waiting until "domcontentloaded"
+ search=kryptonian workstation source=BargainHardware
+2026-05-29 13:25:46 [info     ] cases.generic_market.done      found=0 search=kryptonian workstation source=BargainHardware
+2026-05-29 13:25:55 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=fortress+of+solitude+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=fortress+of+solitude+build", waiting until "domcontentloaded"
+ search=fortress of solitude build source=BargainHardware
+2026-05-29 13:25:55 [info     ] cases.generic_market.done      found=0 search=fortress of solitude build source=BargainHardware
+2026-05-29 13:26:03 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=lian+li+style+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=lian+li+style+case", waiting until "domcontentloaded"
+ search=lian li style case source=BargainHardware
+2026-05-29 13:26:03 [info     ] cases.generic_market.done      found=0 search=lian li style case source=BargainHardware
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-29 13:26:12 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=hyte+y60+style+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=hyte+y60+style+case", waiting until "domcontentloaded"
+ search=hyte y60 style case source=BargainHardware
+2026-05-29 13:26:12 [info     ] cases.generic_market.done      found=0 search=hyte y60 style case source=BargainHardware
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-29 13:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-29 13:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-29 13:26:20 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=Montech+panoramic+case
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=Montech+panoramic+case", waiting until "domcontentloaded"
+ search=Montech panoramic case source=BargainHardware
+2026-05-29 13:26:20 [info     ] cases.generic_market.done      found=0 search=Montech panoramic case source=BargainHardware
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-29 13:26:29 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=darkFlash+fish+tank
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=darkFlash+fish+tank", waiting until "domcontentloaded"
+ search=darkFlash fish tank source=BargainHardware
+2026-05-29 13:26:29 [info     ] cases.generic_market.done      found=0 search=darkFlash fish tank source=BargainHardware
+2026-05-29 13:26:37 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=showcase+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=showcase+build", waiting until "domcontentloaded"
+ search=showcase build source=BargainHardware
+2026-05-29 13:26:37 [info     ] cases.generic_market.done      found=0 search=showcase build source=BargainHardware
