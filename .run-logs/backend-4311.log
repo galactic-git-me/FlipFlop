@@ -531,3 +531,22 @@ Call log:
 [scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
 [scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
 2026-05-29 11:30:40 [debug    ] ebay_buy.request_retry         attempt=1 error= search=AM4 motherboard cpu combo
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'cylon red eye pc': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+2026-05-29 11:31:06 [debug    ] ebay_buy.request_retry         attempt=2 error= search=AM4 motherboard cpu combo
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+2026-05-29 11:31:33 [debug    ] ebay_buy.request_retry         attempt=3 error= search=AM4 motherboard cpu combo
+2026-05-29 11:31:35 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU Motherboard Combo sold=None
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay 'battlestar inspired workstation': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+2026-05-29 11:32:00 [debug    ] ebay_sold.request_retry        attempt=1 error= search=DDR4 RAM
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay 'station command build': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+2026-05-29 11:32:26 [debug    ] ebay_sold.request_retry        attempt=2 error= search=DDR4 RAM
