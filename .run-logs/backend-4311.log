@@ -222,3 +222,47 @@ Call log:
  site=BargainHardware term=gaming mouse
 [scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
 2026-05-29 11:18:41 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 CPU
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-29 11:19:08 [debug    ] ebay_sold.request_retry        attempt=2 error= search=AM4 CPU
+[scraper] eBay 'mesh airflow case': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming headset': 0 found, 0 new (total 0)
+2026-05-29 11:19:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-29 11:19:30 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming headset
+2026-05-29 11:19:30 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:19:30 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:19:31 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=gaming headset
+2026-05-29 11:19:34 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 CPU
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 11:19:39 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+headset&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+headset&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming headset
+2026-05-29 11:19:47 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+headset&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+headset&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming headset
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 11:19:55 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+headset&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+headset&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=gaming headset
+[scraper] eBay 'high airflow gaming case': 0 found, 0 new (total 0)
+2026-05-29 11:20:01 [debug    ] ebay_buy.request_retry         attempt=1 error= search=AM4 CPU
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 11:20:03 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=gaming+headset
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=gaming+headset", waiting until "domcontentloaded"
+ site=Alibaba term=gaming headset
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-29 11:20:11 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+headset
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+headset", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming headset
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-29 11:20:27 [debug    ] ebay_buy.request_retry         attempt=2 error= search=AM4 CPU
