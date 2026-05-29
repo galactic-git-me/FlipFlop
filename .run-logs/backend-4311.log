@@ -516,3 +516,18 @@ Call log:
 2026-05-29 11:28:53 [debug    ] ebay_buy.request_retry         attempt=3 error= search=AM4 motherboard
 [scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
 2026-05-29 11:28:55 [debug    ] upgrade_parts.ebay             buy=None part=AM4 Motherboard sold=None
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-29 11:29:20 [debug    ] ebay_sold.request_retry        attempt=1 error= search=AM4 motherboard cpu combo
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'galactic empire build': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+2026-05-29 11:29:46 [debug    ] ebay_sold.request_retry        attempt=2 error= search=AM4 motherboard cpu combo
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'rebel alliance gaming pc': 0 found, 0 new (total 0)
+2026-05-29 11:30:13 [debug    ] ebay_sold.request_retry        attempt=3 error= search=AM4 motherboard cpu combo
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+2026-05-29 11:30:40 [debug    ] ebay_buy.request_retry         attempt=1 error= search=AM4 motherboard cpu combo
