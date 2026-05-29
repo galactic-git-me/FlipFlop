@@ -375,11 +375,20 @@ export default function DashboardPage() {
   const totalPages = Math.ceil(listings.length / pageSize);
   const pagedListings = listings.slice((tablePage - 1) * pageSize, tablePage * pageSize);
 
-  // ── Loading ──────────────────────────────────────────────────────────────────
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center p-6">
-        <div className="w-full max-w-xl rounded-2xl border border-[#1e2d45] bg-[#0d1320]/90 p-5">
+  const latestListings = [...listings]
+    .sort((a, b) => new Date(b.first_seen_at).getTime() - new Date(a.first_seen_at).getTime())
+    .slice(0, 24);
+
+  return (
+    <div className="p-6 space-y-6 dashboard-zoom">
+      <ManualSubmitModal
+        open={showManualSubmit}
+        onClose={() => setShowManualSubmit(false)}
+        onSuccess={() => { setShowManualSubmit(false); load(); }}
+      />
+      <AntiBotPreflightBanner />
+      {loading && (
+        <div className="w-full max-w-xl rounded-2xl border border-[#1e2d45] bg-[#0d1320]/90 p-4">
           <div className="flex items-center justify-between text-base mb-2">
             <div className="flex items-center gap-2 text-slate-300">
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -398,31 +407,8 @@ export default function DashboardPage() {
               ? `Fetched ${feedsDone}/11 dashboard feeds • ${elapsedSecs}s elapsed`
               : "Finalizing data..."}
           </div>
-          <div className="mt-3">
-            <button
-              onClick={() => setLoading(false)}
-              className="text-base px-3 py-1.5 rounded-md border border-[#2a3d5c] text-slate-300 hover:text-white hover:border-[#4b648f] transition-colors"
-            >
-              Open dashboard now
-            </button>
-          </div>
         </div>
-      </div>
-    );
-  }
-
-  const latestListings = [...listings]
-    .sort((a, b) => new Date(b.first_seen_at).getTime() - new Date(a.first_seen_at).getTime())
-    .slice(0, 24);
-
-  return (
-    <div className="p-6 space-y-6 dashboard-zoom">
-      <ManualSubmitModal
-        open={showManualSubmit}
-        onClose={() => setShowManualSubmit(false)}
-        onSuccess={() => { setShowManualSubmit(false); load(); }}
-      />
-      <AntiBotPreflightBanner />
+      )}
       {scanStatus && (scanStatus.running || (scanStatus.sites && scanStatus.sites.length > 0)) && (
         <ScanOverlay status={scanStatus} />
       )}
