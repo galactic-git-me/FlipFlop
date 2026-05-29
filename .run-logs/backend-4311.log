@@ -586,3 +586,10 @@ Call log:
 2026-05-29 11:37:46 [debug    ] ebay_sold.request_retry        attempt=2 error= search=NVMe 1TB
 [scraper] eBay 'hidden leaf gaming pc': 0 found, 0 new (total 0)
 2026-05-29 11:38:13 [debug    ] ebay_sold.request_retry        attempt=3 error= search=NVMe 1TB
+2026-05-29 11:38:40 [debug    ] ebay_buy.request_retry         attempt=1 error= search=NVMe 1TB
+[scraper] eBay 'hokage workstation': 0 found, 0 new (total 0)
+2026-05-29 11:39:06 [debug    ] ebay_buy.request_retry         attempt=2 error= search=NVMe 1TB
+2026-05-29 11:39:33 [debug    ] ebay_buy.request_retry         attempt=3 error= search=NVMe 1TB
+2026-05-29 11:39:35 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
+[scraper] eBay 'pokedex workstation': 0 found, 0 new (total 0)
+2026-05-29 11:40:00 [debug    ] ebay_sold.request_retry        attempt=1 error= search=PSU
