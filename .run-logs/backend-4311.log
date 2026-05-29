@@ -3733,3 +3733,52 @@ Call log:
 2026-05-29 14:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
 2026-05-29 14:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
 2026-05-29 14:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 0)
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 14:33:08 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 14:33:17 [info     ] source.done                    found=0 gems=0 source=eBay UK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 14:33:31 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-29 14:33:31 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+[scraper] eBay '650W PSU': 0 found, 0 new (total 0)
+2026-05-29 14:33:31 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-29 14:33:31 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=0 new_gems=0 sources_scanned=8
+2026-05-29 14:33:39 [info     ] autonomous_cycle.done          duration_ms=1083288
