@@ -13,5 +13,8 @@
   },
   "external_demand": {
     "last_success_at": "2026-05-29T10:15:45.251845+00:00"
+  },
+  "accessories": {
+    "last_success_at": "2026-05-29T10:27:49.401443+00:00"
   }
 }
