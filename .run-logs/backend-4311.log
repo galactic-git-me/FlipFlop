@@ -3024,3 +3024,56 @@ Call log:
   - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=dragon+radar+workstation", waiting until "domcontentloaded"
  search=dragon radar workstation source=BargainHardware
 2026-05-29 13:23:56 [info     ] cases.generic_market.done      found=0 search=dragon radar workstation source=BargainHardware
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-29 13:24:04 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=avengers+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=avengers+workstation", waiting until "domcontentloaded"
+ search=avengers workstation source=BargainHardware
+2026-05-29 13:24:04 [info     ] cases.generic_market.done      found=0 search=avengers workstation source=BargainHardware
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+2026-05-29 13:24:13 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=shield+tactical+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=shield+tactical+pc", waiting until "domcontentloaded"
+ search=shield tactical pc source=BargainHardware
+2026-05-29 13:24:13 [info     ] cases.generic_market.done      found=0 search=shield tactical pc source=BargainHardware
+2026-05-29 13:24:21 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=jarvis+ai+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=jarvis+ai+workstation", waiting until "domcontentloaded"
+ search=jarvis ai workstation source=BargainHardware
+2026-05-29 13:24:21 [info     ] cases.generic_market.done      found=0 search=jarvis ai workstation source=BargainHardware
+2026-05-29 13:24:30 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=stark+industries+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=stark+industries+pc", waiting until "domcontentloaded"
+ search=stark industries pc source=BargainHardware
+2026-05-29 13:24:30 [info     ] cases.generic_market.done      found=0 search=stark industries pc source=BargainHardware
+2026-05-29 13:24:38 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=gamma+core+build
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gamma+core+build", waiting until "domcontentloaded"
+ search=gamma core build source=BargainHardware
+2026-05-29 13:24:38 [info     ] cases.generic_market.done      found=0 search=gamma core build source=BargainHardware
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-29 13:24:47 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=radioactive+green+rgb+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=radioactive+green+rgb+pc", waiting until "domcontentloaded"
+ search=radioactive green rgb pc source=BargainHardware
+2026-05-29 13:24:47 [info     ] cases.generic_market.done      found=0 search=radioactive green rgb pc source=BargainHardware
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+2026-05-29 13:24:55 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=cerebro+workstation
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=cerebro+workstation", waiting until "domcontentloaded"
+ search=cerebro workstation source=BargainHardware
+2026-05-29 13:24:55 [info     ] cases.generic_market.done      found=0 search=cerebro workstation source=BargainHardware
+2026-05-29 13:25:04 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=mutant+tactical+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=mutant+tactical+pc", waiting until "domcontentloaded"
+ search=mutant tactical pc source=BargainHardware
+2026-05-29 13:25:04 [info     ] cases.generic_market.done      found=0 search=mutant tactical pc source=BargainHardware
+2026-05-29 13:25:12 [warning  ] cases.generic_market.error     error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=spiderverse+gaming+pc
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=spiderverse+gaming+pc", waiting until "domcontentloaded"
+ search=spiderverse gaming pc source=BargainHardware
+2026-05-29 13:25:12 [info     ] cases.generic_market.done      found=0 search=spiderverse gaming pc source=BargainHardware
