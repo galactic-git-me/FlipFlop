@@ -266,3 +266,45 @@ Call log:
  site=BargainHardware term=gaming headset
 [scraper] eBay 'pc tower': 0 found, 0 new (total 0)
 2026-05-29 11:20:27 [debug    ] ebay_buy.request_retry         attempt=2 error= search=AM4 CPU
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'premium aluminum pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+2026-05-29 11:20:54 [debug    ] ebay_buy.request_retry         attempt=3 error= search=AM4 CPU
+2026-05-29 11:20:56 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+[scraper] eBay 'usb microphone': 0 found, 0 new (total 0)
+2026-05-29 11:20:59 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 11:21:07 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=usb microphone
+2026-05-29 11:21:07 [info     ] gumtree.playwright.done        total=0
+2026-05-29 11:21:07 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-29 11:21:07 [warning  ] facebook.accessories.error     error=BrowserContext.new_page: Target page, context or browser has been closed term=usb microphone
+2026-05-29 11:21:16 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=usb+microphone&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=usb+microphone&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=usb microphone
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 11:21:21 [debug    ] ebay_sold.request_retry        attempt=1 error= search=i7 CPU
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 11:21:24 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=usb+microphone&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=usb+microphone&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=usb microphone
+[scraper] eBay 'luxury gaming case': 0 found, 0 new (total 0)
+2026-05-29 11:21:32 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=usb+microphone&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=usb+microphone&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=usb microphone
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+2026-05-29 11:21:40 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=usb+microphone
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=usb+microphone", waiting until "domcontentloaded"
+ site=Alibaba term=usb microphone
+2026-05-29 11:21:47 [debug    ] ebay_sold.request_retry        attempt=2 error= search=i7 CPU
+2026-05-29 11:21:48 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=usb+microphone
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=usb+microphone", waiting until "domcontentloaded"
+ site=BargainHardware term=usb microphone
