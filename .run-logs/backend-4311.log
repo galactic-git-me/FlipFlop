@@ -1999,3 +1999,53 @@ Call log:
   - navigating to "https://www.amazon.co.uk/s?k=gamma+core+build&i=computers", waiting until "domcontentloaded"
 
 2026-05-29 12:58:17 [info     ] amazon.cases.done              found=0 search=gamma core build
+2026-05-29 12:58:25 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=radioactive+green+rgb+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=radioactive+green+rgb+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:25 [info     ] amazon.cases.done              found=0 search=radioactive green rgb pc
+2026-05-29 12:58:33 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=cerebro+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=cerebro+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:34 [info     ] amazon.cases.done              found=0 search=cerebro workstation
+2026-05-29 12:58:42 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=mutant+tactical+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=mutant+tactical+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:42 [info     ] amazon.cases.done              found=0 search=mutant tactical pc
+2026-05-29 12:58:50 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=spiderverse+gaming+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=spiderverse+gaming+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:51 [info     ] amazon.cases.done              found=0 search=spiderverse gaming pc
+2026-05-29 12:58:59 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=red+blue+rgb+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=red+blue+rgb+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:58:59 [info     ] amazon.cases.done              found=0 search=red blue rgb build
+2026-05-29 12:59:07 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=batcomputer+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=batcomputer+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:07 [info     ] amazon.cases.done              found=0 search=batcomputer workstation
+2026-05-29 12:59:16 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=dark+knight+pc&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=dark+knight+pc&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:16 [info     ] amazon.cases.done              found=0 search=dark knight pc
+2026-05-29 12:59:24 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=kryptonian+workstation&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=kryptonian+workstation&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:24 [info     ] amazon.cases.done              found=0 search=kryptonian workstation
+2026-05-29 12:59:33 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=fortress+of+solitude+build&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=fortress+of+solitude+build&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:33 [info     ] amazon.cases.done              found=0 search=fortress of solitude build
+2026-05-29 12:59:41 [warning  ] amazon.cases.scrape_error      error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=lian+li+style+case&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=lian+li+style+case&i=computers", waiting until "domcontentloaded"
+
+2026-05-29 12:59:41 [info     ] amazon.cases.done              found=0 search=lian li style case
