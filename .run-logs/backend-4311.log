@@ -903,3 +903,154 @@ INFO:     100.101.209.68:45346 - "GET /api/listings/stats HTTP/1.1" 200 OK
 INFO:     100.101.209.68:45356 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:45362 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:45368 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45372 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45376 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45388 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45412 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-29 10:45:59 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=pc+speakers&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=pc+speakers&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=pc speakers
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45438 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45448 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-29 10:46:07 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=pc+speakers&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=pc+speakers&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=pc speakers
+INFO:     100.101.209.68:60004 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60012 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60024 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60038 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60044 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60048 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60060 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60064 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60078 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60102 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60110 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60116 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60120 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60132 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:46:15 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=pc+speakers&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=pc+speakers&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=pc speakers
+INFO:     100.101.209.68:39408 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39418 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39428 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39444 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:46:20 [debug    ] ebay_buy.request_retry         attempt=2 error= search=i7 CPU
+INFO:     100.101.209.68:39458 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39464 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39470 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39486 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39496 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39512 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39528 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39542 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39558 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39570 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-29 10:46:23 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.alibaba.com/trade/search?SearchText=pc+speakers
+Call log:
+  - navigating to "https://www.alibaba.com/trade/search?SearchText=pc+speakers", waiting until "domcontentloaded"
+ site=Alibaba term=pc speakers
+INFO:     100.101.209.68:39580 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56668 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56684 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56696 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56704 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:46:31 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.bargainhardware.eu/de/catalogsearch/result/?q=pc+speakers
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=pc+speakers", waiting until "domcontentloaded"
+ site=BargainHardware term=pc speakers
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51766 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51780 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51782 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51786 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51792 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51802 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51808 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51816 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51832 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51842 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51856 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51872 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51876 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51888 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51900 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+[scraper] eBay 'micro atx fish tank': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51914 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51928 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51936 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51938 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:46:47 [debug    ] ebay_buy.request_retry         attempt=3 error= search=i7 CPU
+INFO:     100.101.209.68:50796 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50804 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50814 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50824 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50832 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:46:49 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50848 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50872 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50888 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50908 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50910 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50924 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50936 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50952 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56452 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56460 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56490 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56504 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56516 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56526 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56536 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56540 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44008 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44012 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44022 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44050 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44058 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44064 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44070 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44072 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44076 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44078 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming controller': 0 found, 0 new (total 0)
+2026-05-29 10:47:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:44094 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44098 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44110 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44124 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:47:14 [debug    ] ebay_sold.request_retry        attempt=1 error= search=i9 CPU
+INFO:     100.101.209.68:42272 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42276 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42290 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42296 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-29 10:47:20 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_TIMED_OUT at https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming controller
+2026-05-29 10:47:20 [info     ] gumtree.playwright.done        total=0
+2026-05-29 10:47:20 [info     ] facebook.playwright.cookies_loaded count=8
