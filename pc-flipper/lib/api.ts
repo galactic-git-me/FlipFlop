@@ -172,6 +172,8 @@ export interface AntiBotPreflightStatus {
   last_run_at: string | null;
   urls: string[];
   wait_seconds: number;
+  browser_cdp_url?: string;
+  browser_cdp_host?: string;
 }
 
 export interface SourceSearchTerm {

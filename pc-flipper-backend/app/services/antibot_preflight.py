@@ -1,6 +1,9 @@
 import asyncio
 import os
 from datetime import datetime, timezone
+from urllib.parse import urlparse
+
+import httpx
 
 import structlog
 
@@ -31,6 +34,14 @@ def _interactive_mode() -> bool:
 
 
 def preflight_status() -> dict:
+    cdp_url = (os.getenv("BROWSER_CDP_URL", "") or "").strip()
+    cdp_host = ""
+    if cdp_url:
+        try:
+            parsed = urlparse(cdp_url)
+            cdp_host = parsed.netloc or parsed.path
+        except Exception:
+            cdp_host = ""
     return {
         "enabled": os.getenv("ANTI_BOT_PREFLIGHT_ON_STARTUP", "1").lower() in {"1", "true", "yes"},
         "show_scraper_browser": os.getenv("SHOW_SCRAPER_BROWSER", "0"),
@@ -43,6 +54,8 @@ def preflight_status() -> dict:
         "last_run_at": _LAST_RUN_AT,
         "urls": CHALLENGE_URLS,
         "wait_seconds": max(30, int(os.getenv("ANTI_BOT_PREFLIGHT_WAIT_SECONDS", "120"))),
+        "browser_cdp_url": cdp_url,
+        "browser_cdp_host": cdp_host,
     }
 
 
@@ -111,4 +124,3 @@ def trigger_antibot_preflight() -> dict:
         return {"ok": True, "started": False, "reason": "already_running"}
     asyncio.create_task(run_antibot_preflight())
     return {"ok": True, "started": True}
-
