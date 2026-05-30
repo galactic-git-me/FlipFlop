@@ -1578,3 +1578,26 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:45:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 134)
+2026-05-30 23:45:21 [warning  ] gumtree.playwright.no_listings page_title=Pokedex workstation | Stuff for Sale - Gumtree term=pokedex workstation
+2026-05-30 23:45:21 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:45:51 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:45:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:46:05 [warning  ] gumtree.playwright.no_listings page_title=Pikachu yellow rgb build | Stuff for Sale - Gumtree term=pikachu yellow rgb build
+2026-05-30 23:46:05 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:46:35 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:46:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:46:48 [warning  ] gumtree.playwright.no_listings page_title=Super saiyan gaming pc | Stuff for Sale - Gumtree term=super saiyan gaming pc
+2026-05-30 23:46:49 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 134)
+2026-05-30 23:47:19 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:47:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
