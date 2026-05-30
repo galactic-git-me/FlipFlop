@@ -1344,11 +1344,11 @@ async def _scrape_auction_site(
                 skipped_no_href=skipped_no_href,
                 skipped_href_filter=skipped_href_filter,
             )
-            record_term_result(term=term, found=len(cards), new=kept)
+            record_term_result(term=term, found=len(cards), new=kept, source_name=site_name)
 
         except Exception as exc:
             log.error(f"{site_name}.playwright.error", term=term, error=str(exc))
-            record_term_result(term=term, error=str(exc))
+            record_term_result(term=term, error=str(exc), source_name=site_name)
             continue
 
         await asyncio.sleep(random.uniform(1.5, 2.5))

@@ -505,6 +505,7 @@ async def scrape_ebay(
     """
     results: list[RawListing] = []
     seen_ids: set[str] = set()
+    source_label = "eBay UK Auctions" if auction_mode else "eBay UK"
     global _EBAY_VENDOR_BLOCK_UNTIL_TS
     component_markers = (
         "motherboard",
@@ -524,7 +525,7 @@ async def scrape_ebay(
         if _EBAY_VENDOR_BLOCK_UNTIL_TS > time.monotonic():
             wait_s = int(_EBAY_VENDOR_BLOCK_UNTIL_TS - time.monotonic())
             for term in search_terms:
-                record_term_result(term=term, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{wait_s}s")
+                record_term_result(term=term, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{wait_s}s", source_name=source_label)
             return []
 
         async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
@@ -625,7 +626,7 @@ async def scrape_ebay(
         for idx, term in enumerate(search_terms):
             term, new_listings, blocked, last_status, err = await _fetch_term(term)
             if err:
-                record_term_result(term=term, error=err)
+                record_term_result(term=term, error=err, source_name=source_label)
                 print(f"[scraper] eBay error for {term!r}: {err}")
                 continue
 
@@ -642,13 +643,14 @@ async def scrape_ebay(
                     found=0,
                     new=0,
                     error=f"ebay_blocked(status={last_status})",
+                    source_name=source_label,
                 )
                 blocked_terms.append(term)
                 consecutive_blocked_terms += 1
                 # Extra jitter when blocked to reduce repeated bot signatures.
                 await asyncio.sleep(random.uniform(8.0, 25.0))
             else:
-                record_term_result(term=term, found=len(new_listings), new=added)
+                record_term_result(term=term, found=len(new_listings), new=added, source_name=source_label)
                 consecutive_blocked_terms = 0
             print(f"[scraper] eBay '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
 
@@ -658,7 +660,7 @@ async def scrape_ebay(
                 # Mark remaining terms as retry-later for this pass.
                 remaining = search_terms[idx + 1:]
                 for rt in remaining:
-                    record_term_result(term=rt, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{cooldown_s}s")
+                    record_term_result(term=rt, found=0, new=0, error=f"ebay_retry_later_circuit_breaker_{cooldown_s}s", source_name=source_label)
                 break
 
         second_pass = False
@@ -701,12 +703,12 @@ async def scrape_ebay(
                             results.append(listing)
                     added = len(results) - before
                     if blocked and not new_listings:
-                        record_term_result(term=term, found=0, new=0, error=f"ebay_blocked_retry(status={resp.status_code})")
+                        record_term_result(term=term, found=0, new=0, error=f"ebay_blocked_retry(status={resp.status_code})", source_name=source_label)
                     else:
-                        record_term_result(term=term, found=len(new_listings), new=added)
+                        record_term_result(term=term, found=len(new_listings), new=added, source_name=source_label)
                     print(f"[scraper] eBay retry '{term}': {len(new_listings)} found, {added} new (total {len(results)})")
                 except Exception as exc:
-                    record_term_result(term=term, error=f"ebay_retry_error:{exc}")
+                    record_term_result(term=term, error=f"ebay_retry_error:{exc}", source_name=source_label)
                     print(f"[scraper] eBay retry error for {term!r}: {exc}")
     return results
 
@@ -1097,10 +1099,10 @@ async def scrape_preloved(search_terms: list[str], min_price: float, max_price: 
                         seen.add(l.external_id)
                         results.append(l)
                         added += 1
-                record_term_result(term=term, found=len(listings), new=added)
+                record_term_result(term=term, found=len(listings), new=added, source_name="Preloved")
                 print(f"[scraper] Preloved '{term}': {len(listings)} parsed, {added} new (total {len(results)})")
             except Exception as exc:
-                record_term_result(term=term, error=str(exc))
+                record_term_result(term=term, error=str(exc), source_name="Preloved")
                 print(f"[scraper] Preloved error for {term!r}: {exc}")
 
     return results
@@ -1257,10 +1259,10 @@ async def scrape_john_pye(min_price: float, max_price: float) -> list[RawListing
                     if l.external_id not in seen:
                         seen.add(l.external_id)
                         results.append(l)
-                record_term_result(term=term, found=len(new), new=len(results) - before)
+                record_term_result(term=term, found=len(new), new=len(results) - before, source_name="John Pye")
                 print(f"[scraper] John Pye '{term}': {len(new)} parsed, total {len(results)}")
             except Exception as exc:
-                record_term_result(term=term, error=str(exc))
+                record_term_result(term=term, error=str(exc), source_name="John Pye")
                 print(f"[scraper] John Pye error for {term!r}: {exc}")
 
     return results

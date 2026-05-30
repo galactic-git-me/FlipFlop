@@ -8007,3 +8007,548 @@ INFO:     100.101.209.68:59058 - "GET /api/search-telemetry/recent HTTP/1.1" 200
 INFO:     100.101.209.68:59060 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59070 - "GET /api/sources/health HTTP/1.1" 200 OK
 2026-05-30 08:13:49 [info     ] facebook.playwright.items      count=24 term=B550 motherboard
+INFO:     100.84.151.109:52804 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52804 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52804 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59082 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59088 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59090 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59106 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59116 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:13:52 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=X570%20motherboard&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:13:53 [debug    ] upgrade_parts.ebay             buy=None part=PSU sold=None
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:42472 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42482 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42484 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42494 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61061 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61061 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:13:59 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:14:01 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:14:03 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:42496 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42506 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42514 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42522 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42538 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42542 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42556 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42572 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42574 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42586 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42588 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42590 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56986 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56992 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56996 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57012 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:14:05 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:59553 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59553 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-30 08:14:07 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:08:14 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 168, in run_upgrade_parts_swarm
+    sold = await _ebay_sold_median(client, search)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 353, in _ebay_sold_median
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:08:14 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 626, in scrape_ebay
+    for idx, term in enumerate(search_terms):
+                                              
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 606, in _fetch_term
+    if blocked and attempt < 3:
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:08:14 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 199, in run_accessories_swarm
+    ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 367, in _scrape_facebook_accessories
+    rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/playwright_scraper.py", line 505, in scrape_facebook_playwright
+    async with _FACEBOOK_SCRAPE_SEM:
+  File "/usr/lib/python3.12/asyncio/locks.py", line 14, in __aenter__
+    await self.acquire()
+  File "/usr/lib/python3.12/asyncio/locks.py", line 386, in acquire
+    await fut
+asyncio.exceptions.CancelledError
+2026-05-30 08:14:07 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2448364]
+INFO:     Started server process [2637451]
+INFO:     Waiting for application startup.
+2026-05-30 08:14:08 [info     ] app.startup
+2026-05-30 08:14:08 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 08:14:08 [info     ] seeded.source_search_terms     count=1 scope=accessories
+2026-05-30 08:14:08 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 08:14:08 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 08:14:08 [info     ] scheduler.started              jobs=11
+2026-05-30 08:14:08 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 08:14:08 [info     ] accessories_swarm.start
+2026-05-30 08:14:08 [info     ] cases_swarm.start
+2026-05-30 08:14:08 [info     ] flip_opportunities_swarm.start
+2026-05-30 08:14:08 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-30 08:14:09 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-30 08:14:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:14:09 [info     ] source.cooldown_ignored        reason=cooldown_active_5113s source=Gumtree
+2026-05-30 08:14:09 [info     ] source.cooldown_ignored        reason=cooldown_active_2225s source=AliExpress
+2026-05-30 08:14:09 [info     ] source.cooldown_ignored        reason=cooldown_active_621s source=Alibaba
+2026-05-30 08:14:09 [info     ] source.cooldown_ignored        reason=cooldown_active_2161s source=BargainHardware
+2026-05-30 08:14:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:14:10 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:63631 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60996 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60996 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63631 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57022 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57028 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57042 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57058 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-30 08:14:12 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:14:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 627, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 532, in _fetch_term
+    await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:14:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 168, in run_upgrade_parts_swarm
+    sold = await _ebay_sold_median(client, search)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 345, in _ebay_sold_median
+    r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1814, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1585, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1674, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1702, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1739, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1776, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_transports/default.py", line 377, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 217, in _receive_event
+    data = await self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_backends/anyio.py", line 35, in read
+    return await self._stream.receive(max_bytes=max_bytes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/streams/tls.py", line 239, in receive
+    data = await self._call_sslobject_method(self._ssl_object.read, max_bytes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/streams/tls.py", line 182, in _call_sslobject_method
+    data = await self.transport_stream.receive()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1284, in receive
+    await self._protocol.read_event.wait()
+  File "/usr/lib/python3.12/asyncio/locks.py", line 212, in wait
+    await fut
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:14:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 187, in run_accessories_swarm
+    ebay_results = await _scrape_ebay_accessories(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 69, in _scrape_ebay_accessories
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 627, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 532, in _fetch_term
+    await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-30 08:14:12 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2637451]
+INFO:     Started server process [2642001]
+INFO:     Waiting for application startup.
+2026-05-30 08:14:13 [info     ] app.startup
+2026-05-30 08:14:13 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 08:14:13 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 08:14:13 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 08:14:13 [info     ] scheduler.started              jobs=11
+2026-05-30 08:14:13 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 08:14:14 [info     ] accessories_swarm.start
+2026-05-30 08:14:14 [info     ] cases_swarm.start
+2026-05-30 08:14:14 [info     ] flip_opportunities_swarm.start
+2026-05-30 08:14:14 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:14:15 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-30 08:14:15 [info     ] source.cooldown_ignored        reason=cooldown_active_615s source=Alibaba
+2026-05-30 08:14:15 [info     ] source.cooldown_ignored        reason=cooldown_active_2155s source=BargainHardware
+2026-05-30 08:14:15 [info     ] source.cooldown_ignored        reason=cooldown_active_5108s source=Gumtree
+2026-05-30 08:14:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:14:15 [info     ] source.cooldown_ignored        reason=cooldown_active_2219s source=AliExpress
+2026-05-30 08:14:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:14:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:54828 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54840 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54846 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54862 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54886 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54906 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54916 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54918 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54932 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54940 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:14:19 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:54944 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54958 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54968 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54978 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:14:20 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-30 08:14:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.84.151.109:53150 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60387 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53150 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:14:22 [info     ] startup_bootstrap.done
+2026-05-30 08:14:24 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900
+INFO:     100.101.209.68:40774 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40782 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40792 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40802 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40804 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40810 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40822 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:14:29 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:60893 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60893 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:14:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:14:33 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:14:34 [warning  ] gumtree.playwright.no_listings page_title=Ryzen 9 7900 | Stuff for Sale - Gumtree term=Ryzen 9 7900
+2026-05-30 08:14:34 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:40824 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40832 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40836 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40846 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40860 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40872 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43402 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:14:35 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:56450 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56040 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56040 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43408 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43422 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43434 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:14:38 [info     ] facebook.playwright.items      count=24 term=AMD Ryzen 7 7800X3D
+2026-05-30 08:14:38 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900X
+2026-05-30 08:14:40 [info     ] gumtree.playwright.cards       count=1 term=Ryzen 9 7900X
+INFO:     127.0.0.1:34698 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-30 08:14:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:43464 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43480 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43490 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43498 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43504 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:14:43 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:14:45 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc
+INFO:     100.101.209.68:33006 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33008 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33016 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33024 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52765 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52765 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41684 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-30 08:14:48 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:14:48 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+2026-05-30 08:14:49 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+INFO:     100.101.209.68:33026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33042 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33054 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33060 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33066 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33068 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:14:50 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:14:51 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.84.151.109:50233 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:14:52 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:33074 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33090 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33104 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33114 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50233 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50233 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:14:54 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:33120 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33126 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33142 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33146 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33148 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:14:55 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc untested
+2026-05-30 08:14:56 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900
+2026-05-30 08:15:00 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+INFO:     100.101.209.68:37858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37860 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37868 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37874 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55203 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59268 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50086 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50086 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55203 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59268 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:15:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:15:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     127.0.0.1:45354 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55282 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55300 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55314 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55320 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55336 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55352 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55368 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55370 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55384 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55402 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:15:06 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc fault
+2026-05-30 08:15:07 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+2026-05-30 08:15:07 [info     ] gumtree.playwright.done        total=0
+2026-05-30 08:15:07 [info     ] source.done                    found=0 gems=0 source=Gumtree
+2026-05-30 08:15:08 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'pc speakers': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56549 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56549 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55404 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-30 08:15:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:55416 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55420 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55428 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:15:10 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:15:12 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:15:14 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:15:16 [info     ] gumtree.playwright.cards       count=25 term=pc speakers
+INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:15:17 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900X
+INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45640 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45650 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45654 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45664 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45678 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45686 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45692 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45702 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45710 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45718 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45734 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45748 - "GET /api/sources/ HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45760 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45766 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45772 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:15:21 [info     ] gumtree.playwright.done        total=0
+2026-05-30 08:15:21 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.84.151.109:63356 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:15:22 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+2026-05-30 08:15:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
