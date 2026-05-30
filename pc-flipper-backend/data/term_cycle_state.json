@@ -36,5 +36,81 @@
         "total": 10
       }
     }
+  },
+  "accessories": {
+    "active": false,
+    "batch_size": 5,
+    "vendors": {
+      "eBay": {
+        "cursor": 8,
+        "total": 8
+      },
+      "Gumtree": {
+        "cursor": 8,
+        "total": 8
+      },
+      "Facebook Marketplace": {
+        "cursor": 8,
+        "total": 8
+      },
+      "Amazon": {
+        "cursor": 8,
+        "total": 8
+      },
+      "Temu": {
+        "cursor": 8,
+        "total": 8
+      },
+      "AliExpress": {
+        "cursor": 8,
+        "total": 8
+      },
+      "Alibaba": {
+        "cursor": 8,
+        "total": 8
+      },
+      "BargainHardware": {
+        "cursor": 8,
+        "total": 8
+      }
+    }
+  },
+  "cases": {
+    "active": true,
+    "batch_size": 5,
+    "vendors": {
+      "eBay": {
+        "cursor": 5,
+        "total": 62
+      },
+      "eBay (Worldwide)": {
+        "cursor": 5,
+        "total": 62
+      },
+      "Amazon": {
+        "cursor": 5,
+        "total": 62
+      },
+      "Temu": {
+        "cursor": 5,
+        "total": 62
+      },
+      "AliExpress": {
+        "cursor": 5,
+        "total": 62
+      },
+      "BargainHardware": {
+        "cursor": 5,
+        "total": 62
+      },
+      "CherryTree Inc": {
+        "cursor": 1,
+        "total": 1
+      },
+      "Alibaba": {
+        "cursor": 5,
+        "total": 62
+      }
+    }
   }
 }
