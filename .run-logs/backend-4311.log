@@ -1564,3 +1564,17 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:43:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:43:53 [warning  ] gumtree.playwright.no_listings page_title=Hidden leaf gaming pc | Stuff for Sale - Gumtree term=hidden leaf gaming pc
+2026-05-30 23:43:54 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:44:24 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:44:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hokage+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:44:37 [warning  ] gumtree.playwright.no_listings page_title=Hokage workstation | Stuff for Sale - Gumtree term=hokage workstation
+2026-05-30 23:44:37 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:45:08 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:45:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
