@@ -331,6 +331,7 @@ async def scrape_gumtree_playwright(
                 record_term_result(term=term, found=0, new=0, error="source_timeout_backoff", source_name="Gumtree")
                 continue
             try:
+                term_added = 0
                 url = (
                     "https://www.gumtree.com/for-sale"
                     f"?q={term.replace(' ', '+')}"
@@ -369,6 +370,7 @@ async def scrape_gumtree_playwright(
                         term=term,
                         page_title=title_text,
                     )
+                    record_term_result(term=term, found=0, new=0, source_name="Gumtree")
                     continue
 
                 await asyncio.sleep(random.uniform(0.5, 1.5))
@@ -438,8 +440,10 @@ async def scrape_gumtree_playwright(
                             image_urls=[image_url] if image_url else [],
                             source_name="Gumtree",
                         ))
+                        term_added += 1
                     except Exception:
                         continue
+                record_term_result(term=term, found=term_added, new=term_added, source_name="Gumtree")
 
             except Exception as exc:
                 log.error("gumtree.playwright.error", term=term, error=str(exc))

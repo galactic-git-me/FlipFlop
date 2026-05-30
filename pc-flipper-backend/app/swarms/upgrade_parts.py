@@ -595,6 +595,25 @@ async def _fetch_playwright_lowest_price(
             await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
             page = await ctx.new_page()
             await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            title_l = (await page.title() or "").lower()
+            body_l = (await page.content() or "").lower()[:120000]
+            if source_name == "temu" and (
+                "login" in title_l
+                or "/login" in (page.url or "").lower()
+                or "kwcdn.com/upload-static/assets/chl/js" in body_l
+                or "challenge" in body_l
+            ):
+                await browser.close()
+                return None
+            if source_name in {"aliexpress", "alibaba"} and (
+                "captcha interception" in title_l
+                or "captcha" in body_l
+                or "_____tmd_____" in body_l
+                or "/punish" in body_l
+                or "awsc/captcha" in body_l
+            ):
+                await browser.close()
+                return None
             try:
                 await page.wait_for_selector(item_selector, timeout=10000)
             except Exception as exc:

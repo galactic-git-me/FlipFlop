@@ -1837,8 +1837,13 @@ async def _scrape_generic_marketplace_listings(
                     await page.goto(url, wait_until="domcontentloaded", timeout=30000)
                     # Explicit anti-bot/login detection so telemetry is truthful.
                     title_l = (await page.title() or "").lower()
-                    body_l = (await page.content() or "").lower()[:12000]
-                    if source_name.lower() == "temu" and ("login" in title_l or "/login" in (page.url or "").lower()):
+                    body_l = (await page.content() or "").lower()[:120000]
+                    if source_name.lower() == "temu" and (
+                        "login" in title_l
+                        or "/login" in (page.url or "").lower()
+                        or "kwcdn.com/upload-static/assets/chl/js" in body_l
+                        or "challenge" in body_l
+                    ):
                         record_term_result(
                             term=term,
                             found=0,
@@ -1849,7 +1854,13 @@ async def _scrape_generic_marketplace_listings(
                         challenge_emitted = True
                         added = 0
                         break
-                    if source_name.lower() in {"aliexpress", "alibaba"} and ("captcha interception" in title_l or "captcha" in body_l):
+                    if source_name.lower() in {"aliexpress", "alibaba"} and (
+                        "captcha interception" in title_l
+                        or "captcha" in body_l
+                        or "_____tmd_____" in body_l
+                        or "/punish" in body_l
+                        or "awsc/captcha" in body_l
+                    ):
                         record_term_result(
                             term=term,
                             found=0,

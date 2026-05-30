@@ -699,3 +699,890 @@ INFO:     100.84.151.109:61409 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
 Call log:
   - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
  term=gaming pc untested
+2026-05-30 08:28:54 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:28:55 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+2026-05-30 08:28:55 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+INFO:     100.84.151.109:61409 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:28:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:28:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:28:59 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     127.0.0.1:40698 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61409 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61409 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:29:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:45852 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45860 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45874 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45878 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45892 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45906 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45910 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45920 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:29:03 [info     ] facebook.playwright.items      count=22 term=gaming pc
+2026-05-30 08:29:03 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=pc tower
+INFO:     100.101.209.68:45926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45942 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45946 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45960 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45972 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45984 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45998 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:29:04 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+2026-05-30 08:29:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55379 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55379 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56980 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-30 08:29:09 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc fault
+INFO:     100.101.209.68:56986 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56998 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57010 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:29:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:55379 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55379 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50249 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55379 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:29:12 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+INFO:     100.101.209.68:57024 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57040 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57048 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57052 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57056 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55379 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55379 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:29:16 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+2026-05-30 08:29:17 [info     ] gumtree.playwright.done        total=59
+INFO:     100.101.209.68:32864 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32870 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32880 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32886 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:29:17 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=420.0 query=gaming PC gtx 1060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=79.0 median=502.8 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=600.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=642.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=642.0 query=gaming PC i5 9400 rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=123.0 median=639.6 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=39.0 median=538.8 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=510.0 query=gaming PC i5-3470 rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i7-2600k rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=510.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC gtx 1650 status=403
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:29:17 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:29:17 [info     ] source.scrape.done             found=59 gems=4 source=Gumtree
+2026-05-30 08:29:18 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:29:19 [info     ] gumtree.playwright.done        total=35
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:29:19 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+INFO:     100.101.209.68:32890 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32898 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32914 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32926 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32928 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32940 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32946 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:29:19 [info     ] source.done                    found=35 gems=3 source=Gumtree
+2026-05-30 08:29:20 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for background tasks to complete. (CTRL+C to force quit)
+2026-05-30 08:29:22 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+2026-05-30 08:29:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:29:27 [info     ] facebook.playwright.items      count=22 term=gaming pc untested
+2026-05-30 08:29:27 [info     ] source.scrape.done             found=0 gems=0 source=AliExpress
+2026-05-30 08:29:32 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20fault&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:29:37 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-30 08:29:38 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:29:40 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:29:42 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:29:44 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:29:44 [info     ] source.scrape.done             found=0 gems=0 source=Temu
+INFO:     Waiting for application shutdown.
+2026-05-30 08:29:44 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:27:34 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 170, in run_upgrade_parts_swarm
+    buy = await _ebay_buy_price(client, search)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 381, in _ebay_buy_price
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:27:34 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 627, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 607, in _fetch_term
+    await asyncio.sleep(random.uniform(8.0, 18.0))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:27:34 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 199, in run_accessories_swarm
+    ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 367, in _scrape_facebook_accessories
+    rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/playwright_scraper.py", line 505, in scrape_facebook_playwright
+    except Exception:
+  File "/usr/lib/python3.12/asyncio/locks.py", line 14, in __aenter__
+    await self.acquire()
+  File "/usr/lib/python3.12/asyncio/locks.py", line 386, in acquire
+    await fut
+asyncio.exceptions.CancelledError
+2026-05-30 08:29:44 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3054806]
+WARNING:  WatchFiles detected changes in 'app/services/scraper.py'. Reloading...
+INFO:     Started server process [3148777]
+INFO:     Waiting for application startup.
+2026-05-30 08:29:46 [info     ] app.startup
+2026-05-30 08:29:46 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 08:29:46 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 08:29:46 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 08:29:46 [info     ] scheduler.started              jobs=11
+2026-05-30 08:29:46 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+INFO:     Started server process [3149444]
+INFO:     Waiting for application startup.
+2026-05-30 08:29:47 [info     ] app.startup
+2026-05-30 08:29:47 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 08:29:47 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 08:29:47 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 08:29:47 [info     ] scheduler.started              jobs=11
+2026-05-30 08:29:47 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 08:29:47 [info     ] accessories_swarm.start
+2026-05-30 08:29:47 [info     ] cases_swarm.start
+2026-05-30 08:29:47 [info     ] flip_opportunities_swarm.start
+2026-05-30 08:29:47 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.84.151.109:55022 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62384 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45854 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60228 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45862 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52660 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65086 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59746 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52692 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51430 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51430 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44830 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51430 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44834 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-30 08:29:48 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+INFO:     100.84.151.109:51430 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56114 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-30 08:29:49 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:44846 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44866 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41938 - "POST /api/sources/2/scrape HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41942 - "POST /api/sources/8/scrape HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41954 - "POST /api/sources/9/scrape HTTP/1.1" 200 OK
+2026-05-30 08:29:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:29:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:29:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     127.0.0.1:41968 - "POST /api/sources/10/scrape HTTP/1.1" 200 OK
+2026-05-30 08:29:54 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=AMD Ryzen 7 7800X3D
+2026-05-30 08:29:54 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:61409 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51848 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51848 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:29:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:29:56 [info     ] source.scrape.done             found=0 gems=0 source=AliExpress
+INFO:     100.101.209.68:37714 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37718 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37730 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37744 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:29:57 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-30 08:29:58 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-30 08:29:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:29:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:29:58 [info     ] startup_bootstrap.done
+2026-05-30 08:29:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:37752 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37766 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37778 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37810 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:29:59 [info     ] source.scrape.done             found=0 gems=0 source=Alibaba
+2026-05-30 08:30:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:30:00 [info     ] source.done                    found=0 gems=0 source=AliExpress
+INFO:     100.84.151.109:51848 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61409 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61409 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51848 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:30:02 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=Ryzen 9 7900
+2026-05-30 08:30:02 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:30:02 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=Ryzen 9 7900
+INFO:     100.84.151.109:51848 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51848 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58934 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37828 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37830 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37846 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37858 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37864 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:30:04 [info     ] facebook.playwright.items      count=24 term=AMD Ryzen 7 7800X3D
+INFO:     100.101.209.68:35616 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35624 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35630 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35644 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:30:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:35650 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35654 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35670 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35682 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35686 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59529 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:30:12 [warning  ] gumtree.playwright.no_listings page_title=Ryzen 9 7900 | Stuff for Sale - Gumtree term=Ryzen 9 7900
+2026-05-30 08:30:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.84.151.109:59529 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:30:12 [warning  ] gumtree.playwright.no_listings page_title=Ryzen 9 7900 | Stuff for Sale - Gumtree term=Ryzen 9 7900
+2026-05-30 08:30:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:35698 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35710 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35718 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35732 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:30:16 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900X
+2026-05-30 08:30:16 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900X
+2026-05-30 08:30:17 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:30:17 [info     ] gumtree.playwright.cards       count=1 term=Ryzen 9 7900X
+2026-05-30 08:30:18 [info     ] gumtree.playwright.cards       count=1 term=Ryzen 9 7900X
+2026-05-30 08:30:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:30:19 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:33514 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33522 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33532 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33546 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33548 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33562 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33566 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54021 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54021 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33570 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-30 08:30:22 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:33574 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33576 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33584 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:30:22 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+2026-05-30 08:30:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+WARNING:  WatchFiles detected changes in 'app/swarms/upgrade_parts.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for background tasks to complete. (CTRL+C to force quit)
+2026-05-30 08:30:24 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc
+2026-05-30 08:30:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:30:25 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+2026-05-30 08:30:25 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-30 08:30:26 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900
+2026-05-30 08:30:27 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-30 08:30:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 08:30:30 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+2026-05-30 08:30:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:30:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:30:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:30:35 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc untested
+2026-05-30 08:30:37 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-30 08:30:38 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc untested
+2026-05-30 08:30:38 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+2026-05-30 08:30:40 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-30 08:30:44 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+2026-05-30 08:30:45 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:30:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:30:46 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:30:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+tower&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:30:48 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:30:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:30:50 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:30:51 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=pc tower
+2026-05-30 08:30:52 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc fault
+2026-05-30 08:30:53 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900X
+2026-05-30 08:30:53 [info     ] gumtree.playwright.cards       count=25 term=pc tower
+2026-05-30 08:30:54 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+2026-05-30 08:30:56 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+2026-05-30 08:30:58 [info     ] gumtree.playwright.done        total=35
+2026-05-30 08:30:58 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:30:58 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC gtx 1650 status=403
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:30:58 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:30:58 [info     ] source.done                    found=35 gems=0 source=Gumtree
+2026-05-30 08:31:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:31:00 [info     ] gumtree.playwright.done        total=59
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=420.0 query=gaming PC gtx 1060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=79.0 median=502.8 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=600.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=642.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=642.0 query=gaming PC i5 9400 rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=123.0 median=639.6 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=39.0 median=538.8 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=510.0 query=gaming PC i5-3470 rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i7-2600k rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-30 08:31:00 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=510.0 query=gaming PC rtx 3060
+2026-05-30 08:31:01 [info     ] source.scrape.done             found=59 gems=0 source=Gumtree
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-30 08:31:14 [info     ] source.scrape.done             found=0 gems=0 source=Temu
+INFO:     Waiting for application shutdown.
+2026-05-30 08:31:15 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:29:47 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 170, in run_upgrade_parts_swarm
+    buy = await _ebay_buy_price(client, search)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 381, in _ebay_buy_price
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:29:47 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 627, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 607, in _fetch_term
+    await asyncio.sleep(random.uniform(8.0, 18.0))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 07:29:47 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 199, in run_accessories_swarm
+    ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 367, in _scrape_facebook_accessories
+    rows = await scrape_facebook_playwright([term], 1, int(MAX_PRICE))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/playwright_scraper.py", line 509, in scrape_facebook_playwright
+    async with _FACEBOOK_SCRAPE_SEM:
+  File "/usr/lib/python3.12/asyncio/locks.py", line 14, in __aenter__
+    await self.acquire()
+  File "/usr/lib/python3.12/asyncio/locks.py", line 386, in acquire
+    await fut
+asyncio.exceptions.CancelledError
+2026-05-30 08:31:15 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3149444]
+INFO:     Started server process [3212142]
+INFO:     Waiting for application startup.
+2026-05-30 08:31:16 [info     ] app.startup
+2026-05-30 08:31:16 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 08:31:16 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 08:31:16 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 08:31:16 [info     ] scheduler.started              jobs=11
+2026-05-30 08:31:16 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 08:31:16 [info     ] accessories_swarm.start
+2026-05-30 08:31:16 [info     ] cases_swarm.start
+2026-05-30 08:31:16 [info     ] flip_opportunities_swarm.start
+2026-05-30 08:31:16 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.84.151.109:62036 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58201 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61615 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53364 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54752 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51363 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54756 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54770 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51363 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54786 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57354 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54385 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52128 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61388 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55240 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51363 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55242 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49368 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52248 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57354 - "OPTIONS /api/preflight/antibot/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52128 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49368 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54230 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52128 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57354 - "OPTIONS /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54246 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52296 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49368 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52128 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54254 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:31:17 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-30 08:31:18 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49368 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54260 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52128 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54272 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54288 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54304 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:31:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:31:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:31:22 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=AMD Ryzen 7 7800X3D
+2026-05-30 08:31:22 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:51913 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51913 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:31:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:31:25 [info     ] gumtree.playwright.cards       count=2 term=AMD Ryzen 7 7800X3D
+2026-05-30 08:31:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:31:25 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:34962 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34974 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34980 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34986 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51913 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:31:26 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:31:26 [info     ] source.done                    found=0 gems=0 source=AliExpress
+INFO:     100.101.209.68:34990 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35020 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35030 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35032 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:28 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:31:29 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900
+2026-05-30 08:31:31 [info     ] facebook.playwright.items      count=24 term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:62461 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62461 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35038 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35048 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35050 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35070 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35072 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35078 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35084 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35088 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35104 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35110 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:31:39 [warning  ] gumtree.playwright.no_listings page_title=Ryzen 9 7900 | Stuff for Sale - Gumtree term=Ryzen 9 7900
+2026-05-30 08:31:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Ryzen+9+7900X&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:31:39 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:62606 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62606 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41468 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41484 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41508 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41512 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62606 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59750 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62606 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59750 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:31:41 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:41526 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41530 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41544 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41558 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:43 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=Ryzen 9 7900X
