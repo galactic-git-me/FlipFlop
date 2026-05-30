@@ -1475,3 +1475,20 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:34:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:35:08 [warning  ] gumtree.playwright.no_listings page_title=Galactic empire build | Stuff for Sale - Gumtree term=galactic empire build
+2026-05-30 23:35:09 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:35:39 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:35:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:35:52 [warning  ] gumtree.playwright.no_listings page_title=Rebel alliance gaming pc | Stuff for Sale - Gumtree term=rebel alliance gaming pc
+2026-05-30 23:35:53 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:36:23 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:36:23 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 134)
+2026-05-30 23:36:36 [warning  ] gumtree.playwright.no_listings page_title=Cylon red eye pc | Stuff for Sale - Gumtree term=cylon red eye pc
+2026-05-30 23:36:36 [info     ] gumtree.playwright.done        total=0
