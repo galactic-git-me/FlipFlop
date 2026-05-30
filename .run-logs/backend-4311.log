@@ -3767,3 +3767,194 @@ INFO:     100.84.151.109:57898 - "GET /api/playbooks/proposals/?status=pending H
 INFO:     100.84.151.109:51175 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:51175 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     100.84.151.109:57898 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56848 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56864 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56880 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56892 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51175 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51175 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51175 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56900 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56916 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56932 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56940 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56944 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'white fish tank case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:38948 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38956 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38958 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38974 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38976 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38980 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38990 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38998 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39008 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39020 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39024 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:37:27 [debug    ] upgrade_parts.ebay             buy=None part=CPU Cooler sold=None
+INFO:     100.84.151.109:62700 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62700 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc untested': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39032 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39042 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39046 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39062 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61267 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39078 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39080 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39082 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39092 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39098 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61267 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49656 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58578 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39112 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39126 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39136 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39152 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39156 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39172 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39184 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58578 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49656 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39188 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39200 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39206 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39208 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49656 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49656 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44382 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44392 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44396 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44406 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44408 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44412 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44416 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44424 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44426 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63909 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53798 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53798 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34524 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34526 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34540 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34548 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34562 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34574 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34586 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34596 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34602 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34612 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34618 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54226 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54226 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34628 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34640 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34654 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34666 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34668 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:38:01 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55390 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49995 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49995 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55390 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44174 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44176 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44188 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44198 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55390 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55390 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:38:12 [info     ] source.done                    found=0 gems=0 source=Temu
+INFO:     100.101.209.68:44200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44214 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44230 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44236 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44232 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44240 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44264 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44270 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44268 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44276 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:38:13 [debug    ] upgrade_parts.bh               part=NVIDIA GPU price_gbp=20.5
+INFO:     100.101.209.68:38432 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57351 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38442 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38458 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38468 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+2026-05-30 08:38:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.84.151.109:57351 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+2026-05-30 08:38:20 [debug    ] upgrade_parts.bh               part=AM4 CPU price_gbp=5.12
+INFO:     100.84.151.109:61218 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:38:23 [info     ] gumtree.playwright.cards       count=25 term=gaming mouse
+INFO:     100.84.151.109:63745 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38480 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38492 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38506 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38508 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63745 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:38:26 [debug    ] upgrade_parts.bh               part=i7 CPU price_gbp=10.25
+INFO:     100.101.209.68:41864 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41868 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41878 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41884 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:38:26 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:38:26 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:38:27 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:41900 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41912 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41922 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41938 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41944 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41950 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41960 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:38:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50814 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64312 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53417 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41972 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41984 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41998 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42004 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53417 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50814 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64312 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:38:33 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:38:35 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:38:37 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:38:37 [debug    ] upgrade_parts.bh               part=i9 CPU price_gbp=5.12
+INFO:     100.101.209.68:54902 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54910 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54926 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54932 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54938 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:38:39 [info     ] facebook.playwright.items      count=20 term=gaming mouse
+INFO:     100.84.151.109:54139 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54139 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54948 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54958 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54968 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54980 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+2026-05-30 08:38:41 [debug    ] upgrade_parts.bh               part=AM4 Motherboard price_gbp=3.07
