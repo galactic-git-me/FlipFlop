@@ -1586,3 +1586,665 @@ INFO:     100.101.209.68:41558 - "GET /api/schedule HTTP/1.1" 200 OK
 Call log:
   - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
  term=Ryzen 9 7900X
+2026-05-30 08:31:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:31:45 [info     ] gumtree.playwright.cards       count=1 term=Ryzen 9 7900X
+2026-05-30 08:31:45 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:31:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.84.151.109:55660 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55660 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:31:47 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:54638 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54652 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54654 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:31:49 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc
+INFO:     100.101.209.68:54660 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54664 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54674 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54678 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54690 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54698 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54712 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54728 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:50 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+INFO:     100.84.151.109:55660 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57425 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55660 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49294 - "GET /api/facebook/status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55873 - "GET /api/listings/stats/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58112 - "GET /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55660 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-29T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 29, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:55873 - "GET /api/config/search/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49294 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-22T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 22, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:57350 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57425 - "GET /api/flips/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58112 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55873 - "GET /api/intel/retrain-status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57425 - "GET /api/playbooks/?status=active HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58112 - "GET /api/demand/summary/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56497 - "GET /api/demand/auction-intel/?limit=15 HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53180 - "GET /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55873 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57425 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58112 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56497 - "GET /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57425 - "GET /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58112 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53180 - "GET /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55873 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56497 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 404 Not Found
+INFO:     100.84.151.109:57425 - "GET /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54734 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54748 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54766 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54774 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:52 [info     ] gumtree.playwright.cards       count=30 term=gaming pc
+2026-05-30 08:31:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Ryzen%209%207900X&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:31:53 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-30 08:31:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:31:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+untested&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:46776 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46784 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46788 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46792 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:31:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:60356 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60356 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:32:01 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc untested
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-30 08:32:02 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:32:03 [info     ] gumtree.playwright.cards       count=2 term=gaming pc untested
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36472 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-30 08:32:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.101.209.68:36476 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36488 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36502 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36516 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36524 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36534 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36540 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36556 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36562 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36572 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36588 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:32:06 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900X
+INFO:     100.101.209.68:36598 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36612 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36614 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36630 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-30 08:32:07 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.84.151.109:55947 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:32:08 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc fault
+INFO:     100.84.151.109:55947 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:10 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:32:11 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=gaming keyboard
+2026-05-30 08:32:12 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+2026-05-30 08:32:13 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+2026-05-30 08:32:14 [info     ] gumtree.playwright.done        total=35
+INFO:     100.101.209.68:44626 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-30 08:32:14 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC gtx 1650 status=403
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+INFO:     100.101.209.68:44632 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+INFO:     100.101.209.68:44638 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44648 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:32:14 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-30 08:32:14 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:32:15 [info     ] source.done                    found=35 gems=0 source=Gumtree
+2026-05-30 08:32:15 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:60486 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60486 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60486 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60486 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44652 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44662 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44672 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44674 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60486 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64448 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:32:17 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:32:18 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:32:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:32:19 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:44692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44702 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44716 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44722 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44738 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44742 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44746 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:32:21 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:64448 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44758 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44760 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44776 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44782 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:32:23 [info     ] facebook.playwright.items      count=22 term=gaming pc
+INFO:     100.84.151.109:64448 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64448 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:24 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-30 08:32:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20untested&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33250 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33266 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33276 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33286 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33288 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33296 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33300 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33312 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33314 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53884 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53884 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51642 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51654 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51670 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51684 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51694 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51696 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:32:37 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:51706 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51710 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51712 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51716 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:32:39 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:59615 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59615 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:41 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:51722 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51730 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51742 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51756 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59615 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59615 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59615 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:32:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:32:46 [info     ] facebook.playwright.items      count=22 term=gaming pc untested
+INFO:     100.101.209.68:59776 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59792 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59798 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59806 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55414 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55414 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20fault&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:55414 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59824 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59826 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59830 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59846 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59852 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59864 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59880 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59892 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59908 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59924 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59938 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:32:55 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:45382 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45390 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45398 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45406 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:32:55 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.84.151.109:55414 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55414 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:32:57 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:32:58 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+2026-05-30 08:32:59 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:33:01 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45414 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45426 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45442 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45444 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:33:03 [info     ] facebook.playwright.items      count=22 term=gaming pc fault
+INFO:     100.84.151.109:58387 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58387 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50552 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50564 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50580 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50582 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50596 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:33:06 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:58387 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63441 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63441 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58387 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
