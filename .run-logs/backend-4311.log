@@ -1354,3 +1354,43 @@ Call log:
 [scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 86)
 2026-05-30 23:29:28 [warning  ] gumtree.playwright.no_listings page_title=Micro atx fish tank | Stuff for Sale - Gumtree term=micro atx fish tank
 2026-05-30 23:29:28 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:29:37 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:29:37 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20speakers&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:29:37 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:29:41 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=pc speakers
+2026-05-30 23:29:41 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=pc speakers
+2026-05-30 23:29:41 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=pc speakers
+2026-05-30 23:29:59 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:29:59 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=compact+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:30:05 [info     ] gumtree.playwright.cards       count=20 term=compact gaming case
+2026-05-30 23:30:07 [info     ] gumtree.playwright.done        total=20
+2026-05-30 23:30:16 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:30:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:30:23 [info     ] gumtree.playwright.cards       count=25 term=gaming controller
+2026-05-30 23:30:25 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:30:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:30:37 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:30:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cyberpunk+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:30:51 [warning  ] gumtree.playwright.no_listings page_title=Cyberpunk pc case | Stuff for Sale - Gumtree term=cyberpunk pc case
+2026-05-30 23:30:51 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:30:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:30:55 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:30:56 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming controller
+2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming controller
+2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming controller
