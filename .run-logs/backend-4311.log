@@ -9941,3 +9941,210 @@ Call log:
 2026-05-30 09:15:49 [info     ] facebook.playwright.done       total=0
 2026-05-30 09:15:49 [info     ] facebook.playwright.cookies_loaded count=8
 2026-05-30 09:15:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:15:50 [info     ] gumtree.playwright.cards       count=25 term=NVIDIA GPU
+2026-05-30 09:15:50 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:51 [info     ] gumtree.playwright.done        total=25
+2026-05-30 09:15:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard%20cpu%20combo&minPrice=1&maxPrice=2500&exact=false
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+2026-05-30 09:15:52 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:52 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+2026-05-30 09:15:53 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:15:54 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+2026-05-30 09:15:55 [info     ] gumtree.playwright.done        total=25
+2026-05-30 09:15:55 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:55 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:53596 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53612 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53618 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53630 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53634 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53648 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53652 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53656 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53670 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53684 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53698 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53692 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53706 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53718 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53722 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53730 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:15:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 09:15:55 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM%2032GB%202x16GB&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:15:56 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:56 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:57 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVMe%201TB&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:15:58 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:58 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=PSU&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:15:59 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:15:59 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:15:59 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=AM4 CPU
+2026-05-30 09:16:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=CPU%20cooler&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:16:00 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:16:00 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:16:01 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=RGB%20fans&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 09:16:02 [info     ] gumtree.playwright.cards       count=12 term=AM4 CPU
+2026-05-30 09:16:02 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:53746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53758 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53762 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53770 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:05 [info     ] gumtree.playwright.done        total=12
+2026-05-30 09:16:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:36244 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36256 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36272 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36284 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36288 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:08 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+INFO:     100.101.209.68:36290 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36294 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36298 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36308 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36314 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36326 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36332 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 09:16:11 [info     ] gumtree.playwright.cards       count=25 term=i7 CPU
+INFO:     100.101.209.68:36344 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36352 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36362 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36366 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:14 [info     ] gumtree.playwright.done        total=25
+2026-05-30 09:16:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:51882 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51886 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51914 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51924 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51928 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51930 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51940 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51946 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:21 [info     ] gumtree.playwright.cards       count=6 term=i9 CPU
+2026-05-30 09:16:22 [info     ] gumtree.playwright.done        total=6
+2026-05-30 09:16:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'futuristic gaming case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:59564 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59574 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59578 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59588 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59592 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59594 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59610 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 09:16:26 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+INFO:     100.101.209.68:59620 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59630 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59646 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59654 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:29 [info     ] gumtree.playwright.cards       count=8 term=AM4 motherboard
+2026-05-30 09:16:30 [info     ] gumtree.playwright.done        total=8
+2026-05-30 09:16:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:59668 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59680 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59696 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59698 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59712 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35788 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35794 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35798 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35808 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:39 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+INFO:     100.101.209.68:35818 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35830 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35844 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35850 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35864 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35872 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35886 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 09:16:44 [warning  ] gumtree.playwright.no_listings page_title=AM4 motherboard cpu combo | Stuff for Sale - Gumtree term=AM4 motherboard cpu combo
+2026-05-30 09:16:44 [info     ] gumtree.playwright.done        total=0
+2026-05-30 09:16:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:35898 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35908 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35912 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35922 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52498 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52502 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52504 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52510 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'xl mouse pad': 0 found, 0 new (total 0)
+2026-05-30 09:16:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 09:16:50 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+INFO:     100.101.209.68:52526 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52536 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52548 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52558 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:16:53 [info     ] gumtree.playwright.done        total=25
+2026-05-30 09:16:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 09:16:55 [info     ] gumtree.playwright.cards       count=7 term=xl mouse pad
+INFO:     100.101.209.68:56268 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56278 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56292 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56300 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56310 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56322 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56330 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56338 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56350 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56364 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56370 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56372 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'federation command build': 0 found, 0 new (total 0)
+2026-05-30 09:16:58 [info     ] gumtree.playwright.done        total=7
+2026-05-30 09:16:58 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 09:16:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=xl%20mouse%20pad&minPrice=1&maxPrice=80&exact=false
+2026-05-30 09:16:59 [info     ] facebook.playwright.done       total=0
+2026-05-30 09:17:00 [info     ] gumtree.playwright.cards       count=9 term=DDR4 RAM 32GB 2x16GB
+2026-05-30 09:17:01 [info     ] gumtree.playwright.done        total=9
+INFO:     100.101.209.68:56386 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56398 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56408 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56422 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:17:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 09:17:07 [info     ] gumtree.playwright.cards       count=29 term=NVMe 1TB
+INFO:     100.101.209.68:47284 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47288 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47302 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47304 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47306 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47318 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47328 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47344 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47358 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 09:17:10 [info     ] gumtree.playwright.done        total=25
+2026-05-30 09:17:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:47360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47364 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47374 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47384 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47398 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47410 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47416 - "GET /api/sources/health HTTP/1.1" 200 OK
