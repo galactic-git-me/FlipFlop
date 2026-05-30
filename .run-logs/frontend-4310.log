@@ -336,3 +336,6 @@ Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
  GET / 200 in 30ms (next.js: 3ms, application-code: 27ms)
  GET / 200 in 541ms (next.js: 3ms, application-code: 538ms)
 [browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 111ms (next.js: 7ms, application-code: 105ms)
+[browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /api/nasa-bg 200 in 3.2s (next.js: 805ms, application-code: 2.4s)
