@@ -1632,3 +1632,24 @@ Call log:
 2026-05-30 23:50:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-30 23:50:28 [warning  ] gumtree.playwright.no_listings page_title=Stark industries pc | Stuff for Sale - Gumtree term=stark industries pc
 2026-05-30 23:50:28 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 134)
+2026-05-30 23:50:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:50:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:51:11 [warning  ] gumtree.playwright.no_listings page_title=Gamma core build | Stuff for Sale - Gumtree term=gamma core build
+2026-05-30 23:51:11 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:51:42 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:51:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:51:55 [warning  ] gumtree.playwright.no_listings page_title=Radioactive green rgb pc | Stuff for Sale - Gumtree term=radioactive green rgb pc
+2026-05-30 23:51:55 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 134)
+2026-05-30 23:52:25 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:52:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
