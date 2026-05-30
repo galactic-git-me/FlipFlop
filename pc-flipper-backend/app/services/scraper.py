@@ -478,6 +478,9 @@ def _is_ebay_blocked(status_code: int, body: str) -> bool:
         "akamai",
         "bot",
         "forbidden",
+        "error page | ebay",
+        "something went wrong on our end",
+        "reference-id",
     )
     return any(m in probe for m in blocked_markers)
 
@@ -529,7 +532,11 @@ async def scrape_ebay(
             try:
                     is_component_term = any(m in term.lower() for m in component_markers)
                     sacat = "0" if is_component_term else "179"
-                    token = await _get_ebay_access_token(client) if settings.ebay_use_api else None
+                    prefer_api = bool(
+                        settings.ebay_use_api
+                        or (settings.ebay_app_id and settings.ebay_client_secret)
+                    )
+                    token = await _get_ebay_access_token(client) if prefer_api else None
                     if token:
                         api_listings = await _scrape_ebay_api_term(
                             client=client,
