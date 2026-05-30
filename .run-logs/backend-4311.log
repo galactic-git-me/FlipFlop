@@ -1314,3 +1314,43 @@ Call log:
 2026-05-30 23:27:45 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
 2026-05-30 23:27:47 [info     ] gumtree.playwright.done        total=25
 2026-05-30 23:27:47 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:28:02 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:28:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:28:07 [info     ] gumtree.playwright.cards       count=1 term=white fish tank case
+2026-05-30 23:28:08 [info     ] gumtree.playwright.done        total=1
+2026-05-30 23:28:17 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:28:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=usb%20microphone&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:28:18 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:45318 - "HEAD /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 23:28:21 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=usb microphone
+2026-05-30 23:28:21 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=usb microphone
+2026-05-30 23:28:21 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=usb microphone
+2026-05-30 23:28:38 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:28:38 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:28:42 [info     ] gumtree.playwright.cards       count=7 term=white rgb case
+2026-05-30 23:28:45 [info     ] gumtree.playwright.done        total=7
+2026-05-30 23:28:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:28:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:29:04 [info     ] gumtree.playwright.cards       count=25 term=pc speakers
+2026-05-30 23:29:06 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:29:06 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:29:15 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:29:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=micro+atx+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 86)
+2026-05-30 23:29:28 [warning  ] gumtree.playwright.no_listings page_title=Micro atx fish tank | Stuff for Sale - Gumtree term=micro atx fish tank
+2026-05-30 23:29:28 [info     ] gumtree.playwright.done        total=0

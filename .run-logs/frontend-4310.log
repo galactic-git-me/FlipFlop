@@ -16,3 +16,4 @@
 
 ○ Compiling / ...
  HEAD / 200 in 5.0s (next.js: 4.3s, application-code: 674ms)
+ HEAD / 200 in 96ms (next.js: 11ms, application-code: 85ms)
