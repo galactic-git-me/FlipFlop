@@ -1,20 +1,46 @@
-INFO:     Started server process [393090]
-INFO:     Waiting for application startup.
-2026-05-30 23:12:55 [info     ] app.startup
-2026-05-30 23:12:55 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-30 23:12:55 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-30 23:12:55 [info     ] scheduler.started              jobs=11
-2026-05-30 23:12:56 [info     ] runtime.preflight.antibot.start pages=6 wait_seconds=120
-2026-05-30 23:12:56 [info     ] startup_bootstrap.start
-INFO:     Application startup complete.
-2026-05-30 23:12:56 [info     ] accessories_swarm.start
-2026-05-30 23:12:56 [info     ] cases_swarm.start
-2026-05-30 23:12:56 [info     ] flip_opportunities_swarm.start
-2026-05-30 23:12:56 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-2026-05-30 23:12:56 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-2026-05-30 23:12:56 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Temu
-2026-05-30 23:12:56 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=AliExpress
-2026-05-30 23:12:56 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Alibaba
-2026-05-30 23:12:56 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Gumtree
-2026-05-30 23:12:56 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Facebook Marketplace
+INFO:     Started reloader process [454900] using WatchFiles
+INFO:     Started server process [455228]
+INFO:     Waiting for application startup.
+2026-05-31 00:15:53 [info     ] app.startup
+2026-05-31 00:15:54 [info     ] seeded.sources
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=eBay UK Auctions
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=John Pye
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=Amazon
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=Temu
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=AliExpress
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=Alibaba
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=BargainHardware
+2026-05-31 00:15:54 [info     ] seeded.new_source              name=CherryTree Inc
+2026-05-31 00:15:54 [info     ] seeded.manual_source           name=Manual Submission
+2026-05-31 00:15:54 [info     ] seeded.manual_source           name=Manual Photo
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=Apex Auctions
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=BidSpotter
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=Wilsons Auctions
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=i-bidder
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=Merkandi
+2026-05-31 00:15:54 [info     ] seeded.auction_source          name=Wholesale Clearance UK
+2026-05-31 00:15:54 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 00:15:54 [info     ] seeded.search_config
+2026-05-31 00:15:54 [info     ] seeded.app_settings            model=gemma3:4b
+2026-05-31 00:15:54 [info     ] seeded.playbooks               count=4
+2026-05-31 00:15:54 [info     ] seeded.source_search_terms     count=236 scope=cases
+2026-05-31 00:15:54 [info     ] seeded.source_search_terms     count=22 scope=flip_opportunities
+2026-05-31 00:15:54 [info     ] seeded.source_search_terms     count=21 scope=upgrade_parts
+2026-05-31 00:15:54 [info     ] seeded.source_search_terms     count=8 scope=accessories
+2026-05-31 00:15:54 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 00:15:54 [info     ] scheduler.started              jobs=11
+2026-05-31 00:15:54 [info     ] runtime.preflight.antibot.start pages=6 wait_seconds=120
+2026-05-31 00:15:54 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-31 00:15:54 [info     ] accessories_swarm.start
+2026-05-31 00:15:54 [info     ] cases_swarm.start
+2026-05-31 00:15:54 [info     ] flip_opportunities_swarm.start
+2026-05-31 00:15:54 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-31 00:15:54 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-31 00:15:54 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Gumtree
+2026-05-31 00:15:54 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Facebook Marketplace
+2026-05-31 00:15:54 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Temu
+2026-05-31 00:15:54 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=AliExpress
+2026-05-31 00:15:54 [info     ] source.deferred.antibot        reason=waiting_for_antibot_preflight source=Alibaba
