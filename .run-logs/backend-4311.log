@@ -3958,3 +3958,274 @@ INFO:     100.101.209.68:54968 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:54980 - "GET /api/schedule HTTP/1.1" 200 OK
 [scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
 2026-05-30 08:38:41 [debug    ] upgrade_parts.bh               part=AM4 Motherboard price_gbp=3.07
+2026-05-30 08:38:43 [info     ] facebook.playwright.done       total=20
+INFO:     100.101.209.68:54996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55002 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55012 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55016 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55022 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55032 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:38:44 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+[scraper] eBay 'micro atx fish tank': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58667 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:38:48 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
+INFO:     100.84.151.109:58667 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44798 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44814 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44824 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44840 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44850 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44864 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44870 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44884 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58667 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:38:53 [debug    ] upgrade_parts.bh               part=DDR4 RAM 32GB 2x16GB price_gbp=102.48
+INFO:     100.84.151.109:58667 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58667 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45124 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45136 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58667 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45148 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58170 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58170 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58667 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45166 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45170 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45172 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45186 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45192 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45200 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45202 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45212 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45238 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45246 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45262 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:03 [debug    ] upgrade_parts.bh               part=NVMe 1TB price_gbp=25.62
+INFO:     100.84.151.109:50949 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50949 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54830 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54832 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54836 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54844 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:54635 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54635 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54856 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54866 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54876 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54882 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:14 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.101.209.68:56048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56050 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56064 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56072 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56080 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56092 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56100 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56110 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-30 08:39:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:56136 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56152 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56162 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVIDIA%20GPU&minPrice=1&maxPrice=2500&exact=false
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-30 08:39:19 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=NVIDIA GPU
+INFO:     100.84.151.109:65243 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:39:20 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:65243 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56164 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56172 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56186 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56192 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65243 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65243 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55375 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:39:22 [info     ] gumtree.playwright.cards       count=25 term=NVIDIA GPU
+2026-05-30 08:39:22 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:55375 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65243 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:39:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:39:25 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+2026-05-30 08:39:25 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:39:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 08:39:26 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:39316 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39328 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39330 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39340 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39342 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52814 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52814 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:39:29 [info     ] facebook.playwright.items      count=21 term=NVIDIA GPU
+INFO:     100.101.209.68:39348 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39352 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39368 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39372 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'compact gaming case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:39382 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39398 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39408 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39420 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39434 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39444 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39458 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:39:31 [info     ] gumtree.playwright.cards       count=12 term=AM4 CPU
+2026-05-30 08:39:33 [info     ] facebook.playwright.done       total=20
+2026-05-30 08:39:33 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:39:33 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20CPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 08:39:35 [info     ] gumtree.playwright.done        total=12
+2026-05-30 08:39:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.84.151.109:59177 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59177 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60094 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60098 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60104 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60114 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:39 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:39:39 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+INFO:     100.101.209.68:60118 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60128 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60134 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60136 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:40 [info     ] gumtree.playwright.cards       count=25 term=i7 CPU
+2026-05-30 08:39:41 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-30 08:39:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.84.151.109:58258 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:39:44 [info     ] gumtree.playwright.done        total=25
+INFO:     100.84.151.109:58258 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44732 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:45 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:44734 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44744 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44750 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44766 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44768 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44782 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:39:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:44792 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44806 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44820 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58258 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61905 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61905 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58258 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:39:48 [info     ] facebook.playwright.items      count=15 term=AM4 CPU
+[scraper] eBay 'gaming headset': 0 found, 0 new (total 0)
+2026-05-30 08:39:49 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 08:39:51 [info     ] facebook.playwright.done       total=15
+2026-05-30 08:39:51 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:39:51 [info     ] gumtree.playwright.cards       count=6 term=i9 CPU
+2026-05-30 08:39:52 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20CPU&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:44840 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44856 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44872 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44882 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44890 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58258 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61905 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58258 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:39:52 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
+2026-05-30 08:39:53 [info     ] gumtree.playwright.done        total=6
+2026-05-30 08:39:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:44898 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44914 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44930 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44936 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:39:54 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-30 08:39:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:39:59 [info     ] gumtree.playwright.cards       count=8 term=AM4 motherboard
+2026-05-30 08:40:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:62499 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62499 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53858 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53860 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53862 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53872 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53884 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53892 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53900 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:40:01 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:40:01 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:40:02 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:53910 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53922 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53928 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53932 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:40:03 [info     ] gumtree.playwright.done        total=8
+2026-05-30 08:40:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-30 08:40:04 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:53944 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53956 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53968 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53984 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53998 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:40:05 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
