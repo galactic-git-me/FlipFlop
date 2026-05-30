@@ -29,6 +29,7 @@ from typing import Optional
 import structlog
 from app.services.search_telemetry import record_term_result
 from app.services.proxy import playwright_proxy_config
+from app.config import get_settings
 
 log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
@@ -201,6 +202,36 @@ async def _make_context(
     *,
     force_persistent_profile: bool = False,
 ):
+    settings = get_settings()
+    cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
+    if cdp_url:
+        try:
+            browser = await playwright.chromium.connect_over_cdp(cdp_url)
+            if browser.contexts:
+                context = browser.contexts[0]
+            else:
+                context = await browser.new_context(
+                    user_agent=_USER_AGENT,
+                    viewport={"width": 1366, "height": 768},
+                    locale="en-GB",
+                    timezone_id="Europe/London",
+                    java_script_enabled=True,
+                )
+            try:
+                await context.add_init_script(_STEALTH_JS)
+            except Exception:
+                pass
+            if cookies:
+                try:
+                    await context.add_cookies(cookies)
+                except Exception as exc:
+                    log.warning("playwright.cookies.add_failed", error=str(exc))
+            # Return browser=None so downstream cleanup only closes page/context,
+            # not the externally owned Chrome session.
+            return None, context
+        except Exception as exc:
+            log.warning("playwright.cdp_connect_failed_fallback_launch", error=str(exc), cdp_url=cdp_url)
+
     interactive = _interactive_scraper_mode()
     headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
     if interactive:

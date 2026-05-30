@@ -409,17 +409,27 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
     listings: list[RawListing] = []
     async with _EBAY_PLAYWRIGHT_SEM:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--disable-dev-shm-usage",
-                    "--disable-infobars",
-                    "--window-size=1366,768",
-                    "--lang=en-GB",
-                ],
-                proxy=playwright_proxy_config(),
-            )
+            cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
+            browser = None
+            attached_cdp = False
+            if cdp_url:
+                try:
+                    browser = await p.chromium.connect_over_cdp(cdp_url)
+                    attached_cdp = True
+                except Exception:
+                    browser = None
+            if browser is None:
+                browser = await p.chromium.launch(
+                    headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
+                    args=[
+                        "--disable-blink-features=AutomationControlled",
+                        "--disable-dev-shm-usage",
+                        "--disable-infobars",
+                        "--window-size=1366,768",
+                        "--lang=en-GB",
+                    ],
+                    proxy=playwright_proxy_config(),
+                )
             state_path = _ebay_state_path()
             context_kwargs = {
                 "user_agent": ua.random,
@@ -428,7 +438,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             }
             if state_path.exists():
                 context_kwargs["storage_state"] = str(state_path)
-            context = await browser.new_context(**context_kwargs)
+            if attached_cdp and browser.contexts:
+                context = browser.contexts[0]
+            else:
+                context = await browser.new_context(**context_kwargs)
             await context.add_init_script(stealth_js)
             page = await context.new_page()
             try:
@@ -458,12 +471,15 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     if listings:
                         break
             finally:
-                try:
-                    await context.storage_state(path=str(state_path))
-                except Exception as exc:
-                    print(f"[scraper] unable to persist eBay playwright state: {exc}")
-                await context.close()
-                await browser.close()
+                if not attached_cdp:
+                    try:
+                        await context.storage_state(path=str(state_path))
+                    except Exception as exc:
+                        print(f"[scraper] unable to persist eBay playwright state: {exc}")
+                    await context.close()
+                    await browser.close()
+                else:
+                    await page.close()
     return listings, blocked
 
 
@@ -1835,24 +1851,37 @@ async def _scrape_generic_marketplace_listings(
     max_pages = max(1, int(getattr(settings, "marketplace_max_pages_per_term", 2) or 2))
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=True,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-            ],
-            proxy=playwright_proxy_config(),
-        )
-        ctx = await browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            locale="en-GB",
-            timezone_id="Europe/London",
-        )
+        cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
+        browser = None
+        attached_cdp = False
+        if cdp_url:
+            try:
+                browser = await p.chromium.connect_over_cdp(cdp_url)
+                attached_cdp = True
+            except Exception:
+                browser = None
+        if browser is None:
+            browser = await p.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                ],
+                proxy=playwright_proxy_config(),
+            )
+        if attached_cdp and browser.contexts:
+            ctx = browser.contexts[0]
+        else:
+            ctx = await browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+                locale="en-GB",
+                timezone_id="Europe/London",
+            )
         await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
 
         page = await ctx.new_page()
@@ -1990,7 +2019,10 @@ async def _scrape_generic_marketplace_listings(
                     record_term_result(term=term, found=0, new=0, source_name=source_name)
             except Exception as exc:
                 record_term_result(term=term, error=str(exc), source_name=source_name)
-        await browser.close()
+        if attached_cdp:
+            await page.close()
+        else:
+            await browser.close()
     return results
 
 
