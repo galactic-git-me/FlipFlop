@@ -11945,3 +11945,276 @@ INFO:     100.84.151.109:62747 - "GET /api/playbooks/proposals?status=pending HT
 2026-05-30 08:23:26 [info     ] facebook.playwright.items      count=24 term=Ryzen 9 7900X
 INFO:     100.84.151.109:62927 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:62927 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:23:28 [info     ] gumtree.playwright.cards       count=25 term=pc speakers
+INFO:     100.101.209.68:57416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57428 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57440 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57442 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57458 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57464 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57480 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62927 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57490 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57502 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57512 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57528 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57534 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57548 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57562 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57570 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57578 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:23:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+pc+fault&max_price=500&min_price=0&sort=date&distance=nationwide
+2026-05-30 08:23:33 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
+2026-05-30 08:23:34 [info     ] gumtree.playwright.done        total=25
+2026-05-30 08:23:34 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.84.151.109:62927 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62927 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:23:36 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming pc fault
+2026-05-30 08:23:38 [info     ] gumtree.playwright.cards       count=1 term=gaming pc fault
+INFO:     100.101.209.68:49828 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49834 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49840 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49850 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:23:40 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:23:40 [info     ] gumtree.playwright.done        total=35
+2026-05-30 08:23:40 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC gtx 1650 status=403
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=576.0 query=gaming PC gtx 1650
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=348.0 query=gaming PC gtx 970
+2026-05-30 08:23:40 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 7 7800x rtx 3060 status=403
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=750.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=744.0 query=gaming PC rtx 4060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=115.0 median=630.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC core i5 3470 rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=1002.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=924.0 query=gaming PC rtx 3060
+2026-05-30 08:23:40 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 9 7900x rtx 3060 status=403
+2026-05-30 08:23:40 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:23:40 [info     ] source.done                    found=35 gems=0 source=Gumtree
+2026-05-30 08:23:41 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+2026-05-30 08:23:42 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:23:44 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:49866 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49872 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44734 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44736 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44744 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44758 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44772 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44784 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44792 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44796 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44808 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44824 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:23:46 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:44838 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44844 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44848 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44864 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:23:48 [info     ] facebook.playwright.items      count=22 term=gaming pc
+INFO:     100.84.151.109:59237 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50480 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49512 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:23:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:59237 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49512 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50480 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-30 08:23:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:52292 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52308 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52324 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52338 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52342 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52344 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52352 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52354 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:23:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:24:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:52364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52378 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52394 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52408 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52414 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36078 - "POST /api/swarms/flip_opportunities/trigger HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52426 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36088 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52428 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:24:02 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     127.0.0.1:36090 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-30 08:24:04 [info     ] facebook.playwright.items      count=22 term=gaming pc untested
+INFO:     100.101.209.68:52444 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52450 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52464 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48434 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-30 08:24:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20fault&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:49658 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49666 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49670 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49674 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49680 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49692 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49698 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49712 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49714 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48454 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-05-30 08:24:14 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+2026-05-30 08:24:14 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     127.0.0.1:41924 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44754 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44770 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44776 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44784 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44786 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44798 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:24:16 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:24:18 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:24:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-30 08:24:20 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:44806 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44814 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44820 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44846 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44850 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44856 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44860 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:24:22 [info     ] facebook.playwright.items      count=22 term=gaming pc fault
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:24:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:47410 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47422 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47424 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47428 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47442 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47452 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47464 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47468 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47476 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47480 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47486 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'argb gaming case': 0 found, 0 new (total 0)
+2026-05-30 08:24:33 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:47494 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47502 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47510 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47524 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47530 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:24:35 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:24:38 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:45926 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45942 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45948 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45950 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:24:40 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:24:42 [info     ] facebook.playwright.items      count=19 term=gaming pc no gpu
+2026-05-30 08:24:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:50602 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50614 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50634 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50622 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50640 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50660 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50650 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50672 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50686 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50690 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50700 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50704 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50718 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50720 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50724 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50740 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:24:47 [debug    ] upgrade_parts.ebay             buy=None part=i9 CPU sold=None
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-30 08:24:50 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
