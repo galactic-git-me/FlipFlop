@@ -43,13 +43,13 @@ export function AntiBotPreflightBanner() {
         await api.preflight.triggerAntibot();
       } catch {
         // Frontend fallback tab open still helps if backend preflight is unavailable.
+      } finally {
+        for (const url of challengeUrls) {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+        setLastOpenedAt(new Date());
+        setTimeout(() => setBusy(false), 300);
       }
-      for (const url of challengeUrls) {
-        window.open(url, "_blank", "noopener,noreferrer");
-      }
-      setLastOpenedAt(new Date());
-    } finally {
-      setTimeout(() => setBusy(false), 300);
     })();
   };
 

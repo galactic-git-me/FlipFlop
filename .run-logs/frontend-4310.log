@@ -1,8 +1,3 @@
-============================================================
-Frontend URL: http://andromeda-ts:4310
-Tailscale URL: andromeda-ts:4310
-============================================================
-Tailscale URL (live): andromeda-ts:4310
 
 > pc-flipper@0.1.0 dev
 > next dev --webpack -p 4310 -H 0.0.0.0
@@ -10,7 +5,7 @@ Tailscale URL (live): andromeda-ts:4310
 ▲ Next.js 16.2.4 (webpack)
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 407ms
+✓ Ready in 425ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -19,3 +14,134 @@ Tailscale URL (live): andromeda-ts:4310
    * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
 
 
+○ Compiling / ...
+⨯ ./components/antibot-preflight-banner.tsx
+Error:   x Expected ',', got 'finally'
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:51:1]
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+  x Expected ';', '}' or <eof>
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:40:1]
+ 37 | 
+ 38 |   const openTabs = () => {
+ 39 |     setBusy(true);
+ 40 |     void (async () => {
+    :     ^^|^
+    :       `-- This is the expression part of an expression statement
+ 41 |       try {
+ 42 |         // Trigger backend-managed preflight first so CDP browser tabs open on the scraper browser session.
+ 43 |         await api.preflight.triggerAntibot();
+ 44 |       } catch {
+ 45 |         // Frontend fallback tab open still helps if backend preflight is unavailable.
+ 46 |       }
+ 47 |       for (const url of challengeUrls) {
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/antibot-preflight-banner.tsx
+./app/page.tsx
+⨯ ./components/antibot-preflight-banner.tsx
+Error:   x Expected ',', got 'finally'
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:51:1]
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+  x Expected ';', '}' or <eof>
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:40:1]
+ 37 | 
+ 38 |   const openTabs = () => {
+ 39 |     setBusy(true);
+ 40 |     void (async () => {
+    :     ^^|^
+    :       `-- This is the expression part of an expression statement
+ 41 |       try {
+ 42 |         // Trigger backend-managed preflight first so CDP browser tabs open on the scraper browser session.
+ 43 |         await api.preflight.triggerAntibot();
+ 44 |       } catch {
+ 45 |         // Frontend fallback tab open still helps if backend preflight is unavailable.
+ 46 |       }
+ 47 |       for (const url of challengeUrls) {
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/antibot-preflight-banner.tsx
+./app/page.tsx
+⨯ ./components/antibot-preflight-banner.tsx
+Error:   x Expected ',', got 'finally'
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:51:1]
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+  x Expected ';', '}' or <eof>
+    ,-[/home/mac/CODING/FlipFlop/pc-flipper/components/antibot-preflight-banner.tsx:40:1]
+ 37 | 
+ 38 |   const openTabs = () => {
+ 39 |     setBusy(true);
+ 40 |     void (async () => {
+    :     ^^|^
+    :       `-- This is the expression part of an expression statement
+ 41 |       try {
+ 42 |         // Trigger backend-managed preflight first so CDP browser tabs open on the scraper browser session.
+ 43 |         await api.preflight.triggerAntibot();
+ 44 |       } catch {
+ 45 |         // Frontend fallback tab open still helps if backend preflight is unavailable.
+ 46 |       }
+ 47 |       for (const url of challengeUrls) {
+ 48 |         window.open(url, "_blank", "noopener,noreferrer");
+ 49 |       }
+ 50 |       setLastOpenedAt(new Date());
+ 51 |     } finally {
+    :       ^^^^^^^
+ 52 |       setTimeout(() => setBusy(false), 300);
+ 53 |     })();
+ 54 |   };
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/antibot-preflight-banner.tsx
+./app/page.tsx
+ HEAD / 200 in 1009ms (next.js: 307ms, application-code: 702ms)
