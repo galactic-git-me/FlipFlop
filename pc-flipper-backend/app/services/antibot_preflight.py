@@ -119,7 +119,7 @@ async def run_antibot_preflight() -> None:
                 browser = None
                 context = None
                 try:
-            if cdp_url:
+                    if cdp_url:
                         browser = await p.chromium.connect_over_cdp(cdp_url)
                         if browser.contexts:
                             context = browser.contexts[0]

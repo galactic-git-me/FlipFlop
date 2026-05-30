@@ -208,7 +208,8 @@ async def lifespan(app: FastAPI):
     await _load_db_settings_into_config()
     if not chromium_available():
         log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
-    await run_antibot_preflight()
+    # Run preflight asynchronously so API stays responsive while challenge tabs open.
+    asyncio.create_task(run_antibot_preflight())
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     yield
