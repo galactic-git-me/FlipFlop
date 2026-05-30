@@ -325,9 +325,9 @@ async def scrape_gumtree_playwright(
 
         page = await context.new_page()
 
-        timeout_seen = False
+        timeout_errors = 0
         for term in search_terms[:6]:  # cap terms — each takes ~5s
-            if timeout_seen:
+            if timeout_errors >= 2:
                 record_term_result(term=term, found=0, new=0, error="source_timeout_backoff", source_name="Gumtree")
                 continue
             try:
@@ -341,7 +341,7 @@ async def scrape_gumtree_playwright(
                 )
                 log.info("gumtree.playwright.fetch", url=url)
                 # Fail fast on slow/blocked sessions so one source doesn't stall startup cycles.
-                await page.goto(url, wait_until="domcontentloaded", timeout=8000)
+                await page.goto(url, wait_until="domcontentloaded", timeout=14000)
 
                 # Accept cookie banner if present
                 try:
@@ -445,7 +445,7 @@ async def scrape_gumtree_playwright(
                 log.error("gumtree.playwright.error", term=term, error=str(exc))
                 msg = str(exc).lower()
                 if "timed_out" in msg or "timeout" in msg:
-                    timeout_seen = True
+                    timeout_errors += 1
                 continue
 
         if browser is not None:
@@ -535,7 +535,7 @@ async def scrape_facebook_playwright(
                             "&exact=false"
                         )
                         log.info("facebook.playwright.fetch", url=url)
-                        await page.goto(url, wait_until="domcontentloaded", timeout=10000)
+                        await page.goto(url, wait_until="domcontentloaded", timeout=16000)
                         if "/login/" in (page.url or ""):
                             login_required.set()
                             return term, [], "login_required"
@@ -648,9 +648,9 @@ async def scrape_facebook_playwright(
                     finally:
                         await page.close()
 
-            timeout_seen = False
+            timeout_errors = 0
             for term in search_terms[:20]:
-                if timeout_seen:
+                if timeout_errors >= 2:
                     record_term_result(
                         term=term,
                         found=0,
@@ -667,7 +667,7 @@ async def scrape_facebook_playwright(
                     record_term_result(term=term, error=err, source_name="Facebook Marketplace")
                     err_l = str(err).lower()
                     if "timed_out" in err_l or "timeout" in err_l:
-                        timeout_seen = True
+                        timeout_errors += 1
                     continue
 
                 term_new = 0

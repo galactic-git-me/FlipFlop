@@ -41,18 +41,18 @@ export function AntiBotPreflightBanner() {
           <div className="font-semibold">Anti-bot preflight</div>
           <div className="opacity-90">
             {noGui
-              ? "No GUI display in backend runtime, so challenge windows cannot open automatically."
+              ? "No GUI display in backend runtime, so challenge windows cannot open automatically. Scraping continues in background."
               : `Status: ${status.last_result} — ${status.last_message}`}
           </div>
           {noGui && (
             <div className="opacity-90 mt-1">
-              Launch backend from a desktop shell with DISPLAY, or run preflight manually from this panel after that.
+              This banner is informational only and does not block dashboard loading.
             </div>
           )}
         </div>
         <button
           className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50 disabled:opacity-60"
-          disabled={busy || status.running}
+          disabled={busy || status.running || noGui}
           onClick={async () => {
             setBusy(true);
             try {
@@ -63,7 +63,7 @@ export function AntiBotPreflightBanner() {
             }
           }}
         >
-          {status.running || busy ? "Running…" : "Run Preflight"}
+          {noGui ? "No GUI Session" : (status.running || busy ? "Running…" : "Run Preflight")}
         </button>
       </div>
     </div>
