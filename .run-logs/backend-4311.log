@@ -1506,3 +1506,18 @@ Call log:
 2026-05-30 23:37:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-30 23:38:04 [warning  ] gumtree.playwright.no_listings page_title=Station command build | Stuff for Sale - Gumtree term=station command build
 2026-05-30 23:38:04 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'gaming pc fault': 0 found, 0 new (total 134)
+2026-05-30 23:38:34 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:38:34 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:38:47 [warning  ] gumtree.playwright.no_listings page_title=Diplomatic station workstation | Stuff for Sale - Gumtree term=diplomatic station workstation
+2026-05-30 23:38:47 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:39:18 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:39:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:39:31 [warning  ] gumtree.playwright.no_listings page_title=Leviathan inspired build | Stuff for Sale - Gumtree term=leviathan inspired build
+2026-05-30 23:39:31 [info     ] gumtree.playwright.done        total=0
