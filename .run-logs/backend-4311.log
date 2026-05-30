@@ -1543,3 +1543,24 @@ Call log:
 2026-05-30 23:41:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-30 23:41:42 [warning  ] gumtree.playwright.no_listings page_title=Decepticon workstation | Stuff for Sale - Gumtree term=decepticon workstation
 2026-05-30 23:41:43 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 134)
+2026-05-30 23:42:13 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:42:13 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:42:26 [warning  ] gumtree.playwright.no_listings page_title=Anime gaming pc | Stuff for Sale - Gumtree term=anime gaming pc
+2026-05-30 23:42:26 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:42:56 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:42:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=manga+aesthetic+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:43:10 [warning  ] gumtree.playwright.no_listings page_title=Manga aesthetic workstation | Stuff for Sale - Gumtree term=manga aesthetic workstation
+2026-05-30 23:43:10 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 134)
+2026-05-30 23:43:40 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:43:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
