@@ -1251,3 +1251,66 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:25:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:26:01 [info     ] gumtree.playwright.cards       count=25 term=CPU cooler
+2026-05-30 23:26:03 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:26:06 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:26:10 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=high+airflow+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:26:11 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+2026-05-30 23:26:15 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:26:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:26:17 [info     ] gumtree.playwright.cards       count=3 term=high airflow gaming case
+2026-05-30 23:26:17 [info     ] gumtree.playwright.done        total=3
+2026-05-30 23:26:18 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=RGB%20fans&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:26:19 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:26:33 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:34 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:26:39 [info     ] gumtree.playwright.cards       count=25 term=RGB fans
+2026-05-30 23:26:41 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:26:42 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=4 box=0 ebay_buy=12 ebay_sold=12 errors=0 overclockers=0 scan=0 temu=0 updated=12
+2026-05-30 23:26:47 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:48 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=premium+aluminum+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:26:49 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:26:49 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:26:50 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:26:53 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming headset
+2026-05-30 23:26:53 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming headset
+2026-05-30 23:26:53 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming headset
+2026-05-30 23:26:53 [info     ] gumtree.playwright.cards       count=3 term=premium aluminum pc case
+2026-05-30 23:26:54 [info     ] gumtree.playwright.done        total=3
+2026-05-30 23:27:24 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:27:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=luxury+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:27:29 [info     ] gumtree.playwright.cards       count=20 term=luxury gaming case
+[scraper] eBay 'pc tower': 0 found, 0 new (total 86)
+2026-05-30 23:27:32 [info     ] gumtree.playwright.done        total=20
+2026-05-30 23:27:39 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:27:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:27:45 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
+2026-05-30 23:27:47 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:27:47 [info     ] facebook.playwright.cookies_loaded count=8
