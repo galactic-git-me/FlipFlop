@@ -80,27 +80,27 @@
     "batch_size": 5,
     "vendors": {
       "eBay": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "eBay (Worldwide)": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "Amazon": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "Temu": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "AliExpress": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "BargainHardware": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       },
       "CherryTree Inc": {
@@ -108,7 +108,7 @@
         "total": 1
       },
       "Alibaba": {
-        "cursor": 15,
+        "cursor": 20,
         "total": 62
       }
     }
