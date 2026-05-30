@@ -1601,3 +1601,17 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:47:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:47:32 [warning  ] gumtree.playwright.no_listings page_title=Dragon radar workstation | Stuff for Sale - Gumtree term=dragon radar workstation
+2026-05-30 23:47:32 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:48:03 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:48:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:48:16 [warning  ] gumtree.playwright.no_listings page_title=Avengers workstation | Stuff for Sale - Gumtree term=avengers workstation
+2026-05-30 23:48:16 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:48:47 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:48:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
