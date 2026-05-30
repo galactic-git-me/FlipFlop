@@ -52,18 +52,22 @@ export function AntiBotPreflightBanner() {
         </div>
         <button
           className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50 disabled:opacity-60"
-          disabled={busy || status.running || noGui}
+          disabled={busy || status.running}
           onClick={async () => {
             setBusy(true);
             try {
-              await api.preflight.triggerAntibot();
-              setTimeout(() => void load(), 1000);
+              if (noGui) {
+                await load();
+              } else {
+                await api.preflight.triggerAntibot();
+                setTimeout(() => void load(), 1000);
+              }
             } finally {
               setBusy(false);
             }
           }}
         >
-          {noGui ? "No GUI Session" : (status.running || busy ? "Running…" : "Run Preflight")}
+          {noGui ? "Re-check Session" : (status.running || busy ? "Running…" : "Run Preflight")}
         </button>
       </div>
     </div>
