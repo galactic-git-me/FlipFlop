@@ -1166,3 +1166,88 @@ Call log:
 [scraper] eBay retry error for 'gaming mouse': 
 2026-05-30 23:24:04 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
 2026-05-30 23:24:07 [info     ] gumtree.playwright.done        total=21
+2026-05-30 23:24:13 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:13 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVMe%201TB&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:24:14 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:24:14 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:24:26 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:24:32 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:32 [info     ] gumtree.playwright.cards       count=3 term=argb gaming case
+2026-05-30 23:24:32 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-30 23:24:33 [info     ] gumtree.playwright.done        total=3
+2026-05-30 23:24:37 [info     ] gumtree.playwright.cards       count=25 term=gaming mouse
+2026-05-30 23:24:37 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:24:41 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:24:41 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:24:43 [info     ] gumtree.playwright.cards       count=29 term=NVMe 1TB
+2026-05-30 23:24:45 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=PSU&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:24:45 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:24:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:24:46 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:25:03 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rgb+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:25:09 [info     ] gumtree.playwright.cards       count=2 term=rgb airflow case
+2026-05-30 23:25:09 [info     ] gumtree.playwright.done        total=2
+2026-05-30 23:25:16 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:16 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:25:16 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:16 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:25:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:25:20 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming mouse
+2026-05-30 23:25:20 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming mouse
+2026-05-30 23:25:20 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming mouse
+2026-05-30 23:25:23 [info     ] gumtree.playwright.cards       count=26 term=PSU
+2026-05-30 23:25:24 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:25:40 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:25:40 [error    ] gumtree.playwright.error       error=Page.goto: net::ERR_NETWORK_CHANGED at https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=mesh airflow case
+2026-05-30 23:25:40 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 86)
+2026-05-30 23:25:47 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:47 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=CPU%20cooler&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:25:48 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:25:48 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:25:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:25:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
