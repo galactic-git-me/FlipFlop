@@ -1730,6 +1730,13 @@ async def fetch_listings(
         )
 
     if "bargainhardware" in name or "bargain hardware" in name:
+        return await _scrape_bargainhardware_http(
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+        )
+
+    if "bargainhardware" in name or "bargain hardware" in name:
         return await _scrape_generic_marketplace_listings(
             source_name="BargainHardware",
             search_terms=search_terms[:20],
@@ -1963,4 +1970,68 @@ async def _scrape_generic_marketplace_listings(
             except Exception as exc:
                 record_term_result(term=term, error=str(exc), source_name=source_name)
         await browser.close()
+    return results
+
+
+async def _scrape_bargainhardware_http(
+    *,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    headers = _headers()
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True})) as client:
+        for term in search_terms:
+            added = 0
+            try:
+                url = f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={term.replace(' ', '+')}"
+                resp = await client.get(url, headers=headers)
+                if resp.status_code != 200:
+                    record_term_result(term=term, found=0, new=0, error=f"http_status_{resp.status_code}", source_name="BargainHardware")
+                    continue
+                html = resp.text
+                soup = BeautifulSoup(html, "lxml")
+                anchors = soup.select("a[href]")
+                for a in anchors:
+                    href = str(a.get("href") or "").strip()
+                    if not href:
+                        continue
+                    if href.startswith("/"):
+                        href = "https://www.bargainhardware.eu" + href
+                    if "/catalogsearch/" in href:
+                        continue
+                    title = a.get_text(" ", strip=True)
+                    if not title or len(title) < 6:
+                        continue
+                    scope = a.find_parent(["li", "div", "article"]) or a
+                    scope_text = scope.get_text(" ", strip=True)
+                    price = _parse_price(scope_text)
+                    if price <= 0:
+                        continue
+                    if price < float(min_price) or price > float(max_price):
+                        continue
+                    external_id = f"bargainhardware_{abs(hash(href))}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+                    results.append(
+                        RawListing(
+                            external_id=external_id,
+                            title=title[:240],
+                            price=price,
+                            url=href,
+                            location=None,
+                            condition="unknown",
+                            description="",
+                            image_urls=[],
+                            source_name="BargainHardware",
+                            listing_type="classified",
+                        )
+                    )
+                    added += 1
+                record_term_result(term=term, found=added, new=added, source_name="BargainHardware")
+            except Exception as exc:
+                record_term_result(term=term, found=0, new=0, error=str(exc), source_name="BargainHardware")
     return results
