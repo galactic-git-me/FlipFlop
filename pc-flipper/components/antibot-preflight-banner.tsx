@@ -37,14 +37,20 @@ export function AntiBotPreflightBanner() {
 
   const openTabs = () => {
     setBusy(true);
-    try {
+    void (async () => {
+      try {
+        // Trigger backend-managed preflight first so CDP browser tabs open on the scraper browser session.
+        await api.preflight.triggerAntibot();
+      } catch {
+        // Frontend fallback tab open still helps if backend preflight is unavailable.
+      }
       for (const url of challengeUrls) {
         window.open(url, "_blank", "noopener,noreferrer");
       }
       setLastOpenedAt(new Date());
     } finally {
       setTimeout(() => setBusy(false), 300);
-    }
+    })();
   };
 
   if (!status || status.last_result === "success") return null;
@@ -55,7 +61,7 @@ export function AntiBotPreflightBanner() {
         <div>
           <div className="font-semibold">Marketplace Challenges</div>
           <div className="opacity-90">
-            Complete login/captcha challenges in browser tabs, then return here and rerun scan.
+            Click button to open challenge/login tabs, complete them, then scans will continue for gated sources.
           </div>
           {lastOpenedAt && (
             <div className="opacity-75 mt-1 text-xs">
@@ -75,4 +81,3 @@ export function AntiBotPreflightBanner() {
     </div>
   );
 }
-

@@ -7,8 +7,6 @@ import httpx
 
 import structlog
 
-from app.services.playwright_scraper import chromium_available
-
 log = structlog.get_logger(__name__)
 
 _LOCK = asyncio.Lock()
@@ -25,12 +23,35 @@ CHALLENGE_URLS = [
     "https://www.gumtree.com/",
     "https://www.bargainhardware.co.uk/",
 ]
+_GATED_SOURCES = {
+    "Facebook Marketplace",
+    "Temu",
+    "AliExpress",
+    "Alibaba",
+    "Gumtree",
+}
 
 
 def _interactive_mode() -> bool:
     enabled = os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
     has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
-    return enabled and has_display
+    has_cdp = bool((os.getenv("BROWSER_CDP_URL", "") or "").strip())
+    return enabled and (has_display or has_cdp)
+
+
+def should_defer_source_scrape(source_name: str) -> tuple[bool, str]:
+    """Gate anti-bot/login sources until preflight has completed successfully."""
+    src = (source_name or "").strip()
+    if src not in _GATED_SOURCES:
+        return False, ""
+    enabled = os.getenv("ANTI_BOT_PREFLIGHT_ON_STARTUP", "1").lower() in {"1", "true", "yes"}
+    if not enabled:
+        return False, ""
+    if _RUNNING:
+        return True, "waiting_for_antibot_preflight"
+    if _LAST_RESULT != "success":
+        return True, "antibot_preflight_incomplete"
+    return False, ""
 
 
 def preflight_status() -> dict:
@@ -47,7 +68,7 @@ def preflight_status() -> dict:
         "show_scraper_browser": os.getenv("SHOW_SCRAPER_BROWSER", "0"),
         "has_display": bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY")),
         "interactive_mode": _interactive_mode(),
-        "chromium_available": chromium_available(),
+        "chromium_available": _chromium_available(),
         "running": _RUNNING,
         "last_result": _LAST_RESULT,
         "last_message": _LAST_MESSAGE,
@@ -83,7 +104,7 @@ async def run_antibot_preflight() -> None:
                     hint="Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available",
                 )
                 return
-            if not chromium_available():
+            if not _chromium_available():
                 _LAST_RESULT = "skipped_no_chromium"
                 _LAST_MESSAGE = "Chromium not installed for Playwright"
                 log.warning("runtime.preflight.antibot.skipped_no_chromium")
@@ -93,10 +114,23 @@ async def run_antibot_preflight() -> None:
 
             wait_seconds = max(30, int(os.getenv("ANTI_BOT_PREFLIGHT_WAIT_SECONDS", "120")))
             log.info("runtime.preflight.antibot.start", pages=len(CHALLENGE_URLS), wait_seconds=wait_seconds)
+            cdp_url = (os.getenv("BROWSER_CDP_URL", "") or "").strip()
             async with async_playwright() as p:
-                browser = await p.chromium.launch(headless=False, args=["--no-sandbox", "--disable-dev-shm-usage"])
-                context = await browser.new_context()
+                browser = None
+                context = None
                 try:
+            if cdp_url:
+                        browser = await p.chromium.connect_over_cdp(cdp_url)
+                        if browser.contexts:
+                            context = browser.contexts[0]
+                        else:
+                            context = await browser.new_context()
+                        log.info("runtime.preflight.antibot.cdp_attached", cdp_url=cdp_url)
+                    else:
+                        browser = await p.chromium.launch(
+                            headless=False, args=["--no-sandbox", "--disable-dev-shm-usage"]
+                        )
+                        context = await browser.new_context()
                     for url in CHALLENGE_URLS:
                         try:
                             page = await context.new_page()
@@ -108,8 +142,10 @@ async def run_antibot_preflight() -> None:
                     _LAST_RESULT = "success"
                     _LAST_MESSAGE = "Preflight browser session completed"
                 finally:
-                    await context.close()
-                    await browser.close()
+                    if context is not None and not cdp_url:
+                        await context.close()
+                    if browser is not None and not cdp_url:
+                        await browser.close()
             log.info("runtime.preflight.antibot.done")
         except Exception as exc:
             _LAST_RESULT = "failed"
@@ -117,6 +153,14 @@ async def run_antibot_preflight() -> None:
             log.warning("runtime.preflight.antibot.failed", error=str(exc))
         finally:
             _RUNNING = False
+
+
+def _chromium_available() -> bool:
+    try:
+        from app.services.playwright_scraper import chromium_available
+        return bool(chromium_available())
+    except Exception:
+        return False
 
 
 def trigger_antibot_preflight() -> dict:

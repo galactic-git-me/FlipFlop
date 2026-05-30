@@ -38,6 +38,7 @@ from app.services.playwright_scraper import (
     scrape_facebook_playwright,
     scrape_gumtree_playwright,
 )
+from app.services.antibot_preflight import should_defer_source_scrape
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -578,6 +579,17 @@ async def _fetch_playwright_lowest_price(
     source_name: str,
     max_price: float,
 ) -> float | None:
+    source_label = {
+        "temu": "Temu",
+        "aliexpress": "AliExpress",
+        "alibaba": "Alibaba",
+        "amazon": "Amazon",
+    }.get(str(source_name or "").lower(), source_name)
+    defer, reason = should_defer_source_scrape(str(source_label))
+    if defer:
+        log.info("upgrade_parts.playwright.deferred", source=source_label, reason=reason)
+        return None
+
     try:
         from playwright.async_api import async_playwright
     except ImportError:

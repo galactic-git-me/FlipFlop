@@ -19,6 +19,7 @@ from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.proxy import playwright_proxy_config
 from app.services.playwright_scraper import chromium_available
+from app.services.antibot_preflight import should_defer_source_scrape
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -282,6 +283,10 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
 
 async def _scrape_playwright_accessories(page, term: str, theme: str, site: str, url: str) -> list[RawAccessory]:
     out: list[RawAccessory] = []
+    defer, reason = should_defer_source_scrape(site)
+    if defer:
+        log.info("accessories.playwright.deferred", source=site, term=term, reason=reason)
+        return out
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=30000)
         await asyncio.sleep(1.0)

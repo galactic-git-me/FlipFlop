@@ -28,6 +28,7 @@ from app.services.source_health import (
     apply_success,
     should_skip_due_to_cooldown,
 )
+from app.services.antibot_preflight import should_defer_source_scrape
 from app.config import get_settings
 
 log = structlog.get_logger(__name__)
@@ -205,6 +206,11 @@ async def _scan_source(source, search_terms: list, config) -> dict:
     try:
         if not search_terms:
             scan_state.site_done(source.name, 0, 0)
+            return result
+        defer, defer_reason = should_defer_source_scrape(source.name)
+        if defer:
+            scan_state.site_done(source.name, 0, 0)
+            log.info("source.deferred.antibot", source=source.name, reason=defer_reason)
             return result
         src_cfg_pre = dict((source.config or {}))
         skip, reason = should_skip_due_to_cooldown(src_cfg_pre)
