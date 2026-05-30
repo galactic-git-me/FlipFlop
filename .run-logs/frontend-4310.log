@@ -610,3 +610,48 @@ Tailscale URL (live): andromeda-ts:4310
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+ GET / 200 in 629ms (next.js: 8ms, application-code: 621ms)
+[browser] Image with src "/pics/logo.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+ GET /api/nasa-bg 200 in 2.9s (next.js: 1053ms, application-code: 1817ms)
+ GET /opportunities 200 in 1206ms (next.js: 1143ms, application-code: 63ms)
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+ GET /opportunities 200 in 326ms (next.js: 3ms, application-code: 322ms)
+[browser] Image with src "/pics/logo.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
