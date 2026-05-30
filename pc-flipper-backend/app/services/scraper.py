@@ -1694,6 +1694,13 @@ async def fetch_listings(
         )
 
     if "temu" in name:
+        http_rows = await _scrape_temu_http(
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+        )
+        if http_rows:
+            return http_rows
         return await _scrape_generic_marketplace_listings(
             source_name="Temu",
             search_terms=search_terms[:20],
@@ -1706,6 +1713,13 @@ async def fetch_listings(
         )
 
     if "aliexpress" in name:
+        http_rows = await _scrape_aliexpress_http(
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+        )
+        if http_rows:
+            return http_rows
         return await _scrape_generic_marketplace_listings(
             source_name="AliExpress",
             search_terms=search_terms[:20],
@@ -1718,6 +1732,13 @@ async def fetch_listings(
         )
 
     if "alibaba" in name:
+        http_rows = await _scrape_alibaba_http(
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+        )
+        if http_rows:
+            return http_rows
         return await _scrape_generic_marketplace_listings(
             source_name="Alibaba",
             search_terms=search_terms[:20],
@@ -2034,4 +2055,151 @@ async def _scrape_bargainhardware_http(
                 record_term_result(term=term, found=added, new=added, source_name="BargainHardware")
             except Exception as exc:
                 record_term_result(term=term, found=0, new=0, error=str(exc), source_name="BargainHardware")
+    return results
+
+
+async def _scrape_temu_http(
+    *,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    headers = _headers()
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True})) as client:
+        for term in search_terms:
+            added = 0
+            try:
+                url = f"https://www.temu.com/search_result.html?search_key={term.replace(' ', '+')}&search_method=user"
+                resp = await client.get(url, headers=headers)
+                if resp.status_code != 200:
+                    record_term_result(term=term, found=0, new=0, error=f"http_status_{resp.status_code}", source_name="Temu")
+                    continue
+                body_l = resp.text.lower()
+                if "kwcdn.com/upload-static/assets/chl/js" in body_l or "challenge" in body_l or "/login" in body_l:
+                    record_term_result(term=term, found=0, new=0, error="login_required", source_name="Temu")
+                    continue
+                soup = BeautifulSoup(resp.text, "lxml")
+                anchors = soup.select("a[href*='/goods'], a[href*='_goods']")
+                for a in anchors:
+                    href = str(a.get("href") or "").strip()
+                    if not href:
+                        continue
+                    if href.startswith("/"):
+                        href = "https://www.temu.com" + href
+                    title = a.get_text(" ", strip=True)
+                    if not title or len(title) < 6:
+                        continue
+                    scope = a.find_parent(["li", "div", "article"]) or a
+                    price = _parse_price(scope.get_text(" ", strip=True))
+                    if price <= 0 or price < float(min_price) or price > float(max_price):
+                        continue
+                    external_id = f"temu_{abs(hash(href))}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+                    results.append(RawListing(external_id=external_id, title=title[:240], price=price, url=href, location=None, condition="unknown", description="", image_urls=[], source_name="Temu", listing_type="classified"))
+                    added += 1
+                record_term_result(term=term, found=added, new=added, source_name="Temu")
+            except Exception as exc:
+                record_term_result(term=term, found=0, new=0, error=str(exc), source_name="Temu")
+    return results
+
+
+async def _scrape_aliexpress_http(
+    *,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    headers = _headers()
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True})) as client:
+        for term in search_terms:
+            added = 0
+            try:
+                url = f"https://www.aliexpress.com/wholesale?SearchText={term.replace(' ', '+')}&g=y&SortType=price_asc"
+                resp = await client.get(url, headers=headers)
+                if resp.status_code != 200:
+                    record_term_result(term=term, found=0, new=0, error=f"http_status_{resp.status_code}", source_name="AliExpress")
+                    continue
+                body_l = resp.text.lower()
+                if "captcha" in body_l or "_____tmd_____" in body_l or "/punish" in body_l:
+                    record_term_result(term=term, found=0, new=0, error="captcha_required", source_name="AliExpress")
+                    continue
+                soup = BeautifulSoup(resp.text, "lxml")
+                anchors = soup.select("a[href*='/item/'], a[href*='/i/']")
+                for a in anchors:
+                    href = str(a.get("href") or "").strip()
+                    if not href:
+                        continue
+                    if href.startswith("/"):
+                        href = "https://www.aliexpress.com" + href
+                    title = a.get_text(" ", strip=True)
+                    if not title or len(title) < 6:
+                        continue
+                    scope = a.find_parent(["li", "div", "article"]) or a
+                    price = _parse_price(scope.get_text(" ", strip=True))
+                    if price <= 0 or price < float(min_price) or price > float(max_price):
+                        continue
+                    external_id = f"aliexpress_{abs(hash(href))}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+                    results.append(RawListing(external_id=external_id, title=title[:240], price=price, url=href, location=None, condition="unknown", description="", image_urls=[], source_name="AliExpress", listing_type="classified"))
+                    added += 1
+                record_term_result(term=term, found=added, new=added, source_name="AliExpress")
+            except Exception as exc:
+                record_term_result(term=term, found=0, new=0, error=str(exc), source_name="AliExpress")
+    return results
+
+
+async def _scrape_alibaba_http(
+    *,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    headers = _headers()
+    async with httpx.AsyncClient(**apply_httpx_proxy({"timeout": 25, "follow_redirects": True})) as client:
+        for term in search_terms:
+            added = 0
+            try:
+                url = f"https://www.alibaba.com/trade/search?SearchText={term.replace(' ', '+')}"
+                resp = await client.get(url, headers=headers)
+                if resp.status_code != 200:
+                    record_term_result(term=term, found=0, new=0, error=f"http_status_{resp.status_code}", source_name="Alibaba")
+                    continue
+                body_l = resp.text.lower()
+                if "captcha" in body_l or "awsc/captcha" in body_l or "punish-component" in body_l:
+                    record_term_result(term=term, found=0, new=0, error="captcha_required", source_name="Alibaba")
+                    continue
+                soup = BeautifulSoup(resp.text, "lxml")
+                anchors = soup.select("a[href*='/product-detail/'], a[href*='/x/'], a[href*='offer']")
+                for a in anchors:
+                    href = str(a.get("href") or "").strip()
+                    if not href:
+                        continue
+                    if href.startswith("/"):
+                        href = "https://www.alibaba.com" + href
+                    title = a.get_text(" ", strip=True)
+                    if not title or len(title) < 6:
+                        continue
+                    scope = a.find_parent(["li", "div", "article"]) or a
+                    price = _parse_price(scope.get_text(" ", strip=True))
+                    if price <= 0 or price < float(min_price) or price > float(max_price):
+                        continue
+                    external_id = f"alibaba_{abs(hash(href))}"
+                    if external_id in seen:
+                        continue
+                    seen.add(external_id)
+                    results.append(RawListing(external_id=external_id, title=title[:240], price=price, url=href, location=None, condition="unknown", description="", image_urls=[], source_name="Alibaba", listing_type="classified"))
+                    added += 1
+                record_term_result(term=term, found=added, new=added, source_name="Alibaba")
+            except Exception as exc:
+                record_term_result(term=term, found=0, new=0, error=str(exc), source_name="Alibaba")
     return results
