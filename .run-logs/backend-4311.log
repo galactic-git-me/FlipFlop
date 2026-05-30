@@ -10266,3 +10266,213 @@ Call log:
 Call log:
   - waiting for locator("button:has-text('Accept all')")
  selector=button:has-text('Accept all')
+2026-05-30 08:18:16 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:18:18 [info     ] facebook.playwright.items      count=24 term=desktop pcs lot
+INFO:     100.101.209.68:56930 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56936 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56938 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56946 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:18:21 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=Dell%20OptiPlex&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56948 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56956 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56966 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56982 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57006 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57022 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57026 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57028 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57040 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57054 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57068 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65426 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62123 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62123 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65426 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49332 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49338 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49348 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49352 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65426 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:18:34 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:44086 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44092 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44102 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44116 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44124 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44128 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44140 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44156 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:18:36 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:18:38 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:44166 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44168 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44170 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44176 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44190 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44204 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44216 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:18:40 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 12)
+2026-05-30 08:18:42 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM 32GB 2x16GB sold=None
+INFO:     100.101.209.68:44220 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44230 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44238 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44244 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:18:43 [info     ] facebook.playwright.items      count=26 term=Dell OptiPlex
+[scraper] eBay 'high airflow gaming case': 0 found, 0 new (total 0)
+2026-05-30 08:18:47 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20EliteDesk&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:56464 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56466 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56470 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56484 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56486 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49684 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59849 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59849 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49684 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56498 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56514 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56526 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56538 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:18:53 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:34996 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35010 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35020 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35026 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35032 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35034 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:18:55 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:18:57 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:35036 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35046 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35062 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35070 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:18:59 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:35086 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35092 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35094 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35096 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35110 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:19:02 [info     ] facebook.playwright.items      count=24 term=HP EliteDesk
+2026-05-30 08:19:06 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=HP%20workstation&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:49670 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49686 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49692 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49702 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49716 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49732 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49744 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49754 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49770 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49778 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:19:10 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:19:12 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:49794 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49804 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49814 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49816 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 12)
+2026-05-30 08:19:14 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.84.151.109:51665 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65237 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60448 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60450 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51665 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60452 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60466 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65237 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-30 08:19:16 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
+2026-05-30 08:19:16 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+2026-05-30 08:19:19 [info     ] facebook.playwright.items      count=24 term=HP workstation
+2026-05-30 08:19:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=office%20pc%20tower&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:60482 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60494 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60500 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49876 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49882 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49896 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49898 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49910 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49914 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49924 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49938 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49946 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49962 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49968 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'premium aluminum pc case': 0 found, 0 new (total 0)
+2026-05-30 08:19:27 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:19:29 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:53305 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 08:19:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:49970 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49976 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49988 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49990 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:19:33 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:19:36 [info     ] facebook.playwright.items      count=24 term=office pc tower
+INFO:     100.101.209.68:60726 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60742 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60754 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60766 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60776 - "GET /api/schedule HTTP/1.1" 200 OK
