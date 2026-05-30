@@ -1521,3 +1521,25 @@ Call log:
 2026-05-30 23:39:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-30 23:39:31 [warning  ] gumtree.playwright.no_listings page_title=Leviathan inspired build | Stuff for Sale - Gumtree term=leviathan inspired build
 2026-05-30 23:39:31 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 134)
+2026-05-30 23:40:01 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:40:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:40:15 [warning  ] gumtree.playwright.no_listings page_title=Biomechanical spaceship pc | Stuff for Sale - Gumtree term=biomechanical spaceship pc
+2026-05-30 23:40:15 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:40:45 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:40:45 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:40:59 [warning  ] gumtree.playwright.no_listings page_title=Autobot gaming pc | Stuff for Sale - Gumtree term=autobot gaming pc
+2026-05-30 23:40:59 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:41:29 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:41:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:41:42 [warning  ] gumtree.playwright.no_listings page_title=Decepticon workstation | Stuff for Sale - Gumtree term=decepticon workstation
+2026-05-30 23:41:43 [info     ] gumtree.playwright.done        total=0
