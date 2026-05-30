@@ -1444,3 +1444,34 @@ Call log:
 2026-05-30 23:33:01 [info     ] gumtree.playwright.cards       count=25 term=xl mouse pad
 2026-05-30 23:33:04 [info     ] gumtree.playwright.done        total=25
 2026-05-30 23:33:04 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:33:28 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:33:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:33:34 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:33:34 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=xl%20mouse%20pad&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:33:35 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:33:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=xl mouse pad
+2026-05-30 23:33:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=xl mouse pad
+2026-05-30 23:33:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=xl mouse pad
+2026-05-30 23:33:41 [warning  ] gumtree.playwright.no_listings page_title=Borg cube pc | Stuff for Sale - Gumtree term=borg cube pc
+2026-05-30 23:33:41 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:33:44 [info     ] accessories_swarm.done         errors=0 found=532 upserted=408
+2026-05-30 23:34:11 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:34:11 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:34:25 [warning  ] gumtree.playwright.no_listings page_title=Borg collective build | Stuff for Sale - Gumtree term=borg collective build
+2026-05-30 23:34:25 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'gaming pc': HTTP blocked/empty (status=200), Playwright returned 50
+[scraper] eBay 'gaming pc': 50 found, 48 new (total 134)
+2026-05-30 23:34:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:34:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
