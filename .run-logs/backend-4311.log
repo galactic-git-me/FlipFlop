@@ -8552,3 +8552,1095 @@ INFO:     100.84.151.109:63356 - "GET /health HTTP/1.1" 200 OK
 2026-05-30 08:15:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc&minPrice=0&maxPrice=500&exact=false
 INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:63356 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60276 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60280 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60282 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60290 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63356 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63356 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49553 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49553 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:15:30 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:60296 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60312 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60320 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60336 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60340 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:15:32 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:50571 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50571 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:15:34 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:60344 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60354 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60358 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60370 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33458 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33470 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33486 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33498 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33508 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33514 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:15:36 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:15:39 [info     ] facebook.playwright.items      count=22 term=gaming pc
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33520 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33536 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33544 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33554 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:15:43 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20untested&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:33570 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33580 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33584 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33590 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33600 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-30 08:15:49 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:57594 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57594 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35958 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35968 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35970 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35988 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36004 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36018 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36028 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36030 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36032 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36044 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:15:51 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:57594 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59511 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57594 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59511 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:15:53 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:15:55 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+2026-05-30 08:15:55 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:47248 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-30 08:15:56 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+INFO:     100.101.209.68:47262 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47264 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47280 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47288 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56535 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56535 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:15:58 [info     ] facebook.playwright.items      count=22 term=gaming pc untested
+INFO:     100.101.209.68:47294 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47308 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47310 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47326 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58186 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-30 08:16:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20fault&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45276 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45290 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45304 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45320 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45322 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45336 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45352 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45358 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45368 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45376 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45384 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:07 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45400 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45412 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45432 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45444 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:09 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:16:11 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:16:13 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55852 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55868 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55882 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55894 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:16 [info     ] facebook.playwright.items      count=22 term=gaming pc fault
+INFO:     100.84.151.109:57350 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59032 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:16:19 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20gpu&minPrice=0&maxPrice=500&exact=false
+INFO:     100.101.209.68:55908 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55910 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55918 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55924 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55938 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55948 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55958 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55968 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55982 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55998 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63179 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56002 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56016 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56028 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56042 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:25 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:16:27 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:16:28 [debug    ] upgrade_parts.ebay             buy=None part=i9 CPU sold=None
+2026-05-30 08:16:29 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.84.151.109:51210 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51210 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:16:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:58440 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58442 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58456 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58474 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58486 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58500 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58502 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58506 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:33 [info     ] facebook.playwright.items      count=19 term=gaming pc no gpu
+[scraper] eBay 'argb gaming case': 0 found, 0 new (total 0)
+2026-05-30 08:16:36 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20pc%20no%20hard%20drive&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34800 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34808 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34820 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34826 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-30 08:16:37 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3060 status=403
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC ryzen 5 5600g status=403
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC i7-3770 rtx 3050 status=403
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rx 550 status=403
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=265.0 median=438.0 query=gaming PC gtx 750
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+INFO:     100.101.209.68:34834 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=359.99 median=839.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=899.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=334.95 median=809.94 query=gaming PC athlon 3000 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC athlon 9600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=755.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=175.99 median=619.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=56.99 median=476.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=47.91 median=465.49 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=25.91 median=439.09 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=118.99 median=550.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+INFO:     100.101.209.68:34848 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=128.0 median=561.6 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=32.79 median=447.35 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=491.94 query=gaming PC athlon 3000
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=887.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.95 median=779.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=383.0 median=867.6 query=gaming PC ryzen 7 7735hs rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=354.95 median=833.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.95 median=755.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=30.91 median=445.09 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=324.95 median=797.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=278.69 median=742.43 query=gaming PC i7 6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=489.0 median=994.8 query=gaming PC i3-14100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.66 median=545.59 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=196.02 median=643.22 query=gaming PC i5 9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=174.0 median=616.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=69.0 median=574.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.9 median=707.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=223.99 median=676.79 query=gaming PC intel i5 8500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=706.8 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=82.99 median=591.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=335.99 median=811.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=761.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=153.0 median=591.6 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=179.0 median=622.8 query=gaming PC intel i5 2400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=695.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=335.99 median=811.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.0 median=874.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=297.99 median=765.59 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=295.0 median=762.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=695.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=50.57 median=552.68 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=706.8 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=59.48 median=563.38 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=49.99 median=551.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=59.49 median=563.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=335.99 median=811.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=259.99 median=719.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=57.26 median=560.71 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=54.95 median=557.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.0 median=454.8 query=gaming PC gtx750
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.0 median=874.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=899.99 query=gaming PC ryzen 5 5500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=75.42 median=582.5 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=294.99 median=761.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=297.99 median=765.59 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.99 median=827.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=414.99 median=905.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=278.69 median=742.43 query=gaming PC i7 6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=489.0 median=994.8 query=gaming PC i3-14100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=215.0 median=666.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.66 median=545.59 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=918.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=646.8 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=429.98 median=923.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=658.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=111.99 median=626.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=439.99 median=647.99 query=gaming PC i7-3770 rtx 3050
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC intel i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=404.99 median=893.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.9 median=707.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=153.0 median=591.6 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=223.99 median=676.79 query=gaming PC intel i5 8500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=658.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.99 median=593.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.66 median=545.59 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=414.99 median=905.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=179.0 median=622.8 query=gaming PC intel i5 2400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=706.8 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.9 median=707.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.99 median=827.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=189.0 median=634.8 query=gaming PC intel i5 2400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=111.99 median=626.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=174.0 median=616.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=489.0 median=994.8 query=gaming PC i3-14100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.0 median=454.8 query=gaming PC gtx750
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.0 median=544.8 query=gaming PC i3-6100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=670.8 query=gaming PC intel i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.01 median=564.01 query=gaming PC i5-3470 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=223.99 median=676.79 query=gaming PC intel i5 8500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.96 median=743.95 query=gaming PC i5 9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.99 median=827.99 query=gaming PC i5-12500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=201.11 median=649.33 query=gaming PC i5 8500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=290.02 median=756.02 query=gaming PC i5 10500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=196.02 median=643.22 query=gaming PC i5 9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=646.8 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.66 median=545.59 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=449.99 median=947.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=165.61 median=606.73 query=gaming PC i5-9500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.49 median=575.39 query=gaming PC i7-4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=339.83 median=815.8 query=gaming PC i7-9700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=706.8 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=766.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=483.6 median=988.32 query=gaming PC i5 10500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=153.0 median=591.6 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=494.0 median=1000.8 query=gaming PC i5 12500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=164.0 median=604.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.99 median=671.99 query=gaming PC i5-8500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=264.49 median=725.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=392.93 median=879.52 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=214.99 median=665.99 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=208.9 median=658.68 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.99 median=575.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.0 median=544.8 query=gaming PC i3-6100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=229.0 median=682.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=707.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=194.9 median=641.88 query=gaming PC i7-7700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=670.8 query=gaming PC i5 6500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=295.0 median=762.0 query=gaming PC i5-8500t rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=767.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=189.1 median=634.92 query=gaming PC i5-4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=224.99 median=677.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.99 median=545.99 query=gaming PC core i5 6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.0 median=826.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=159.9 median=599.88 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=259.0 median=718.8 query=gaming PC i7-9700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=215.5 median=666.6 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=182.2 median=626.64 query=gaming PC i5 6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=887.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=199.99 median=647.99 query=gaming PC xeon e5-1620v3 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=215.65 median=666.78 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=215.5 median=666.6 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=495.0 median=1002.0 query=gaming PC xeon e5-1603v3 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.99 median=755.99 query=gaming PC i5-1145g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=740.4 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=592.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=278.69 median=742.43 query=gaming PC i7 6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=84.0 median=592.8 query=gaming PC core i5 4570 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=181.5 median=625.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.9 median=707.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=610.8 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=170.89 median=613.07 query=gaming PC i7-6700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.0 median=694.8 query=gaming PC intel i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=174.0 median=616.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.0 median=586.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=489.0 median=994.8 query=gaming PC i3-14100 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=670.8 query=gaming PC intel i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=179.0 median=622.8 query=gaming PC intel i5 2400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC i5-9500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.99 median=593.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.2 median=564.24 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=646.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=706.8 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=449.99 median=947.99 query=gaming PC i5-9400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=41.94 median=542.33 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=188.0 median=633.6 query=gaming PC i7 4770 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=335.99 median=811.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=429.0 median=922.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.66 median=545.59 query=gaming PC i7-2600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=125.99 median=559.19 query=gaming PC i5 7400 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.94 median=671.93 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.42 median=604.1 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=99.98 median=611.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=274.99 median=821.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=653.99 query=gaming PC ryzen 5 5500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=94.99 median=605.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=204.99 median=737.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=56.54 median=559.85 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=44.99 median=545.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.99 median=599.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=875.99 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.95 median=791.94 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=134.95 median=653.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=83.78 median=592.54 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.87 median=604.64 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=79.99 median=587.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=118.4 median=634.08 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=224.99 median=761.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.99 median=593.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=119.99 median=635.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=234.99 median=773.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=779.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=68.69 median=574.43 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=334.18 median=893.02 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.9 median=599.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=103.8 median=616.56 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=197.0 median=728.4 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.99 median=839.99 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=50.26 median=552.31 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=250.51 median=792.61 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=229.34 median=767.21 query=gaming PC xeon e5 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.99 median=851.99 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=143.99 median=664.79 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.99 median=827.99 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.99 median=827.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=863.99 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=141.82 median=662.18 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=344.99 median=821.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=164.95 median=689.94 query=gaming PC ryzen 5 5600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=334.99 median=809.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.95 median=851.94 query=gaming PC ryzen 5 5800x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.99 median=827.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=779.99 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=99.98 median=611.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.42 median=604.1 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.94 median=671.93 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=68.99 median=574.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=94.99 median=605.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=109.99 median=623.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=134.95 median=653.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=79.99 median=587.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=113.38 median=628.06 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.99 median=599.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.87 median=604.64 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=87.99 median=597.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=155.22 median=678.26 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.83 median=599.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=83.78 median=592.54 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.99 median=593.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=118.4 median=634.08 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=88.99 median=598.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=86.1 median=595.32 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.9 median=599.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=86.02 median=595.22 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.98 median=629.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=103.8 median=616.56 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=50.26 median=552.31 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=73.39 median=580.07 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=136.99 median=656.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=250.51 median=792.61 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=141.31 median=661.57 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=83.16 median=591.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=83.36 median=592.03 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=44.99 median=545.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=77.99 median=585.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=95.53 median=606.64 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=98.23 median=609.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.94 median=671.93 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=99.98 median=611.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=134.95 median=653.94 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.99 median=593.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=155.22 median=678.26 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.42 median=604.1 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=109.99 median=623.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=113.38 median=628.06 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=298.65 median=850.38 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.99 median=599.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=110.99 median=625.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=136.99 median=656.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.83 median=599.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=182.99 median=711.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=93.87 median=604.64 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=134.99 median=653.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=68.99 median=574.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=87.99 median=597.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=86.1 median=595.32 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.84 median=935.81 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=278.99 median=826.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=153.97 median=676.76 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=269.99 median=815.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=79.99 median=587.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=103.8 median=616.56 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=388.48 median=958.18 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=209.99 median=743.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=159.99 median=683.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=299.99 median=851.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.98 median=629.98 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=244.76 median=785.71 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=126.26 median=643.51 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=165.67 median=690.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=314.71 median=869.65 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=120.98 median=637.18 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=658.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=80.47 median=588.56 query=gaming PC ryzen 5 5500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=676.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=159.99 median=683.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=726.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=144.08 median=664.9 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=204.99 median=737.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.0 median=670.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=61.99 median=566.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=197.0 median=728.4 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=137.49 median=656.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=114.07 median=628.88 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=160.97 median=685.16 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=130.12 median=648.14 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=127.99 median=645.59 query=gaming PC ryzen 5 8400f rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=121.15 median=637.38 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=361.35 median=925.62 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=153.0 median=675.6 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=242.27 median=782.72 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.99 median=755.99 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=172.94 median=699.53 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=89.99 median=599.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=145.62 median=666.74 query=gaming PC ryzen 5 5600xt rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=50.26 median=552.31 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=159.99 median=683.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=694.8 query=gaming PC ryzen 5 5600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=109.99 median=623.99 query=gaming PC ryzen 5 3400g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=208.29 median=741.95 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=85.94 median=595.13 query=gaming PC ryzen 5 5500 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=164.95 median=689.94 query=gaming PC ryzen 5 5600 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=274.99 median=821.99 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=369.0 median=850.8 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=165.16 median=690.19 query=gaming PC ryzen 5 5600gt rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=301.47 median=853.76 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=258.99 median=802.79 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=270.29 median=816.35 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=459.0 median=958.8 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=113.38 median=628.06 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=195.0 median=726.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=169.0 median=694.8 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=197.0 median=728.4 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=172.94 median=699.53 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=658.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=361.35 median=925.62 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=242.27 median=782.72 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=379.99 median=863.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=154.0 median=676.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=301.47 median=853.76 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=730.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=120.98 median=637.18 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=171.05 median=697.26 query=gaming PC ryzen 7 5700 rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=149.0 median=670.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=279.99 median=827.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=875.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.99 median=779.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=316.29 median=871.55 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=195.99 median=727.19 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=344.99 median=905.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=160.97 median=685.16 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=435.99 median=1015.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.59 median=755.51 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=145.62 median=666.74 query=gaming PC ryzen 5 5600xt rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=249.95 median=791.94 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=875.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=349.99 median=827.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=339.99 median=815.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.99 median=839.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=404.99 median=893.99 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=185.27 median=630.32 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=218.88 median=670.66 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=194.99 median=641.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=239.0 median=694.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=192.99 median=639.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=187.12 median=632.54 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=244.99 median=701.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=236.99 median=692.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=238.99 median=694.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=316.3 median=787.56 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=235.94 median=691.13 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.0 median=754.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=302.28 median=770.74 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=178.99 median=622.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=175.99 median=619.19 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=233.99 median=688.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=670.8 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=289.84 median=755.81 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=254.99 median=713.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=238.88 median=694.66 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=186.99 median=632.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=196.99 median=644.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=178.99 median=622.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=257.98 median=717.58 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=128.99 median=646.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=264.99 median=725.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=340.0 median=816.0 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=236.99 median=692.39 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=178.99 median=622.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=197.58 median=645.1 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=270.1 median=732.12 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=257.92 median=717.5 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=316.3 median=787.56 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=237.99 median=693.59 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=320.57 median=792.68 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=179.99 median=623.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=296.1 median=763.32 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=188.99 median=634.79 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=419.99 median=911.99 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=185.13 median=630.16 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [info     ] resale_scraper.fallback_buy_price buy_price=228.43 median=682.12 query=gaming PC rtx 3060
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_4762123083005655619 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_1075030069530399247 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_1973106151945049690 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_87571456840868896 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_5081571759265740780 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4471778923095679424 fingerprint=asc technology gaming pc computer tower i7 8gb|||369 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2388339849634291008 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_6651390035963263322 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_7791712675644162544 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_3229746596820526014 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_7980298898715284635 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5002199985826897486 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_7686188285398422529 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2736579180572534385 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_369055778293761133 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_8227040745546163168 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_952518110663240808 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_5043061643586555330 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6026671968365999721 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_3044102248428864940 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_5200531332295504542 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_4409272553978855305 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5633358385766163374 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_7384915474038521672 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_635424736809537147 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7641762161381876345 fingerprint=asc technology gaming pc computer tower i7 8gb|||369 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_428533140982259483 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5621976360380819615 fingerprint=xum spartan prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_3826783305631195235 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770||299 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6842455799944281317 fingerprint=xum elite prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_1755917805714460915 fingerprint=ultra fast gaming pc amd a8 9600 quad|||300 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_2543546338926649084 fingerprint=ultra fast gaming pc amd a8 9600 quad|||300 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_1422656181897081540 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_326049186157488010 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_8420662250712298015 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_3817741227156151256 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_5711346601575411016 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1385630992701479086 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2777947259021418968 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_583606949916778354 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_9001468631451339252 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_3936960784091763517 fingerprint=dell fast optiplex 7020 9020 sff pc intel|||245 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6527818186868787411 fingerprint=business and office multimedia computer i7 6700 8|I7 6700||279 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_3720380897817469831 fingerprint=dell slim desktop ec51250 intel core i3 14100|Intel Core I3-14100||489 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6758827118768866307 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||115 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7176439558992229964 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_5134970307012342906 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_1813256456060265129 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7009975866469365768 fingerprint=dell optiplex 3070 sff office pc i5 9500|I5 9500||196 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_212619522986400463 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||220 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4589287255175666122 fingerprint=dell 7020 9020 dual monitor setup sff pc|||174 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_1654758360464057714 fingerprint=professional office computer desktop pc complete new with|||250 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_6920126147812683286 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_2654689636181810919 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770||299 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4978983749876952127 fingerprint=dell optiplex 3060 sff desktop pc intel i5|Intel I5 8500||224 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_7122867657742565008 fingerprint=dell optiplex 7060 sff desktop computer pc intel|Intel Core I7-8700||249 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_2155555026783496583 fingerprint=acer aspire xc 1710 tower desktop pc intel|||336 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_2340854845740529980 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||200 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_625135397717738357 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||295 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6794438705505192807 fingerprint=dell optiplex 3050 sff desktop computer intel core|Intel Core I5-7500||153 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4366512639139771713 fingerprint=optiplex intel i5 2400 16gb ram 256gb ngff|Intel I5 2400||179 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5938701155365210547 fingerprint=asc technology gaming pc computer tower i7 8gb|||369 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_7586907892128860068 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_9196842093716766028 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_3293346845565804048 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_1048234559966556235 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_5392297788150355875 fingerprint=xum elite prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_7611178122856113836 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3754086468451224566 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_4236139638304490529 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7142764125138229190 fingerprint=asc technology budget i7 gaming tower intergrated graphics|||240 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_7878850498134658831 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_4688651161136247660 fingerprint=acer aspire xc 1710 tower desktop pc intel|||336 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_5179476330872707902 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2956639782238772974 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3015046764875990861 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||389 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6578559754902011104 fingerprint=gaming pc tower intel core i7 3770 3|Intel Core I7-3770||298 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_3828847106722633387 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_165257373819746500 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_2152905103562000435 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_250565101520162295 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_6092906860637296131 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_4801116860530357252 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_8757055127747661247 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_7526350551121354406 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_9165044102700952466 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8035215699900415578 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3106617358524933708 fingerprint=asc technology budget i7 gaming tower intergrated graphics|||240 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_789522322973391416 fingerprint=dell optiplex 7060 sff desktop computer pc intel|Intel Core I7-8700||249 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_553491951906585366 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_8670195838872827847 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770||299 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_2316179040610019468 fingerprint=acer aspire xc 1710 tower desktop pc intel|||336 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_515233967355576991 fingerprint=asc technology gaming pc tower i5 8gb ram|||260 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_4310396069767317825 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_244378975417104071 fingerprint=asc technology gaming pc computer tower i7 8gb|||369 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_2670444006959260417 fingerprint=xum elite prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7577130248809174306 fingerprint=gaming pc tower intel core i5 16gb ram||GTX750 4GB|279 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3037950424569687250 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||389 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1088126820611549151 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_6400071692753684669 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_3930347612824803451 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||200 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_554929457498568763 fingerprint=gaming pc tower intel core i7 3770 16gb|Intel Core I7-3770||295 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2168382158054152992 fingerprint=gaming pc tower intel core i7 3770 3|Intel Core I7-3770||298 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7422352452823515799 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770||350 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_693290353176719767 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_8048964273731874933 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_576173894514654142 fingerprint=lenovo a100 all in one desktop pc 23|||415 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1984289403809656998 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_666869959819788401 fingerprint=business and office multimedia computer i7 6700 8|I7 6700||279 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_6796952965022724775 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_7443630884473849287 fingerprint=dell slim desktop ec51250 intel core i3 14100|Intel Core I3-14100||489 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_5337908379401290260 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2840394250311090709 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_173317304351862813 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||220 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_8664537042765108179 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6210084724455470447 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||115 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_3634020028843391209 fingerprint=dell fast optiplex 7020 9020 sff pc intel|||245 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_8540466346130004594 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7295153161883490821 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||199 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5450761261017164404 fingerprint=complete set of 22 in monitor with optiplex|||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5231429648394091053 fingerprint=asc technology gaming pc desktop computer bundle i7|I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_8338417829386146793 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6752905234261753716 fingerprint=complete set of 22 in monitor with optiplex|||112 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_9041603383122568263 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||200 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_6107924922539728356 fingerprint=professional office computer desktop pc complete new with|||250 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2504873540552593723 fingerprint=dell optiplex 3050 sff desktop computer intel core|Intel Core I5-7500||153 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6268711846983259403 fingerprint=dell optiplex 3060 sff desktop pc intel i5|Intel I5 8500||224 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2616401634431388428 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_3649185063531980667 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1627758306435347762 fingerprint=complete set of 22 in monitor with optiplex|||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_7790324628713102180 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_1902754637786463874 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6278013331570487853 fingerprint=compuclear hp sff desktop pc bundle intel i5|||155 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_2019854917164387083 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_1352038853906296658 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||115 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3569677710097315 fingerprint=lenovo a100 all in one desktop pc 23|||415 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_708981145742991051 fingerprint=optiplex intel i5 2400 16gb ram 256gb ngff|Intel I5 2400||179 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_2775481926190853687 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||220 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_728374399199815706 fingerprint=dell optiplex 7060 sff desktop computer pc intel|Intel Core I7-8700||249 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_1476540945529415333 fingerprint=professional office computer desktop pc complete new with|||250 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_4595634993215006732 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_4657996128280392980 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3100999443138548696 fingerprint=complete set of 22 in monitor with optiplex|||112 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5313835771176280373 fingerprint=stgsivir all in one pc desktop computer 21|||300 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8162306248882133778 fingerprint=dell 7020 9020 dual monitor setup sff pc|||174 source=Amazon
+INFO:     100.84.151.109:60632 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_8375369472274510468 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_4996944489579225231 fingerprint=dell slim desktop ec51250 intel core i3 14100|Intel Core I3-14100||489 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6466718104069197605 fingerprint=dell fast optiplex 7020 9020 sff pc intel|||245 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8918025411709758054 fingerprint=asc technology gaming pc desktop computer bundle i7|I7-3770||310 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1397837009216279985 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3124391686891467483 fingerprint=gaming pc tower intel core i5 16gb ram||GTX750 4GB|279 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5968592895266488414 fingerprint=hp elitedesk 800 g2 sff desktop pc intel|Intel Core I3-6100||114 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3053784093963574530 fingerprint=optiplex intel i7 4770 16gb ram 256gb m|Intel I7 4770||219 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6436067474659841493 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_7941295778219694667 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_5173739970642909816 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||220 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_294271929995776322 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4461193258942618631 fingerprint=dell optiplex 3060 sff desktop pc intel i5|Intel I5 8500||224 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_1820101049062382231 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7004606491848793850 fingerprint=dell optiplex 3070 sff office pc i5 9500|I5 9500||196 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1764295444435136309 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||199 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_5444167811484071313 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||115 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1791929593645822783 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_2356567448769360925 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_3551828850040160516 fingerprint=dell fast optiplex 7020 9020 sff pc intel|||245 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_4643531638322759249 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_900832419406179558 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_5644234925253805976 fingerprint=dell optiplex 7060 sff desktop computer pc intel|Intel Core I7-8700||249 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_8467668086192031798 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||200 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5640391101517887285 fingerprint=dell optiplex 3050 sff desktop computer intel core|Intel Core I5-7500||153 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5148974790897936512 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||164 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_6193095023452147586 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6924461992022456873 fingerprint=hp elitedesk 800 g2 sff desktop pc intel|Intel Core I3-6100||114 source=Amazon
+INFO:     100.84.151.109:60632 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6981337720182302288 fingerprint=hp prodesk 400 g6 sff desktop pc intel|||216 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4688025288413406264 fingerprint=hp prodesk 400 g6 sff desktop pc intel|||216 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_1827248226065858395 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||277 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_9015869478864228484 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||154 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5198869462424080923 fingerprint=business and office multimedia computer i7 6700 8|I7 6700||279 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_350713221233244643 fingerprint=window 11 pro optiplex core i5 series desktop|Core I5 4570||84 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_2192723404747857817 fingerprint=dell fast optiplex 3050 5050 sff desktop computer|||182 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_7068800825459256894 fingerprint=professional office computer desktop pc complete new with|||250 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_4934309855258111486 fingerprint=optiplex 7020 sff desktop pc computer i7 4770|I7 4770||169 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_6608189983963733150 fingerprint=dell fast optiplex i7 6700 sff desktop computer|I7-6700||171 source=Amazon
+2026-05-30 08:16:37 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_5470836001514805842 fingerprint=dell fast optiplex 3050 5050 7050 sff desktop|Intel Core I5-6500||139 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_1572130219725019547 fingerprint=dell 7020 9020 dual monitor setup sff pc|||174 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6557740982606522297 fingerprint=dell fast optiplex 7020 9020 sff desktop computer|||200 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_3522987210569118433 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_2315047967141163161 fingerprint=dell slim desktop ec51250 intel core i3 14100|Intel Core I3-14100||489 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8328579678624035889 fingerprint=optiplex intel i7 4770 16gb ram 256gb m|Intel I7 4770||219 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7832745669208864170 fingerprint=optiplex intel i5 2400 16gb ram 256gb ngff|Intel I5 2400||179 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_4399091169771560670 fingerprint=dell optiplex 5070 sff intel i5 9500 ultra|Intel I5-9500||220 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_6632089673342480542 fingerprint=dell fast optiplex 7020 9020 sff pc intel|||245 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_245589406004255009 fingerprint=compuclear hp sff desktop pc bundle intel i5|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_6449220283561631100 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||130 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_8629184224714747857 fingerprint=dell optiplex 7060 sff desktop computer pc intel|Intel Core I7-8700||249 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_2858666468225424615 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_9004953520323845006 fingerprint=acer aspire xc 1710 tower desktop pc intel|||336 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_8557179323724909453 fingerprint=dell optiplex intel core i7 2600 quad core|Intel Core I7-2600||115 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4172306665202001011 fingerprint=asus rog strix b550 f gaming wifi ii|||150 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2615051567568714598 fingerprint=gigabyte b550 gaming x v2 motherboard supports amd|||93 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_9061552389898016405 fingerprint=msi mpg b550 gaming plus motherboard atx supports|||100 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1634009093815058655 fingerprint=ryzen 5 5600g 3 9ghz turbo 4 4ghz|Ryzen 5 5600G||275 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_403958911494054698 fingerprint=msi b550 a pro motherboard atx supports amd|||95 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2831938785135909015 fingerprint=ryzen 5 5600g 3 9ghz turbo 4 4ghz|Ryzen 5 5600G||205 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1135518937253607929 fingerprint=gigabyte a520m s2h motherboard supports amd ryzen 5000|||57 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8861146533688909606 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||250 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7246675031312933703 fingerprint=msi a520m a pro motherboard matx supports amd|||45 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_6723952895815928169 fingerprint=msi b550m pro vdh wifi motherboard m atx|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6989403084235088751 fingerprint=cpu motherboard bundle amd ryzen 7 5700x gigabyte|Amd Ryzen 7 5700X||250 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_67260176553949881 fingerprint=asus wave rog strix b550 a gaming b550|||135 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7865941164088568107 fingerprint=asus prime b550m a wifi ii amd b550|||94 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3424412816824270023 fingerprint=msi b550m pro vdh motherboard m atx supports|||80 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1574689582090193940 fingerprint=asus prime b550 plus motherboard atx socket am4|||118 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_5980092520927148019 fingerprint=asus rog strix b550 f gaming motherboard amd|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1041293824185014289 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||240 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3483370135814934750 fingerprint=asus prime b550m a motherboard micro atx socket|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_1667970812340105536 fingerprint=gigabyte b550m gaming x wifi6 motherboard supports amd|||104 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8907916840636354735 fingerprint=amd ryzensets 7 5800x processor 8 cores 16|||197 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_333732764657939600 fingerprint=gigabyte a520m k v2 motherboard supports amd ryzen|||50 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2747925303762945722 fingerprint=msi b550 gaming gen3 motherboard atx am4 amd|||251 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1027914857614861984 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||350 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1957644867182678351 fingerprint=ionz cpu motherboard bundle amd ryzen 5 5600|Amd Ryzen 5 5600||165 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3673997864699192848 fingerprint=asus tuf gaming b550 plus motherboard atx socket|||130 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5914080613314515492 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||280 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7341326885986107745 fingerprint=msi mpg b550 gaming plus motherboard atx supports|||100 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_4249040787695781325 fingerprint=gigabyte b550 gaming x v2 motherboard supports amd|||93 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6122189670232089970 fingerprint=asus rog strix b550 f gaming wifi ii|||150 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8265194488019630160 fingerprint=gigabyte b550m k motherboard supports amd ryzen 5000|||69 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2749620647482964255 fingerprint=msi b550 a pro motherboard atx supports amd|||95 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6250568825743836723 fingerprint=msi b550 gaming wifi motherboard atx supports amd|||110 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7382090486961207263 fingerprint=asus wave rog strix b550 a gaming b550|||135 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7190350580258979217 fingerprint=msi b550m pro vdh motherboard m atx supports|||80 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3718535787136381402 fingerprint=gigabyte b550m gaming x wifi6 motherboard amd ryzen|||113 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_6688237114612624814 fingerprint=msi b550m pro vdh wifi motherboard m atx|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_242258918384398584 fingerprint=asus prime b550m a wifi ii amd b550|||94 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5147340797862572014 fingerprint=gigabyte b550 eagle wifi6 motherboard amd ryzen 5000|||88 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6866824460504624308 fingerprint=msi mag b550 tomahawk max wifi motherboard atx|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_136556280692067376 fingerprint=gigabyte b550m aorus elite motherboard supports amd ryzen|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8298184912652842482 fingerprint=asus rog strix b550 f gaming motherboard amd|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7792483998139006429 fingerprint=asus prime b550 plus motherboard atx socket am4|||118 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8102624381577313700 fingerprint=gigabyte b550 gaming x v2 amd ryzen 5000|||86 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6838722372176038684 fingerprint=asus prime b550m a motherboard micro atx socket|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4309117837684822780 fingerprint=1200 asus tuf gaming b550m plus wifi ii|||115 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_1675707640562856885 fingerprint=gigabyte b550m gaming x wifi6 motherboard supports amd|||104 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8908549974925634079 fingerprint=gigabyte a520m k v2 motherboard supports amd ryzen|||50 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7785665994654589308 fingerprint=asus tuf gaming b550 plus motherboard atx socket|||130 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1016320731348948875 fingerprint=p yta g wna asus rog strix b550|||137 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4420537763375940202 fingerprint=msi b550 gaming gen3 motherboard atx am4 amd|||251 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2639625113371091806 fingerprint=msi a520m a pro motherboard matx supports amd|||45 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2089677718768926565 fingerprint=asus rog strix b550 f gaming wifi ii|||150 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_890309634139080622 fingerprint=msi mpg b550 gaming plus motherboard atx supports|||100 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_772338621216639233 fingerprint=asus wave rog strix b550 a gaming b550|||135 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7880250568404199854 fingerprint=asus rog strix b550 f gaming motherboard amd|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7851242663206937106 fingerprint=msi mag b550 tomahawk max wifi motherboard atx|||155 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_8824772045452698440 fingerprint=gigabyte b550 gaming x v2 motherboard supports amd|||93 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_515759054808873851 fingerprint=msi b550 gaming wifi motherboard atx supports amd|||110 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6750825839412135579 fingerprint=gigabyte b550m gaming x wifi6 motherboard amd ryzen|||113 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_5235260663329350684 fingerprint=msi b550m pro vdh wifi motherboard m atx|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_730853631827363222 fingerprint=gigabyte b650 eagle ax motherboard supports amd ryzen|||111 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4189745624401036506 fingerprint=p yta g wna asus rog strix b550|||137 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1107263238818164079 fingerprint=gigabyte b550m aorus elite motherboard supports amd ryzen|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3972033367140416639 fingerprint=asus prime b550m a wifi ii amd b550|||94 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3539376855274691293 fingerprint=gigabyte b550m k motherboard supports amd ryzen 5000|||69 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8611848690844162119 fingerprint=gigabyte b550 eagle wifi6 motherboard amd ryzen 5000|||88 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4130829015442922361 fingerprint=gigabyte b550 gaming x v2 amd ryzen 5000|||86 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3130806275586767002 fingerprint=msi b550m pro vdh motherboard m atx supports|||80 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_3884689119326410619 fingerprint=gigabyte b550m gaming x wifi6 motherboard supports amd|||104 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2096989105891196386 fingerprint=asus tuf gaming b550 plus motherboard atx socket|||130 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7503184643277120687 fingerprint=1200 asus tuf gaming b550m plus wifi ii|||115 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5856209183335652069 fingerprint=msi mag b550 tomahawk motherboard atx supports amd|||245 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2450386938785973581 fingerprint=amd ryzensets 5 5600 processor 6 cores 12|||121 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6590243255554300201 fingerprint=amd ryzensets 5 5600x processor 6 cores 12threads|||139 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2930730172002697356 fingerprint=amd ryzensets 5 9600x processor radeon graphics included|||154 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3838146128121297653 fingerprint=amd ryzensets 5 5600g processor integrated radeon graphics|||160 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_599567466718696751 fingerprint=amd ryzensets 7 5700x processor 8 cores 16|||195 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_795398801384675165 fingerprint=ryzen 5 5600g 3 9ghz turbo 4 4ghz|Ryzen 5 5600G||205 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=7 external_id=amazon_713485585685456230 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2075743910115776347 fingerprint=amd ryzensets 5 7600x processor integrated radeon graphics|||149 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_7720589821842924735 fingerprint=amd ryzensets 7 5800x processor 8 cores 16|||197 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1866016545530121040 fingerprint=amd ryzensets 5 7600 processor radeon graphics integrated|||161 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_548312052130914209 fingerprint=amd ryzen 7 9800x 3d desktop processor 8|||361 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4506403664456759303 fingerprint=amd ryzensets 7 9700x processor 8 cores 16|||242 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2354146668327075807 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5977481634552644656 fingerprint=amd ryzen 7 5700g 8 core 16 thread|Amd Ryzen 7 5700G||173 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_758775601195160760 fingerprint=msi b550m pro vdh wifi motherboard m atx|||90 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_1957419165347868833 fingerprint=amd ryzen 5 5600xt processor 6 cores 12|Amd Ryzen 5 5600Xt||146 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_9138724352104192763 fingerprint=gigabyte a520m k v2 motherboard supports amd ryzen|||50 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4928329488306634637 fingerprint=ionz cpu motherboard bundle amd ryzen 5 5600|Amd Ryzen 5 5600||165 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5542509053154182405 fingerprint=ryzen 5 5600g 3 9ghz turbo 4 4ghz|Ryzen 5 5600G||275 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_1410502867742820517 fingerprint=xum elite prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3310705357346662050 fingerprint=gigabyte b550m gaming x wifi6 motherboard amd ryzen|||113 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_8699030977529048577 fingerprint=xum spartan prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3022502810648516488 fingerprint=amd ryzensets 7 5700x processor 8 cores 16|||195 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_2103501807305737080 fingerprint=amd ryzensets 7 5800x processor 8 cores 16|||197 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7307068932505244923 fingerprint=amd ryzen 7 5700g 8 core 16 thread|Amd Ryzen 7 5700G||173 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4441967698860904470 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||250 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6388565751582829757 fingerprint=amd ryzensets 5 5600x processor 6 cores 12threads|||139 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6000209351407240357 fingerprint=amd ryzen 7 9800x 3d desktop processor 8|||361 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5441432249353200782 fingerprint=amd ryzensets 7 9700x processor 8 cores 16|||242 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7686260921761684034 fingerprint=amd ryzensets 5 9600x processor radeon graphics included|||154 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4857112871879597471 fingerprint=amd ryzensets 5 5600 processor 6 cores 12|||121 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3803024858937995877 fingerprint=amd ryzensets 5 7600x processor integrated radeon graphics|||149 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_2066921906787542098 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||280 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_7209917833400505234 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||240 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6838476262393469299 fingerprint=amd ryzensets 5 7600 processor radeon graphics integrated|||161 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_6526661071434108896 fingerprint=amd ryzen 5 5600xt processor 6 cores 12|Amd Ryzen 5 5600Xt||146 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_3586559547376032517 fingerprint=cpu motherboard bundle amd ryzen 7 5700x gigabyte|Amd Ryzen 7 5700X||250 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5938112004191753131 fingerprint=ryzen 7 5700x 3 4ghz turbo 4 6ghz|Ryzen 7 5700X||350 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_77357886914738806 fingerprint=corsair vengeance lpx ddr4 ram 32gb 2x16gb up|||316 source=Amazon
+2026-05-30 08:16:38 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_4216138880929008567 fingerprint=corsair vengeance lpx ddr4 ram 32gb 2x16gb up|||316 source=Amazon
+2026-05-30 08:16:38 [info     ] source.done                    found=644 gems=0 source=Amazon
+INFO:     100.101.209.68:34854 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34862 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34876 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60632 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51964 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60632 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51964 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:16:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:45846 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45856 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45868 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45886 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:45 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:51964 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51964 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:16:47 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:45894 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45900 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45912 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45920 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:16:49 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
