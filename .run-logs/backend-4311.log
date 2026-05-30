@@ -2089,3 +2089,164 @@ Call log:
 2026-05-30 23:57:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=galactic%20empire%20build&minPrice=1&maxPrice=350&exact=false
 2026-05-30 23:57:45 [info     ] facebook.playwright.done       total=0
 2026-05-30 23:57:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:57:48 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:57:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=rebel%20alliance%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:57:49 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:57:49 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:57:51 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:57:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=cylon%20red%20eye%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:57:52 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:57:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:57:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:57:55 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=battlestar%20inspired%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:57:55 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:57:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:57:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:57:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=station%20command%20build&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:57:59 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:57:59 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:01 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:01 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=diplomatic%20station%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:02 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:05 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=leviathan%20inspired%20build&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:06 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:06 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:08 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=biomechanical%20spaceship%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:09 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:11 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:11 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=autobot%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:12 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:14 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:15 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=decepticon%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:15 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:15 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:18 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=anime%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:18 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:18 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:21 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:21 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=manga%20aesthetic%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:22 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:24 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:24 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=hidden%20leaf%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:25 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:28 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=hokage%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:29 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:29 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:31 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:31 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pokedex%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:32 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:32 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:35 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pikachu%20yellow%20rgb%20build&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:35 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:35 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:38 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=super%20saiyan%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:39 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:39 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:41 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:41 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=dragon%20radar%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:42 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:42 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:45 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:45 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=avengers%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:45 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:45 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:48 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=shield%20tactical%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:49 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:49 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:51 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=jarvis%20ai%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:52 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:52 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:55 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=stark%20industries%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:55 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:55 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:58:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:58:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gamma%20core%20build&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:58:59 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:58:59 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:59:01 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:59:01 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=radioactive%20green%20rgb%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:59:02 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:59:02 [info     ] facebook.playwright.cookies_loaded count=8
