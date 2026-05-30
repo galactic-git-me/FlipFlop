@@ -207,6 +207,7 @@ async def _make_context(
     if cdp_url:
         try:
             browser = await playwright.chromium.connect_over_cdp(cdp_url)
+            log.info("playwright.cdp_attached", cdp_url=cdp_url)
             if browser.contexts:
                 context = browser.contexts[0]
             else:

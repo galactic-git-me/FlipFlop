@@ -416,6 +416,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                 try:
                     browser = await p.chromium.connect_over_cdp(cdp_url)
                     attached_cdp = True
+                    print(f"[scraper] playwright.cdp_attached ebay cdp_url={cdp_url}")
                 except Exception:
                     browser = None
             if browser is None:
@@ -1858,6 +1859,7 @@ async def _scrape_generic_marketplace_listings(
             try:
                 browser = await p.chromium.connect_over_cdp(cdp_url)
                 attached_cdp = True
+                print(f"[scraper] playwright.cdp_attached generic source={source_name} cdp_url={cdp_url}")
             except Exception:
                 browser = None
         if browser is None:

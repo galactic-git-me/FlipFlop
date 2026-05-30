@@ -4587,3 +4587,438 @@ INFO:     100.101.209.68:51996 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:52000 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52004 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52020 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50085 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50932 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50570 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52036 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52050 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50570 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52066 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50932 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52070 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50085 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42684 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42694 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42728 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42730 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42736 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42748 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42762 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42774 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42790 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42806 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42816 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42832 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42850 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63810 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63810 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55518 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55520 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55536 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55550 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55558 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55564 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55578 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55580 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55592 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52302 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58635 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58635 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55596 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55608 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55622 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55632 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55634 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55640 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58635 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52302 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43976 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43982 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43986 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52302 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58635 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43994 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43996 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44010 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44024 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58635 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58635 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56002 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56018 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56034 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56048 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-30 10:11:07 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 08:39:56 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 643, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 623, in _fetch_term
+    await asyncio.sleep(random.uniform(8.0, 18.0))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-30 10:11:07 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [851036]
+INFO:     Started server process [1687874]
+INFO:     Waiting for application startup.
+2026-05-30 10:11:08 [info     ] app.startup
+2026-05-30 10:11:08 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 10:11:08 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 10:11:08 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 10:11:08 [info     ] scheduler.started              jobs=11
+2026-05-30 10:11:08 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 10:11:08 [info     ] accessories_swarm.start
+2026-05-30 10:11:08 [info     ] cases_swarm.start
+2026-05-30 10:11:08 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.101.209.68:56056 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56068 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56070 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-30 10:11:08 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+INFO:     100.101.209.68:56076 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56084 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56100 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56104 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50060 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50060 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56110 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56116 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56118 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56124 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56134 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56140 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56142 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56156 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56168 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:11:14 [debug    ] upgrade_parts.ebay             buy=30.0 part=NVIDIA GPU sold=94.99
+WARNING:  WatchFiles detected changes in 'app/services/scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-30 10:11:15 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 09:11:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 643, in scrape_ebay
+    for idx, term in enumerate(search_terms):
+                                              
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 548, in _fetch_term
+    async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 09:11:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 168, in run_upgrade_parts_swarm
+    sold = await _ebay_sold_median(client, search)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 345, in _ebay_sold_median
+    r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1814, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1585, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1688, in send
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 1682, in send
+    await response.aread()
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_models.py", line 913, in aread
+    self._content = b"".join([part async for part in self.aiter_bytes()])
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_models.py", line 931, in aiter_bytes
+    async for raw_bytes in self.aiter_raw():
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_models.py", line 989, in aiter_raw
+    async for raw_stream_bytes in self.stream:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_client.py", line 150, in __aiter__
+    async for chunk in self._stream:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpx/_transports/default.py", line 257, in __aiter__
+    async for part in self._httpcore_stream:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 407, in __aiter__
+    raise exc from None
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py", line 403, in __aiter__
+    async for part in self._stream:
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 342, in __aiter__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 334, in __aiter__
+    async for chunk in self._connection._receive_response_body(**kwargs):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 203, in _receive_response_body
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py", line 217, in _receive_event
+    data = await self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/httpcore/_backends/anyio.py", line 35, in read
+    return await self._stream.receive(max_bytes=max_bytes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/streams/tls.py", line 239, in receive
+    data = await self._call_sslobject_method(self._ssl_object.read, max_bytes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/streams/tls.py", line 182, in _call_sslobject_method
+    data = await self.transport_stream.receive()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1284, in receive
+    await self._protocol.read_event.wait()
+  File "/usr/lib/python3.12/asyncio/locks.py", line 212, in wait
+    await fut
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-05-31 09:11:08 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 187, in run_accessories_swarm
+    ebay_results = await _scrape_ebay_accessories(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 69, in _scrape_ebay_accessories
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 643, in scrape_ebay
+    for idx, term in enumerate(search_terms):
+                                              
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 548, in _fetch_term
+    async def _fetch_term(term: str) -> tuple[str, list[RawListing], bool, int, str | None]:
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-30 10:11:15 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1687874]
+INFO:     Started server process [1690413]
+INFO:     Waiting for application startup.
+2026-05-30 10:11:16 [info     ] app.startup
+2026-05-30 10:11:16 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-30 10:11:16 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-30 10:11:16 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-30 10:11:16 [info     ] scheduler.started              jobs=11
+2026-05-30 10:11:16 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-30 10:11:16 [info     ] accessories_swarm.start
+2026-05-30 10:11:16 [info     ] cases_swarm.start
+2026-05-30 10:11:16 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-30 10:11:16 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+INFO:     100.101.209.68:43530 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43540 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43542 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51007 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52465 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56451 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58232 - "GET /health HTTP/1.1" 200 OK
+2026-05-30 10:11:22 [debug    ] upgrade_parts.ebay             buy=30.0 part=NVIDIA GPU sold=94.99
+INFO:     100.84.151.109:51007 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58232 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56451 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-05-30 10:11:24 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:43574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43578 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43592 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43606 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43620 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43628 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43630 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 10:11:24 [debug    ] upgrade_parts.ebay             buy=10.99 part=AM4 CPU sold=86.4
+INFO:     100.101.209.68:56016 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56022 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56030 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56036 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56042 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:11:28 [debug    ] upgrade_parts.ebay             buy=11.99 part=i7 CPU sold=51.94
+INFO:     100.101.209.68:56048 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56064 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56080 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56090 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:11:30 [debug    ] upgrade_parts.ebay             buy=110.39 part=i9 CPU sold=180.0
+INFO:     100.84.151.109:64546 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 10:11:33 [debug    ] upgrade_parts.ebay             buy=30.99 part=AM4 Motherboard sold=77.37
+INFO:     100.84.151.109:64546 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 10:11:35 [debug    ] upgrade_parts.ebay             buy=47.5 part=AM4 CPU Motherboard Combo sold=118.5
+INFO:     100.101.209.68:43132 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43136 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43142 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43152 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43168 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43172 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43176 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43182 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43196 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:11:38 [debug    ] upgrade_parts.ebay             buy=9.99 part=DDR4 RAM sold=37.52
+INFO:     100.101.209.68:43202 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43210 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43222 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43236 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43244 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43254 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43264 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 10:11:41 [debug    ] upgrade_parts.ebay             buy=94.99 part=DDR4 RAM 32GB 2x16GB sold=137.1
+INFO:     100.84.151.109:53927 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53927 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 10:11:44 [debug    ] upgrade_parts.ebay             buy=44.99 part=NVMe 1TB sold=83.31
+INFO:     100.101.209.68:38964 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38978 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38984 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38994 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53927 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54844 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54844 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53927 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 10:11:47 [debug    ] upgrade_parts.ebay             buy=6.99 part=PSU sold=32.57
+2026-05-30 10:11:50 [debug    ] upgrade_parts.ebay             buy=6.06 part=CPU Cooler sold=20.0
+INFO:     100.101.209.68:39000 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39008 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39010 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39026 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53927 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54844 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54844 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 10:11:53 [debug    ] upgrade_parts.ebay             buy=9.99 part=RGB Fans sold=20.0
+INFO:     100.101.209.68:39040 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39054 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39058 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39070 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33194 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33202 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33212 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33214 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33230 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33246 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33248 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33258 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33268 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33274 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33288 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33298 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33314 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33318 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33334 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'fish tank pc case': 113 found, 113 new (total 113)
+2026-05-30 10:12:04 [debug    ] upgrade_parts.bh               part=NVIDIA GPU price_gbp=20.5
+2026-05-30 10:12:08 [debug    ] upgrade_parts.bh               part=AM4 CPU price_gbp=5.12
+INFO:     100.101.209.68:32786 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32798 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32810 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32826 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32836 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32844 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32856 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32872 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32888 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32902 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32912 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:12:14 [debug    ] upgrade_parts.bh               part=i7 CPU price_gbp=10.25
+[scraper] eBay 'gaming keyboard': 139 found, 135 new (total 135)
+2026-05-30 10:12:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:35568 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35582 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35598 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35602 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35612 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35618 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35634 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35636 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35638 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:12:22 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+2026-05-30 10:12:23 [debug    ] upgrade_parts.bh               part=i9 CPU price_gbp=5.12
+INFO:     100.101.209.68:59778 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59786 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59802 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59808 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59820 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59822 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59830 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 10:12:25 [info     ] gumtree.playwright.done        total=25
+2026-05-30 10:12:25 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 10:12:26 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+2026-05-30 10:12:26 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:59840 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59842 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59846 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59852 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59864 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59868 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59874 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59884 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 10:12:28 [debug    ] upgrade_parts.bh               part=AM4 Motherboard price_gbp=3.07
+2026-05-30 10:12:30 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+2026-05-30 10:12:34 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
+INFO:     100.101.209.68:56060 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56074 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56078 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56082 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56090 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-30 10:12:40 [debug    ] upgrade_parts.bh               part=DDR4 RAM 32GB 2x16GB price_gbp=102.48
+INFO:     100.101.209.68:56104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56118 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56134 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56146 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56170 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56174 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56190 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56218 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56220 - "GET /api/sources/health HTTP/1.1" 200 OK
