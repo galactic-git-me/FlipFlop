@@ -194,13 +194,16 @@ def start_scheduler():
     upgrade_start = now
     cases_start = now
     accessories_start = now
-    external_demand_start = _next_run_for("external_demand", 60, now)
-    playbook_evolution_start = _next_run_for("playbook_evolution", 60, now)
-    autonomous_start = _next_run_for("autonomous", 60, now)
-    outcome_capture_start = _next_run_for("outcome_capture", 60, now)
-    model_retraining_start = _next_run_for("model_retraining", 60, now)
-    retrain_watchdog_start = _next_run_for("retrain_checkpoint_watchdog", 60, now)
-    compliant_ingestion_start = _next_run_for("compliant_market_ingestion", 60, now)
+    # Keep startup deterministic: external_demand + playbook_evolution are handled
+    # by run_startup_bootstrap(). Delay their scheduled cron jobs (and other hourly
+    # analysis jobs) to avoid duplicate/overlapping execution at app boot.
+    external_demand_start = now + timedelta(hours=1)
+    playbook_evolution_start = now + timedelta(hours=1)
+    autonomous_start = now + timedelta(hours=1)
+    outcome_capture_start = now + timedelta(hours=1)
+    model_retraining_start = now + timedelta(hours=1)
+    retrain_watchdog_start = now + timedelta(hours=1)
+    compliant_ingestion_start = now + timedelta(hours=1)
 
     scheduler.add_job(
         _run_job_with_history,

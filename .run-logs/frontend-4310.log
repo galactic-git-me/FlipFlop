@@ -10,7 +10,7 @@ Tailscale URL (live): andromeda-ts:4310
 ▲ Next.js 16.2.4 (webpack)
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 423ms
+✓ Ready in 426ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -19,10 +19,3 @@ Tailscale URL (live): andromeda-ts:4310
    * /home/mac/CODING/FlipFlop/pc-flipper/package-lock.json
 
 
-○ Compiling / ...
- GET / 200 in 4.9s (next.js: 4.2s, application-code: 703ms)
-[browser] Image with src "/pics/logo.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
- GET /api/nasa-bg 200 in 2.5s (next.js: 749ms, application-code: 1777ms)
-[?25h
