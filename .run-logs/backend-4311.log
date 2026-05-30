@@ -8070,3 +8070,151 @@ INFO:     100.101.209.68:34766 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34776 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34778 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61920 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61920 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55542 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55552 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55566 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55570 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55580 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55592 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55600 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55606 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55616 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50116 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50116 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34626 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34638 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34644 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34658 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34660 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34670 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34674 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34678 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34682 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34692 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34698 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34710 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34730 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34734 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62414 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59364 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53552 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54941 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54941 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53552 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53552 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54941 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59364 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59364 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54941 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40364 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40376 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40388 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40400 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40410 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40422 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40426 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40434 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40438 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40444 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'mutant tactical pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40454 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40462 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40468 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40470 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40486 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35774 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35784 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35788 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35790 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53771 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53771 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35818 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35824 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59106 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59114 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59120 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59130 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59136 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59152 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59164 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59174 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59190 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59206 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60694 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53608 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53608 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60694 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59220 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59228 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59230 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59244 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60694 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53608 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53608 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57384 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57390 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57398 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57402 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57404 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57418 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57430 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57452 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57468 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57476 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57478 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57482 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57498 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57500 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57512 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57354 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57354 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54188 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54190 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54196 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54210 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54212 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54214 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54218 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54224 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54234 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64771 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64928 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50269 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34058 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34062 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34078 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34094 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34108 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34122 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34130 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34146 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34158 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34168 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34184 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'spiderverse gaming pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:54880 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60983 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52555 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34186 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34188 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34198 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34214 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34230 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52555 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60983 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60983 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34244 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34246 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50842 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50850 - "GET /api/schedule HTTP/1.1" 200 OK
