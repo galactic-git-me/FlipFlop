@@ -57,6 +57,10 @@ _NO_RETRY_SOURCES = {
     # and does not improve yield.
     "John Pye",
 }
+_NON_RETRYABLE_TERM_ERRORS = {
+    "captcha_required",
+    "login_required",
+}
 
 _SOURCE_ALIASES: dict[str, tuple[str, ...]] = {
     "ebay": ("eBay UK", "eBay UK Auctions"),
@@ -223,6 +227,13 @@ async def _scan_source(source, search_terms: list, config) -> dict:
         result["found"] = len(raw_listings)
 
         # Scrapes can run in parallel, but SQLite writes must be serialized.
+        failed_rows = await _failed_terms_for_run_with_errors(run_id, source.name)
+        blocker_only_zero = (
+            len(raw_listings) == 0
+            and len(failed_rows) > 0
+            and all(str(err or "") in _NON_RETRYABLE_TERM_ERRORS for _, err in failed_rows)
+        )
+
         async with _DB_WRITE_LOCK:
             async with AsyncSessionLocal() as db:
                 gems = await _upsert_listings(db, raw_listings, source.id, config)
@@ -231,6 +242,11 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                 source_row = await db.get(DataSource, source.id)
                 src_cfg = dict((source_row.config or {})) if source_row else {}
                 src_cfg = apply_success(src_cfg, len(raw_listings))
+                if blocker_only_zero:
+                    # Do not cooldown sources that are blocked by interactive
+                    # challenges; they need manual preflight, not backoff loops.
+                    src_cfg["zero_results_streak"] = 0
+                    src_cfg.pop("cooldown_until", None)
 
                 await db.execute(
                     update(DataSource)
@@ -246,7 +262,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                 await db.commit()
 
         # Retry only failed terms later in the same hour, while keeping successful data.
-        failed_terms = await _failed_terms_for_run(run_id, source.name)
+        failed_terms = [term for term, err in failed_rows if str(err or "") not in _NON_RETRYABLE_TERM_ERRORS]
         if failed_terms:
             if source.name in _NO_RETRY_SOURCES:
                 log.info(
@@ -363,6 +379,34 @@ async def _failed_terms_for_run(run_id: str | None, source_name: str) -> list[st
         terms = [str(t[0]).strip() for t in rows.all() if t and t[0]]
     # Preserve order, drop duplicates
     return list(dict.fromkeys(terms))
+
+
+async def _failed_terms_for_run_with_errors(run_id: str | None, source_name: str) -> list[tuple[str, str]]:
+    if not run_id:
+        return []
+    async with AsyncSessionLocal() as db:
+        rows = await db.execute(
+            select(SearchTelemetry.term, SearchTelemetry.error)
+            .where(
+                SearchTelemetry.run_id == run_id,
+                SearchTelemetry.source == source_name,
+                SearchTelemetry.error.is_not(None),
+            )
+        )
+        items = [
+            (str(t or "").strip(), str(e or "").strip())
+            for t, e in rows.all()
+            if str(t or "").strip()
+        ]
+    # Preserve first occurrence order by term+error combo.
+    seen: set[tuple[str, str]] = set()
+    out: list[tuple[str, str]] = []
+    for item in items:
+        if item in seen:
+            continue
+        seen.add(item)
+        out.append(item)
+    return out
 
 
 async def _upsert_listings(
