@@ -13093,3 +13093,71 @@ INFO:     100.84.151.109:54468 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61974 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:61974 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
 INFO:     100.84.151.109:61974 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61974 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61974 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49974 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64718 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49974 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64718 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64718 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64718 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:55133 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55133 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57606 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57606 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57606 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57784 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52146 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57784 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52146 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52146 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52146 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49561 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49561 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57012 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57012 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51810 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52148 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51740 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54679 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51810 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51740 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54679 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 07:26:18 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-30 07:26:18 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-30 07:26:18 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-30 07:26:18 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Temu still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=Temu
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=AliExpress still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=AliExpress
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=BargainHardware still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Alibaba still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=Alibaba
+2026-05-30 07:26:19 [warning  ] source.retry.partial           retried_terms=20 source=Amazon still_failed_terms=20
+2026-05-30 07:26:19 [info     ] source.done                    found=0 gems=0 source=Amazon
+INFO:     100.84.151.109:56106 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56106 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60630 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60630 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55031 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55031 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55031 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55031 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64445 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:55031 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
