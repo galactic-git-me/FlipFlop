@@ -12909,3 +12909,52 @@ INFO:     100.84.151.109:50737 - "GET /api/alerts?limit=100&include_acked=false 
 INFO:     100.84.151.109:62514 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:62514 - "OPTIONS /api/preflight/antibot HTTP/1.1" 200 OK
 INFO:     100.84.151.109:62514 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50175 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50175 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50175 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:65500 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65500 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49680 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49680 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49680 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62342 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49680 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62342 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62342 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61910 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61910 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53845 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:55304 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53845 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63517 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63517 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63517 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63517 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61452 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63517 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61452 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63517 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61452 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49452 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:49452 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:58120 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58120 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52198 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52198 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52198 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52198 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52198 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:59257 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52198 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52198 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52198 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57192 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57192 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
