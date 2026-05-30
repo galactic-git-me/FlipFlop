@@ -1394,3 +1394,53 @@ Call log:
 2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming controller
 2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming controller
 2026-05-30 23:30:59 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming controller
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 86)
+2026-05-30 23:31:21 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:31:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=futuristic+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:31:27 [info     ] gumtree.playwright.cards       count=20 term=futuristic gaming case
+2026-05-30 23:31:29 [info     ] gumtree.playwright.done        total=20
+2026-05-30 23:31:34 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:31:34 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=24+inch+monitor&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:31:40 [info     ] gumtree.playwright.cards       count=25 term=24 inch monitor
+2026-05-30 23:31:42 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:31:42 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:31:56 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=9
+2026-05-30 23:31:56 [info     ] source.done                    found=183 gems=0 source=eBay UK
+2026-05-30 23:32:00 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:32:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:32:13 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:32:13 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+2026-05-30 23:32:13 [warning  ] gumtree.playwright.no_listings page_title=Federation command build | Stuff for Sale - Gumtree term=federation command build
+2026-05-30 23:32:13 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:32:13 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:32:16 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=24 inch monitor
+2026-05-30 23:32:16 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=24 inch monitor
+2026-05-30 23:32:16 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=24 inch monitor
+2026-05-30 23:32:44 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:32:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 86)
+2026-05-30 23:32:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:32:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:32:57 [warning  ] gumtree.playwright.no_listings page_title=Starfleet workstation | Stuff for Sale - Gumtree term=starfleet workstation
+2026-05-30 23:32:57 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:33:01 [info     ] gumtree.playwright.cards       count=25 term=xl mouse pad
+2026-05-30 23:33:04 [info     ] gumtree.playwright.done        total=25
+2026-05-30 23:33:04 [info     ] facebook.playwright.cookies_loaded count=8
