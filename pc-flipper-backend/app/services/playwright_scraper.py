@@ -383,18 +383,18 @@ async def scrape_gumtree_playwright(
                 for card in cards:
                     try:
                         title_el = await card.query_selector(
-                            "[data-q='listing-title'], .listing-title, h2, h3"
+                            "[data-q='tile-title'], [data-q='listing-title'], .listing-title, h2, h3"
                         )
                         price_el = await card.query_selector(
-                            "[data-q='listing-price'], .listing-price strong, "
+                            "[data-q='tile-price'], [data-q='listing-price'], .listing-price strong, "
                             ".listing-price, [class*='price']"
                         )
                         link_el = await card.query_selector(
-                            "a[href*='/ad/'], a[href*='/p/'], a[href]"
+                            "a[data-q='search-result-anchor'], a[href*='/ad/'], a[href*='/p/'], a[href]"
                         )
                         img_el = await card.query_selector("img")
                         loc_el = await card.query_selector(
-                            "[data-q='listing-location'], .listing-location, [class*='location']"
+                            "[data-q='tile-location'], [data-q='listing-location'], .listing-location, [class*='location']"
                         )
 
                         if not title_el or not link_el:

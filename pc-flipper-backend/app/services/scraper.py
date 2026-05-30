@@ -1831,9 +1831,35 @@ async def _scrape_generic_marketplace_listings(
         for term in search_terms:
             try:
                 added = 0
+                challenge_emitted = False
                 for page_num in range(1, max_pages + 1):
                     url = _with_page(build_url(term), page_num)
                     await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                    # Explicit anti-bot/login detection so telemetry is truthful.
+                    title_l = (await page.title() or "").lower()
+                    body_l = (await page.content() or "").lower()[:12000]
+                    if source_name.lower() == "temu" and ("login" in title_l or "/login" in (page.url or "").lower()):
+                        record_term_result(
+                            term=term,
+                            found=0,
+                            new=0,
+                            error="login_required",
+                            source_name=source_name,
+                        )
+                        challenge_emitted = True
+                        added = 0
+                        break
+                    if source_name.lower() in {"aliexpress", "alibaba"} and ("captcha interception" in title_l or "captcha" in body_l):
+                        record_term_result(
+                            term=term,
+                            found=0,
+                            new=0,
+                            error="captcha_required",
+                            source_name=source_name,
+                        )
+                        challenge_emitted = True
+                        added = 0
+                        break
                     try:
                         await page.wait_for_selector(item_selector, timeout=10000)
                     except Exception:
@@ -1916,7 +1942,13 @@ async def _scrape_generic_marketplace_listings(
                     # Keep sequential pagination, but stop early when no new rows are parsed.
                     if page_added == 0:
                         break
-                record_term_result(term=term, found=added, new=added, source_name=source_name)
+                # Avoid duplicate telemetry row if this term already emitted a challenge-required status.
+                if challenge_emitted:
+                    pass
+                elif added > 0:
+                    record_term_result(term=term, found=added, new=added, source_name=source_name)
+                else:
+                    record_term_result(term=term, found=0, new=0, source_name=source_name)
             except Exception as exc:
                 record_term_result(term=term, error=str(exc), source_name=source_name)
         await browser.close()
