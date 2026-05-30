@@ -3265,3 +3265,505 @@ INFO:     100.101.209.68:42374 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.84.151.109:50480 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
 INFO:     100.84.151.109:50944 - "GET /health HTTP/1.1" 200 OK
 INFO:     100.84.151.109:50944 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:35:54 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:59160 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59166 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59180 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59194 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59202 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59216 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59228 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:35:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:59244 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59258 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59266 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59276 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59288 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-30 08:35:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:59292 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59298 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59306 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59322 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:56465 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56465 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56465 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50523 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:36:02 [info     ] facebook.playwright.items      count=24 term=office pc tower
+INFO:     100.84.151.109:50523 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56465 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59326 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59328 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59332 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59334 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:06 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard%20cpu%20combo&minPrice=0&maxPrice=500&exact=false
+[scraper] eBay 'premium aluminum pc case': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57350 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49272 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49274 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49288 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49290 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49296 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49300 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49310 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49316 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49328 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49344 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49358 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49370 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:36:11 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:49384 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49388 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49404 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49412 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:13 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 08:36:15 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.84.151.109:57889 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57889 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:36:17 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 08:36:19 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
+2026-05-30 08:36:19 [info     ] facebook.playwright.items      count=24 term=AM4 motherboard cpu combo
+INFO:     100.101.209.68:60886 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60896 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60910 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60912 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51309 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60918 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60932 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60946 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60950 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60960 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=B550%20motherboard&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:51309 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51309 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55456 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55464 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55476 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55488 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55502 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55506 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55518 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:36:26 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.84.151.109:51309 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51893 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51309 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51309 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:36:28 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:55526 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55530 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55542 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55544 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:30 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.84.151.109:51309 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 08:36:32 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:51309 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33508 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33512 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33536 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33540 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:35 [info     ] facebook.playwright.items      count=24 term=B550 motherboard
+INFO:     100.101.209.68:33556 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33560 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33572 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33582 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:39 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=X570%20motherboard&minPrice=0&maxPrice=500&exact=false
+INFO:     100.84.151.109:51573 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+[scraper] eBay 'luxury gaming case': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51573 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33588 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33604 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33610 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33624 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33626 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33642 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33644 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'office pc tower': 0 found, 0 new (total 0)
+2026-05-30 08:36:44 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:44714 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44718 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44726 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44738 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:36:46 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:44748 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44758 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44768 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44772 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64959 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64959 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:36:48 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:36:50 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.84.151.109:64959 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64959 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51495 - "GET /health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:51495 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64959 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 08:36:52 [debug    ] upgrade_parts.ebay             buy=None part=PSU sold=None
+2026-05-30 08:36:53 [info     ] facebook.playwright.items      count=24 term=X570 motherboard
+INFO:     100.101.209.68:44784 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44798 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44806 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44814 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64959 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64959 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:36:56 [info     ] facebook.playwright.done       total=250
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC ryzen 9 7950x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=229.0 median=766.8 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=420.0 median=996.0 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC ryzen 7 8700f rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1008.0 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=290.0 median=840.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=280.0 median=828.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC ryzen 9 7950x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=280.0 median=828.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC ryzen 9 9900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=768.0 query=gaming PC ryzen 5 5600g rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC ryzen 9 5900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 5900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=295.0 median=846.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=918.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=340.0 median=900.0 query=gaming PC ryzen 9 9950x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC ryzen 9 3900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=210.0 median=744.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC ryzen 5 5600x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=636.0 query=gaming PC ryzen 7 2700x rx 5600 xt
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=384.0 query=gaming PC gtx 1660 ti
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC i7-3770 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=499.0 median=718.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=660.0 query=gaming PC ryzen 5 3600x rtx 2070 super
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=205.0 median=366.0 query=gaming PC gtx 1050 ti
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=636.0 query=gaming PC ryzen 5 3600 gtx 1660
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=804.0 query=gaming PC i7 10700k rtx 2060 super
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=684.0 query=gaming PC rtx 4070
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=245.0 median=786.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=170.0 median=324.0 query=gaming PC xeon e5-2570
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=235.0 median=774.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=160.0 median=684.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=410.0 median=984.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC i7 10700 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=499.0 median=718.8 query=gaming PC i7-9700k rtx 2080ti
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=410.0 median=612.0 query=gaming PC ryzen 5 2600 gtx 1660
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=540.0 query=gaming PC ryzen 5 3600 rx 580
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=280.0 median=828.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=730.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=160.0 median=684.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=170.0 median=324.0 query=gaming PC intel i7 4790k gtx 960
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=444.0 query=gaming PC rtx 3070
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1008.0 query=gaming PC i7 7700k rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=624.0 query=gaming PC rx 9070 xt
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=449.0 median=946.8 query=gaming PC i7-8565u rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=455.0 median=954.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=135.0 median=654.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=52.0 median=554.4 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=500.0 median=1092.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=225.0 median=762.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=828.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=642.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=79.0 median=586.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=594.0 query=gaming PC ryzen 5 2600x gtx 1660
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=425.0 median=918.0 query=gaming PC i7-10700t rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=528.0 query=gaming PC i5-2400 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=730.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=410.0 median=984.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=348.0 query=gaming PC i5-6400 rx 580
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=1032.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=210.0 median=744.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=642.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=89.0 median=598.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=139.0 median=574.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=594.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=29.0 median=526.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=570.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=708.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=145.0 median=582.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=125.0 median=642.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=790.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=249.0 median=790.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=450.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=588.0 query=gaming PC i7-8700 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=594.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=516.0 query=gaming PC i5-7500 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=420.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=570.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC core i5 8500t rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=468.0 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=276.0 query=gaming PC
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=155.0 median=678.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=490.0 median=996.0 query=gaming PC i7-13700hx rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=450.0 median=948.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=360.0 query=gaming PC xeon e5 gtx 980ti
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=768.0 query=gaming PC xeon 64gb rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=399.0 median=970.8 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=684.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=300.0 query=gaming PC xeon e5-1620
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=570.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=570.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=450.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=75.0 median=582.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=528.0 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=540.0 query=gaming PC i5-6500 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=600.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=624.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC i7-1165g rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC ryzen 5 1600 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC intel i5 13600kf rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=400.0 median=972.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC ryzen 5 1600 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC ryzen 5 3600 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=50.0 median=552.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=70.0 median=576.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=65.0 median=570.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=90.0 median=600.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=160.0 median=684.0 query=gaming PC ryzen 5 5600 rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=45.0 median=546.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=175.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=175.0 median=702.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=60.0 median=564.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-30 08:36:56 [info     ] resale_scraper.fallback_buy_price buy_price=85.0 median=594.0 query=gaming PC rtx 3060
+INFO:     100.101.209.68:40914 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40934 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40942 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40958 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40974 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40990 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 08:36:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+2026-05-30 08:36:56 [info     ] source.done                    found=250 gems=0 source=Facebook Marketplace
+INFO:     100.101.209.68:41002 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41016 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41026 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41036 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41052 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:37:01 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:41060 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41064 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41074 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41078 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:37:03 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.84.151.109:54696 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54696 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:37:05 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:37:07 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'gaming pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36592 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36602 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-30 08:37:10 [info     ] facebook.playwright.items      count=23 term=gaming keyboard
+INFO:     100.101.209.68:36608 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36618 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36622 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36638 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36648 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36676 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36662 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36686 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36696 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36718 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36728 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36702 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36742 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36758 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57898 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:57898 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:37:14 [info     ] facebook.playwright.done       total=23
+INFO:     100.84.151.109:57898 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51175 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51175 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:57898 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
