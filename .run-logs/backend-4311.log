@@ -998,3 +998,171 @@ Call log:
 2026-05-30 23:22:09 [info     ] facebook.playwright.cookies_loaded count=8
 2026-05-30 23:22:12 [info     ] gumtree.playwright.cards       count=19 term=AM4 motherboard
 2026-05-30 23:22:14 [info     ] gumtree.playwright.done        total=19
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 86)
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+[scraper] eBay retry 'panoramic pc case': 113 found, 111 new (total 111)
+2026-05-30 23:22:40 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:22:40 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard%20cpu%20combo&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:22:40 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:22:40 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:22:44 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:22:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:22:50 [info     ] gumtree.playwright.cards       count=5 term=AM4 motherboard cpu combo
+2026-05-30 23:22:51 [info     ] gumtree.playwright.done        total=5
+2026-05-30 23:23:05 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:23:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:23:11 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:23:11 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:23:11 [info     ] gumtree.playwright.cards       count=1 term=fish tank pc case
+2026-05-30 23:23:12 [info     ] gumtree.playwright.done        total=1
+2026-05-30 23:23:12 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:23:12 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:23:21 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:23:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:23:26 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+2026-05-30 23:23:29 [info     ] gumtree.playwright.done        total=25
+[scraper] eBay retry 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay retry 'Ryzen 9 7900': 102 found, 102 new (total 102)
+2026-05-30 23:23:42 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:23:42 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:23:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:23:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM%2032GB%202x16GB&minPrice=1&maxPrice=2500&exact=false
+2026-05-30 23:23:43 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:23:43 [info     ] facebook.playwright.cookies_loaded count=8
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay retry 'Ryzen 9 7900X': 102 found, 22 new (total 124)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 86)
+[scraper] eBay retry 'AM4 motherboard cpu combo': 59 found, 59 new (total 183)
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=290.0 median=840.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=291.74 median=554.09 query=gaming PC ryzen 9 7900x
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=192.05 median=722.46 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=126.07 median=643.28 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=249.62 median=791.54 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=349.49 median=911.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=337.05 median=896.46 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=345.39 median=906.47 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=288.87 median=550.64 query=gaming PC ryzen 9 7900x
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=278.46 median=826.15 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=271.04 median=529.25 query=gaming PC ryzen 9 7900
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=983.99 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=379.99 median=947.99 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=267.46 median=812.95 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=458.35 median=1042.02 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=312.67 median=867.2 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=419.99 median=995.99 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=21.49 median=517.79 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=461.21 median=1045.45 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=433.98 median=1012.78 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=312.99 median=867.59 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=278.0 median=825.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=362.12 median=926.54 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=363.0 median=927.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=472.13 median=1058.56 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=459.13 median=1042.96 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=467.45 median=1052.94 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=149.17 median=671.0 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=124.7 median=641.64 query=gaming PC ryzen 5 2600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=297.1 median=848.52 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=384.1 median=868.92 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=145.82 median=666.98 query=gaming PC ryzen 5 3600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=320.59 median=876.71 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=83.32 median=591.98 query=gaming PC ryzen 3 3200g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=74.99 median=581.99 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=738.0 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=199.0 median=646.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=66.66 median=571.99 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=66.66 median=571.99 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=269.95 median=815.94 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=229.0 median=766.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=191.2 median=637.44 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=87.5 median=597.0 query=gaming PC ryzen 3 3100 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=74.99 median=581.99 query=gaming PC ryzen 3 2200g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=249.95 median=791.94 query=gaming PC ryzen 5 4500 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=156.69 median=680.03 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=275.0 median=822.0 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=165.0 median=690.0 query=gaming PC ryzen 5 2600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=456.43 median=955.72 query=gaming PC ryzen 7 5700g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=74.08 median=580.9 query=gaming PC ryzen 5 2400g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=369.95 median=935.94 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=399.95 median=971.94 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=308.95 median=862.74 query=gaming PC ryzen 5 3600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=449.95 median=1031.94 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=409.95 median=983.94 query=gaming PC ryzen 7 2700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=45.82 median=546.98 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=465.7 median=966.84 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=281.5 median=829.8 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=77.35 median=584.82 query=gaming PC ryzen 5 1600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=73.5 median=580.2 query=gaming PC ryzen 7 3700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=389.2 median=875.04 query=gaming PC ryzen 9 3900x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=229.5 median=767.4 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=404.5 median=977.4 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=61.04 median=565.25 query=gaming PC ryzen 5 2600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=928.44 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=99.9 median=611.88 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=469.69 median=1055.63 query=gaming PC ryzen 7 5800x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=91.19 median=601.43 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=363.7 median=844.44 query=gaming PC ryzen 7 5700x rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC ryzen 5 3600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=295.0 median=846.0 query=gaming PC ryzen 9 3900 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=459.02 median=1042.82 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=86.99 median=596.39 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=125.92 median=643.1 query=gaming PC ryzen 5 3400g rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=269.01 median=814.81 query=gaming PC ryzen 5 3060 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=87.5 median=597.0 query=gaming PC ryzen 5 2600 rtx 3060
+2026-05-30 23:23:55 [info     ] resale_scraper.fallback_buy_price buy_price=353.49 median=832.19 query=gaming PC rtx 3060
+2026-05-30 23:23:55 [warning  ] gumtree.playwright.no_listings page_title=Panoramic pc case | Stuff for Sale - Gumtree term=panoramic pc case
+2026-05-30 23:23:55 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:23:56 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=eBay UK
+2026-05-30 23:23:59 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:24:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay retry error for 'gaming mouse': 
+2026-05-30 23:24:04 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
+2026-05-30 23:24:07 [info     ] gumtree.playwright.done        total=21
