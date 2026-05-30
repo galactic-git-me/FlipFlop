@@ -22,5 +22,8 @@
   },
   "upgrade_parts": {
     "last_success_at": "2026-05-30T11:04:28.451703+00:00"
+  },
+  "autonomous": {
+    "last_success_at": "2026-05-30T11:10:47.613945+00:00"
   }
 }
