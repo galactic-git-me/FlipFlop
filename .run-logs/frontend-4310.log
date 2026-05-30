@@ -356,3 +356,58 @@ Tailscale URL (live): andromeda-ts:4310
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
 [browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'removeChild')
+ GET / 200 in 530ms (next.js: 8ms, application-code: 522ms)
+[browser] Image with src "/pics/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
