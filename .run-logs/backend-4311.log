@@ -1653,3 +1653,48 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-30 23:52:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:52:39 [warning  ] gumtree.playwright.no_listings page_title=Cerebro workstation | Stuff for Sale - Gumtree term=cerebro workstation
+2026-05-30 23:52:39 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:52:44 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:52:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 134)
+2026-05-30 23:52:57 [warning  ] gumtree.playwright.no_listings page_title=Mutant tactical pc | Stuff for Sale - Gumtree term=mutant tactical pc
+2026-05-30 23:52:57 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:52:59 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:52:59 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:53:13 [warning  ] gumtree.playwright.no_listings page_title=Spiderverse gaming pc | Stuff for Sale - Gumtree term=spiderverse gaming pc
+2026-05-30 23:53:13 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:53:15 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:53:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=red+blue+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 134)
+2026-05-30 23:53:28 [warning  ] gumtree.playwright.no_listings page_title=Red blue rgb build | Stuff for Sale - Gumtree term=red blue rgb build
+2026-05-30 23:53:29 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:53:31 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:53:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=batcomputer+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 134)
+2026-05-30 23:53:44 [warning  ] gumtree.playwright.no_listings page_title=Batcomputer workstation | Stuff for Sale - Gumtree term=batcomputer workstation
+2026-05-30 23:53:44 [info     ] gumtree.playwright.done        total=0
+2026-05-30 23:53:47 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:53:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-30 23:53:53 [info     ] gumtree.playwright.cards       count=1 term=dark knight pc
+2026-05-30 23:53:53 [info     ] gumtree.playwright.done        total=1
+2026-05-30 23:53:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-30 23:53:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=kryptonian+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
