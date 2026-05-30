@@ -5437,3 +5437,654 @@ INFO:     100.101.209.68:36624 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36636 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36652 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36656 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53432 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53432 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36664 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36674 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36692 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36708 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'xl mouse pad': 0 found, 0 new (total 0)
+2026-05-30 08:47:32 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:36714 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36718 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36730 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36736 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50102 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50102 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:47:38 [info     ] gumtree.playwright.cards       count=7 term=xl mouse pad
+2026-05-30 08:47:40 [info     ] gumtree.playwright.done        total=7
+2026-05-30 08:47:40 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 08:47:40 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=xl%20mouse%20pad&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:34242 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34270 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34282 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34290 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34294 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34306 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34310 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34318 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34334 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34344 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34356 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34368 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34374 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34382 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65297 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60766 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60766 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65297 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65297 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65297 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 08:47:47 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 08:47:49 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:41626 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41628 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41634 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41646 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:47:51 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 08:47:53 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:41652 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41664 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41678 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41692 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41702 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:47:55 [info     ] facebook.playwright.items      count=24 term=xl mouse pad
+INFO:     100.84.151.109:58293 - "OPTIONS /api/facebook/status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59820 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "OPTIONS /api/listings/stats/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60618 - "OPTIONS /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "OPTIONS /api/flips/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-29T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58293 - "OPTIONS /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-22T23%3A00%3A00.000Z HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60618 - "OPTIONS /api/config/search/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "OPTIONS /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "OPTIONS /api/playbooks/?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59820 - "OPTIONS /api/demand/summary/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58293 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60618 - "OPTIONS /api/demand/auction-intel/?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62100 - "OPTIONS /api/intel/retrain-status/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59820 - "OPTIONS /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58293 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-29T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 29, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 29, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:51420 - "GET /api/facebook/status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62100 - "GET /api/swarms/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:60618 - "GET /api/listings/stats/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40630 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:59820 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40632 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40634 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40644 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /api/flips/ HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "GET /api/config/search/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:60618 - "GET /api/listings/?sort_by=estimated_profit&sort_desc=true&limit=1&min_profit=0&first_seen_after=2026-05-22T23%3A00%3A00.000Z HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/datetime.pyx", line 152, in asyncpg.pgproto.pgproto.timestamp_encode
+TypeError: can't subtract offset-naive and offset-aware datetimes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 534, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 185, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/api/listings.py", line 62, in get_listings
+    result = await db.execute(q)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $3: datetime.datetime(2026, 5, 22, 23, 0, tz... (can't subtract offset-naive and offset-aware datetimes)
+[SQL: SELECT listings.id, listings.external_id, listings.dedupe_fingerprint, listings.source_id, listings.source_name, listings.source_confidence, listings.title, listings.description, listings.price, listings.url, listings.image_urls, listings.location, listings.condition, listings.cpu, listings.ram_gb, listings.ram_type, listings.storage_gb, listings.storage_type, listings.gpu, listings.has_psu, listings.raw_specs, listings.gem_score, listings.classification, listings.gem_signals, listings.estimated_resale, listings.resale_low, listings.resale_high, listings.resale_comp_count, listings.estimated_profit, listings.estimated_upgrade_cost, listings.initial_estimated_profit, listings.listing_type, listings.listing_ends_at, listings.expected_buy_price, listings.seller_name, listings.seller_feedback_count, listings.seller_feedback_pct, listings.seller_type, listings.seller_has_shop, listings.listed_at, listings.status, listings.first_seen_at, listings.last_seen_at, listings.sold_at 
+FROM listings 
+WHERE listings.status = $1::listingstatus AND listings.estimated_profit >= $2::FLOAT AND listings.first_seen_at >= $3::TIMESTAMP WITHOUT TIME ZONE ORDER BY listings.estimated_profit DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER]
+[parameters: ('active', 0.0, datetime.datetime(2026, 5, 22, 23, 0, tzinfo=TzInfo(0)), 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+INFO:     100.84.151.109:62100 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40648 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63482 - "GET /api/playbooks/?status=active HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51420 - "GET /api/demand/summary/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62371 - "GET /api/demand/auction-intel/?limit=15 HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:40650 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40652 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "GET /api/schedule/autonomous_cycle/runs/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63482 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54092 - "GET /api/intel/retrain-status/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51420 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "OPTIONS /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63482 - "OPTIONS /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54092 - "OPTIONS /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "OPTIONS /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "OPTIONS /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "OPTIONS /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:63482 - "OPTIONS /api/schedule/autonomous_cycle/runs HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54092 - "OPTIONS /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "GET /api/facebook/status HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54092 - "GET /api/playbooks?status=active HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62100 - "GET /api/schedule/autonomous_cycle/runs HTTP/1.1" 404 Not Found
+INFO:     100.84.151.109:63482 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51420 - "GET /api/demand/auction-intel?limit=15 HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62371 - "GET /api/intel/retrain-status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40666 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40668 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40674 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40690 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'leviathan inspired build': 0 found, 0 new (total 0)
+2026-05-30 08:48:00 [info     ] facebook.playwright.done       total=24
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64725 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57778 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57790 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57800 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57812 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57820 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57836 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57846 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57850 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57866 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57880 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57882 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57888 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57900 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57914 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57924 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57938 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:65212 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:65212 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57954 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57962 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57970 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57980 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 08:48:16 [info     ] accessories_swarm.done         errors=0 found=687 upserted=540
+INFO:     100.101.209.68:45744 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45752 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45762 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45776 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64820 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64820 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64820 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52525 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52525 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64820 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45802 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45818 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45826 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'biomechanical spaceship pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:64820 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36086 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36102 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36110 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36126 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36140 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36142 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36144 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64820 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64820 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36160 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36176 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36178 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36186 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36190 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36202 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36216 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36220 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36224 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53095 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53095 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33622 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33634 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33648 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33650 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53095 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53095 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33656 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33668 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33680 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33682 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33690 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33696 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33700 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33712 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33720 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33736 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54234 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63740 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63740 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54234 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42696 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42704 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42708 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42714 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:54234 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:54234 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60748 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60762 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60772 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60790 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60792 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60808 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60814 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60828 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53825 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53825 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53825 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60834 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60840 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60854 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60856 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60862 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60868 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60878 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60884 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60896 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60898 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60912 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58804 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58804 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50578 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50594 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50604 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50612 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50614 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:51876 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49637 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:51876 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49637 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50616 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50622 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50634 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50648 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:49637 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:49637 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50666 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50674 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50680 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50682 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50698 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50704 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48850 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48862 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48870 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48874 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48888 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48890 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48904 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48912 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58710 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58710 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52435 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56044 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56050 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56056 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56072 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56080 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56086 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56090 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56098 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56102 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56108 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56122 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52435 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52435 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.84.151.109:52435 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52435 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56136 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56142 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56156 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56170 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56182 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47586 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47588 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47594 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47606 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63449 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:63449 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:56450 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+[scraper] eBay 'autobot gaming pc': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:56450 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47612 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47626 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47638 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47646 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47650 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47660 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47664 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47680 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47682 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47694 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47704 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47712 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47716 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50201 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50201 - "GET /api/preflight/antibot HTTP/1.1" 200 OK

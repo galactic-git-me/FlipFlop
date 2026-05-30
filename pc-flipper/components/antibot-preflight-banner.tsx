@@ -6,13 +6,18 @@ import { api, AntiBotPreflightStatus } from "@/lib/api";
 export function AntiBotPreflightBanner() {
   const [status, setStatus] = useState<AntiBotPreflightStatus | null>(null);
   const [busy, setBusy] = useState(false);
+  const [lastCheckedAt, setLastCheckedAt] = useState<Date | null>(null);
+  const [checkError, setCheckError] = useState<string | null>(null);
 
   const load = async () => {
     try {
       const s = await api.preflight.antibotStatus();
       setStatus(s);
+      setLastCheckedAt(new Date());
+      setCheckError(null);
     } catch {
       setStatus(null);
+      setCheckError("Check failed; retry.");
     }
   };
 
@@ -49,6 +54,16 @@ export function AntiBotPreflightBanner() {
               This banner is informational only and does not block dashboard loading.
             </div>
           )}
+          {noGui && lastCheckedAt && (
+            <div className="opacity-75 mt-1 text-xs">
+              Last checked: {lastCheckedAt.toLocaleTimeString()}
+            </div>
+          )}
+          {noGui && checkError && (
+            <div className="opacity-90 mt-1 text-xs text-amber-100">
+              {checkError}
+            </div>
+          )}
         </div>
         <button
           className="px-3 py-1.5 rounded-md border border-white/25 hover:border-white/50 disabled:opacity-60"
@@ -57,7 +72,10 @@ export function AntiBotPreflightBanner() {
             setBusy(true);
             try {
               if (noGui) {
-                await load();
+                await Promise.race([
+                  load(),
+                  new Promise((resolve) => setTimeout(resolve, 2500)),
+                ]);
               } else {
                 await api.preflight.triggerAntibot();
                 setTimeout(() => void load(), 1000);
@@ -67,7 +85,7 @@ export function AntiBotPreflightBanner() {
             }
           }}
         >
-          {noGui ? "Re-check Session" : (status.running || busy ? "Running…" : "Run Preflight")}
+          {noGui ? (busy ? "Checking…" : "Re-check Session") : (status.running || busy ? "Running…" : "Run Preflight")}
         </button>
       </div>
     </div>
