@@ -1770,3 +1770,197 @@ INFO:     100.101.209.68:47426 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:47428 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-30 07:49:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
 2026-05-30 07:49:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide
+INFO:     100.84.151.109:61761 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61761 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50124 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61761 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50124 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61761 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:50124 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61761 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-05-30 07:49:41 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:47436 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47444 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47446 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47450 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47462 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47464 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47480 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47502 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:64044 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+2026-05-30 07:49:43 [error    ] facebook.playwright.error      error=Page.goto: net::ERR_TIMED_OUT at https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+Call log:
+  - navigating to "https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+INFO:     100.84.151.109:64044 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 07:49:44 [error    ] gumtree.playwright.error       error=Page.goto: Timeout 8000ms exceeded.
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=AMD+Ryzen+7+7800X3D&max_price=500&min_price=0&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=AMD Ryzen 7 7800X3D
+2026-05-30 07:49:44 [info     ] facebook.playwright.done       total=0
+2026-05-30 07:49:44 [info     ] gumtree.playwright.done        total=0
+2026-05-30 07:49:44 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Facebook Marketplace
+2026-05-30 07:49:44 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=5 source=Gumtree
+INFO:     100.101.209.68:54814 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54820 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54828 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54836 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54850 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54864 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54868 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53532 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:53532 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54874 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54882 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54898 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54914 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:53532 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47710 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47712 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47718 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47726 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47740 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62372 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:62372 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47746 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47760 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47772 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47784 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 07:49:59 [debug    ] ebay_sold.request_retry        attempt=1 error= search=NVIDIA GPU
+INFO:     100.84.151.109:62372 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58863 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47808 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47814 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47822 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47828 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.84.151.109:62372 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47842 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58863 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47858 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.84.151.109:58863 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:58863 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40856 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40868 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40876 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40880 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40894 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40906 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40912 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40918 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40924 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.84.151.109:52116 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:52116 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34248 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34258 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34262 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34268 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+2026-05-30 07:50:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:34284 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34292 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34304 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34320 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34324 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34340 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34356 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34358 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34374 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34382 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34400 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34416 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34420 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34434 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34442 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 07:50:24 [error    ] gumtree.playwright.error       error=Page.goto: Timeout 8000ms exceeded.
+Call log:
+  - navigating to "https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide", waiting until "domcontentloaded"
+ term=gaming mouse
+2026-05-30 07:50:24 [info     ] gumtree.playwright.done        total=0
+2026-05-30 07:50:24 [info     ] facebook.playwright.cookies_loaded count=8
+INFO:     100.84.151.109:61677 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61677 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 07:50:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false
+2026-05-30 07:50:26 [debug    ] ebay_sold.request_retry        attempt=2 error= search=NVIDIA GPU
+INFO:     100.84.151.109:61677 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64529 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:64529 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61677 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     100.84.151.109:61677 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61677 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45900 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45914 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45928 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45936 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45938 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45946 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45952 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45956 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45964 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45968 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45984 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45994 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46008 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46014 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46024 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46028 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-30 07:50:33 [error    ] facebook.playwright.error      error=Page.goto: net::ERR_TIMED_OUT at https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false
+Call log:
+  - navigating to "https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false", waiting until "domcontentloaded"
+ term=gaming mouse
+2026-05-30 07:50:33 [info     ] facebook.playwright.done       total=0
+INFO:     100.84.151.109:50523 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:50523 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43868 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43882 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43896 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 07:50:41 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.amazon.co.uk/s?k=gaming+mouse&i=computers
+Call log:
+  - navigating to "https://www.amazon.co.uk/s?k=gaming+mouse&i=computers", waiting until "domcontentloaded"
+ site=Amazon term=gaming mouse
+INFO:     100.101.209.68:43910 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43918 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43920 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43934 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56416 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56430 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56446 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56452 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56460 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56470 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56474 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56490 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56502 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56514 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56520 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 07:50:49 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.temu.com/search_result.html?search_key=gaming+mouse&search_method=user
+Call log:
+  - navigating to "https://www.temu.com/search_result.html?search_key=gaming+mouse&search_method=user", waiting until "domcontentloaded"
+ site=Temu term=gaming mouse
+INFO:     127.0.0.1:38488 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+2026-05-30 07:50:52 [debug    ] ebay_sold.request_retry        attempt=3 error= search=NVIDIA GPU
+INFO:     100.84.151.109:62928 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     100.84.151.109:61322 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+2026-05-30 07:50:56 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=Alibaba
+2026-05-30 07:50:56 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=BargainHardware
+2026-05-30 07:50:56 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=20 source=AliExpress
+INFO:     100.101.209.68:47732 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47738 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47760 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47774 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47784 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47744 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47792 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47808 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-30 07:50:57 [warning  ] accessories.playwright.error   error=Page.goto: net::ERR_TIMED_OUT at https://www.aliexpress.com/wholesale?SearchText=gaming+mouse&g=y&SortType=price_asc
+Call log:
+  - navigating to "https://www.aliexpress.com/wholesale?SearchText=gaming+mouse&g=y&SortType=price_asc", waiting until "domcontentloaded"
+ site=AliExpress term=gaming mouse
