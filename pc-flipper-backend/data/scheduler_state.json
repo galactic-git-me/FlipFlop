@@ -1,26 +1,8 @@
 {
   "external_demand": {
-    "last_success_at": "2026-05-30T08:23:12.088239+00:00"
+    "last_success_at": "2026-05-30T08:40:04.666436+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-30T08:23:12.173686+00:00"
-  },
-  "upgrade_parts": {
-    "last_success_at": "2026-05-30T08:32:51.806779+00:00"
-  },
-  "flip_opportunities": {
-    "last_success_at": "2026-05-30T07:44:18.106890+00:00"
-  },
-  "accessories": {
-    "last_success_at": "2026-05-30T08:32:06.193386+00:00"
-  },
-  "compliant_market_ingestion": {
-    "last_success_at": "2026-05-30T08:04:52.361093+00:00"
-  },
-  "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-05-30T08:04:52.752947+00:00"
-  },
-  "outcome_capture": {
-    "last_success_at": "2026-05-30T08:04:53.192069+00:00"
+    "last_success_at": "2026-05-30T08:40:04.722872+00:00"
   }
 }
