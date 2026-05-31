@@ -2250,3 +2250,106 @@ Call log:
 2026-05-30 23:59:01 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=radioactive%20green%20rgb%20pc&minPrice=1&maxPrice=350&exact=false
 2026-05-30 23:59:02 [info     ] facebook.playwright.done       total=0
 2026-05-30 23:59:02 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:59:10 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-30 23:59:21 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=cerebro%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:59:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 23:59:26 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 23:59:28 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 23:59:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 23:59:31 [warning  ] facebook.playwright.login_required hint=Save fb_cookies.json — see playwright_scraper.py instructions
+2026-05-30 23:59:32 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:59:32 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:59:37 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-30 23:59:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=mutant%20tactical%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:59:42 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 23:59:44 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-30 23:59:46 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-30 23:59:48 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-30 23:59:49 [error    ] facebook.playwright.error      error=Page.query_selector: Execution context was destroyed, most likely because of a navigation term=mutant tactical pc
+2026-05-30 23:59:49 [info     ] facebook.playwright.done       total=0
+2026-05-30 23:59:50 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-30 23:59:51 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-30 23:59:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=spiderverse%20gaming%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-30 23:59:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-30 23:59:58 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-31 00:00:00 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=button:has-text('Accept all')
+2026-05-31 00:00:02 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 00:00:09 [error    ] facebook.playwright.error      error=Page.query_selector: Execution context was destroyed, most likely because of a navigation term=spiderverse gaming pc
+2026-05-31 00:00:09 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:00:09 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 00:00:10 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:00:11 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=red%20blue%20rgb%20build&minPrice=1&maxPrice=350&exact=false
+2026-05-31 00:00:15 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 00:00:17 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-31 00:00:19 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=button:has-text('Accept all')
+2026-05-31 00:00:21 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 00:00:22 [error    ] facebook.playwright.error      error=Page.query_selector: Execution context was destroyed, most likely because of a navigation term=red blue rgb build
+2026-05-31 00:00:22 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:00:22 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 00:00:23 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:00:23 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=batcomputer%20workstation&minPrice=1&maxPrice=350&exact=false
+2026-05-31 00:00:27 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 00:00:29 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-31 00:00:31 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
