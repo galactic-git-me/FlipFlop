@@ -4,5 +4,11 @@
   },
   "playbook_evolution": {
     "last_success_at": "2026-05-31T12:36:34.503291+00:00"
+  },
+  "accessories": {
+    "last_success_at": "2026-05-31T12:41:35.203969+00:00"
+  },
+  "cases": {
+    "last_success_at": "2026-05-31T12:41:51.871263+00:00"
   }
 }
