@@ -1,8 +1,8 @@
 services:
-  coding-git-sync:
+  repo-watcher:
     build:
       context: ./autosync
-    container_name: coding-git-sync
+    container_name: coding-repo-watcher
     restart: unless-stopped
     environment:
       CODING_DIR: /coding
