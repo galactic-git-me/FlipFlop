@@ -504,3 +504,50 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 [scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
 [scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
 2026-05-31 00:04:46 [debug    ] upgrade_parts.ebay             buy=None part=i7 CPU sold=None
+2026-05-31 00:05:19 [debug    ] upgrade_parts.ebay             buy=None part=i9 CPU sold=None
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-31 00:05:40 [info     ] runtime.preflight.antibot.done
+2026-05-31 00:05:45 [debug    ] upgrade_parts.ebay             buy=None part=AM4 Motherboard sold=87.5
+[scraper] eBay retry error for 'gaming keyboard': 
+INFO:     127.0.0.1:60654 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60654 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+[scraper] eBay retry error for 'fish tank pc case': 
+INFO:     127.0.0.1:41888 - "POST /api/schedule/flip_opportunities/run/ HTTP/1.1" 307 Temporary Redirect
+2026-05-31 00:05:58 [warning  ] job.skipped.already_running    job_id=flip_opportunities
+INFO:     127.0.0.1:41888 - "POST /api/schedule/flip_opportunities/run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41890 - "GET /api/search-telemetry/recent/?limit=200 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:41890 - "GET /api/search-telemetry/recent?limit=200 HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-31 00:06:17 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:06:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:06:19 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU Motherboard Combo sold=None
+2026-05-31 00:06:23 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+INFO:     127.0.0.1:42116 - "GET /api/schedule/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:42116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42124 - "GET /api/search-telemetry/recent/?limit=30 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:42124 - "GET /api/search-telemetry/recent?limit=30 HTTP/1.1" 200 OK
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-31 00:06:25 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:06:25 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     127.0.0.1:52898 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52900 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52904 - "POST /api/sources/3/scrape/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52904 - "POST /api/sources/3/scrape HTTP/1.1" 200 OK
+2026-05-31 00:06:37 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
