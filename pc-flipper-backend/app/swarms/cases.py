@@ -395,6 +395,7 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
         return []
 
     cases = []
+    filtered_delivery = 0
     query = search.replace(" ", "+")
     url = f"https://www.google.co.uk/search?q={query}&tbm=shop&hl=en-GB&gl=gb&num=20"
 
@@ -821,6 +822,7 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
                     if price <= 0 or price > 200:
                         continue
                     if not allow_temu_aliexpress_listing(str(item.get("contextText", ""))):
+                        filtered_delivery += 1
                         continue
                     href = str(item.get("href", ""))
                     if not href.startswith("http"):
@@ -840,6 +842,8 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
             log.warning("aliexpress.cases.scrape_error", error=str(exc))
         finally:
             await browser.close()
+    if filtered_delivery > 0:
+        log.info("aliexpress.cases.delivery_filtered", search=search, filtered=filtered_delivery)
 
     log.info("aliexpress.cases.done", search=search, found=len(cases))
     return cases
@@ -860,6 +864,7 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
         return []
 
     cases = []
+    filtered_delivery = 0
     url = f"https://www.temu.com/search_result.html?search_key={search.replace(' ', '+')}&search_method=user"
 
     async with async_playwright() as p:
@@ -970,6 +975,7 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
                     if price <= 0 or price > 150:
                         continue
                     if not allow_temu_aliexpress_listing(str(item.get("contextText", ""))):
+                        filtered_delivery += 1
                         continue
                     href = str(item.get("href", ""))
                     if not href.startswith("http"):
@@ -989,6 +995,8 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
             log.warning("temu.cases.scrape_error", error=str(exc))
         finally:
             await browser.close()
+    if filtered_delivery > 0:
+        log.info("temu.cases.delivery_filtered", search=search, filtered=filtered_delivery)
 
     log.info("temu.cases.done", search=search, found=len(cases))
     return cases

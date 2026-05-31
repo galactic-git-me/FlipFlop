@@ -597,6 +597,7 @@ async def _fetch_playwright_lowest_price(
         return None
 
     prices: list[float] = []
+    filtered_delivery = 0
     try:
         async with async_playwright() as p:
             browser = await p.chromium.launch(
@@ -684,11 +685,14 @@ async def _fetch_playwright_lowest_price(
                     continue
                 if source_name in {"temu", "aliexpress"}:
                     if not allow_temu_aliexpress_listing((row or {}).get("contextText") or ""):
+                        filtered_delivery += 1
                         continue
                 prices.append(p)
     except Exception as exc:
         log.debug("upgrade_parts.playwright_fetch.error", source=source_name, error=str(exc))
         return None
+    if filtered_delivery > 0 and source_name in {"temu", "aliexpress"}:
+        log.info("upgrade_parts.delivery_filtered", source=source_name, search=url, filtered=filtered_delivery)
 
     return round(sorted(prices)[0], 2) if prices else None
 

@@ -284,6 +284,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
 
 async def _scrape_playwright_accessories(page, term: str, theme: str, site: str, url: str) -> list[RawAccessory]:
     out: list[RawAccessory] = []
+    filtered_delivery = 0
     defer, reason = should_defer_source_scrape(site)
     if defer:
         log.info("accessories.playwright.deferred", source=site, term=term, reason=reason)
@@ -321,6 +322,7 @@ async def _scrape_playwright_accessories(page, term: str, theme: str, site: str,
         )
         for r in rows or []:
             if site in {"Temu", "AliExpress"} and not allow_temu_aliexpress_listing(str(r.get("contextText") or "")):
+                filtered_delivery += 1
                 continue
             out.append(
                 RawAccessory(
@@ -335,6 +337,8 @@ async def _scrape_playwright_accessories(page, term: str, theme: str, site: str,
             )
     except Exception as exc:
         log.warning("accessories.playwright.error", site=site, term=term, error=str(exc))
+    if filtered_delivery > 0 and site in {"Temu", "AliExpress"}:
+        log.info("accessories.delivery_filtered", site=site, term=term, filtered=filtered_delivery)
     return out
 
 

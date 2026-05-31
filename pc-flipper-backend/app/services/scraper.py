@@ -1891,6 +1891,7 @@ async def _scrape_generic_marketplace_listings(
         for term in search_terms:
             try:
                 added = 0
+                filtered_delivery = 0
                 challenge_emitted = False
                 for page_num in range(1, max_pages + 1):
                     url = _with_page(build_url(term), page_num)
@@ -1992,6 +1993,7 @@ async def _scrape_generic_marketplace_listings(
                             continue
                         if source_name.lower() in {"temu", "aliexpress"}:
                             if not allow_temu_aliexpress_listing(item.get("contextText") or ""):
+                                filtered_delivery += 1
                                 continue
                         href = str(item.get("href") or "")
                         external_id = f"{source_name.lower()}_{abs(hash(href))}"
@@ -2023,7 +2025,16 @@ async def _scrape_generic_marketplace_listings(
                 elif added > 0:
                     record_term_result(term=term, found=added, new=added, source_name=source_name)
                 else:
-                    record_term_result(term=term, found=0, new=0, source_name=source_name)
+                    if filtered_delivery > 0 and source_name.lower() in {"temu", "aliexpress"}:
+                        record_term_result(
+                            term=term,
+                            found=0,
+                            new=0,
+                            error="delivery_filtered_non_uk_or_gt5d",
+                            source_name=source_name,
+                        )
+                    else:
+                        record_term_result(term=term, found=0, new=0, source_name=source_name)
             except Exception as exc:
                 record_term_result(term=term, error=str(exc), source_name=source_name)
         if attached_cdp:
