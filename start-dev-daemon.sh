@@ -28,17 +28,17 @@ cmd_start() {
     echo "$existing" > "$PID_FILE"
     echo "Startup controller already running (pid $existing)."
     echo "Log: $OUT_LOG"
-    exit 0
+    return 0
   fi
 
   if is_running; then
     echo "Daemon already running (pid $(cat "$PID_FILE"))."
-    exit 0
+    return 0
   fi
 
   cd "$ROOT_DIR"
   # Run startup script detached from this shell so child services survive.
-  nohup env ENABLE_TMUX_DASHBOARD=0 ATTACH_TMUX=0 bash ./start-dev-quiet-ports.sh >> "$OUT_LOG" 2>&1 < /dev/null &
+  nohup env ENABLE_TMUX_DASHBOARD="${ENABLE_TMUX_DASHBOARD:-1}" ATTACH_TMUX="${ATTACH_TMUX:-0}" bash ./start-dev-quiet-ports.sh >> "$OUT_LOG" 2>&1 < /dev/null &
   local pid=$!
   echo "$pid" > "$PID_FILE"
   sleep 1
@@ -48,7 +48,7 @@ cmd_start() {
   else
     echo "Daemon failed to start. Check: $OUT_LOG"
     rm -f "$PID_FILE"
-    exit 1
+    return 1
   fi
 }
 
@@ -56,7 +56,7 @@ cmd_stop() {
   if ! is_running; then
     echo "Daemon not running."
     rm -f "$PID_FILE"
-    exit 0
+    return 0
   fi
   local pid
   pid="$(cat "$PID_FILE")"
