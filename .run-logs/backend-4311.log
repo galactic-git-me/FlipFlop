@@ -342,3 +342,38 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-31 00:28:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:28:22 [warning  ] gumtree.playwright.no_listings page_title=Pikachu yellow rgb build | Stuff for Sale - Gumtree term=pikachu yellow rgb build
+2026-05-31 00:28:22 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:28:25 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:28:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:28:38 [warning  ] gumtree.playwright.no_listings page_title=Super saiyan gaming pc | Stuff for Sale - Gumtree term=super saiyan gaming pc
+2026-05-31 00:28:38 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:28:40 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:28:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:28:54 [warning  ] gumtree.playwright.no_listings page_title=Dragon radar workstation | Stuff for Sale - Gumtree term=dragon radar workstation
+2026-05-31 00:28:54 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:28:56 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:28:56 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:29:10 [warning  ] gumtree.playwright.no_listings page_title=Avengers workstation | Stuff for Sale - Gumtree term=avengers workstation
+2026-05-31 00:29:10 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:29:12 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:29:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:29:26 [warning  ] gumtree.playwright.no_listings page_title=Shield tactical pc | Stuff for Sale - Gumtree term=shield tactical pc
+2026-05-31 00:29:26 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:29:28 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:29:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
