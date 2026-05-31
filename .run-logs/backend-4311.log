@@ -2037,3 +2037,1041 @@ INFO:     100.101.209.68:34648 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:34652 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34660 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:34666 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:22:08 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:34678 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34690 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34702 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34704 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34716 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34720 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34726 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:09 [info     ] gumtree.playwright.cards       count=19 term=AM4 motherboard
+2026-05-31 02:22:10 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-31 02:22:12 [info     ] gumtree.playwright.cards       count=25 term=24 inch monitor
+2026-05-31 02:22:13 [info     ] facebook.playwright.items      count=20 term=i7 CPU
+2026-05-31 02:22:14 [info     ] gumtree.playwright.done        total=19
+2026-05-31 02:22:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:22:16 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:22:16 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:22:17 [info     ] facebook.playwright.done       total=20
+2026-05-31 02:22:17 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:54312 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-31 02:22:18 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:54328 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54338 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54346 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54350 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54362 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54370 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54374 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54384 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54386 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54398 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54414 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54430 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54446 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54452 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54456 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54458 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54460 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54476 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-31 02:22:20 [info     ] gumtree.playwright.cards       count=5 term=AM4 motherboard cpu combo
+2026-05-31 02:22:21 [info     ] gumtree.playwright.done        total=5
+2026-05-31 02:22:21 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:22:22 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 02:22:24 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:40922 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40938 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40940 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40950 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40956 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40958 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40970 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:26 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-31 02:22:27 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+2026-05-31 02:22:28 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-31 02:22:31 [info     ] facebook.playwright.items      count=22 term=24 inch monitor
+2026-05-31 02:22:31 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:40984 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40998 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-31 02:22:31 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41000 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41016 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41024 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41040 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41042 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41058 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41062 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41066 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41078 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41082 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:34 [info     ] facebook.playwright.done       total=22
+INFO:     100.101.209.68:41090 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41096 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41104 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41116 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41118 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41126 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41132 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i9%20CPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 02:22:37 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
+2026-05-31 02:22:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=24 inch monitor
+2026-05-31 02:22:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=24 inch monitor
+2026-05-31 02:22:38 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=24 inch monitor
+2026-05-31 02:22:39 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 02:22:40 [info     ] gumtree.playwright.done        total=21
+2026-05-31 02:22:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:22:41 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55764 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55776 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55784 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55794 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55806 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55820 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55836 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55850 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55856 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55872 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55882 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55890 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:22:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-31 02:22:45 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 02:22:47 [info     ] gumtree.playwright.cards       count=29 term=NVMe 1TB
+INFO:     100.101.209.68:55356 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55372 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55388 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55400 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55416 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55420 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55432 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:48 [info     ] facebook.playwright.items      count=20 term=i9 CPU
+2026-05-31 02:22:50 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:22:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:55446 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55456 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55458 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55474 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55478 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55488 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55504 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:52 [info     ] facebook.playwright.done       total=20
+2026-05-31 02:22:52 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:22:52 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard&minPrice=1&maxPrice=2500&exact=false
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:36380 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36392 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36400 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36408 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36424 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:22:57 [info     ] gumtree.playwright.cards       count=26 term=PSU
+2026-05-31 02:22:57 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 02:22:59 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:36428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36446 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36458 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36474 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36484 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36494 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:22:59 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:23:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:23:01 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-31 02:23:03 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:36508 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36510 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36520 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36530 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36546 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36554 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36564 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:23:06 [info     ] facebook.playwright.items      count=24 term=AM4 motherboard
+2026-05-31 02:23:06 [info     ] gumtree.playwright.cards       count=25 term=CPU cooler
+INFO:     100.101.209.68:57580 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57582 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57592 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57604 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57612 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57626 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57636 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57646 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57648 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57662 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57666 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57668 - "GET /api/schedule HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+2026-05-31 02:23:09 [info     ] gumtree.playwright.done        total=25
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-31 02:23:09 [info     ] scheduler.stopped
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-06-01 01:13:43 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 263, in run_upgrade_parts_swarm
+    amz_r, temu_r, ali_r, ali_b_r, gum_r, fb_r = await asyncio.gather(
+                                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 240, in _fetch_lane_seq
+    lane.append(await fn(p["ebay_search"]))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 554, in _fetch_gumtree_component
+    rows = await scrape_gumtree_playwright([search_term], 1, 2500)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/playwright_scraper.py", line 353, in scrape_gumtree_playwright
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/async_api/_context_manager.py", line 40, in __aenter__
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 464, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 550, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-05-31 02:13:43 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 145, in run_flip_opportunities_swarm
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-06-01 01:13:43 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 188, in run_accessories_swarm
+    ebay_results = await _scrape_ebay_accessories(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 70, in _scrape_ebay_accessories
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 644, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 624, in _fetch_term
+    await asyncio.sleep(random.uniform(8.0, 18.0))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-31 02:23:09 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3098851]
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: write EPIPE
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:957:11)
+    at Socket._write (node:net:969:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at PipeTransport.send (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/protocol/transport.js:51:21)
+    at dispatcherConnection.onmessage (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/cli/driver.js:59:57)
+    at DispatcherConnection.sendCreate (/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/dispatchers/dispatcher.js:190:10)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.11.0
+INFO:     Started server process [3412425]
+INFO:     Waiting for application startup.
+2026-05-31 02:23:11 [info     ] app.startup
+2026-05-31 02:23:11 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 02:23:11 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 02:23:11 [info     ] scheduler.started              jobs=11
+2026-05-31 02:23:11 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-31 02:23:11 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-31 02:23:11 [info     ] accessories_swarm.start
+2026-05-31 02:23:11 [info     ] cases_swarm.start
+2026-05-31 02:23:11 [info     ] flip_opportunities_swarm.start
+2026-05-31 02:23:11 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-31 02:23:11 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-31 02:23:11 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
+2026-05-31 02:23:11 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
+2026-05-31 02:23:11 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:23:11 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:23:11 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
+INFO:     100.101.209.68:45980 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45990 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45994 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45998 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46004 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46010 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46024 - "GET /api/sources/health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/playwright_scraper.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-31 02:23:18 [info     ] scheduler.stopped
+Job "Cases Catalogue Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-06-01 01:23:11 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 191, in run_cases_swarm
+    source_batches.append(await _scrape_source_seq(source))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 173, in _scrape_source_seq
+    rows.append(await _scrape_one(source, "Dynamic", term))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 153, in _scrape_one
+    cases = await scrape_fn(term, theme)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/cases.py", line 272, in _scrape_ebay
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 644, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 549, in _fetch_term
+    await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Upgrade Parts Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-06-01 01:23:11 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 169, in run_upgrade_parts_swarm
+    sold = await _ebay_sold_median(client, search)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/upgrade_parts.py", line 354, in _ebay_sold_median
+    await asyncio.sleep(2.5 * (attempt + 1))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+Job "Accessories Swarm (trigger: interval[1 day, 0:00:00], next run at: 2026-06-01 01:23:11 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 188, in run_accessories_swarm
+    ebay_results = await _scrape_ebay_accessories(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/accessories.py", line 70, in _scrape_ebay_accessories
+    listings = await scrape_ebay(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 644, in scrape_ebay
+    term, new_listings, blocked, last_status, err = await _fetch_term(term)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/services/scraper.py", line 549, in _fetch_term
+    await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-05-31 02:23:18 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3412425]
+INFO:     Started server process [3416318]
+INFO:     Waiting for application startup.
+2026-05-31 02:23:19 [info     ] app.startup
+2026-05-31 02:23:19 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 02:23:19 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 02:23:19 [info     ] scheduler.started              jobs=11
+2026-05-31 02:23:19 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-31 02:23:19 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-31 02:23:19 [info     ] accessories_swarm.start
+2026-05-31 02:23:19 [info     ] cases_swarm.start
+2026-05-31 02:23:19 [info     ] flip_opportunities_swarm.start
+2026-05-31 02:23:19 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     100.101.209.68:46032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46034 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46036 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+2026-05-31 02:23:20 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-31 02:23:20 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
+2026-05-31 02:23:20 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
+2026-05-31 02:23:20 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:23:20 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:23:20 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
+INFO:     100.101.209.68:46042 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46054 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46070 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46080 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46082 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46092 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46104 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46116 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46128 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:23:23 [info     ] resale_scraper.block_detected  cooldown_seconds=900.0 query=gaming PC rtx 3060 status=403
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=340.0 median=900.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=17.0 median=512.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=17.0 median=512.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=17.0 median=512.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.block_cooldown_active wait_seconds=900.0
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=440.0 median=1020.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=13.0 median=507.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=1008.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=1008.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=44.0 median=544.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=385.0 median=954.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=385.0 median=954.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=882.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=160.0 median=684.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=13.0 median=507.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=13.0 median=507.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=16.0 median=511.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=119.0 median=634.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=751.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=217.0 median=752.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=418.0 median=993.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=118.0 median=633.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=113.0 median=627.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=116.0 median=631.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=119.0 median=634.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=751.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=754.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=751.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=751.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=310.0 median=864.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=314.0 median=868.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=292.0 median=842.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=162.0 median=686.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=7.0 median=500.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=7.0 median=500.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=51.0 median=553.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=51.0 median=553.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=51.0 median=553.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=52.0 median=554.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=16.0 median=511.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=52.0 median=554.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=6.0 median=499.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=7.0 median=500.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=340.0 median=900.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=624.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=624.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=170.0 median=696.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=41.0 median=541.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=480.0 median=1068.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=480.0 median=1068.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=310.0 median=864.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=17.0 median=512.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=340.0 median=900.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=440.0 median=1020.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=1008.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=430.0 median=1008.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=385.0 median=954.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=385.0 median=954.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=325.0 median=882.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=80.0 median=588.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=120.0 median=636.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=160.0 median=684.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=180.0 median=708.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=217.0 median=752.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=216.0 median=751.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=118.0 median=633.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=119.0 median=634.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=219.0 median=754.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=9.0 median=502.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=140.0 median=660.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=310.0 median=864.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=314.0 median=868.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=240.0 median=780.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=220.0 median=756.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=260.0 median=804.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=292.0 median=842.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=14.0 median=508.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=162.0 median=686.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=7.0 median=500.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=7.0 median=500.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=51.0 median=553.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=51.0 median=553.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=52.0 median=554.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=52.0 median=554.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=130.0 median=648.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=320.0 median=876.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=110.0 median=624.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=30.0 median=528.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=150.0 median=672.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=170.0 median=696.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=190.0 median=720.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=230.0 median=768.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=414.0 median=988.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=42.0 median=542.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=41.0 median=541.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=460.0 median=1044.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=480.0 median=1068.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=480.0 median=1068.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=20.0 median=516.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=360.0 median=924.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=13.0 median=507.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=14.0 median=508.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=15.0 median=510.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=11.0 median=505.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=250.0 median=792.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=3.5 median=496.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=40.0 median=540.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=35.0 median=534.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=25.0 median=522.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=24.0 median=520.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=24.0 median=520.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=24.0 median=520.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=24.0 median=520.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=24.0 median=520.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=3.0 median=495.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=10.0 median=504.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=824.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=315.0 median=870.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=277.0 median=824.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=8.0 median=501.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=380.0 median=948.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=210.0 median=744.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=1.0 median=493.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=330.0 median=888.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=200.0 median=732.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=100.0 median=612.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=4.0 median=496.8 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=12.0 median=506.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=16.0 median=511.2 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=300.0 median=852.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=390.0 median=960.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=3.0 median=495.6 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=2.0 median=494.4 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=5.0 median=498.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=390.0 median=960.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [info     ] resale_scraper.fallback_buy_price buy_price=350.0 median=912.0 query=gaming PC rtx 3060
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3638633147134013532 fingerprint=poweredge r240|||240 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8250627148093333411 fingerprint=poweredge r340|||340 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5242946448502854087 fingerprint=poweredge r440|||440 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4297897998899635684 fingerprint=13 generation|||13 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6242199398429214888 fingerprint=poweredge r330|||330 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6810833316087380508 fingerprint=poweredge r430|||430 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_935373327291235173 fingerprint=poweredge t430 r|||430 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4262210981050128776 fingerprint=poweredge t330 r|||330 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2401464228463646481 fingerprint=proliant dl380 gen11|||380 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5451245852884338633 fingerprint=proliant dl180 gen10|||180 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3572139016973263803 fingerprint=proliant dl360 gen10|||360 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4709309146042505881 fingerprint=proliant dl380 gen10|||380 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_972383108549773867 fingerprint=proliant dl385 gen10|||385 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7918446878374903488 fingerprint=proliant dl20 gen10 plus|||20 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8660788390112955292 fingerprint=proliant dl360 gen10 plus|||360 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7043070479243933805 fingerprint=proliant dl380 gen10 plus|||380 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3811781648016030867 fingerprint=proliant dl385 gen10 plus|||385 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_562050669821010264 fingerprint=proliant dl325 gen10 plus v2|||325 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2976642405363140233 fingerprint=proliant dl20 gen9|||20 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3497514199222033254 fingerprint=proliant dl80 gen9|||80 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8328174590361291624 fingerprint=proliant dl120 gen9|||120 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6020492089068692285 fingerprint=proliant dl160 gen9|||160 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3011124465352091637 fingerprint=proliant dl180 gen9|||180 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4993076907156881569 fingerprint=proliant dl360 gen9|||360 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_861707613434724144 fingerprint=proliant dl380 gen9|||380 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3655141461342744901 fingerprint=proliant dl320e gen8|||320 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6541885619565275541 fingerprint=proliant dl380p gen8|||380 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8420284630762155975 fingerprint=13 generation|||13 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7049786203769994739 fingerprint=cse 216 x12dpi n6|||216 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5632562634881157059 fingerprint=cse 217 x12dpt b6|||217 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3993538533807614204 fingerprint=cse 118 x11dgq|||118 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_9164470330760252810 fingerprint=cse 119u x11dpu|||119 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4708431382208996623 fingerprint=cse 219u x11dpu|||219 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7756908279295172197 fingerprint=thinkserver rs140|||140 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4544989726176821968 fingerprint=ciara orion hf310 g4|||310 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8379430146085759664 fingerprint=ciara orion hf314 g4|||314 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7058895182117580571 fingerprint=cisco ucs c260 m2|||260 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4446641596912176372 fingerprint=cisco ucs c220 m5|||220 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6033552036642403601 fingerprint=cisco ucs c220 m4|||220 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5419817897337345243 fingerprint=cisco ucs c240 m4|||240 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1579285011365555974 fingerprint=cisco ucs c240 m3|||240 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5113211210683327779 fingerprint=cisco ucs c220 m3|||220 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3872019883030339951 fingerprint=gigabyte g292 z20|||292 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_925477195651530026 fingerprint=gigabyte r162 z12 cd|||162 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2818599789303093438 fingerprint=oracle sparc t7 1|||7 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7180232027413392847 fingerprint=oracle sparc s7 2l|||7 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8866107683377624532 fingerprint=qct quantagrid d51b 2u|||51 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_174551887592138999 fingerprint=qct quantagrid d51ph 1ulh|||51 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3219091378112451744 fingerprint=qct quantagrid d52b 1u|||52 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5114547688758687433 fingerprint=qct quantagrid d52bq 2u|||52 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7154602235848969219 fingerprint=sun x4 2|||4 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7236389677636980905 fingerprint=sun x5 2|||5 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1708133572238338066 fingerprint=sun x8 2l|||8 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3706570725395137584 fingerprint=poweredge t330|||330 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4787253803022068819 fingerprint=poweredge t130|||130 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6796008668340503511 fingerprint=proliant ml30 gen10|||30 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7770037581397581548 fingerprint=proliant ml110 gen10|||110 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4341981751692460257 fingerprint=proliant ml350 gen10|||350 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6146858465971031338 fingerprint=proliant ml30 gen9|||30 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1262110973636195114 fingerprint=proliant ml150 gen9|||150 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_9113865897776947105 fingerprint=proliant ml350 gen9|||350 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4838064095367084881 fingerprint=poweredge fx2s chassis|||2 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4453140934403001993 fingerprint=poweredge fx2s 4x fc640|||2 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3395289595044346498 fingerprint=poweredge fx2 4x fc630|||2 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4139740711167535736 fingerprint=proliant xl230k gen10 node|||230 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6287049302000160812 fingerprint=proliant xl190r gen10 node|||190 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1519376050311524402 fingerprint=proliant xl170r gen10 node|||170 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_742603084744244665 fingerprint=proliant sl230s gen8 node|||230 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1733526082295523739 fingerprint=quanta t42d 2u|||42 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8909773108522719758 fingerprint=quanta t42s 2u|||42 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6010105926096486341 fingerprint=quanta t41s 2u|||41 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1918719384283273885 fingerprint=lenovo d2 4x sd530|||2 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1112583887588900389 fingerprint=proliant bl460c gen10|||460 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5049674544787470395 fingerprint=proliant bl460c gen9|||460 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4377634309424581753 fingerprint=synergy 480 gen10|||480 source=BargainHardware
+2026-05-31 02:23:23 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6654257002297200610 fingerprint=synergy 480 gen9|||480 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2827783678880033616 fingerprint=z4 sff g5|||4 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_237204173596479089 fingerprint=z2 g4 sff|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4416853833332519690 fingerprint=thinkstation p330|||330 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7646141698201018887 fingerprint=thinkstation p360|||360 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4051767974197282922 fingerprint=poweredge r240|||240 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3194950969096893846 fingerprint=poweredge r340|||340 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1418334685977477040 fingerprint=poweredge r440|||440 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1808097867222090910 fingerprint=poweredge r330|||330 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5566363965368685240 fingerprint=poweredge r430|||430 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_100371323627627447 fingerprint=poweredge t430 r|||430 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5519491829123261532 fingerprint=poweredge t330 r|||330 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4626844365845476513 fingerprint=proliant dl380 gen11|||380 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7851149374743196165 fingerprint=proliant dl180 gen10|||180 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7500191009156639609 fingerprint=proliant dl360 gen10|||360 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6054320055561241966 fingerprint=proliant dl380 gen10|||380 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7523797262438746656 fingerprint=proliant dl385 gen10|||385 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8604739960514811739 fingerprint=proliant dl20 gen10 plus|||20 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5319149038787047460 fingerprint=proliant dl360 gen10 plus|||360 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8424812879966848771 fingerprint=proliant dl380 gen10 plus|||380 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3183132038648027697 fingerprint=proliant dl385 gen10 plus|||385 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5965050913162133349 fingerprint=proliant dl325 gen10 plus v2|||325 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5753161400138304766 fingerprint=proliant dl20 gen9|||20 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4728541197121095565 fingerprint=proliant dl80 gen9|||80 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5342186951257729593 fingerprint=proliant dl120 gen9|||120 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4316975787570638241 fingerprint=proliant dl160 gen9|||160 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4647846622306580041 fingerprint=proliant dl180 gen9|||180 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7108278683551168362 fingerprint=proliant dl360 gen9|||360 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3573831253143019984 fingerprint=proliant dl380 gen9|||380 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6726489034943631350 fingerprint=proliant dl320e gen8|||320 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5747470665435707175 fingerprint=proliant dl380p gen8|||380 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4359942147186538737 fingerprint=cse 217 x12dpt b6|||217 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_816830617598656274 fingerprint=cse 216 x12dpi n6|||216 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5011934457184294281 fingerprint=cse 118 x11dgq|||118 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5591861757258537614 fingerprint=cse 119u x11dpu|||119 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_797902101351547234 fingerprint=cse 219u x11dpu|||219 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3847895923894842242 fingerprint=thinkserver rs140|||140 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3416277382045896390 fingerprint=ciara orion hf310 g4|||310 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4912033050374460370 fingerprint=ciara orion hf314 g4|||314 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2076527197859081171 fingerprint=cisco ucs c220 m5|||220 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1784045307223898961 fingerprint=cisco ucs c220 m4|||220 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6333955264784227583 fingerprint=cisco ucs c240 m4|||240 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7481798643155437895 fingerprint=cisco ucs c240 m3|||240 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_508372255373142450 fingerprint=cisco ucs c220 m3|||220 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8187091043360175730 fingerprint=cisco ucs c260 m2|||260 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8969875124791871497 fingerprint=gigabyte g292 z20|||292 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8200508023377811816 fingerprint=gigabyte r162 z12 cd|||162 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1032561876654248520 fingerprint=oracle sparc t7 1|||7 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_511839592619920798 fingerprint=oracle sparc s7 2l|||7 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6083106007743933875 fingerprint=qct quantagrid d51b 2u|||51 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5822755566690213117 fingerprint=qct quantagrid d51ph 1ulh|||51 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5088905986113390415 fingerprint=qct quantagrid d52b 1u|||52 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_8161364243846933084 fingerprint=qct quantagrid d52bq 2u|||52 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6009857653627901802 fingerprint=sun x4 2|||4 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_158787141723873325 fingerprint=sun x5 2|||5 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2204776550013091455 fingerprint=sun x8 2l|||8 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6849705114292681979 fingerprint=poweredge t330|||330 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3030649871563019071 fingerprint=poweredge t130|||130 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6702501455207063428 fingerprint=proliant ml30 gen10|||30 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7242253580446811655 fingerprint=proliant ml110 gen10|||110 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_173577706462549892 fingerprint=proliant ml350 gen10|||350 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1258537607525305108 fingerprint=proliant ml30 gen9|||30 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7679056328444650207 fingerprint=proliant ml150 gen9|||150 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3525808432972403752 fingerprint=proliant ml350 gen9|||350 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5628857815577252209 fingerprint=poweredge fx2s chassis|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5049972329607678888 fingerprint=poweredge fx2 4x fc630|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3663969163299859829 fingerprint=poweredge fx2s 4x fc640|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_79243232951638972 fingerprint=proliant xl170r gen10 node|||170 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7474065024827290508 fingerprint=proliant xl190r gen10 node|||190 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7274381181099002876 fingerprint=proliant xl230k gen10 node|||230 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6876635184486805671 fingerprint=proliant sl230s gen8 node|||230 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_9135782104856328575 fingerprint=quanta t42d 2u|||42 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2903081068868293866 fingerprint=quanta t42s 2u|||42 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7593395387133478205 fingerprint=quanta t41s 2u|||41 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5732155279516040665 fingerprint=lenovo d2 4x sd530|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4102207411239456842 fingerprint=proliant bl460c gen10|||460 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_4055774636788291254 fingerprint=proliant bl460c gen9|||460 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3438607931430722179 fingerprint=synergy 480 gen10|||480 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6714950339032836462 fingerprint=synergy 480 gen9|||480 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_5610649127274047045 fingerprint=z4 sff g5|||4 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_1944465159146532776 fingerprint=z2 g4 sff|||2 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_6062015190170147403 fingerprint=thinkstation p330|||330 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_3275409073408884523 fingerprint=thinkstation p360|||360 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_7279051447787679483 fingerprint=small pc workstation shipping box heavy duty cardboard|||277 source=BargainHardware
+2026-05-31 02:23:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=bargainhardware_2020691699278019684 fingerprint=small pc workstation shipping box heavy duty cardboard|||277 source=BargainHardware
+2026-05-31 02:23:24 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=4 source=BargainHardware
+INFO:     100.101.209.68:46130 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46140 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46154 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46156 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46172 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46180 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46184 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:23:28 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:60502 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60504 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60508 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60522 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60536 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60550 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60562 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60578 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60582 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60592 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60600 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60606 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54808 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54810 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54812 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54826 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54838 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54854 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54858 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54866 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54874 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54880 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54888 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54896 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54900 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54916 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56314 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56316 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56330 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56342 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56354 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56364 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56368 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56372 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56380 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56384 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56386 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56388 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56398 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56410 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56418 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56424 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56438 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56440 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:23:53 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:32978 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32994 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32996 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33008 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33020 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33022 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33030 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33036 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33046 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33062 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33064 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33076 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-31 02:24:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:54992 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55006 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55020 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55028 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55040 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55052 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55062 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55072 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55082 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55098 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55112 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55124 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:24:07 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+INFO:     100.101.209.68:55130 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55134 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55138 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55152 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55156 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:24:12 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:24:12 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:24:12 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:55164 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55180 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55186 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55198 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55212 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55216 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-31 02:24:18 [info     ] facebook.playwright.items      count=15 term=gaming keyboard
+2026-05-31 02:24:20 [info     ] facebook.playwright.done       total=15
+INFO:     100.101.209.68:35090 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35094 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35102 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35114 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35118 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35132 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35144 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35146 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35152 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35188 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35200 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35208 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35210 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35212 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35232 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35246 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-31 02:24:24 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming keyboard
+2026-05-31 02:24:24 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming keyboard
+2026-05-31 02:24:24 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming keyboard
+2026-05-31 02:24:26 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+INFO:     100.101.209.68:53440 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53454 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53466 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53482 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53484 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53490 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53494 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50746 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50754 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50768 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50782 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50788 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50804 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50814 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50818 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50822 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50830 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50846 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50848 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50852 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50856 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50864 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50876 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50892 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50908 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50922 - "GET /api/sources/health HTTP/1.1" 200 OK

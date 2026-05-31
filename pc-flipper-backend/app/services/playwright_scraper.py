@@ -325,6 +325,32 @@ async def _launch_browser(playwright):
         raise
 
 
+async def _best_effort_click_any(
+    page,
+    selectors: list[str],
+    *,
+    log_key: str,
+    click_timeout_ms: int = 1200,
+) -> bool:
+    """
+    Try to click the first visible selector without generating timeout-noise logs.
+    Returns True when a click was performed.
+    """
+    for selector in selectors:
+        try:
+            el = await page.query_selector(selector)
+            if not el:
+                continue
+            if not await el.is_visible():
+                continue
+            await el.click(timeout=click_timeout_ms)
+            log.info(log_key, selector=selector)
+            return True
+        except Exception:
+            continue
+    return False
+
+
 # ── Gumtree ─────────────────────────────────────────────────────────────────
 
 async def scrape_gumtree_playwright(
@@ -582,17 +608,18 @@ async def scrape_facebook_playwright(
                             login_required.set()
                             return term, [], "login_required"
 
-                        for selector in [
-                            "div[aria-label='Close']",
-                            "button:has-text('Allow all cookies')",
-                            "button:has-text('Accept all')",
-                            "[data-testid='cookie-policy-manage-dialog-accept-button']",
-                        ]:
-                            try:
-                                await page.click(selector, timeout=2000)
-                                await asyncio.sleep(0.3)
-                            except Exception as exc:
-                                log.debug("facebook.cookie_click_skipped", selector=selector, error=str(exc))
+                        cookie_clicked = await _best_effort_click_any(
+                            page,
+                            [
+                                "button:has-text('Allow all cookies')",
+                                "button:has-text('Accept all')",
+                                "[data-testid='cookie-policy-manage-dialog-accept-button']",
+                                "div[aria-label='Close']",
+                            ],
+                            log_key="facebook.cookie_banner_clicked",
+                        )
+                        if cookie_clicked:
+                            await asyncio.sleep(0.4)
 
                         login_wall = await page.query_selector("input[name='email'], form[data-testid='royal_login_form']")
                         if login_wall:
