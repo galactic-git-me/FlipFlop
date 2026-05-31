@@ -277,17 +277,25 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         gum_r = [None for _ in parts]
         fb_r = [None for _ in parts]
     for v in amz_r:
-        if v and not isinstance(v, Exception):
-            stats["amazon"] += 1
+        if not isinstance(v, Exception):
+            price, _ = _val_count(v)
+            if price:
+                stats["amazon"] += 1
     for v in temu_r:
-        if v and not isinstance(v, Exception):
-            stats["temu"] += 1
+        if not isinstance(v, Exception):
+            price, _ = _val_count(v)
+            if price:
+                stats["temu"] += 1
     for v in ali_r:
-        if v and not isinstance(v, Exception):
-            stats["aliexpress"] += 1
+        if not isinstance(v, Exception):
+            price, _ = _val_count(v)
+            if price:
+                stats["aliexpress"] += 1
     for v in ali_b_r:
-        if v and not isinstance(v, Exception):
-            stats["alibaba"] += 1
+        if not isinstance(v, Exception):
+            price, _ = _val_count(v)
+            if price:
+                stats["alibaba"] += 1
 
     # ── Phase 4: Persist ──────────────────────────────────────────────────────
     async with AsyncSessionLocal() as db:
@@ -301,20 +309,27 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 oc_new    = oc_r[i]   if not isinstance(oc_r[i], Exception)   else None
                 box_new   = box_r[i]  if not isinstance(box_r[i], Exception)  else None
 
-                amz_new   = amz_r[i]  if not isinstance(amz_r[i], Exception)  else None
-                temu_new  = temu_r[i] if not isinstance(temu_r[i], Exception) else None
-                ali_new   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
-                ali_b_new = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
-                gum_new   = gum_r[i] if not isinstance(gum_r[i], Exception) else None
-                fb_new    = fb_r[i] if not isinstance(fb_r[i], Exception) else None
+                amz_v   = amz_r[i]  if not isinstance(amz_r[i], Exception)  else None
+                temu_v  = temu_r[i] if not isinstance(temu_r[i], Exception) else None
+                ali_v   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
+                ali_b_v = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
+                gum_v   = gum_r[i] if not isinstance(gum_r[i], Exception) else None
+                fb_v    = fb_r[i] if not isinstance(fb_r[i], Exception) else None
+
+                amz_new, amz_count = _val_count(amz_v)
+                temu_new, temu_count = _val_count(temu_v)
+                ali_new, ali_count = _val_count(ali_v)
+                ali_b_new, ali_b_count = _val_count(ali_b_v)
+                gum_new, gum_count = _val_count(gum_v)
+                fb_new, fb_count = _val_count(fb_v)
 
                 search = part_def["ebay_search"]
-                record_term_result(source_name="UpgradeParts:Amazon", term=search, found=1 if amz_new else 0, new=0)
-                record_term_result(source_name="UpgradeParts:Temu", term=search, found=1 if temu_new else 0, new=0)
-                record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=1 if ali_new else 0, new=0)
-                record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=1 if ali_b_new else 0, new=0)
-                record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=1 if gum_new else 0, new=0)
-                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=1 if fb_new else 0, new=0)
+                record_term_result(source_name="UpgradeParts:Amazon", term=search, found=amz_count, new=0)
+                record_term_result(source_name="UpgradeParts:Temu", term=search, found=temu_count, new=0)
+                record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=ali_count, new=0)
+                record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=ali_b_count, new=0)
+                record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=gum_count, new=0)
+                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=fb_count, new=0)
 
                 if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new, gum_new, fb_new]):
                     await _upsert_part(
@@ -502,7 +517,7 @@ async def _fetch_box(search_term: str) -> float | None:
 
 # ── Amazon / Temu / AliExpress (Playwright) ──────────────────────────────────
 
-async def _fetch_amazon(search_term: str) -> float | None:
+async def _fetch_amazon(search_term: str) -> tuple[float | None, int]:
     return await _fetch_playwright_lowest_price(
         url=f"https://www.amazon.co.uk/s?k={search_term.replace(' ', '+')}&i=computers",
         item_selector='[data-component-type="s-search-result"]',
@@ -514,7 +529,7 @@ async def _fetch_amazon(search_term: str) -> float | None:
     )
 
 
-async def _fetch_temu(search_term: str) -> float | None:
+async def _fetch_temu(search_term: str) -> tuple[float | None, int]:
     return await _fetch_playwright_lowest_price(
         url=f"https://www.temu.com/search_result.html?search_key={search_term.replace(' ', '+')}&search_method=user",
         item_selector='a[href*="/goods"]',
@@ -526,7 +541,7 @@ async def _fetch_temu(search_term: str) -> float | None:
     )
 
 
-async def _fetch_aliexpress(search_term: str) -> float | None:
+async def _fetch_aliexpress(search_term: str) -> tuple[float | None, int]:
     return await _fetch_playwright_lowest_price(
         url=f"https://www.aliexpress.com/wholesale?SearchText={search_term.replace(' ', '+')}&g=y&SortType=price_asc",
         item_selector='a[href*="/item/"]',
@@ -538,7 +553,7 @@ async def _fetch_aliexpress(search_term: str) -> float | None:
     )
 
 
-async def _fetch_alibaba(search_term: str) -> float | None:
+async def _fetch_alibaba(search_term: str) -> tuple[float | None, int]:
     return await _fetch_playwright_lowest_price(
         url=f"https://www.alibaba.com/trade/search?SearchText={search_term.replace(' ', '+')}",
         item_selector='a[href*="/product-detail/"], a[href*="/x/"]',
@@ -550,24 +565,24 @@ async def _fetch_alibaba(search_term: str) -> float | None:
     )
 
 
-async def _fetch_gumtree_component(search_term: str) -> float | None:
+async def _fetch_gumtree_component(search_term: str) -> tuple[float | None, int]:
     try:
         rows = await scrape_gumtree_playwright([search_term], 1, 2500)
         prices = [float(getattr(r, "price", 0) or 0) for r in rows if float(getattr(r, "price", 0) or 0) > 0]
-        return round(min(prices), 2) if prices else None
+        return (round(min(prices), 2), len(prices)) if prices else (None, 0)
     except Exception as exc:
         log.warning("upgrade_parts.gumtree_fetch.error", search=search_term, error=str(exc))
-        return None
+        return None, 0
 
 
-async def _fetch_facebook_component(search_term: str) -> float | None:
+async def _fetch_facebook_component(search_term: str) -> tuple[float | None, int]:
     try:
         rows = await scrape_facebook_playwright([search_term], 1, 2500)
         prices = [float(getattr(r, "price", 0) or 0) for r in rows if float(getattr(r, "price", 0) or 0) > 0]
-        return round(min(prices), 2) if prices else None
+        return (round(min(prices), 2), len(prices)) if prices else (None, 0)
     except Exception as exc:
         log.warning("upgrade_parts.facebook_fetch.error", search=search_term, error=str(exc))
-        return None
+        return None, 0
 
 
 async def _fetch_playwright_lowest_price(
@@ -579,7 +594,7 @@ async def _fetch_playwright_lowest_price(
     price_selector: str,
     source_name: str,
     max_price: float,
-) -> float | None:
+) -> tuple[float | None, int]:
     source_label = {
         "temu": "Temu",
         "aliexpress": "AliExpress",
@@ -589,12 +604,12 @@ async def _fetch_playwright_lowest_price(
     defer, reason = should_defer_source_scrape(str(source_label))
     if defer:
         log.info("upgrade_parts.playwright.deferred", source=source_label, reason=reason)
-        return None
+        return None, 0
 
     try:
         from playwright.async_api import async_playwright
     except ImportError:
-        return None
+        return None, 0
 
     prices: list[float] = []
     filtered_delivery = 0
@@ -618,7 +633,7 @@ async def _fetch_playwright_lowest_price(
                 or "challenge" in body_l
             ):
                 await browser.close()
-                return None
+                return None, 0
             if source_name in {"aliexpress", "alibaba"} and (
                 "captcha interception" in title_l
                 or "captcha" in body_l
@@ -627,7 +642,7 @@ async def _fetch_playwright_lowest_price(
                 or "awsc/captcha" in body_l
             ):
                 await browser.close()
-                return None
+                return None, 0
             try:
                 await page.wait_for_selector(item_selector, timeout=10000)
             except Exception as exc:
@@ -690,11 +705,11 @@ async def _fetch_playwright_lowest_price(
                 prices.append(p)
     except Exception as exc:
         log.debug("upgrade_parts.playwright_fetch.error", source=source_name, error=str(exc))
-        return None
+        return None, 0
     if filtered_delivery > 0 and source_name in {"temu", "aliexpress"}:
         log.info("upgrade_parts.delivery_filtered", source=source_name, search=url, filtered=filtered_delivery)
 
-    return round(sorted(prices)[0], 2) if prices else None
+    return (round(sorted(prices)[0], 2), len(prices)) if prices else (None, 0)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -702,6 +717,18 @@ async def _fetch_playwright_lowest_price(
 def _parse_price(text: str) -> float:
     m = re.search(r"[\d,]+\.?\d*", str(text).replace(",", ""))
     return float(m.group(0)) if m else 0.0
+
+
+def _val_count(v) -> tuple[float | None, int]:
+    """
+    Normalize lane return value to (price, count).
+    Supports both legacy float and new tuple payload.
+    """
+    if isinstance(v, tuple):
+        price = v[0] if len(v) > 0 else None
+        count = int(v[1]) if len(v) > 1 and v[1] is not None else (1 if price else 0)
+        return price, max(0, count)
+    return v, (1 if v else 0)
 
 
 async def _upsert_part(
