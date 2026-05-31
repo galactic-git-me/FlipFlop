@@ -521,15 +521,19 @@ async def scrape_facebook_playwright(
         )
         return []
 
-    # When CDP is configured, prefer the live browser session state and do NOT
+    # Default: when CDP is configured, prefer live browser session state and do NOT
     # inject file cookies (stale cookie files can force an unexpected logout wall).
+    # Override: FB_FORCE_COOKIE_FILE=1 forces fb_cookies.json mode for troubleshooting.
     settings = get_settings()
     cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
-    use_live_cdp_session = bool(cdp_url)
+    force_cookie_file = os.getenv("FB_FORCE_COOKIE_FILE", "0").lower() in {"1", "true", "yes"}
+    use_live_cdp_session = bool(cdp_url) and not force_cookie_file
 
     cookies = None if use_live_cdp_session else _load_fb_cookies()
     if use_live_cdp_session:
         log.info("facebook.playwright.using_live_cdp_session", cdp_url=cdp_url)
+    elif force_cookie_file:
+        log.info("facebook.playwright.using_cookie_file_override")
     elif cookies:
         log.info("facebook.playwright.cookies_loaded", count=len(cookies))
     else:
