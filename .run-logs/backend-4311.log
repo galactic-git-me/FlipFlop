@@ -2949,3 +2949,384 @@ INFO:     100.101.209.68:56500 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56506 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56518 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:56528 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 244)
+INFO:     100.101.209.68:56534 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56548 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56552 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56564 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56578 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56590 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56598 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56612 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56620 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56624 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56634 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56650 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53670 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53682 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53688 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53690 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53702 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53716 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 102)
+INFO:     100.101.209.68:53718 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53732 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53740 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53746 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53752 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53754 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53762 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53772 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53782 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53796 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53810 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53826 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53834 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42026 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42034 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42044 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42060 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42070 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 244)
+INFO:     100.101.209.68:42086 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42092 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42096 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42102 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42114 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42124 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42126 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49728 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49740 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49746 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49756 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49770 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49782 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49786 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49794 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49806 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49818 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49828 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49836 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49846 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49858 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49860 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49872 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49874 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49890 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49900 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '1TB NVMe SSD': 0 found, 0 new (total 102)
+INFO:     100.101.209.68:48900 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48904 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48918 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48924 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48934 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48942 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48958 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48974 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48988 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48990 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49000 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49002 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49028 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49034 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49040 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49052 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49064 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49066 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 244)
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=280.46 median=828.55 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=299.06 median=850.87 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=307.29 median=860.75 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=285.0 median=834.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=302.3 median=854.76 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=377.62 median=945.14 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=309.29 median=863.15 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=277.37 median=824.84 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=259.99 median=803.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=375.08 median=942.1 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=373.79 median=940.55 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=257.99 median=801.59 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=312.7 median=867.24 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=260.7 median=804.84 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=249.99 median=791.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=356.39 median=919.67 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=250.3 median=792.36 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=362.68 median=927.22 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=289.99 median=839.99 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=342.13 median=902.56 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=402.39 median=974.87 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=402.39 median=974.87 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=363.69 median=928.43 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=280.0 median=828.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=406.88 median=980.26 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=258.62 median=802.34 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=367.59 median=933.11 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=467.0 median=1052.4 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=268.0 median=813.6 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=286.7 median=836.04 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=265.0 median=810.0 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=419.09 median=994.91 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=288.0 median=837.6 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=443.0 median=1023.6 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=297.1 median=848.52 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=360.99 median=925.19 query=gaming PC ryzen 7 7800x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=289.0 median=838.8 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=401.58 median=973.9 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=192.05 median=722.46 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=290.0 median=840.0 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=291.74 median=554.09 query=gaming PC ryzen 9 7900x
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=126.07 median=643.28 query=gaming PC rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=337.05 median=896.46 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=278.46 median=826.15 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=349.49 median=911.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=249.62 median=791.54 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=345.39 median=906.47 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=288.87 median=550.64 query=gaming PC ryzen 9 7900x
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=271.04 median=529.25 query=gaming PC ryzen 9 7900
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=409.99 median=983.99 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=379.99 median=947.99 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=458.35 median=1042.02 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=267.46 median=812.95 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=312.67 median=867.2 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=433.98 median=1012.78 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=419.99 median=995.99 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=21.49 median=517.79 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=461.21 median=1045.45 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=299.0 median=850.8 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=278.0 median=825.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=312.99 median=867.59 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=361.54 median=925.85 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=363.0 median=927.6 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=365.12 median=930.14 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=198.3 median=729.96 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=472.13 median=1058.56 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=459.13 median=1042.96 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] resale_scraper.fallback_buy_price buy_price=467.45 median=1052.94 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:04 [info     ] source.done                    found=244 gems=0 source=eBay UK
+INFO:     100.101.209.68:44002 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44018 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44034 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44052 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44068 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44080 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44092 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44106 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44108 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44112 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46158 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46174 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46188 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46200 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46216 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46224 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46238 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46242 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46266 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46278 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46288 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46292 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46304 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 102)
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=126.07 fallback=170.19 query=pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=170.19 median=696.23 query=gaming PC rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=349.49 fallback=471.81 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=471.81 median=1058.17 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=278.46 fallback=375.92 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=375.92 median=943.1 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=345.39 fallback=466.28 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=466.28 median=1051.54 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=290.0 fallback=391.5 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=391.5 median=961.8 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=192.05 fallback=259.27 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=259.27 median=803.12 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=259.27 median=803.12 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=259.27 median=803.12 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=259.27 median=803.12 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=259.27 median=803.12 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=337.05 fallback=455.02 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=455.02 median=1038.02 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=455.02 median=1038.02 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=455.02 median=1038.02 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:22 [info     ] auction_price.fallback         current_bid=249.62 fallback=336.99 query=ryzen 9 7900x pc tower
+2026-05-31 11:47:22 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=288.87 fallback=389.97 query=ryzen 9 7900x gaming pc
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=389.97 median=671.96 query=gaming PC ryzen 9 7900x
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=365.12 fallback=492.91 query=ryzen 9 7900 pc tower
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=492.91 median=1083.49 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=267.46 fallback=361.07 query=ryzen 9 7900 pc tower
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=361.07 median=925.28 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=361.07 median=925.28 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=361.07 median=925.28 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=379.99 fallback=512.99 query=ryzen 9 7900 pc tower
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=512.99 median=1107.59 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=512.99 median=1107.59 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=512.99 median=1107.59 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=312.67 fallback=422.1 query=ryzen 9 7900 pc tower
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=422.1 median=998.52 query=gaming PC ryzen 9 7900 rtx 3060
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=336.99 median=896.39 query=gaming PC ryzen 9 7900x rtx 3060
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=271.04 fallback=365.9 query=ryzen 9 7900 gaming pc
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=365.9 median=643.08 query=gaming PC ryzen 9 7900
+2026-05-31 11:47:23 [info     ] auction_price.fallback         current_bid=312.99 fallback=422.54 query=ryzen 9 7900 pc tower
+2026-05-31 11:47:23 [info     ] resale_scraper.fallback_buy_price buy_price=422.54 median=999.05 query=gaming PC ryzen 9 7900 rtx 3060
+INFO:     100.101.209.68:46318 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46322 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46338 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46346 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46360 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46364 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46368 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:47:24 [info     ] auction_price.fallback         current_bid=291.74 fallback=393.85 query=ryzen 9 7900x gaming pc
+2026-05-31 11:47:24 [info     ] resale_scraper.fallback_buy_price buy_price=393.85 median=676.62 query=gaming PC ryzen 9 7900x
+2026-05-31 11:47:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_395623854982 fingerprint=amd ryzen 9 7900x 4 7 ghz 12|Amd Ryzen 9 7900X||299 source=eBay UK Auctions
+2026-05-31 11:47:24 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_198388166347 fingerprint=amd ryzen 9 7900 processor 3 7 ghz|Amd Ryzen 9 7900||365 source=eBay UK Auctions
+2026-05-31 11:47:24 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_318297315067 fingerprint=amd ryzen 9 7900 processor 3 7 ghz|Amd Ryzen 9 7900||365 source=eBay UK Auctions
+2026-05-31 11:47:24 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=ebay_198352712442 fingerprint=amd ryzen 9 7900 processor 3 7 ghz|Amd Ryzen 9 7900||365 source=eBay UK Auctions
+2026-05-31 11:47:24 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=ebay_336127878169 fingerprint=amd ryzen 9 7900x 4 7 ghz 12|Amd Ryzen 9 7900X||299 source=eBay UK Auctions
+2026-05-31 11:47:24 [info     ] source.done                    found=102 gems=0 source=eBay UK Auctions
+2026-05-31 11:47:24 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=986 new_gems=0 sources_scanned=4
+INFO:     100.101.209.68:37342 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37348 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37360 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37372 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37378 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37408 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37418 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37424 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37438 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37444 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37454 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37462 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37474 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37484 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37492 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37504 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37514 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37518 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54972 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54974 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54988 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55000 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55016 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55028 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55044 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55050 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55064 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55080 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55092 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55108 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51254 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51258 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51260 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51262 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51272 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51276 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51278 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51290 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51292 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51304 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51312 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51328 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51340 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51352 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51364 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51374 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51390 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51392 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51394 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35188 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35192 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35204 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35220 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35230 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35246 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35260 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35272 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35280 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35286 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35290 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35302 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35308 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35324 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35340 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35352 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35354 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35364 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35374 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35384 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44730 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44732 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44736 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44740 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44754 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44762 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44770 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44772 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44804 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44812 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44826 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44834 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44838 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44852 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44864 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51832 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51836 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51842 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51846 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51856 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51862 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51870 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51884 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51886 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51896 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51904 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51914 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51920 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51932 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45378 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45390 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45392 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45406 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45412 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45426 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45438 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45464 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45472 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45486 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45500 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45514 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45526 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45534 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45550 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45566 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45578 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48472 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48482 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48492 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48508 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48518 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48534 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48548 - "GET /api/sources/health HTTP/1.1" 200 OK
