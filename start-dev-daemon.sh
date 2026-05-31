@@ -12,6 +12,20 @@ controller_pids() {
   pgrep -f 'bash ./start-dev-quiet-ports.sh' || true
 }
 
+normalize_controllers() {
+  local pids
+  pids="$(controller_pids | tr '\n' ' ' | xargs || true)"
+  [[ -n "${pids:-}" ]] || return 0
+  # Keep the first PID, terminate duplicates.
+  local keep
+  keep="$(echo "$pids" | awk '{print $1}')"
+  for p in $pids; do
+    if [[ "$p" != "$keep" ]]; then
+      kill "$p" >/dev/null 2>&1 || true
+    fi
+  done
+}
+
 is_running() {
   [[ -f "$PID_FILE" ]] || return 1
   local pid
@@ -21,6 +35,7 @@ is_running() {
 }
 
 cmd_start() {
+  normalize_controllers
   # If startup controller already exists, adopt it and don't launch another.
   local existing
   existing="$(controller_pids | head -n1 || true)"
@@ -78,6 +93,7 @@ cmd_stop() {
 }
 
 cmd_status() {
+  normalize_controllers
   if is_running; then
     local pid
     pid="$(cat "$PID_FILE")"
