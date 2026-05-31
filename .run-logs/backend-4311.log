@@ -1786,3 +1786,570 @@ Call log:
 Call log:
   - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
 
+2026-05-31 11:38:29 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:30 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:30 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-05-31 11:38:30 [info     ] temu.cases.done                found=0 search=atx pc case
+2026-05-31 11:38:31 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-05-31 11:38:31 [info     ] temu.cases.done                found=0 search=mid tower case
+2026-05-31 11:38:31 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:31 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-05-31 11:38:31 [info     ] temu.cases.done                found=0 search=micro atx case
+2026-05-31 11:38:31 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-05-31 11:38:31 [info     ] temu.cases.done                found=0 search=airflow rgb case
+2026-05-31 11:38:31 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:32 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-05-31 11:38:32 [info     ] temu.cases.done                found=0 search=white gaming case
+2026-05-31 11:38:33 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user"
+ selector=button:has-text('Accept')
+2026-05-31 11:38:33 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-05-31 11:38:33 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=mesh+airflow+case&search_method=user"
+ selector=button:has-text('Accept')
+2026-05-31 11:38:33 [info     ] temu.cases.done                found=0 search=panoramic pc case
+2026-05-31 11:38:34 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:34 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:34 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:35 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:35 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:35 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+INFO:     100.101.209.68:50378 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50394 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50410 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50422 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50434 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50436 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50444 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:38:36 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:36 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:38:36 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:38:36 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:36 [info     ] temu.cases.done                found=0 search=argb gaming case
+2026-05-31 11:38:37 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+INFO:     100.101.209.68:50460 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50464 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50466 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50474 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50478 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 11:38:37 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+INFO:     100.101.209.68:50480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50492 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50506 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:50516 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50532 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50546 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50558 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:38:37 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-05-31 11:38:38 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:38:38 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:38 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:38 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:38:39 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:39 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:39 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:40 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:40 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:40 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:40 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:40 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:38:41 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:42 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:38:42 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:42 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:38:44 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:50560 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50566 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50570 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50584 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50592 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50600 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50610 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:38:46 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+INFO:     100.101.209.68:46516 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46522 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46524 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46536 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46546 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46558 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46572 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46586 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46590 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+2026-05-31 11:38:52 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+INFO:     100.101.209.68:46596 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+2026-05-31 11:38:52 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+INFO:     100.101.209.68:46608 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46614 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46628 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46636 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46640 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46648 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46652 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46664 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:38:53 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-05-31 11:38:54 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:54 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-05-31 11:38:54 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-05-31 11:38:54 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 244)
+2026-05-31 11:38:56 [info     ] temu.cases.done                found=0 search=rgb airflow case
+2026-05-31 11:38:57 [info     ] temu.cases.done                found=0 search=mesh airflow case
+2026-05-31 11:38:57 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:58 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:58 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 102)
+2026-05-31 11:38:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-05-31 11:38:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:39:00 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:39:01 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+INFO:     100.101.209.68:44064 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44080 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44082 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44092 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44102 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44120 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44128 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-31 11:39:02 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-05-31 11:39:02 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:44136 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44148 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-05-31 11:39:02 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:44164 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44176 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 11:39:03 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:39:03 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=atx pc case source=BargainHardware
+2026-05-31 11:39:03 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=micro atx case source=BargainHardware
+2026-05-31 11:39:03 [info     ] cases.generic_market.done      found=12 search=atx pc case source=BargainHardware
+2026-05-31 11:39:04 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-05-31 11:39:04 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:39:04 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:39:04 [info     ] cases.generic_market.done      found=12 search=micro atx case source=BargainHardware
+2026-05-31 11:39:04 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=mid tower case source=BargainHardware
+2026-05-31 11:39:04 [info     ] cases.generic_market.done      found=12 search=mid tower case source=BargainHardware
+2026-05-31 11:39:05 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:39:06 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-05-31 11:39:07 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=airflow rgb case source=BargainHardware
+2026-05-31 11:39:07 [info     ] cases.generic_market.done      found=12 search=airflow rgb case source=BargainHardware
+INFO:     100.101.209.68:34574 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34578 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34584 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34600 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34612 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34616 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34630 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34642 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34644 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34658 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34674 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34684 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34694 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34700 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:39:09 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=fish tank pc case source=BargainHardware
+2026-05-31 11:39:09 [info     ] cases.generic_market.done      found=12 search=fish tank pc case source=BargainHardware
+2026-05-31 11:39:11 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=panoramic pc case source=BargainHardware
+2026-05-31 11:39:11 [info     ] cases.generic_market.done      found=12 search=panoramic pc case source=BargainHardware
+INFO:     100.101.209.68:34708 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34714 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34732 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34744 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 11:39:15 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=argb gaming case source=BargainHardware
+2026-05-31 11:39:15 [info     ] cases.generic_market.done      found=12 search=argb gaming case source=BargainHardware
+2026-05-31 11:39:15 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=white gaming case source=BargainHardware
+2026-05-31 11:39:15 [info     ] cases.generic_market.done      found=12 search=white gaming case source=BargainHardware
+2026-05-31 11:39:16 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-05-31 11:39:16 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-05-31 11:39:16 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=rgb airflow case source=BargainHardware
+2026-05-31 11:39:16 [info     ] cases.generic_market.done      found=12 search=rgb airflow case source=BargainHardware
+2026-05-31 11:39:17 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+INFO:     100.101.209.68:47696 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47700 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47708 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47716 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47726 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47732 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47734 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:39:18 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-05-31 11:39:18 [info     ] cases.generic_market.done      found=12 search=mesh airflow case source=BargainHardware
+[scraper] eBay 'pc tower': 0 found, 0 new (total 244)
+2026-05-31 11:39:20 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=mid tower case source=Alibaba
+2026-05-31 11:39:20 [info     ] cases.generic_market.done      found=0 search=mid tower case source=Alibaba
+2026-05-31 11:39:21 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=atx pc case source=Alibaba
+2026-05-31 11:39:21 [info     ] cases.generic_market.done      found=0 search=atx pc case source=Alibaba
+2026-05-31 11:39:21 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=micro atx case source=Alibaba
+2026-05-31 11:39:21 [info     ] cases.generic_market.done      found=0 search=micro atx case source=Alibaba
+2026-05-31 11:39:22 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=airflow rgb case source=Alibaba
+2026-05-31 11:39:22 [info     ] cases.generic_market.done      found=0 search=airflow rgb case source=Alibaba
+2026-05-31 11:39:22 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=white gaming case source=Alibaba
+2026-05-31 11:39:22 [info     ] cases.generic_market.done      found=0 search=white gaming case source=Alibaba
+INFO:     100.101.209.68:47742 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47746 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47750 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47752 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47760 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47776 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47784 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 11:39:23 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=fish tank pc case source=Alibaba
+2026-05-31 11:39:23 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+2026-05-31 11:39:24 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=panoramic pc case source=Alibaba
+2026-05-31 11:39:24 [info     ] cases.generic_market.done      found=0 search=panoramic pc case source=Alibaba
+2026-05-31 11:39:25 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=argb gaming case source=Alibaba
+2026-05-31 11:39:25 [info     ] cases.generic_market.done      found=0 search=argb gaming case source=Alibaba
+2026-05-31 11:39:25 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=rgb airflow case source=Alibaba
+2026-05-31 11:39:25 [info     ] cases.generic_market.done      found=0 search=rgb airflow case source=Alibaba
+2026-05-31 11:39:25 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=mesh airflow case source=Alibaba
+INFO:     100.101.209.68:34522 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34536 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34546 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34554 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 11:39:26 [info     ] cases.generic_market.done      found=0 search=mesh airflow case source=Alibaba
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=atx pc case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=mid tower case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=micro atx case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=airflow rgb case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=white gaming case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=fish tank pc case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=panoramic pc case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=argb gaming case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=rgb airflow case
+2026-05-31 11:39:26 [error    ] cases.scrape.error             error=cannot access local variable 'filtered_delivery' where it is not associated with a value source=AliExpress term=mesh airflow case
+INFO:     100.101.209.68:34558 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34572 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34596 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34582 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34606 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 102)
+INFO:     100.101.209.68:34608 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34620 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34632 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 11:39:27 [info     ] cases_swarm.done               errors=10 found=574 upserted=314
+INFO:     100.101.209.68:34636 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34640 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34650 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34662 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34678 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34686 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47728 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47732 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47736 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47746 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47756 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47772 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47778 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47798 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47800 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47814 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47830 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47844 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47848 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47856 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47866 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47874 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47884 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47888 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 244)
+INFO:     100.101.209.68:45458 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45472 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45474 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45480 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45494 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45520 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45526 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45536 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45550 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45552 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 102)
+INFO:     100.101.209.68:45562 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45574 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45588 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:45596 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45604 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45616 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45620 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47164 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47178 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47186 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47190 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47204 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47212 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47216 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47226 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47238 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47254 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47262 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47278 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35908 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35920 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35936 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35962 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35968 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35984 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36000 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36008 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36022 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36030 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36040 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36048 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36056 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35748 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35764 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35782 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35796 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35812 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35824 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35830 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35844 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35846 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35858 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 102)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 244)
+INFO:     100.101.209.68:35874 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35890 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35902 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35904 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35914 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35922 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35924 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35942 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35928 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35952 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35968 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35980 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35990 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36006 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53688 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53700 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53710 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53718 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53720 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53732 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53748 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53764 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53772 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53778 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53786 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36824 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36830 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36846 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:36856 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36860 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36868 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36884 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36886 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36896 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36902 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36908 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36912 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36924 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36932 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36946 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36960 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36972 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36974 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36982 - "GET /api/sources/health HTTP/1.1" 200 OK
