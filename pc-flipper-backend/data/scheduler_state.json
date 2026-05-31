@@ -4,5 +4,8 @@
   },
   "playbook_evolution": {
     "last_success_at": "2026-05-31T07:10:20.015633+00:00"
+  },
+  "upgrade_parts": {
+    "last_success_at": "2026-05-31T07:14:05.325491+00:00"
   }
 }
