@@ -44,6 +44,16 @@ REMOTE_CHROME_EXPOSE_PORT="${REMOTE_CHROME_EXPOSE_PORT:-9223}"
 
 mkdir -p "$LOG_DIR"
 
+# Single-instance guard: prevent competing startup controllers.
+LOCK_FILE="$LOG_DIR/start-dev-quiet-ports.lock"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  echo "Another start-dev-quiet-ports.sh instance is already running."
+  echo "If this is stale, stop that process first and rerun."
+  exit 1
+fi
+echo "$$" 1>&9
+
 # Attempt to raise open-file limit to reduce Watchpack/EMFILE failures.
 maybe_raise_nofile_limit() {
   local target="${NOFILE_TARGET:-65535}"
@@ -60,6 +70,8 @@ NGROK_PUBLIC_URL=""
 NGROK_LOG="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.log"
 NGROK_URL_FILE="$LOG_DIR/ngrok-$NGROK_TUNNEL_PORT.url"
 BACKEND_ENV_LOCAL="$ROOT_ENV_LOCAL"
+FRONTEND_PID=""
+BACKEND_PID=""
 
 COMPOSE_ENV_ARGS=()
 if [[ -f "$ROOT_ENV_LOCAL" ]]; then
@@ -1739,10 +1751,14 @@ cleanup() {
   _cleaned_up=1
   echo
   echo "Stopping services..."
-  kill "$FRONTEND_PID" >/dev/null 2>&1 || true
-  kill "$BACKEND_PID" >/dev/null 2>&1 || true
-  wait "$FRONTEND_PID" >/dev/null 2>&1 || true
-  wait "$BACKEND_PID" >/dev/null 2>&1 || true
+  if [[ -n "${FRONTEND_PID:-}" ]]; then
+    kill "$FRONTEND_PID" >/dev/null 2>&1 || true
+    wait "$FRONTEND_PID" >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${BACKEND_PID:-}" ]]; then
+    kill "$BACKEND_PID" >/dev/null 2>&1 || true
+    wait "$BACKEND_PID" >/dev/null 2>&1 || true
+  fi
   if [[ -n "${NGROK_MONITOR_PID:-}" ]]; then
     kill "$NGROK_MONITOR_PID" >/dev/null 2>&1 || true
     wait "$NGROK_MONITOR_PID" >/dev/null 2>&1 || true
@@ -1757,7 +1773,7 @@ cleanup() {
   fi
 }
 
-trap cleanup INT TERM
+trap cleanup EXIT INT TERM
 
 echo
 echo "Frontend: http://$PUBLIC_HOST:$FRONTEND_PORT"
