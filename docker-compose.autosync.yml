@@ -8,6 +8,7 @@ services:
       CODING_DIR: /coding
       INTERVAL_SECONDS: 300
       COMMIT_MSG_PREFIX: "chore: automated codebase synchronization"
+      PRIMARY_REPO: FlipFlop
       GIT_USER_NAME: Coding AutoSync
       GIT_USER_EMAIL: autosync@coding.local
       TZ: Europe/London

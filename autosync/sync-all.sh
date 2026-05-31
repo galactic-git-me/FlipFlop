@@ -4,6 +4,7 @@ set -euo pipefail
 CODING_DIR="${CODING_DIR:-/coding}"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-300}"
 COMMIT_MSG_PREFIX="${COMMIT_MSG_PREFIX:-chore: automated codebase synchronization}"
+PRIMARY_REPO="${PRIMARY_REPO:-FlipFlop}"
 TZ="${TZ:-UTC}"
 export TZ
 
@@ -57,10 +58,15 @@ sync_repo() {
     behind=0
   fi
 
-  if [[ "$ahead" -gt 0 && "$behind" -eq 0 ]]; then
-    git push origin "$branch" || push_rc=$?
-  elif [[ "$behind" -gt 0 ]]; then
-    log "[$name] Skip push: behind origin/$branch by $behind commit(s)."
+  if [[ "$name" == "$PRIMARY_REPO" ]]; then
+    # Primary project is source-of-truth: always force-push local branch.
+    git push --force origin "$branch" || push_rc=$?
+  else
+    if [[ "$ahead" -gt 0 && "$behind" -eq 0 ]]; then
+      git push origin "$branch" || push_rc=$?
+    elif [[ "$behind" -gt 0 ]]; then
+      log "[$name] Skip push: behind origin/$branch by $behind commit(s)."
+    fi
   fi
 
   if [[ $fetch_rc -ne 0 || $commit_rc -ne 0 || $push_rc -ne 0 ]]; then
@@ -69,7 +75,13 @@ sync_repo() {
 }
 
 while true; do
+  if [[ -d "$CODING_DIR/$PRIMARY_REPO" ]]; then
+    sync_repo "$CODING_DIR/$PRIMARY_REPO"
+  fi
   while IFS= read -r -d '' d; do
+    if [[ "$d" == "$CODING_DIR/$PRIMARY_REPO" ]]; then
+      continue
+    fi
     sync_repo "$d"
   done < <(find "$CODING_DIR" -mindepth 1 -maxdepth 1 -type d -print0)
 
