@@ -37,6 +37,13 @@ CASE_THEMES = [
     {"theme": "Micro ATX", "terms": ["micro atx case"]},
     {"theme": "O11 Style", "terms": ["Lian Li O11 style case"]},
 ]
+CORE_CASE_TERMS = [
+    "atx pc case",
+    "mid tower case",
+    "micro atx case",
+    "airflow rgb case",
+    "white gaming case",
+]
 
 SOURCES = [
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
@@ -139,7 +146,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         if source["fn"] == "cherrytree":
             terms_by_vendor[source["name"]] = ["catalogue"]
             continue
-        terms: list[str] = []
+        terms: list[str] = list(CORE_CASE_TERMS)
         for theme_def in all_themes:
             terms.extend(theme_def["terms"][:2])
         deduped_terms = list(dict.fromkeys(terms))
