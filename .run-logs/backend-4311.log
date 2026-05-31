@@ -860,3 +860,78 @@ Call log:
 
 2026-05-31 00:15:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=luxury+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-31 00:15:22 [info     ] gumtree.playwright.cards       count=19 term=AM4 motherboard
+2026-05-31 00:15:26 [info     ] gumtree.playwright.done        total=19
+2026-05-31 00:15:26 [info     ] gumtree.playwright.cards       count=20 term=luxury gaming case
+2026-05-31 00:15:28 [info     ] gumtree.playwright.done        total=20
+2026-05-31 00:15:36 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:15:36 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVIDIA%20GPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:15:36 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:15:36 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:15:56 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:15:56 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:15:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:15:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:15:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:15:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+fish+tank+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:16:02 [info     ] gumtree.playwright.cards       count=5 term=AM4 motherboard cpu combo
+2026-05-31 00:16:03 [info     ] gumtree.playwright.done        total=5
+2026-05-31 00:16:04 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+2026-05-31 00:16:05 [info     ] gumtree.playwright.cards       count=1 term=white fish tank case
+2026-05-31 00:16:05 [info     ] gumtree.playwright.done        total=1
+2026-05-31 00:16:06 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:16:06 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:16:07 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:16:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20CPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:16:08 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:16:08 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:16:33 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:16:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:16:35 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:16:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:16:38 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:16:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+2026-05-31 00:16:38 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+2026-05-31 00:16:39 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:16:41 [info     ] gumtree.playwright.cards       count=7 term=white rgb case
+2026-05-31 00:16:42 [info     ] gumtree.playwright.done        total=7
+2026-05-31 00:16:42 [info     ] gumtree.playwright.done        total=25
