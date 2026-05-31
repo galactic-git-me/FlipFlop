@@ -1,18 +1,19 @@
-INFO:     Started server process [2194115]
+INFO:     Started server process [2441940]
 INFO:     Waiting for application startup.
-2026-05-31 00:36:17 [info     ] app.startup
-2026-05-31 00:36:17 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-31 00:36:17 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-31 00:36:17 [info     ] scheduler.started              jobs=11
-2026-05-31 00:36:17 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
-2026-05-31 00:36:17 [info     ] startup_bootstrap.start
+2026-05-31 00:51:16 [info     ] app.startup
+2026-05-31 00:51:16 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 00:51:16 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 00:51:16 [info     ] scheduler.started              jobs=11
+2026-05-31 00:51:16 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-31 00:51:16 [info     ] startup_bootstrap.start
 INFO:     Application startup complete.
-2026-05-31 00:36:17 [info     ] accessories_swarm.start
-2026-05-31 00:36:17 [info     ] cases_swarm.start
-2026-05-31 00:36:17 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-31 00:51:16 [info     ] accessories_swarm.start
+2026-05-31 00:51:16 [info     ] cases_swarm.start
+2026-05-31 00:51:16 [info     ] upgrade_parts_swarm.start      total_parts=12
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-2026-05-31 00:36:17 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-INFO:     127.0.0.1:46026 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46036 - "POST /api/sources/3/scrape/ HTTP/1.1" 307 Temporary Redirect
-2026-05-31 00:36:24 [info     ] startup_bootstrap.done
-INFO:     127.0.0.1:45866 - "GET /api/search-telemetry/recent?limit=40 HTTP/1.1" 200 OK
+2026-05-31 00:51:16 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+INFO:     127.0.0.1:49446 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49448 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49458 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49468 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49478 - "GET /api/sources/health HTTP/1.1" 200 OK
