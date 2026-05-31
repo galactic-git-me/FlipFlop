@@ -551,3 +551,54 @@ INFO:     127.0.0.1:52900 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:52904 - "POST /api/sources/3/scrape/ HTTP/1.1" 307 Temporary Redirect
 INFO:     127.0.0.1:52904 - "POST /api/sources/3/scrape HTTP/1.1" 200 OK
 2026-05-31 00:06:37 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+INFO:     127.0.0.1:47532 - "GET /api/search-telemetry/recent/?limit=120 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:47532 - "GET /api/search-telemetry/recent?limit=120 HTTP/1.1" 200 OK
+2026-05-31 00:06:52 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM sold=None
+2026-05-31 00:06:55 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:06:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+2026-05-31 00:06:56 [info     ] facebook.playwright.done       total=0
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+2026-05-31 00:07:16 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:07:17 [error    ] source.scrape.error            error=BrowserContext.new_page: Target page, context or browser has been closed source=Facebook Marketplace
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=319.99 median=503.99 query=gaming PC ryzen 5 3400g
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-31 00:07:17 [info     ] resale_scraper.fallback_buy_price buy_price=389.99 median=587.99 query=gaming PC rx 550
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_5955187463806272441 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_3033780303310976940 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_8605746029232915193 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_7492370489634372483 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_6628195905008685969 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_8412967568617166544 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_6794380753612306744 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_458338127288185422 fingerprint=stgsivir gaming pc gaming computer desktop tower amd|Amd Ryzen 5 3400G|RADEON VEGA 11|320 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=3 external_id=amazon_6138276421139906247 fingerprint=xum cmp 510 gaming pc ryzen 5 5600g|Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_913136265014160429 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_3445562581245679251 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_3793358926828736148 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=8 external_id=amazon_917288046314688658 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-31 00:07:17 [warning  ] listing.duplicate_match        duplicate_rows=10 external_id=amazon_2676899768747245015 fingerprint=zer lon gaming pc desktop computer intel core||RX 550|390 source=Amazon
+2026-05-31 00:07:17 [info     ] source.retry.scheduled         delay_minutes=8 failed_terms=17 source=Amazon
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-31 00:07:25 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM 32GB 2x16GB sold=None
+2026-05-31 00:07:38 [warning  ] accessories.playwright.error   error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+keyboard", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming keyboard
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
+2026-05-31 00:07:58 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
