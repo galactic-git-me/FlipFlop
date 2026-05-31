@@ -36,6 +36,11 @@ TERMS_POLL_SECONDS="${TERMS_POLL_SECONDS:-12}"
 DEV_CLEAR_DATA_ON_START="${DEV_CLEAR_DATA_ON_START:-1}"
 # Global startup mode override (dev|production). Defaults to dev.
 STARTUP_MODE="${STARTUP_MODE:-dev}"
+REMOTE_CHROME_AUTO_START="${REMOTE_CHROME_AUTO_START:-0}"
+REMOTE_CHROME_SSH_USER="${REMOTE_CHROME_SSH_USER:-mclar}"
+REMOTE_CHROME_HOST="${REMOTE_CHROME_HOST:-100.84.151.109}"
+REMOTE_CHROME_DEBUG_PORT="${REMOTE_CHROME_DEBUG_PORT:-9222}"
+REMOTE_CHROME_EXPOSE_PORT="${REMOTE_CHROME_EXPOSE_PORT:-9223}"
 
 mkdir -p "$LOG_DIR"
 
@@ -300,6 +305,32 @@ infer_startup_mode() {
     mode="dev"
   fi
   echo "$mode"
+}
+
+maybe_start_remote_chrome_debug() {
+  if [[ "$REMOTE_CHROME_AUTO_START" != "1" ]]; then
+    return 0
+  fi
+  if ! command -v ssh >/dev/null 2>&1; then
+    echo "REMOTE_CHROME_AUTO_START=1 but ssh is not installed. Skipping remote Chrome launch."
+    return 0
+  fi
+
+  local ssh_target="${REMOTE_CHROME_SSH_USER}@${REMOTE_CHROME_HOST}"
+  echo "Starting remote Chrome debug on $ssh_target ..."
+  if ! ssh -o ConnectTimeout=8 -o BatchMode=yes "$ssh_target" \
+    "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& { Stop-Process -Name chrome -Force -ErrorAction SilentlyContinue; Start-Process 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' '--remote-debugging-port=${REMOTE_CHROME_DEBUG_PORT} --remote-debugging-address=127.0.0.1 --user-data-dir=\$env:TEMP\\flipflop-chrome'; Start-Sleep -Seconds 2; netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=${REMOTE_CHROME_EXPOSE_PORT} | Out-Null; netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=${REMOTE_CHROME_EXPOSE_PORT} connectaddress=127.0.0.1 connectport=${REMOTE_CHROME_DEBUG_PORT} }\"" \
+    >/dev/null 2>&1; then
+    echo "Remote Chrome launch over SSH failed. Continuing startup."
+    return 0
+  fi
+
+  local cdp_url="http://${REMOTE_CHROME_HOST}:${REMOTE_CHROME_EXPOSE_PORT}/json/version"
+  if curl -fsS --max-time 5 "$cdp_url" >/dev/null 2>&1; then
+    echo "Remote Chrome debug is reachable at $cdp_url"
+  else
+    echo "Remote Chrome launched but CDP probe failed at $cdp_url (continuing)."
+  fi
 }
 
 START_MODE="$(infer_startup_mode)"
@@ -567,6 +598,7 @@ echo "Mode summary: DEV (hot reload enabled)"
 echo "App runtime: local uvicorn + local next dev (NO api/web Docker containers)"
 echo "Infra runtime: db/redis in Docker"
 export_root_env_local
+maybe_start_remote_chrome_debug
 if [[ "${SHOW_SCRAPER_BROWSER:-0}" =~ ^(1|true|yes)$ ]]; then
   if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
     echo "SHOW_SCRAPER_BROWSER=1 is set, but no GUI display is available (DISPLAY/WAYLAND_DISPLAY missing)."
