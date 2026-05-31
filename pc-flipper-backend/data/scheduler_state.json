@@ -12,7 +12,7 @@
     "last_success_at": "2026-05-31T04:34:18.077784+00:00"
   },
   "flip_opportunities": {
-    "last_success_at": "2026-05-31T04:51:43.875433+00:00"
+    "last_success_at": "2026-05-31T05:41:07.850258+00:00"
   },
   "compliant_market_ingestion": {
     "last_success_at": "2026-05-31T05:26:48.504997+00:00"
@@ -22,5 +22,8 @@
   },
   "outcome_capture": {
     "last_success_at": "2026-05-31T05:26:48.810355+00:00"
+  },
+  "autonomous": {
+    "last_success_at": "2026-05-31T05:40:58.710396+00:00"
   }
 }
