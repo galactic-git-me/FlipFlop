@@ -377,3 +377,27 @@ Call log:
   - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
 
 2026-05-31 00:29:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:29:41 [warning  ] gumtree.playwright.no_listings page_title=Jarvis ai workstation | Stuff for Sale - Gumtree term=jarvis ai workstation
+2026-05-31 00:29:41 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:29:44 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:29:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:29:57 [warning  ] gumtree.playwright.no_listings page_title=Stark industries pc | Stuff for Sale - Gumtree term=stark industries pc
+2026-05-31 00:29:57 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:30:00 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:30:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:30:17 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gamma core build
+2026-05-31 00:30:27 [warning  ] gumtree.playwright.no_listings page_title=Gamma core build | Stuff for Sale - Gumtree term=gamma core build
+2026-05-31 00:30:28 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:30:43 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:30:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:30:48 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=radioactive green rgb pc
+2026-05-31 00:31:00 [warning  ] gumtree.playwright.no_listings page_title=Radioactive green rgb pc | Stuff for Sale - Gumtree term=radioactive green rgb pc
