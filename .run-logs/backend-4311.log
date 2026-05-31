@@ -602,3 +602,20 @@ Call log:
  site=BargainHardware term=gaming keyboard
 [scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 0)
 2026-05-31 00:07:58 [debug    ] upgrade_parts.ebay             buy=None part=NVMe 1TB sold=None
+[scraper] playwright.cdp_attached ebay cdp_url=http://100.84.151.109:9223
+2026-05-31 00:08:31 [debug    ] upgrade_parts.ebay             buy=None part=PSU sold=None
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay retry error for 'panoramic pc case': 
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+[scraper] eBay 'gaming mouse': 0 found, 0 new (total 0)
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
+2026-05-31 00:09:05 [debug    ] upgrade_parts.ebay             buy=None part=CPU Cooler sold=None
+2026-05-31 00:09:38 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
