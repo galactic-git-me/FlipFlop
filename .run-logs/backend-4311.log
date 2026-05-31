@@ -1855,3 +1855,49 @@ Call log:
 2026-05-31 00:20:54 [info     ] gumtree.playwright.done        total=0
 2026-05-31 00:20:58 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=9
 2026-05-31 00:20:58 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
+2026-05-31 00:21:18 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:21:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:21:20 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:21:20 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK still_failed_terms=9
+2026-05-31 00:21:20 [info     ] source.done                    found=0 gems=0 source=eBay UK
+2026-05-31 00:21:20 [info     ] flip_opportunities_swarm.done  errors=0 listings_found=912 new_gems=0 sources_scanned=4
+2026-05-31 00:21:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVMe%201TB&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:21:21 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:21:21 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:21:24 [info     ] gumtree.playwright.cards       count=25 term=gaming controller
+2026-05-31 00:21:25 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:21:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:21:27 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:21:27 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:21:38 [warning  ] gumtree.playwright.no_listings page_title=Borg cube pc | Stuff for Sale - Gumtree term=borg cube pc
+2026-05-31 00:21:38 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:21:51 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:21:51 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=PSU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:21:52 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:21:52 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:22:08 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:22:09 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:22:22 [warning  ] gumtree.playwright.no_listings page_title=Borg collective build | Stuff for Sale - Gumtree term=borg collective build
+2026-05-31 00:22:22 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:22:22 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:22:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
+2026-05-31 00:22:23 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:22:27 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gaming controller
