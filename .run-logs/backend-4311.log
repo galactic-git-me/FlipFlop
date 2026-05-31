@@ -1,35 +1,30 @@
-INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
-INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-INFO:     Started reloader process [984090] using WatchFiles
-INFO:     Started server process [984092]
+INFO:     Started server process [1016435]
 INFO:     Waiting for application startup.
-2026-05-31 08:27:35 [info     ] app.startup
-2026-05-31 08:27:35 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-31 08:27:35 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-31 08:27:35 [info     ] scheduler.started              jobs=11
-2026-05-31 08:27:35 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
-2026-05-31 08:27:35 [info     ] startup_bootstrap.start
+2026-05-31 08:29:04 [info     ] app.startup
+2026-05-31 08:29:04 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 08:29:04 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 08:29:04 [info     ] scheduler.started              jobs=11
+2026-05-31 08:29:04 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-31 08:29:04 [info     ] startup_bootstrap.start
 INFO:     Application startup complete.
-2026-05-31 08:27:35 [info     ] accessories_swarm.start
-2026-05-31 08:27:35 [info     ] cases_swarm.start
-2026-05-31 08:27:35 [info     ] flip_opportunities_swarm.start
-2026-05-31 08:27:35 [info     ] upgrade_parts_swarm.start      total_parts=12
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] facebook.playwright.cookies_loaded count=8
-2026-05-31 08:27:36 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-2026-05-31 08:27:36 [info     ] cases.terms.capped             max_terms=10 total_terms=91 vendors=10
-2026-05-31 08:27:36 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
-2026-05-31 08:27:36 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
-2026-05-31 08:27:36 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
-2026-05-31 08:27:36 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
-2026-05-31 08:27:36 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
-2026-05-31 08:27:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
-2026-05-31 08:27:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
-2026-05-31 08:27:37 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
-INFO:     127.0.0.1:37120 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:29:04 [info     ] accessories_swarm.start
+2026-05-31 08:29:04 [info     ] cases_swarm.start
+2026-05-31 08:29:04 [info     ] flip_opportunities_swarm.start
+2026-05-31 08:29:04 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
+2026-05-31 08:29:04 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 08:29:05 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-31 08:29:05 [info     ] cases.terms.capped             max_terms=10 total_terms=91 vendors=10
+2026-05-31 08:29:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
+2026-05-31 08:29:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
+2026-05-31 08:29:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
+2026-05-31 08:29:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 08:29:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
+INFO:     127.0.0.1:36276 - "GET /api/sources/health HTTP/1.1" 200 OK
