@@ -1,20 +1,8 @@
 {
   "external_demand": {
-    "last_success_at": "2026-05-31T10:33:26.265264+00:00"
+    "last_success_at": "2026-05-31T10:53:49.341166+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-31T10:33:26.369291+00:00"
-  },
-  "upgrade_parts": {
-    "last_success_at": "2026-05-31T10:35:21.909572+00:00"
-  },
-  "accessories": {
-    "last_success_at": "2026-05-31T10:37:09.869016+00:00"
-  },
-  "cases": {
-    "last_success_at": "2026-05-31T10:39:27.279615+00:00"
-  },
-  "flip_opportunities": {
-    "last_success_at": "2026-05-31T10:47:24.129395+00:00"
+    "last_success_at": "2026-05-31T10:53:49.558349+00:00"
   }
 }
