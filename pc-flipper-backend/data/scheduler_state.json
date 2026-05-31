@@ -1,17 +1,8 @@
 {
   "external_demand": {
-    "last_success_at": "2026-05-31T07:24:12.948984+00:00"
+    "last_success_at": "2026-05-31T07:49:13.907943+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-05-31T07:24:13.004393+00:00"
-  },
-  "accessories": {
-    "last_success_at": "2026-05-31T07:32:12.780803+00:00"
-  },
-  "upgrade_parts": {
-    "last_success_at": "2026-05-31T07:33:30.374467+00:00"
-  },
-  "flip_opportunities": {
-    "last_success_at": "2026-05-31T07:35:38.024141+00:00"
+    "last_success_at": "2026-05-31T07:49:13.953994+00:00"
   }
 }
