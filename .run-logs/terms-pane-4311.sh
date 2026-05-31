@@ -34,10 +34,12 @@ VENDOR_ALIAS = {
 }
 VENDOR_GROUPS = {
     "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
-    "Marketplaces": ["Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "CherryTree Inc", "Facebook Marketplace"],
-    "Other": [
-        "BidSpotter", "eBay UK Auctions", "Apex Auctions", "Wilsons Auctions", "i-bidder",
-        "Gumtree", "Temu", "AliExpress", "Alibaba", "CherryTree Inc", "BargainHardware",
+    "FBMP": ["Facebook Marketplace"],
+    "Others": [
+        "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "CherryTree Inc",
+        "Gumtree", "BidSpotter", "Apex Auctions", "Wilsons Auctions", "i-bidder",
+        "Preloved", "John Pye", "Manual Submission", "Manual Photo", "Merkandi",
+        "Wholesale Clearance UK",
     ],
 }
 FLIP_SOURCE_PREFIXES = ["eBay UK Auctions", "Facebook Marketplace", "BidSpotter"]
@@ -233,7 +235,7 @@ pane_w = max(80, int(getattr(console.size, "width", 120)))
 tbl.add_column("Catalogue", style="bold cyan", no_wrap=True, width=16)
 tbl.add_column("Run(5s)", justify="center", no_wrap=True, width=12)
 tbl.add_column("Search Term", style="yellow", no_wrap=False, overflow="fold", width=28)
-group_names = ["eBay", "Marketplaces", "Other"]
+group_names = ["eBay", "FBMP", "Others"]
 for g in group_names:
     tbl.add_column(g, justify="center", no_wrap=True, width=12)
 
