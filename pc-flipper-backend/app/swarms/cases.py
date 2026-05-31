@@ -22,6 +22,7 @@ from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay
 from app.services.proxy import playwright_proxy_config
 from app.services.playwright_scraper import chromium_available
+from app.services.delivery_filters import allow_temu_aliexpress_listing
 import structlog
 from sqlalchemy import select as sa_select
 
@@ -804,7 +805,8 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
                         const img = link.querySelector("img");
                         const imgSrc = img ? (img.src || img.getAttribute("data-src") || "") : "";
 
-                        out.push({title, price, href, img: imgSrc});
+                        const contextText = (node?.textContent || '').replace(/\\s+/g, " ").trim().slice(0, 1200);
+                        out.push({title, price, href, img: imgSrc, contextText});
                     } catch (e) {}
                 });
                 return out.slice(0, 12);
@@ -817,6 +819,8 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
                         continue
                     price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 200:
+                        continue
+                    if not allow_temu_aliexpress_listing(str(item.get("contextText", ""))):
                         continue
                     href = str(item.get("href", ""))
                     if not href.startswith("http"):
@@ -950,7 +954,8 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
                         const img = link.querySelector("img");
                         const imgSrc = img ? (img.src || img.getAttribute("data-src") || "") : "";
 
-                        out.push({title, price, href, img: imgSrc});
+                        const contextText = (node?.textContent || '').replace(/\\s+/g, " ").trim().slice(0, 1200);
+                        out.push({title, price, href, img: imgSrc, contextText});
                     } catch (e) {}
                 });
                 return out.slice(0, 12);
@@ -963,6 +968,8 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
                         continue
                     price = float(item.get("price", 0) or 0)
                     if price <= 0 or price > 150:
+                        continue
+                    if not allow_temu_aliexpress_listing(str(item.get("contextText", ""))):
                         continue
                     href = str(item.get("href", ""))
                     if not href.startswith("http"):

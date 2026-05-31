@@ -19,6 +19,7 @@ from fake_useragent import UserAgent
 
 from app.config import get_settings
 from app.services.search_telemetry import record_term_result
+from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.services.spec_parser import parse_specs
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
 
@@ -1972,7 +1973,8 @@ async def _scrape_generic_marketplace_listings(
                                 if (!price || !Number.isFinite(price)) continue;
                                 const imgEl = node.querySelector('img');
                                 const image = imgEl ? (imgEl.src || imgEl.getAttribute('src') || '') : '';
-                                out.push({title, href, price, image});
+                                const contextText = (scope?.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 1200);
+                                out.push({title, href, price, image, contextText});
                             } catch (_) {}
                         }
                         return out;
@@ -1988,6 +1990,9 @@ async def _scrape_generic_marketplace_listings(
                             continue
                         if price < float(min_price) or price > float(max_price):
                             continue
+                        if source_name.lower() in {"temu", "aliexpress"}:
+                            if not allow_temu_aliexpress_listing(item.get("contextText") or ""):
+                                continue
                         href = str(item.get("href") or "")
                         external_id = f"{source_name.lower()}_{abs(hash(href))}"
                         if external_id in seen:
@@ -2062,6 +2067,8 @@ async def _scrape_bargainhardware_http(
                         continue
                     scope = a.find_parent(["li", "div", "article"]) or a
                     scope_text = scope.get_text(" ", strip=True)
+                    if not allow_temu_aliexpress_listing(scope_text):
+                        continue
                     price = _parse_price(scope_text)
                     if price <= 0:
                         continue
@@ -2126,6 +2133,9 @@ async def _scrape_temu_http(
                     if not title or len(title) < 6:
                         continue
                     scope = a.find_parent(["li", "div", "article"]) or a
+                    scope_text = scope.get_text(" ", strip=True)
+                    if not allow_temu_aliexpress_listing(scope_text):
+                        continue
                     price = _parse_price(scope.get_text(" ", strip=True))
                     if price <= 0 or price < float(min_price) or price > float(max_price):
                         continue

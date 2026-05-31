@@ -20,6 +20,7 @@ from app.services.scraper import scrape_ebay
 from app.services.proxy import playwright_proxy_config
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import should_defer_source_scrape
+from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -311,13 +312,16 @@ async def _scrape_playwright_accessories(page, term: str, theme: str, site: str,
                     if (!Number.isFinite(price) || price <= 0 || price > 80) continue;
                     const img = (node.querySelector('img')?.src || '');
                     seen.add(href);
-                    data.push({title: txt, href, price, img});
+                    const contextText = (scopeText || '').replace(/\\s+/g, ' ').trim().slice(0, 1200);
+                    data.push({title: txt, href, price, img, contextText});
                     if (data.length >= 60) break;
                 }
                 return data;
             }"""
         )
         for r in rows or []:
+            if site in {"Temu", "AliExpress"} and not allow_temu_aliexpress_listing(str(r.get("contextText") or "")):
+                continue
             out.append(
                 RawAccessory(
                     name=str(r.get("title") or "")[:200],

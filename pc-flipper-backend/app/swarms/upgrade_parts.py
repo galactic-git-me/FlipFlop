@@ -39,6 +39,7 @@ from app.services.playwright_scraper import (
     scrape_gumtree_playwright,
 )
 from app.services.antibot_preflight import should_defer_source_scrape
+from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.models.source_search_term import SourceSearchTerm
 from sqlalchemy import select as sa_select
 import structlog
@@ -660,7 +661,8 @@ async def _fetch_playwright_lowest_price(
                                 const m = re.exec(txt);
                                 if (m) price = parseFloat(m[1].replace(',', ''));
                             });
-                            if (price > 0) out.push(price);
+                            const contextText = (scope.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 1200);
+                            if (price > 0) out.push({price, contextText});
                         } catch (e) {}
                     });
                     return out;
@@ -673,7 +675,17 @@ async def _fetch_playwright_lowest_price(
                 },
             )
             await browser.close()
-            prices = [float(p) for p in raw if 1 < float(p) < max_price]
+            for row in raw:
+                try:
+                    p = float((row or {}).get("price") or 0)
+                except Exception:
+                    continue
+                if not (1 < p < max_price):
+                    continue
+                if source_name in {"temu", "aliexpress"}:
+                    if not allow_temu_aliexpress_listing((row or {}).get("contextText") or ""):
+                        continue
+                prices.append(p)
     except Exception as exc:
         log.debug("upgrade_parts.playwright_fetch.error", source=source_name, error=str(exc))
         return None
