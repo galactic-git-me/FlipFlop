@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_DIR="$ROOT_DIR/.run-logs"
 PID_FILE="$ROOT_DIR/.start-dev-daemon.pid"
-OUT_LOG="$LOG_DIR/start-dev-daemon.log"
+OUT_LOG="$ROOT_DIR/.start-dev-daemon.log"
 
 mkdir -p "$LOG_DIR"
 
@@ -79,6 +79,7 @@ cmd_status() {
 }
 
 cmd_logs() {
+  touch "$OUT_LOG"
   tail -n 120 -f "$OUT_LOG"
 }
 
