@@ -10,7 +10,7 @@ Tailscale URL (live): andromeda-ts:4310
 ▲ Next.js 16.2.4 (webpack)
 - Local:         http://localhost:4310
 - Network:       http://0.0.0.0:4310
-✓ Ready in 415ms
+✓ Ready in 524ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/mac/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
