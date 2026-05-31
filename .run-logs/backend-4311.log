@@ -1399,3 +1399,282 @@ INFO:     100.101.209.68:51488 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:51492 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51496 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51498 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'atx pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:51510 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51520 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51522 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51538 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51544 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51558 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'micro atx case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33510 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33524 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33526 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33528 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33530 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33534 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:51:35 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:33542 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33544 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33546 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33558 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33562 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:51:38 [debug    ] upgrade_parts.bh               part=NVIDIA GPU price_gbp=20.5
+INFO:     100.101.209.68:33568 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33580 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33584 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33606 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33622 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33638 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'white gaming case': 0 found, 0 new (total 0)
+2026-05-31 16:51:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:51:41 [debug    ] upgrade_parts.bh               part=AM4 CPU price_gbp=5.12
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 0)
+2026-05-31 16:51:46 [info     ] gumtree.playwright.cards       count=22 term=atx pc case
+INFO:     100.101.209.68:41824 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41828 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41840 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41856 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41872 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41886 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:51:49 [debug    ] upgrade_parts.bh               part=i7 CPU price_gbp=30.74
+INFO:     100.101.209.68:41902 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41906 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41908 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41918 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41920 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:51:50 [info     ] gumtree.playwright.done        total=21
+2026-05-31 16:51:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mid+tower+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41938 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41952 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41960 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41968 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41982 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41996 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:51:55 [info     ] gumtree.playwright.cards       count=25 term=mid tower case
+INFO:     100.101.209.68:42648 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42658 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42660 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42692 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42694 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42708 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:51:58 [debug    ] upgrade_parts.bh               part=i9 CPU price_gbp=5.12
+[scraper] eBay 'airflow rgb case': 0 found, 0 new (total 0)
+2026-05-31 16:51:59 [info     ] gumtree.playwright.done        total=25
+2026-05-31 16:52:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=micro+atx+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:42714 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42720 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42736 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42752 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42766 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:52:02 [debug    ] upgrade_parts.bh               part=AM4 Motherboard price_gbp=3.07
+INFO:     100.101.209.68:42782 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42798 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42802 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42816 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42830 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42840 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42842 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:04 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+INFO:     100.101.209.68:46560 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46572 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46580 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46592 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46602 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46608 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46614 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:06 [info     ] gumtree.playwright.cards       count=10 term=micro atx case
+2026-05-31 16:52:08 [info     ] gumtree.playwright.done        total=9
+2026-05-31 16:52:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=airflow+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:09 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
+[scraper] eBay 'white gaming case': 0 found, 0 new (total 0)
+2026-05-31 16:52:11 [debug    ] upgrade_parts.bh               part=DDR4 RAM 32GB 2x16GB price_gbp=51.24
+INFO:     100.101.209.68:46628 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46636 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46652 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46654 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46664 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46680 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46694 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46706 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46714 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46730 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46738 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46746 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:52:14 [info     ] gumtree.playwright.cards       count=2 term=airflow rgb case
+2026-05-31 16:52:15 [info     ] gumtree.playwright.done        total=2
+2026-05-31 16:52:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:20 [info     ] gumtree.playwright.cards       count=25 term=white gaming case
+INFO:     100.101.209.68:40922 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40932 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40938 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40944 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40956 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40966 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40980 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40990 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41000 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41016 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:41028 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41036 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41040 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41052 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVIDIA%20GPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:26 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:26 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:57138 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57142 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57144 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57152 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57166 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:52:28 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20CPU&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:57168 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57178 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57194 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57202 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:52:28 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=AM4 motherboard cpu combo
+INFO:     100.101.209.68:57216 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57218 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57228 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:29 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=AM4 CPU
+2026-05-31 16:52:30 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=NVIDIA GPU
+2026-05-31 16:52:30 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=i7 CPU
+2026-05-31 16:52:30 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:30 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:31 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=i9 CPU
+2026-05-31 16:52:31 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=DDR4 RAM 32GB 2x16GB
+2026-05-31 16:52:31 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=AM4 motherboard
+2026-05-31 16:52:32 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i7%20CPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:32 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=DDR4 RAM
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+2026-05-31 16:52:33 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:33 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 16:52:34 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=i9%20CPU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:35 [info     ] gumtree.playwright.cards       count=25 term=i7 CPU
+2026-05-31 16:52:35 [info     ] gumtree.playwright.cards       count=17 term=AM4 CPU
+2026-05-31 16:52:36 [info     ] gumtree.playwright.cards       count=19 term=AM4 motherboard
+2026-05-31 16:52:36 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:36 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:48720 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48732 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48738 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48746 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48754 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48756 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48768 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:37 [info     ] gumtree.playwright.cards       count=5 term=AM4 motherboard cpu combo
+INFO:     100.101.209.68:48772 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48778 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48794 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48808 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48812 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-31 16:52:37 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
+2026-05-31 16:52:37 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:48824 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48838 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 16:52:37 [info     ] gumtree.playwright.cards       count=25 term=NVIDIA GPU
+2026-05-31 16:52:38 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:38 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+2026-05-31 16:52:39 [info     ] gumtree.playwright.cards       count=9 term=i9 CPU
+2026-05-31 16:52:39 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:48848 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48862 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48864 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48876 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48880 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 16:52:40 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard%20cpu%20combo&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:40 [info     ] gumtree.playwright.done        total=5
+2026-05-31 16:52:40 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:41 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:41 [info     ] gumtree.playwright.done        total=9
+2026-05-31 16:52:42 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 16:52:42 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM%2032GB%202x16GB&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 16:52:43 [info     ] gumtree.playwright.done        total=17
+2026-05-31 16:52:43 [info     ] facebook.playwright.done       total=0
+2026-05-31 16:52:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
