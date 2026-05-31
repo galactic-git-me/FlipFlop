@@ -1211,16 +1211,85 @@ stats = get("/listings/stats") or {}
 demand = get("/demand/summary") or {}
 scan = get("/swarms/scan/status") or {}
 schedule = get("/schedule") or []
+taxonomy = get("/source-search-terms") or {}
+telem = get("/search-telemetry/by-source?limit=2500") or {}
+sources_health = get("/sources/health") or {}
 
 total = int(stats.get("total_listings") or demand.get("total_listings") or 0)
 gems = int(stats.get("gems_count") or demand.get("total_gems") or 0)
 avg_profit = float(stats.get("avg_profit") or 0.0)
 gem_rate = (float(gems) / float(total) * 100.0) if total > 0 else 0.0
 running = bool(scan.get("running"))
-done = int(scan.get("completed") or 0)
-scan_total = int(scan.get("total") or 0)
 live_found = int(scan.get("total_found") or 0)
 live_gems = int(scan.get("total_gems") or 0)
+
+def normalize_source_name(name: str) -> str:
+    n = str(name or "").strip().lower()
+    if n in {"ebay", "ebay uk", "ebay (worldwide)"}:
+        return "eBay UK"
+    if n in {"ebay uk auctions", "ebay auctions"}:
+        return "eBay UK Auctions"
+    if n in {"amazon", "amazon uk"}:
+        return "Amazon"
+    if n in {"facebook", "facebook marketplace"}:
+        return "Facebook Marketplace"
+    if n == "bargainhardware":
+        return "BargainHardware"
+    return str(name or "").strip()
+
+def telemetry_source_candidates(scope: str, vendor: str) -> list[str]:
+    aliases = {
+        "eBay": ["eBay UK", "eBay UK Auctions"],
+        "Amazon": ["Amazon"],
+    }
+    names = aliases.get(vendor, [normalize_source_name(vendor)])
+    if scope == "cases":
+        return [f"Cases:{n}" for n in names]
+    if scope == "accessories":
+        return [f"Accessories:{n}" for n in names]
+    if scope == "upgrade_parts":
+        return [f"UpgradeParts:{n}" for n in names]
+    return names
+
+def vendor_enabled(vendor: str) -> bool:
+    aliases = {
+        "eBay": ["eBay UK", "eBay UK Auctions"],
+        "Amazon": ["Amazon"],
+    }
+    options = aliases.get(vendor, [normalize_source_name(vendor)])
+    return any(normalize_source_name(o) in enabled_sources for o in options)
+
+enabled_sources = set()
+for s in (sources_health.get("items") or []):
+    if bool((s or {}).get("enabled", False)):
+        enabled_sources.add(normalize_source_name((s or {}).get("name")))
+
+latest = {}
+for src, rows in ((telem.get("items") or {}) or {}).items():
+    src_n = str(src or "")
+    for r in (rows or []):
+        t = str((r or {}).get("term") or "").strip().lower()
+        if t and (src_n, t) not in latest:
+            latest[(src_n, t)] = True
+
+term_items = taxonomy.get("items") or []
+term_expected = 0
+term_done = 0
+for row in term_items:
+    if not bool((row or {}).get("enabled", True)):
+        continue
+    scope = str((row or {}).get("scope") or "").strip()
+    term = str((row or {}).get("term") or "").strip().lower()
+    if not scope or not term:
+        continue
+    srcs = [str(x).strip() for x in ((row or {}).get("source_names") or []) if str(x).strip()]
+    for vendor in srcs:
+        candidates = telemetry_source_candidates(scope, vendor)
+        if not vendor_enabled(vendor):
+            continue
+        term_expected += 1
+        if any((cand, term) in latest for cand in candidates):
+            term_done += 1
 
 def parse_iso(ts):
     if not ts:
@@ -1254,7 +1323,7 @@ if last_dt and next_dt and next_dt > last_dt:
 
 print("")
 print(f"  listings: {total}   gems: {gems}   gem-rate: {gem_rate:.1f}%   avg-profit: £{avg_profit:.0f}")
-print(f"  scan: {'running' if running else 'idle'}   progress: {done}/{scan_total}   found: {live_found}   live-gems: {live_gems}")
+print(f"  scan: {'running' if running else 'idle'}   progress: {term_done}/{term_expected}   found: {live_found}   live-gems: {live_gems}")
 print(f"  next scan: [{bar}]  T-{remain_txt}")
 PY
   sleep 8
@@ -1428,45 +1497,35 @@ def scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     return names
 
 def scope_runs_progress(scope: str) -> str:
-    # No in-catalogue cycle model: each catalogue runs terms sequentially in one pass.
-    if scope != "flip_opportunities":
-        return "seq"
+    rows = by_scope.get(scope, []) or []
+    if not rows:
+        return "0/0 0%"
 
-    # For flip, show live completion percent for current pass.
-    src_count = len([s for s in enabled_source_names if s in FLIP_SOURCE_NAMES]) or len(FLIP_SOURCE_NAMES)
-    kw_count = max(1, len(cfg_keywords))
-    expected = max(1, kw_count * src_count)
-    run_started = None
-    flip_job = next((j for j in (schedule_rows or []) if str((j or {}).get("id")) == "flip_opportunities"), None)
-    if flip_job:
-        ts = str((flip_job or {}).get("last_run_at") or "")
-        if ts:
-            try:
-                run_started = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-                if run_started.tzinfo is None:
-                    run_started = run_started.replace(tzinfo=timezone.utc)
-                run_started = run_started.astimezone(timezone.utc)
-            except Exception:
-                run_started = None
+    expected = 0
     hit = 0
-    for src, rows in (telem_by_source or {}).items():
-        src_s = str(src)
-        if not any(src_s.startswith(pref) for pref in FLIP_SOURCE_PREFIXES):
+    for row in rows:
+        term = str((row or {}).get("term") or "").strip().lower()
+        if not term:
             continue
-        for row in (rows or []):
-            if run_started is not None:
-                try:
-                    ts = datetime.fromisoformat(str((row or {}).get("ts") or "").replace("Z", "+00:00"))
-                    if ts.tzinfo is None:
-                        ts = ts.replace(tzinfo=timezone.utc)
-                    ts = ts.astimezone(timezone.utc)
-                    if ts < run_started:
-                        continue
-                except Exception:
-                    continue
-            hit += 1
+        allowed = [str(x).strip() for x in ((row or {}).get("source_names") or []) if str(x).strip()]
+        for vendor in allowed:
+            candidates = scope_vendor_sources(scope, vendor)
+            base_enabled = False
+            if vendor in {"eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"}:
+                base_enabled = ("eBay UK" in enabled_source_names) or ("eBay UK Auctions" in enabled_source_names)
+            elif vendor in {"Amazon", "Amazon UK"}:
+                base_enabled = "Amazon" in enabled_source_names
+            else:
+                base_enabled = vendor in enabled_source_names
+            if not base_enabled:
+                continue
+            expected += 1
+            if any((c, term) in latest_term_state for c in candidates):
+                hit += 1
+
+    expected = max(1, expected)
     pct = int(max(0.0, min(100.0, (100.0 * float(hit) / float(expected)))))
-    return f"seq {pct}%"
+    return f"{hit}/{expected} {pct}%"
 
 def active_term_rows(scope: str, rows: list[dict]) -> list[dict]:
     """Show recent active terms for each catalogue without cycle/cursor state."""
