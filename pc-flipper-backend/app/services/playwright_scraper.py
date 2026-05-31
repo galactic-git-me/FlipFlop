@@ -521,9 +521,16 @@ async def scrape_facebook_playwright(
         )
         return []
 
-    # Load cookies if available
-    cookies = _load_fb_cookies()
-    if cookies:
+    # When CDP is configured, prefer the live browser session state and do NOT
+    # inject file cookies (stale cookie files can force an unexpected logout wall).
+    settings = get_settings()
+    cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
+    use_live_cdp_session = bool(cdp_url)
+
+    cookies = None if use_live_cdp_session else _load_fb_cookies()
+    if use_live_cdp_session:
+        log.info("facebook.playwright.using_live_cdp_session", cdp_url=cdp_url)
+    elif cookies:
         log.info("facebook.playwright.cookies_loaded", count=len(cookies))
     else:
         log.info("facebook.playwright.no_cookies", hint="Save fb_cookies.json for full access")
@@ -531,12 +538,6 @@ async def scrape_facebook_playwright(
     results: list[RawListing] = []
     seen: set[str] = set()
     login_required = asyncio.Event()
-    settings = None
-    try:
-        from app.config import get_settings
-        settings = get_settings()
-    except Exception:
-        settings = None
     term_concurrency = max(1, min(4, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
 
     async with _FACEBOOK_SCRAPE_SEM:
