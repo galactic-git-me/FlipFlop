@@ -619,3 +619,108 @@ playwright._impl._errors.TargetClosedError: Target page, context or browser has 
 [scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 0)
 2026-05-31 00:09:05 [debug    ] upgrade_parts.ebay             buy=None part=CPU Cooler sold=None
 2026-05-31 00:09:38 [debug    ] upgrade_parts.ebay             buy=None part=RGB Fans sold=None
+[scraper] playwright.cdp_attached ebay cdp_url=http://100.84.151.109:9223
+2026-05-31 00:10:03 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=nvidia+gpu", waiting until "domcontentloaded"
+ search=nvidia+gpu
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay 'argb gaming case': HTTP blocked/empty (status=200), Playwright returned 64
+[scraper] eBay 'argb gaming case': 64 found, 64 new (total 64)
+[scraper] eBay retry error for 'AMD Ryzen 7 7800X3D': 
+[scraper] eBay retry error for 'gaming mouse': 
+2026-05-31 00:10:29 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=am4+cpu", waiting until "domcontentloaded"
+ search=am4+cpu
+[scraper] eBay retry error for 'AMD Ryzen 7 7800X3D': 
+2026-05-31 00:10:42 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:10:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:10:47 [info     ] gumtree.playwright.cards       count=1 term=fish tank pc case
+2026-05-31 00:10:48 [info     ] gumtree.playwright.done        total=1
+2026-05-31 00:10:55 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i7+cpu", waiting until "domcontentloaded"
+ search=intel+i7+cpu
+2026-05-31 00:10:56 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:10:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:11:02 [info     ] gumtree.playwright.cards       count=25 term=gaming mouse
+2026-05-31 00:11:04 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:11:04 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+[scraper] eBay retry 'Ryzen 9 7900': 0 found, 0 new (total 0)
+2026-05-31 00:11:18 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:11:21 [debug    ] bh.pw.error                    error=Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=intel+i9+cpu", waiting until "domcontentloaded"
+ search=intel+i9+cpu
+2026-05-31 00:11:22 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+[scraper] playwright.cdp_attached ebay cdp_url=http://100.84.151.109:9223
+2026-05-31 00:11:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:11:34 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=panoramic pc case
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+[scraper] eBay retry error for 'Ryzen 9 7900': 
+2026-05-31 00:11:36 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+2026-05-31 00:11:40 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
+2026-05-31 00:11:44 [warning  ] gumtree.playwright.no_listings page_title=Panoramic pc case | Stuff for Sale - Gumtree term=panoramic pc case
+2026-05-31 00:11:45 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:11:46 [debug    ] upgrade_parts.bh               part=DDR4 RAM 32GB 2x16GB price_gbp=102.48
+2026-05-31 00:11:59 [debug    ] upgrade_parts.bh               part=NVMe 1TB price_gbp=25.62
+2026-05-31 00:12:03 [debug    ] upgrade_parts.bh               part=PSU price_gbp=8.2
+[scraper] eBay retry error for 'Ryzen 9 7900X': 
+2026-05-31 00:12:07 [debug    ] upgrade_parts.bh               part=CPU Cooler price_gbp=5.12
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2026-05-31 00:12:11 [debug    ] upgrade_parts.bh               part=RGB Fans price_gbp=3.07
+2026-05-31 00:12:13 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:12:15 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/cf3d3424-42d7-4c09-829b-0d23347ba9d7
+
+2026-05-31 00:12:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:12:22 [info     ] gumtree.playwright.cards       count=3 term=argb gaming case
+2026-05-31 00:12:22 [info     ] gumtree.playwright.done        total=3
+2026-05-31 00:12:24 [debug    ] playwright.wait_selector_timeout error=Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[href*=\"/goods\"]") to be visible
+ selector=a[href*="/goods"] source=temu
