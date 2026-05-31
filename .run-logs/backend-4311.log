@@ -1,19 +1,201 @@
-INFO:     Started server process [2441940]
-INFO:     Waiting for application startup.
-2026-05-31 00:51:16 [info     ] app.startup
-2026-05-31 00:51:16 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
-2026-05-31 00:51:16 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-05-31 00:51:16 [info     ] scheduler.started              jobs=11
-2026-05-31 00:51:16 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
-2026-05-31 00:51:16 [info     ] startup_bootstrap.start
-INFO:     Application startup complete.
-2026-05-31 00:51:16 [info     ] accessories_swarm.start
-2026-05-31 00:51:16 [info     ] cases_swarm.start
-2026-05-31 00:51:16 [info     ] upgrade_parts_swarm.start      total_parts=12
+INFO:     Will watch for changes in these directories: ['/home/mac/CODING/FlipFlop/pc-flipper-backend']
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
-2026-05-31 00:51:16 [info     ] cases_swarm.themes             base=5 playbook_extra=6
-INFO:     127.0.0.1:49446 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49448 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49458 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49468 - "GET /api/sources/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49478 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     Started reloader process [2540449] using WatchFiles
+INFO:     Started server process [2540462]
+INFO:     Waiting for application startup.
+2026-05-31 01:56:05 [info     ] app.startup
+2026-05-31 01:56:05 [info     ] seeded.sources
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=eBay UK Auctions
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=John Pye
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=Amazon
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=Temu
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=AliExpress
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=Alibaba
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=BargainHardware
+2026-05-31 01:56:05 [info     ] seeded.new_source              name=CherryTree Inc
+2026-05-31 01:56:05 [info     ] seeded.manual_source           name=Manual Submission
+2026-05-31 01:56:05 [info     ] seeded.manual_source           name=Manual Photo
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=Apex Auctions
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=BidSpotter
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=Wilsons Auctions
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=i-bidder
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=Merkandi
+2026-05-31 01:56:05 [info     ] seeded.auction_source          name=Wholesale Clearance UK
+2026-05-31 01:56:05 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-05-31 01:56:05 [info     ] seeded.search_config
+2026-05-31 01:56:05 [info     ] seeded.app_settings            model=gemma3:4b
+2026-05-31 01:56:05 [info     ] seeded.playbooks               count=4
+2026-05-31 01:56:05 [info     ] seeded.source_search_terms     count=236 scope=cases
+2026-05-31 01:56:05 [info     ] seeded.source_search_terms     count=22 scope=flip_opportunities
+2026-05-31 01:56:05 [info     ] seeded.source_search_terms     count=21 scope=upgrade_parts
+2026-05-31 01:56:05 [info     ] seeded.source_search_terms     count=8 scope=accessories
+2026-05-31 01:56:05 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-05-31 01:56:05 [info     ] scheduler.started              jobs=11
+2026-05-31 01:56:05 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-05-31 01:56:05 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-05-31 01:56:05 [info     ] accessories_swarm.start
+2026-05-31 01:56:05 [info     ] cases_swarm.start
+2026-05-31 01:56:05 [info     ] flip_opportunities_swarm.start
+2026-05-31 01:56:05 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-05-31 01:56:05 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-05-31 01:56:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
+2026-05-31 01:56:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
+2026-05-31 01:56:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
+2026-05-31 01:56:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 01:56:05 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 01:56:13 [info     ] startup_bootstrap.done
+INFO:     100.101.209.68:57432 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57458 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57444 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57502 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57470 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57518 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57532 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57538 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57540 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57554 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57564 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57570 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57572 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57576 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57588 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay playwright empty term='gaming keyboard' title='Error Page | eBay' html_len=1831 markers=0
+INFO:     100.101.209.68:59832 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59848 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59858 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59866 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59878 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59892 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59904 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59920 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59924 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59930 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59934 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59948 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59962 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59974 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59990 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59996 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60012 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60028 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60044 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60058 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 01:56:38 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=None
+INFO:     100.101.209.68:37428 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37438 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37454 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37460 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37462 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37478 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37488 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37494 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming keyboard': 0 found, 0 new (total 0)
+2026-05-31 01:56:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:34828 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34842 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34854 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34860 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34876 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34892 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34900 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34908 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34912 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34916 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34920 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 01:56:53 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+INFO:     100.101.209.68:34936 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34944 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34956 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34958 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34974 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 01:56:55 [info     ] gumtree.playwright.done        total=25
+2026-05-31 01:56:55 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 01:56:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+[scraper] eBay 'fish tank pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:58116 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58118 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58132 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58138 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'AMD Ryzen 7 7800X3D': 0 found, 0 new (total 0)
+2026-05-31 01:57:01 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 01:57:03 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:58150 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58154 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58168 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58182 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58184 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58186 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58192 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 01:57:05 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:45462 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45474 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45476 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45490 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45502 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45504 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45514 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45528 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45532 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 01:57:07 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 01:57:09 [info     ] facebook.playwright.items      count=15 term=gaming keyboard
+2026-05-31 01:57:11 [info     ] facebook.playwright.done       total=15
+2026-05-31 01:57:12 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+2026-05-31 01:57:14 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming keyboard
+2026-05-31 01:57:14 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming keyboard
+2026-05-31 01:57:14 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming keyboard
+INFO:     100.101.209.68:45544 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45558 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45562 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45576 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32960 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32974 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32976 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:32988 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32990 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32994 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33002 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33018 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33026 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33028 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33042 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33048 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': HTTP blocked/empty (status=200), Playwright returned 3
+[scraper] eBay 'Ryzen 9 7900': 3 found, 3 new (total 3)
+INFO:     100.101.209.68:33056 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33058 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33072 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33078 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52020 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52032 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52038 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52052 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:52064 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52074 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52088 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52090 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52102 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'panoramic pc case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:52108 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52120 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52124 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52136 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52142 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52146 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52162 - "GET /api/sources/health HTTP/1.1" 200 OK
