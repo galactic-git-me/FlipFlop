@@ -6,6 +6,7 @@ These are upsell items to bundle with flipped PCs.
 """
 import re
 import asyncio
+import os
 import httpx
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -184,20 +185,36 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
     scrape_concurrency = max(1, int(os.getenv("ACCESSORIES_TERM_CONCURRENCY", "10")))
     scrape_sem = asyncio.Semaphore(scrape_concurrency)
     has_chrom = chromium_available()
+    vendor_term_sets = {k: set(v) for k, v in batch_terms.items()}
 
     async def _scrape_term(search_def: dict) -> tuple[dict, list[tuple[str, list[RawAccessory]]], str | None]:
         async with scrape_sem:
             try:
                 source_batches: list[tuple[str, list[RawAccessory]]] = []
-                if search_def["term"] in set(batch_terms.get("eBay", [])):
-                    source_batches.append((
+                term = search_def["term"]
+                theme = search_def["theme"]
+                condition = search_def["condition"]
+
+                direct_tasks: list[tuple[str, asyncio.Future]] = []
+                if term in vendor_term_sets.get("eBay", set()):
+                    direct_tasks.append((
                         "Accessories:eBay",
-                        await _scrape_ebay_accessories(search_def["term"], search_def["theme"], search_def["condition"]),
+                        asyncio.create_task(_scrape_ebay_accessories(term, theme, condition)),
                     ))
-                if search_def["term"] in set(batch_terms.get("Gumtree", [])):
-                    source_batches.append(("Accessories:Gumtree", await _scrape_gumtree_accessories(search_def["term"], search_def["theme"])))
-                if search_def["term"] in set(batch_terms.get("Facebook Marketplace", [])):
-                    source_batches.append(("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"])))
+                if term in vendor_term_sets.get("Gumtree", set()):
+                    direct_tasks.append((
+                        "Accessories:Gumtree",
+                        asyncio.create_task(_scrape_gumtree_accessories(term, theme)),
+                    ))
+                if term in vendor_term_sets.get("Facebook Marketplace", set()):
+                    direct_tasks.append((
+                        "Accessories:Facebook Marketplace",
+                        asyncio.create_task(_scrape_facebook_accessories(term, theme)),
+                    ))
+
+                if direct_tasks:
+                    direct_results = await asyncio.gather(*[t[1] for t in direct_tasks], return_exceptions=False)
+                    source_batches.extend((direct_tasks[idx][0], rows) for idx, rows in enumerate(direct_results))
 
                 if has_chrom:
                     from playwright.async_api import async_playwright
@@ -210,20 +227,20 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                         ctx = await browser.new_context(user_agent=ua.random, locale="en-GB", timezone_id="Europe/London")
                         await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
                         page = await ctx.new_page()
-                        if search_def["term"] in set(batch_terms.get("Amazon", [])):
-                            source_batches.append(("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers")))
-                        if search_def["term"] in set(batch_terms.get("Temu", [])):
-                            source_batches.append(("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user")))
-                        if search_def["term"] in set(batch_terms.get("AliExpress", [])):
-                            source_batches.append(("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc")))
-                        if search_def["term"] in set(batch_terms.get("Alibaba", [])):
-                            source_batches.append(("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}")))
-                        if search_def["term"] in set(batch_terms.get("BargainHardware", [])):
-                            source_batches.append(("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}")))
+                        if term in vendor_term_sets.get("Amazon", set()):
+                            source_batches.append(("Accessories:Amazon", await _scrape_playwright_accessories(page, term, theme, "Amazon", f"https://www.amazon.co.uk/s?k={term.replace(' ', '+')}&i=computers")))
+                        if term in vendor_term_sets.get("Temu", set()):
+                            source_batches.append(("Accessories:Temu", await _scrape_playwright_accessories(page, term, theme, "Temu", f"https://www.temu.com/search_result.html?search_key={term.replace(' ', '+')}&search_method=user")))
+                        if term in vendor_term_sets.get("AliExpress", set()):
+                            source_batches.append(("Accessories:AliExpress", await _scrape_playwright_accessories(page, term, theme, "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={term.replace(' ', '+')}&g=y&SortType=price_asc")))
+                        if term in vendor_term_sets.get("Alibaba", set()):
+                            source_batches.append(("Accessories:Alibaba", await _scrape_playwright_accessories(page, term, theme, "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={term.replace(' ', '+')}")))
+                        if term in vendor_term_sets.get("BargainHardware", set()):
+                            source_batches.append(("Accessories:BargainHardware", await _scrape_playwright_accessories(page, term, theme, "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={term.replace(' ', '+')}")))
                         await browser.close()
                 else:
                     for vendor in ("Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"):
-                        if search_def["term"] in set(batch_terms.get(vendor, [])):
+                        if term in vendor_term_sets.get(vendor, set()):
                             source_batches.append((f"Accessories:{vendor}", []))
                 return search_def, source_batches, None
             except Exception as exc:
