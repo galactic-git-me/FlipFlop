@@ -401,3 +401,24 @@ Call log:
   - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
  term=radioactive green rgb pc
 2026-05-31 00:31:00 [warning  ] gumtree.playwright.no_listings page_title=Radioactive green rgb pc | Stuff for Sale - Gumtree term=radioactive green rgb pc
+2026-05-31 00:31:01 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:31:07 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:31:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:31:13 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=cerebro workstation
+2026-05-31 00:31:24 [warning  ] gumtree.playwright.no_listings page_title=Cerebro workstation | Stuff for Sale - Gumtree term=cerebro workstation
+2026-05-31 00:31:25 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:31:29 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:31:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:31:38 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=mutant tactical pc
+2026-05-31 00:31:49 [warning  ] gumtree.playwright.no_listings page_title=Facebook Marketplace term=mutant tactical pc
+2026-05-31 00:31:49 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:31:58 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+INFO:     127.0.0.1:53978 - "POST /api/preflight/antibot/trigger/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53978 - "POST /api/preflight/antibot/trigger HTTP/1.1" 200 OK
+2026-05-31 00:32:22 [info     ] runtime.preflight.antibot.start pages=6 wait_seconds=120
