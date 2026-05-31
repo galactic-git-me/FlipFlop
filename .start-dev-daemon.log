@@ -181,3 +181,92 @@ Opening tmux session 'flipflop-dev-logs' with 4-pane quadrant layout.
 Detach with Ctrl+b then d to return.
 Skipping auto-attach.
 Attach manually with: tmux attach -t flipflop-dev-logs
+
+Stopping services...
+
+One of the services exited unexpectedly.
+Check logs:
+  /home/mac/CODING/FlipFlop/.run-logs/frontend-4310.log
+  /home/mac/CODING/FlipFlop/.run-logs/backend-4311.log
+Startup mode: dev
+Mode summary: DEV (hot reload enabled)
+App runtime: local uvicorn + local next dev (NO api/web Docker containers)
+Infra runtime: db/redis in Docker
+SHOW_SCRAPER_BROWSER=1 is set, but no GUI display is available (DISPLAY/WAYLAND_DISPLAY missing).
+Interactive login/captcha windows cannot be shown in this session.
+Run this script from your desktop terminal session (with DISPLAY set) to get Facebook login windows.
+DEV mode: clearing local runtime data first...
+Ensuring local Postgres container is running...
+ Network pc-flipper-backend_default Creating 
+ Network pc-flipper-backend_default Created 
+ Volume pc-flipper-backend_postgres_data Creating 
+ Volume pc-flipper-backend_postgres_data Created 
+ Container pc-flipper-backend-db-1 Creating 
+ Container pc-flipper-backend-db-1 Created 
+ Container pc-flipper-backend-db-1 Starting 
+ Container pc-flipper-backend-db-1 Started 
+Starting backend on http://andromeda-ts:4311 ...
+Starting frontend on http://andromeda-ts:4310 ...
+
+Frontend: http://andromeda-ts:4310
+Backend : http://andromeda-ts:4311
+API base: http://andromeda-ts:4311/api
+Tailscale URL: andromeda-ts:4310
+ngrok   : starting (monitoring on 127.0.0.1:4048)
+Mode    : dev
+
+Logs:
+  /home/mac/CODING/FlipFlop/.run-logs/frontend-4310.log
+  /home/mac/CODING/FlipFlop/.run-logs/backend-4311.log
+
+Press Ctrl+C to stop both.
+
+Opening tmux session 'flipflop-dev-logs' with 4-pane quadrant layout.
+Detach with Ctrl+b then d to return.
+Skipping auto-attach.
+Attach manually with: tmux attach -t flipflop-dev-logs
+
+Stopping services...
+
+One of the services exited unexpectedly.
+Check logs:
+  /home/mac/CODING/FlipFlop/.run-logs/frontend-4310.log
+  /home/mac/CODING/FlipFlop/.run-logs/backend-4311.log
+Startup mode: dev
+Mode summary: DEV (hot reload enabled)
+App runtime: local uvicorn + local next dev (NO api/web Docker containers)
+Infra runtime: db/redis in Docker
+SHOW_SCRAPER_BROWSER=1 is set, but no GUI display is available (DISPLAY/WAYLAND_DISPLAY missing).
+Interactive login/captcha windows cannot be shown in this session.
+Run this script from your desktop terminal session (with DISPLAY set) to get Facebook login windows.
+DEV mode: clearing local runtime data first...
+Ensuring local Postgres container is running...
+ Network pc-flipper-backend_default Creating 
+ Network pc-flipper-backend_default Created 
+ Volume pc-flipper-backend_postgres_data Creating 
+ Volume pc-flipper-backend_postgres_data Created 
+ Container pc-flipper-backend-db-1 Creating 
+ Container pc-flipper-backend-db-1 Created 
+ Container pc-flipper-backend-db-1 Starting 
+ Container pc-flipper-backend-db-1 Started 
+Starting backend on http://andromeda-ts:4311 ...
+Starting frontend on http://andromeda-ts:4310 ...
+Startup mode: dev
+Mode summary: DEV (hot reload enabled)
+App runtime: local uvicorn + local next dev (NO api/web Docker containers)
+Infra runtime: db/redis in Docker
+SHOW_SCRAPER_BROWSER=1 is set, but no GUI display is available (DISPLAY/WAYLAND_DISPLAY missing).
+Interactive login/captcha windows cannot be shown in this session.
+Run this script from your desktop terminal session (with DISPLAY set) to get Facebook login windows.
+DEV mode: clearing local runtime data first...
+Ensuring local Postgres container is running...
+ Network pc-flipper-backend_default Creating 
+ Network pc-flipper-backend_default Created 
+ Volume pc-flipper-backend_postgres_data Creating 
+ Volume pc-flipper-backend_postgres_data Created 
+ Container pc-flipper-backend-db-1 Creating 
+ Container pc-flipper-backend-db-1 Created 
+ Container pc-flipper-backend-db-1 Starting 
+ Container pc-flipper-backend-db-1 Started 
+Starting backend on http://andromeda-ts:4311 ...
+Starting frontend on http://andromeda-ts:4310 ...
