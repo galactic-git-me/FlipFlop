@@ -422,3 +422,32 @@ Call log:
 INFO:     127.0.0.1:53978 - "POST /api/preflight/antibot/trigger/ HTTP/1.1" 307 Temporary Redirect
 INFO:     127.0.0.1:53978 - "POST /api/preflight/antibot/trigger HTTP/1.1" 200 OK
 2026-05-31 00:32:22 [info     ] runtime.preflight.antibot.start pages=6 wait_seconds=120
+INFO:     127.0.0.1:32944 - "POST /api/sources/3/scrape/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:32944 - "POST /api/sources/3/scrape HTTP/1.1" 200 OK
+2026-05-31 00:32:28 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:32:37 [warning  ] runtime.preflight.antibot.failed error=BrowserType.connect_over_cdp: Timeout 15000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/a65f27b8-ce06-4e91-9aad-b6d8b07e20c8
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/a65f27b8-ce06-4e91-9aad-b6d8b07e20c8
+
+INFO:     127.0.0.1:56718 - "GET /api/preflight/antibot/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56718 - "GET /api/preflight/antibot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56734 - "GET /api/search-telemetry/recent/?limit=160 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56734 - "GET /api/search-telemetry/recent?limit=160 HTTP/1.1" 200 OK
+2026-05-31 00:32:58 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+  -   - <ws connecting> ws://100.84.151.109:9223/devtools/browser/a65f27b8-ce06-4e91-9aad-b6d8b07e20c8
+  -   - <ws connected> ws://100.84.151.109:9223/devtools/browser/a65f27b8-ce06-4e91-9aad-b6d8b07e20c8
+
+2026-05-31 00:32:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AMD%20Ryzen%207%207800X3D&minPrice=0&maxPrice=500&exact=false
+2026-05-31 00:32:59 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:32:59 [info     ] source.scrape.done             found=0 gems=0 source=Facebook Marketplace
+2026-05-31 00:33:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:33:28 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=spiderverse gaming pc
+2026-05-31 00:33:39 [warning  ] gumtree.playwright.no_listings page_title=Spiderverse gaming pc | Stuff for Sale - Gumtree term=spiderverse gaming pc
+2026-05-31 00:33:41 [info     ] gumtree.playwright.done        total=0
