@@ -1901,3 +1901,56 @@ Call log:
 2026-05-31 00:22:22 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
 2026-05-31 00:22:23 [info     ] facebook.playwright.done       total=0
 2026-05-31 00:22:27 [warning  ] accessories.playwright.error   error=Page.evaluate: Execution context was destroyed, most likely because of a navigation site=Temu term=gaming controller
+2026-05-31 00:22:52 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:22:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:22:53 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:22:53 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=CPU%20cooler&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:22:55 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:22:55 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:23:03 [warning  ] accessories.playwright.error   error=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.bargainhardware.eu/de/catalogsearch/result/?q=gaming+controller", waiting until "domcontentloaded"
+ site=BargainHardware term=gaming controller
+2026-05-31 00:23:05 [warning  ] gumtree.playwright.no_listings page_title=Galactic empire build | Stuff for Sale - Gumtree term=galactic empire build
+2026-05-31 00:23:06 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:23:25 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:23:25 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=RGB%20fans&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:23:26 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:23:26 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=7 box=0 ebay_buy=0 ebay_sold=1 errors=0 overclockers=0 scan=0 temu=0 updated=12
+2026-05-31 00:23:33 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:23:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=24+inch+monitor&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:23:36 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:23:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:23:40 [info     ] gumtree.playwright.cards       count=25 term=24 inch monitor
+2026-05-31 00:23:42 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:23:42 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:23:49 [warning  ] gumtree.playwright.no_listings page_title=Rebel alliance gaming pc | Stuff for Sale - Gumtree term=rebel alliance gaming pc
+2026-05-31 00:23:49 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:24:12 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:24:12 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+2026-05-31 00:24:13 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:24:20 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:24:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:24:33 [warning  ] gumtree.playwright.no_listings page_title=Cylon red eye pc | Stuff for Sale - Gumtree term=cylon red eye pc
+2026-05-31 00:24:33 [info     ] gumtree.playwright.done        total=0
