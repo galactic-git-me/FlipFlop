@@ -1322,3 +1322,93 @@ INFO:     100.101.209.68:39766 - "GET /api/sources/health HTTP/1.1" 200 OK
 [scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
 2026-05-31 08:33:29 [info     ] gumtree.playwright.done        total=25
 2026-05-31 08:33:30 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=8 box=0 ebay_buy=0 ebay_sold=1 errors=0 overclockers=0 scan=0 temu=0 updated=12
+INFO:     100.101.209.68:39768 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39776 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39782 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39798 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39812 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39818 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41580 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41594 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41602 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41606 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41614 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41622 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41638 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46070 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46072 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46084 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46088 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46098 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46102 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46114 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'futuristic gaming case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:52576 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52580 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52582 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52594 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52598 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52608 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52620 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 0)
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55028 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55030 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55042 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55052 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55068 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55078 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55088 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41464 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41472 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41484 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41508 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41516 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41518 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 7 5700X': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:41534 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41542 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41552 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41558 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41574 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41580 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41586 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:34:28 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 08:34:28 [info     ] resale_scraper.fallback_buy_price buy_price=499.99 median=1007.99 query=gaming PC rtx 3060
+2026-05-31 08:34:28 [info     ] resale_scraper.fallback_buy_price buy_price=309.99 median=779.99 query=gaming PC i7-3770 rtx 3060
+2026-05-31 08:34:28 [info     ] resale_scraper.fallback_buy_price buy_price=436.0 median=643.2 query=gaming PC i7-3770 rtx 3050
+2026-05-31 08:34:28 [info     ] resale_scraper.fallback_buy_price buy_price=399.99 median=599.99 query=gaming PC ryzen 5 5600g
+2026-05-31 08:34:28 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_1183711547230734112 fingerprint=xum legend prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 08:34:28 [warning  ] listing.duplicate_match        duplicate_rows=2 external_id=amazon_5522693823649415736 fingerprint=gtr gaming starter pc bundle ryzen 5 16gb|||500 source=Amazon
+2026-05-31 08:34:28 [warning  ] listing.duplicate_match        duplicate_rows=6 external_id=amazon_8524541196361293070 fingerprint=asc technology gaming pc tower intel core i7|Intel Core I7-3770||310 source=Amazon
+2026-05-31 08:34:28 [warning  ] listing.duplicate_match        duplicate_rows=5 external_id=amazon_2046174204598665603 fingerprint=asc technology gaming pc tower i7 3770 3|I7-3770|RTX 3050 6GB|436 source=Amazon
+2026-05-31 08:34:28 [warning  ] listing.duplicate_match        duplicate_rows=4 external_id=amazon_7247237448833434409 fingerprint=xum elite prebuilt gaming pc amd ryzen 5|Amd Ryzen 5 5600G|RADEON VEGA 7|400 source=Amazon
+2026-05-31 08:34:28 [info     ] source.retry.success           retried_terms=1 source=Amazon
+2026-05-31 08:34:28 [info     ] source.done                    found=653 gems=0 source=Amazon
+INFO:     100.101.209.68:34760 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34764 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34774 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34788 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34796 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34806 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34822 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'federation command build': 0 found, 0 new (total 0)
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:49566 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49568 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49578 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49580 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49594 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49606 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49618 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '32GB DDR4 2x16': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:48472 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48484 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48490 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48504 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48508 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48510 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48520 - "GET /api/sources/health HTTP/1.1" 200 OK
