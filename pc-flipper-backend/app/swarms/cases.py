@@ -302,6 +302,17 @@ async def _scrape_ebay(search: str, theme: str) -> list[RawCase]:
             condition_code="1000",
             worldwide=False,
         )
+        # Fallback: if strict "new-only" pass returns nothing, retry without
+        # condition filtering to capture mixed-condition listings.
+        if not listings:
+            listings = await scrape_ebay(
+                [search],
+                min_price=1,
+                max_price=350,
+                auction_mode=False,
+                condition_code=None,
+                worldwide=False,
+            )
         return [
             RawCase(
                 name=l.title[:200],
@@ -387,6 +398,15 @@ async def _scrape_ebay_worldwide(search: str, theme: str) -> list[RawCase]:
             condition_code="1000",
             worldwide=True,
         )
+        if not listings:
+            listings = await scrape_ebay(
+                [search],
+                min_price=1,
+                max_price=200,
+                auction_mode=False,
+                condition_code=None,
+                worldwide=True,
+            )
         return [
             RawCase(
                 name=l.title[:200],
