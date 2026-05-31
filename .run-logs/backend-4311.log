@@ -2353,3 +2353,36 @@ Call log:
 Call log:
   - waiting for locator("button:has-text('Accept all')")
  selector=button:has-text('Accept all')
+2026-05-31 00:00:33 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 00:00:33 [warning  ] facebook.playwright.login_required hint=Save fb_cookies.json — see playwright_scraper.py instructions
+2026-05-31 00:00:33 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:00:33 [info     ] facebook.playwright.cookies_loaded count=8
+2026-05-31 00:00:34 [info     ] playwright.cdp_attached        cdp_url=http://100.84.151.109:9223
+2026-05-31 00:00:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=dark%20knight%20pc&minPrice=1&maxPrice=350&exact=false
+2026-05-31 00:00:39 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+2026-05-31 00:00:41 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+ selector=button:has-text('Allow all cookies')
+2026-05-31 00:00:43 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+  -     - waiting for" https://www.facebook.com/login/device-based/regular/login/?login_attempt=1" navigation to finish...
+  -     - navigated to "https://www.facebook.com/marketplace/london/search/?query=dark%2520knight%2520pc&minPrice=1&maxPrice=350&exact=false&lsrc=lb"
+ selector=button:has-text('Accept all')
+2026-05-31 00:00:45 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 00:00:51 [info     ] facebook.playwright.items      count=24 term=dark knight pc
+INFO:     127.0.0.1:42200 - "POST /api/preflight/antibot/trigger/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:42212 - "POST /api/schedule/flip_opportunities/run/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:42222 - "POST /api/schedule/upgrade_parts/run/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:42232 - "GET /api/search-telemetry/recent/?limit=180 HTTP/1.1" 307 Temporary Redirect
