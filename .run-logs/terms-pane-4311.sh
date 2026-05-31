@@ -254,30 +254,16 @@ for scope in SCOPES:
             members = VENDOR_GROUPS.get(group, [])
             seen_any = False
             status = "blank"
-            total_expected = 0
-            total_done = 0
+            total_found = 0
             for v in members:
                 if allowed and v not in allowed:
                     continue
                 seen_any = True
                 candidates = scope_vendor_sources(scope, v)
-                # Count one expected scrape unit per vendor for this term when vendor is enabled.
-                base_enabled = False
-                if v in {"eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"}:
-                    base_enabled = ("eBay UK" in enabled_source_names) or ("eBay UK Auctions" in enabled_source_names)
-                elif v in {"Amazon", "Amazon UK"}:
-                    base_enabled = "Amazon" in enabled_source_names
-                else:
-                    base_enabled = v in enabled_source_names
-                if base_enabled:
-                    total_expected += 1
-
-                vendor_hit = False
                 for src in candidates:
                     item = latest_term_state.get((src, term.lower()))
                     st, found, saved = _cell_state(item)
-                    if item and not vendor_hit:
-                        vendor_hit = True
+                    total_found += max(0, int(found or 0))
                     if st == "error":
                         status = "error"
                     elif st == "retry" and status not in ("error",):
@@ -286,16 +272,14 @@ for scope in SCOPES:
                         status = "success"
                     elif st == "zero" and status == "blank":
                         status = "zero"
-                if vendor_hit:
-                    total_done += 1
             if not seen_any:
                 out.append("")
             elif status == "error":
                 out.append("[red]✗[/red]")
             elif status == "retry":
                 out.append("[yellow]🚦[/yellow]")
-            elif total_expected > 0:
-                out.append(f"[green]✓{total_done}/{total_expected}[/green]")
+            elif total_found > 0:
+                out.append(f"[green]✓{total_found}[/green]")
             else:
                 out.append("[dim]0[/dim]")
         tbl.add_row(*out)
@@ -303,7 +287,7 @@ for scope in SCOPES:
     tbl.add_section()
 
 console.clear()
-legend = "[green]✓done/total[/green]=vendor scrape coverage for this term  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
+legend = "[green]✓count[/green]=scraped listings  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry later  blank=not run"
 console.print(Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue"))
 PY
   sleep "12"
