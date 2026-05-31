@@ -1,6 +1,6 @@
 FROM alpine:3.20
-RUN apk add --no-cache bash git ca-certificates tzdata
+RUN apk add --no-cache bash git ca-certificates tzdata findutils
 WORKDIR /app
-COPY sync.sh /usr/local/bin/sync.sh
-RUN chmod +x /usr/local/bin/sync.sh
-ENTRYPOINT ["/usr/local/bin/sync.sh"]
+COPY sync-all.sh /usr/local/bin/sync-all.sh
+RUN chmod +x /usr/local/bin/sync-all.sh
+ENTRYPOINT ["/usr/local/bin/sync-all.sh"]

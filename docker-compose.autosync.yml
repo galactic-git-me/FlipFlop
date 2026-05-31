@@ -1,16 +1,16 @@
 services:
-  flipflop-git-sync:
+  coding-git-sync:
     build:
       context: ./autosync
-    container_name: flipflop-git-sync
+    container_name: coding-git-sync
     restart: unless-stopped
     environment:
-      REPO_DIR: /repo
-      BRANCH: master
+      CODING_DIR: /coding
       INTERVAL_SECONDS: 300
-      GIT_USER_NAME: FlipFlop AutoSync
-      GIT_USER_EMAIL: autosync@flipflop.local
+      COMMIT_MSG_PREFIX: "chore: automated codebase synchronization"
+      GIT_USER_NAME: Coding AutoSync
+      GIT_USER_EMAIL: autosync@coding.local
       TZ: Europe/London
     volumes:
-      - /home/mac/CODING/FlipFlop:/repo
+      - /home/mac/CODING:/coding
       - /home/mac/.git-credentials:/root/.git-credentials:ro
