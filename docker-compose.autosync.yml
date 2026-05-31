@@ -1,0 +1,16 @@
+services:
+  flipflop-git-sync:
+    build:
+      context: ./autosync
+    container_name: flipflop-git-sync
+    restart: unless-stopped
+    environment:
+      REPO_DIR: /repo
+      BRANCH: master
+      INTERVAL_SECONDS: 300
+      GIT_USER_NAME: FlipFlop AutoSync
+      GIT_USER_EMAIL: autosync@flipflop.local
+      TZ: Europe/London
+    volumes:
+      - /home/mac/CODING/FlipFlop:/repo
+      - /home/mac/.git-credentials:/root/.git-credentials:ro
