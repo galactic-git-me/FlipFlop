@@ -1571,3 +1571,232 @@ INFO:     100.101.209.68:51450 - "GET /api/demand/summary HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51460 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
 INFO:     100.101.209.68:51468 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-31 02:03:06 [debug    ] upgrade_parts.bh               part=i7 CPU price_gbp=30.74
+INFO:     100.101.209.68:51476 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51490 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51498 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51514 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51520 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51534 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51536 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51546 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51550 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51554 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51566 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54926 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54940 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54956 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54958 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54966 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:18 [debug    ] upgrade_parts.bh               part=i9 CPU price_gbp=5.12
+INFO:     100.101.209.68:54976 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54988 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55004 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55010 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:22 [debug    ] upgrade_parts.bh               part=AM4 Motherboard price_gbp=3.07
+INFO:     100.101.209.68:55018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55024 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55040 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55054 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55056 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55066 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55078 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 0)
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 3)
+INFO:     100.101.209.68:33022 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33034 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33042 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33048 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33068 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33080 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33086 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:30 [debug    ] upgrade_parts.bh               part=AM4 CPU Motherboard Combo price_gbp=3.07
+2026-05-31 02:03:35 [debug    ] upgrade_parts.bh               part=DDR4 RAM price_gbp=3.07
+[scraper] eBay 'gaming controller': 0 found, 0 new (total 0)
+2026-05-31 02:03:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:56726 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56728 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56740 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56744 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56770 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56778 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56792 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56802 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56814 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56818 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56830 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56840 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56850 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56854 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56858 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'white rgb case': 0 found, 0 new (total 0)
+2026-05-31 02:03:40 [info     ] gumtree.playwright.cards       count=25 term=gaming controller
+2026-05-31 02:03:41 [debug    ] upgrade_parts.bh               part=DDR4 RAM 32GB 2x16GB price_gbp=102.48
+2026-05-31 02:03:44 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:03:44 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:03:44 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:43336 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43338 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43342 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:50 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+INFO:     100.101.209.68:43350 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43356 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43366 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43372 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43378 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:52 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+2026-05-31 02:03:52 [debug    ] upgrade_parts.bh               part=NVMe 1TB price_gbp=25.62
+2026-05-31 02:03:54 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+INFO:     100.101.209.68:43390 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43400 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43412 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:43418 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43430 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43442 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43452 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43460 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43472 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43484 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:03:56 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+2026-05-31 02:03:56 [debug    ] upgrade_parts.bh               part=PSU price_gbp=8.2
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 0)
+2026-05-31 02:03:58 [info     ] facebook.playwright.items      count=15 term=gaming controller
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 3)
+2026-05-31 02:04:00 [debug    ] upgrade_parts.bh               part=CPU Cooler price_gbp=5.12
+2026-05-31 02:04:00 [info     ] facebook.playwright.done       total=15
+INFO:     100.101.209.68:48618 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48626 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48634 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48638 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:03 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming controller
+2026-05-31 02:04:03 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming controller
+2026-05-31 02:04:03 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming controller
+INFO:     100.101.209.68:48642 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48644 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48652 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48658 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48664 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:04 [debug    ] upgrade_parts.bh               part=RGB Fans price_gbp=3.07
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Temu
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] upgrade_parts.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba
+2026-05-31 02:04:07 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:04:07 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVIDIA+GPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:04:08 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVIDIA%20GPU&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:42720 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42724 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42740 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:42744 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42754 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42766 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42780 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42782 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42786 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42800 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42814 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:12 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
+[scraper] eBay 'micro atx fish tank': 0 found, 0 new (total 0)
+2026-05-31 02:04:14 [info     ] gumtree.playwright.cards       count=25 term=NVIDIA GPU
+2026-05-31 02:04:14 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Allow all cookies')")
+ selector=button:has-text('Allow all cookies')
+INFO:     100.101.209.68:48326 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48342 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48348 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48352 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48362 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:16 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:04:16 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all')")
+ selector=button:has-text('Accept all')
+2026-05-31 02:04:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:04:18 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='cookie-policy-manage-dialog-accept-button']")
+ selector=[data-testid='cookie-policy-manage-dialog-accept-button']
+INFO:     100.101.209.68:48376 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48390 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48396 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48398 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:21 [info     ] facebook.playwright.items      count=22 term=NVIDIA GPU
+2026-05-31 02:04:21 [info     ] gumtree.playwright.cards       count=17 term=AM4 CPU
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-31 02:04:24 [info     ] facebook.playwright.done       total=21
+2026-05-31 02:04:24 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:04:24 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20CPU&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:37776 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37786 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37788 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37796 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37806 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37822 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37824 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:04:26 [info     ] gumtree.playwright.done        total=17
+2026-05-31 02:04:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:37826 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37840 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37854 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37880 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37886 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37902 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37918 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:04:29 [debug    ] facebook.cookie_click_skipped  error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("div[aria-label='Close']")
+ selector=div[aria-label='Close']
