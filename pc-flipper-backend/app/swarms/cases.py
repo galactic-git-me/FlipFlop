@@ -131,6 +131,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
     playbook_themes = await _playbook_extra_themes()
     all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
+    max_terms = max(1, int(os.getenv("CASES_MAX_TERMS", "10")))
     terms_by_vendor: dict[str, list[str]] = {}
     for source in SOURCES:
         if source_allowlist and source["name"] not in source_allowlist:
@@ -141,8 +142,15 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         terms: list[str] = []
         for theme_def in all_themes:
             terms.extend(theme_def["terms"][:2])
-        terms_by_vendor[source["name"]] = list(dict.fromkeys(terms))
+        deduped_terms = list(dict.fromkeys(terms))
+        terms_by_vendor[source["name"]] = deduped_terms[:max_terms]
     batch_terms = terms_by_vendor
+    log.info(
+        "cases.terms.capped",
+        max_terms=max_terms,
+        vendors=len(batch_terms),
+        total_terms=sum(len(v) for v in batch_terms.values()),
+    )
 
     async def _scrape_one(source: dict, theme: str, term: str):
         fn_key = source["fn"].replace("-", "_").replace(" ", "_")
