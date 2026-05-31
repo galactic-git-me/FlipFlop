@@ -164,14 +164,22 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         if s["fn"] in _PLAYWRIGHT_CASE_SOURCES and not has_chromium:
             continue
         enabled_sources.append(s)
+    term_concurrency = max(1, int(os.getenv("CASES_TERM_CONCURRENCY", "10")))
+    term_sem = asyncio.Semaphore(term_concurrency)
+
     async def _scrape_source_seq(source: dict) -> list[dict]:
         rows: list[dict] = []
         # CherryTree should ingest from its cases catalogue once, not per search term.
         if source["fn"] == "cherrytree":
             rows.append(await _scrape_one(source, "Catalogue", "catalogue"))
             return rows
-        for term in batch_terms.get(source["name"], []):
-            rows.append(await _scrape_one(source, "Dynamic", term))
+        async def _one(term: str):
+            async with term_sem:
+                return await _scrape_one(source, "Dynamic", term)
+        rows = await asyncio.gather(
+            *[_one(term) for term in batch_terms.get(source["name"], [])],
+            return_exceptions=False,
+        )
         return rows
 
     scrape_results: list[dict] = []
@@ -187,9 +195,10 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     term=term,
                     error="playwright.chromium_not_installed",
                 )
-    source_batches: list[list[dict]] = []
-    for source in enabled_sources:
-        source_batches.append(await _scrape_source_seq(source))
+    source_batches: list[list[dict]] = await asyncio.gather(
+        *[_scrape_source_seq(source) for source in enabled_sources],
+        return_exceptions=False,
+    )
     for batch in source_batches:
         for r in batch:
             scrape_results.append(r)

@@ -234,20 +234,23 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 error="playwright.chromium_not_installed",
             )
 
-    async def _fetch_lane_seq(fn):
-        lane = []
-        for p in parts:
-            try:
-                lane.append(await fn(p["ebay_search"]))
-            except Exception as exc:
-                lane.append(exc)
-        return lane
+    async def _fetch_lane_concurrent(fn, max_concurrency: int = 8):
+        sem = asyncio.Semaphore(max(1, max_concurrency))
+
+        async def _one(p):
+            async with sem:
+                try:
+                    return await fn(p["ebay_search"])
+                except Exception as exc:
+                    return exc
+
+        return await asyncio.gather(*[_one(p) for p in parts], return_exceptions=False)
 
     # ── Phase 3: each vendor sequential, vendors in parallel ──────────────────
     scan_r, oc_r, box_r = await asyncio.gather(
-        _fetch_lane_seq(_fetch_scan),
-        _fetch_lane_seq(_fetch_overclockers),
-        _fetch_lane_seq(_fetch_box),
+        _fetch_lane_concurrent(_fetch_scan),
+        _fetch_lane_concurrent(_fetch_overclockers),
+        _fetch_lane_concurrent(_fetch_box),
     )
     for v in scan_r:
         if v and not isinstance(v, Exception):
@@ -262,12 +265,12 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
     if has_chromium:
         amz_r, temu_r, ali_r, ali_b_r, gum_r, fb_r = await asyncio.gather(
-            _fetch_lane_seq(_fetch_amazon),
-            _fetch_lane_seq(_fetch_temu),
-            _fetch_lane_seq(_fetch_aliexpress),
-            _fetch_lane_seq(_fetch_alibaba),
-            _fetch_lane_seq(_fetch_gumtree_component),
-            _fetch_lane_seq(_fetch_facebook_component),
+            _fetch_lane_concurrent(_fetch_amazon),
+            _fetch_lane_concurrent(_fetch_temu),
+            _fetch_lane_concurrent(_fetch_aliexpress),
+            _fetch_lane_concurrent(_fetch_alibaba),
+            _fetch_lane_concurrent(_fetch_gumtree_component),
+            _fetch_lane_concurrent(_fetch_facebook_component),
         )
     else:
         amz_r = [None for _ in parts]

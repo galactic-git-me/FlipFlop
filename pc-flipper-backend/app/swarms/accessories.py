@@ -181,27 +181,25 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
     terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
     batch_terms = terms_by_vendor
 
-    async with AsyncSessionLocal() as db:
-        for search_def in search_defs:
+    scrape_concurrency = max(1, int(os.getenv("ACCESSORIES_TERM_CONCURRENCY", "10")))
+    scrape_sem = asyncio.Semaphore(scrape_concurrency)
+    has_chrom = chromium_available()
+
+    async def _scrape_term(search_def: dict) -> tuple[dict, list[tuple[str, list[RawAccessory]]], str | None]:
+        async with scrape_sem:
             try:
                 source_batches: list[tuple[str, list[RawAccessory]]] = []
                 if search_def["term"] in set(batch_terms.get("eBay", [])):
-                    ebay_results = await _scrape_ebay_accessories(
-                        search_def["term"],
-                        search_def["theme"],
-                        search_def["condition"],
-                    )
-                    source_batches.append(("Accessories:eBay", ebay_results))
+                    source_batches.append((
+                        "Accessories:eBay",
+                        await _scrape_ebay_accessories(search_def["term"], search_def["theme"], search_def["condition"]),
+                    ))
                 if search_def["term"] in set(batch_terms.get("Gumtree", [])):
-                    source_batches.append(
-                        ("Accessories:Gumtree", await _scrape_gumtree_accessories(search_def["term"], search_def["theme"]))
-                    )
+                    source_batches.append(("Accessories:Gumtree", await _scrape_gumtree_accessories(search_def["term"], search_def["theme"])))
                 if search_def["term"] in set(batch_terms.get("Facebook Marketplace", [])):
-                    source_batches.append(
-                        ("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"]))
-                    )
+                    source_batches.append(("Accessories:Facebook Marketplace", await _scrape_facebook_accessories(search_def["term"], search_def["theme"])))
 
-                if chromium_available():
+                if has_chrom:
                     from playwright.async_api import async_playwright
                     async with async_playwright() as p:
                         browser = await p.chromium.launch(
@@ -209,72 +207,53 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                             args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],
                             proxy=playwright_proxy_config(),
                         )
-                        ctx = await browser.new_context(
-                            user_agent=ua.random,
-                            locale="en-GB",
-                            timezone_id="Europe/London",
-                        )
+                        ctx = await browser.new_context(user_agent=ua.random, locale="en-GB", timezone_id="Europe/London")
                         await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
                         page = await ctx.new_page()
-
                         if search_def["term"] in set(batch_terms.get("Amazon", [])):
-                            source_batches.append(
-                                ("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers"))
-                            )
+                            source_batches.append(("Accessories:Amazon", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Amazon", f"https://www.amazon.co.uk/s?k={search_def['term'].replace(' ', '+')}&i=computers")))
                         if search_def["term"] in set(batch_terms.get("Temu", [])):
-                            source_batches.append(
-                                ("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user"))
-                            )
+                            source_batches.append(("Accessories:Temu", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Temu", f"https://www.temu.com/search_result.html?search_key={search_def['term'].replace(' ', '+')}&search_method=user")))
                         if search_def["term"] in set(batch_terms.get("AliExpress", [])):
-                            source_batches.append(
-                                ("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc"))
-                            )
+                            source_batches.append(("Accessories:AliExpress", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "AliExpress", f"https://www.aliexpress.com/wholesale?SearchText={search_def['term'].replace(' ', '+')}&g=y&SortType=price_asc")))
                         if search_def["term"] in set(batch_terms.get("Alibaba", [])):
-                            source_batches.append(
-                                ("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}"))
-                            )
+                            source_batches.append(("Accessories:Alibaba", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "Alibaba", f"https://www.alibaba.com/trade/search?SearchText={search_def['term'].replace(' ', '+')}")))
                         if search_def["term"] in set(batch_terms.get("BargainHardware", [])):
-                            source_batches.append(
-                                ("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}"))
-                            )
+                            source_batches.append(("Accessories:BargainHardware", await _scrape_playwright_accessories(page, search_def["term"], search_def["theme"], "BargainHardware", f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={search_def['term'].replace(' ', '+')}")))
                         await browser.close()
                 else:
                     for vendor in ("Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"):
                         if search_def["term"] in set(batch_terms.get(vendor, [])):
                             source_batches.append((f"Accessories:{vendor}", []))
-
-                for source_name, results in source_batches:
-                    raw_found = len(results)
-                    saved_count = min(24, raw_found)
-                    stats["found"] += raw_found
-                    record_term_result(
-                        source_name=source_name,
-                        term=search_def["term"],
-                        found=raw_found,
-                        new=saved_count,
-                    )
-                    for acc in results[:24]:
-                        try:
-                            await _upsert_accessory(db, acc)
-                            stats["upserted"] += 1
-                        except Exception as row_exc:
-                            stats["errors"] += 1
-                            await db.rollback()
-                            record_term_result(
-                                source_name=source_name,
-                                term=search_def["term"],
-                                error=f"row_upsert_error:{row_exc}",
-                            )
-                            log.error("accessories.upsert.error", term=search_def["term"], source=source_name, error=str(row_exc))
+                return search_def, source_batches, None
             except Exception as exc:
+                return search_def, [], str(exc)
+
+    term_results = await asyncio.gather(*[_scrape_term(sd) for sd in search_defs], return_exceptions=False)
+
+    async with AsyncSessionLocal() as db:
+        for search_def, source_batches, scrape_err in term_results:
+            if scrape_err:
                 stats["errors"] += 1
                 await db.rollback()
-                record_term_result(
-                    source_name="Accessories:eBay",
-                    term=search_def["term"],
-                    error=str(exc),
-                )
-                log.error("accessories.scrape.error", term=search_def["term"], error=str(exc))
+                record_term_result(source_name="Accessories:eBay", term=search_def["term"], error=scrape_err)
+                log.error("accessories.scrape.error", term=search_def["term"], error=scrape_err)
+                continue
+
+            for source_name, results in source_batches:
+                raw_found = len(results)
+                saved_count = min(24, raw_found)
+                stats["found"] += raw_found
+                record_term_result(source_name=source_name, term=search_def["term"], found=raw_found, new=saved_count)
+                for acc in results[:24]:
+                    try:
+                        await _upsert_accessory(db, acc)
+                        stats["upserted"] += 1
+                    except Exception as row_exc:
+                        stats["errors"] += 1
+                        await db.rollback()
+                        record_term_result(source_name=source_name, term=search_def["term"], error=f"row_upsert_error:{row_exc}")
+                        log.error("accessories.upsert.error", term=search_def["term"], source=source_name, error=str(row_exc))
 
         await db.commit()
 
