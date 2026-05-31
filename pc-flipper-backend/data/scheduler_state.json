@@ -4,5 +4,11 @@
   },
   "playbook_evolution": {
     "last_success_at": "2026-05-31T07:24:13.004393+00:00"
+  },
+  "accessories": {
+    "last_success_at": "2026-05-31T07:32:12.780803+00:00"
+  },
+  "upgrade_parts": {
+    "last_success_at": "2026-05-31T07:33:30.374467+00:00"
   }
 }

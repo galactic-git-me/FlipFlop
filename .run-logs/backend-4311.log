@@ -1196,3 +1196,129 @@ INFO:     100.101.209.68:35396 - "GET /api/sources/health HTTP/1.1" 200 OK
 2026-05-31 08:31:57 [info     ] gumtree.playwright.done        total=17
 2026-05-31 08:31:57 [info     ] gumtree.playwright.cards       count=25 term=xl mouse pad
 2026-05-31 08:31:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i7+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'micro atx fish tank': 0 found, 0 new (total 0)
+2026-05-31 08:32:02 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:32:02 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 08:32:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=xl%20mouse%20pad&minPrice=1&maxPrice=80&exact=false
+2026-05-31 08:32:03 [info     ] gumtree.playwright.cards       count=25 term=i7 CPU
+2026-05-31 08:32:03 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:35404 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35408 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35424 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35426 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35438 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35450 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35458 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=xl mouse pad
+2026-05-31 08:32:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=xl mouse pad
+2026-05-31 08:32:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=xl mouse pad
+2026-05-31 08:32:07 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:32:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=i9+CPU&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:55056 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55082 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55092 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55104 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55110 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55114 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:12 [info     ] accessories_swarm.done         errors=0 found=558 upserted=384
+2026-05-31 08:32:13 [info     ] gumtree.playwright.cards       count=9 term=i9 CPU
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 0)
+2026-05-31 08:32:16 [info     ] gumtree.playwright.done        total=9
+2026-05-31 08:32:16 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:38948 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38964 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38966 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38988 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39016 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:22 [info     ] gumtree.playwright.cards       count=19 term=AM4 motherboard
+2026-05-31 08:32:25 [info     ] gumtree.playwright.done        total=19
+2026-05-31 08:32:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=AM4+motherboard+cpu+combo&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:37844 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37850 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37858 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37870 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37878 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37882 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37884 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+2026-05-31 08:32:31 [info     ] gumtree.playwright.cards       count=5 term=AM4 motherboard cpu combo
+2026-05-31 08:32:32 [info     ] gumtree.playwright.done        total=5
+2026-05-31 08:32:32 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:36268 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36282 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36286 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36298 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36302 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36308 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36322 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:38 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+[scraper] eBay 'compact gaming case': 0 found, 0 new (total 0)
+2026-05-31 08:32:41 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:32:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53458 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53460 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53470 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53482 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53494 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53498 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53512 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:48 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
+2026-05-31 08:32:50 [info     ] gumtree.playwright.done        total=21
+2026-05-31 08:32:51 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:53522 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53528 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53530 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53532 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53540 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53542 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53550 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:32:57 [info     ] gumtree.playwright.cards       count=29 term=NVMe 1TB
+2026-05-31 08:33:00 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:33:01 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:43794 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43800 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43814 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43830 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43842 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43852 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+2026-05-31 08:33:07 [info     ] gumtree.playwright.cards       count=26 term=PSU
+2026-05-31 08:33:09 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:42966 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42982 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42994 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43006 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43016 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43028 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43040 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:33:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'cyberpunk pc case': 0 found, 0 new (total 0)
+2026-05-31 08:33:16 [info     ] gumtree.playwright.cards       count=25 term=CPU cooler
+INFO:     100.101.209.68:54622 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54638 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54640 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54644 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54650 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54660 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54668 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+2026-05-31 08:33:19 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:33:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 08:33:25 [info     ] gumtree.playwright.cards       count=25 term=RGB fans
+INFO:     100.101.209.68:39712 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39724 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39726 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39728 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39744 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39754 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39766 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+2026-05-31 08:33:29 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:33:30 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=8 box=0 ebay_buy=0 ebay_sold=1 errors=0 overclockers=0 scan=0 temu=0 updated=12
