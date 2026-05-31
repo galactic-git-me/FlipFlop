@@ -771,3 +771,102 @@ INFO:     100.101.209.68:59090 - "GET /api/schedule HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59092 - "GET /api/source-search-terms HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59118 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:27:01 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:27:01 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 08:27:01 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+2026-05-31 08:27:02 [info     ] facebook.playwright.done       total=0
+2026-05-31 08:27:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming headset
+2026-05-31 08:27:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming headset
+2026-05-31 08:27:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming headset
+[scraper] eBay 'rgb airflow case': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34538 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34548 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34550 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34560 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34576 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34592 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:42650 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42664 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42668 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42670 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42676 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42684 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42698 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:27:23 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU Motherboard Combo sold=None
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:42714 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42724 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42738 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42748 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42758 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42770 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:42772 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36354 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36356 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36372 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36376 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36390 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36404 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36410 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:34464 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34474 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34482 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34486 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34498 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34500 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34512 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58066 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58076 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58092 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58104 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58114 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58134 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'usb microphone': 0 found, 0 new (total 0)
+2026-05-31 08:27:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 08:27:57 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM sold=None
+INFO:     100.101.209.68:48638 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48646 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48658 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48670 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48676 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48686 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48694 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'mesh airflow case': 0 found, 0 new (total 0)
+2026-05-31 08:27:59 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
+2026-05-31 08:28:02 [info     ] gumtree.playwright.done        total=25
+2026-05-31 08:28:02 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 08:28:02 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=usb%20microphone&minPrice=1&maxPrice=80&exact=false
+2026-05-31 08:28:03 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:59456 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59458 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59462 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59476 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59478 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59486 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59492 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:28:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=usb microphone
+2026-05-31 08:28:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=usb microphone
+2026-05-31 08:28:06 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=usb microphone
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 0)
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:59494 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59496 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59504 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59506 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59520 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59526 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59542 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 08:28:17 [debug    ] upgrade_parts.ebay             buy=None part=DDR4 RAM 32GB 2x16GB sold=134.95
+INFO:     100.101.209.68:52486 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52498 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52512 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52520 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52532 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52548 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52564 - "GET /api/sources/health HTTP/1.1" 200 OK
