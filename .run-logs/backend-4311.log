@@ -1277,3 +1277,210 @@ INFO:     100.101.209.68:52628 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:52644 - "GET /api/schedule HTTP/1.1" 200 OK
 2026-05-31 02:42:56 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard&minPrice=1&maxPrice=2500&exact=false
 2026-05-31 02:42:57 [info     ] gumtree.playwright.cards       count=25 term=DDR4 RAM
+2026-05-31 02:43:00 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:43:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=DDR4+RAM+32GB+2x16GB&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:52660 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52676 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52690 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52694 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52708 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-31 02:43:02 [info     ] facebook.playwright.items      count=24 term=AM4 motherboard
+INFO:     100.101.209.68:52710 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52720 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52734 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52742 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52744 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:52746 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52758 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52770 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52782 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 128)
+2026-05-31 02:43:06 [info     ] gumtree.playwright.cards       count=21 term=DDR4 RAM 32GB 2x16GB
+2026-05-31 02:43:06 [info     ] facebook.playwright.done       total=24
+2026-05-31 02:43:06 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:43:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=AM4%20motherboard%20cpu%20combo&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:45322 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45326 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45338 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45344 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45348 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:43:09 [info     ] gumtree.playwright.done        total=21
+2026-05-31 02:43:10 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=NVMe+1TB&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:45356 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45358 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45366 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45382 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45384 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45390 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:45406 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:12 [info     ] facebook.playwright.items      count=24 term=AM4 motherboard cpu combo
+[scraper] eBay 'rgb airflow case': 105 found, 105 new (total 105)
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 181)
+2026-05-31 02:43:16 [info     ] gumtree.playwright.cards       count=29 term=NVMe 1TB
+2026-05-31 02:43:17 [info     ] facebook.playwright.done       total=24
+2026-05-31 02:43:17 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:43:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:32992 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32998 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33008 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33024 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33036 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33048 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33060 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:19 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:33070 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33072 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33080 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33094 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33102 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33104 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33106 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=PSU&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:33112 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33120 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33136 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33146 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33148 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:43:23 [info     ] facebook.playwright.items      count=23 term=DDR4 RAM
+2026-05-31 02:43:25 [info     ] gumtree.playwright.cards       count=26 term=PSU
+INFO:     100.101.209.68:34814 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34816 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34826 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34832 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34848 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34852 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34864 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:28 [info     ] facebook.playwright.done       total=22
+2026-05-31 02:43:28 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:43:29 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM%2032GB%202x16GB&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 02:43:29 [info     ] gumtree.playwright.done        total=25
+[scraper] eBay 'pc tower': 0 found, 0 new (total 128)
+2026-05-31 02:43:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:34876 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34882 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34898 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34910 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34920 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33886 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33890 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33906 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33916 - "GET /api/sources/ HTTP/1.1" 200 OK
+2026-05-31 02:43:34 [info     ] gumtree.playwright.cards       count=25 term=CPU cooler
+INFO:     100.101.209.68:33920 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33934 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33940 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33942 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33954 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33956 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33972 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33976 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33988 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33990 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:40 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:43:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 181)
+2026-05-31 02:43:43 [info     ] facebook.playwright.items      count=26 term=DDR4 RAM 32GB 2x16GB
+INFO:     100.101.209.68:33996 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34002 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34030 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34040 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34042 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47012 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47022 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47024 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47038 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47044 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:43:47 [info     ] gumtree.playwright.cards       count=25 term=RGB fans
+2026-05-31 02:43:47 [info     ] facebook.playwright.done       total=25
+2026-05-31 02:43:47 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:43:47 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVMe%201TB&minPrice=1&maxPrice=2500&exact=false
+INFO:     100.101.209.68:47048 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47054 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47058 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47072 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47084 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47090 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47096 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:50 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:47112 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47116 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47128 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47144 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47152 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47160 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47174 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:43:53 [info     ] facebook.playwright.items      count=19 term=NVMe 1TB
+[scraper] eBay 'gaming headset': 117 found, 113 new (total 113)
+2026-05-31 02:43:54 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'pc tower no graphics': 0 found, 0 new (total 128)
+INFO:     100.101.209.68:38972 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38974 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38976 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38988 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38992 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:43:58 [info     ] facebook.playwright.done       total=19
+2026-05-31 02:43:58 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:43:58 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=PSU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 02:43:59 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+INFO:     100.101.209.68:39000 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39010 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39012 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39028 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39036 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39052 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39068 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'mesh airflow case': 242 found, 242 new (total 242)
+2026-05-31 02:44:04 [info     ] facebook.playwright.items      count=19 term=PSU
+2026-05-31 02:44:04 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:44:04 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:39700 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39704 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39710 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:39720 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39734 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39740 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39754 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:44:07 [info     ] facebook.playwright.done       total=19
+2026-05-31 02:44:07 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:44:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+[scraper] eBay 'pc tower': 0 found, 0 new (total 181)
+INFO:     100.101.209.68:39758 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39774 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39784 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39792 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39794 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39806 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39812 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39816 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39828 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39844 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39848 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39862 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:44:13 [info     ] facebook.playwright.items      count=25 term=gaming headset
+2026-05-31 02:44:17 [info     ] facebook.playwright.done       total=25
+INFO:     100.101.209.68:44282 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44296 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44302 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44308 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44318 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44322 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44336 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:44:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=CPU%20cooler&minPrice=1&maxPrice=2500&exact=false
+[scraper] eBay 'pc tower no storage': 0 found, 0 new (total 128)
+2026-05-31 02:44:19 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming headset
+2026-05-31 02:44:19 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming headset
+2026-05-31 02:44:19 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming headset
+INFO:     100.101.209.68:44340 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44356 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44366 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44370 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44384 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44390 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44412 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44420 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44428 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44440 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44448 - "GET /api/schedule HTTP/1.1" 200 OK
