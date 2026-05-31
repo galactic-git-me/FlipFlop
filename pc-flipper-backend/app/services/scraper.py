@@ -458,7 +458,16 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                         title = (await page.title()) or ""
                     except Exception:
                         continue
-                    blocked_markers = ("access denied", "errors.edgesuite.net", "akamai", "forbidden")
+                    blocked_markers = (
+                        "access denied",
+                        "errors.edgesuite.net",
+                        "akamai",
+                        "forbidden",
+                        "error page | ebay",
+                        "something went wrong on our end",
+                        "robot",
+                        "captcha",
+                    )
                     blocked = any(m in (title + " " + html).lower() for m in blocked_markers)
                     if blocked:
                         print(f"[scraper] eBay playwright blocked term={term!r} title={title[:80]!r}")
