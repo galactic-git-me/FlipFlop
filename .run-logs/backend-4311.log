@@ -1817,3 +1817,41 @@ Call log:
 
 2026-05-31 00:19:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
 2026-05-31 00:19:42 [info     ] gumtree.playwright.cards       count=25 term=pc speakers
+2026-05-31 00:19:45 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:19:45 [info     ] gumtree.playwright.done        total=25
+2026-05-31 00:19:45 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:19:46 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:19:46 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:19:46 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:19:57 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:19:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:20:10 [warning  ] gumtree.playwright.no_listings page_title=Federation command build | Stuff for Sale - Gumtree term=federation command build
+2026-05-31 00:20:10 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:20:16 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:20:17 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20speakers&minPrice=1&maxPrice=80&exact=false
+2026-05-31 00:20:18 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:20:41 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:20:41 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 00:20:48 [warning  ] playwright.cdp_connect_failed_fallback_launch cdp_url=http://100.84.151.109:9223 error=BrowserType.connect_over_cdp: Timeout 30000ms exceeded.
+Call log:
+  - <ws preparing> retrieving websocket url from http://100.84.151.109:9223
+
+2026-05-31 00:20:48 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=DDR4%20RAM%2032GB%202x16GB&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 00:20:49 [info     ] facebook.playwright.done       total=0
+2026-05-31 00:20:49 [info     ] facebook.playwright.using_live_cdp_session cdp_url=http://100.84.151.109:9223
+2026-05-31 00:20:54 [warning  ] gumtree.playwright.no_listings page_title=Starfleet workstation | Stuff for Sale - Gumtree term=starfleet workstation
+2026-05-31 00:20:54 [info     ] gumtree.playwright.done        total=0
+2026-05-31 00:20:58 [warning  ] source.retry.partial           retried_terms=20 source=eBay UK Auctions still_failed_terms=9
+2026-05-31 00:20:58 [info     ] source.done                    found=0 gems=0 source=eBay UK Auctions
