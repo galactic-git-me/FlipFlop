@@ -47,13 +47,26 @@ mkdir -p "$LOG_DIR"
 
 # Single-instance guard: prevent competing startup controllers.
 LOCK_FILE="$LOG_DIR/start-dev-quiet-ports.lock"
-exec 9>"$LOCK_FILE"
-if ! flock -n 9; then
-  echo "Another start-dev-quiet-ports.sh instance is already running."
-  echo "If this is stale, stop that process first and rerun."
-  exit 1
+if command -v flock >/dev/null 2>&1; then
+  exec 9>"$LOCK_FILE"
+  if ! flock -n 9; then
+    echo "Another start-dev-quiet-ports.sh instance is already running."
+    echo "If this is stale, stop that process first and rerun."
+    exit 1
+  fi
+  echo "$$" 1>&9
+else
+  # Fallback for environments without flock (e.g. Git Bash / some WSL setups).
+  if [[ -f "$LOCK_FILE" ]]; then
+    existing_pid="$(cat "$LOCK_FILE" 2>/dev/null || true)"
+    if [[ -n "${existing_pid:-}" ]] && kill -0 "$existing_pid" >/dev/null 2>&1; then
+      echo "Another start-dev-quiet-ports.sh instance is already running (pid $existing_pid)."
+      echo "If this is stale, stop that process first and rerun."
+      exit 1
+    fi
+  fi
+  echo "$$" >"$LOCK_FILE"
 fi
-echo "$$" 1>&9
 
 # Attempt to raise open-file limit to reduce Watchpack/EMFILE failures.
 maybe_raise_nofile_limit() {
@@ -78,6 +91,24 @@ COMPOSE_ENV_ARGS=()
 if [[ -f "$ROOT_ENV_LOCAL" ]]; then
   COMPOSE_ENV_ARGS=(--env-file "$ROOT_ENV_LOCAL")
 fi
+
+DOCKER_COMPOSE_CMD=()
+init_docker_compose_cmd() {
+  if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+    DOCKER_COMPOSE_CMD=(docker compose)
+  elif command -v docker-compose >/dev/null 2>&1; then
+    DOCKER_COMPOSE_CMD=(docker-compose)
+    # docker-compose v1 can be inconsistent with --env-file in mixed environments.
+    COMPOSE_ENV_ARGS=()
+  else
+    echo "Docker Compose is required (docker compose or docker-compose not found)."
+    exit 1
+  fi
+}
+
+compose() {
+  "${DOCKER_COMPOSE_CMD[@]}" "${COMPOSE_ENV_ARGS[@]}" "$@"
+}
 
 start_ngrok_supervisor() {
   if [[ "$ENABLE_NGROK" != "1" ]]; then
@@ -254,6 +285,7 @@ free_port() {
 require_cmd npm
 require_cmd lsof
 maybe_raise_nofile_limit
+init_docker_compose_cmd
 
 if ! command -v python3 >/dev/null 2>&1 && ! command -v python >/dev/null 2>&1; then
   echo "Missing required command: python3 (or python)"
@@ -358,12 +390,12 @@ start_postgres() {
   echo "Ensuring local Postgres container is running..."
   (
     cd "$BACKEND_DIR"
-    docker compose "${COMPOSE_ENV_ARGS[@]}" up -d db >/dev/null
+    compose up -d db >/dev/null
   )
 
   # Resolve DB container id for health/readiness checks
   local db_cid
-  db_cid="$(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q db)"
+  db_cid="$(cd "$BACKEND_DIR" && compose ps -q db)"
   if [[ -z "$db_cid" ]]; then
     echo "Could not resolve db container id from docker compose."
     exit 1
@@ -402,12 +434,12 @@ clear_dev_data_first() {
   fi
   echo "DEV mode: clearing local runtime data first..."
   if command -v docker >/dev/null 2>&1; then
-    (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" down -v --remove-orphans >/dev/null 2>&1 || true)
+    (cd "$BACKEND_DIR" && compose down -v --remove-orphans >/dev/null 2>&1 || true)
     # Frontend compose may require port vars; pass them explicitly.
     (
       cd "$FRONTEND_DIR" && \
       FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
-      docker compose "${COMPOSE_ENV_ARGS[@]}" down -v --remove-orphans >/dev/null 2>&1 || true
+      compose down -v --remove-orphans >/dev/null 2>&1 || true
     )
     docker rm -f pc-flipper-web pc-flipper-backend-api-1 pc-flipper-backend-db-1 pc-flipper-backend-redis-1 >/dev/null 2>&1 || true
   fi
@@ -425,7 +457,7 @@ restart_project_containers_if_running() {
   local services=()
   while IFS= read -r svc; do
     [[ -n "$svc" ]] && services+=("$svc")
-  done < <(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" config --services 2>/dev/null || true)
+  done < <(cd "$BACKEND_DIR" && compose config --services 2>/dev/null || true)
 
   if [[ ${#services[@]} -eq 0 ]]; then
     return 0
@@ -434,7 +466,7 @@ restart_project_containers_if_running() {
   local running_services=()
   local svc cid status
   for svc in "${services[@]}"; do
-    cid="$(cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q "$svc" 2>/dev/null || true)"
+    cid="$(cd "$BACKEND_DIR" && compose ps -q "$svc" 2>/dev/null || true)"
     if [[ -z "$cid" ]]; then
       continue
     fi
@@ -446,7 +478,7 @@ restart_project_containers_if_running() {
 
   if [[ ${#running_services[@]} -gt 0 ]]; then
     echo "Detected running project containers. Restarting to avoid stale builds: ${running_services[*]}"
-    (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" restart "${running_services[@]}" >/dev/null)
+    (cd "$BACKEND_DIR" && compose restart "${running_services[@]}" >/dev/null)
   fi
 }
 
@@ -477,7 +509,7 @@ compose_service_running() {
   local compose_dir="$1"
   local service="$2"
   local cid status
-  cid="$(cd "$compose_dir" && docker compose "${COMPOSE_ENV_ARGS[@]}" ps -q "$service" 2>/dev/null || true)"
+  cid="$(cd "$compose_dir" && compose ps -q "$service" 2>/dev/null || true)"
   if [[ -z "$cid" ]]; then
     return 1
   fi
@@ -526,7 +558,7 @@ smart_refresh_project_containers() {
   frontend_cur_hash="$(project_tree_hash "$FRONTEND_DIR")"
 
   echo "Ensuring backend infra containers are up (db, redis)..."
-  (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d db redis >/dev/null)
+  (cd "$BACKEND_DIR" && compose up -d db redis >/dev/null)
 
   local backend_api_buildable="0"
   if compose_service_buildable "$BACKEND_DIR" "Dockerfile"; then
@@ -538,13 +570,13 @@ smart_refresh_project_containers() {
     free_port "$BACKEND_PORT"
     if [[ -z "$backend_prev_hash" || "$backend_cur_hash" != "$backend_prev_hash" ]]; then
       echo "Backend code changed -> rebuilding api container..."
-      (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d --build api >/dev/null)
+      (cd "$BACKEND_DIR" && compose up -d --build api >/dev/null)
     else
       if compose_service_running "$BACKEND_DIR" "api"; then
         echo "Backend code unchanged and api is running -> leaving backend container running."
       else
         echo "Backend api not running -> starting api container..."
-        (cd "$BACKEND_DIR" && docker compose "${COMPOSE_ENV_ARGS[@]}" up -d api >/dev/null)
+        (cd "$BACKEND_DIR" && compose up -d api >/dev/null)
       fi
     fi
   else
@@ -563,10 +595,10 @@ smart_refresh_project_containers() {
     if [[ -z "$frontend_prev_hash" || "$frontend_cur_hash" != "$frontend_prev_hash" ]]; then
       echo "Frontend code changed -> rebuilding web container..."
       (
-        cd "$FRONTEND_DIR"
-        FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
-        NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-          docker compose "${COMPOSE_ENV_ARGS[@]}" up -d --build web >/dev/null
+          cd "$FRONTEND_DIR"
+          FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+          NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
+          compose up -d --build web >/dev/null
       )
     else
       if compose_service_running "$FRONTEND_DIR" "web"; then
@@ -575,7 +607,7 @@ smart_refresh_project_containers() {
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
           NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-            docker compose "${COMPOSE_ENV_ARGS[@]}" restart web >/dev/null
+            compose restart web >/dev/null
         )
       else
         echo "Frontend web not running -> starting web container..."
@@ -583,7 +615,7 @@ smart_refresh_project_containers() {
           cd "$FRONTEND_DIR"
           FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
           NEXT_PUBLIC_API_URL="http://$PUBLIC_HOST:$BACKEND_PORT/api" \
-            docker compose "${COMPOSE_ENV_ARGS[@]}" up -d web >/dev/null
+            compose up -d web >/dev/null
         )
       fi
     fi
