@@ -3506,3 +3506,534 @@ INFO:     100.101.209.68:47524 - "GET /api/sources/health HTTP/1.1" 200 OK
 2026-05-31 09:22:05 [info     ] gumtree.playwright.done        total=3
 2026-05-31 09:22:06 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
 2026-05-31 09:22:06 [info     ] gumtree.playwright.done        total=3
+2026-05-31 09:22:07 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=micro+atx+fish+tank&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:08 [info     ] gumtree.playwright.cards       count=21 term=luxury gaming case
+2026-05-31 09:22:10 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=white rgb case
+INFO:     100.101.209.68:43628 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43642 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43658 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43664 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43676 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43678 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43686 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:11 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=micro atx fish tank
+2026-05-31 09:22:11 [info     ] gumtree.playwright.cards       count=1 term=white fish tank case
+2026-05-31 09:22:12 [info     ] gumtree.playwright.cards       count=7 term=white rgb case
+2026-05-31 09:22:13 [info     ] gumtree.playwright.done        total=1
+2026-05-31 09:22:13 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=compact+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:13 [info     ] gumtree.playwright.done        total=21
+2026-05-31 09:22:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cyberpunk+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:14 [info     ] gumtree.playwright.done        total=7
+2026-05-31 09:22:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=futuristic+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:43972 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43984 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43998 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44012 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44028 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'slim micro atx case office': 0 found, 0 new (total 0)
+2026-05-31 09:22:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=federation+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:44030 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44034 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44046 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44060 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44066 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44068 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44084 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44086 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44092 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44104 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44120 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44136 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44146 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44156 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'mini tower desktop case': 0 found, 0 new (total 0)
+2026-05-31 09:22:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=starfleet+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:21 [info     ] gumtree.playwright.cards       count=21 term=compact gaming case
+2026-05-31 09:22:21 [warning  ] gumtree.playwright.no_listings page_title=Micro atx fish tank | Stuff for Sale - Gumtree term=micro atx fish tank
+2026-05-31 09:22:21 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:21 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+  -     - click action done
+  -     - waiting for scheduled navigations to finish
+ term=federation command build
+2026-05-31 09:22:22 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+cube+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:23 [info     ] gumtree.playwright.cards       count=21 term=futuristic gaming case
+2026-05-31 09:22:24 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=starfleet workstation
+2026-05-31 09:22:26 [info     ] gumtree.playwright.done        total=21
+[scraper] eBay 'B550 motherboard': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:50438 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50450 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50456 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50458 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50470 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50482 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50486 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=borg+collective+build&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:50498 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50500 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50508 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50518 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:50524 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 09:22:28 [warning  ] gumtree.playwright.no_listings page_title=Cyberpunk pc case | Stuff for Sale - Gumtree term=cyberpunk pc case
+2026-05-31 09:22:28 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:28 [info     ] gumtree.playwright.done        total=21
+2026-05-31 09:22:28 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=galactic+empire+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:29 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rebel+alliance+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 60)
+2026-05-31 09:22:31 [warning  ] gumtree.playwright.no_listings page_title=Federation command build | Stuff for Sale - Gumtree term=federation command build
+2026-05-31 09:22:31 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:32 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cylon+red+eye+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'cheap atx pc case': 0 found, 0 new (total 0)
+2026-05-31 09:22:33 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=battlestar+inspired+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:34 [warning  ] gumtree.playwright.no_listings page_title=Starfleet workstation | Stuff for Sale - Gumtree term=starfleet workstation
+2026-05-31 09:22:35 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:51608 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51610 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51620 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51622 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51638 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51646 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51654 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51656 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51664 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51666 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51680 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51696 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51698 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:35 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=station+command+build&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'budget gaming case atx': 0 found, 0 new (total 0)
+2026-05-31 09:22:36 [warning  ] gumtree.playwright.no_listings page_title=Borg cube pc | Stuff for Sale - Gumtree term=borg cube pc
+2026-05-31 09:22:36 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=diplomatic+station+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:36 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=cylon red eye pc
+2026-05-31 09:22:37 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:37 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=battlestar inspired workstation
+2026-05-31 09:22:37 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=leviathan+inspired+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:39 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=station command build
+INFO:     100.101.209.68:51706 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51712 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51722 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51738 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51750 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 09:22:40 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+  -     - click action done
+  -     - waiting for scheduled navigations to finish
+ term=diplomatic station workstation
+2026-05-31 09:22:41 [warning  ] gumtree.playwright.no_listings page_title=Borg collective build | Stuff for Sale - Gumtree term=borg collective build
+2026-05-31 09:22:41 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:41 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=leviathan inspired build
+2026-05-31 09:22:42 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=biomechanical+spaceship+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:42 [warning  ] gumtree.playwright.no_listings page_title=Galactic empire build | Stuff for Sale - Gumtree term=galactic empire build
+2026-05-31 09:22:43 [warning  ] gumtree.playwright.no_listings page_title=Rebel alliance gaming pc | Stuff for Sale - Gumtree term=rebel alliance gaming pc
+2026-05-31 09:22:43 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:51754 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51760 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-31 09:22:43 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:51772 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51778 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51782 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51786 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51796 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=autobot+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:44 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=decepticon+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:46 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=biomechanical spaceship pc
+2026-05-31 09:22:46 [warning  ] gumtree.playwright.no_listings page_title=Cylon red eye pc | Stuff for Sale - Gumtree term=cylon red eye pc
+2026-05-31 09:22:47 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:47 [warning  ] gumtree.playwright.no_listings page_title=Battlestar inspired workstation | Stuff for Sale - Gumtree term=battlestar inspired workstation
+2026-05-31 09:22:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=anime+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:47 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:48 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=manga+aesthetic+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:49 [warning  ] gumtree.playwright.no_listings page_title=Station command build | Stuff for Sale - Gumtree term=station command build
+2026-05-31 09:22:49 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:35018 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35030 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35042 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35064 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35068 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35076 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:50 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hidden+leaf+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:50 [warning  ] gumtree.playwright.no_listings page_title=Diplomatic station workstation | Stuff for Sale - Gumtree term=diplomatic station workstation
+2026-05-31 09:22:50 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:51 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=anime gaming pc
+2026-05-31 09:22:51 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hokage+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:51 [warning  ] gumtree.playwright.no_listings page_title=Leviathan inspired build | Stuff for Sale - Gumtree term=leviathan inspired build
+INFO:     100.101.209.68:35086 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-05-31 09:22:52 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:35094 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35110 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35114 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35120 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35122 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35126 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:22:52 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=manga aesthetic workstation
+INFO:     100.101.209.68:35128 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35136 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35142 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35146 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35160 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 09:22:53 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pokedex+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:54 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+ term=hidden leaf gaming pc
+2026-05-31 09:22:56 [warning  ] gumtree.playwright.no_listings page_title=Biomechanical spaceship pc | Stuff for Sale - Gumtree term=biomechanical spaceship pc
+2026-05-31 09:22:56 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:57 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=pokedex workstation
+2026-05-31 09:22:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pikachu+yellow+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:22:59 [info     ] gumtree.playwright.cards       count=3 term=pokedex workstation
+2026-05-31 09:22:59 [warning  ] gumtree.playwright.no_listings page_title=Autobot gaming pc | Stuff for Sale - Gumtree term=autobot gaming pc
+2026-05-31 09:22:59 [warning  ] gumtree.playwright.no_listings page_title=Decepticon workstation | Stuff for Sale - Gumtree term=decepticon workstation
+[scraper] eBay 'Ryzen 5 5600': 0 found, 0 new (total 60)
+2026-05-31 09:22:59 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:22:59 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=super+saiyan+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:40108 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40114 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-31 09:23:00 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dragon+radar+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:40126 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40136 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40148 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40162 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:40178 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:01 [warning  ] gumtree.playwright.no_listings page_title=Anime gaming pc | Stuff for Sale - Gumtree term=anime gaming pc
+2026-05-31 09:23:01 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:02 [warning  ] gumtree.playwright.no_listings page_title=Manga aesthetic workstation | Stuff for Sale - Gumtree term=manga aesthetic workstation
+2026-05-31 09:23:02 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=avengers+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:02 [info     ] gumtree.playwright.done        total=0
+[scraper] eBay 'X570 motherboard': 0 found, 0 new (total 0)
+2026-05-31 09:23:03 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=shield+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:03 [info     ] gumtree.playwright.done        total=3
+2026-05-31 09:23:04 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=jarvis+ai+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:04 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=dragon radar workstation
+2026-05-31 09:23:04 [warning  ] gumtree.playwright.no_listings page_title=Hidden leaf gaming pc | Stuff for Sale - Gumtree term=hidden leaf gaming pc
+2026-05-31 09:23:04 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:54666 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54670 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54672 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54680 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54694 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 09:23:05 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=stark+industries+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:54710 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54726 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54728 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54742 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54750 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54766 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54782 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:06 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=avengers workstation
+2026-05-31 09:23:06 [warning  ] gumtree.playwright.no_listings page_title=Hokage workstation | Stuff for Sale - Gumtree term=hokage workstation
+2026-05-31 09:23:07 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:07 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=shield tactical pc
+2026-05-31 09:23:08 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gamma+core+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:08 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+ term=jarvis ai workstation
+INFO:     100.101.209.68:54796 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54812 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54818 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54826 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54842 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54854 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54856 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:09 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=stark industries pc
+2026-05-31 09:23:12 [warning  ] gumtree.playwright.no_listings page_title=Pikachu yellow rgb build | Stuff for Sale - Gumtree term=pikachu yellow rgb build
+2026-05-31 09:23:12 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:12 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=gamma core build
+2026-05-31 09:23:12 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=radioactive+green+rgb+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:14 [warning  ] gumtree.playwright.no_listings page_title=Dragon radar workstation | Stuff for Sale - Gumtree term=dragon radar workstation
+2026-05-31 09:23:14 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:14 [warning  ] gumtree.playwright.no_listings page_title=Super saiyan gaming pc | Stuff for Sale - Gumtree term=super saiyan gaming pc
+2026-05-31 09:23:14 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=cerebro+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:14 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:15 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mutant+tactical+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:16 [warning  ] gumtree.playwright.no_listings page_title=Avengers workstation | Stuff for Sale - Gumtree term=avengers workstation
+2026-05-31 09:23:16 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:53426 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53448 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53436 - "GET /api/demand/summary HTTP/1.1" 200 OK
+2026-05-31 09:23:17 [warning  ] gumtree.playwright.no_listings page_title=Shield tactical pc | Stuff for Sale - Gumtree term=shield tactical pc
+INFO:     100.101.209.68:53466 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53460 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53488 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53510 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53524 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53526 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53528 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:17 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:17 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=spiderverse+gaming+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:18 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=red+blue+rgb+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:18 [warning  ] gumtree.playwright.no_listings page_title=Jarvis ai workstation | Stuff for Sale - Gumtree term=jarvis ai workstation
+2026-05-31 09:23:18 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:19 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=cerebro workstation
+2026-05-31 09:23:19 [warning  ] gumtree.playwright.no_listings page_title=Stark industries pc | Stuff for Sale - Gumtree term=stark industries pc
+2026-05-31 09:23:19 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=batcomputer+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'Ryzen 7 5700X': HTTP blocked/empty (status=200), Playwright returned 58
+[scraper] eBay 'Ryzen 7 5700X': 58 found, 47 new (total 107)
+2026-05-31 09:23:19 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:19 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=mutant tactical pc
+2026-05-31 09:23:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=dark+knight+pc&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:53530 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53542 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53556 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53564 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53566 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53578 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53580 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:21 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=spiderverse gaming pc
+2026-05-31 09:23:22 [warning  ] gumtree.playwright.no_listings page_title=Gamma core build | Stuff for Sale - Gumtree term=gamma core build
+2026-05-31 09:23:22 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+ term=red blue rgb build
+2026-05-31 09:23:22 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:23 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=kryptonian+workstation&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:24 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+ term=batcomputer workstation
+2026-05-31 09:23:24 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=dark knight pc
+INFO:     100.101.209.68:34370 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34378 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34380 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34392 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34398 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34410 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34418 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 09:23:26 [info     ] gumtree.playwright.cards       count=1 term=dark knight pc
+2026-05-31 09:23:26 [warning  ] gumtree.playwright.no_listings page_title=Radioactive green rgb pc | Stuff for Sale - Gumtree term=radioactive green rgb pc
+2026-05-31 09:23:26 [info     ] gumtree.playwright.done        total=1
+2026-05-31 09:23:27 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fortress+of+solitude+build&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:27 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=lian+li+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:27 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=kryptonian workstation
+[scraper] eBay 'Ryzen 5 5600': HTTP blocked/empty (status=200), Playwright returned 23
+[scraper] eBay 'Ryzen 5 5600': 23 found, 23 new (total 23)
+2026-05-31 09:23:29 [warning  ] gumtree.playwright.no_listings page_title=Cerebro workstation | Stuff for Sale - Gumtree term=cerebro workstation
+2026-05-31 09:23:29 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:34428 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-05-31 09:23:29 [warning  ] gumtree.playwright.no_listings page_title=Mutant tactical pc | Stuff for Sale - Gumtree term=mutant tactical pc
+INFO:     100.101.209.68:34438 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34442 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34450 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34452 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 09:23:30 [info     ] gumtree.playwright.done        total=0
+2026-05-31 09:23:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=hyte+y60+style+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-05-31 09:23:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=Montech+panoramic+case&max_price=350&min_price=1&sort=date&distance=nationwide
