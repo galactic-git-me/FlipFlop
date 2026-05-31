@@ -1267,3 +1267,616 @@ INFO:     100.101.209.68:33266 - "GET /api/sources/health HTTP/1.1" 200 OK
 [scraper] eBay 'gaming pc fault': 0 found, 0 new (total 109)
 2026-05-31 02:37:34 [info     ] gumtree.playwright.cards       count=26 term=PSU
 2026-05-31 02:37:35 [info     ] facebook.playwright.items      count=26 term=DDR4 RAM 32GB 2x16GB
+INFO:     100.101.209.68:60278 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60280 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60296 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60300 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60310 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-05-31 02:37:37 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:37:38 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=CPU+cooler&max_price=2500&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:37:40 [info     ] facebook.playwright.done       total=25
+2026-05-31 02:37:40 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:37:40 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=NVMe%201TB&minPrice=1&maxPrice=2500&exact=false
+INFO:     127.0.0.1:35698 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35712 - "GET /api/search-telemetry/by-source?limit=5000 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60316 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60318 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60322 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60330 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60334 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60344 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60356 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60366 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60382 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60396 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:60406 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60414 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60426 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60430 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:37:43 [info     ] gumtree.playwright.cards       count=25 term=CPU cooler
+2026-05-31 02:37:46 [info     ] facebook.playwright.items      count=19 term=NVMe 1TB
+2026-05-31 02:37:47 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:37:47 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=RGB+fans&max_price=2500&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:47954 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47958 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47962 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47972 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47976 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47990 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48000 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48016 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48026 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48034 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48044 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-31 02:37:50 [info     ] facebook.playwright.done       total=19
+2026-05-31 02:37:50 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:48058 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:37:50 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=PSU&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 02:37:53 [info     ] gumtree.playwright.cards       count=25 term=RGB fans
+2026-05-31 02:37:56 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:37:56 [info     ] facebook.playwright.items      count=19 term=PSU
+INFO:     100.101.209.68:55064 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming controller': 126 found, 125 new (total 125)
+INFO:     100.101.209.68:55074 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55080 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:55092 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55106 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55118 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55132 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55148 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55156 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55166 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55176 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55186 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55196 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55212 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:37:58 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-05-31 02:38:00 [info     ] facebook.playwright.done       total=19
+2026-05-31 02:38:00 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:38:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=CPU%20cooler&minPrice=1&maxPrice=2500&exact=false
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 189)
+INFO:     100.101.209.68:55228 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55244 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55256 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55260 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:55262 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no gpu': 0 found, 0 new (total 109)
+2026-05-31 02:38:04 [info     ] gumtree.playwright.cards       count=25 term=gaming controller
+2026-05-31 02:38:06 [info     ] facebook.playwright.items      count=23 term=CPU cooler
+[scraper] eBay 'white rgb case': 117 found, 107 new (total 107)
+INFO:     100.101.209.68:57730 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57744 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57750 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57766 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57772 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57784 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57794 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:38:07 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:38:07 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:38:09 [info     ] facebook.playwright.done       total=23
+2026-05-31 02:38:09 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:38:10 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:57796 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57802 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57810 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:57822 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57828 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57832 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57844 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57848 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57854 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57870 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57876 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57878 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44508 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44522 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44528 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44532 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44548 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44552 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44568 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:38:16 [info     ] facebook.playwright.items      count=15 term=gaming controller
+2026-05-31 02:38:19 [info     ] facebook.playwright.done       total=15
+2026-05-31 02:38:20 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=RGB%20fans&minPrice=1&maxPrice=2500&exact=false
+2026-05-31 02:38:22 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming controller
+2026-05-31 02:38:22 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming controller
+2026-05-31 02:38:22 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming controller
+INFO:     100.101.209.68:44582 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44584 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44586 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44588 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44604 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44618 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44630 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:38:25 [info     ] facebook.playwright.items      count=24 term=RGB fans
+INFO:     100.101.209.68:51766 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51782 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51786 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51800 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51802 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51804 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51806 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51820 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51830 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51832 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51842 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51844 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:38:30 [info     ] facebook.playwright.done       total=24
+2026-05-31 02:38:30 [info     ] upgrade_parts_swarm.done       alibaba=0 aliexpress=0 amazon=0 bh=8 box=0 ebay_buy=5 ebay_sold=5 errors=0 overclockers=0 scan=0 temu=0 updated=12
+INFO:     100.101.209.68:51858 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51862 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51872 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51888 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51892 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51908 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51920 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 109)
+[scraper] eBay 'gaming pc no hard drive': 0 found, 0 new (total 189)
+INFO:     100.101.209.68:54248 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54264 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54276 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54284 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54290 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54294 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54306 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54316 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54328 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54336 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54350 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54352 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54360 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54362 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54368 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54376 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54378 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54392 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54400 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47308 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47310 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47318 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47322 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47338 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47350 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47358 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47370 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47386 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47394 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47402 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47414 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56712 - "GET /api/listings/stats HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 109)
+INFO:     100.101.209.68:56718 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56722 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56726 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56728 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56730 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56744 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56760 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56776 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56788 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56796 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56800 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56814 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'micro atx fish tank': 104 found, 104 new (total 104)
+INFO:     100.101.209.68:56824 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56836 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56850 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56862 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56864 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56866 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56874 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56888 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56894 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56898 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56914 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56920 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Dell OptiPlex': 0 found, 0 new (total 189)
+INFO:     127.0.0.1:39772 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39782 - "DELETE /api/source-search-terms/23 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39790 - "DELETE /api/source-search-terms/27 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39794 - "DELETE /api/source-search-terms/22 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39798 - "DELETE /api/source-search-terms/28 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39810 - "DELETE /api/source-search-terms/21 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39824 - "DELETE /api/source-search-terms/26 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39828 - "DELETE /api/source-search-terms/24 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39836 - "DELETE /api/source-search-terms/25 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39838 - "DELETE /api/source-search-terms/129 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39846 - "DELETE /api/source-search-terms/122 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39850 - "DELETE /api/source-search-terms/126 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39852 - "DELETE /api/source-search-terms/131 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39858 - "DELETE /api/source-search-terms/123 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39866 - "DELETE /api/source-search-terms/127 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39868 - "DELETE /api/source-search-terms/125 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39876 - "DELETE /api/source-search-terms/130 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39882 - "DELETE /api/source-search-terms/128 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39896 - "DELETE /api/source-search-terms/124 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39898 - "DELETE /api/source-search-terms/103 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39914 - "DELETE /api/source-search-terms/99 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39916 - "DELETE /api/source-search-terms/100 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39920 - "DELETE /api/source-search-terms/101 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39928 - "DELETE /api/source-search-terms/98 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39932 - "DELETE /api/source-search-terms/102 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39938 - "DELETE /api/source-search-terms/191 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39954 - "DELETE /api/source-search-terms/198 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39960 - "DELETE /api/source-search-terms/197 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39964 - "DELETE /api/source-search-terms/192 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39976 - "DELETE /api/source-search-terms/194 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:39990 - "DELETE /api/source-search-terms/195 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40004 - "DELETE /api/source-search-terms/193 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40016 - "DELETE /api/source-search-terms/196 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40032 - "DELETE /api/source-search-terms/91 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40036 - "DELETE /api/source-search-terms/92 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40042 - "DELETE /api/source-search-terms/95 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40048 - "DELETE /api/source-search-terms/90 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40062 - "DELETE /api/source-search-terms/96 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40064 - "DELETE /api/source-search-terms/93 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40066 - "DELETE /api/source-search-terms/94 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40072 - "DELETE /api/source-search-terms/97 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40088 - "DELETE /api/source-search-terms/68 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40094 - "DELETE /api/source-search-terms/75 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40096 - "DELETE /api/source-search-terms/77 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40112 - "DELETE /api/source-search-terms/67 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40124 - "DELETE /api/source-search-terms/66 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40138 - "DELETE /api/source-search-terms/72 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40148 - "DELETE /api/source-search-terms/73 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40164 - "DELETE /api/source-search-terms/78 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40174 - "DELETE /api/source-search-terms/69 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40182 - "DELETE /api/source-search-terms/74 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40186 - "DELETE /api/source-search-terms/76 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40200 - "DELETE /api/source-search-terms/79 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40216 - "DELETE /api/source-search-terms/70 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40230 - "DELETE /api/source-search-terms/71 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40242 - "DELETE /api/source-search-terms/217 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40248 - "DELETE /api/source-search-terms/216 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40258 - "DELETE /api/source-search-terms/214 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40266 - "DELETE /api/source-search-terms/218 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40276 - "DELETE /api/source-search-terms/220 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40284 - "DELETE /api/source-search-terms/212 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40296 - "DELETE /api/source-search-terms/215 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40304 - "DELETE /api/source-search-terms/221 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40312 - "DELETE /api/source-search-terms/219 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40326 - "DELETE /api/source-search-terms/213 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40332 - "DELETE /api/source-search-terms/51 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40344 - "DELETE /api/source-search-terms/52 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40356 - "DELETE /api/source-search-terms/58 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40372 - "DELETE /api/source-search-terms/53 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40386 - "DELETE /api/source-search-terms/55 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40398 - "DELETE /api/source-search-terms/56 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40402 - "DELETE /api/source-search-terms/54 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40412 - "DELETE /api/source-search-terms/57 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40420 - "DELETE /api/source-search-terms/154 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40434 - "DELETE /api/source-search-terms/158 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40450 - "DELETE /api/source-search-terms/153 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40466 - "DELETE /api/source-search-terms/159 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40468 - "DELETE /api/source-search-terms/157 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40472 - "DELETE /api/source-search-terms/161 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40484 - "DELETE /api/source-search-terms/160 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40496 - "DELETE /api/source-search-terms/156 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40510 - "DELETE /api/source-search-terms/152 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40516 - "DELETE /api/source-search-terms/155 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40530 - "DELETE /api/source-search-terms/108 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40538 - "DELETE /api/source-search-terms/105 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40552 - "DELETE /api/source-search-terms/104 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40566 - "DELETE /api/source-search-terms/106 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40578 - "DELETE /api/source-search-terms/109 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40594 - "DELETE /api/source-search-terms/107 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40604 - "DELETE /api/source-search-terms/5 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40612 - "DELETE /api/source-search-terms/6 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40618 - "DELETE /api/source-search-terms/3 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40628 - "DELETE /api/source-search-terms/1 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40634 - "DELETE /api/source-search-terms/10 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40646 - "DELETE /api/source-search-terms/8 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40652 - "DELETE /api/source-search-terms/2 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40662 - "DELETE /api/source-search-terms/7 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40668 - "DELETE /api/source-search-terms/9 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40680 - "DELETE /api/source-search-terms/4 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40692 - "DELETE /api/source-search-terms/286 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40702 - "DELETE /api/source-search-terms/285 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40708 - "DELETE /api/source-search-terms/282 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40716 - "DELETE /api/source-search-terms/280 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40720 - "DELETE /api/source-search-terms/281 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40730 - "DELETE /api/source-search-terms/284 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40738 - "DELETE /api/source-search-terms/283 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40748 - "DELETE /api/source-search-terms/287 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40760 - "DELETE /api/source-search-terms/209 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40770 - "DELETE /api/source-search-terms/206 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40784 - "DELETE /api/source-search-terms/211 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40786 - "DELETE /api/source-search-terms/205 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40792 - "DELETE /api/source-search-terms/207 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40798 - "DELETE /api/source-search-terms/208 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40812 - "DELETE /api/source-search-terms/210 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40814 - "DELETE /api/source-search-terms/176 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40830 - "DELETE /api/source-search-terms/178 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40832 - "DELETE /api/source-search-terms/177 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40842 - "DELETE /api/source-search-terms/179 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40852 - "DELETE /api/source-search-terms/180 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40860 - "DELETE /api/source-search-terms/174 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40864 - "DELETE /api/source-search-terms/170 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40866 - "DELETE /api/source-search-terms/175 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40876 - "DELETE /api/source-search-terms/173 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40878 - "DELETE /api/source-search-terms/171 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40884 - "DELETE /api/source-search-terms/168 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40894 - "DELETE /api/source-search-terms/172 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40902 - "DELETE /api/source-search-terms/169 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40914 - "DELETE /api/source-search-terms/37 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40926 - "DELETE /api/source-search-terms/33 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40938 - "DELETE /api/source-search-terms/30 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40954 - "DELETE /api/source-search-terms/36 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40970 - "DELETE /api/source-search-terms/31 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40978 - "DELETE /api/source-search-terms/32 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40982 - "DELETE /api/source-search-terms/29 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:40992 - "DELETE /api/source-search-terms/35 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41008 - "DELETE /api/source-search-terms/34 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41018 - "DELETE /api/source-search-terms/165 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41026 - "DELETE /api/source-search-terms/162 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41032 - "DELETE /api/source-search-terms/166 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41038 - "DELETE /api/source-search-terms/167 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41040 - "DELETE /api/source-search-terms/163 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41042 - "DELETE /api/source-search-terms/164 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41044 - "DELETE /api/source-search-terms/134 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41052 - "DELETE /api/source-search-terms/137 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41056 - "DELETE /api/source-search-terms/132 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41072 - "DELETE /api/source-search-terms/133 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41078 - "DELETE /api/source-search-terms/136 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41082 - "DELETE /api/source-search-terms/139 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41096 - "DELETE /api/source-search-terms/140 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41112 - "DELETE /api/source-search-terms/138 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41114 - "DELETE /api/source-search-terms/135 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41122 - "DELETE /api/source-search-terms/141 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41138 - "DELETE /api/source-search-terms/257 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41148 - "DELETE /api/source-search-terms/256 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41158 - "DELETE /api/source-search-terms/258 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41166 - "DELETE /api/source-search-terms/251 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41176 - "DELETE /api/source-search-terms/252 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41190 - "DELETE /api/source-search-terms/247 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41206 - "DELETE /api/source-search-terms/248 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41218 - "DELETE /api/source-search-terms/249 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41226 - "DELETE /api/source-search-terms/254 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41240 - "DELETE /api/source-search-terms/255 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41254 - "DELETE /api/source-search-terms/253 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41266 - "DELETE /api/source-search-terms/245 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41276 - "DELETE /api/source-search-terms/246 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41290 - "DELETE /api/source-search-terms/237 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41306 - "DELETE /api/source-search-terms/239 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41312 - "DELETE /api/source-search-terms/240 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41324 - "DELETE /api/source-search-terms/241 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41336 - "DELETE /api/source-search-terms/238 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41342 - "DELETE /api/source-search-terms/250 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41352 - "DELETE /api/source-search-terms/242 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41362 - "DELETE /api/source-search-terms/243 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41376 - "DELETE /api/source-search-terms/244 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41386 - "DELETE /api/source-search-terms/229 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41400 - "DELETE /api/source-search-terms/232 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41410 - "DELETE /api/source-search-terms/235 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41418 - "DELETE /api/source-search-terms/236 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41430 - "DELETE /api/source-search-terms/230 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41432 - "DELETE /api/source-search-terms/227 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41448 - "DELETE /api/source-search-terms/223 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41458 - "DELETE /api/source-search-terms/234 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41460 - "DELETE /api/source-search-terms/228 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41470 - "DELETE /api/source-search-terms/231 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41480 - "DELETE /api/source-search-terms/233 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41490 - "DELETE /api/source-search-terms/225 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41506 - "DELETE /api/source-search-terms/222 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41508 - "DELETE /api/source-search-terms/226 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41520 - "DELETE /api/source-search-terms/224 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41524 - "DELETE /api/source-search-terms/144 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41534 - "DELETE /api/source-search-terms/149 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41548 - "DELETE /api/source-search-terms/151 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41558 - "DELETE /api/source-search-terms/146 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41574 - "DELETE /api/source-search-terms/147 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41584 - "DELETE /api/source-search-terms/143 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41600 - "DELETE /api/source-search-terms/148 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41614 - "DELETE /api/source-search-terms/142 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41616 - "DELETE /api/source-search-terms/150 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41620 - "DELETE /api/source-search-terms/145 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41624 - "DELETE /api/source-search-terms/20 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41636 - "DELETE /api/source-search-terms/11 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41642 - "DELETE /api/source-search-terms/17 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41656 - "DELETE /api/source-search-terms/15 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41658 - "DELETE /api/source-search-terms/18 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41670 - "DELETE /api/source-search-terms/12 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41682 - "DELETE /api/source-search-terms/14 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41684 - "DELETE /api/source-search-terms/13 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41700 - "DELETE /api/source-search-terms/19 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41704 - "DELETE /api/source-search-terms/16 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41708 - "DELETE /api/source-search-terms/48 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41718 - "DELETE /api/source-search-terms/46 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41720 - "DELETE /api/source-search-terms/50 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41736 - "DELETE /api/source-search-terms/45 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41750 - "DELETE /api/source-search-terms/47 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41754 - "DELETE /api/source-search-terms/49 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41760 - "DELETE /api/source-search-terms/187 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41772 - "DELETE /api/source-search-terms/189 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41778 - "DELETE /api/source-search-terms/186 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41786 - "DELETE /api/source-search-terms/190 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41792 - "DELETE /api/source-search-terms/188 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41802 - "DELETE /api/source-search-terms/61 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41812 - "DELETE /api/source-search-terms/59 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41828 - "DELETE /api/source-search-terms/64 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41836 - "DELETE /api/source-search-terms/60 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41850 - "DELETE /api/source-search-terms/62 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41864 - "DELETE /api/source-search-terms/65 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41876 - "DELETE /api/source-search-terms/63 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41888 - "DELETE /api/source-search-terms/89 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41902 - "DELETE /api/source-search-terms/87 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41906 - "DELETE /api/source-search-terms/85 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41910 - "DELETE /api/source-search-terms/80 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41926 - "DELETE /api/source-search-terms/86 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41928 - "DELETE /api/source-search-terms/84 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41930 - "DELETE /api/source-search-terms/82 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41932 - "DELETE /api/source-search-terms/88 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41942 - "DELETE /api/source-search-terms/81 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41958 - "DELETE /api/source-search-terms/83 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41964 - "DELETE /api/source-search-terms/204 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41976 - "DELETE /api/source-search-terms/202 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41978 - "DELETE /api/source-search-terms/201 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41980 - "DELETE /api/source-search-terms/200 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41990 - "DELETE /api/source-search-terms/199 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:41996 - "DELETE /api/source-search-terms/203 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42012 - "DELETE /api/source-search-terms/110 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42022 - "DELETE /api/source-search-terms/119 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42030 - "DELETE /api/source-search-terms/117 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42044 - "DELETE /api/source-search-terms/112 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42054 - "DELETE /api/source-search-terms/111 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42056 - "DELETE /api/source-search-terms/121 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42062 - "DELETE /api/source-search-terms/114 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42068 - "DELETE /api/source-search-terms/118 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42074 - "DELETE /api/source-search-terms/113 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42082 - "DELETE /api/source-search-terms/116 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42094 - "DELETE /api/source-search-terms/115 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42102 - "DELETE /api/source-search-terms/120 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42106 - "DELETE /api/source-search-terms/266 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42118 - "DELETE /api/source-search-terms/265 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42132 - "DELETE /api/source-search-terms/267 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42144 - "DELETE /api/source-search-terms/270 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42146 - "DELETE /api/source-search-terms/269 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42148 - "DELETE /api/source-search-terms/268 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42164 - "DELETE /api/source-search-terms/261 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42166 - "DELETE /api/source-search-terms/262 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42182 - "DELETE /api/source-search-terms/263 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42186 - "DELETE /api/source-search-terms/278 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42192 - "DELETE /api/source-search-terms/273 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42206 - "DELETE /api/source-search-terms/274 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42218 - "DELETE /api/source-search-terms/277 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42224 - "DELETE /api/source-search-terms/275 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42238 - "DELETE /api/source-search-terms/276 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42244 - "DELETE /api/source-search-terms/279 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42256 - "DELETE /api/source-search-terms/259 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42272 - "DELETE /api/source-search-terms/260 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42288 - "DELETE /api/source-search-terms/264 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42302 - "DELETE /api/source-search-terms/271 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42310 - "DELETE /api/source-search-terms/272 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42320 - "DELETE /api/source-search-terms/44 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42334 - "DELETE /api/source-search-terms/41 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42342 - "DELETE /api/source-search-terms/43 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42352 - "DELETE /api/source-search-terms/38 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42362 - "DELETE /api/source-search-terms/40 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42374 - "DELETE /api/source-search-terms/42 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42382 - "DELETE /api/source-search-terms/39 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42394 - "DELETE /api/source-search-terms/184 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42406 - "DELETE /api/source-search-terms/181 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42422 - "DELETE /api/source-search-terms/182 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42430 - "DELETE /api/source-search-terms/185 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42446 - "DELETE /api/source-search-terms/183 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:42452 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42460 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42466 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42472 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42476 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42482 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42498 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42500 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42510 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42514 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42520 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42532 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42536 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42538 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42546 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42554 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42562 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42576 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42578 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42592 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42594 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42600 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42602 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42610 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42612 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42624 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42638 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42654 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42670 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42684 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42696 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42702 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42710 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42726 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42728 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42740 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42748 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42754 - "POST /api/source-search-terms HTTP/1.1" 201 Created
+INFO:     127.0.0.1:42764 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49462 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49464 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49472 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49476 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49490 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49494 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49508 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49518 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49526 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49536 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49538 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49544 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49552 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49558 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41780 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41788 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41792 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41794 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41804 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 109)
+INFO:     100.101.209.68:41818 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41824 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41836 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41844 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41852 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41860 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41872 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54632 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54642 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54656 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54668 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54670 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54676 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54688 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54700 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54708 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54718 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54732 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54734 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay '24 inch monitor': 124 found, 118 new (total 118)
+INFO:     100.101.209.68:54750 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54766 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54774 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:54790 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54798 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54814 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:54820 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:39:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=24+inch+monitor&max_price=80&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'HP EliteDesk': 0 found, 0 new (total 189)
+2026-05-31 02:39:35 [info     ] gumtree.playwright.cards       count=25 term=24 inch monitor
+INFO:     100.101.209.68:60958 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60964 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60978 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60992 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60996 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32776 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32778 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-05-31 02:39:39 [info     ] gumtree.playwright.done        total=25
+2026-05-31 02:39:39 [info     ] facebook.playwright.using_cookie_file_override
+2026-05-31 02:39:39 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:32794 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32812 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32820 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:32832 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'HP workstation': 0 found, 0 new (total 109)
+INFO:     100.101.209.68:37386 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37388 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37390 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37402 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37418 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37428 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37440 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37442 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37454 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37468 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37484 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37492 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37504 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-05-31 02:39:46 [info     ] facebook.playwright.items      count=22 term=24 inch monitor
+INFO:     100.101.209.68:37510 - "GET /api/sources/health HTTP/1.1" 200 OK
