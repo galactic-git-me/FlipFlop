@@ -8,6 +8,10 @@ OUT_LOG="$ROOT_DIR/.start-dev-daemon.log"
 
 mkdir -p "$LOG_DIR"
 
+controller_pids() {
+  pgrep -f 'bash ./start-dev-quiet-ports.sh' || true
+}
+
 is_running() {
   [[ -f "$PID_FILE" ]] || return 1
   local pid
@@ -17,6 +21,16 @@ is_running() {
 }
 
 cmd_start() {
+  # If startup controller already exists, adopt it and don't launch another.
+  local existing
+  existing="$(controller_pids | head -n1 || true)"
+  if [[ -n "${existing:-}" ]]; then
+    echo "$existing" > "$PID_FILE"
+    echo "Startup controller already running (pid $existing)."
+    echo "Log: $OUT_LOG"
+    exit 0
+  fi
+
   if is_running; then
     echo "Daemon already running (pid $(cat "$PID_FILE"))."
     exit 0
@@ -24,7 +38,7 @@ cmd_start() {
 
   cd "$ROOT_DIR"
   # Run startup script detached from this shell so child services survive.
-  nohup bash ./start-dev-quiet-ports.sh >> "$OUT_LOG" 2>&1 < /dev/null &
+  nohup env ENABLE_TMUX_DASHBOARD=0 ATTACH_TMUX=0 bash ./start-dev-quiet-ports.sh >> "$OUT_LOG" 2>&1 < /dev/null &
   local pid=$!
   echo "$pid" > "$PID_FILE"
   sleep 1
@@ -74,6 +88,13 @@ cmd_status() {
     echo "Daemon not running."
   fi
 
+  local controllers
+  controllers="$(controller_pids | tr '\n' ' ' | xargs || true)"
+  if [[ -n "${controllers:-}" ]]; then
+    echo "Controller PIDs: $controllers"
+  else
+    echo "Controller PIDs: none"
+  fi
   echo "Relevant processes:"
   pgrep -af 'start-dev-quiet-ports.sh|next dev --webpack -p 4310 -H 0.0.0.0|uvicorn app.main:app --host 0.0.0.0 --port 4311 --reload' || true
 }

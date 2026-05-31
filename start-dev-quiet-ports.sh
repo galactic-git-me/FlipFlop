@@ -21,6 +21,7 @@ LAUNCH_DASHBOARD_WINDOW="${LAUNCH_DASHBOARD_WINDOW:-0}"
 # Always auto-attach to tmux dashboard for this workflow.
 # (Only skipped automatically when no interactive TTY is available.)
 ATTACH_TMUX="1"
+ENABLE_TMUX_DASHBOARD="${ENABLE_TMUX_DASHBOARD:-1}"
 ENABLE_NGROK="${ENABLE_NGROK:-1}"
 NGROK_TUNNEL_PORT="${NGROK_TUNNEL_PORT:-$BACKEND_PORT}"
 NGROK_API_PORT="${NGROK_API_PORT:-4048}"
@@ -751,6 +752,9 @@ refresh_ngrok_url
 start_ngrok_monitor
 
 open_tmux_logs() {
+  if [[ "$ENABLE_TMUX_DASHBOARD" != "1" ]]; then
+    return 0
+  fi
   if ! command -v tmux >/dev/null 2>&1; then
     echo "tmux not found; skipping split-log view. Install tmux to enable auto split panes."
     return 0
