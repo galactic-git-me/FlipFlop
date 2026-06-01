@@ -31,10 +31,9 @@ SCOPE_LABELS = {
 }
 VENDOR_GROUPS = {
     "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
-    "FBMP": ["Facebook Marketplace"],
+    "Amazon": ["Amazon", "Amazon UK"],
+    "Temu": ["Temu"],
     "Others": [
-        "Amazon",
-        "Temu",
         "AliExpress",
         "Alibaba",
         "BargainHardware",
@@ -160,6 +159,7 @@ def _scope_vendor_sources(scope: str, vendor: str) -> list[str]:
     aliases = {
         "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
         "Amazon": ["Amazon", "Amazon UK"],
+        "Temu": ["Temu"],
     }
     names = aliases.get(vendor, [vendor])
     if scope == "cases":
@@ -248,7 +248,8 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
     tbl.add_column("Catalogue", style="bold cyan", width=18, no_wrap=True)
     tbl.add_column("Search Term", style="yellow", width=34, overflow="fold")
     tbl.add_column("eBay", justify="center", width=10)
-    tbl.add_column("FBMP", justify="center", width=10)
+    tbl.add_column("Amazon", justify="center", width=10)
+    tbl.add_column("Temu", justify="center", width=10)
     tbl.add_column("Others", justify="center", width=10)
 
     def render_group(scope: str, rows: list[dict[str, Any]]) -> None:
@@ -257,7 +258,7 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
             term = str(r.get("term") or "").strip()
             allowed = set(r.get("source_names") or [])
             out = [SCOPE_LABELS[scope] if first else "", term]
-            for group in ["eBay", "FBMP", "Others"]:
+            for group in ["eBay", "Amazon", "Temu", "Others"]:
                 members = VENDOR_GROUPS[group]
                 seen_any = False
                 state = "blank"
