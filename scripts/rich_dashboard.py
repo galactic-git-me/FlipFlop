@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import argparse
+import re
 import time
+from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -15,7 +17,7 @@ try:
     from rich.layout import Layout
     from rich.live import Live
     from rich.panel import Panel
-from rich.table import Table
+    from rich.table import Table
 except Exception as exc:  # pragma: no cover
     raise SystemExit(f"Rich is required. Install with pip install rich. Error: {exc}")
 
@@ -59,6 +61,80 @@ def _safe_get(client: httpx.Client, url: str) -> Any:
         return r.json()
     except Exception:
         return None
+
+
+class LogTailer:
+    def __init__(self, log_file: str, max_lines: int = 140):
+        self.path = Path(log_file)
+        self.max_lines = max_lines
+        self.lines: deque[str] = deque(maxlen=max_lines)
+        self._fh = None
+        self._inode = None
+        self._load_initial()
+
+    def _load_initial(self) -> None:
+        try:
+            if not self.path.exists():
+                return
+            with self.path.open("r", encoding="utf-8", errors="replace") as f:
+                for ln in f.readlines()[-self.max_lines:]:
+                    self.lines.append(ln.rstrip("\n"))
+        except Exception:
+            pass
+
+    def _ensure_open(self) -> None:
+        try:
+            if not self.path.exists():
+                return
+            st = self.path.stat()
+            inode = (st.st_dev, st.st_ino)
+            if self._fh is None or self._inode != inode:
+                if self._fh:
+                    self._fh.close()
+                self._fh = self.path.open("r", encoding="utf-8", errors="replace")
+                self._fh.seek(0, 2)
+                self._inode = inode
+        except Exception:
+            self._fh = None
+            self._inode = None
+
+    def poll(self) -> list[str]:
+        self._ensure_open()
+        if not self._fh:
+            return list(self.lines)
+        try:
+            while True:
+                ln = self._fh.readline()
+                if not ln:
+                    break
+                self.lines.append(ln.rstrip("\n"))
+        except Exception:
+            pass
+        return list(self.lines)
+
+
+def _build_backend_logs(lines: list[str], log_file: str) -> Panel:
+    tbl = Table.grid(expand=True)
+    tbl.add_column()
+    if not lines:
+        tbl.add_row("[dim]Waiting for backend logs...[/dim]")
+    else:
+        for ln in lines[-120:]:
+            low = ln.lower()
+            style = "white"
+            if "error" in low or "exception" in low or "failed" in low:
+                style = "bold red"
+            elif "warn" in low:
+                style = "yellow"
+            elif "/api/" in low:
+                style = "cyan"
+            elif "info" in low:
+                style = "bright_blue"
+            elif "debug" in low:
+                style = "dim"
+            safe_ln = re.sub(r"\x1b\[[0-9;]*m", "", ln)
+            tbl.add_row(f"[{style}]{safe_ln}[/{style}]")
+    return Panel(tbl, title=f"Backend Logs: {log_file}", border_style="green")
 
 
 def _age(iso_ts: str | None) -> str:
@@ -143,7 +219,7 @@ def _build_schedule(schedule_rows: Any) -> Panel:
             jid = str((j or {}).get("id") or "")
             if not jid:
                 continue
-            status = str((j or {}).get("status") or "")
+            status = str((j or {}).get("last_status") or (j or {}).get("status") or "")
             status_label = "[green]success[/green]" if status == "success" else status or "—"
             tbl.add_row(jid, _age((j or {}).get("last_run_at")), _age((j or {}).get("next_run_at")), status_label)
     if tbl.row_count == 0:
@@ -229,9 +305,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base-url", default="http://127.0.0.1:4311")
     ap.add_argument("--refresh", type=float, default=1.0)
+    ap.add_argument("--log-file", default="", help="Backend log file path")
     args = ap.parse_args()
 
     api = args.base_url.rstrip("/") + "/api"
+    default_log = str(Path(__file__).resolve().parents[1] / ".run-logs" / "backend-4311.log")
+    log_file = args.log_file or default_log
+    tailer = LogTailer(log_file=log_file, max_lines=140)
     with httpx.Client(follow_redirects=True) as client:
         layout = Layout()
         layout.split_row(
@@ -240,11 +320,13 @@ def main() -> int:
         )
         layout["left"].split_column(
             Layout(name="kpis", size=7),
-            Layout(name="sched"),
+            Layout(name="sched", size=14),
+            Layout(name="logs"),
         )
         layout["right"].update(Panel("[dim]Loading search terms...[/dim]", border_style="bright_blue"))
         layout["kpis"].update(Panel("[dim]Loading KPIs...[/dim]", border_style="bright_blue"))
         layout["sched"].update(Panel("[dim]Loading scheduler...[/dim]", border_style="cyan"))
+        layout["logs"].update(Panel("[dim]Loading backend logs...[/dim]", border_style="green"))
 
         with Live(layout, refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True):
             while True:
@@ -280,9 +362,11 @@ def main() -> int:
                     layout["kpis"].update(_build_kpis(listing_stats, demand_summary, scan_status))
                     layout["sched"].update(_build_schedule(schedule_rows))
                     layout["right"].update(_build_terms(taxonomy_rows, telem_items, enabled))
+                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file))
                 except Exception as exc:
                     layout["kpis"].update(Panel("[red]Dashboard render error[/red]", border_style="red"))
                     layout["sched"].update(Panel(f"[red]{exc}[/red]", title="Error", border_style="red"))
+                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file))
                 time.sleep(max(0.2, args.refresh))
 
 
