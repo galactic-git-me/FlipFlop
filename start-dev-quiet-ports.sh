@@ -110,6 +110,34 @@ compose() {
   "${DOCKER_COMPOSE_CMD[@]}" "${COMPOSE_ENV_ARGS[@]}" "$@"
 }
 
+stop_existing_runtime() {
+  # Stop prior app processes (best effort).
+  pkill -f "uvicorn app.main:app --host .* --port $BACKEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "uvicorn app.main:app --port $BACKEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "next dev .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "next start .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "node .*next dev .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "node .*next start .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "$FRONTEND_DIR/node_modules/.bin/next dev .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+  pkill -f "$FRONTEND_DIR/node_modules/.bin/next start .* -p $FRONTEND_PORT" >/dev/null 2>&1 || true
+
+  # Stop prior project containers so each start is clean and deterministic.
+  if command -v docker >/dev/null 2>&1; then
+    (cd "$BACKEND_DIR" && compose stop api db redis >/dev/null 2>&1 || true)
+    (cd "$BACKEND_DIR" && compose rm -f api db redis >/dev/null 2>&1 || true)
+    (
+      cd "$FRONTEND_DIR" && \
+      FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+      compose stop web >/dev/null 2>&1 || true
+    )
+    (
+      cd "$FRONTEND_DIR" && \
+      FRONTEND_PORT="$FRONTEND_PORT" FRONTEND_CONTAINER_PORT="$FRONTEND_CONTAINER_PORT" \
+      compose rm -f web >/dev/null 2>&1 || true
+    )
+  fi
+}
+
 start_ngrok_supervisor() {
   if [[ "$ENABLE_NGROK" != "1" ]]; then
     return 0
@@ -653,6 +681,9 @@ if [[ "${SHOW_SCRAPER_BROWSER:-0}" =~ ^(1|true|yes)$ ]]; then
     echo "Interactive scraper browser mode enabled; login/captcha windows will be shown when needed."
   fi
 fi
+
+echo "Preflight: stopping existing project processes/containers..."
+stop_existing_runtime
 
 clear_dev_data_first
 

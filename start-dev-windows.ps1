@@ -64,6 +64,16 @@ function Invoke-ComposeBackend([string[]]$ExtraArgs) {
   }
 }
 
+function Invoke-ComposeFrontend([string[]]$ExtraArgs) {
+  Push-Location $FrontendDir
+  try {
+    $compose = Get-ComposeCommand
+    & $compose.Bin @($compose.Args + $ExtraArgs)
+  } finally {
+    Pop-Location
+  }
+}
+
 function Sync-EnvFiles {
   $rootEnv = Join-Path $RootDir ".env.local"
   if (Test-Path $rootEnv) {
@@ -129,6 +139,26 @@ function Stop-Dev {
   Write-Host "Stopped dev services."
 }
 
+function Stop-ProjectContainers {
+  try {
+    $null = Get-ComposeCommand
+  } catch {
+    return
+  }
+  try {
+    Invoke-ComposeBackend @("stop", "api", "db", "redis") | Out-Null
+  } catch { $null = $_ }
+  try {
+    Invoke-ComposeBackend @("rm", "-f", "api", "db", "redis") | Out-Null
+  } catch { $null = $_ }
+  try {
+    Invoke-ComposeFrontend @("stop", "web") | Out-Null
+  } catch { $null = $_ }
+  try {
+    Invoke-ComposeFrontend @("rm", "-f", "web") | Out-Null
+  } catch { $null = $_ }
+}
+
 function Show-Status {
   $running = Get-CimInstance Win32_Process | Where-Object {
     $_.CommandLine -match "uvicorn app.main:app" -or
@@ -146,6 +176,10 @@ function Start-Dev {
   Ensure-Dir $LogsDir
   Sync-EnvFiles
 
+  # Always stop any existing runtime first to avoid stale/conflicting sessions.
+  Stop-Dev | Out-Null
+  Stop-ProjectContainers
+
   if (-not $SkipInstall) {
     Ensure-BackendDeps
     Ensure-FrontendDeps
@@ -159,9 +193,6 @@ function Start-Dev {
   $backendErrLog = Join-Path $LogsDir "backend-4311.err.log"
   $frontendLog = Join-Path $LogsDir "frontend-4310.log"
   $frontendErrLog = Join-Path $LogsDir "frontend-4310.err.log"
-
-  # Stop prior instances before launching.
-  Stop-Dev | Out-Null
 
   $backendPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
   $backendArgs = "-m uvicorn app.main:app --reload --host 0.0.0.0 --port $BackendPort"
