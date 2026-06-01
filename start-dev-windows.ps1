@@ -95,9 +95,9 @@ function Stop-Dev {
   if (Test-Path $PidFile) {
     $state = Get-Content $PidFile -Raw | ConvertFrom-Json
     foreach ($name in @("backendPid", "frontendPid")) {
-      $pid = $state.$name
-      if ($pid) {
-        try { Stop-Process -Id $pid -Force -ErrorAction Stop } catch {}
+      $procId = $state.$name
+      if ($procId) {
+        try { Stop-Process -Id $procId -Force -ErrorAction Stop } catch { $null = $_ }
       }
     }
     Remove-Item $PidFile -Force -ErrorAction SilentlyContinue
@@ -110,7 +110,7 @@ function Stop-Dev {
       $_.CommandLine -match "next dev -p $FrontendPort"
     } |
     ForEach-Object {
-      try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch {}
+      try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch { $null = $_ }
     }
 
   Write-Host "Stopped dev services."
