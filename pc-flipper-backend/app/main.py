@@ -1,5 +1,6 @@
 import structlog
 import asyncio
+import sys
 from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI
@@ -22,6 +23,14 @@ from app.services.antibot_preflight import run_antibot_preflight
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
+
+# Windows Playwright compatibility:
+# ensure subprocess-capable asyncio policy (needed by Playwright driver transport).
+if sys.platform.startswith("win"):
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())  # type: ignore[attr-defined]
+    except Exception:
+        pass
 
 _CASE_DEFAULT_SOURCES = [
     "eBay",

@@ -2999,3 +2999,419 @@ INFO:     100.101.209.68:59940 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59954 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59966 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:59982 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56152 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56162 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56166 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56170 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56176 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay '650W PSU': 0 found, 0 new (total 129)
+INFO:     100.101.209.68:56184 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56188 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56192 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56196 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56204 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56216 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56224 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38202 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38218 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38224 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38232 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38236 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38242 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38254 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38266 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38270 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38276 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38282 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38294 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38310 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38314 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38316 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38328 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38334 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38346 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38354 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38364 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38374 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38390 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38392 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38402 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38408 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38416 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35298 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35312 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35320 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35322 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35336 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35346 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35352 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35366 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35368 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35378 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35388 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35396 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48172 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48182 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48196 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48198 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48214 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48226 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48242 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48248 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48250 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48256 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48262 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48274 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48290 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48292 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48294 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48296 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48304 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48312 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48320 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49132 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49144 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49158 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49174 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49182 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49194 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49204 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49218 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49230 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49244 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:49260 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49266 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49274 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:49286 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59342 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59344 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59348 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59362 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59374 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59376 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59390 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59404 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59406 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59422 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59428 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59444 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59450 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59466 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59476 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59480 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59482 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59490 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59492 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51258 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51264 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51280 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51290 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51300 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51312 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51314 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51322 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51334 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51336 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51340 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51348 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51362 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51372 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51388 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51404 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51420 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51436 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51440 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38350 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38364 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38374 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38376 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38392 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38400 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38414 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38428 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38442 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38454 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38466 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38474 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38478 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38490 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38494 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38498 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38510 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38524 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38532 - "GET /api/sources/health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-06-01 13:15:22 [info     ] scheduler.stopped
+Job "Flip Opportunities Swarm (trigger: interval[1:00:00], next run at: 2026-06-01 13:00:06 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/.venv/lib/python3.12/site-packages/apscheduler/executors/base_py3.py", line 30, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/workers/scheduler.py", line 151, in _run_job_with_history
+    result = await fn()
+             ^^^^^^^^^^
+  File "/home/mac/CODING/FlipFlop/pc-flipper-backend/app/swarms/flip_opportunities.py", line 145, in run_flip_opportunities_swarm
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+2026-06-01 13:15:22 [info     ] app.shutdown
+INFO:     Application shutdown complete.
+INFO:     Finished server process [626123]
+INFO:     Started server process [705808]
+INFO:     Waiting for application startup.
+2026-06-01 13:15:23 [info     ] app.startup
+2026-06-01 13:15:23 [info     ] facebook.cookies_found         hint=fb_cookies.json found — full Marketplace access enabled
+2026-06-01 13:15:23 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-06-01 13:15:23 [info     ] scheduler.started              jobs=11
+2026-06-01 13:15:23 [info     ] runtime.preflight.antibot.skipped_no_gui hint=Set SHOW_SCRAPER_BROWSER=1 and ensure DISPLAY/WAYLAND_DISPLAY is available
+2026-06-01 13:15:23 [info     ] startup_bootstrap.start
+INFO:     Application startup complete.
+2026-06-01 13:15:23 [info     ] accessories_swarm.start
+2026-06-01 13:15:23 [info     ] cases_swarm.start
+2026-06-01 13:15:23 [info     ] flip_opportunities_swarm.start
+2026-06-01 13:15:23 [info     ] upgrade_parts_swarm.start      total_parts=12
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:15:23 [info     ] cases_swarm.themes             base=5 playbook_extra=6
+2026-06-01 13:15:23 [info     ] cases.terms.capped             max_terms=10 total_terms=91 vendors=10
+2026-06-01 13:15:24 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Gumtree
+2026-06-01 13:15:24 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Facebook Marketplace
+2026-06-01 13:15:24 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Temu
+2026-06-01 13:15:24 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=AliExpress
+2026-06-01 13:15:24 [info     ] source.deferred.antibot        reason=antibot_preflight_incomplete source=Alibaba
+2026-06-01 13:15:24 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=usb+microphone&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:24 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20keyboard&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=pc+speakers&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:25 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-06-01 13:15:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+keyboard&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:25 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-06-01 13:15:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=xl+mouse+pad&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:25 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:25 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=24+inch+monitor&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+mouse&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+headset&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:26 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-06-01 13:15:26 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=gaming+controller&max_price=80&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:15:26 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-06-01 13:15:27 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20mouse&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:27 [info     ] cases.generic_market.no_data_dns search=catalogue source=CherryTree Inc
+2026-06-01 13:15:28 [info     ] cases.generic_market.done      found=0 search=catalogue source=CherryTree Inc
+2026-06-01 13:15:28 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:29 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=usb microphone
+INFO:     100.101.209.68:47142 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-06-01 13:15:29 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=pc speakers
+2026-06-01 13:15:29 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming keyboard
+INFO:     100.101.209.68:47144 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47160 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47168 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47180 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47194 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-06-01 13:15:30 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=24 inch monitor
+INFO:     100.101.209.68:47210 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:15:30 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=xl mouse pad
+2026-06-01 13:15:30 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20headset&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:30 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming mouse
+2026-06-01 13:15:31 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+ term=gaming controller
+2026-06-01 13:15:31 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:31 [info     ] gumtree.playwright.cards       count=25 term=usb microphone
+2026-06-01 13:15:31 [debug    ] gumtree.cookie_click_skipped   error=Page.click: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept'), button:has-text('I Accept'), [data-testid='cookie-accept'], #gdpr-banner-accept")
+  -     - locator resolved to <button id="onetrust-accept-btn-handler">Accept all</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+  -     - performing click action
+ term=gaming headset
+2026-06-01 13:15:31 [info     ] gumtree.playwright.cards       count=25 term=pc speakers
+INFO:     100.101.209.68:47214 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-06-01 13:15:32 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=usb%20microphone&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:47228 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47240 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47248 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47254 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:15:32 [info     ] gumtree.playwright.cards       count=25 term=gaming keyboard
+2026-06-01 13:15:32 [info     ] gumtree.playwright.cards       count=25 term=24 inch monitor
+2026-06-01 13:15:33 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:33 [info     ] gumtree.playwright.cards       count=25 term=xl mouse pad
+2026-06-01 13:15:33 [info     ] gumtree.playwright.cards       count=25 term=gaming mouse
+2026-06-01 13:15:33 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=pc%20speakers&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:33 [info     ] gumtree.playwright.cards       count=25 term=gaming controller
+2026-06-01 13:15:34 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:35 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=gaming%20controller&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:35 [info     ] gumtree.playwright.cards       count=25 term=gaming headset
+2026-06-01 13:15:35 [info     ] source.done                    found=0 gems=0 source=BargainHardware
+2026-06-01 13:15:35 [info     ] startup_bootstrap.done
+2026-06-01 13:15:35 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:46260 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46276 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46290 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:46294 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46296 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46310 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46318 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:15:36 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=24%20inch%20monitor&minPrice=1&maxPrice=80&exact=false
+2026-06-01 13:15:37 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:37 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:37 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=xl%20mouse%20pad&minPrice=1&maxPrice=80&exact=false
+INFO:     100.101.209.68:46322 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-06-01 13:15:38 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:46336 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46342 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46350 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46366 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46374 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46384 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:15:38 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:38 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:38 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:15:38 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:38 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:39 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:15:40 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:46398 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46414 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46420 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46424 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46438 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:15:45 [debug    ] upgrade_parts.ebay             buy=None part=NVIDIA GPU sold=86.6
+INFO:     100.101.209.68:47902 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47904 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47916 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47932 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47948 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47954 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47960 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47974 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47984 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47986 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:47998 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48000 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48006 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48012 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44382 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44386 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44396 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44408 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44414 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44420 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44424 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44426 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44440 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44452 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44462 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44468 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44480 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44484 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44492 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44508 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44520 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44534 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44548 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34946 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34952 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34954 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34958 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34974 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34976 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34980 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43124 - "POST /api/swarms/flip_opportunities/trigger HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43132 - "POST /api/swarms/components/trigger HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:43148 - "POST /api/swarms/cases/trigger HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43158 - "POST /api/swarms/accessories/trigger HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34992 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35004 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35018 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35024 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35032 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35042 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35046 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35062 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35072 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35088 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35106 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43170 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40506 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+2026-06-01 13:16:19 [debug    ] upgrade_parts.ebay             buy=None part=AM4 CPU sold=None
+INFO:     100.101.209.68:34426 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34442 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34444 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34446 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34458 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34470 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34480 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34484 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34488 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34498 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34512 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34528 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40514 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34534 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34548 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34554 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34560 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34566 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34578 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34584 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35334 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46902 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46906 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46920 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46932 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46946 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46956 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46962 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35340 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46974 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46990 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47002 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47006 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47020 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33376 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33388 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33394 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33404 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33420 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33432 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33440 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51418 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51430 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33448 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33450 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33464 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:33478 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33480 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33496 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33504 - "GET /api/sources/health HTTP/1.1" 200 OK
