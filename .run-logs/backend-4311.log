@@ -1254,3 +1254,168 @@ INFO:     100.101.209.68:35224 - "GET /api/sources/ HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35226 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35238 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
 INFO:     100.101.209.68:35246 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'Ryzen 9 7900X': 0 found, 0 new (total 228)
+INFO:     100.101.209.68:51720 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51728 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51738 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51754 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51758 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51770 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51784 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:03 [info     ] accessories_swarm.done         errors=0 found=664 upserted=528
+INFO:     100.101.209.68:51794 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51810 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51804 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51834 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51826 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51840 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51846 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51858 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51874 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51894 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51886 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51908 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37096 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37104 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37106 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:37114 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37126 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37134 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37140 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37142 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37152 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37164 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37180 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37194 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37196 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:37206 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'mid tower case': 115 found, 109 new (total 109)
+INFO:     100.101.209.68:41162 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41174 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41178 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41188 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41200 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'micro atx case': 138 found, 131 new (total 131)
+2026-06-01 13:04:20 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=atx+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:41212 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41222 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41224 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41232 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41246 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41252 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:41260 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53552 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53564 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53572 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:53578 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53580 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53590 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53596 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:25 [info     ] gumtree.playwright.cards       count=22 term=atx pc case
+INFO:     100.101.209.68:53598 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53614 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53630 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53644 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53648 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53658 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53666 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53668 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53676 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53686 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53690 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:53694 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'airflow rgb case': 125 found, 120 new (total 120)
+2026-06-01 13:04:29 [info     ] gumtree.playwright.done        total=21
+2026-06-01 13:04:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mid+tower+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:04:30 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=micro+atx+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:04:36 [info     ] gumtree.playwright.cards       count=25 term=mid tower case
+2026-06-01 13:04:36 [info     ] gumtree.playwright.cards       count=10 term=micro atx case
+INFO:     100.101.209.68:48056 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48064 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48070 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48084 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48096 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48102 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48114 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'white gaming case': 125 found, 115 new (total 115)
+2026-06-01 13:04:39 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=airflow+rgb+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:04:39 [info     ] gumtree.playwright.done        total=9
+2026-06-01 13:04:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=white+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:48128 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48138 - "GET /api/config/search HTTP/1.1" 200 OK
+2026-06-01 13:04:40 [info     ] gumtree.playwright.done        total=25
+INFO:     100.101.209.68:48140 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:48142 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48144 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48146 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48152 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:40 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=fish+tank+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:48158 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48172 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48178 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48192 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:48204 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:04:44 [info     ] gumtree.playwright.cards       count=2 term=airflow rgb case
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 129)
+INFO:     100.101.209.68:43662 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43674 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43678 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43684 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43688 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43702 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43714 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:45 [info     ] gumtree.playwright.cards       count=25 term=white gaming case
+2026-06-01 13:04:46 [info     ] gumtree.playwright.done        total=2
+2026-06-01 13:04:46 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=panoramic+pc+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:04:51 [info     ] gumtree.playwright.done        total=25
+2026-06-01 13:04:52 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=argb+gaming+case&max_price=350&min_price=1&sort=date&distance=nationwide
+INFO:     100.101.209.68:43720 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43728 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43726 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43764 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43754 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43780 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43798 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43784 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43804 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43834 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43818 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:43840 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:54 [warning  ] gumtree.playwright.no_listings page_title=Fish tank pc case | Stuff for Sale - Gumtree term=fish tank pc case
+2026-06-01 13:04:55 [info     ] gumtree.playwright.done        total=0
+INFO:     100.101.209.68:44892 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44902 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:44912 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44924 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44928 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44936 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:04:55 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=rgb+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+[scraper] eBay 'fish tank pc case': 109 found, 109 new (total 109)
+2026-06-01 13:04:57 [info     ] gumtree.playwright.fetch       url=https://www.gumtree.com/for-sale?q=mesh+airflow+case&max_price=350&min_price=1&sort=date&distance=nationwide
+2026-06-01 13:04:58 [info     ] gumtree.playwright.cards       count=2 term=argb gaming case
+2026-06-01 13:04:59 [info     ] gumtree.playwright.done        total=2
+2026-06-01 13:04:59 [info     ] facebook.playwright.using_cookie_file_override
+[scraper] eBay 'AM4 motherboard cpu combo': 0 found, 0 new (total 228)
+2026-06-01 13:05:00 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=atx%20pc%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:00 [warning  ] gumtree.playwright.no_listings page_title=Panoramic pc case | Stuff for Sale - Gumtree term=panoramic pc case
+2026-06-01 13:05:00 [info     ] gumtree.playwright.done        total=0
+2026-06-01 13:05:00 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:00 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:00 [info     ] facebook.playwright.using_cookie_file_override
+INFO:     100.101.209.68:44938 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44948 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44950 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44954 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44964 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-06-01 13:05:03 [info     ] gumtree.playwright.cards       count=2 term=rgb airflow case
+INFO:     100.101.209.68:44972 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:44974 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:03 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=mid%20tower%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:04 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:04 [info     ] facebook.playwright.using_cookie_file_override
+[scraper] eBay 'panoramic pc case': 113 found, 112 new (total 112)
+2026-06-01 13:05:04 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:04 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=micro%20atx%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:04 [info     ] gumtree.playwright.done        total=2
+2026-06-01 13:05:04 [info     ] facebook.playwright.using_cookie_file_override
