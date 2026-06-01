@@ -47,6 +47,10 @@ def should_defer_source_scrape(source_name: str) -> tuple[bool, str]:
     enabled = os.getenv("ANTI_BOT_PREFLIGHT_ON_STARTUP", "1").lower() in {"1", "true", "yes"}
     if not enabled:
         return False, ""
+    # If we're not in an interactive preflight-capable runtime, do not block sources.
+    # They should still scrape headless/background and report real telemetry.
+    if not _interactive_mode():
+        return False, ""
     if _RUNNING:
         return True, "waiting_for_antibot_preflight"
     if _LAST_RESULT != "success":

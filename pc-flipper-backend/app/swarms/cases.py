@@ -773,6 +773,7 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
         return []
 
     cases = []
+    filtered_delivery = 0
     url = f"https://www.aliexpress.com/wholesale?SearchText={search.replace(' ', '+')}&g=y&SortType=price_asc"
 
     async with async_playwright() as p:
