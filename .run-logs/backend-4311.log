@@ -1419,3 +1419,688 @@ INFO:     100.101.209.68:44974 - "GET /api/sources/health HTTP/1.1" 200 OK
 2026-06-01 13:05:04 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=micro%20atx%20case&minPrice=1&maxPrice=350&exact=false
 2026-06-01 13:05:04 [info     ] gumtree.playwright.done        total=2
 2026-06-01 13:05:04 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:05 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:05 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:05 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=airflow%20rgb%20case&minPrice=1&maxPrice=350&exact=false
+INFO:     100.101.209.68:59356 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59360 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59366 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59378 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59390 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:05:06 [info     ] gumtree.playwright.cards       count=2 term=mesh airflow case
+2026-06-01 13:05:06 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:06 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:06 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=white%20gaming%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:06 [info     ] gumtree.playwright.done        total=2
+2026-06-01 13:05:06 [info     ] facebook.playwright.using_cookie_file_override
+[scraper] eBay 'argb gaming case': 127 found, 122 new (total 122)
+2026-06-01 13:05:07 [info     ] facebook.playwright.using_cookie_file_override
+2026-06-01 13:05:07 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:07 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=fish%20tank%20pc%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:08 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:09 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=panoramic%20pc%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:09 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:10 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=argb%20gaming%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:10 [info     ] facebook.playwright.done       total=0
+INFO:     100.101.209.68:59398 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59408 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59420 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:59426 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59428 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59434 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59448 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:11 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=rgb%20airflow%20case&minPrice=1&maxPrice=350&exact=false
+INFO:     100.101.209.68:59454 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59458 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59462 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59472 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59484 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59486 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:59498 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:11 [info     ] amazon.cases.done              found=10 search=atx pc case
+2026-06-01 13:05:12 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:12 [info     ] facebook.playwright.fetch      url=https://www.facebook.com/marketplace/london/search/?query=mesh%20airflow%20case&minPrice=1&maxPrice=350&exact=false
+2026-06-01 13:05:12 [info     ] amazon.cases.done              found=10 search=mid tower case
+2026-06-01 13:05:13 [info     ] facebook.playwright.done       total=0
+2026-06-01 13:05:13 [info     ] amazon.cases.done              found=10 search=micro atx case
+2026-06-01 13:05:15 [info     ] amazon.cases.done              found=10 search=airflow rgb case
+[scraper] eBay 'rgb airflow case': 105 found, 105 new (total 105)
+2026-06-01 13:05:16 [info     ] amazon.cases.done              found=10 search=fish tank pc case
+2026-06-01 13:05:16 [info     ] amazon.cases.done              found=10 search=white gaming case
+2026-06-01 13:05:17 [info     ] amazon.cases.done              found=10 search=argb gaming case
+2026-06-01 13:05:17 [info     ] amazon.cases.done              found=10 search=panoramic pc case
+2026-06-01 13:05:17 [info     ] amazon.cases.done              found=10 search=rgb airflow case
+INFO:     100.101.209.68:52434 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52438 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52440 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52450 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52464 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:05:18 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=atx+pc+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=atx+pc+case&search_method=user"
+  -     - locator resolved to <button tabindex="0" role="button" type="button" class="btn-s5Zu1 primary-2RHJ5 xxl-1gc62 limitWidth-Zu4uF btn-2onS4">…</button>
+  -   - attempting click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is not stable
+  -   - retrying click action
+  -     - waiting for element to be visible, enabled and stable
+  -     - element is visible, enabled and stable
+  -     - scrolling into view if needed
+  -     - done scrolling
+ selector=button:has-text('Accept')
+2026-06-01 13:05:18 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+ selector=button:has-text('Accept')
+2026-06-01 13:05:18 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=micro+atx+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=micro+atx+case&search_method=user"
+ selector=button:has-text('Accept')
+2026-06-01 13:05:19 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=airflow+rgb+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=airflow+rgb+case&search_method=user"
+ selector=button:has-text('Accept')
+INFO:     100.101.209.68:52470 - "GET /api/listings/stats HTTP/1.1" 200 OK
+2026-06-01 13:05:19 [info     ] amazon.cases.done              found=10 search=mesh airflow case
+INFO:     100.101.209.68:52474 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52486 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52498 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52512 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-06-01 13:05:19 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=white+gaming+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=white+gaming+case&search_method=user"
+ selector=button:has-text('Accept')
+INFO:     100.101.209.68:52524 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52534 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:20 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=fish+tank+pc+case&search_method=user"
+ selector=button:has-text('Accept')
+2026-06-01 13:05:20 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:20 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:20 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:21 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:21 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:22 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:22 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=panoramic+pc+case&search_method=user"
+ selector=button:has-text('Accept')
+2026-06-01 13:05:22 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:22 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:22 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:23 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:23 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:24 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:24 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:24 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+  -     - locator resolved to <svg width="1em" height="1em" tabindex="0" version="1.1" role="button" aria-label="close" fill="currentColor" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="closeBtn-25P89 close-1NvaT">…</svg>
+  -   - attempting click action
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -     - waiting 20ms
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 100ms
+  -     4 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 500ms
+ selector=[class*='close']
+2026-06-01 13:05:24 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+  -     - locator resolved to <svg width="1em" height="1em" tabindex="0" version="1.1" role="button" aria-label="close" fill="currentColor" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="closeBtn-25P89 close-1NvaT">…</svg>
+  -   - attempting click action
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -     - waiting 20ms
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 100ms
+  -     4 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 500ms
+ selector=[class*='close']
+2026-06-01 13:05:24 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+  -     - locator resolved to <svg width="1em" height="1em" tabindex="0" version="1.1" role="button" aria-label="close" fill="currentColor" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="closeBtn-25P89 close-1NvaT">…</svg>
+  -   - attempting click action
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -     - waiting 20ms
+  -     2 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 100ms
+  -     4 × waiting for element to be visible, enabled and stable
+  -       - element is visible, enabled and stable
+  -       - scrolling into view if needed
+  -       - done scrolling
+  -       - <div class="wrap-uaglT mask-am7T- animation-1zD_Q up-25jEw"></div> from <div>…</div> subtree intercepts pointer events
+  -     - retrying click action
+  -       - waiting 500ms
+ selector=[class*='close']
+2026-06-01 13:05:25 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:25 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:26 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:38852 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38858 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38866 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:38882 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38888 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38898 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38900 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:27 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+INFO:     100.101.209.68:38914 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38916 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38930 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38942 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38946 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38956 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38964 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 228)
+2026-06-01 13:05:29 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:38978 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38986 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38992 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:38996 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:39012 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay 'desktop pc': 0 found, 0 new (total 129)
+[scraper] eBay 'mesh airflow case': 240 found, 240 new (total 240)
+INFO:     100.101.209.68:57988 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:57996 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58002 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58006 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58010 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58014 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58016 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:37 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     2 × waiting for" https://www.temu.com/login.html?from=https%3A%2F%2Fwww.temu.com%2Fsearch_result.html%3Fsearch_key%3Dargb%252Bgaming%252Bcase%26search_method%3Duser&login_scene=2&refer_page_name=search_result&refer_p…" navigation to finish...
+  -       - navigated to "https://www.temu.com/login.html?from=https%3A%2F%2Fwww.temu.com%2Fsearch_result.html%3Fsearch_key%3Dargb%252Bgaming%252Bcase%26search_method%3Duser&login_scene=2&refer_page_name=search_result&refer_p…"
+ selector=button:has-text('Accept')
+2026-06-01 13:05:39 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:39 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:39 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:39 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:40 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:40 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:41 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:41 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+INFO:     100.101.209.68:58022 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58034 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58050 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:58056 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58070 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58080 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58090 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:41 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-06-01 13:05:41 [info     ] temu.cases.done                found=0 search=atx pc case
+2026-06-01 13:05:42 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-06-01 13:05:42 [info     ] temu.cases.done                found=0 search=micro atx case
+2026-06-01 13:05:42 [warning  ] temu.cases.scrape_error        error=temu_verification_challenge
+2026-06-01 13:05:42 [info     ] temu.cases.done                found=0 search=mid tower case
+INFO:     100.101.209.68:58094 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58104 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58110 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58116 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58130 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:05:43 [info     ] temu.cases.done                found=0 search=airflow rgb case
+2026-06-01 13:05:43 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:43 [info     ] temu.cases.done                found=0 search=white gaming case
+2026-06-01 13:05:43 [info     ] temu.cases.done                found=0 search=fish tank pc case
+2026-06-01 13:05:44 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+  -     - waiting for" https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user" navigation to finish...
+  -     - navigated to "https://www.temu.com/search_result.html?search_key=rgb+airflow+case&search_method=user"
+ selector=button:has-text('Accept')
+INFO:     100.101.209.68:58140 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58150 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58156 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58158 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58160 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-06-01 13:05:44 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+INFO:     100.101.209.68:58166 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:58168 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:44 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept')")
+ selector=button:has-text('Accept')
+2026-06-01 13:05:46 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:46 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:46 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:05:47 [info     ] temu.cases.done                found=0 search=panoramic pc case
+2026-06-01 13:05:47 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:48 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:48 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:48 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:48 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:05:49 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='modal'] button")
+ selector=[class*='modal'] button
+2026-06-01 13:05:49 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:05:50 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:05:50 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:05:50 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:50 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:51 [debug    ] temu.modal.dismiss_failed      error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:51 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:51 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:52 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:05:52 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:60762 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60766 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60770 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60782 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60798 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60808 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:60812 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:53 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+INFO:     100.101.209.68:51876 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51890 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51900 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51912 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51914 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:05:55 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 228)
+INFO:     100.101.209.68:51926 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51942 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51954 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:51958 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51974 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51976 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:51986 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:05:57 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:57 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:57 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:58 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:05:58 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:05:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:05:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+[scraper] eBay 'desktop pcs lot': 0 found, 0 new (total 129)
+2026-06-01 13:05:59 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:06:00 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:06:00 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Ship to')")
+ selector=button:has-text('Ship to')
+2026-06-01 13:06:01 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:51998 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52006 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52020 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52036 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52040 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+2026-06-01 13:06:01 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+INFO:     100.101.209.68:52056 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:52064 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:06:01 [info     ] temu.cases.done                found=0 search=argb gaming case
+2026-06-01 13:06:01 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:06:02 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:06:02 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator(".close-btn")
+ selector=.close-btn
+2026-06-01 13:06:03 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:06:03 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:06:03 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:06:04 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+2026-06-01 13:06:04 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("[class*='close']")
+ selector=[class*='close']
+2026-06-01 13:06:05 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:06:06 [debug    ] temu.wait_selector_timeout     error=Page.wait_for_selector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("[class*='search-result'], [data-type='goods'], [class*='goods-item'], [class*='product-item'], [class*='SearchResult']") to be visible
+
+2026-06-01 13:06:06 [debug    ] aliexpress.modal.dismiss_failed error=Page.click: Timeout 2000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('OK')")
+ selector=button:has-text('OK')
+INFO:     100.101.209.68:33972 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33982 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:33994 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34004 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34020 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:06:08 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=atx pc case source=BargainHardware
+2026-06-01 13:06:08 [info     ] temu.cases.done                found=0 search=mesh airflow case
+2026-06-01 13:06:08 [info     ] temu.cases.done                found=0 search=rgb airflow case
+2026-06-01 13:06:08 [info     ] cases.generic_market.done      found=12 search=atx pc case source=BargainHardware
+INFO:     100.101.209.68:34026 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34040 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34046 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34054 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34064 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34074 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34084 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34086 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34100 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34106 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:34120 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34130 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34144 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:34148 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:06:14 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=airflow rgb case source=BargainHardware
+2026-06-01 13:06:14 [info     ] cases.generic_market.done      found=12 search=airflow rgb case source=BargainHardware
+2026-06-01 13:06:14 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=micro atx case source=BargainHardware
+2026-06-01 13:06:14 [info     ] cases.generic_market.done      found=12 search=micro atx case source=BargainHardware
+2026-06-01 13:06:15 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-06-01 13:06:15 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-06-01 13:06:15 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+2026-06-01 13:06:15 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=mid tower case source=BargainHardware
+2026-06-01 13:06:15 [info     ] cases.generic_market.done      found=12 search=mid tower case source=BargainHardware
+2026-06-01 13:06:16 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+INFO:     100.101.209.68:46908 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46914 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46924 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46936 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46942 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46952 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46954 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:06:18 [debug    ] aliexpress.wait_selector_timeout error=Page.wait_for_selector: Timeout 12000ms exceeded.
+Call log:
+  - waiting for locator("a[href*='/item/'], [class*='product-snippet'], [class*='search-item-card']") to be visible
+
+INFO:     100.101.209.68:46968 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46972 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:46988 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47002 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:47012 - "GET /api/schedule HTTP/1.1" 200 OK
+2026-06-01 13:06:21 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=fish tank pc case source=BargainHardware
+2026-06-01 13:06:21 [info     ] cases.generic_market.done      found=12 search=fish tank pc case source=BargainHardware
+2026-06-01 13:06:21 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=panoramic pc case source=BargainHardware
+2026-06-01 13:06:21 [info     ] cases.generic_market.done      found=12 search=panoramic pc case source=BargainHardware
+2026-06-01 13:06:23 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=rgb airflow case source=BargainHardware
+2026-06-01 13:06:23 [info     ] cases.generic_market.done      found=12 search=rgb airflow case source=BargainHardware
+2026-06-01 13:06:23 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=mesh airflow case source=BargainHardware
+2026-06-01 13:06:23 [info     ] cases.generic_market.done      found=12 search=mesh airflow case source=BargainHardware
+2026-06-01 13:06:24 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=atx pc case source=Alibaba
+2026-06-01 13:06:24 [info     ] cases.generic_market.done      found=0 search=atx pc case source=Alibaba
+[scraper] eBay 'pc tower': 0 found, 0 new (total 228)
+2026-06-01 13:06:25 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=mid tower case source=Alibaba
+INFO:     100.101.209.68:56172 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56182 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56184 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56196 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56200 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56208 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+2026-06-01 13:06:26 [info     ] cases.generic_market.done      found=0 search=mid tower case source=Alibaba
+INFO:     100.101.209.68:56220 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:06:26 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=micro atx case source=Alibaba
+2026-06-01 13:06:26 [info     ] cases.generic_market.done      found=0 search=micro atx case source=Alibaba
+2026-06-01 13:06:26 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=airflow rgb case source=Alibaba
+2026-06-01 13:06:26 [info     ] cases.generic_market.done      found=0 search=airflow rgb case source=Alibaba
+INFO:     100.101.209.68:56226 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56228 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56232 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56236 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56250 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56262 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56276 - "GET /api/sources/health HTTP/1.1" 200 OK
+2026-06-01 13:06:27 [warning  ] cases.generic_market.error     error=bargainhardware_rate_limited_429 search=argb gaming case source=BargainHardware
+2026-06-01 13:06:27 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=white gaming case source=Alibaba
+2026-06-01 13:06:27 [info     ] cases.generic_market.done      found=12 search=argb gaming case source=BargainHardware
+2026-06-01 13:06:27 [info     ] cases.generic_market.done      found=0 search=white gaming case source=Alibaba
+[scraper] eBay 'pc tower': 0 found, 0 new (total 129)
+2026-06-01 13:06:28 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=fish tank pc case source=Alibaba
+2026-06-01 13:06:28 [info     ] cases.generic_market.done      found=0 search=fish tank pc case source=Alibaba
+2026-06-01 13:06:29 [warning  ] cases.generic_market.error     error=alibaba_captcha_interception search=panoramic pc case source=Alibaba
