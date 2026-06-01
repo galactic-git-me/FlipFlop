@@ -14,6 +14,7 @@ $PidFile = Join-Path $LogsDir "windows-dev-pids.json"
 
 $FrontendPort = if ($env:FRONTEND_PORT) { $env:FRONTEND_PORT } else { "4310" }
 $BackendPort  = if ($env:BACKEND_PORT)  { $env:BACKEND_PORT }  else { "4311" }
+$AutoDashboard = if ($env:RICH_DASHBOARD_AUTO_LAUNCH) { $env:RICH_DASHBOARD_AUTO_LAUNCH } else { "1" }
 
 function Ensure-Dir([string]$Path) {
   if (-not (Test-Path $Path)) {
@@ -186,6 +187,15 @@ function Start-Dev {
     startedAt = (Get-Date).ToString("o")
   } | ConvertTo-Json | Set-Content -Path $PidFile
 
+  if ($AutoDashboard -in @("1","true","True","yes","YES")) {
+    $dashboardPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
+    $dashboardScript = Join-Path $RootDir "scripts\rich_dashboard.py"
+    if ((Test-Path $dashboardPython) -and (Test-Path $dashboardScript)) {
+      $cmd = "cd `"$RootDir`"; & `"$dashboardPython`" `"$dashboardScript`" --base-url http://localhost:$BackendPort"
+      Start-Process -FilePath "powershell.exe" -ArgumentList @("-NoExit", "-ExecutionPolicy", "Bypass", "-Command", $cmd) | Out-Null
+    }
+  }
+
   Write-Host ""
   Write-Host "Frontend: http://localhost:$FrontendPort"
   Write-Host "Backend : http://localhost:$BackendPort"
@@ -198,6 +208,7 @@ function Start-Dev {
   Write-Host "Commands:"
   Write-Host "  .\start-dev-windows.ps1 status"
   Write-Host "  .\start-dev-windows.ps1 stop"
+  Write-Host "  .venv\Scripts\python.exe .\scripts\rich_dashboard.py --base-url http://localhost:$BackendPort"
 }
 
 switch ($Action) {

@@ -789,6 +789,7 @@ open_tmux_logs() {
   fi
   if ! command -v tmux >/dev/null 2>&1; then
     echo "tmux not found; skipping split-log view. Install tmux to enable auto split panes."
+    echo "Rich dashboard alternative: $ROOT_DIR/start-rich-dashboard.sh"
     return 0
   fi
 
