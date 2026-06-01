@@ -41,6 +41,18 @@ function Get-ComposeCommand {
   throw "Docker Compose not found. Install Docker Desktop."
 }
 
+function Ensure-DockerRunning {
+  $compose = Get-ComposeCommand
+  if ($compose.Bin -eq "docker") {
+    try {
+      docker info | Out-Null
+      return
+    } catch {
+      throw "Docker Desktop is installed but the daemon is not running. Start Docker Desktop and wait for 'Engine running', then rerun."
+    }
+  }
+}
+
 function Invoke-ComposeBackend([string[]]$ExtraArgs) {
   Push-Location $BackendDir
   try {
@@ -139,10 +151,13 @@ function Start-Dev {
   }
 
   Write-Host "Starting db/redis containers..."
+  Ensure-DockerRunning
   Invoke-ComposeBackend @("up", "-d", "db", "redis") | Out-Null
 
   $backendLog = Join-Path $LogsDir "backend-4311.log"
+  $backendErrLog = Join-Path $LogsDir "backend-4311.err.log"
   $frontendLog = Join-Path $LogsDir "frontend-4310.log"
+  $frontendErrLog = Join-Path $LogsDir "frontend-4310.err.log"
 
   # Stop prior instances before launching.
   Stop-Dev | Out-Null
@@ -153,7 +168,7 @@ function Start-Dev {
     -ArgumentList $backendArgs `
     -WorkingDirectory $BackendDir `
     -RedirectStandardOutput $backendLog `
-    -RedirectStandardError $backendLog `
+    -RedirectStandardError $backendErrLog `
     -WindowStyle Hidden `
     -PassThru
 
@@ -161,7 +176,7 @@ function Start-Dev {
     -ArgumentList @("run", "dev", "--", "--webpack", "-p", $FrontendPort, "-H", "0.0.0.0") `
     -WorkingDirectory $FrontendDir `
     -RedirectStandardOutput $frontendLog `
-    -RedirectStandardError $frontendLog `
+    -RedirectStandardError $frontendErrLog `
     -WindowStyle Hidden `
     -PassThru
 
@@ -176,7 +191,9 @@ function Start-Dev {
   Write-Host "Backend : http://localhost:$BackendPort"
   Write-Host "Logs:"
   Write-Host "  $frontendLog"
+  Write-Host "  $frontendErrLog"
   Write-Host "  $backendLog"
+  Write-Host "  $backendErrLog"
   Write-Host ""
   Write-Host "Commands:"
   Write-Host "  .\start-dev-windows.ps1 status"
