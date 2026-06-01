@@ -92,7 +92,6 @@ _VENDOR_ALIASES: dict[str, str] = {
     "ebay uk auctions": "eBay",
     "gumtree uk": "Gumtree",
     "gumtree": "Gumtree",
-    "facebook marketplace": "Facebook Marketplace",
     "amazon": "Amazon",
     "amazon uk": "Amazon",
     "alibaba uk": "Alibaba",
@@ -147,7 +146,6 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     terms_by_vendor = {
         "eBay": [p["ebay_search"] for p in parts],
         "Gumtree": [p["ebay_search"] for p in parts],
-        "Facebook Marketplace": [p["ebay_search"] for p in parts],
         "BargainHardware": [p["ebay_search"] for p in parts],
         "Scan": [p["ebay_search"] for p in parts],
         "Overclockers": [p["ebay_search"] for p in parts],
@@ -267,13 +265,12 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
 
     # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
     if has_chromium:
-        amz_r, temu_r, ali_r, ali_b_r, gum_r, fb_r = await asyncio.gather(
+        amz_r, temu_r, ali_r, ali_b_r, gum_r = await asyncio.gather(
             _fetch_lane_concurrent(_fetch_amazon, lane_concurrency),
             _fetch_lane_concurrent(_fetch_temu, lane_concurrency),
             _fetch_lane_concurrent(_fetch_aliexpress, lane_concurrency),
             _fetch_lane_concurrent(_fetch_alibaba, lane_concurrency),
             _fetch_lane_concurrent(_fetch_gumtree_component, lane_concurrency),
-            _fetch_lane_concurrent(_fetch_facebook_component, lane_concurrency),
         )
     else:
         amz_r = [None for _ in parts]
@@ -281,7 +278,6 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         ali_r = [None for _ in parts]
         ali_b_r = [None for _ in parts]
         gum_r = [None for _ in parts]
-        fb_r = [None for _ in parts]
     for v in amz_r:
         if not isinstance(v, Exception):
             price, _ = _val_count(v)
@@ -320,14 +316,12 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 ali_v   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
                 ali_b_v = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
                 gum_v   = gum_r[i] if not isinstance(gum_r[i], Exception) else None
-                fb_v    = fb_r[i] if not isinstance(fb_r[i], Exception) else None
 
                 amz_new, amz_count = _val_count(amz_v)
                 temu_new, temu_count = _val_count(temu_v)
                 ali_new, ali_count = _val_count(ali_v)
                 ali_b_new, ali_b_count = _val_count(ali_b_v)
                 gum_new, gum_count = _val_count(gum_v)
-                fb_new, fb_count = _val_count(fb_v)
 
                 search = part_def["ebay_search"]
                 record_term_result(source_name="UpgradeParts:Amazon", term=search, found=amz_count, new=0)
@@ -335,9 +329,8 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=ali_count, new=0)
                 record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=ali_b_count, new=0)
                 record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=gum_count, new=0)
-                record_term_result(source_name="UpgradeParts:Facebook Marketplace", term=search, found=fb_count, new=0)
 
-                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new, gum_new, fb_new]):
+                if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new, gum_new]):
                     await _upsert_part(
                         db, part_def, ebay_used, ebay_sold, bh_refurb,
                         scan_new, oc_new, box_new, amz_new, temu_new, ali_new,

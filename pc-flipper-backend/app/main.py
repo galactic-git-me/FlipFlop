@@ -36,7 +36,6 @@ _CASE_DEFAULT_SOURCES = [
     "eBay",
     "eBay (Worldwide)",
     "Gumtree",
-    "Facebook Marketplace",
     "Amazon",
     "Temu",
     "AliExpress",
@@ -803,7 +802,7 @@ async def _seed_default_data():
                         scope="flip_opportunities",
                         group_name="PC Flip Opportunities",
                         term=term,
-                        source_names=["eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                        source_names=["eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
                         attributes={},
                         notes="seeded_flip_terms",
                         enabled=True,
@@ -818,7 +817,7 @@ async def _seed_default_data():
                     scope="upgrade_parts",
                     group_name="Upgrade Components",
                     term=term,
-                    source_names=["eBay", "Gumtree", "Facebook Marketplace", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"],
+                    source_names=["eBay", "Gumtree", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"],
                     attributes={},
                     notes="seeded_upgrade_terms",
                     enabled=True,
@@ -847,7 +846,7 @@ async def _seed_default_data():
                     scope="accessories",
                     group_name="Gaming Accessories",
                     term=term,
-                    source_names=["eBay", "Gumtree", "Facebook Marketplace", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
+                    source_names=["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"],
                     attributes={},
                     notes="seeded_accessory_terms",
                     enabled=True,
@@ -868,8 +867,8 @@ async def _seed_default_data():
         }
         rows = (await db.execute(select(SourceSearchTerm))).scalars().all()
         updated_rows = 0
-        flip_allowed = {"eBay UK", "eBay UK Auctions", "Facebook Marketplace", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
-        common_allowed = {"eBay", "Gumtree", "Facebook Marketplace", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
+        flip_allowed = {"eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
+        common_allowed = {"eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
         cases_allowed = set(common_allowed) | {"eBay (Worldwide)", "CherryTree Inc"}
         upgrade_allowed = set(common_allowed)
         accessories_allowed = set(common_allowed)
@@ -893,11 +892,11 @@ async def _seed_default_data():
             elif scope == "upgrade_parts":
                 deduped = [s for s in deduped if s in upgrade_allowed]
                 if not deduped:
-                    deduped = ["eBay", "Gumtree", "Facebook Marketplace", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"]
+                    deduped = ["eBay", "Gumtree", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"]
             elif scope == "accessories":
                 deduped = [s for s in deduped if s in accessories_allowed]
                 if not deduped:
-                    deduped = ["eBay", "Gumtree", "Facebook Marketplace", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+                    deduped = ["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
             if deduped != names:
                 row.source_names = deduped
                 updated_rows += 1

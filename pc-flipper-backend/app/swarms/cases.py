@@ -49,7 +49,6 @@ SOURCES = [
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Gumtree",           "fn": "gumtree"},
-    {"name": "Facebook Marketplace", "fn": "facebook"},
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
@@ -57,7 +56,7 @@ SOURCES = [
     {"name": "CherryTree Inc",    "fn": "cherrytree"},
     {"name": "Alibaba",           "fn": "alibaba"},
 ]
-_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "facebook", "amazon", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
+_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "amazon", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
 
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",

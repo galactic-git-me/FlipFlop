@@ -43,7 +43,6 @@ ACCESSORY_SEARCHES = [
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
     "ebay uk auctions": "eBay",
-    "facebook marketplace": "Facebook Marketplace",
     "amazon uk": "Amazon",
     "bargain hardware": "BargainHardware",
 }
@@ -176,7 +175,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
         } for r in rows if str(r.term or "").strip()]
     terms_by_vendor: dict[str, list[str]] = {}
     for d in search_defs:
-        srcs = d.get("source_names") or ["eBay", "Gumtree", "Facebook Marketplace", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+        srcs = d.get("source_names") or ["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
         for s in srcs:
             terms_by_vendor.setdefault(str(s), []).append(d["term"])
     terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
@@ -205,11 +204,6 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                     direct_tasks.append((
                         "Accessories:Gumtree",
                         asyncio.create_task(_scrape_gumtree_accessories(term, theme)),
-                    ))
-                if term in vendor_term_sets.get("Facebook Marketplace", set()):
-                    direct_tasks.append((
-                        "Accessories:Facebook Marketplace",
-                        asyncio.create_task(_scrape_facebook_accessories(term, theme)),
                     ))
 
                 if direct_tasks:
