@@ -1188,3 +1188,69 @@ INFO:     100.101.209.68:36572 - "GET /api/search-telemetry/by-source?limit=2500
 INFO:     100.101.209.68:36580 - "GET /api/config/search HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36596 - "GET /api/sources/health HTTP/1.1" 200 OK
 INFO:     100.101.209.68:36608 - "GET /api/schedule HTTP/1.1" 200 OK
+[scraper] eBay retry 'gaming keyboard': 129 found, 128 new (total 128)
+[scraper] eBay 'Ryzen 9 7900X': 103 found, 9 new (total 129)
+INFO:     100.101.209.68:36616 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36622 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36636 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36646 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36656 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36658 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:36662 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay retry 'panoramic pc case': 127 found, 125 new (total 125)
+2026-06-01 13:03:33 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming keyboard
+2026-06-01 13:03:33 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming keyboard
+2026-06-01 13:03:33 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming keyboard
+[scraper] eBay retry 'argb gaming case': 128 found, 123 new (total 123)
+INFO:     100.101.209.68:56196 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56204 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56214 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:56208 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56230 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56238 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56242 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56258 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56274 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56294 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56304 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56316 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56318 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56290 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56332 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56348 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56354 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:56358 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+[scraper] eBay retry 'xl mouse pad': 0 found, 0 new (total 0)
+INFO:     100.101.209.68:56372 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay retry 'usb microphone': 118 found, 114 new (total 114)
+[scraper] eBay retry 'gaming headset': 136 found, 126 new (total 126)
+2026-06-01 13:03:44 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=xl mouse pad
+2026-06-01 13:03:44 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=xl mouse pad
+2026-06-01 13:03:44 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=xl mouse pad
+[scraper] eBay retry 'fish tank pc case': 128 found, 128 new (total 128)
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=usb microphone
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=usb microphone
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=usb microphone
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Temu term=gaming headset
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=AliExpress term=gaming headset
+2026-06-01 13:03:47 [info     ] accessories.playwright.deferred reason=antibot_preflight_incomplete source=Alibaba term=gaming headset
+INFO:     100.101.209.68:35064 - "GET /api/listings/stats HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35070 - "GET /api/demand/summary HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35076 - "GET /api/swarms/scan/status HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35082 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35094 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35102 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35116 - "GET /api/sources/health HTTP/1.1" 200 OK
+[scraper] eBay retry 'mid tower case': 132 found, 122 new (total 122)
+INFO:     100.101.209.68:35130 - "GET /api/source-search-terms HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35142 - "GET /api/search-telemetry/by-source?limit=2500 HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35158 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35174 - "GET /api/sources/health HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35176 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35188 - "GET /api/schedule HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35198 - "GET /api/config/search HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35210 - "GET /api/sources HTTP/1.1" 307 Temporary Redirect
+INFO:     100.101.209.68:35224 - "GET /api/sources/ HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35226 - "GET /api/search-telemetry/recent HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35238 - "GET /api/search-telemetry/by-source HTTP/1.1" 200 OK
+INFO:     100.101.209.68:35246 - "GET /api/sources/health HTTP/1.1" 200 OK
