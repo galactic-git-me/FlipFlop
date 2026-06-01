@@ -15,7 +15,7 @@ try:
     from rich.layout import Layout
     from rich.live import Live
     from rich.panel import Panel
-    from rich.table import Table
+from rich.table import Table
 except Exception as exc:  # pragma: no cover
     raise SystemExit(f"Rich is required. Install with pip install rich. Error: {exc}")
 
@@ -234,31 +234,57 @@ def main() -> int:
     api = args.base_url.rstrip("/") + "/api"
     with httpx.Client(follow_redirects=True) as client:
         layout = Layout()
-        layout.split_column(
-            Layout(name="kpis", size=7),
-            Layout(name="sched", size=14),
-            Layout(name="terms"),
+        layout.split_row(
+            Layout(name="left", ratio=1),
+            Layout(name="right", ratio=1),
         )
+        layout["left"].split_column(
+            Layout(name="kpis", size=7),
+            Layout(name="sched"),
+        )
+        layout["right"].update(Panel("[dim]Loading search terms...[/dim]", border_style="bright_blue"))
+        layout["kpis"].update(Panel("[dim]Loading KPIs...[/dim]", border_style="bright_blue"))
+        layout["sched"].update(Panel("[dim]Loading scheduler...[/dim]", border_style="cyan"))
 
         with Live(layout, refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True):
             while True:
-                listing_stats = _safe_get(client, f"{api}/listings/stats")
-                demand_summary = _safe_get(client, f"{api}/demand/summary")
-                scan_status = _safe_get(client, f"{api}/swarms/scan/status")
-                schedule_rows = _safe_get(client, f"{api}/schedule") or []
-                taxonomy_payload = _safe_get(client, f"{api}/source-search-terms") or {}
-                taxonomy_rows = (taxonomy_payload or {}).get("items") or []
-                telem = _safe_get(client, f"{api}/search-telemetry/by-source?limit=2500") or {}
-                telem_items = (telem or {}).get("items") or {}
-                health = _safe_get(client, f"{api}/sources/health") or {}
-                enabled = {str((x or {}).get("name") or "") for x in ((health or {}).get("items") or []) if bool((x or {}).get("enabled", False))}
+                try:
+                    listing_stats = _safe_get(client, f"{api}/listings/stats")
+                    demand_summary = _safe_get(client, f"{api}/demand/summary")
+                    scan_status = _safe_get(client, f"{api}/swarms/scan/status")
+                    schedule_rows = _safe_get(client, f"{api}/schedule") or []
 
-                layout["kpis"].update(_build_kpis(listing_stats, demand_summary, scan_status))
-                layout["sched"].update(_build_schedule(schedule_rows))
-                layout["terms"].update(_build_terms(taxonomy_rows, telem_items, enabled))
+                    taxonomy_payload = _safe_get(client, f"{api}/source-search-terms")
+                    if isinstance(taxonomy_payload, dict):
+                        taxonomy_rows = taxonomy_payload.get("items") or []
+                    elif isinstance(taxonomy_payload, list):
+                        taxonomy_rows = taxonomy_payload
+                    else:
+                        taxonomy_rows = []
+
+                    telem = _safe_get(client, f"{api}/search-telemetry/by-source?limit=2500") or {}
+                    telem_items = (telem or {}).get("items") if isinstance(telem, dict) else {}
+                    if not isinstance(telem_items, dict):
+                        telem_items = {}
+
+                    health = _safe_get(client, f"{api}/sources/health") or {}
+                    health_items = (health or {}).get("items") if isinstance(health, dict) else []
+                    if not isinstance(health_items, list):
+                        health_items = []
+                    enabled = {
+                        str((x or {}).get("name") or "")
+                        for x in health_items
+                        if bool((x or {}).get("enabled", False))
+                    }
+
+                    layout["kpis"].update(_build_kpis(listing_stats, demand_summary, scan_status))
+                    layout["sched"].update(_build_schedule(schedule_rows))
+                    layout["right"].update(_build_terms(taxonomy_rows, telem_items, enabled))
+                except Exception as exc:
+                    layout["kpis"].update(Panel("[red]Dashboard render error[/red]", border_style="red"))
+                    layout["sched"].update(Panel(f"[red]{exc}[/red]", title="Error", border_style="red"))
                 time.sleep(max(0.2, args.refresh))
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
