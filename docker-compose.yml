@@ -1,0 +1,74 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: flipflop-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pcflipper
+      POSTGRES_USER: flipper
+      POSTGRES_PASSWORD: flipper
+    ports:
+      - "5432:5432"
+    volumes:
+      - flipflop_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flipper -d pcflipper"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: flipflop-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./pc-flipper-backend
+      dockerfile: Dockerfile
+    container_name: flipflop-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "4311:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://flipper:flipper@db:5432/pcflipper
+      SYNC_DATABASE_URL: postgresql://flipper:flipper@db:5432/pcflipper
+      REDIS_URL: redis://redis:6379/0
+      FRONTEND_URL: http://localhost:4310
+      # Attach Playwright to Chrome running on host machine.
+      # Windows/macOS Docker Desktop: host.docker.internal resolves automatically.
+      # Linux Docker: we map it with extra_hosts below.
+      BROWSER_CDP_URL: http://host.docker.internal:9222
+      SHOW_SCRAPER_BROWSER: "1"
+      FB_HEADLESS: "0"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build:
+      context: ./pc-flipper
+      dockerfile: Dockerfile
+    container_name: flipflop-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4310:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:4311/api
+
+volumes:
+  flipflop_postgres_data:
