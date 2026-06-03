@@ -489,5 +489,45 @@ export const api = {
       estimated_profit: number;
       margin_pct: number;
     }>(`/reselling/flips/${flipId}/pricing-summary`),
+
+    generateListing: (flipId: number) => request<{
+      flip_id: number;
+      title_options: string[];
+      description: string;
+      recommended_title: string;
+      specs: string;
+    }>(`/reselling/flips/${flipId}/generate-listing`, { method: "POST" }),
+
+    processImages: (flipId: number, imageUrls: string[], addWatermark: boolean = true) =>
+      request<{
+        flip_id: number;
+        images: Array<{
+          base64: string;
+          size_kb: number;
+        }>;
+        processed_count: number;
+        error_count: number;
+        error_urls: string[];
+      }>(`/reselling/flips/${flipId}/process-images`, {
+        method: "POST",
+        body: JSON.stringify({ image_urls: imageUrls, add_watermark: addWatermark }),
+      }),
+
+    getListingPreview: (flipId: number) => request<{
+      flip_id: number;
+      title: string;
+      description: string;
+      listing_source: "saved" | "generated";
+      pricing: {
+        listing_price: number;
+        walk_away_price: number;
+        estimated_profit: number;
+        margin_pct: number;
+        insertion_fee: number;
+        final_value_fee_pct: number;
+      };
+      images_available: boolean;
+      ready_to_post: boolean;
+    }>(`/reselling/flips/${flipId}/listing-preview`),
   },
 };

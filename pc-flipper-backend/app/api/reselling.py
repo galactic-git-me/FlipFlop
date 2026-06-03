@@ -9,7 +9,7 @@ import structlog
 
 from app.database import get_db
 from app.models.flip import Flip
-from app.services import ebay_pricing
+from app.services import ebay_pricing, image_processor, listing_generator
 
 log = structlog.get_logger(__name__)
 
@@ -116,4 +116,186 @@ async def get_flip_pricing_summary(
 
     except Exception as e:
         log.error("reselling.pricing_summary_failed", flip_id=flip_id, error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/flips/{flip_id}/generate-listing")
+async def generate_flip_listing(
+    flip_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Generate professional eBay listing with AI.
+
+    Returns:
+    - Multiple title options (user picks best)
+    - Professional description with FlipFlop branding
+    - Estimated specs summary
+    """
+    result = await db.execute(select(Flip).where(Flip.id == flip_id))
+    flip = result.scalar_one_or_none()
+
+    if not flip:
+        raise HTTPException(status_code=404, detail=f"Flip {flip_id} not found")
+
+    try:
+        listing = await listing_generator.generate_full_listing(flip)
+
+        # Optionally save to flip model
+        # flip.generated_title = listing["recommended_title"]
+        # flip.generated_description = listing["description"]
+        # await db.commit()
+
+        log.info("reselling.listing_generated", flip_id=flip_id)
+        return listing
+
+    except Exception as e:
+        log.error("reselling.listing_generation_failed", flip_id=flip_id, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Listing generation failed: {e}")
+
+
+@router.post("/flips/{flip_id}/process-images")
+async def process_flip_images(
+    flip_id: int,
+    image_urls: list[str] = [],
+    add_watermark: bool = True,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Process and brand images for an eBay listing.
+
+    Args:
+        flip_id: Flip ID
+        image_urls: List of image URLs to process
+        add_watermark: Whether to add FlipFlop branding
+
+    Returns:
+    - List of processed image URLs (or base64 encoded if stored locally)
+    - Processing stats (processed count, errors, sizes)
+    """
+    result = await db.execute(select(Flip).where(Flip.id == flip_id))
+    flip = result.scalar_one_or_none()
+
+    if not flip:
+        raise HTTPException(status_code=404, detail=f"Flip {flip_id} not found")
+
+    # Use listing images if none provided
+    if not image_urls and flip.listing and flip.listing.image_urls:
+        image_urls = flip.listing.image_urls
+
+    if not image_urls:
+        raise HTTPException(status_code=400, detail="No image URLs provided")
+
+    try:
+        # Process images
+        processed_bytes, errors = await image_processor.process_images_for_listing(
+            image_urls,
+            max_concurrent=3,
+            add_watermark=add_watermark,
+        )
+
+        if not processed_bytes:
+            raise HTTPException(status_code=500, detail="No images could be processed")
+
+        # Convert bytes to base64 for transfer (in production, would upload to S3)
+        import base64
+
+        image_data = [
+            {
+                "base64": base64.b64encode(img_bytes).decode("utf-8"),
+                "size_kb": image_processor.get_image_size_kb(img_bytes),
+            }
+            for img_bytes in processed_bytes
+        ]
+
+        # Optionally save image URLs to flip
+        # flip.generated_images_urls = [img["base64"] for img in image_data]
+        # flip.image_generation_status = "complete"
+        # await db.commit()
+
+        log.info(
+            "reselling.images_processed",
+            flip_id=flip_id,
+            processed=len(processed_bytes),
+            errors=len(errors),
+        )
+
+        return {
+            "flip_id": flip_id,
+            "images": image_data,
+            "processed_count": len(processed_bytes),
+            "error_count": len(errors),
+            "error_urls": errors,
+        }
+
+    except Exception as e:
+        log.error("reselling.image_processing_failed", flip_id=flip_id, error=str(e))
+        raise HTTPException(status_code=500, detail=f"Image processing failed: {e}")
+
+
+@router.get("/flips/{flip_id}/listing-preview")
+async def get_listing_preview(
+    flip_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get complete preview of a flip listing before posting.
+
+    Combines:
+    - Pricing analysis
+    - Generated title & description
+    - Processed images (if available)
+    - Estimated profit
+    """
+    result = await db.execute(select(Flip).where(Flip.id == flip_id))
+    flip = result.scalar_one_or_none()
+
+    if not flip:
+        raise HTTPException(status_code=404, detail=f"Flip {flip_id} not found")
+
+    try:
+        # Get pricing
+        fees = await ebay_pricing.get_seller_fees()
+        pricing = ebay_pricing.calculate_pricing_tiers(
+            total_cost=flip.total_cost,
+            estimated_resale=flip.current_estimated_resale or flip.initial_estimated_resale,
+            insertion_fee=fees.get("insertion_fee", 0.30),
+            final_value_fee_pct=fees.get("final_value_fee_pct", 0.127),
+        )
+
+        # Get listing content (use existing generated or create new)
+        if flip.generated_title and flip.generated_description:
+            listing_content = {
+                "title": flip.generated_title,
+                "description": flip.generated_description,
+                "source": "saved",
+            }
+        else:
+            # Generate fresh if not saved
+            listing_content_data = await listing_generator.generate_full_listing(flip)
+            listing_content = {
+                "title": listing_content_data["recommended_title"],
+                "description": listing_content_data["description"],
+                "source": "generated",
+            }
+
+        return {
+            "flip_id": flip_id,
+            "title": listing_content["title"],
+            "description": listing_content["description"],
+            "listing_source": listing_content["source"],
+            "pricing": {
+                "listing_price": pricing["optimal_listing_price"],
+                "walk_away_price": pricing["walk_away_price"],
+                "estimated_profit": pricing["estimated_profit_at_optimal"],
+                "margin_pct": pricing["margin_pct"],
+                "insertion_fee": pricing["insertion_fee"],
+                "final_value_fee_pct": pricing["final_value_fee_pct"],
+            },
+            "images_available": bool(flip.generated_images_urls),
+            "ready_to_post": bool(flip.generated_title and flip.generated_description),
+        }
+
+    except Exception as e:
+        log.error("reselling.preview_failed", flip_id=flip_id, error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
