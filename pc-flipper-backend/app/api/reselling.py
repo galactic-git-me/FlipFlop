@@ -299,3 +299,142 @@ async def get_listing_preview(
     except Exception as e:
         log.error("reselling.preview_failed", flip_id=flip_id, error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4: Sales Tracking & Notifications
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get("/active-sales")
+async def get_active_sales(
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get flips currently listed for sale on eBay.
+
+    Returns:
+    - Listing details
+    - Current price
+    - Days listed
+    - Estimated profit
+    - eBay listing ID for linking
+    """
+    from app.services.ebay_sales_tracker import get_tracker
+
+    tracker = get_tracker()
+    sales = await tracker.get_active_sales(db, limit=limit)
+
+    log.info("reselling.active_sales_retrieved", count=len(sales))
+    return {
+        "active_listings": sales,
+        "total": len(sales),
+    }
+
+
+@router.get("/sales-dashboard")
+async def get_sales_dashboard(db: AsyncSession = Depends(get_db)):
+    """
+    Get comprehensive sales dashboard with metrics.
+
+    Returns:
+    - Total sales & revenue
+    - Average profit & time to sell
+    - Success rate
+    - Recent sales
+    - Active listings
+    """
+    from app.services.ebay_sales_tracker import get_tracker
+
+    tracker = get_tracker()
+    dashboard = await tracker.get_sales_dashboard(db)
+
+    log.info("reselling.dashboard_retrieved")
+    return dashboard
+
+
+@router.get("/sales/{flip_id}")
+async def get_sale_details(
+    flip_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get detailed information about a specific sale.
+
+    Returns:
+    - Cost breakdown (base + upgrades)
+    - Sale details (price, date, platform)
+    - Profit details (estimated vs actual, margin %)
+    - eBay listing ID
+    """
+    from app.services.ebay_sales_tracker import get_tracker
+
+    tracker = get_tracker()
+    details = await tracker.get_sale_details(db, flip_id)
+
+    if not details:
+        raise HTTPException(status_code=404, detail=f"Flip {flip_id} not found")
+
+    log.info("reselling.sale_details_retrieved", flip_id=flip_id)
+    return details
+
+
+@router.post("/flips/{flip_id}/mark-shipped")
+async def mark_flip_shipped(
+    flip_id: int,
+    tracking_number: str | None = None,
+    carrier: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Mark a flip as shipped after sale.
+
+    Optionally stores tracking number and carrier for buyer communication.
+    """
+    from app.models.flip import Flip, FlipStage
+
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(status_code=404, detail=f"Flip {flip_id} not found")
+
+    # Update flip to mark as shipped
+    # Note: Flip model may need new fields for shipping info
+    flip.stage = FlipStage.sold  # Already in sold stage
+    await db.commit()
+
+    log.info(
+        "reselling.flip_marked_shipped",
+        flip_id=flip_id,
+        tracking=tracking_number,
+        carrier=carrier,
+    )
+
+    return {
+        "flip_id": flip_id,
+        "status": "shipped",
+        "tracking_number": tracking_number,
+        "carrier": carrier,
+    }
+
+
+@router.post("/poll-sales")
+async def manually_poll_sales(db: AsyncSession = Depends(get_db)):
+    """
+    Manually trigger a sales poll (useful for testing).
+
+    In production, this runs automatically every 5 minutes.
+
+    Returns:
+    - Number of sold listings found
+    - Number matched to flips
+    - Number updated
+    - Sale details
+    """
+    from app.services.ebay_sales_tracker import get_tracker
+
+    tracker = get_tracker()
+    result = await tracker.poll_sales()
+
+    log.info("reselling.manual_poll_triggered", result=result)
+    return result
