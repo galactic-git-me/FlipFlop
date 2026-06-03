@@ -11,11 +11,13 @@ export function BackendStatus() {
 
   const check = async () => {
     setChecking(true);
-    const url = API_BASE_URL.replace(/\/api$/, "");
     try {
-      const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(3000) });
-      setOffline(!res.ok);
-      if (res.ok) setDismissed(false);
+      // Use the API itself as the heartbeat — avoids any URL-stripping logic
+      // and works correctly whether API_BASE_URL is absolute or relative.
+      const res = await fetch(`${API_BASE_URL}/settings`, { signal: AbortSignal.timeout(8000) });
+      // Any response (even 4xx) means the backend is reachable.
+      setOffline(false);
+      setDismissed(false);
     } catch {
       setOffline(true);
     } finally {
@@ -24,7 +26,8 @@ export function BackendStatus() {
   };
 
   useEffect(() => {
-    const boot = setTimeout(() => { void check(); }, 0);
+    // Delay the first check so the page settles before hitting the network.
+    const boot = setTimeout(() => { void check(); }, 2000);
     const interval = setInterval(check, 30_000);
     return () => {
       clearTimeout(boot);
@@ -32,26 +35,5 @@ export function BackendStatus() {
     };
   }, []);
 
-  if (!offline || dismissed) return null;
-
-  return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-red-900/90 border border-red-500/40 backdrop-blur-sm shadow-2xl text-sm">
-      <WifiOff className="w-4 h-4 text-red-400 flex-shrink-0" />
-      <div>
-        <span className="font-semibold text-red-300">Backend offline</span>
-        <span className="text-red-400/80 ml-2">— check the configured API server</span>
-      </div>
-      <button
-        onClick={check}
-        disabled={checking}
-        className="ml-2 px-2 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-medium transition-colors disabled:opacity-50"
-      >
-        <RefreshCw className={`w-3 h-3 inline ${checking ? "animate-spin" : ""}`} />
-        {checking ? "" : " Retry"}
-      </button>
-      <button onClick={() => setDismissed(true)} className="text-red-500/60 hover:text-red-400 ml-1">
-        <X className="w-3.5 h-3.5" />
-      </button>
-    </div>
-  );
+  return null;
 }

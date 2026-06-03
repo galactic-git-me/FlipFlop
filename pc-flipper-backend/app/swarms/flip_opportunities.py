@@ -474,7 +474,16 @@ async def _upsert_listings(
                 log.warning("listing.enrichment_error", source=raw.source_name, external_id=raw.external_id, error=str(exc))
                 return None
 
-    enriched = await asyncio.gather(*[_enrich_listing(raw) for raw in raw_listings], return_exceptions=False)
+    # Process in small chunks so the event loop stays responsive.
+    # Spawning hundreds of tasks at once (even behind a semaphore) overwhelms
+    # the event loop; chunking limits concurrent task creation.
+    _CHUNK = 8
+    enriched: list = []
+    for _i in range(0, len(raw_listings), _CHUNK):
+        _batch = raw_listings[_i:_i + _CHUNK]
+        _results = await asyncio.gather(*[_enrich_listing(r) for r in _batch], return_exceptions=False)
+        enriched.extend(_results)
+        await asyncio.sleep(0)   # yield to event loop between chunks
 
     for item in enriched:
         if not item:

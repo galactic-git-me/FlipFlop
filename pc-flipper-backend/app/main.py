@@ -1,6 +1,12 @@
 import structlog
 import asyncio
 import sys
+
+# Playwright requires ProactorEventLoop on Windows to launch browser subprocesses.
+# Must be set before any asyncio usage.
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+
 from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI
@@ -12,7 +18,7 @@ from app import models as _models  # noqa: F401  Ensures all ORM models are regi
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
-from app.api import alerts
+from app.api import alerts, reselling
 from app.api import ebay_compliance
 from app.api import preflight
 from app.api.build_wizard import router as build_wizard_router
@@ -20,6 +26,7 @@ from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
+from app.services.listing_ingest_queue import start_workers, stop_workers as stop_ingest_workers
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -208,7 +215,8 @@ def _infer_case_attributes(term: str, group_name: str) -> dict:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     install_log_capture()          # must be first — before any structlog usage
-    log.info("app.startup")
+    loop = asyncio.get_running_loop()
+    log.info("app.startup", event_loop_type=type(loop).__name__)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     await _migrate_add_columns()
@@ -218,10 +226,12 @@ async def lifespan(app: FastAPI):
         log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
     # Run preflight asynchronously so API stays responsive while challenge tabs open.
     asyncio.create_task(run_antibot_preflight())
+    start_workers(n=4)
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     yield
     stop_scheduler()
+    await stop_ingest_workers()
     await engine.dispose()
     log.info("app.shutdown")
 
@@ -274,7 +284,16 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
+# Chrome Private Network Access: allow pages on localhost:XXXX to fetch
+# from localhost:YYYY without being blocked by the PNA preflight check.
+@app.middleware("http")
+async def private_network_access(request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    return response
 
 app.include_router(listings.router, prefix="/api")
 app.include_router(flips.router, prefix="/api")
@@ -296,6 +315,7 @@ app.include_router(source_search_terms.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
+app.include_router(reselling.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
 

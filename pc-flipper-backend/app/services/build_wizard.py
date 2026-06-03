@@ -21,6 +21,10 @@ from dataclasses import dataclass, field, asdict
 from typing import Literal
 
 import structlog
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import AsyncSessionLocal
+from app.models.part import Part, PartCategory
 from app.services.compatibility_engine import evaluate_build_compatibility
 
 log = structlog.get_logger(__name__)
@@ -73,6 +77,9 @@ class Build:
     rank: int = 0
     owned_components_applied: list[str] = field(default_factory=list)
     owned_value_offset: float = 0.0
+    # Visualization metadata
+    risk_score: float = 5.0         # 0–10 (0=safest, 10=riskiest) for scatter graph
+    demand_score: float = 5.0       # 0–10 (demand signal)
 
 
 @dataclass
@@ -130,6 +137,52 @@ async def wizard_agent(
     )
 
 
+async def _fetch_available_components(budget_remaining: float) -> dict[str, list[dict]]:
+    """
+    Query the Parts library for available CPUs, motherboards, GPUs, RAM, SSDs, PSUs within budget.
+    Returns dict: category → list of available parts with prices.
+    """
+    async with AsyncSessionLocal() as db:
+        components = {
+            "cpu": [],
+            "motherboard": [],
+            "gpu": [],
+            "ram": [],
+            "ssd": [],
+            "psu": [],
+            "case": [],
+        }
+
+        categories = [PartCategory.cpu, PartCategory.motherboard, PartCategory.gpu,
+                     PartCategory.ram, PartCategory.ssd, PartCategory.psu, PartCategory.case]
+
+        for category in categories:
+            query = select(Part).where(
+                Part.category == category,
+                Part.is_active == True,
+                Part.price <= budget_remaining
+            ).order_by(Part.price.asc()).limit(5)  # Top 5 cheapest in each category
+
+            result = await db.execute(query)
+            parts = result.scalars().all()
+
+            components[category.value] = [
+                {
+                    "id": p.id,
+                    "name": p.name,
+                    "brand": p.brand,
+                    "model": p.model,
+                    "specs": p.specs,
+                    "price": p.price,
+                    "source": p.source_site,
+                    "url": p.source_url,
+                }
+                for p in parts
+            ]
+
+        return components
+
+
 def _apply_owned_components(builds: list[Build], owned_components: list[dict]) -> None:
     """
     If user already owns components, do not count those upgrade costs again.
@@ -164,12 +217,24 @@ def _apply_owned_components(builds: list[Build], owned_components: list[dict]) -
 async def composer_agent(intent: RefinedIntent, playbook: dict, attempt: int = 1) -> list[Build]:
     """
     Generates 5 candidate builds.
-    Uses AI to ground builds in real parts prices and market conditions.
+    Uses AI to ground builds in real parts prices from the components library.
+    Considers both base listings + real available upgrades from the parts database.
     """
     from app.services.ai_service import chat as ai_chat
 
     upgrade_strategy = playbook.get("upgrade_strategy", {})
     profit_strategy  = playbook.get("profit_strategy", {})
+
+    # Fetch real available components from Parts library
+    available_components = await _fetch_available_components(intent.budget_max * 0.6)  # Reserve 40% for base unit
+
+    # Format components for the prompt
+    components_context = "AVAILABLE COMPONENTS FROM LIBRARY (real market prices):\n"
+    for category, parts in available_components.items():
+        if parts:
+            components_context += f"\n{category.upper()} options:\n"
+            for p in parts[:3]:  # Show top 3 in each category
+                components_context += f"  - {p['name']} ({p['brand']} {p['model']}) - £{p['price']} from {p['source']}\n"
 
     prompt = f"""You are the Composer agent in a PC-flipping build wizard.
 
@@ -183,11 +248,18 @@ User notes: {intent.user_notes or 'none'}
 Playbook upgrade requirements: {json.dumps(upgrade_strategy)}
 Playbook profit strategy: {json.dumps(profit_strategy)}
 
+{components_context}
+
 {_MARKET_CONTEXT}
 
 Generate EXACTLY 5 distinct PC-flip builds that fit this playbook and budget.
+IMPORTANT: Use REAL components from the library above when composing upgrades.
+You can combine: a base listing + real upgrade components from the library.
+You can also recommend CPUs and motherboards as SEPARATE upgrade components if needed.
+
 Each build must be a real, practical flip — not theoretical.
 Make them DIFFERENT from each other: vary the base PC, GPU tier, risk level.
+Include risk_score (0=safest, 10=riskiest) and demand_score (0=low, 10=excellent).
 
 {"This is attempt " + str(attempt) + " of 3 — make builds more conservative and achievable." if attempt > 1 else ""}
 
@@ -202,14 +274,17 @@ Respond with ONLY valid JSON. No explanation outside the JSON.
       "base_cost": 85,
       "upgrades": [
         {{"role": "gpu", "item": "RTX 3060 12GB", "cost_estimate": 170, "source": "eBay used", "required": true}},
-        {{"role": "storage", "item": "500GB NVMe SSD", "cost_estimate": 25, "source": "Amazon", "required": false}}
+        {{"role": "cpu", "item": "Intel Core i7-9700K", "cost_estimate": 120, "source": "Parts library", "required": false}},
+        {{"role": "storage", "item": "500GB NVMe SSD", "cost_estimate": 25, "source": "Parts library", "required": false}}
       ],
       "total_cost": 280,
       "estimated_resale": 420,
       "estimated_profit": 140,
       "profit_margin_pct": 33,
       "risk": "low",
+      "risk_score": 3,
       "demand_fit": "excellent",
+      "demand_score": 9,
       "why": "One sentence on why this is a good flip",
       "sell_platform": "eBay",
       "sell_price_target": 420
@@ -260,7 +335,9 @@ def _parse_builds_json(response: str) -> list[Build]:
             estimated_profit=float(b.get("estimated_profit", 0)),
             profit_margin_pct=float(b.get("profit_margin_pct", 0)),
             risk=b.get("risk", "medium"),
+            risk_score=float(b.get("risk_score", 5.0)),
             demand_fit=b.get("demand_fit", "good"),
+            demand_score=float(b.get("demand_score", 5.0)),
             why=b.get("why", ""),
             sell_platform=b.get("sell_platform", "eBay"),
             sell_price_target=float(b.get("sell_price_target", 0)),

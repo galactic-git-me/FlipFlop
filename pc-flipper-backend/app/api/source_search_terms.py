@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy import select, distinct
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,6 +10,12 @@ from app.schemas.source_search_term import (
     SourceSearchTermUpdate,
     SourceSearchTermOut,
 )
+
+
+class ListTermsResponse(BaseModel):
+    items: list[SourceSearchTermOut]
+    groups: list[str]
+    scopes: list[str]
 
 router = APIRouter(prefix="/source-search-terms", tags=["source-search-terms"])
 

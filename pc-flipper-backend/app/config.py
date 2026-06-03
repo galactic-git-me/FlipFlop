@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     # Public HTTPS callback URL that eBay is configured to call for deletion notifications.
     # Example: https://your-domain.tld/api/ebay/marketplace-account-deletion
     ebay_notification_endpoint: str = ""
+    ebay_reselling_enabled: bool = True
+    ebay_message_poll_interval_seconds: int = 300
+    ebay_sales_poll_interval_seconds: int = 1800
+    ebay_walkaway_margin_pct: float = 0.15
+    flipflop_logo_path: str = "public/flipflop-logo.png"
     merkandi_api_key: str = ""
 
     stability_api_key: str = ""
@@ -58,6 +63,7 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = (".env.local", ".env")
+        extra = "ignore"
 
 
 @lru_cache

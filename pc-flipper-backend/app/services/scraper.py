@@ -117,6 +117,8 @@ class RawListing:
     seller_has_shop: bool = False
     # When the listing was originally posted by the seller
     listed_at: Optional[datetime] = None
+    # Search term that retrieved this listing (for demand score annotation)
+    found_via_term: str = ""
 
 
 # ── Seller classification heuristics ─────────────────────────────────────────
@@ -299,6 +301,7 @@ def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> lis
                 source_name=source_name,
                 source_confidence="official_api",
                 listing_type=listing_type,
+                found_via_term=term,
             )
         )
     return out
@@ -904,6 +907,7 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
                 seller_type=seller_type,
                 seller_has_shop=seller_has_shop,
                 listed_at=listed_at,
+                found_via_term=term,
             ))
         except Exception:
             continue
@@ -957,13 +961,13 @@ async def scrape_gumtree(search_terms: list[str], max_price: float) -> list[RawL
                           f"(status={resp.status_code}, body_len={len(resp.text)}). "
                           "Skipping — Gumtree requires a headless browser.")
                     continue
-                results.extend(_parse_gumtree_html(resp.text))
+                results.extend(_parse_gumtree_html(resp.text, term))
             except Exception as exc:
                 print(f"[scraper] Gumtree error for {term!r}: {exc}")
     return results
 
 
-def _parse_gumtree_html(html: str) -> list[RawListing]:
+def _parse_gumtree_html(html: str, term: str = "") -> list[RawListing]:
     soup = BeautifulSoup(html, "lxml")
     listings = []
 
@@ -1007,6 +1011,7 @@ def _parse_gumtree_html(html: str) -> list[RawListing]:
                     description="",
                     image_urls=[image_url] if image_url else [],
                     source_name="Gumtree",
+                    found_via_term=term,
                 ))
             except Exception:
                 continue
@@ -1070,6 +1075,7 @@ def _parse_gumtree_html(html: str) -> list[RawListing]:
                 description="",
                 image_urls=[image_url] if image_url else [],
                 source_name="Gumtree",
+                found_via_term=term,
             ))
         except Exception:
             continue
@@ -1119,7 +1125,7 @@ async def scrape_preloved(search_terms: list[str], min_price: float, max_price: 
                     print(f"[scraper] Preloved: no usable response for {term!r}, skipping")
                     continue
 
-                listings = _parse_preloved_html(resp.text)
+                listings = _parse_preloved_html(resp.text, term)
                 added = 0
                 for l in listings:
                     if l.external_id not in seen:
@@ -1135,7 +1141,7 @@ async def scrape_preloved(search_terms: list[str], min_price: float, max_price: 
     return results
 
 
-def _parse_preloved_html(html: str) -> list[RawListing]:
+def _parse_preloved_html(html: str, term: str = "") -> list[RawListing]:
     soup = BeautifulSoup(html, "lxml")
     listings = []
 
@@ -1180,6 +1186,7 @@ def _parse_preloved_html(html: str) -> list[RawListing]:
                     description="",
                     image_urls=[],
                     source_name="Preloved",
+                    found_via_term=term,
                 ))
             except Exception:
                 continue
@@ -1243,6 +1250,7 @@ def _parse_preloved_html(html: str) -> list[RawListing]:
                 description="",
                 image_urls=[image_url] if image_url else [],
                 source_name="Preloved",
+                found_via_term=term,
             ))
         except Exception:
             continue

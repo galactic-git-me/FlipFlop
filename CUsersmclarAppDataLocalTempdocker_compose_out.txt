@@ -1,0 +1,185 @@
+ Image flipflop-backend Building 
+ Image flipflop-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.03kB 0.0s done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 30B 0.1s
+#2 ...
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 576B 0.1s done
+#3 DONE 0.3s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.19kB 0.1s done
+#2 DONE 0.4s
+
+#4 [backend internal] load metadata for docker.io/library/python:3.12-slim
+#4 ...
+
+#5 [auth] library/python:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#6 [auth] library/node:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#7 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#7 DONE 2.7s
+
+#4 [backend internal] load metadata for docker.io/library/python:3.12-slim
+#4 DONE 2.7s
+
+#8 [backend internal] load .dockerignore
+#8 transferring context: 0.1s
+#8 transferring context: 2B 0.1s done
+#8 DONE 0.2s
+
+#9 [frontend internal] load .dockerignore
+#9 transferring context: 2B 0.0s done
+#9 DONE 0.3s
+
+#10 [frontend internal] load build context
+#10 DONE 0.0s
+
+#11 [frontend deps 1/4] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#11 ...
+
+#12 [backend 1/6] FROM docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203
+#12 resolve docker.io/library/python:3.12-slim@sha256:090ba77e2958f6af52a5341f788b50b032dd4ca28377d2893dcf1ecbdfdfe203 0.8s done
+#12 DONE 0.9s
+
+#13 [backend 2/6] WORKDIR /app
+#13 CACHED
+
+#14 [backend 3/6] RUN apt-get update && apt-get install -y --no-install-recommends     build-essential     curl     ca-certificates     libnss3     libnspr4     libatk1.0-0     libatk-bridge2.0-0     libcups2     libdrm2     libxkbcommon0     libxcomposite1     libxdamage1     libxfixes3     libxrandr2     libgbm1     libasound2     libatspi2.0-0     libwayland-client0     libwayland-cursor0     libwayland-egl1     libx11-6     libxcb1     libxext6     libxrender1     libxshmfence1     libxss1     libxtst6     fonts-liberation     && rm -rf /var/lib/apt/lists/*
+#14 CACHED
+
+#11 [frontend deps 1/4] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.8s done
+#11 DONE 0.9s
+
+#15 [backend internal] load build context
+#15 ...
+
+#16 [frontend deps 2/4] WORKDIR /app
+#16 CACHED
+
+#15 [backend internal] load build context
+#15 transferring context: 12.10MB 4.2s
+#15 transferring context: 27.42MB 9.4s
+#15 ...
+
+#10 [frontend internal] load build context
+#10 ...
+
+#15 [backend internal] load build context
+#15 transferring context: 48.83MB 14.4s
+#15 transferring context: 65.63MB 19.5s
+#15 ...
+
+#10 [frontend internal] load build context
+#10 transferring context: 6.24MB 18.5s done
+#10 ...
+
+#15 [backend internal] load build context
+#15 ...
+
+#10 [frontend internal] load build context
+#10 DONE 20.5s
+
+#15 [backend internal] load build context
+#15 ...
+
+#17 [frontend deps 3/4] COPY package*.json ./
+#17 CACHED
+
+#18 [frontend deps 4/4] RUN npm ci
+#18 CACHED
+
+#15 [backend internal] load build context
+#15 transferring context: 77.80MB 24.1s
+#15 transferring context: 102.16MB 29.2s
+#15 ...
+
+#19 [frontend builder 3/5] COPY --from=deps /app/node_modules ./node_modules
+#19 ...
+
+#15 [backend internal] load build context
+#15 transferring context: 147.69MB 34.2s
+#15 transferring context: 186.85MB 39.3s
+#15 transferring context: 216.76MB 44.3s
+#15 transferring context: 239.78MB 49.3s
+#15 transferring context: 263.03MB 54.3s
+#15 transferring context: 305.32MB 59.5s
+#15 transferring context: 342.19MB 64.7s
+#15 transferring context: 368.56MB 69.7s
+#15 transferring context: 400.70MB 74.8s
+#15 transferring context: 430.19MB 80.0s
+#15 transferring context: 472.14MB 85.2s
+#15 transferring context: 504.51MB 90.3s
+#15 transferring context: 539.01MB 95.4s
+#15 transferring context: 571.22MB 100.5s
+#15 transferring context: 595.09MB 105.6s
+#15 transferring context: 623.92MB 110.7s
+#15 transferring context: 657.60MB 115.7s
+#15 transferring context: 693.58MB 120.8s
+#15 transferring context: 732.71MB 125.9s
+#15 transferring context: 765.04MB 131.1s
+#15 transferring context: 797.84MB 136.2s
+#15 transferring context: 829.13MB 141.3s
+#15 transferring context: 872.88MB 146.4s
+#15 transferring context: 909.28MB 151.6s
+#15 transferring context: 943.16MB 156.6s
+#15 transferring context: 976.61MB 161.7s
+#15 ...
+
+#19 [frontend builder 3/5] COPY --from=deps /app/node_modules ./node_modules
+#19 DONE 141.0s
+
+#15 [backend internal] load build context
+#15 transferring context: 1.01GB 166.7s
+#15 transferring context: 1.03GB 171.7s
+#15 ...
+
+#20 [frontend builder 4/5] COPY . .
+#20 ...
+
+#15 [backend internal] load build context
+#15 transferring context: 1.06GB 176.7s
+#15 transferring context: 1.10GB 181.8s
+#15 transferring context: 1.14GB 186.8s
+#15 transferring context: 1.18GB 191.9s
+#15 transferring context: 1.22GB 197.0s
+#15 transferring context: 1.25GB 202.0s
+#15 transferring context: 1.29GB 207.1s
+#15 transferring context: 1.34GB 212.2s
+#15 transferring context: 1.37GB 217.2s
+#15 transferring context: 1.41GB 222.3s
+#15 transferring context: 1.44GB 227.4s
+#15 transferring context: 1.48GB 232.4s
+#15 transferring context: 1.52GB 237.5s
+#15 transferring context: 1.55GB 242.6s
+#15 transferring context: 1.59GB 247.6s
+#15 transferring context: 1.63GB 252.6s
+#15 transferring context: 1.66GB 257.7s
+#15 transferring context: 1.70GB 262.8s
+#15 transferring context: 1.73GB 267.9s
+#15 transferring context: 1.77GB 272.9s
+#15 transferring context: 1.80GB 278.0s
+#15 transferring context: 1.82GB 279.2s done
+#15 ERROR: error from sender: open C:\Users\mclar\CODING\FlipFlop\pc-flipper-backend\.venv\lib64: The file cannot be accessed by the system.
+
+#20 [frontend builder 4/5] COPY . .
+#20 CANCELED
+------
+ > [backend internal] load build context:
+------
+target backend: failed to solve: error from sender: open C:\Users\mclar\CODING\FlipFlop\pc-flipper-backend\.venv\lib64: The file cannot be accessed by the system.
+
+
+
+View build details: docker-desktop://dashboard/build/default/default/yf5pil10yppjoly1pou6fdrmx
+

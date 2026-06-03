@@ -46,6 +46,9 @@ class ListingOut(BaseModel):
     seller_type: Optional[str]           # shop | refurb_shop | flipper | private
     seller_has_shop: bool
     listed_at: Optional[datetime]        # when the seller originally posted this
+    # Demand intelligence — from the search term that found this listing
+    demand_score: Optional[float]        # 0-10 demand score of the search term
+    found_via_term: Optional[str]        # the search term text
     status: ListingStatus
     first_seen_at: datetime
     last_seen_at: datetime

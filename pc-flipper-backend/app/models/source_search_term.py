@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import String, Integer, Boolean, DateTime, JSON, Text
+from typing import Optional
+from sqlalchemy import String, Integer, Boolean, DateTime, JSON, Text, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -16,3 +17,12 @@ class SourceSearchTerm(Base):
     notes: Mapped[str | None] = mapped_column(Text)
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    # Demand intelligence
+    demand_score: Mapped[float] = mapped_column(Float, default=5.0)
+    # Baseline terms are anchors — never auto-disabled regardless of zero results
+    is_baseline: Mapped[bool] = mapped_column(Boolean, default=False)
+    # How many consecutive scrape runs returned zero results
+    zero_results_streak: Mapped[int] = mapped_column(Integer, default=0)
+    # Last time this term found at least one result
+    last_result_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)

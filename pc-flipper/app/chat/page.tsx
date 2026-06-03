@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { api, WizardPlaybook, WizardBuild, RefinedIntent, PurchasePlan, PlanStep } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { BuildScatterGraph } from "@/components/build-scatter-graph";
 
 // ─── Phase definitions ────────────────────────────────────────────────────────
 
@@ -805,7 +806,7 @@ function BuildWizardPageContent() {
 
           {/* ── Phase 4: Builds ── */}
           {phase === "builds" && result && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-slate-100">
@@ -821,6 +822,18 @@ function BuildWizardPageContent() {
                   Budget: £{budget}
                 </span>
               </div>
+
+              {/* Scatter Graph */}
+              {result.builds.length > 0 && (
+                <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl p-4">
+                  <BuildScatterGraph
+                    builds={result.builds}
+                    selectedBuild={selectedBuild}
+                    onSelectBuild={setSelectedBuild}
+                  />
+                </div>
+              )}
+
               <div className="space-y-3">
                 {result.builds.map(b => (
                   <BuildCard

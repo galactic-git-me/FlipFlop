@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from typing import Any
 
 import structlog
-from sqlalchemy import and_, select
+from sqlalchemy import and_, select, update
 
 from app.database import AsyncSessionLocal
 from app.models.flip import Flip, FlipStage
 from app.models.playbook import Playbook, PlaybookProposal
+from app.models.source_search_term import SourceSearchTerm
 from app.services.alerts import emit_alert
 from app.services.demand_service import compute_demand
 from app.services.external_demand import latest_external_signal_snapshot
@@ -349,7 +351,13 @@ async def run_playbook_evolution() -> dict:
 
         await db.commit()
 
-    log.info("playbook_evolution.done", proposals_created=proposals_created, sold_flips=len(sold_flips))
+    # Sync search terms from demand data
+    terms_result = await _sync_search_terms(external, demand_categories)
+    log.info("playbook_evolution.done",
+             proposals_created=proposals_created,
+             sold_flips=len(sold_flips),
+             terms_upserted=terms_result.get("upserted", 0),
+             terms_disabled=terms_result.get("disabled", 0))
     if proposals_created > 0:
         try:
             await emit_alert(
@@ -364,3 +372,185 @@ async def run_playbook_evolution() -> dict:
         except Exception as exc:
             log.warning("playbook_evolution.alert_emit_error", error=str(exc))
     return {"ok": True, "proposals_created": proposals_created, "sold_flips": len(sold_flips)}
+
+
+# ─── Baseline search terms ────────────────────────────────────────────────────
+# These always exist, are never auto-disabled, and get a fixed demand score of 5.
+# They ensure broad coverage even when demand signals are thin.
+
+_BASELINE_TERMS: dict[str, list[dict]] = {
+    "flip_opportunities": [
+        {"term": "gaming PC",              "group": "core"},
+        {"term": "gaming pc fault",        "group": "core"},
+        {"term": "gaming pc untested",     "group": "core"},
+        {"term": "gaming pc no gpu",       "group": "core"},
+        {"term": "pc tower",               "group": "core"},
+        {"term": "desktop pc",             "group": "core"},
+        {"term": "desktop pcs lot",        "group": "core"},
+        {"term": "Dell OptiPlex",          "group": "office_fleet"},
+        {"term": "HP EliteDesk",           "group": "office_fleet"},
+        {"term": "HP workstation",         "group": "office_fleet"},
+        {"term": "Ryzen 5 5600",           "group": "components"},
+        {"term": "Ryzen 7 5700X",          "group": "components"},
+    ],
+    "cases": [
+        {"term": "atx pc case",            "group": "generic"},
+        {"term": "midi tower case",        "group": "generic"},
+        {"term": "gaming case",            "group": "generic"},
+        {"term": "rgb pc case",            "group": "generic"},
+        {"term": "mesh airflow case",      "group": "generic"},
+        {"term": "tempered glass case",    "group": "generic"},
+        {"term": "white pc case",          "group": "generic"},
+        {"term": "black pc case",          "group": "generic"},
+    ],
+    "accessories": [
+        {"term": "gaming keyboard",        "group": "peripherals"},
+        {"term": "gaming mouse",           "group": "peripherals"},
+        {"term": "gaming headset",         "group": "peripherals"},
+        {"term": "gaming controller",      "group": "peripherals"},
+        {"term": "gaming monitor",         "group": "peripherals"},
+    ],
+    "upgrade_parts": [
+        {"term": "RTX 3060",               "group": "gpu"},
+        {"term": "RTX 3070",               "group": "gpu"},
+        {"term": "DDR4 RAM 16GB",          "group": "ram"},
+        {"term": "DDR4 RAM 32GB",          "group": "ram"},
+        {"term": "NVMe SSD 1TB",           "group": "storage"},
+        {"term": "AMD Ryzen 5 5600",       "group": "cpu"},
+        {"term": "AMD Ryzen 7 5700X",      "group": "cpu"},
+    ],
+}
+
+# Demand signal → additional search terms with score mapping.
+# Keys are Google Trends query names; value = list of terms to upsert if score > threshold.
+_DEMAND_TERM_RULES: list[dict] = [
+    # Cases — driven by trending styles
+    {"query": "panoramic case",      "scope": "cases", "group": "trending", "threshold": 2.0,
+     "terms": ["panoramic pc case", "wraparound glass case", "fish tank pc case"]},
+    {"query": "white pc build",      "scope": "cases", "group": "trending", "threshold": 2.0,
+     "terms": ["white gaming case", "white airflow case", "white rgb case", "snow white pc case"]},
+    {"query": "cyberpunk pc",        "scope": "cases", "group": "trending", "threshold": 2.0,
+     "terms": ["cyberpunk pc case", "rgb cyberpunk case", "neon gaming case"]},
+    {"query": "mini itx build",      "scope": "cases", "group": "trending", "threshold": 2.0,
+     "terms": ["sff gaming case", "mini itx case", "compact gaming case"]},
+    {"query": "streaming setup",     "scope": "cases", "group": "trending", "threshold": 2.0,
+     "terms": ["streamer pc case", "content creator pc case", "streaming rgb setup"]},
+    # Accessories
+    {"query": "gaming keyboard",     "scope": "accessories", "group": "trending", "threshold": 3.0,
+     "terms": ["mechanical gaming keyboard", "rgb gaming keyboard", "wireless gaming keyboard"]},
+    {"query": "gaming monitor",      "scope": "accessories", "group": "trending", "threshold": 3.0,
+     "terms": ["24 inch gaming monitor", "27 inch gaming monitor", "144hz monitor"]},
+    # Flip opportunities
+    {"query": "ai pc",               "scope": "flip_opportunities", "group": "ai", "threshold": 5.0,
+     "terms": ["ai workstation pc", "local llm pc", "ml workstation"]},
+    {"query": "budget gaming pc",    "scope": "flip_opportunities", "group": "budget", "threshold": 2.0,
+     "terms": ["cheap gaming pc", "budget gaming desktop", "entry level gaming pc"]},
+    # Upgrade parts
+    {"query": "rtx 4060",            "scope": "upgrade_parts", "group": "gpu", "threshold": 3.0,
+     "terms": ["RTX 4060", "RTX 4060 Ti"]},
+    {"query": "rtx 4070",            "scope": "upgrade_parts", "group": "gpu", "threshold": 3.0,
+     "terms": ["RTX 4070", "RTX 4070 Super"]},
+]
+
+_ZERO_RESULTS_DISABLE_THRESHOLD = 5  # disable after this many consecutive zero-result runs
+
+
+async def _sync_search_terms(external: dict, demand_categories: list) -> dict:
+    """
+    Upsert baseline and demand-driven search terms.
+    - Baselines: always present, never disabled, demand_score = 5.0
+    - Demand terms: upserted when Google Trends score exceeds threshold,
+      score = normalised trend score (0-10)
+    - Terms with zero_results_streak >= threshold and is_baseline=False are disabled
+    """
+    signal_map = _latest_query_signal_map(external)
+    upserted = 0
+    disabled = 0
+
+    all_sources = [
+        "eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions",
+        "Amazon", "Gumtree", "Temu", "AliExpress", "Alibaba",
+        "BargainHardware", "CherryTree Inc", "Preloved",
+    ]
+
+    async with AsyncSessionLocal() as db:
+        # ── 1. Upsert baselines ───────────────────────────────────────────────
+        for scope, terms in _BASELINE_TERMS.items():
+            for entry in terms:
+                term_text = entry["term"]
+                result = await db.execute(
+                    select(SourceSearchTerm).where(
+                        SourceSearchTerm.scope == scope,
+                        SourceSearchTerm.term == term_text,
+                    )
+                )
+                row = result.scalar_one_or_none()
+                if row is None:
+                    db.add(SourceSearchTerm(
+                        scope=scope,
+                        group_name=entry.get("group", "baseline"),
+                        term=term_text,
+                        source_names=all_sources,
+                        notes="auto_baseline",
+                        enabled=True,
+                        is_baseline=True,
+                        demand_score=5.0,
+                    ))
+                    upserted += 1
+                else:
+                    row.is_baseline = True
+                    row.enabled = True
+                    if row.demand_score == 0.0:
+                        row.demand_score = 5.0
+
+        # ── 2. Upsert demand-driven terms ─────────────────────────────────────
+        for rule in _DEMAND_TERM_RULES:
+            raw_score = _score_for(signal_map, rule["query"])
+            if raw_score < rule["threshold"]:
+                continue
+            # Normalise to 0-10 (scores rarely exceed 10 from our signal source)
+            demand_score = min(10.0, round(raw_score, 1))
+            for term_text in rule["terms"]:
+                result = await db.execute(
+                    select(SourceSearchTerm).where(
+                        SourceSearchTerm.scope == rule["scope"],
+                        SourceSearchTerm.term == term_text,
+                    )
+                )
+                row = result.scalar_one_or_none()
+                if row is None:
+                    db.add(SourceSearchTerm(
+                        scope=rule["scope"],
+                        group_name=rule.get("group", "demand"),
+                        term=term_text,
+                        source_names=all_sources,
+                        notes=f"demand_driven|query={rule['query']}|score={demand_score}",
+                        enabled=True,
+                        is_baseline=False,
+                        demand_score=demand_score,
+                    ))
+                    upserted += 1
+                else:
+                    row.demand_score = demand_score
+                    row.enabled = True
+                    row.zero_results_streak = 0
+
+        # ── 3. Auto-disable dead terms ─────────────────────────────────────────
+        dead_result = await db.execute(
+            select(SourceSearchTerm).where(
+                SourceSearchTerm.is_baseline == False,  # noqa: E712
+                SourceSearchTerm.enabled == True,       # noqa: E712
+                SourceSearchTerm.zero_results_streak >= _ZERO_RESULTS_DISABLE_THRESHOLD,
+            )
+        )
+        for dead in dead_result.scalars().all():
+            dead.enabled = False
+            disabled += 1
+            log.info("search_term.auto_disabled",
+                     term=dead.term, scope=dead.scope,
+                     streak=dead.zero_results_streak)
+
+        await db.commit()
+
+    log.info("search_terms.synced", upserted=upserted, disabled=disabled)
+    return {"upserted": upserted, "disabled": disabled}

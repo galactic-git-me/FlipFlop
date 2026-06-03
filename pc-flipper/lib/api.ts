@@ -39,7 +39,9 @@ export interface WizardBuild {
   estimated_profit: number;
   profit_margin_pct: number;
   risk: "low" | "medium" | "high";
+  risk_score?: number; // 0-10 for scatter graph visualization
   demand_fit: "excellent" | "good" | "moderate" | "poor";
+  demand_score?: number; // 0-10 for scatter graph visualization
   why: string;
   sell_platform: string;
   sell_price_target: number;
@@ -441,5 +443,51 @@ export const api = {
       request<{ window_days: number; variants: Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number; sample_quality: "low" | "medium" | "high" }> }>(
         `/playbooks/experiments/attribution${window_days ? `?window_days=${window_days}` : ""}`,
       ),
+  },
+
+  reselling: {
+    getSellerFees: () => request<{
+      insertion_fee: number;
+      final_value_fee_pct: number;
+      category: string;
+      seller_tier: string;
+      last_updated: string;
+      expires_at: number;
+    }>("/reselling/seller-fees"),
+
+    analyzePricing: (flipId: number) => request<{
+      flip_id: number;
+      total_cost: number;
+      estimated_resale: number;
+      seller_fees: {
+        insertion_fee: number;
+        final_value_fee_pct: number;
+        seller_tier: string;
+        last_updated: string;
+      };
+      pricing_tiers: {
+        walk_away_price: number;
+        total_cost_position: number;
+        optimal_listing_price: number;
+        estimated_profit_at_optimal: number;
+        breakeven_price: number;
+        margin_pct: number;
+        insertion_fee: number;
+        final_value_fee_pct: number;
+        final_value_fee_at_optimal: number;
+        net_proceeds_at_optimal: number;
+      };
+      analysis_timestamp: string;
+    }>(`/reselling/flips/${flipId}/pricing-analysis`, { method: "POST" }),
+
+    getPricingSummary: (flipId: number) => request<{
+      flip_id: number;
+      total_cost: number;
+      estimated_resale: number;
+      walk_away_price: number;
+      optimal_listing_price: number;
+      estimated_profit: number;
+      margin_pct: number;
+    }>(`/reselling/flips/${flipId}/pricing-summary`),
   },
 };

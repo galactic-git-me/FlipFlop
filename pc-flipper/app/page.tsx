@@ -208,9 +208,15 @@ export default function DashboardPage() {
     } catch {
       // API offline — show empty state
     } finally {
-      setLoadProgress(100);
-      setTimeout(() => setLoadProgress(0), 200);
-      setLoading(false);
+      // Ensure the progress bar is visible for at least 1.5 s so it doesn't
+      // flash and vanish when all calls fail fast (e.g. 500 errors).
+      const elapsed = Date.now() - loadingStartedAt;
+      const remaining = Math.max(0, 1500 - elapsed);
+      setTimeout(() => {
+        setLoadProgress(100);
+        setTimeout(() => setLoadProgress(0), 400);
+        setLoading(false);
+      }, remaining);
     }
   };
 

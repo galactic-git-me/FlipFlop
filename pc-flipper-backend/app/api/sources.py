@@ -7,6 +7,11 @@ from app.models.source import DataSource
 from app.schemas.source import DataSourceOut, DataSourceCreate, DataSourceUpdate
 from app.services.source_health import compute_health_score
 
+# Only ONE source scrape runs at a time.  Playwright-backed sources each spin up
+# a Chrome process; running them concurrently exhausts memory and crashes the
+# backend (EOF on the Playwright stdio pipe).
+_SOURCE_SCRAPE_SEM = asyncio.Semaphore(1)
+
 router = APIRouter(prefix="/sources", tags=["sources"])
 
 
@@ -83,23 +88,25 @@ async def scrape_source(
 
 async def _scrape_source_bg(source_id: int):
     """Run a full flip-opportunities scan filtered to a single source."""
+    await _SOURCE_SCRAPE_SEM.acquire()
+    try:
+        await _do_scrape(source_id)
+    finally:
+        _SOURCE_SCRAPE_SEM.release()
+
+
+async def _do_scrape(source_id: int):
     import structlog
     from datetime import datetime
     from sqlalchemy import select, update
     from app.models.search_config import SearchConfig
     from app.services.scraper import fetch_listings
-    from app.services.spec_parser import parse_specs
-    from app.services.classifier import score_listing
-    from app.services.estimator import estimate_upgrade_cost, estimate_profit
-    from app.services.resale_scraper import get_resale_range, clear_cache
-    from app.models.listing import Listing, ListingStatus, Classification
+    from app.services.resale_scraper import clear_cache
     from app.services import scan_state
     from app.services.search_telemetry import begin_source_run, end_source_run
-    from app.config import get_settings
+    from app.services.listing_ingest_queue import enqueue_nowait, IngestItem
 
     log = structlog.get_logger(__name__)
-    settings = get_settings()
-    enrich_concurrency = max(1, min(24, int(getattr(settings, "max_concurrent_scrapers", 8) or 8)))
 
     async with AsyncSessionLocal() as db:
         source = await db.get(DataSource, source_id)
@@ -127,110 +134,33 @@ async def _scrape_source_bg(source_id: int):
             max_price=config.max_price,
         )
 
-        async with AsyncSessionLocal() as db:
-            _MINI_PC_KW = {
-                "mini pc", "mini-pc", "intel nuc", " nuc ", "nuc pc",
-                "beelink", "minisforum", "gmktec", "trigkey", "geekom",
-                "stick pc", "tiny pc", "mini computer",
-            }
-            new_gems = 0
-            sem = asyncio.Semaphore(enrich_concurrency)
-
-            async def _enrich_listing(raw):
-                async with sem:
-                    try:
-                        if any(kw in raw.title.lower() for kw in _MINI_PC_KW):
-                            return None
-                        specs = parse_specs(raw.title, raw.description)
-                        resale_range = await get_resale_range(
-                            specs.cpu, specs.ram_gb, specs.ram_type,
-                            specs.storage_gb, specs.storage_type, specs.gpu,
-                            buy_price=raw.price,
-                        )
-                        upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
-                        resale = resale_range.median
-                        profit = estimate_profit(raw.price, resale, upgrade_cost)
-                        profit_low = estimate_profit(raw.price, resale_range.low, upgrade_cost)
-                        profit_high = estimate_profit(raw.price, resale_range.high, upgrade_cost)
-                        score_result = score_listing(
-                            title=raw.title, price=raw.price, estimated_profit=profit,
-                            cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
-                            storage_gb=specs.storage_gb, gpu=specs.gpu, has_psu=specs.has_psu,
-                            location=raw.location,
-                            profit_low=profit_low, profit_high=profit_high,
-                        )
-                        return {
-                            "raw": raw,
-                            "specs": specs,
-                            "resale_range": resale_range,
-                            "upgrade_cost": upgrade_cost,
-                            "resale": resale,
-                            "profit": profit,
-                            "score_result": score_result,
-                        }
-                    except Exception as exc:
-                        log.warning("source.scrape.listing_enrichment_error", source=source.name, external_id=raw.external_id, error=str(exc))
-                        return None
-
-            enriched = await asyncio.gather(*[_enrich_listing(raw) for raw in raw_listings], return_exceptions=False)
-
-            for item in enriched:
-                if not item:
-                    continue
-                raw = item["raw"]
-                specs = item["specs"]
-                resale_range = item["resale_range"]
-                upgrade_cost = item["upgrade_cost"]
-                resale = item["resale"]
-                profit = item["profit"]
-                score_result = item["score_result"]
-
-                existing = await db.execute(
-                    select(Listing)
-                    .where(Listing.external_id == raw.external_id)
-                    .order_by(Listing.id.desc())
+        # Build demand score lookup from DB for all terms that appeared in results
+        from app.models.source_search_term import SourceSearchTerm as SST
+        from sqlalchemy import select as sa_select
+        found_terms = {r.found_via_term for r in raw_listings if r.found_via_term}
+        term_scores: dict[str, float] = {}
+        if found_terms:
+            async with AsyncSessionLocal() as db2:
+                rows = await db2.execute(
+                    sa_select(SST.term, SST.demand_score).where(SST.term.in_(found_terms))
                 )
-                existing_rows = existing.scalars().all()
-                listing = existing_rows[0] if existing_rows else None
-                if len(existing_rows) > 1:
-                    log.warning(
-                        "source.scrape.duplicate_external_id",
-                        source=source.name,
-                        external_id=raw.external_id,
-                        duplicate_rows=len(existing_rows),
-                    )
-                if listing:
-                    listing.last_seen_at = datetime.utcnow()
-                    listing.price = raw.price
-                    listing.status = ListingStatus.active
-                    listing.estimated_resale = resale
-                    listing.resale_low = resale_range.low
-                    listing.resale_high = resale_range.high
-                    listing.resale_comp_count = resale_range.count
-                    listing.estimated_upgrade_cost = upgrade_cost
-                    listing.estimated_profit = profit
-                    listing.classification = score_result.classification
-                    listing.gem_score = score_result.score
-                    listing.gem_signals = score_result.signals
-                else:
-                    listing = Listing(
-                        external_id=raw.external_id, source_id=source_id, source_name=raw.source_name,
-                        title=raw.title, description=raw.description, price=raw.price, url=raw.url,
-                        image_urls=raw.image_urls, location=raw.location, condition=raw.condition,
-                        cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
-                        storage_gb=specs.storage_gb, storage_type=specs.storage_type,
-                        gpu=specs.gpu, has_psu=specs.has_psu,
-                        gem_score=score_result.score, classification=score_result.classification,
-                        gem_signals=score_result.signals, estimated_resale=resale,
-                        resale_low=resale_range.low, resale_high=resale_range.high,
-                        resale_comp_count=resale_range.count,
-                        estimated_profit=profit, estimated_upgrade_cost=upgrade_cost,
-                        initial_estimated_profit=profit,
-                    )
-                    db.add(listing)
-                    if score_result.classification in (Classification.amazing_gem, Classification.gem):
-                        new_gems += 1
+                for t, s in rows.all():
+                    term_scores[t] = float(s or 5.0)
 
+        queued = sum(
+            1 for raw in raw_listings
+            if enqueue_nowait(IngestItem(
+                raw=raw,
+                source_id=source_id,
+                min_price=config.min_price,
+                max_price=config.max_price,
+                demand_score=term_scores.get(raw.found_via_term, 5.0),
+                found_via_term=raw.found_via_term,
+            ))
+        )
+        log.info("source.scrape.queued", source=source.name, queued=queued, total=len(raw_listings))
+
+        async with AsyncSessionLocal() as db:
             await db.execute(
                 update(DataSource).where(DataSource.id == source_id).values(
                     last_scraped_at=datetime.utcnow(),
@@ -241,8 +171,8 @@ async def _scrape_source_bg(source_id: int):
             )
             await db.commit()
 
-        scan_state.site_done(source.name, len(raw_listings), new_gems)
-        log.info("source.scrape.done", source=source.name, found=len(raw_listings), gems=new_gems)
+        scan_state.site_done(source.name, len(raw_listings), 0)
+        log.info("source.scrape.done", source=source.name, found=len(raw_listings))
 
     except Exception as exc:
         scan_state.site_error(source.name, str(exc))

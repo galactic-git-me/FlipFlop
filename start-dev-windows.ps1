@@ -6,87 +6,38 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$RootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$RootDir    = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BackendDir = Join-Path $RootDir "pc-flipper-backend"
-$FrontendDir = Join-Path $RootDir "pc-flipper"
-$LogsDir = Join-Path $RootDir ".run-logs"
-$PidFile = Join-Path $LogsDir "windows-dev-pids.json"
+$FrontendDir= Join-Path $RootDir "pc-flipper"
+$LogsDir    = Join-Path $RootDir ".run-logs"
+$PidFile    = Join-Path $LogsDir "windows-dev-pids.json"
 
-$FrontendPort = if ($env:FRONTEND_PORT) { $env:FRONTEND_PORT } else { "4310" }
-$BackendPort  = if ($env:BACKEND_PORT)  { $env:BACKEND_PORT }  else { "4311" }
+$FrontendPort  = if ($env:FRONTEND_PORT)  { $env:FRONTEND_PORT }  else { "4310" }
+$BackendPort   = if ($env:BACKEND_PORT)   { $env:BACKEND_PORT }   else { "4311" }
 $AutoDashboard = if ($env:RICH_DASHBOARD_AUTO_LAUNCH) { $env:RICH_DASHBOARD_AUTO_LAUNCH } else { "1" }
 
 function Ensure-Dir([string]$Path) {
-  if (-not (Test-Path $Path)) {
-    New-Item -ItemType Directory -Path $Path | Out-Null
-  }
+  if (-not (Test-Path $Path)) { New-Item -ItemType Directory -Path $Path | Out-Null }
 }
 
 function Get-PythonCommand {
-  if (Get-Command py -ErrorAction SilentlyContinue) { return "py -3" }
+  if (Get-Command py     -ErrorAction SilentlyContinue) { return "py -3" }
   if (Get-Command python -ErrorAction SilentlyContinue) { return "python" }
   if (Get-Command python3 -ErrorAction SilentlyContinue) { return "python3" }
   throw "Python not found. Install Python 3 first."
 }
 
-function Get-ComposeCommand {
-  if (Get-Command docker -ErrorAction SilentlyContinue) {
-    try {
-      docker compose version | Out-Null
-      return @{ Bin = "docker"; Args = @("compose") }
-    } catch {}
-  }
-  if (Get-Command docker-compose -ErrorAction SilentlyContinue) {
-    return @{ Bin = "docker-compose"; Args = @() }
-  }
-  throw "Docker Compose not found. Install Docker Desktop."
-}
-
-function Ensure-DockerRunning {
-  $compose = Get-ComposeCommand
-  if ($compose.Bin -eq "docker") {
-    try {
-      docker info | Out-Null
-      return
-    } catch {
-      throw "Docker Desktop is installed but the daemon is not running. Start Docker Desktop and wait for 'Engine running', then rerun."
-    }
-  }
-}
-
-function Invoke-ComposeBackend([string[]]$ExtraArgs) {
-  Push-Location $BackendDir
-  try {
-    $compose = Get-ComposeCommand
-    & $compose.Bin @($compose.Args + $ExtraArgs)
-  } finally {
-    Pop-Location
-  }
-}
-
-function Invoke-ComposeFrontend([string[]]$ExtraArgs) {
-  Push-Location $FrontendDir
-  try {
-    $compose = Get-ComposeCommand
-    & $compose.Bin @($compose.Args + $ExtraArgs)
-  } finally {
-    Pop-Location
-  }
-}
-
 function Sync-EnvFiles {
   $rootEnv = Join-Path $RootDir ".env.local"
   if (Test-Path $rootEnv) {
-    Copy-Item $rootEnv (Join-Path $BackendDir ".env") -Force
+    Copy-Item $rootEnv (Join-Path $BackendDir  ".env") -Force
     Copy-Item $rootEnv (Join-Path $FrontendDir ".env") -Force
   }
 }
 
 function Ensure-BackendDeps {
-  $venvDir = Join-Path $BackendDir ".venv"
-  $venvPython = Join-Path $venvDir "Scripts\python.exe"
+  $venvPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
   $py = Get-PythonCommand
-
   Push-Location $BackendDir
   try {
     if (-not (Test-Path $venvPython)) {
@@ -96,12 +47,9 @@ function Ensure-BackendDeps {
     Write-Host "Installing backend dependencies..."
     & $venvPython -m pip install --upgrade pip | Out-Null
     & $venvPython -m pip install -r requirements.txt
-
     Write-Host "Installing Playwright Chromium..."
     & $venvPython -m playwright install chromium
-  } finally {
-    Pop-Location
-  }
+  } finally { Pop-Location }
 }
 
 function Ensure-FrontendDeps {
@@ -109,9 +57,7 @@ function Ensure-FrontendDeps {
   try {
     Write-Host "Installing frontend dependencies..."
     npm install --no-audit --no-fund
-  } finally {
-    Pop-Location
-  }
+  } finally { Pop-Location }
 }
 
 function Stop-Dev {
@@ -125,44 +71,21 @@ function Stop-Dev {
     }
     Remove-Item $PidFile -Force -ErrorAction SilentlyContinue
   }
-
-  # Safety net if pid file is stale.
+  # Safety net for stale processes
   Get-CimInstance Win32_Process |
     Where-Object {
       $_.CommandLine -match "uvicorn app.main:app" -or
-      $_.CommandLine -match "next dev -p $FrontendPort"
+      $_.CommandLine -match "next dev"
     } |
     ForEach-Object {
       try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch { $null = $_ }
     }
-
   Write-Host "Stopped dev services."
-}
-
-function Stop-ProjectContainers {
-  try {
-    $null = Get-ComposeCommand
-  } catch {
-    return
-  }
-  try {
-    Invoke-ComposeBackend @("stop", "api", "db", "redis") | Out-Null
-  } catch { $null = $_ }
-  try {
-    Invoke-ComposeBackend @("rm", "-f", "api", "db", "redis") | Out-Null
-  } catch { $null = $_ }
-  try {
-    Invoke-ComposeFrontend @("stop", "web") | Out-Null
-  } catch { $null = $_ }
-  try {
-    Invoke-ComposeFrontend @("rm", "-f", "web") | Out-Null
-  } catch { $null = $_ }
 }
 
 function Show-Status {
   $running = Get-CimInstance Win32_Process | Where-Object {
-    $_.CommandLine -match "uvicorn app.main:app" -or
-    $_.CommandLine -match "next dev -p $FrontendPort"
+    $_.CommandLine -match "uvicorn app.main:app" -or $_.CommandLine -match "next dev"
   }
   if ($running) {
     Write-Host "Running processes:"
@@ -175,75 +98,66 @@ function Show-Status {
 function Start-Dev {
   Ensure-Dir $LogsDir
   Sync-EnvFiles
-
-  # Always stop any existing runtime first to avoid stale/conflicting sessions.
   Stop-Dev | Out-Null
-  Stop-ProjectContainers
 
   if (-not $SkipInstall) {
     Ensure-BackendDeps
     Ensure-FrontendDeps
   }
 
-  Write-Host "Starting db/redis containers..."
-  Ensure-DockerRunning
-  Invoke-ComposeBackend @("up", "-d", "db", "redis") | Out-Null
+  $backendLog    = Join-Path $LogsDir "backend-$BackendPort.log"
+  $backendErrLog = Join-Path $LogsDir "backend-$BackendPort.err.log"
+  $frontendLog   = Join-Path $LogsDir "frontend-$FrontendPort.log"
+  $frontendErrLog= Join-Path $LogsDir "frontend-$FrontendPort.err.log"
 
-  $backendLog = Join-Path $LogsDir "backend-4311.log"
-  $backendErrLog = Join-Path $LogsDir "backend-4311.err.log"
-  $frontendLog = Join-Path $LogsDir "frontend-4310.log"
-  $frontendErrLog = Join-Path $LogsDir "frontend-4310.err.log"
-
+  Write-Host "Starting backend (uvicorn --reload) on port $BackendPort..."
   $backendPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
-  $backendArgs = "-m uvicorn app.main:app --reload --host 0.0.0.0 --port $BackendPort"
   $backendProc = Start-Process -FilePath $backendPython `
-    -ArgumentList $backendArgs `
+    -ArgumentList "run_dev.py --host 0.0.0.0 --port $BackendPort" `
     -WorkingDirectory $BackendDir `
     -RedirectStandardOutput $backendLog `
-    -RedirectStandardError $backendErrLog `
+    -RedirectStandardError  $backendErrLog `
     -WindowStyle Hidden `
     -PassThru
 
+  Write-Host "Starting frontend (next dev) on port $FrontendPort..."
   $frontendProc = Start-Process -FilePath "npm.cmd" `
-    -ArgumentList @("run", "dev", "--", "--webpack", "-p", $FrontendPort, "-H", "0.0.0.0") `
+    -ArgumentList @("run", "dev", "--", "-p", $FrontendPort, "-H", "0.0.0.0") `
     -WorkingDirectory $FrontendDir `
     -RedirectStandardOutput $frontendLog `
-    -RedirectStandardError $frontendErrLog `
+    -RedirectStandardError  $frontendErrLog `
     -WindowStyle Hidden `
     -PassThru
 
   @{
-    backendPid = $backendProc.Id
+    backendPid  = $backendProc.Id
     frontendPid = $frontendProc.Id
-    startedAt = (Get-Date).ToString("o")
+    startedAt   = (Get-Date).ToString("o")
   } | ConvertTo-Json | Set-Content -Path $PidFile
 
   if ($AutoDashboard -in @("1","true","True","yes","YES")) {
-    $dashboardPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
     $dashboardScript = Join-Path $RootDir "scripts\rich_dashboard.py"
-    if ((Test-Path $dashboardPython) -and (Test-Path $dashboardScript)) {
-      $cmd = "cd `"$RootDir`"; & `"$dashboardPython`" `"$dashboardScript`" --base-url http://localhost:$BackendPort"
-      Start-Process -FilePath "powershell.exe" -ArgumentList @("-NoExit", "-ExecutionPolicy", "Bypass", "-Command", $cmd) | Out-Null
+    if ((Test-Path $backendPython) -and (Test-Path $dashboardScript)) {
+      $cmd = "cd `"$RootDir`"; & `"$backendPython`" `"$dashboardScript`" --base-url http://localhost:$BackendPort"
+      Start-Process -FilePath "powershell.exe" `
+        -ArgumentList @("-NoExit", "-ExecutionPolicy", "Bypass", "-Command", $cmd) | Out-Null
     }
   }
 
   Write-Host ""
-  Write-Host "Frontend: http://localhost:$FrontendPort"
-  Write-Host "Backend : http://localhost:$BackendPort"
-  Write-Host "Logs:"
-  Write-Host "  $frontendLog"
-  Write-Host "  $frontendErrLog"
-  Write-Host "  $backendLog"
-  Write-Host "  $backendErrLog"
+  Write-Host "  Frontend : http://localhost:$FrontendPort"
+  Write-Host "  Backend  : http://localhost:$BackendPort"
+  Write-Host "  Logs     : $LogsDir"
   Write-Host ""
-  Write-Host "Commands:"
-  Write-Host "  .\start-dev-windows.ps1 status"
-  Write-Host "  .\start-dev-windows.ps1 stop"
-  Write-Host "  .venv\Scripts\python.exe .\scripts\rich_dashboard.py --base-url http://localhost:$BackendPort"
+  Write-Host "  NOTE: Postgres and Redis must already be running locally."
+  Write-Host "        Configure DATABASE_URL / REDIS_URL in .env.local if needed."
+  Write-Host ""
+  Write-Host "  .\start-dev-windows.ps1 stop     <- stop all"
+  Write-Host "  .\start-dev-windows.ps1 status   <- check processes"
 }
 
 switch ($Action) {
-  "start" { Start-Dev }
-  "stop" { Stop-Dev }
+  "start"  { Start-Dev }
+  "stop"   { Stop-Dev }
   "status" { Show-Status }
 }

@@ -228,76 +228,92 @@ def _extract_prices(soup: BeautifulSoup) -> list[float]:
     return prices
 
 
-async def _fetch_sold_prices(query: str) -> list[float]:
+async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
     """
-    Two-pass eBay UK completed-listings search.
-    Pass 1: Desktop PCs category (179).  Pass 2: all categories.
-    Does NOT use LH_BIN=1 — that parameter silently breaks the sold-listings
-    page on eBay UK.  Auction items are filtered in _extract_prices instead.
+    eBay Finding API — findCompletedItems (sold, fixed-price, UK).
+    Two passes: Desktop PCs category (179) first, then all categories.
+    No scraping, no bot-detection, no 403s.
     """
-    global _RESALE_EBAY_BLOCK_UNTIL_TS, _RESALE_EBAY_BLOCK_LOGGED
+    url = "https://svcs.ebay.com/services/search/FindingService/v1"
+    prices: list[float] = []
 
-    now = time.monotonic()
-    if now < _RESALE_EBAY_BLOCK_UNTIL_TS:
-        if not _RESALE_EBAY_BLOCK_LOGGED:
-            wait_s = round(_RESALE_EBAY_BLOCK_UNTIL_TS - now, 1)
-            _info_throttled("resale_scraper.block_cooldown_active", wait_seconds=wait_s)
-            _RESALE_EBAY_BLOCK_LOGGED = True
-        return []
-    _RESALE_EBAY_BLOCK_LOGGED = False
-
-    all_prices: list[float] = []
-
-    for sacat in ("179", "0"):
-        params = {
-            "_nkw": query,
-            "LH_Sold": "1",
-            "LH_Complete": "1",
-            # No LH_BIN=1 — breaks sold-listing results on eBay UK
-            "_sacat": sacat,
-            "_sop": "12",       # Most recent first
-            "LH_PrefLoc": "1",  # UK preferred
-            "_ipg": "60",
+    for cat in ("179", "0"):
+        params: dict[str, str] = {
+            "OPERATION-NAME":        "findCompletedItems",
+            "SERVICE-VERSION":       "1.0.3",
+            "SECURITY-APPNAME":      app_id,
+            "RESPONSE-DATA-FORMAT":  "JSON",
+            "GLOBAL-ID":             "EBAY-GB",
+            "keywords":              query,
+            "itemFilter(0).name":    "SoldItemsOnly",
+            "itemFilter(0).value":   "true",
+            "itemFilter(1).name":    "ListingType",
+            "itemFilter(1).value":   "FixedPrice",
+            "itemFilter(2).name":    "LocatedIn",
+            "itemFilter(2).value":   "GB",
+            "paginationInput.entriesPerPage": "50",
+            "sortOrder":             "EndTimeSoonest",
         }
-        headers = {
-            "User-Agent": ua.random,
-            "Accept-Language": "en-GB,en;q=0.9",
-            "Accept": "text/html,application/xhtml+xml",
-            "Accept-Encoding": "gzip, deflate",
-        }
+        if cat != "0":
+            params["categoryId"] = cat
+
         try:
-            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=headers,
-                )
-            if resp.status_code in (401, 403, 429):
-                _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
-                _info_throttled(
-                    "resale_scraper.block_detected",
-                    status=resp.status_code,
-                    cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
-                    query=query,
-                )
-                return []
-            if resp.status_code != 200 or len(resp.text) < 2000:
-                log.debug("resale_scraper.empty_response", query=query, cat=sacat,
-                          status=resp.status_code, length=len(resp.text))
-                continue
-            soup = BeautifulSoup(resp.text, "lxml")
-            found = _extract_prices(soup)
-            log.debug("resale_scraper.pass", query=query, cat=sacat, found=len(found))
-            all_prices.extend(found)
-        except Exception as exc:
-            log.warning("resale_scraper.fetch_error", query=query, cat=sacat, error=str(exc))
+            async with httpx.AsyncClient(timeout=12, follow_redirects=True) as client:
+                resp = await client.get(url, params=params)
 
-        if len(all_prices) >= 5:
+            if resp.status_code != 200:
+                log.debug("resale_scraper.finding_api_error", query=query, cat=cat,
+                          status=resp.status_code)
+                continue
+
+            data = resp.json()
+            items = (
+                data.get("findCompletedItemsResponse", [{}])[0]
+                    .get("searchResult", [{}])[0]
+                    .get("item", [])
+            )
+            for item in items:
+                try:
+                    price_val = float(
+                        item["sellingStatus"][0]["currentPrice"][0]["__value__"]
+                    )
+                    if 80.0 < price_val < 1_400.0:
+                        prices.append(price_val)
+                except (KeyError, ValueError, IndexError):
+                    continue
+
+            log.debug("resale_scraper.finding_api_pass",
+                      query=query, cat=cat, found=len(prices))
+
+        except Exception as exc:
+            log.debug("ebay_sold.request_retry", attempt=1, error=str(exc), search=query)
+
+        if len(prices) >= 5:
             break
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
-    return all_prices
+    return prices
+
+
+async def _fetch_sold_prices(query: str) -> list[float]:
+    """
+    Primary: eBay Finding API (no scraping, no bot detection).
+    Requires EBAY_APP_ID to be set to a production key.
+    """
+    from app.config import get_settings
+    settings = get_settings()
+    app_id = getattr(settings, "ebay_app_id", "") or ""
+
+    if app_id and not app_id.startswith("SBX-"):
+        prices = await _fetch_via_finding_api(query, app_id)
+        if prices:
+            return prices
+        log.debug("resale_scraper.finding_api_empty", query=query)
+
+    # Fallback: return empty so get_resale_range uses the buy-price formula.
+    # (HTML scraping removed — eBay blocks it consistently in production.)
+    return []
 
 
 async def get_resale_range(

@@ -86,6 +86,10 @@ class Listing(Base):
     # When the listing was originally posted by the seller (as opposed to first_seen_at which is when WE saw it)
     listed_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
 
+    # Demand intelligence — annotated at ingest time from the search term that found this listing
+    demand_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    found_via_term: Mapped[Optional[str]] = mapped_column(String(400), nullable=True)
+
     # Lifecycle
     status: Mapped[ListingStatus] = mapped_column(
         Enum(ListingStatus), default=ListingStatus.active

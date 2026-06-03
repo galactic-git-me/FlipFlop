@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { api } from "@/lib/api";
+import { Upload } from "lucide-react";
 
 interface FbStatus {
   exists: boolean;
@@ -19,6 +20,19 @@ export function FacebookCookieBanner() {
   const [submitting, setSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ ok: boolean; message: string } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileLoad = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setCookieJson((ev.target?.result as string) ?? "");
+    };
+    reader.readAsText(file);
+    // Reset so the same file can be re-selected if needed
+    e.target.value = "";
+  };
 
   useEffect(() => {
     api.facebook.status().then(setStatus).catch(() => null);
@@ -101,12 +115,31 @@ export function FacebookCookieBanner() {
               </ol>
             </div>
 
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              onChange={handleFileLoad}
+              className="hidden"
+            />
+
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs text-slate-500">Paste JSON or load from file</span>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs text-slate-300 border border-[#1e2d45] hover:border-[#00dc82]/40 hover:text-[#00dc82] transition-colors"
+              >
+                <Upload className="w-3 h-3" />
+                Load from file
+              </button>
+            </div>
+
             <textarea
               ref={textareaRef}
               value={cookieJson}
               onChange={(e) => setCookieJson(e.target.value)}
               placeholder='[{"name": "c_user", "value": "...", ...}]'
-              rows={8}
+              rows={7}
               className="w-full bg-[#080c14] border border-[#1e2d45] rounded-xl px-3 py-2.5 text-xs font-mono text-slate-300 placeholder-slate-600 focus:outline-none focus:border-[#00dc82]/40 resize-none mb-3"
             />
 
