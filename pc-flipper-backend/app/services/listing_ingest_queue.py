@@ -130,7 +130,7 @@ _MINI_PC_KW = {
 
 
 async def _process(item: IngestItem) -> None:
-    from app.services.spec_parser import parse_specs
+    from app.services.spec_parser import parse_specs, validate_pc_listing
     from app.services.classifier import score_listing
     from app.services.estimator import estimate_upgrade_cost, estimate_profit
     from app.services.resale_scraper import get_resale_range
@@ -140,6 +140,17 @@ async def _process(item: IngestItem) -> None:
 
     # Quick filter — mini PCs are not flippable gaming PCs
     if any(kw in raw.title.lower() for kw in _MINI_PC_KW):
+        return
+
+    # ── Validate listing is actually a PC (filter false positives) ──────────────
+    is_valid_pc, invalid_reason = validate_pc_listing(raw.title, raw.description or "")
+    if not is_valid_pc:
+        log.info(
+            "listing_ingest_queue.rejected_false_positive",
+            title=raw.title[:80],
+            reason=invalid_reason,
+            source=raw.source_name,
+        )
         return
 
     # ── Enrich ────────────────────────────────────────────────────────────────

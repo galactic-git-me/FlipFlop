@@ -108,6 +108,21 @@ def parse_specs(title: str, description: str = "") -> ParsedSpecs:
     return specs
 
 
+def validate_pc_listing(title: str, description: str = "") -> tuple[bool, Optional[str]]:
+    """
+    Public validation function to check if a listing is a valid PC.
+    Can be called from any ingestion pipeline.
+
+    Returns:
+        Tuple of (is_valid, rejection_reason)
+    """
+    text = (title + " " + description).lower()
+    is_valid, reason = _validate_is_pc(title, text, ParsedSpecs())
+    if not is_valid:
+        log.warning("listing.validation_failed", title=title[:80], reason=reason)
+    return is_valid, reason
+
+
 def _validate_is_pc(title: str, text_lower: str, specs: "ParsedSpecs") -> tuple[bool, Optional[str]]:
     """
     Quick validation to filter obvious false positives (games, peripherals).
