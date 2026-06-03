@@ -1,10 +1,14 @@
 """
 Extracts structured specs from a raw listing title + description.
 Pure regex/heuristics — fast and runs offline.
+Includes validation to filter out false positives (games, peripherals).
 """
 import re
+import structlog
 from dataclasses import dataclass
 from typing import Optional
+
+log = structlog.get_logger(__name__)
 
 
 @dataclass
@@ -16,6 +20,8 @@ class ParsedSpecs:
     storage_type: Optional[str] = None
     gpu: Optional[str] = None
     has_psu: bool = True
+    is_likely_valid_pc: bool = True  # Validation result
+    validation_reason: Optional[str] = None  # Why it's invalid, if applicable
 
 
 CPU_PATTERNS = [
@@ -96,4 +102,57 @@ def parse_specs(title: str, description: str = "") -> ParsedSpecs:
     if any(sig in text for sig in NO_PSU_SIGNALS):
         specs.has_psu = False
 
+    # ─ Validation: Check if likely a valid PC (filter false positives)
+    specs.is_likely_valid_pc, specs.validation_reason = _validate_is_pc(title, text, specs)
+
     return specs
+
+
+def _validate_is_pc(title: str, text_lower: str, specs: "ParsedSpecs") -> tuple[bool, Optional[str]]:
+    """
+    Quick validation to filter obvious false positives (games, peripherals).
+    Returns (is_valid, rejection_reason).
+    """
+    # Reject games and software
+    game_indicators = [
+        "game", "cd-rom", "dvd", "expansion", "addon", "dlc", "software",
+        "windows", "linux", "os "
+    ]
+    if any(indicator in text_lower for indicator in game_indicators):
+        if "cd-rom" in text_lower or "game" in text_lower:
+            return False, "Likely a game or software, not a PC"
+
+    # Reject obvious peripherals
+    peripheral_keywords = [
+        "mouse", "keyboard", "monitor", "headset", "speaker", "webcam",
+        "controller", "gamepad", "joystick", "cable", "adapter"
+    ]
+    if any(keyword in text_lower for keyword in peripheral_keywords):
+        return False, "Appears to be a peripheral, not a PC"
+
+    # Reject single components when no other system indicators present
+    single_component_patterns = [
+        ("ram stick", "ram module", "dimm"),
+        ("graphics card", "video card", "gpu"),
+        ("power supply", "psu"),
+        ("motherboard", "mainboard"),
+        ("hard drive", "ssd drive", "nvme"),
+    ]
+
+    for pattern_group in single_component_patterns:
+        if any(p in text_lower for p in pattern_group):
+            # Only reject if no CPU and no system keywords
+            if not specs.cpu and "pc" not in text_lower and "computer" not in text_lower:
+                component_type = pattern_group[0]
+                return False, f"Single component ({component_type}) without system indicators"
+
+    # Require system indicator keywords
+    system_keywords = ["pc", "computer", "desktop", "tower", "workstation", "gaming"]
+    has_system_indicator = any(kw in text_lower for kw in system_keywords)
+
+    # If no system indicator and no CPU, likely not a PC
+    if not has_system_indicator and not specs.cpu:
+        return False, "No PC or CPU indicators found"
+
+    # Passed validation
+    return True, None
