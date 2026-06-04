@@ -35,7 +35,7 @@ export default function RootLayout({
       lang="en"
       className={`${rajdhani.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="h-full node-body">
+      <body className="h-full node-body" suppressHydrationWarning>
         <FaviconAnimator />
         <TraeBg />
         <Sidebar />

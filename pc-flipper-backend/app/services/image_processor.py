@@ -10,7 +10,7 @@ Handles:
 
 import io
 import asyncio
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from pathlib import Path
 import structlog
 import httpx
@@ -20,6 +20,12 @@ try:
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
+    Image = None  # type: ignore
+    ImageDraw = None  # type: ignore
+    ImageFont = None  # type: ignore
+
+if TYPE_CHECKING:
+    from PIL import Image as PILImage
 
 log = structlog.get_logger(__name__)
 
@@ -119,7 +125,7 @@ def process_image_bytes(
         return None
 
 
-def _add_watermark(img: Image.Image, text: str = "FlipFlop", opacity: float = 0.15):
+def _add_watermark(img: "Image.Image", text: str = "FlipFlop", opacity: float = 0.15):
     """
     Add watermark text to image (bottom-right corner).
 

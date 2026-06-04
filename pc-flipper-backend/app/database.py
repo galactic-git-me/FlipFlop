@@ -2,16 +2,19 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import event
 from app.config import get_settings
+import os
 
 settings = get_settings()
 
-_is_sqlite = settings.database_url.startswith("sqlite")
+# Override with SQLite if DATABASE_URL env var is set explicitly, or use config default
+_database_url = os.getenv("DATABASE_URL", settings.database_url)
+_is_sqlite = _database_url.startswith("sqlite")
 
 if _is_sqlite:
     # WAL mode + busy timeout prevent "database is locked" errors when
     # multiple scrapers write concurrently to the same SQLite file.
     engine = create_async_engine(
-        settings.database_url,
+        _database_url,
         echo=False,
         connect_args={"timeout": 30},  # wait up to 30s for lock
     )
@@ -23,7 +26,7 @@ if _is_sqlite:
         conn.execute("PRAGMA synchronous=NORMAL")
 else:
     engine = create_async_engine(
-        settings.database_url,
+        _database_url,
         echo=False,
         pool_size=10,
         max_overflow=20,

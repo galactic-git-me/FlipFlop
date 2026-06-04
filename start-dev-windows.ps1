@@ -95,6 +95,24 @@ function Show-Status {
   }
 }
 
+function Open-Chrome([string]$Url) {
+  try {
+    $chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+    if (-not (Test-Path $chromePath)) {
+      $chromePath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+    }
+
+    if (Test-Path $chromePath) {
+      Start-Process -FilePath $chromePath -ArgumentList $Url | Out-Null
+      Write-Host "Opened Chrome: $Url" -ForegroundColor Green
+    } else {
+      Write-Host "Chrome not found. Visit: $Url" -ForegroundColor Yellow
+    }
+  } catch {
+    Write-Host "Could not open Chrome. Visit: $Url" -ForegroundColor Yellow
+  }
+}
+
 function Start-Dev {
   Ensure-Dir $LogsDir
   Sync-EnvFiles
@@ -144,10 +162,15 @@ function Start-Dev {
     }
   }
 
+  # Wait for frontend to be ready, then open Chrome
+  Write-Host "Waiting for frontend to be ready..."
+  Start-Sleep -Seconds 3
+  Open-Chrome "http://localhost:$FrontendPort"
+
   Write-Host ""
-  Write-Host "  Frontend : http://localhost:$FrontendPort"
-  Write-Host "  Backend  : http://localhost:$BackendPort"
-  Write-Host "  Logs     : $LogsDir"
+  Write-Host "  Frontend : http://localhost:$FrontendPort" -ForegroundColor Cyan
+  Write-Host "  Backend  : http://localhost:$BackendPort" -ForegroundColor Cyan
+  Write-Host "  Logs     : $LogsDir" -ForegroundColor Cyan
   Write-Host ""
   Write-Host "  NOTE: Postgres and Redis must already be running locally."
   Write-Host "        Configure DATABASE_URL / REDIS_URL in .env.local if needed."

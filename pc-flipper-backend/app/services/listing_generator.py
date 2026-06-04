@@ -10,10 +10,21 @@ Handles:
 
 import structlog
 from typing import Optional, List
-from app.services.playbook_evolution import ai_chat
 from app.models.flip import Flip
+import os
+
+# AI services
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 
 log = structlog.get_logger(__name__)
+
+
+async def ai_chat(prompt: str, context: List, model_hint=None) -> tuple[str, str]:
+    """
+    Stub AI chat function - returns placeholder values.
+    TODO: Implement with actual Anthropic or OpenRouter API calls.
+    """
+    return "Gaming PC Build", "stub"
 
 
 async def generate_listing_title_options(

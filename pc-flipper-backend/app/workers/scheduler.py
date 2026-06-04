@@ -333,15 +333,52 @@ def start_scheduler():
 async def run_startup_bootstrap() -> dict:
     """
     One-shot startup bootstrap:
-      1) pull external demand immediately
-      2) run playbook evolution after demand completes
-    Runs asynchronously alongside catalogue jobs.
+      1) Run flip opportunities scraper (main data source)
+      2) Skip other swarms on startup to avoid SQLite locking
+      3) Pull external demand (lightweight)
+      4) Run playbook evolution
+    Swarms run sequentially to avoid database locks.
     """
     log.info("startup_bootstrap.start")
-    demand = await _run_job_with_history("external_demand", ingest_external_demand_signals)
-    evolution = await _run_job_with_history("playbook_evolution", run_playbook_evolution)
-    out = {"ok": True, "steps": {"external_demand": demand, "playbook_evolution": evolution}}
-    log.info("startup_bootstrap.done")
+
+    # Run only flip_opportunities on startup to get initial data
+    # Other swarms will run on their scheduled intervals
+    flip_opp = None
+    try:
+        flip_opp = await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "startup"))
+        log.info("startup_bootstrap.flip_opportunities_done", status=flip_opp.get("ok"), listings=flip_opp.get("listings_found", 0))
+    except Exception as e:
+        log.error("startup_bootstrap.flip_opportunities_failed", error=str(e))
+        flip_opp = {"ok": False, "error": str(e)}
+
+    # Wait before next job to ensure database is unlocked
+    await asyncio.sleep(2)
+
+    demand = None
+    try:
+        demand = await _run_job_with_history("external_demand", ingest_external_demand_signals)
+        log.info("startup_bootstrap.external_demand_done", status=demand.get("ok"))
+    except Exception as e:
+        log.error("startup_bootstrap.external_demand_failed", error=str(e))
+        demand = {"ok": False, "error": str(e)}
+
+    evolution = None
+    try:
+        evolution = await _run_job_with_history("playbook_evolution", run_playbook_evolution)
+        log.info("startup_bootstrap.playbook_evolution_done", status=evolution.get("ok"))
+    except Exception as e:
+        log.error("startup_bootstrap.playbook_evolution_failed", error=str(e))
+        evolution = {"ok": False, "error": str(e)}
+
+    out = {
+        "ok": True,
+        "steps": {
+            "flip_opportunities": flip_opp,
+            "external_demand": demand,
+            "playbook_evolution": evolution
+        }
+    }
+    log.info("startup_bootstrap.done", summary=out)
     return out
 
 
