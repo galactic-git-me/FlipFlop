@@ -62,14 +62,52 @@ def _safe_get(client: httpx.Client, url: str) -> Any:
         return None
 
 
+import subprocess
+import threading
+
+
 class LogTailer:
-    def __init__(self, log_file: str, max_lines: int = 140):
+    def __init__(self, log_file: str, max_lines: int = 140, docker_container: str = ""):
         self.path = Path(log_file)
         self.max_lines = max_lines
         self.lines: deque[str] = deque(maxlen=max_lines)
         self._fh = None
         self._inode = None
-        self._load_initial()
+        self._docker_proc: subprocess.Popen | None = None
+        self._lock = threading.Lock()
+
+        if docker_container:
+            self._start_docker_tailer(docker_container)
+        else:
+            self._load_initial()
+
+    def _start_docker_tailer(self, container: str) -> None:
+        try:
+            # Seed with recent history first
+            result = subprocess.run(
+                ["docker", "logs", "--tail", str(self.max_lines), container],
+                capture_output=True, text=True, errors="replace",
+            )
+            for ln in (result.stdout + result.stderr).splitlines():
+                self.lines.append(ln)
+            # Then follow live
+            self._docker_proc = subprocess.Popen(
+                ["docker", "logs", "-f", "--tail", "0", container],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True, errors="replace",
+            )
+            t = threading.Thread(target=self._docker_reader, daemon=True)
+            t.start()
+        except Exception:
+            pass
+
+    def _docker_reader(self) -> None:
+        try:
+            for ln in self._docker_proc.stdout:
+                with self._lock:
+                    self.lines.append(ln.rstrip("\n"))
+        except Exception:
+            pass
 
     def _load_initial(self) -> None:
         try:
@@ -82,6 +120,8 @@ class LogTailer:
             pass
 
     def _ensure_open(self) -> None:
+        if self._docker_proc is not None:
+            return
         try:
             if not self.path.exists():
                 return
@@ -98,6 +138,9 @@ class LogTailer:
             self._inode = None
 
     def poll(self) -> list[str]:
+        if self._docker_proc is not None:
+            with self._lock:
+                return list(self.lines)
         self._ensure_open()
         if not self._fh:
             return list(self.lines)
@@ -112,7 +155,7 @@ class LogTailer:
         return list(self.lines)
 
 
-def _build_backend_logs(lines: list[str], log_file: str) -> Panel:
+def _build_backend_logs(lines: list[str], log_file: str, docker_container: str = "") -> Panel:
     tbl = Table.grid(expand=True)
     tbl.add_column()
     if not lines:
@@ -133,7 +176,8 @@ def _build_backend_logs(lines: list[str], log_file: str) -> Panel:
                 style = "dim"
             safe_ln = re.sub(r"\x1b\[[0-9;]*m", "", ln)
             tbl.add_row(f"[{style}]{safe_ln}[/{style}]")
-    return Panel(tbl, title=f"Backend Logs: {log_file}", border_style="green")
+    title = f"Backend Logs: docker/{docker_container}" if docker_container else f"Backend Logs: {log_file}"
+    return Panel(tbl, title=title, border_style="green")
 
 
 def _age(iso_ts: str | None) -> str:
@@ -368,12 +412,13 @@ def main() -> int:
     ap.add_argument("--base-url", default="http://127.0.0.1:4311")
     ap.add_argument("--refresh", type=float, default=1.0)
     ap.add_argument("--log-file", default="", help="Backend log file path")
+    ap.add_argument("--docker-container", default="", help="Stream logs from this Docker container instead of a file")
     args = ap.parse_args()
 
     api = args.base_url.rstrip("/") + "/api"
     default_log = str(Path(__file__).resolve().parents[1] / ".run-logs" / "backend-4311.log")
     log_file = args.log_file or default_log
-    tailer = LogTailer(log_file=log_file, max_lines=140)
+    tailer = LogTailer(log_file=log_file, max_lines=140, docker_container=args.docker_container)
     with httpx.Client(follow_redirects=True) as client:
         layout = Layout()
         layout.split_row(
@@ -424,11 +469,11 @@ def main() -> int:
                     layout["kpis"].update(_build_kpis(listing_stats, demand_summary, scan_status))
                     layout["sched"].update(_build_schedule(schedule_rows))
                     layout["right"].update(_build_terms(taxonomy_rows, telem_items, enabled, schedule_rows))
-                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file))
+                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file, args.docker_container))
                 except Exception as exc:
                     layout["kpis"].update(Panel("[red]Dashboard render error[/red]", border_style="red"))
                     layout["sched"].update(Panel(f"[red]{exc}[/red]", title="Error", border_style="red"))
-                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file))
+                    layout["logs"].update(_build_backend_logs(tailer.poll(), log_file, args.docker_container))
                 time.sleep(max(0.2, args.refresh))
 
 
