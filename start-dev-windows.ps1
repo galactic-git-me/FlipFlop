@@ -60,26 +60,44 @@ function Ensure-FrontendDeps {
   } finally { Pop-Location }
 }
 
+function Stop-ProcessTree([int]$RootPid) {
+  # Kill entire process subtree (children first, then parent).
+  # Without /T, npm spawns dozens of Node.js workers that become orphans.
+  try { taskkill /F /T /PID $RootPid 2>$null | Out-Null } catch { $null = $_ }
+}
+
 function Stop-Dev {
   if (Test-Path $PidFile) {
     $state = Get-Content $PidFile -Raw | ConvertFrom-Json
     foreach ($name in @("backendPid", "frontendPid")) {
       $procId = $state.$name
-      if ($procId) {
-        try { Stop-Process -Id $procId -Force -ErrorAction Stop } catch { $null = $_ }
-      }
+      if ($procId) { Stop-ProcessTree -RootPid $procId }
     }
     Remove-Item $PidFile -Force -ErrorAction SilentlyContinue
   }
-  # Safety net for stale processes
+
+  # Safety net 1 — named Python / Node patterns
   Get-CimInstance Win32_Process |
     Where-Object {
       $_.CommandLine -match "uvicorn app.main:app" -or
-      $_.CommandLine -match "next dev"
+      $_.CommandLine -match "next dev" -or
+      $_.CommandLine -match "run_dev\.py"
     } |
-    ForEach-Object {
-      try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch { $null = $_ }
-    }
+    ForEach-Object { Stop-ProcessTree -RootPid $_.ProcessId }
+
+  # Safety net 2 — orphaned Node.js workers from the frontend dir
+  # (Next.js webpack/turbopack workers don't inherit "next dev" in their CommandLine)
+  $frontendDirEscaped = [regex]::Escape($FrontendDir)
+  Get-CimInstance Win32_Process |
+    Where-Object {
+      $_.Name -eq "node.exe" -and $_.CommandLine -match $frontendDirEscaped
+    } |
+    ForEach-Object { Stop-ProcessTree -RootPid $_.ProcessId }
+
+  # Safety net 3 — any headless_shell.exe left over from Playwright
+  Get-Process -Name "headless_shell" -ErrorAction SilentlyContinue |
+    ForEach-Object { try { $_.Kill() } catch { $null = $_ } }
+
   Write-Host "Stopped dev services."
 }
 
