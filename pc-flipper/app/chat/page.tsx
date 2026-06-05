@@ -828,7 +828,7 @@ function BuildWizardPageContent() {
                 <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl p-4">
                   <BuildScatterGraph
                     builds={result.builds}
-                    selectedBuild={selectedBuild}
+                    selectedBuild={selectedBuild ?? undefined}
                     onSelectBuild={setSelectedBuild}
                   />
                 </div>
