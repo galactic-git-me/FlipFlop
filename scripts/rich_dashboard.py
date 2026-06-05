@@ -188,11 +188,8 @@ _EBAY_ALIASES   = {"eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions",
 
 
 def _normalise_vendor(name: str) -> str:
-    """Merge all eBay variants into one canonical name for column counting."""
-    if name.lower().startswith("ebay"):
-        # Keep "eBay UK Auctions" distinct from "eBay UK" only if it's auction-specific
-        if "auction" in name.lower():
-            return "eBay UK Auctions"
+    """Merge ALL eBay variants (eBay UK, eBay UK Auctions, eBay (Worldwide), eBay…) into one column."""
+    if name.lower().startswith("ebay") or name.lower() == "ebay":
         return _EBAY_CANONICAL
     return name
 
@@ -292,16 +289,23 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
         term_lower = term.lower()
         key = (_scoped_src(scope, vendor), term_lower)
         st, found = _cell_state(latest.get(key))
-        # Different swarms recorded eBay telemetry under "eBay" vs "eBay UK" —
-        # try aliases so historical data from before the naming fix still shows.
-        if st == "blank" and "ebay" in vendor.lower():
-            for alt in ("eBay UK", "eBay", "eBay (Worldwide)", "eBay UK Auctions"):
-                if alt == vendor:
-                    continue
+        # All eBay variants map to one canonical column — try all source name forms
+        # so data from any eBay sub-source (auctions, worldwide, plain "eBay") shows up.
+        if st == "blank" and vendor == _EBAY_CANONICAL:
+            total_found_all = 0
+            best_st = "blank"
+            for alt in ("eBay UK", "eBay", "eBay (Worldwide)", "eBay UK Auctions",
+                        "eBay Auctions", "eBay (UK)"):
                 alt_st, alt_found = _cell_state(latest.get((_scoped_src(scope, alt), term_lower)))
-                if alt_st != "blank":
-                    st, found = alt_st, alt_found
-                    break
+                total_found_all += max(0, alt_found)
+                if alt_st == "error":
+                    best_st = "error"
+                elif alt_st == "retry" and best_st != "error":
+                    best_st = "retry"
+                elif alt_st in ("success", "zero") and best_st == "blank":
+                    best_st = alt_st
+            if best_st != "blank":
+                st, found = best_st, total_found_all
         if st == "error":   return "[red]✗[/red]"
         if st == "retry":   return "[yellow]~[/yellow]"
         if found > 0:       return f"[green]✓{found}[/green]"
