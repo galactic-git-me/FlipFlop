@@ -29,6 +29,7 @@ from app.services.source_health import (
     should_skip_due_to_cooldown,
 )
 from app.services.antibot_preflight import should_defer_source_scrape
+from app.services.claude_eval_queue import enqueue_for_claude, should_queue_for_claude
 from app.config import get_settings
 
 log = structlog.get_logger(__name__)
@@ -242,7 +243,7 @@ async def _scan_source(source, search_terms: list, config) -> dict:
 
         async with _DB_WRITE_LOCK:
             async with AsyncSessionLocal() as db:
-                gems = await _upsert_listings(db, raw_listings, source.id, config)
+                gems, claude_candidates = await _upsert_listings(db, raw_listings, source.id, config)
                 result["gems"] = gems
 
                 source_row = await db.get(DataSource, source.id)
@@ -265,6 +266,11 @@ async def _scan_source(source, search_terms: list, config) -> dict:
                         config=src_cfg,
                     )
                 )
+                await db.flush()
+                # IDs now populated on ORM objects after flush
+                for candidate in claude_candidates:
+                    if candidate.id:
+                        enqueue_for_claude(candidate.id)
                 await db.commit()
 
         # Retry only failed terms later in the same hour, while keeping successful data.
@@ -305,8 +311,12 @@ async def _scan_source(source, search_terms: list, config) -> dict:
             result["found"] += len(retry_raw)
             async with _DB_WRITE_LOCK:
                 async with AsyncSessionLocal() as db:
-                    retry_gems = await _upsert_listings(db, retry_raw, source.id, config)
+                    retry_gems, retry_candidates = await _upsert_listings(db, retry_raw, source.id, config)
                     result["gems"] += retry_gems
+                    await db.flush()
+                    for candidate in retry_candidates:
+                        if candidate.id:
+                            enqueue_for_claude(candidate.id)
                     await db.execute(
                         update(DataSource)
                         .where(DataSource.id == source.id)
@@ -420,8 +430,11 @@ async def _upsert_listings(
     raw_listings: list,
     source_id: int,
     config: SearchConfig,
-) -> int:
+) -> tuple[int, list]:
+    """Returns (new_gems_count, listing_objects_needing_claude_eval).
+    IDs are populated after caller calls db.flush()."""
     new_gems = 0
+    claude_candidates: list = []  # Listing ORM objects — IDs filled by flush
     sem = asyncio.Semaphore(_ENRICH_CONCURRENCY)
 
     async def _enrich_listing(raw):
@@ -440,7 +453,8 @@ async def _upsert_listings(
                     specs.storage_gb, specs.storage_type, specs.gpu,
                     buy_price=effective_buy_price,
                 )
-                upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
+                _is_am5 = any(h in raw.title.lower() for h in ("am5", "b650", "x670", "a620"))
+                upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb, is_am5=_is_am5)
                 resale = resale_range.median
                 profit = estimate_profit(effective_buy_price, resale, upgrade_cost)
                 profit_low = estimate_profit(effective_buy_price, resale_range.low, upgrade_cost)
@@ -597,7 +611,11 @@ async def _upsert_listings(
             if score_result.classification in (Classification.amazing_gem, Classification.gem):
                 new_gems += 1
 
-    return new_gems
+        # Collect for Claude evaluation — IDs will be populated after caller flushes
+        if listing and listing.claude_judged_at is None and should_queue_for_claude(listing):
+            claude_candidates.append(listing)
+
+    return new_gems, claude_candidates
 
 
 _MINI_PC_EXCLUDE: set[str] = {

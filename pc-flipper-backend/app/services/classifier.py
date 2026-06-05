@@ -80,6 +80,11 @@ POOR_TITLE_PATTERNS = [
 _AM4_HINTS = ("am4", "b450", "b550", "x470", "x570")
 _AM5_HINTS = ("am5", "b650", "x670", "a620")
 
+# Keywords that mark a listing as a bare component rather than a complete PC.
+# These listings don't fit the flip model (we can't complete-build from a CPU alone).
+_COMPONENT_ONLY_HINTS = (" cpu", " processor", "bare cpu", "cpu only", "no motherboard")
+_COMPLETE_PC_HINTS    = ("pc", "desktop", "tower", "computer", "workstation", "system")
+
 
 @dataclass
 class ScoringResult:
@@ -104,6 +109,17 @@ def score_listing(
 ) -> ScoringResult:
     result = ScoringResult()
     title_lower = title.lower()
+
+    # Reject bare component listings — a CPU/processor without a PC body can't
+    # be flipped under our model (missing motherboard, DDR5, etc.).
+    is_component_only = (
+        any(h in title_lower for h in _COMPONENT_ONLY_HINTS)
+        and not any(h in title_lower for h in _COMPLETE_PC_HINTS)
+    )
+    if is_component_only:
+        result.classification = Classification.overpriced
+        result.signals.append("component-only listing")
+        return result
 
     # Gem signals from title
     for signal, pts in GEM_SIGNALS.items():
@@ -148,23 +164,26 @@ def score_listing(
         result.signals.append("ddr5 higher cost")
 
     # Platform generation bias: prefer AM4 value builds over AM5 at current prices.
-    # This is a soft scoring preference only (never an exclusion gate).
     if any(h in title_lower for h in _AM4_HINTS):
         result.score += 8
         result.signals.append("am4 value platform")
     if any(h in title_lower for h in _AM5_HINTS):
-        result.score -= 10
+        result.score -= 30  # AM5 requires expensive board + DDR5 — hard to flip profitably
         result.signals.append("am5 higher entry cost")
 
-    # Price band
+    # Price band — heavier penalties above £200 to reflect capital risk
     if price <= 50:
         result.score += 20
     elif price <= 100:
         result.score += 10
     elif price <= 150:
         result.score += 5
-    else:
+    elif price <= 200:
         result.score -= 10
+    elif price <= 350:
+        result.score -= 25
+    else:
+        result.score -= 40  # >£350 requires exceptional margin to be worthwhile
 
     # Collection-only location hints
     if location and any(x in location.lower() for x in ["only", "local"]):

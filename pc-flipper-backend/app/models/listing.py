@@ -98,5 +98,18 @@ class Listing(Base):
     last_seen_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     sold_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
 
+    # Claude authoritative evaluation
+    claude_verdict:            Mapped[Optional[str]]      = mapped_column(String(10))    # GEM | GOOD | MAYBE | REJECT
+    claude_flipability_score:  Mapped[Optional[float]]    = mapped_column(Float)
+    claude_expected_profit:    Mapped[Optional[float]]    = mapped_column(Float)
+    claude_roi:                Mapped[Optional[float]]    = mapped_column(Float)
+    claude_confidence:         Mapped[Optional[float]]    = mapped_column(Float)
+    claude_capital_efficiency: Mapped[Optional[int]]      = mapped_column(Integer)
+    claude_resale_demand:      Mapped[Optional[int]]      = mapped_column(Integer)
+    claude_upgrade_complexity: Mapped[Optional[int]]      = mapped_column(Integer)
+    claude_reasoning:          Mapped[Optional[str]]      = mapped_column(Text)
+    claude_main_risk:          Mapped[Optional[str]]      = mapped_column(Text)
+    claude_judged_at:          Mapped[Optional[datetime]] = mapped_column(DateTime)
+
     def __repr__(self):
         return f"<Listing {self.id} {self.title[:40]!r} £{self.price}>"

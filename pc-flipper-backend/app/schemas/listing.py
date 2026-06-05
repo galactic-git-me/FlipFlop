@@ -52,6 +52,18 @@ class ListingOut(BaseModel):
     status: ListingStatus
     first_seen_at: datetime
     last_seen_at: datetime
+    # Claude authoritative evaluation
+    claude_verdict:            Optional[str]      = None
+    claude_flipability_score:  Optional[float]    = None
+    claude_expected_profit:    Optional[float]    = None
+    claude_roi:                Optional[float]    = None
+    claude_confidence:         Optional[float]    = None
+    claude_capital_efficiency: Optional[int]      = None
+    claude_resale_demand:      Optional[int]      = None
+    claude_upgrade_complexity: Optional[int]      = None
+    claude_reasoning:          Optional[str]      = None
+    claude_main_risk:          Optional[str]      = None
+    claude_judged_at:          Optional[datetime] = None
 
     model_config = {"from_attributes": True}
 

@@ -134,6 +134,7 @@ async def _process(item: IngestItem) -> None:
     from app.services.classifier import score_listing
     from app.services.estimator import estimate_upgrade_cost, estimate_profit
     from app.services.resale_scraper import get_resale_range
+    from app.services.claude_eval_queue import enqueue_for_claude, should_queue_for_claude
     from app.models.listing import Listing, ListingStatus, Classification
 
     raw = item.raw
@@ -160,8 +161,10 @@ async def _process(item: IngestItem) -> None:
         specs.storage_gb, specs.storage_type, specs.gpu,
         buy_price=raw.price,
     )
+    _title_lower = raw.title.lower()
+    _is_am5 = any(h in _title_lower for h in ("am5", "b650", "x670", "a620"))
     upgrade_cost = estimate_upgrade_cost(
-        specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb
+        specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb, is_am5=_is_am5
     )
     resale      = resale_range.median
     profit      = estimate_profit(raw.price, resale, upgrade_cost)
@@ -228,4 +231,11 @@ async def _process(item: IngestItem) -> None:
             )
             db.add(listing)
 
+        await db.flush()
+        listing_id = listing.id
+        needs_claude = listing.claude_judged_at is None and should_queue_for_claude(listing)
         await db.commit()
+
+    # Queue for Claude evaluation (checked inside session while attrs are live)
+    if listing_id and needs_claude:
+        enqueue_for_claude(listing_id)

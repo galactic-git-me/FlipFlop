@@ -36,8 +36,18 @@ log = structlog.get_logger(__name__)
 _LOG_THROTTLE_TS: dict[str, float] = {}
 _PLAYWRIGHT_MISSING_WARNED = False
 _CHROMIUM_AVAILABLE: bool | None = None
+# Hard cap on simultaneous live Playwright browser processes.
+# Each browser = one headless_shell.exe.  Without this cap, parallel scrapers
+# (Gumtree + Facebook + Preloved + Apex + Wilsons + …) each spawn their own
+# browser, and the count grows unboundedly across hourly scan cycles.
+# Value 3 keeps CPU/RAM manageable on a dev machine; raise in production.
+_MAX_CONCURRENT_BROWSERS = 3
+_BROWSER_LIFETIME_SEM = asyncio.Semaphore(_MAX_CONCURRENT_BROWSERS)
+
+# Legacy name kept so existing _launch_browser usages don't error.
+# It now guards only the actual chromium.launch() call (serialised).
 _PLAYWRIGHT_LAUNCH_SEM = asyncio.Semaphore(1)
-_FACEBOOK_SCRAPE_SEM = asyncio.Semaphore(1)
+_FACEBOOK_SCRAPE_SEM  = asyncio.Semaphore(1)
 
 
 def _log_info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -95,6 +105,10 @@ def chromium_available() -> bool:
         if browsers_root:
             candidates.append(Path(browsers_root).expanduser())
         candidates.append(Path.home() / ".cache" / "ms-playwright")
+        # Windows: AppData/Local/ms-playwright
+        local_app_data = os.getenv("LOCALAPPDATA", "")
+        if local_app_data:
+            candidates.append(Path(local_app_data) / "ms-playwright")
 
         executable_hits: list[Path] = []
         for root in candidates:
@@ -376,7 +390,7 @@ async def scrape_gumtree_playwright(
     results: list[RawListing] = []
     seen: set[str] = set()
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -570,7 +584,7 @@ async def scrape_facebook_playwright(
     login_required = asyncio.Event()
     term_concurrency = max(1, min(4, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
 
-    async with _FACEBOOK_SCRAPE_SEM:
+    async with _FACEBOOK_SCRAPE_SEM, _BROWSER_LIFETIME_SEM:
         async with async_playwright() as p:
             try:
                 browser, context = await _make_context(
@@ -784,7 +798,7 @@ async def scrape_preloved_playwright(
     results: list[RawListing] = []
     seen: set[str] = set()
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -978,7 +992,7 @@ async def scrape_apex_playwright(
     seen: set[str] = set()
     intercepted: list[dict] = []
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -1451,7 +1465,7 @@ async def scrape_wilsons_playwright(
             f"&categoryId=65"  # IT / Technology category
         )
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="Wilsons Auctions",
@@ -1507,7 +1521,7 @@ async def scrape_ibidder_playwright(
             f"&priceFrom={int(lo)}&priceTo={int(hi)}"
         )
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="i-bidder",
@@ -1568,7 +1582,7 @@ async def scrape_bidspotter_playwright(
             f"&country=gb"
         )
 
-    async with async_playwright() as p:
+    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="BidSpotter",

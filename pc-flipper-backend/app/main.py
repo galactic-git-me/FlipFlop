@@ -27,6 +27,7 @@ from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
 from app.services.listing_ingest_queue import start_workers, stop_workers as stop_ingest_workers
+from app.services.claude_eval_queue import start_eval_workers, stop_eval_workers
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -213,9 +214,17 @@ def _infer_case_attributes(term: str, group_name: str) -> dict:
 
 
 @asynccontextmanager
+def _loop_exception_handler(loop, context):
+    exc = context.get("exception")
+    if exc is not None and type(exc).__name__ in ("TargetClosedError", "ConnectionClosedError"):
+        return  # Playwright internal cleanup noise — harmless
+    loop.default_exception_handler(context)
+
+
 async def lifespan(app: FastAPI):
     install_log_capture()          # must be first — before any structlog usage
     loop = asyncio.get_running_loop()
+    loop.set_exception_handler(_loop_exception_handler)
     log.info("app.startup", event_loop_type=type(loop).__name__)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -227,11 +236,13 @@ async def lifespan(app: FastAPI):
     # Run preflight asynchronously so API stays responsive while challenge tabs open.
     asyncio.create_task(run_antibot_preflight())
     start_workers(n=4)
+    start_eval_workers(n=2)
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     yield
     stop_scheduler()
     await stop_ingest_workers()
+    await stop_eval_workers()
     await engine.dispose()
     log.info("app.shutdown")
 
@@ -351,6 +362,18 @@ async def _migrate_add_columns():
         ("listings", "dedupe_fingerprint",    "VARCHAR(255)"),
         # Playbook upsell strategy
         ("playbooks", "upsell_strategy",      "JSON"),
+        # Claude authoritative evaluation columns
+        ("listings", "claude_verdict",            "VARCHAR(10)"),
+        ("listings", "claude_flipability_score",  "FLOAT"),
+        ("listings", "claude_expected_profit",    "FLOAT"),
+        ("listings", "claude_roi",                "FLOAT"),
+        ("listings", "claude_confidence",         "FLOAT"),
+        ("listings", "claude_capital_efficiency", "INTEGER"),
+        ("listings", "claude_resale_demand",      "INTEGER"),
+        ("listings", "claude_upgrade_complexity", "INTEGER"),
+        ("listings", "claude_reasoning",          "TEXT"),
+        ("listings", "claude_main_risk",          "TEXT"),
+        ("listings", "claude_judged_at",          "DATETIME"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:

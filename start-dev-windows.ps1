@@ -115,6 +115,15 @@ function Open-Chrome([string]$Url) {
 
 function Start-Dev {
   Ensure-Dir $LogsDir
+
+  # Trim logs older than 24 hours before starting
+  $trimScript = Join-Path $RootDir "scripts\trim_logs.py"
+  $backendPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
+  if ((Test-Path $trimScript) -and (Test-Path $backendPython)) {
+    Write-Host "Trimming old logs..."
+    & $backendPython $trimScript
+  }
+
   Sync-EnvFiles
   Stop-Dev | Out-Null
 

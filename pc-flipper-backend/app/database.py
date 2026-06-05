@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import event
+from sqlalchemy.pool import NullPool
 from app.config import get_settings
 import os
 
@@ -11,12 +12,14 @@ _database_url = os.getenv("DATABASE_URL", settings.database_url)
 _is_sqlite = _database_url.startswith("sqlite")
 
 if _is_sqlite:
-    # WAL mode + busy timeout prevent "database is locked" errors when
-    # multiple scrapers write concurrently to the same SQLite file.
+    # NullPool: each session gets its own connection, preventing pool exhaustion
+    # when long-running scans hold connections while API reads are waiting.
+    # WAL mode (set in the connect listener) allows concurrent reads alongside writes.
     engine = create_async_engine(
         _database_url,
         echo=False,
-        connect_args={"timeout": 30},  # wait up to 30s for lock
+        connect_args={"timeout": 30},
+        poolclass=NullPool,
     )
 
     @event.listens_for(engine.sync_engine, "connect")

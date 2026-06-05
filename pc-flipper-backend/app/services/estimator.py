@@ -122,6 +122,12 @@ BUDGET_CASE_RESALE_ADD = 2 * BUDGET_CASE_COST   # = £140
 BUDGET_RAM_COST        = 65    # 32GB DDR4-3200 kit (2×16GB used, ~£60-70)
 BUDGET_RAM_RESALE_ADD  = 60    # 32GB adds meaningful value — gaming minimum is now 32GB
 
+# AM5 platform overhead — motherboard + DDR5 RAM are required before anything else.
+# These are NOT included in standard upgrade_cost because the default model assumes
+# the listing already has a board and DDR4. AM5 listings need these added explicitly.
+AM5_MOBO_COST  = 130   # budget B650 motherboard new (~£120-140)
+AM5_DDR5_COST  = 70    # 32GB DDR5-5600 kit new (~£65-75)
+
 # Build quality / presentation uplift — premium buyers pay for a clean, tested,
 # well-presented build (good photos, cable management, etc.).
 PRESENTATION_UPLIFT    = 75
@@ -178,6 +184,7 @@ def estimate_upgrade_cost(
     gpu: str | None,
     has_psu: bool,
     ram_gb: int | None = None,
+    is_am5: bool = False,
 ) -> float:
     """
     Actual cash spend to make the listing a finished themed product.
@@ -192,6 +199,9 @@ def estimate_upgrade_cost(
         cost += BUDGET_PSU_COST
     if not ram_gb or ram_gb < 32:   # 32 GB is the 2026 gaming minimum
         cost += BUDGET_RAM_COST
+    if is_am5:
+        # AM5 needs a new motherboard and DDR5 kit — not in the standard model
+        cost += AM5_MOBO_COST + AM5_DDR5_COST
     return cost
 
 

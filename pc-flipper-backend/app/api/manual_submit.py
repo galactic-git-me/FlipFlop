@@ -28,6 +28,7 @@ from app.services.spec_parser import parse_specs
 from app.services.classifier import score_listing
 from app.services.estimator import estimate_upgrade_cost, estimate_profit
 from app.services.resale_scraper import get_resale_range
+from app.services.claude_eval_queue import enqueue_for_claude, should_queue_for_claude
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/manual-submit", tags=["manual-submit"])
@@ -135,7 +136,8 @@ async def _run_pipeline(raw, db: AsyncSession) -> Listing:
         specs.storage_gb, specs.storage_type, specs.gpu,
         buy_price=raw.price,
     )
-    upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb)
+    _is_am5 = any(h in raw.title.lower() for h in ("am5", "b650", "x670", "a620"))
+    upgrade_cost = estimate_upgrade_cost(specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb, is_am5=_is_am5)
     resale      = resale_range.median
     profit      = estimate_profit(raw.price, resale,            upgrade_cost)
     profit_low  = estimate_profit(raw.price, resale_range.low,  upgrade_cost)
@@ -210,6 +212,12 @@ async def _run_pipeline(raw, db: AsyncSession) -> Listing:
         db.add(listing)
 
     await db.flush()
+    needs_claude = listing.claude_judged_at is None and should_queue_for_claude(listing)
+    listing_id = listing.id
     await db.refresh(listing)
     await db.commit()
+
+    if needs_claude and listing_id:
+        enqueue_for_claude(listing_id)
+
     return listing
