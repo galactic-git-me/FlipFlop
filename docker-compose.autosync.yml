@@ -17,4 +17,4 @@ services:
     volumes:
       - /home/mac/CODING:/coding
       - /home/mac/.git-credentials:/home/mac/.git-credentials
-      - /home/mac/.gitconfig:/home/mac/.gitconfig:ro
+      - /home/mac/.gitconfig:/home/mac/.gitconfig
