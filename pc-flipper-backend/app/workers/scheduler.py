@@ -218,7 +218,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=settings.parts_update_interval_hours),
+        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
         id="upgrade_parts",
         name="Upgrade Parts Swarm",
         kwargs={"job_id": "upgrade_parts", "fn": partial(run_upgrade_parts_swarm, "main")},
@@ -229,7 +229,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=24),
+        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
         id="cases",
         name="Cases Catalogue Swarm",
         kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
@@ -240,7 +240,7 @@ def start_scheduler():
 
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(hours=24),
+        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
         id="accessories",
         name="Accessories Swarm",
         kwargs={"job_id": "accessories", "fn": partial(run_accessories_swarm, "main")},
