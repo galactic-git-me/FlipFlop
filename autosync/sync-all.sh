@@ -40,8 +40,29 @@ sync_repo() {
     branch="master"
   fi
 
-  local fetch_rc=0 commit_rc=0 push_rc=0 ahead=0 behind=0
+  local fetch_rc=0 commit_rc=0 push_rc=0 rebase_rc=0 ahead=0 behind=0
   git fetch origin "$branch" --quiet || fetch_rc=$?
+
+  if git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+    behind="$(git rev-list --count "HEAD..origin/$branch" 2>/dev/null || echo 0)"
+  fi
+
+  # If remote has new commits, stash any uncommitted work, rebase on top, then restore.
+  if [[ "$behind" -gt 0 ]]; then
+    log "[$name] Remote is $behind commit(s) ahead — rebasing local work on top..."
+    local stashed=0
+    if ! git diff --quiet || ! git diff --cached --quiet 2>/dev/null; then
+      git stash push -u -m "autosync-stash" >/dev/null 2>&1 && stashed=1
+    fi
+    git rebase "origin/$branch" || rebase_rc=$?
+    if [[ $rebase_rc -ne 0 ]]; then
+      git rebase --abort >/dev/null 2>&1 || true
+      [[ "$stashed" -eq 1 ]] && git stash pop >/dev/null 2>&1 || true
+      log "[$name] Rebase failed — skipping this cycle. Manual intervention required."
+      return 0
+    fi
+    [[ "$stashed" -eq 1 ]] && git stash pop >/dev/null 2>&1 || true
+  fi
 
   git add -A || true
   if ! git diff --cached --quiet 2>/dev/null; then
@@ -61,7 +82,7 @@ sync_repo() {
   if [[ "$ahead" -gt 0 && "$behind" -eq 0 ]]; then
     git push origin "$branch" || push_rc=$?
   elif [[ "$behind" -gt 0 ]]; then
-    log "[$name] Skip push: behind origin/$branch by $behind commit(s). Pull first."
+    log "[$name] Still behind after rebase — skipping push this cycle."
   fi
 
   if [[ $fetch_rc -ne 0 || $commit_rc -ne 0 || $push_rc -ne 0 ]]; then

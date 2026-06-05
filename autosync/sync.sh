@@ -30,6 +30,31 @@ while true; do
   git fetch origin "$BRANCH" --quiet
   FETCH_RC=$?
 
+  BEHIND_CNT=0
+  if git rev-parse --verify "origin/$BRANCH" >/dev/null 2>&1; then
+    BEHIND_CNT=$(git rev-list --count "HEAD..origin/$BRANCH" 2>/dev/null || echo 0)
+  fi
+
+  # If remote has new commits, stash any uncommitted work, rebase on top, then restore.
+  REBASE_RC=0
+  if [[ "$BEHIND_CNT" -gt 0 ]]; then
+    log "Remote is $BEHIND_CNT commit(s) ahead — rebasing local work on top..."
+    STASHED=0
+    if ! git diff --quiet || ! git diff --cached --quiet 2>/dev/null; then
+      git stash push -u -m "autosync-stash" >/dev/null 2>&1 && STASHED=1
+    fi
+    git rebase "origin/$BRANCH" || REBASE_RC=$?
+    if [[ $REBASE_RC -ne 0 ]]; then
+      git rebase --abort >/dev/null 2>&1 || true
+      [[ "$STASHED" -eq 1 ]] && git stash pop >/dev/null 2>&1 || true
+      log "Rebase failed — skipping this cycle. Manual intervention required."
+      set -e
+      sleep "$INTERVAL_SECONDS"
+      continue
+    fi
+    [[ "$STASHED" -eq 1 ]] && git stash pop >/dev/null 2>&1 || true
+  fi
+
   git add -A
   if ! git diff --cached --quiet; then
     TS="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
@@ -40,9 +65,7 @@ while true; do
   fi
 
   # Push only when branch can fast-forward remote.
-  git rev-parse --verify "origin/$BRANCH" >/dev/null 2>&1
-  HAS_REMOTE_BRANCH=$?
-  if [[ $HAS_REMOTE_BRANCH -eq 0 ]]; then
+  if git rev-parse --verify "origin/$BRANCH" >/dev/null 2>&1; then
     AHEAD_CNT=$(git rev-list --count "origin/$BRANCH..HEAD" 2>/dev/null || echo 0)
     BEHIND_CNT=$(git rev-list --count "HEAD..origin/$BRANCH" 2>/dev/null || echo 0)
   else
@@ -56,7 +79,7 @@ while true; do
   else
     PUSH_RC=0
     if [[ "$BEHIND_CNT" -gt 0 ]]; then
-      log "Skip push: local is behind origin/$BRANCH by $BEHIND_CNT commit(s). Manual sync required."
+      log "Still behind after rebase — skipping push this cycle."
     fi
   fi
 
