@@ -701,6 +701,10 @@ if [[ -x "$BACKEND_DIR/.venv/bin/uvicorn" ]]; then
   UVICORN_BIN="$BACKEND_DIR/.venv/bin/uvicorn"
 fi
 
+# Ensure Playwright Chromium is installed (mirrors Windows startup behaviour).
+echo "Ensuring Playwright Chromium is installed..."
+"$PYTHON_BIN" -m playwright install chromium
+
 BACKEND_LOG="$LOG_DIR/backend-$BACKEND_PORT.log"
 FRONTEND_LOG="$LOG_DIR/frontend-$FRONTEND_PORT.log"
 # Reset logs each startup so panes show current run clearly.

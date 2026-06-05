@@ -14,6 +14,7 @@ $PidFile    = Join-Path $LogsDir "windows-dev-pids.json"
 
 $FrontendPort  = if ($env:FRONTEND_PORT)  { $env:FRONTEND_PORT }  else { "4310" }
 $BackendPort   = if ($env:BACKEND_PORT)   { $env:BACKEND_PORT }   else { "4311" }
+$BackendTZ     = if ($env:BACKEND_TZ)     { $env:BACKEND_TZ }     else { "Europe/London" }
 $AutoDashboard = if ($env:RICH_DASHBOARD_AUTO_LAUNCH) { $env:RICH_DASHBOARD_AUTO_LAUNCH } else { "1" }
 
 function Ensure-Dir([string]$Path) {
@@ -159,6 +160,8 @@ function Start-Dev {
 
   Write-Host "Starting backend (uvicorn --reload) on port $BackendPort..."
   $backendPython = Join-Path $BackendDir ".venv\Scripts\python.exe"
+  $prevTZ = $env:TZ
+  $env:TZ = $BackendTZ
   $backendProc = Start-Process -FilePath $backendPython `
     -ArgumentList "run_dev.py --host 0.0.0.0 --port $BackendPort" `
     -WorkingDirectory $BackendDir `
@@ -166,10 +169,11 @@ function Start-Dev {
     -RedirectStandardError  $backendErrLog `
     -WindowStyle Hidden `
     -PassThru
+  $env:TZ = $prevTZ
 
-  Write-Host "Starting frontend (next dev) on port $FrontendPort..."
+  Write-Host "Starting frontend (next dev --webpack) on port $FrontendPort..."
   $frontendProc = Start-Process -FilePath "npm.cmd" `
-    -ArgumentList @("run", "dev", "--", "-p", $FrontendPort, "-H", "0.0.0.0") `
+    -ArgumentList @("run", "dev", "--", "--webpack", "-p", $FrontendPort, "-H", "0.0.0.0") `
     -WorkingDirectory $FrontendDir `
     -RedirectStandardOutput $frontendLog `
     -RedirectStandardError  $frontendErrLog `
