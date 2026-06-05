@@ -58,15 +58,10 @@ sync_repo() {
     behind=0
   fi
 
-  if [[ "$name" == "$PRIMARY_REPO" ]]; then
-    # Primary project is source-of-truth: always force-push local branch.
-    git push --force origin "$branch" || push_rc=$?
-  else
-    if [[ "$ahead" -gt 0 && "$behind" -eq 0 ]]; then
-      git push origin "$branch" || push_rc=$?
-    elif [[ "$behind" -gt 0 ]]; then
-      log "[$name] Skip push: behind origin/$branch by $behind commit(s)."
-    fi
+  if [[ "$ahead" -gt 0 && "$behind" -eq 0 ]]; then
+    git push origin "$branch" || push_rc=$?
+  elif [[ "$behind" -gt 0 ]]; then
+    log "[$name] Skip push: behind origin/$branch by $behind commit(s). Pull first."
   fi
 
   if [[ $fetch_rc -ne 0 || $commit_rc -ne 0 || $push_rc -ne 0 ]]; then
