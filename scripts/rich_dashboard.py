@@ -155,20 +155,16 @@ def _age(iso_ts: str | None) -> str:
         return "—"
 
 
-def _scope_vendor_sources(scope: str, vendor: str) -> list[str]:
-    aliases = {
-        "eBay": ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
-        "Amazon": ["Amazon", "Amazon UK"],
-        "Temu": ["Temu"],
-    }
-    names = aliases.get(vendor, [vendor])
-    if scope == "cases":
-        return [f"Cases:{n}" for n in names]
-    if scope == "accessories":
-        return [f"Accessories:{n}" for n in names]
-    if scope == "upgrade_parts":
-        return [f"UpgradeParts:{n}" for n in names]
-    return names
+_SCOPE_PREFIX = {
+    "cases":        "Cases:",
+    "accessories":  "Accessories:",
+    "upgrade_parts":"UpgradeParts:",
+}
+
+
+def _scoped_src(scope: str, vendor: str) -> str:
+    """Return the telemetry key for (scope, vendor), e.g. 'Cases:eBay UK'."""
+    return _SCOPE_PREFIX.get(scope, "") + vendor
 
 
 def _cell_state(item: dict[str, Any] | None) -> tuple[str, int]:
@@ -177,12 +173,29 @@ def _cell_state(item: dict[str, Any] | None) -> tuple[str, int]:
     err = str((item or {}).get("error") or "").strip().lower()
     found = int((item or {}).get("found") or 0)
     if err:
-        if "retry" in err or "blocked" in err or "backoff" in err or "429" in err or "chromium_not_installed" in err:
+        if any(k in err for k in ("retry", "blocked", "backoff", "429", "chromium_not_installed",
+                                   "source_timeout", "captcha", "login_required")):
             return ("retry", found)
         return ("error", found)
     if found > 0:
         return ("success", found)
     return ("zero", 0)
+
+
+def _compute_top_vendors(telem_items: dict[str, Any], max_cols: int = 5) -> list[tuple[str, int]]:
+    """
+    Return (vendor_name, total_found) sorted by total_found DESC.
+    Strips scope prefixes (Cases:, Accessories:, UpgradeParts:) before aggregating
+    so 'eBay UK' counts are merged across all catalogues.
+    """
+    totals: dict[str, int] = {}
+    for raw_src, rows in (telem_items or {}).items():
+        src = re.sub(r"^(?:Cases|Accessories|UpgradeParts):", "", str(raw_src))
+        for r in (rows or []):
+            found = int((r or {}).get("found") or 0)
+            if found > 0:
+                totals[src] = totals.get(src, 0) + found
+    return sorted(totals.items(), key=lambda x: x[1], reverse=True)[:max_cols]
 
 
 def _build_kpis(listing_stats: Any, demand_summary: Any, scan_status: Any) -> Panel:
@@ -244,53 +257,36 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
             if term and (str(src), term) not in latest:
                 latest[(str(src), term)] = r
 
+    # ── Dynamic vendor columns: top N sources by total listings found (DESC) ──
+    top_vendors  = _compute_top_vendors(telem_items, max_cols=5)
+    if not top_vendors:
+        top_vendors = [("eBay UK", 0), ("Amazon", 0), ("Gumtree", 0), ("Facebook Marketplace", 0)]
+    vendor_names = [v for v, _ in top_vendors]
+
+    # ── Build table ───────────────────────────────────────────────────────────
     tbl = Table(expand=True, box=box.SIMPLE_HEAVY, show_lines=False)
-    tbl.add_column("Catalogue", style="bold cyan", width=18, no_wrap=True)
-    tbl.add_column("Search Term", style="yellow", width=34, overflow="fold")
-    tbl.add_column("eBay", justify="center", width=10)
-    tbl.add_column("Amazon", justify="center", width=10)
-    tbl.add_column("Temu", justify="center", width=10)
-    tbl.add_column("Others", justify="center", width=10)
+    tbl.add_column("Catalogue",   style="bold cyan", width=16, no_wrap=True)
+    tbl.add_column("Search Term", style="yellow",    width=28, overflow="fold")
+    for vendor, total in top_vendors:
+        label = (vendor[:9] + "…") if len(vendor) > 10 else vendor
+        hdr   = (f"{label}\n[dim]Σ{total}[/dim]") if total else label
+        tbl.add_column(hdr, justify="center", width=9, no_wrap=True)
+
+    def _cell(scope: str, vendor: str, term: str) -> str:
+        key = (_scoped_src(scope, vendor), term.lower())
+        st, found = _cell_state(latest.get(key))
+        if st == "error":   return "[red]✗[/red]"
+        if st == "retry":   return "[yellow]~[/yellow]"
+        if found > 0:       return f"[green]✓{found}[/green]"
+        if st == "zero":    return "[dim]0[/dim]"
+        return ""
 
     def render_group(scope: str, rows: list[dict[str, Any]]) -> None:
         first = True
-        for r in sorted(rows, key=lambda x: str(x.get("term", "")).lower())[:12]:
-            term = str(r.get("term") or "").strip()
-            allowed = set(r.get("source_names") or [])
-            out = [SCOPE_LABELS[scope] if first else "", term]
-            for group in ["eBay", "Amazon", "Temu", "Others"]:
-                members = VENDOR_GROUPS[group]
-                seen_any = False
-                state = "blank"
-                total_found = 0
-                for v in members:
-                    if allowed and v not in allowed:
-                        continue
-                    # honor enabled sources as rough guard
-                    if enabled_sources and v not in enabled_sources and v not in {"eBay", "Amazon"}:
-                        pass
-                    seen_any = True
-                    for src in _scope_vendor_sources(scope, v):
-                        st, found = _cell_state(latest.get((src, term.lower())))
-                        total_found += max(0, found)
-                        if st == "error":
-                            state = "error"
-                        elif st == "retry" and state != "error":
-                            state = "retry"
-                        elif st == "success" and state not in {"error", "retry"}:
-                            state = "success"
-                        elif st == "zero" and state == "blank":
-                            state = "zero"
-                if not seen_any:
-                    out.append("")
-                elif state == "error":
-                    out.append("[red]✗[/red]")
-                elif state == "retry":
-                    out.append("[yellow]🚦[/yellow]")
-                elif total_found > 0:
-                    out.append(f"[green]✓{total_found}[/green]")
-                else:
-                    out.append("[dim]0[/dim]")
+        for r in sorted(rows, key=lambda x: str(x.get("term", "")).lower())[:14]:
+            term  = str(r.get("term") or "").strip()
+            out   = [SCOPE_LABELS[scope] if first else "", term]
+            out  += [_cell(scope, v, term) for v in vendor_names]
             tbl.add_row(*out)
             first = False
         tbl.add_section()
@@ -298,8 +294,13 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
     for scope in SCOPES:
         render_group(scope, by_scope.get(scope, []))
 
-    legend = "[green]✓count[/green]=scraped listings  [dim]0[/dim]=searched/none  [red]✗[/red]=error  [yellow]🚦[/yellow]=retry  blank=not run"
-    return Panel(tbl, title="Search Terms by Catalogue x Vendor Groups", subtitle=legend, border_style="bright_blue")
+    legend = (
+        "[green]✓n[/green]=listings found  [dim]0[/dim]=ran/none  "
+        "[red]✗[/red]=error  [yellow]~[/yellow]=retry/blocked  blank=not run  "
+        "[dim]Σ[/dim]=total scraped"
+    )
+    return Panel(tbl, title="Search Terms × Vendors  [dim](sorted by yield ↓)[/dim]",
+                 subtitle=legend, border_style="bright_blue")
 
 
 def main() -> int:
