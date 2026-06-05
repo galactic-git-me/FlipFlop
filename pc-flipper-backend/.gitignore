@@ -19,3 +19,8 @@ fb_cookies.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Playwright browser profiles - grow to GBs of Chrome telemetry
+.fb-profile/
+BrowserMetrics/
+DeferredBrowserMetrics/
