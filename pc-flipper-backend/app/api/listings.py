@@ -88,51 +88,59 @@ async def get_listings(
 
 @router.get("/stats")
 async def get_listing_stats(db: AsyncSession = Depends(get_db)):
-    total = await db.scalar(select(func.count()).select_from(Listing))
+    """Single-query stats — avoids the N round-trip latency on large SQLite DBs."""
+    from sqlalchemy import case, literal_column
+    from sqlalchemy.sql.expression import cast
+    from sqlalchemy import Integer, Numeric
 
-    # Claude verdicts (authoritative when available)
-    claude_gems = await db.scalar(
-        select(func.count()).select_from(Listing).where(
-            Listing.claude_verdict.in_(["GEM", "GOOD"])
-        )
+    # One pass over the table: count + conditional aggregates in one SQL statement
+    row = await db.execute(
+        select(
+            func.count().label("total"),
+            # Claude gems: judged + verdict in (GEM, GOOD)
+            func.sum(case(
+                (Listing.claude_verdict.in_(["GEM", "GOOD"]), 1),
+                else_=0
+            )).label("claude_gems"),
+            # Claude judged count
+            func.sum(case(
+                (Listing.claude_judged_at != None, 1),
+                else_=0
+            )).label("claude_judged"),
+            # Rule-based gems (not yet judged by Claude)
+            func.sum(case(
+                (
+                    (Listing.classification.in_([Classification.amazing_gem, Classification.gem])) &
+                    (Listing.claude_judged_at == None),
+                    1
+                ),
+                else_=0
+            )).label("rule_gems"),
+            # Avg profit: prefer Claude expected_profit for judged gems, else estimated
+            func.avg(case(
+                (
+                    (Listing.claude_verdict.in_(["GEM", "GOOD"])) &
+                    (Listing.claude_expected_profit > 0),
+                    Listing.claude_expected_profit
+                ),
+                (
+                    (Listing.classification.in_([Classification.amazing_gem, Classification.gem])) &
+                    (Listing.claude_judged_at == None) &
+                    (Listing.estimated_profit > 0),
+                    Listing.estimated_profit
+                ),
+                else_=None
+            )).label("avg_profit"),
+        ).select_from(Listing)
     )
-    claude_judged = await db.scalar(
-        select(func.count()).select_from(Listing).where(
-            Listing.claude_judged_at != None
-        )
-    )
-    avg_claude_profit = await db.scalar(
-        select(func.avg(Listing.claude_expected_profit)).where(
-            Listing.claude_verdict.in_(["GEM", "GOOD"]),
-            Listing.claude_expected_profit > 0,
-        )
-    )
-
-    # Rule-based fallback counts (listings not yet judged by Claude)
-    rule_gems = await db.scalar(
-        select(func.count()).select_from(Listing).where(
-            Listing.classification.in_([Classification.amazing_gem, Classification.gem]),
-            Listing.claude_judged_at == None,
-        )
-    )
-    avg_rule_profit = await db.scalar(
-        select(func.avg(Listing.estimated_profit)).where(
-            Listing.classification.in_([Classification.amazing_gem, Classification.gem]),
-            Listing.claude_judged_at == None,
-            Listing.estimated_profit > 0,
-        )
-    )
-
-    gems_count = (claude_gems or 0) + (rule_gems or 0)
-    avg_profit = avg_claude_profit or avg_rule_profit or 0
-
+    r = row.one()
     return {
-        "total_listings": total,
-        "gems_count": gems_count,
-        "avg_profit": round(avg_profit, 2),
-        "claude_judged_count": claude_judged or 0,
-        "claude_gems_count": claude_gems or 0,
-        "rule_based_gems_count": rule_gems or 0,
+        "total_listings":       int(r.total or 0),
+        "gems_count":           int((r.claude_gems or 0) + (r.rule_gems or 0)),
+        "avg_profit":           round(float(r.avg_profit or 0), 2),
+        "claude_judged_count":  int(r.claude_judged or 0),
+        "claude_gems_count":    int(r.claude_gems or 0),
+        "rule_based_gems_count":int(r.rule_gems or 0),
     }
 
 
