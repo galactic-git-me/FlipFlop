@@ -154,6 +154,16 @@ _STEALTH_ARGS = [
     "--disable-infobars",
     "--window-size=1366,768",
     "--lang=en-GB",
+    # Disable Chrome telemetry / metrics reporting — these write GBs of data
+    # into BrowserMetrics/ and DeferredBrowserMetrics/ inside the profile dir.
+    "--metrics-recording-only",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-component-update",
+    "--disable-domain-reliability",
+    "--disable-features=OptimizationHints,MediaRouter,Translate",
 ]
 
 _USER_AGENT = (
