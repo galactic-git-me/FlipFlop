@@ -167,9 +167,9 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         for part_def in parts:
             name = part_def["name"]
             search = part_def["ebay_search"]
-            sold = await _ebay_sold_median(client, search)
+            sold, sold_count = await _ebay_sold_median(client, search)
             await asyncio.sleep(random.uniform(0.2, 0.6))
-            buy = await _ebay_buy_price(client, search)
+            buy, buy_count = await _ebay_buy_price(client, search)
             await asyncio.sleep(random.uniform(0.2, 0.6))
             ebay_sold_map[name] = sold
             if sold:
@@ -182,7 +182,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
             record_term_result(
                 source_name="UpgradeParts:eBay UK",
                 term=search,
-                found=1 if (sold or buy) else 0,
+                found=sold_count + buy_count,
                 new=0,
             )
 
@@ -212,7 +212,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                     record_term_result(
                         source_name="UpgradeParts:BargainHardware",
                         term=part_def["bh_search"],
-                        found=1 if price else 0,
+                        found=1 if price is not None else 0,
                         new=0,
                     )
                 await browser.close()
@@ -349,8 +349,9 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
 
 # ── eBay scraping ─────────────────────────────────────────────────────────────
 
-async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> float | None:
-    """Median sold price from eBay completed listings — 3-attempt retry."""
+async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> tuple[float | None, int]:
+    """Median sold price from eBay completed listings — 3-attempt retry.
+    Returns (median_price, listing_count)."""
     params = {
         "_nkw": search, "_sacat": "0",
         "LH_Sold": "1", "LH_Complete": "1",
@@ -363,23 +364,24 @@ async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> float | N
                 prices = _parse_ebay_prices(r.text)
                 if prices:
                     prices.sort()
-                    return round(prices[len(prices) // 2], 2)
+                    return round(prices[len(prices) // 2], 2), len(prices)
                 # got a page but no prices — might be "Access Denied" soft block
                 if "access denied" in r.text.lower() or "interruption" in r.text.lower():
                     await asyncio.sleep(2.5 * (attempt + 1))
                     continue
-                return None
+                return None, 0
             if r.status_code == 403:
                 await asyncio.sleep(2.5 * (attempt + 1))
                 continue
         except Exception as exc:
             log.debug("ebay_sold.request_retry", search=search, attempt=attempt + 1, error=str(exc))
             await asyncio.sleep(1.5)
-    return None
+    return None, 0
 
 
-async def _ebay_buy_price(client: httpx.AsyncClient, search: str) -> float | None:
-    """25th-percentile Buy-It-Now used price from eBay — 3-attempt retry."""
+async def _ebay_buy_price(client: httpx.AsyncClient, search: str) -> tuple[float | None, int]:
+    """25th-percentile Buy-It-Now used price from eBay — 3-attempt retry.
+    Returns (price, listing_count)."""
     params = {
         "_nkw": search, "_sacat": "0",
         "LH_BIN": "1", "LH_ItemCondition": "3000",
@@ -392,18 +394,18 @@ async def _ebay_buy_price(client: httpx.AsyncClient, search: str) -> float | Non
                 prices = _parse_ebay_prices(r.text)
                 if prices:
                     prices.sort()
-                    return round(prices[max(0, len(prices) // 4)], 2)
+                    return round(prices[max(0, len(prices) // 4)], 2), len(prices)
                 if "access denied" in r.text.lower() or "interruption" in r.text.lower():
                     await asyncio.sleep(2.5 * (attempt + 1))
                     continue
-                return None
+                return None, 0
             if r.status_code == 403:
                 await asyncio.sleep(2.5 * (attempt + 1))
                 continue
         except Exception as exc:
             log.debug("ebay_buy.request_retry", search=search, attempt=attempt + 1, error=str(exc))
             await asyncio.sleep(1.5)
-    return None
+    return None, 0
 
 
 def _parse_ebay_prices(html: str) -> list[float]:

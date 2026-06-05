@@ -253,7 +253,11 @@ def _build_schedule(schedule_rows: Any) -> Panel:
     return Panel(tbl, title="Scheduler", border_style="cyan")
 
 
-def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any], enabled_sources: set[str]) -> Panel:
+_SPINNER_FRAMES = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+_spinner_tick = 0
+
+
+def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any], enabled_sources: set[str], schedule_rows: list[Any] | None = None) -> Panel:
     by_scope: dict[str, list[dict[str, Any]]] = {s: [] for s in SCOPES}
     for row in taxonomy_rows:
         scope = str((row or {}).get("scope") or "").strip()
@@ -312,15 +316,40 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
         if st == "zero":    return "[dim]0[/dim]"
         return ""
 
+    # Build scope → job status map from schedule_rows
+    scope_status: dict[str, str] = {}
+    for j in (schedule_rows or []):
+        jid = str((j or {}).get("id") or "")
+        st = str((j or {}).get("last_status") or "")
+        if jid in SCOPES:
+            scope_status[jid] = st
+
+    def _scope_indicator(scope: str) -> str:
+        global _spinner_tick
+        st = scope_status.get(scope, "")
+        if st == "running":
+            frame = _SPINNER_FRAMES[_spinner_tick % len(_SPINNER_FRAMES)]
+            return f"[yellow]{frame}[/yellow]"
+        if st == "success":
+            return "[green]✓[/green]"
+        if st in ("failed", "error"):
+            return "[red]✗[/red]"
+        return ""
+
     def render_group(scope: str, rows: list[dict[str, Any]]) -> None:
+        global _spinner_tick
         first = True
+        indicator = _scope_indicator(scope)
+        label = SCOPE_LABELS[scope]
         for r in sorted(rows, key=lambda x: str(x.get("term", "")).lower())[:14]:
             term  = str(r.get("term") or "").strip()
-            out   = [SCOPE_LABELS[scope] if first else "", term]
+            cat   = f"{label}\n{indicator}" if first and indicator else (label if first else "")
+            out   = [cat, term]
             out  += [_cell(scope, v, term) for v in vendor_names]
             tbl.add_row(*out)
             first = False
         tbl.add_section()
+        _spinner_tick += 1
 
     for scope in SCOPES:
         render_group(scope, by_scope.get(scope, []))
@@ -394,7 +423,7 @@ def main() -> int:
 
                     layout["kpis"].update(_build_kpis(listing_stats, demand_summary, scan_status))
                     layout["sched"].update(_build_schedule(schedule_rows))
-                    layout["right"].update(_build_terms(taxonomy_rows, telem_items, enabled))
+                    layout["right"].update(_build_terms(taxonomy_rows, telem_items, enabled, schedule_rows))
                     layout["logs"].update(_build_backend_logs(tailer.poll(), log_file))
                 except Exception as exc:
                     layout["kpis"].update(Panel("[red]Dashboard render error[/red]", border_style="red"))
