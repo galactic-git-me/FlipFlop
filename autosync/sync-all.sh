@@ -34,6 +34,11 @@ sync_repo() {
 
   cd "$repo"
 
+  # Skip repos with no origin remote configured.
+  if ! git remote get-url origin >/dev/null 2>&1; then
+    return 0
+  fi
+
   local branch
   branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo master)"
   if [[ -z "$branch" || "$branch" == "HEAD" ]]; then
