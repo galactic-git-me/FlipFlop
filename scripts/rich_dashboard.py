@@ -182,15 +182,31 @@ def _cell_state(item: dict[str, Any] | None) -> tuple[str, int]:
     return ("zero", 0)
 
 
+_EBAY_CANONICAL = "eBay UK"
+_EBAY_ALIASES   = {"eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions",
+                   "eBay Auctions", "ebay", "ebay uk"}
+
+
+def _normalise_vendor(name: str) -> str:
+    """Merge all eBay variants into one canonical name for column counting."""
+    if name.lower().startswith("ebay"):
+        # Keep "eBay UK Auctions" distinct from "eBay UK" only if it's auction-specific
+        if "auction" in name.lower():
+            return "eBay UK Auctions"
+        return _EBAY_CANONICAL
+    return name
+
+
 def _compute_top_vendors(telem_items: dict[str, Any], max_cols: int = 5) -> list[tuple[str, int]]:
     """
     Return (vendor_name, total_found) sorted by total_found DESC.
-    Strips scope prefixes (Cases:, Accessories:, UpgradeParts:) before aggregating
-    so 'eBay UK' counts are merged across all catalogues.
+    - Strips scope prefixes (Cases:, Accessories:, UpgradeParts:)
+    - Merges all eBay variants ("eBay", "eBay UK", "eBay (Worldwide)") into "eBay UK"
     """
     totals: dict[str, int] = {}
     for raw_src, rows in (telem_items or {}).items():
         src = re.sub(r"^(?:Cases|Accessories|UpgradeParts):", "", str(raw_src))
+        src = _normalise_vendor(src)
         for r in (rows or []):
             found = int((r or {}).get("found") or 0)
             if found > 0:
@@ -273,8 +289,19 @@ def _build_terms(taxonomy_rows: list[dict[str, Any]], telem_items: dict[str, Any
         tbl.add_column(hdr, justify="center", width=9, no_wrap=True)
 
     def _cell(scope: str, vendor: str, term: str) -> str:
-        key = (_scoped_src(scope, vendor), term.lower())
+        term_lower = term.lower()
+        key = (_scoped_src(scope, vendor), term_lower)
         st, found = _cell_state(latest.get(key))
+        # Different swarms recorded eBay telemetry under "eBay" vs "eBay UK" —
+        # try aliases so historical data from before the naming fix still shows.
+        if st == "blank" and "ebay" in vendor.lower():
+            for alt in ("eBay UK", "eBay", "eBay (Worldwide)", "eBay UK Auctions"):
+                if alt == vendor:
+                    continue
+                alt_st, alt_found = _cell_state(latest.get((_scoped_src(scope, alt), term_lower)))
+                if alt_st != "blank":
+                    st, found = alt_st, alt_found
+                    break
         if st == "error":   return "[red]✗[/red]"
         if st == "retry":   return "[yellow]~[/yellow]"
         if found > 0:       return f"[green]✓{found}[/green]"

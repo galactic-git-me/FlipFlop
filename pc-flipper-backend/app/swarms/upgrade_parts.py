@@ -180,7 +180,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
 
             log.debug("upgrade_parts.ebay", part=name, sold=sold, buy=buy)
             record_term_result(
-                source_name="UpgradeParts:eBay",
+                source_name="UpgradeParts:eBay UK",
                 term=search,
                 found=1 if (sold or buy) else 0,
                 new=0,

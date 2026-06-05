@@ -247,7 +247,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
             if scrape_err:
                 stats["errors"] += 1
                 await db.rollback()
-                record_term_result(source_name="Accessories:eBay", term=search_def["term"], error=scrape_err)
+                record_term_result(source_name="Accessories:eBay UK", term=search_def["term"], error=scrape_err)
                 log.error("accessories.scrape.error", term=search_def["term"], error=scrape_err)
                 continue
 
