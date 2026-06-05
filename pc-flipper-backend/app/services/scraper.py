@@ -311,7 +311,13 @@ async def _scrape_ebay_api_term(
     is_component_term: bool,
     condition_code: str | None = None,
     worldwide: bool = False,
-) -> list[RawListing]:
+) -> list[RawListing] | None:
+    """
+    Returns:
+      list[RawListing]  — API call succeeded (may be empty list = genuine 0 results)
+      None              — API call failed (non-200, auth error, network error)
+                         Caller may choose to fall back to HTML scraping.
+    """
     endpoint = f"{_ebay_base_url()}/buy/browse/v1/item_summary/search"
     buying = "AUCTION" if auction_mode else "FIXED_PRICE"
     hi = int(max_price) if max_price > 0 else 5000
@@ -342,7 +348,8 @@ async def _scrape_ebay_api_term(
     }
     resp = await client.get(endpoint, params=params, headers=headers)
     if resp.status_code != 200:
-        return []
+        # None signals the caller that the API call itself failed
+        return None
     payload = resp.json()
     items = payload.get("itemSummaries") or []
     return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK")
@@ -572,61 +579,28 @@ async def scrape_ebay(
                             condition_code=condition_code,
                             worldwide=worldwide,
                         )
-                        if api_listings:
+                        if api_listings is not None:
+                            # API call succeeded — authoritative result, never fall back to HTML/Playwright
                             if auction_mode:
                                 for l in api_listings:
                                     l.source_name = "eBay UK Auctions"
                                     l.listing_type = "auction"
                             return term, api_listings, False, 200, None
+                        # api_listings is None → API call failed (non-200/auth error)
+                        # Fall through to HTML scraping as last resort — no Playwright
 
-                    if auction_mode:
-                        params = {
-                            "_nkw": term,
-                            "_sacat": "0",
-                            "_ipg": "120",
-                        }
-                    else:
-                        params = {
-                            "_nkw": term,
-                            "_sacat": "0",
-                            "_ipg": "120",
-                        }
-
+                    # ── HTML scraping path (no API token, or API returned non-200) ──
+                    # No Playwright fallback here: Playwright for eBay violates ToS and
+                    # generates browser processes. API is the authoritative path.
+                    params = {"_nkw": term, "_sacat": "0", "_ipg": "120"}
                     new_listings: list[RawListing] = []
                     blocked = False
                     last_status = 0
-                    query_variants = [params]
 
-                    for attempt in range(1, 4):
-                        variant = query_variants[min(attempt - 1, len(query_variants) - 1)]
-                        resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=variant, headers=_headers())
-                        last_status = resp.status_code
-                        blocked = _is_ebay_blocked(resp.status_code, resp.text)
-                        new_listings = _parse_ebay_html(resp.text, term)
-
-                        if not blocked and new_listings:
-                            break
-
-                        pw_listings, pw_blocked = await asyncio.wait_for(
-                            _scrape_ebay_playwright_term(
-                            term=term,
-                            min_price=min_price,
-                            max_price=max_price,
-                            auction_mode=auction_mode,
-                            ),
-                            timeout=45,
-                        )
-                        if pw_listings:
-                            new_listings = pw_listings
-                            blocked = False
-                            print(
-                                f"[scraper] eBay '{term}': HTTP blocked/empty "
-                                f"(status={resp.status_code}), Playwright returned {len(pw_listings)}"
-                            )
-                            break
-                        blocked = blocked or pw_blocked
-                        if blocked and attempt < 3:
-                            await asyncio.sleep(random.uniform(8.0, 18.0))
+                    resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_headers())
+                    last_status = resp.status_code
+                    blocked = _is_ebay_blocked(resp.status_code, resp.text)
+                    new_listings = _parse_ebay_html(resp.text, term)
 
                     if auction_mode:
                         for l in new_listings:
@@ -697,27 +671,20 @@ async def scrape_ebay(
                 await asyncio.sleep(random.uniform(settings.ebay_delay_min_seconds, settings.ebay_delay_max_seconds))
                 try:
                     is_component_term = any(m in retry_term.lower() for m in component_markers)
-                    params = {
-                        "_nkw": retry_term,
-                        "_sacat": "0",
-                        "_ipg": "120",
-                    }
-                    params = {k: v for k, v in params.items() if v is not None}
-                    resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_headers())
-                    new_listings = _parse_ebay_html(resp.text, term)
-                    blocked = _is_ebay_blocked(resp.status_code, resp.text)
-                    if not new_listings:
-                        pw_listings, pw_blocked = await asyncio.wait_for(
-                            _scrape_ebay_playwright_term(
-                            term=retry_term,
-                            min_price=min_price,
-                            max_price=max_price,
-                            auction_mode=auction_mode,
-                            ),
-                            timeout=45,
-                        )
-                        blocked = blocked or pw_blocked
-                        new_listings = pw_listings
+                    # Retry via API first — same rule as primary pass
+                    retry_token = await _get_ebay_access_token(client) if (settings.ebay_use_api or settings.ebay_app_id) else None
+                    if retry_token:
+                        new_listings = await _scrape_ebay_api_term(
+                            client=client, token=retry_token, term=retry_term,
+                            min_price=min_price, max_price=max_price,
+                            auction_mode=auction_mode, is_component_term=is_component_term,
+                        ) or []
+                        blocked = False
+                    else:
+                        params = {"_nkw": retry_term, "_sacat": "0", "_ipg": "120"}
+                        resp = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_headers())
+                        new_listings = _parse_ebay_html(resp.text, term)
+                        blocked = _is_ebay_blocked(resp.status_code, resp.text)
                     before = len(results)
                     for listing in new_listings:
                         if listing.external_id not in seen_ids:
