@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 """
 Playwright-based scrapers for sites that require a real browser:
   - Gumtree  (JS SPA, no login needed)
@@ -37,12 +38,22 @@ _LOG_THROTTLE_TS: dict[str, float] = {}
 _PLAYWRIGHT_MISSING_WARNED = False
 _CHROMIUM_AVAILABLE: bool | None = None
 # Hard cap on simultaneous live Playwright browser processes.
-# Each browser = one headless_shell.exe.  Without this cap, parallel scrapers
-# (Gumtree + Facebook + Preloved + Apex + Wilsons + …) each spawn their own
-# browser, and the count grows unboundedly across hourly scan cycles.
-# Value 3 keeps CPU/RAM manageable on a dev machine; raise in production.
-_MAX_CONCURRENT_BROWSERS = 3
+# Each browser = one headless_shell.exe.
+#
+# IMPORTANT: This semaphore lives in-process.  If multiple backend instances
+# are running simultaneously (e.g. after an unclean restart), each has its
+# own semaphore — so 2 instances × 2 cap = 4 real browsers.  Always ensure
+# only ONE backend process is running (start-dev-windows.ps1 handles this).
+#
+# Set to 1: fully serialise browser usage.  Scrapers queue up rather than
+# running in parallel.  Slower, but safe on a dev machine with limited RAM.
+# Raise to 2 once you have ≥ 16 GB RAM free and only one backend instance.
+_MAX_CONCURRENT_BROWSERS = 1
 _BROWSER_LIFETIME_SEM = asyncio.Semaphore(_MAX_CONCURRENT_BROWSERS)
+
+# Max seconds any single browser session may run before it is force-closed.
+# Prevents a hung scraper from holding the semaphore slot indefinitely.
+_BROWSER_SESSION_TIMEOUT = 120  # 2 minutes
 
 # Legacy name kept so existing _launch_browser usages don't error.
 # It now guards only the actual chromium.launch() call (serialised).
@@ -378,19 +389,10 @@ async def scrape_gumtree_playwright(
 
     REQUIREMENT: playwright install chromium
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error(
-            "playwright_not_installed",
-            fix="pip install playwright && playwright install chromium",
-        )
-        return []
-
     results: list[RawListing] = []
     seen: set[str] = set()
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -552,15 +554,6 @@ async def scrape_facebook_playwright(
       2. Install "Cookie Editor" extension → export as JSON
       3. Save to:  pc-flipper-backend/fb_cookies.json
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error(
-            "playwright_not_installed",
-            fix="pip install playwright && playwright install chromium",
-        )
-        return []
-
     # Default: when CDP is configured, prefer live browser session state and do NOT
     # inject file cookies (stale cookie files can force an unexpected logout wall).
     # Override: FB_FORCE_COOKIE_FILE=1 forces fb_cookies.json mode for troubleshooting.
@@ -584,8 +577,8 @@ async def scrape_facebook_playwright(
     login_required = asyncio.Event()
     term_concurrency = max(1, min(4, int(getattr(settings, "max_concurrent_scrapers", 3) or 3)))
 
-    async with _FACEBOOK_SCRAPE_SEM, _BROWSER_LIFETIME_SEM:
-        async with async_playwright() as p:
+    async with _FACEBOOK_SCRAPE_SEM:
+        async with managed_playwright() as p:
             try:
                 browser, context = await _make_context(
                     p,
@@ -786,19 +779,10 @@ async def scrape_preloved_playwright(
 
     REQUIREMENT: playwright install chromium
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error(
-            "playwright_not_installed",
-            fix="pip install playwright && playwright install chromium",
-        )
-        return []
-
     results: list[RawListing] = []
     seen: set[str] = set()
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -982,17 +966,11 @@ async def scrape_apex_playwright(
     Uses Playwright to render the page, intercepts BidJS REST API responses
     to extract lot data without needing to manage session cookies manually.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     results: list[RawListing] = []
     seen: set[str] = set()
     intercepted: list[dict] = []
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _launch_browser(p)
         except Exception:
@@ -1452,11 +1430,6 @@ async def scrape_wilsons_playwright(
     Wilsons Auctions — UK's largest independent auction house.
     IT and office equipment lots appear under their Technology category.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        return []
-
     def url_fn(term, lo, hi):
         return (
             f"https://www.wilsonsauctions.com/lots"
@@ -1465,7 +1438,7 @@ async def scrape_wilsons_playwright(
             f"&categoryId=65"  # IT / Technology category
         )
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="Wilsons Auctions",
@@ -1508,11 +1481,6 @@ async def scrape_ibidder_playwright(
     i-bidder — major UK multi-vendor auction aggregator.
     Aggregates lots from hundreds of UK auctioneers.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        return []
-
     def url_fn(term, lo, hi):
         return (
             f"https://www.i-bidder.com/en-gb/auction-catalogues/all/search"
@@ -1521,7 +1489,7 @@ async def scrape_ibidder_playwright(
             f"&priceFrom={int(lo)}&priceTo={int(hi)}"
         )
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="i-bidder",
@@ -1570,11 +1538,6 @@ async def scrape_bidspotter_playwright(
     BidSpotter UK — international auction platform with a large UK catalogue.
     Strong coverage of IT/office equipment lots.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        return []
-
     def url_fn(term, lo, hi):
         return (
             f"https://www.bidspotter.co.uk/en-us/auction-catalogues"
@@ -1582,7 +1545,7 @@ async def scrape_bidspotter_playwright(
             f"&country=gb"
         )
 
-    async with _BROWSER_LIFETIME_SEM, async_playwright() as p:
+    async with managed_playwright() as p:
         return await _scrape_auction_site(
             p,
             site_name="BidSpotter",

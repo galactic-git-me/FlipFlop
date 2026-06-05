@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 """
 PC Cases Swarm — runs daily.
 Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, AliExpress, and Etsy.
@@ -431,18 +432,12 @@ async def _scrape_google_shopping(search: str, theme: str) -> list[RawCase]:
     Uses JS evaluation against the live DOM for resilience against
     Google's frequently-rotating CSS class names.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     cases = []
     filtered_delivery = 0
     query = search.replace(" ", "+")
     url = f"https://www.google.co.uk/search?q={query}&tbm=shop&hl=en-GB&gl=gb&num=20"
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _make_pw_context(p)
         except Exception as exc:
@@ -665,16 +660,10 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
     BeautifulSoup on page.content() misses h2 links because Amazon renders
     them client-side. JS evaluation against the live DOM works reliably.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     cases = []
     url = f"https://www.amazon.co.uk/s?k={search.replace(' ', '+')}&i=computers"
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _make_pw_context(p)
         except Exception as exc:
@@ -765,17 +754,11 @@ async def _scrape_aliexpress(search: str, theme: str) -> list[RawCase]:
     AliExpress is fully JS-rendered. Playwright renders the SPA and extracts
     product cards from the DOM after the search results load.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     cases = []
     filtered_delivery = 0
     url = f"https://www.aliexpress.com/wholesale?SearchText={search.replace(' ', '+')}&g=y&SortType=price_asc"
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _make_pw_context(p)
         except Exception as exc:
@@ -901,17 +884,11 @@ async def _scrape_temu(search: str, theme: str) -> list[RawCase]:
     Temu is a fully client-side React SPA with aggressive bot detection.
     Playwright with stealth patches gets past the initial JS challenge.
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     cases = []
     filtered_delivery = 0
     url = f"https://www.temu.com/search_result.html?search_key={search.replace(' ', '+')}&search_method=user"
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _make_pw_context(p)
         except Exception as exc:
@@ -1052,16 +1029,10 @@ async def _scrape_etsy(search: str, theme: str) -> list[RawCase]:
     Etsy is a fully client-side SPA; Playwright renders the search results.
     Price cap £200 (handmade cases tend to be pricier).
     """
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        log.error("playwright_not_installed", fix="pip install playwright && playwright install chromium")
-        return []
-
     cases = []
     url = f"https://www.etsy.com/uk/search?q={search.replace(' ', '+')}&explicit=1"
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         try:
             browser, context = await _make_pw_context(p)
         except Exception as exc:
@@ -1227,11 +1198,7 @@ async def _scrape_alibaba(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_generic_case_market(search: str, theme: str, source_site: str, url: str) -> list[RawCase]:
     cases: list[RawCase] = []
-    try:
-        from playwright.async_api import async_playwright
-    except Exception:
-        return cases
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         headless = not _interactive_scraper_mode()
         try:
             browser = await p.chromium.launch(

@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 """
 Upgrade Parts Swarm — runs every 24 hours.
 
@@ -191,8 +192,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
     bh_map: dict[str, float | None] = {}
     if has_chromium:
         try:
-            from playwright.async_api import async_playwright
-            async with async_playwright() as p:
+            async with managed_playwright() as p:
                 browser = await p.chromium.launch(
                     headless=True,
                     args=_STEALTH_ARGS,
@@ -605,15 +605,10 @@ async def _fetch_playwright_lowest_price(
         log.info("upgrade_parts.playwright.deferred", source=source_label, reason=reason)
         return None, 0
 
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        return None, 0
-
     prices: list[float] = []
     filtered_delivery = 0
     try:
-        async with async_playwright() as p:
+        async with managed_playwright() as p:
             browser = await p.chromium.launch(
                 headless=True,
                 args=_STEALTH_ARGS,

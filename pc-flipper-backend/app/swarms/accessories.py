@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 """
 Accessories Swarm — runs every 24 hours.
 Scrapes budget gaming accessories (mice, keyboards, headsets, mousepads, controllers,
@@ -211,8 +212,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                     source_batches.extend((direct_tasks[idx][0], rows) for idx, rows in enumerate(direct_results))
 
                 if has_chrom:
-                    from playwright.async_api import async_playwright
-                    async with async_playwright() as p:
+                    async with managed_playwright() as p:
                         browser = await p.chromium.launch(
                             headless=True,
                             args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-dev-shm-usage"],

@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 import asyncio
 import os
 from datetime import datetime, timezone
@@ -114,12 +115,11 @@ async def run_antibot_preflight() -> None:
                 log.warning("runtime.preflight.antibot.skipped_no_chromium")
                 return
 
-            from playwright.async_api import async_playwright
 
             wait_seconds = max(30, int(os.getenv("ANTI_BOT_PREFLIGHT_WAIT_SECONDS", "120")))
             log.info("runtime.preflight.antibot.start", pages=len(CHALLENGE_URLS), wait_seconds=wait_seconds)
             cdp_url = (os.getenv("BROWSER_CDP_URL", "") or "").strip()
-            async with async_playwright() as p:
+            async with managed_playwright() as p:
                 browser = None
                 context = None
                 try:

@@ -1,3 +1,4 @@
+from app.services.browser_pool import managed_playwright
 """
 Scraper service — fetches listings from configured data sources.
 Each platform has its own adapter. Falls back to HTML scraping when no API.
@@ -354,9 +355,7 @@ async def _scrape_ebay_playwright_term(
     auction_mode: bool = False,
 ) -> tuple[list[RawListing], bool]:
     """Browser fallback for eBay when HTTP path is blocked or returns empty."""
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
+    if not chromium_available():
         return [], False
 
     term_q = term.replace(" ", "+")
@@ -405,7 +404,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
     blocked = False
     listings: list[RawListing] = []
     async with _EBAY_PLAYWRIGHT_SEM:
-        async with async_playwright() as p:
+        async with managed_playwright() as p:
             cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
             browser = None
             attached_cdp = False
@@ -1832,10 +1831,6 @@ async def _scrape_generic_marketplace_listings(
     link_selector: str,
     title_selector: str,
 ) -> list[RawListing]:
-    try:
-        from playwright.async_api import async_playwright
-    except Exception:
-        return []
 
     results: list[RawListing] = []
     seen: set[str] = set()
@@ -1862,7 +1857,7 @@ async def _scrape_generic_marketplace_listings(
 
     max_pages = max(1, int(getattr(settings, "marketplace_max_pages_per_term", 2) or 2))
 
-    async with async_playwright() as p:
+    async with managed_playwright() as p:
         cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
         browser = None
         attached_cdp = False

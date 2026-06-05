@@ -76,12 +76,14 @@ function Stop-Dev {
     Remove-Item $PidFile -Force -ErrorAction SilentlyContinue
   }
 
-  # Safety net 1 — named Python / Node patterns
+  # Safety net 1 — named Python / Node patterns AND the entire backend venv
+  $backendVenv = [regex]::Escape((Join-Path $BackendDir ".venv\Scripts\python.exe"))
   Get-CimInstance Win32_Process |
     Where-Object {
       $_.CommandLine -match "uvicorn app.main:app" -or
       $_.CommandLine -match "next dev" -or
-      $_.CommandLine -match "run_dev\.py"
+      $_.CommandLine -match "run_dev\.py" -or
+      $_.CommandLine -match $backendVenv
     } |
     ForEach-Object { Stop-ProcessTree -RootPid $_.ProcessId }
 
