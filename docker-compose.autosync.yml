@@ -13,8 +13,8 @@ services:
       GIT_USER_NAME: Coding AutoSync
       GIT_USER_EMAIL: autosync@coding.local
       TZ: Europe/London
-      HOME: /home/mac
+      HOME: /tmp
       GIT_CONFIG_GLOBAL: /tmp/.gitconfig
     volumes:
       - /home/mac/CODING:/coding
-      - /home/mac/.git-credentials:/home/mac/.git-credentials
+      - /home/mac/.git-credentials:/tmp/.git-credentials
