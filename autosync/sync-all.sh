@@ -15,7 +15,7 @@ if [[ ! -d "$CODING_DIR" ]]; then
   exit 1
 fi
 
-git config --global credential.helper store || true
+git config --global credential.helper "store --file /tmp/git-creds/.git-credentials" || true
 git config --global --add safe.directory '*' || true
 
 if [[ -n "${GIT_USER_NAME:-}" ]]; then git config --global user.name "$GIT_USER_NAME"; fi

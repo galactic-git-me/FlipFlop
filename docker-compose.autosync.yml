@@ -17,4 +17,4 @@ services:
       GIT_CONFIG_GLOBAL: /tmp/.gitconfig
     volumes:
       - /home/mac/CODING:/coding
-      - /home/mac/.git-credentials:/tmp/.git-credentials
+      - /home/mac/.autosync-git:/tmp/git-creds
