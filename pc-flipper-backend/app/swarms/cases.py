@@ -134,28 +134,69 @@ async def run_cases_swarm(mode: str = "main") -> dict:
     log.info("cases_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
 
-    dynamic_themes, source_allowlist = await _dynamic_case_themes_from_db()
-    playbook_themes = await _playbook_extra_themes()
-    all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
-    log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
-    max_terms = max(1, int(os.getenv("CASES_MAX_TERMS", "10")))
-    # Build term → theme mapping so scrapers can tag parts with the right theme.
+    max_terms = max(1, int(os.getenv("CASES_MAX_TERMS", "20")))
+
+    # Build term → theme mapping and per-source term lists.
+    # Matches the flip_opportunities pattern: each DB row distributes its term
+    # to its configured sources (or all non-CherryTree sources if source_names
+    # is empty).  No global source allowlist — that was silently excluding Amazon
+    # and limiting terms to [:2] per group.
     term_to_theme: dict[str, str] = {}
-    for theme_def in all_themes:
-        for t in theme_def["terms"]:
-            term_to_theme.setdefault(t, theme_def["theme"])
     terms_by_vendor: dict[str, list[str]] = {}
-    for source in SOURCES:
-        if source_allowlist and source["name"] not in source_allowlist:
-            continue
-        if source["fn"] == "cherrytree":
-            terms_by_vendor[source["name"]] = ["catalogue"]
-            continue
-        terms: list[str] = list(CORE_CASE_TERMS)
+
+    async with AsyncSessionLocal() as db:
+        db_rows = (
+            await db.execute(
+                sa_select(SourceSearchTerm).where(
+                    SourceSearchTerm.scope == "cases",
+                    SourceSearchTerm.enabled == True,
+                )
+            )
+        ).scalars().all()
+
+    if db_rows:
+        for row in db_rows:
+            term = str(row.term or "").strip()
+            if not term:
+                continue
+            theme = row.group_name or "Custom"
+            term_to_theme.setdefault(term, theme)
+            src_names = row.source_names or []
+            if src_names:
+                for s in src_names:
+                    canonical = _canonical_source_name(str(s))
+                    terms_by_vendor.setdefault(canonical, []).append(term)
+            else:
+                for source in SOURCES:
+                    if source["fn"] != "cherrytree":
+                        terms_by_vendor.setdefault(source["name"], []).append(term)
+        # Always blend in playbook-derived themes too
+        playbook_themes = await _playbook_extra_themes()
+        for theme_def in playbook_themes:
+            for t in theme_def["terms"]:
+                if t not in term_to_theme:
+                    term_to_theme[t] = theme_def["theme"]
+                    for source in SOURCES:
+                        if source["fn"] != "cherrytree":
+                            terms_by_vendor.setdefault(source["name"], []).append(t)
+    else:
+        # Fallback: use hardcoded CASE_THEMES + CORE_CASE_TERMS + playbook themes
+        playbook_themes = await _playbook_extra_themes()
+        all_themes = CASE_THEMES + playbook_themes
         for theme_def in all_themes:
-            terms.extend(theme_def["terms"][:2])
-        deduped_terms = list(dict.fromkeys(terms))
-        terms_by_vendor[source["name"]] = deduped_terms[:max_terms]
+            for t in theme_def["terms"]:
+                term_to_theme.setdefault(t, theme_def["theme"])
+        fallback_terms = list(dict.fromkeys(
+            CORE_CASE_TERMS + [t for td in all_themes for t in td["terms"]]
+        ))
+        for source in SOURCES:
+            if source["fn"] != "cherrytree":
+                terms_by_vendor[source["name"]] = fallback_terms
+
+    # Dedup per source, apply cap, always give CherryTree its catalogue term
+    terms_by_vendor = {k: list(dict.fromkeys(v))[:max_terms] for k, v in terms_by_vendor.items()}
+    terms_by_vendor["CherryTree Inc"] = ["catalogue"]
+
     batch_terms = terms_by_vendor
     log.info(
         "cases.terms.capped",

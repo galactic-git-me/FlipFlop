@@ -115,9 +115,8 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         "amazon": 0, "temu": 0, "aliexpress": 0, "alibaba": 0,
     }
 
-    parts = list(TRACKED_PARTS)
     async with AsyncSessionLocal() as db:
-        rows = (
+        db_rows = (
             await db.execute(
                 sa_select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "upgrade_parts",
@@ -125,39 +124,33 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 )
             )
         ).scalars().all()
-    if rows:
-        wanted: set[str] = set()
-        wanted_for_ebay = False
-        wanted_for_amazon = False
-        for r in rows:
-            term = str(r.term or "").strip().lower()
-            if term:
-                wanted.add(term)
-            sources = [_canonical_vendor(s) for s in (r.source_names or [])]
-            if not sources or "eBay" in sources:
-                wanted_for_ebay = True
-            if not sources or "Amazon" in sources:
-                wanted_for_amazon = True
-        filtered = [p for p in TRACKED_PARTS if str(p.get("ebay_search") or "").strip().lower() in wanted]
-        if filtered:
-            parts = filtered
-        if wanted and (not wanted_for_ebay or not wanted_for_amazon):
-            # Keep lanes active for terms even when row source names used aliases.
-            parts = filtered or parts
-    terms_by_vendor = {
-        "eBay": [p["ebay_search"] for p in parts],
-        "Gumtree": [p["ebay_search"] for p in parts],
-        "BargainHardware": [p["ebay_search"] for p in parts],
-        "Scan": [p["ebay_search"] for p in parts],
-        "Overclockers": [p["ebay_search"] for p in parts],
-        "Box": [p["ebay_search"] for p in parts],
-        "Amazon": [p["ebay_search"] for p in parts],
-        "Temu": [p["ebay_search"] for p in parts],
-        "AliExpress": [p["ebay_search"] for p in parts],
-        "Alibaba": [p["ebay_search"] for p in parts],
-    }
-    allowed = set(terms_by_vendor.get("eBay", []))
-    parts = [p for p in parts if p["ebay_search"] in allowed]
+
+    if db_rows:
+        # Use DB terms directly as search queries — matches flip_opportunities pattern.
+        # Each term is looked up in TRACKED_PARTS by ebay_search (case-insensitive)
+        # to preserve category metadata; unrecognised terms become synthetic entries.
+        tracked_by_search = {str(p["ebay_search"]).lower(): p for p in TRACKED_PARTS}
+        seen: set[str] = set()
+        parts = []
+        for row in db_rows:
+            term = str(row.term or "").strip()
+            if not term or term.lower() in seen:
+                continue
+            seen.add(term.lower())
+            matched = tracked_by_search.get(term.lower())
+            if matched:
+                parts.append(matched)
+            else:
+                parts.append({
+                    "name": term,
+                    "category": PartCategory.accessory,
+                    "ebay_search": term,
+                    "bh_search": term.replace(" ", "+"),
+                })
+        if not parts:
+            parts = list(TRACKED_PARTS)
+    else:
+        parts = list(TRACKED_PARTS)
 
     # ── Phase 1: eBay — sequential within vendor ─────────────────────────────
     ebay_sold_map:  dict[str, float | None] = {}
