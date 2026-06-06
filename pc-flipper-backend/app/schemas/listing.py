@@ -4,6 +4,16 @@ from typing import Optional
 from app.models.listing import Classification, ListingStatus
 
 
+class ListingAlternative(BaseModel):
+    """A cheaper/more-expensive duplicate of the same hardware on a different vendor."""
+    id: int
+    source_name: str
+    price: float
+    url: str
+
+    model_config = {"from_attributes": True}
+
+
 class ListingOut(BaseModel):
     id: int
     external_id: str
@@ -64,6 +74,10 @@ class ListingOut(BaseModel):
     claude_reasoning:          Optional[str]      = None
     claude_main_risk:          Optional[str]      = None
     claude_judged_at:          Optional[datetime] = None
+
+    # Cross-vendor alternatives: same spec fingerprint, higher price, different source.
+    # Populated by the listings API; empty for listings without a spec fingerprint.
+    alternatives: list[ListingAlternative] = []
 
     model_config = {"from_attributes": True}
 

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -5,7 +6,7 @@ from sqlalchemy import select, func, String
 from sqlalchemy.sql.expression import cast as sa_cast
 from app.database import get_db
 from app.models.listing import Listing, ListingStatus, Classification
-from app.schemas.listing import ListingOut, ListingFilter
+from app.schemas.listing import ListingAlternative, ListingOut, ListingFilter
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
@@ -96,10 +97,43 @@ async def get_listings(
 
     result = await db.execute(q)
     rows = result.scalars().all()
+
+    # Fetch cross-vendor alternatives: all active listings that share a spec_fingerprint
+    # with one of the returned rows (but weren't returned themselves — they're pricier).
+    returned_ids = {r.id for r in rows}
+    spec_fps = [r.spec_fingerprint for r in rows if r.spec_fingerprint]
+    alts_by_fp: dict[str, list[ListingAlternative]] = defaultdict(list)
+    if spec_fps:
+        alt_res = await db.execute(
+            select(
+                Listing.id,
+                Listing.spec_fingerprint,
+                Listing.source_name,
+                Listing.price,
+                Listing.url,
+            ).where(
+                Listing.spec_fingerprint.in_(spec_fps),
+                Listing.status == ListingStatus.active,
+                Listing.id.notin_(returned_ids),
+            ).order_by(Listing.price.asc())
+        )
+        for row in alt_res.all():
+            alts_by_fp[row.spec_fingerprint].append(
+                ListingAlternative(
+                    id=row.id,
+                    source_name=row.source_name,
+                    price=row.price,
+                    url=row.url,
+                )
+            )
+
     out = []
     for r in rows:
         item = ListingOut.model_validate(r).model_dump()
         item["gem_explainer"] = _build_gem_explainer(r)
+        item["alternatives"] = [
+            a.model_dump() for a in alts_by_fp.get(r.spec_fingerprint or "", [])
+        ]
         out.append(item)
     return out
 

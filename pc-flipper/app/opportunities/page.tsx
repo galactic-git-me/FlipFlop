@@ -4,7 +4,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
   Gem, RefreshCw, ExternalLink, Zap, Search, SlidersHorizontal,
-  ChevronLeft, ChevronRight, ArrowUpDown, X, PlusCircle,
+  ChevronLeft, ChevronRight, ArrowUpDown, X, PlusCircle, Copy,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -395,6 +395,7 @@ function ListingRow({
     profit > 100 ? "text-[#00dc82]" : profit > 0 ? "text-amber-400" : "text-red-400";
   const gemSignals = l.gem_signals ?? [];
   const isAuction = l.listing_type === "auction";
+  const alternatives = l.alternatives ?? [];
 
   return (
     <Card
@@ -542,6 +543,31 @@ function ListingRow({
               </a>
             </div>
           </div>
+
+          {/* ── Also available on other vendors ─────────────────────────────── */}
+          {alternatives.length > 0 && (
+            <div className="px-3 pb-2.5 flex items-center gap-2 flex-wrap border-t border-white/[0.04] pt-2">
+              <span className="text-[10px] text-slate-600 flex items-center gap-1 flex-shrink-0">
+                <Copy className="w-2.5 h-2.5" />
+                Also listed on
+              </span>
+              {alternatives.map(alt => (
+                <a
+                  key={alt.id}
+                  href={alt.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  title={`View on ${alt.source_name} — £${alt.price.toFixed(2)}`}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0d1a2a] border border-[#1e2d45] text-[10px] text-slate-400 hover:border-amber-400/40 hover:text-amber-300 transition-colors"
+                >
+                  {alt.source_name}
+                  <span className="text-amber-400/80 font-semibold">£{alt.price.toFixed(0)}</span>
+                  <ExternalLink className="w-2 h-2 opacity-50" />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -63,6 +63,8 @@ export interface Listing {
   claude_reasoning:          string | null;
   claude_main_risk:          string | null;
   claude_judged_at:          string | null;
+  // Cross-vendor alternatives with the same hardware specs (cheaper listing is shown; these are the others)
+  alternatives?: { id: number; source_name: string; price: number; url: string }[];
 }
 
 export interface Part {
