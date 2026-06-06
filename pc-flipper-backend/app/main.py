@@ -8,7 +8,7 @@ if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -214,23 +214,15 @@ def _infer_case_attributes(term: str, group_name: str) -> dict:
 
 
 async def _reset_dev_telemetry() -> None:
-    """In dev mode, wipe search_telemetry, all listings, and the archive so the dashboard starts from zero."""
+    """In dev mode, wipe search_telemetry so scrape counters start from zero."""
     from app.database import AsyncSessionLocal
     from app.models.search_telemetry import SearchTelemetry
-    from app.models.listing import Listing
-    from app.models.listing_archive import ListingArchive
     from sqlalchemy import delete
     try:
         async with AsyncSessionLocal() as db:
             await db.execute(delete(SearchTelemetry))
-            deleted = await db.execute(delete(Listing))
-            await db.execute(delete(ListingArchive))
             await db.commit()
-        log.info(
-            "dev.telemetry_reset",
-            reason="app_env=dev — fresh figures each restart",
-            listings_deleted=deleted.rowcount,
-        )
+        log.info("dev.telemetry_reset", reason="app_env=dev — fresh figures each restart")
     except Exception as exc:
         log.warning("dev.telemetry_reset_failed", error=str(exc))
 
@@ -355,9 +347,17 @@ app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
 
 
+_startup_time: datetime = datetime.now(timezone.utc)
+
+
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": "5.0.0", "model": settings.ollama_model}
+    return {
+        "status": "ok",
+        "version": "5.0.0",
+        "app_env": settings.app_env,
+        "started_at": _startup_time.isoformat(),
+    }
 
 
 async def _migrate_add_columns():
