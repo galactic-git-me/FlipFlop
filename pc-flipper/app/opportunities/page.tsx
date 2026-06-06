@@ -431,7 +431,7 @@ function ListingRow({
           <div className="flex-1 min-w-0 p-3 flex items-center gap-4">
             {/* Score */}
             <div className="flex-shrink-0">
-              <FlippabilityScore score={l.gem_score} size="lg" />
+              <FlippabilityScore score={l.gem_score} size="lg" listing={l} />
             </div>
 
             {/* Info block */}
