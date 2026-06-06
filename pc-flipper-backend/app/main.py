@@ -393,13 +393,10 @@ async def _migrate_add_columns():
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:
-            try:
-                await conn.exec_driver_sql(
-                    f"ALTER TABLE {table} ADD COLUMN {col} {col_type}"
-                )
-                log.info("migration.column_added", table=table, column=col)
-            except Exception:
-                pass   # column already exists — ignore
+            await conn.exec_driver_sql(
+                f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"
+            )
+            log.debug("migration.column_ensured", table=table, column=col)
 
 
 # ── Search terms ──────────────────────────────────────────────────────────────
