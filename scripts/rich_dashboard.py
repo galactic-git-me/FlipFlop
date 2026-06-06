@@ -240,6 +240,34 @@ def _normalise_vendor(name: str) -> str:
     return name
 
 
+def _filter_telem_since(telem_items: dict[str, Any], started_at: str) -> dict[str, Any]:
+    """Drop any telemetry rows recorded before `started_at` (ISO string).
+    Used in dev mode so the dashboard only reflects the current session."""
+    try:
+        cutoff = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+        if cutoff.tzinfo is None:
+            cutoff = cutoff.replace(tzinfo=timezone.utc)
+    except Exception:
+        return telem_items
+
+    filtered: dict[str, Any] = {}
+    for src, rows in (telem_items or {}).items():
+        kept = []
+        for r in (rows or []):
+            ts_str = str((r or {}).get("ts") or "")
+            try:
+                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                if ts.tzinfo is None:
+                    ts = ts.replace(tzinfo=timezone.utc)
+                if ts >= cutoff:
+                    kept.append(r)
+            except Exception:
+                kept.append(r)  # keep rows with unparseable timestamps
+        if kept:
+            filtered[src] = kept
+    return filtered
+
+
 def _compute_top_vendors(telem_items: dict[str, Any], max_cols: int = 5) -> list[tuple[str, int]]:
     """
     Return (vendor_name, total_found) sorted by total_found DESC.
@@ -488,6 +516,10 @@ def main() -> int:
         with Live(layout, refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True):
             while True:
                 try:
+                    health = _safe_get(client, f"{api}/health") or {}
+                    app_env    = str((health or {}).get("app_env") or "").strip()
+                    started_at = str((health or {}).get("started_at") or "").strip()
+
                     listing_stats = _safe_get(client, f"{api}/listings/stats")
                     demand_summary = _safe_get(client, f"{api}/demand/summary")
                     scan_status = _safe_get(client, f"{api}/swarms/scan/status")
@@ -506,8 +538,13 @@ def main() -> int:
                     if not isinstance(telem_items, dict):
                         telem_items = {}
 
-                    health = _safe_get(client, f"{api}/sources/health") or {}
-                    health_items = (health or {}).get("items") if isinstance(health, dict) else []
+                    # In dev mode, only show telemetry from after the last container restart
+                    # so the table reflects this session only (same logic as the web UI scope toggle).
+                    if app_env == "dev" and started_at:
+                        telem_items = _filter_telem_since(telem_items, started_at)
+
+                    sources_health = _safe_get(client, f"{api}/sources/health") or {}
+                    health_items = (sources_health or {}).get("items") if isinstance(sources_health, dict) else []
                     if not isinstance(health_items, list):
                         health_items = []
                     enabled = {
