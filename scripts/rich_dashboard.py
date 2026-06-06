@@ -17,7 +17,9 @@ try:
     from rich.layout import Layout
     from rich.live import Live
     from rich.panel import Panel
+    from rich.progress import ProgressBar
     from rich.table import Table
+    from rich.text import Text
 except Exception as exc:  # pragma: no cover
     raise SystemExit(f"Rich is required. Install with pip install rich. Error: {exc}")
 
@@ -265,6 +267,22 @@ def _build_kpis(listing_stats: Any, demand_summary: Any, scan_status: Any) -> Pa
     total = int((scan_status or {}).get("total") or 0)
     found = int((scan_status or {}).get("total_found") or 0)
 
+    if running and total > 0:
+        pct = int(done / total * 100)
+        scan_cell = Group(
+            Text(f"scanning  {pct}%", style="bold green"),
+            ProgressBar(total=total, completed=done, width=22),
+            Text(f"{done}/{total} searches  +{found} found", style="dim"),
+        )
+    elif not running and total > 0:
+        scan_cell = Group(
+            Text("done", style="bold green"),
+            ProgressBar(total=total, completed=total, width=22),
+            Text(f"{done}/{total} searches  +{found} found", style="dim"),
+        )
+    else:
+        scan_cell = Text("idle", style="dim")
+
     tbl = Table.grid(expand=True)
     for _ in range(5):
         tbl.add_column(justify="center")
@@ -273,7 +291,7 @@ def _build_kpis(listing_stats: Any, demand_summary: Any, scan_status: Any) -> Pa
         f"[bold green]{total_gems}[/bold green]\n[dim]gems[/dim]",
         f"[bold yellow]{gem_rate:.1f}%[/bold yellow]\n[dim]gem-rate[/dim]",
         f"[bold cyan]£{avg_profit:.0f}[/bold cyan]\n[dim]avg-profit[/dim]",
-        f"{'[green]running[/green]' if running else '[dim]idle[/dim]'}\n[dim]{done}/{total} found:{found}[/dim]",
+        scan_cell,
     )
     return Panel(tbl, title="FlipFlop Live Stats", border_style="bright_blue")
 
