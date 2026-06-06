@@ -243,14 +243,25 @@ def _normalise_vendor(name: str) -> str:
 def _compute_top_vendors(telem_items: dict[str, Any], max_cols: int = 5) -> list[tuple[str, int]]:
     """
     Return (vendor_name, total_found) sorted by total_found DESC.
-    - Strips scope prefixes (Cases:, Accessories:, UpgradeParts:)
-    - Merges all eBay variants ("eBay", "eBay UK", "eBay (Worldwide)") into "eBay UK"
+
+    Σ = sum of the LATEST found count per unique search term for that vendor.
+    Rows arrive newest-first, so we take the first occurrence of each (src, term)
+    pair — matching exactly what each table cell shows. This keeps the column
+    header totals self-consistent with the visible cell values.
+
+    (Old behaviour summed ALL historical rows, giving inflated totals like Σ7811
+    when individual cells were ✓60.)
     """
     totals: dict[str, int] = {}
     for raw_src, rows in (telem_items or {}).items():
         src = re.sub(r"^(?:Cases|Accessories|UpgradeParts):", "", str(raw_src))
         src = _normalise_vendor(src)
-        for r in (rows or []):
+        seen_terms: set[str] = set()
+        for r in (rows or []):          # rows are ordered newest → oldest
+            term = str((r or {}).get("term") or "").strip().lower()
+            if not term or term in seen_terms:
+                continue                # skip older runs for the same term
+            seen_terms.add(term)
             found = int((r or {}).get("found") or 0)
             if found > 0:
                 totals[src] = totals.get(src, 0) + found
