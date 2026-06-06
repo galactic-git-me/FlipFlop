@@ -61,6 +61,10 @@ class Settings(BaseSettings):
     frontend_url: str = "http://localhost:3000"
     admin_api_key: str = ""
 
+    # "dev" clears search_telemetry on every startup so figures start fresh.
+    # "production" preserves history across restarts.
+    app_env: str = "dev"
+
     class Config:
         env_file = (".env.local", ".env")
         extra = "ignore"

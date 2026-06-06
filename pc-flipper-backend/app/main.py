@@ -213,6 +213,20 @@ def _infer_case_attributes(term: str, group_name: str) -> dict:
     return attrs
 
 
+async def _reset_dev_telemetry() -> None:
+    """In dev mode, wipe search_telemetry so the dashboard always starts from zero."""
+    from app.database import AsyncSessionLocal
+    from app.models.search_telemetry import SearchTelemetry
+    from sqlalchemy import delete
+    try:
+        async with AsyncSessionLocal() as db:
+            await db.execute(delete(SearchTelemetry))
+            await db.commit()
+        log.info("dev.telemetry_reset", reason="app_env=dev — fresh figures each restart")
+    except Exception as exc:
+        log.warning("dev.telemetry_reset_failed", error=str(exc))
+
+
 @asynccontextmanager
 def _loop_exception_handler(loop, context):
     exc = context.get("exception")
@@ -225,10 +239,12 @@ async def lifespan(app: FastAPI):
     install_log_capture()          # must be first — before any structlog usage
     loop = asyncio.get_running_loop()
     loop.set_exception_handler(_loop_exception_handler)
-    log.info("app.startup", event_loop_type=type(loop).__name__)
+    log.info("app.startup", event_loop_type=type(loop).__name__, app_env=settings.app_env)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     await _migrate_add_columns()
+    if settings.app_env == "dev":
+        await _reset_dev_telemetry()
     await _seed_default_data()
     await _load_db_settings_into_config()
     if not chromium_available():

@@ -56,6 +56,7 @@ services:
       BROWSER_CDP_URL: http://host.docker.internal:9222
       SHOW_SCRAPER_BROWSER: "1"
       FB_HEADLESS: "0"
+      APP_ENV: dev
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

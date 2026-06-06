@@ -278,6 +278,21 @@ def _build_kpis(listing_stats: Any, demand_summary: Any, scan_status: Any) -> Pa
     return Panel(tbl, title="FlipFlop Live Stats", border_style="bright_blue")
 
 
+_JOB_ORDER = [
+    "flip_opportunities",
+    "upgrade_parts",
+    "cases",
+    "accessories",
+    "external_demand",
+    "playbook_evolution",
+    "autonomous",
+    "outcome_capture",
+    "model_retraining",
+    "retrain_checkpoint_watchdog",
+    "compliant_market_ingestion",
+]
+
+
 def _build_schedule(schedule_rows: Any) -> Panel:
     tbl = Table(box=box.SIMPLE_HEAVY, expand=True)
     tbl.add_column("Job", style="bold cyan")
@@ -285,7 +300,13 @@ def _build_schedule(schedule_rows: Any) -> Panel:
     tbl.add_column("Next")
     tbl.add_column("Status")
     if isinstance(schedule_rows, list):
-        for j in schedule_rows:
+        sorted_rows = sorted(
+            schedule_rows,
+            key=lambda j: _JOB_ORDER.index(str((j or {}).get("id") or ""))
+            if str((j or {}).get("id") or "") in _JOB_ORDER
+            else len(_JOB_ORDER),
+        )
+        for j in sorted_rows:
             jid = str((j or {}).get("id") or "")
             if not jid:
                 continue
