@@ -55,6 +55,14 @@ _RESALE_EBAY_BLOCK_LOGGED: bool = False
 _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
 _RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
 
+# Circuit breaker for the eBay Finding API.
+# After _FINDING_API_FAIL_THRESHOLD consecutive 503/non-200 responses we stop
+# hitting the endpoint for _FINDING_API_COOLDOWN_SECONDS, then try again.
+_FINDING_API_FAIL_COUNT: int = 0
+_FINDING_API_BLOCK_UNTIL_TS: float = 0.0
+_FINDING_API_FAIL_THRESHOLD: int = 3        # trip after 3 consecutive failures
+_FINDING_API_COOLDOWN_SECONDS: float = 300.0  # 5-minute cool-down
+
 
 def _info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
     key = f"{event}|{kwargs.get('status','')}|{kwargs.get('query','')}"
@@ -233,7 +241,17 @@ async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
     eBay Finding API — findCompletedItems (sold, fixed-price, UK).
     Two passes: Desktop PCs category (179) first, then all categories.
     No scraping, no bot-detection, no 403s.
+
+    Circuit breaker: after _FINDING_API_FAIL_THRESHOLD consecutive non-200
+    responses the function returns [] immediately and stays dark for
+    _FINDING_API_COOLDOWN_SECONDS before trying again.
     """
+    global _FINDING_API_FAIL_COUNT, _FINDING_API_BLOCK_UNTIL_TS
+
+    now = time.monotonic()
+    if _FINDING_API_BLOCK_UNTIL_TS > now:
+        return []
+
     url = "https://svcs.ebay.com/services/search/FindingService/v1"
     prices: list[float] = []
 
@@ -262,9 +280,22 @@ async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
                 resp = await client.get(url, params=params)
 
             if resp.status_code != 200:
+                _FINDING_API_FAIL_COUNT += 1
+                if _FINDING_API_FAIL_COUNT >= _FINDING_API_FAIL_THRESHOLD:
+                    _FINDING_API_BLOCK_UNTIL_TS = time.monotonic() + _FINDING_API_COOLDOWN_SECONDS
+                    log.warning(
+                        "resale_scraper.finding_api_circuit_open",
+                        status=resp.status_code,
+                        fail_count=_FINDING_API_FAIL_COUNT,
+                        cooldown_seconds=_FINDING_API_COOLDOWN_SECONDS,
+                    )
+                    return []
                 log.debug("resale_scraper.finding_api_error", query=query, cat=cat,
                           status=resp.status_code)
                 continue
+
+            # Successful response — reset the fail counter
+            _FINDING_API_FAIL_COUNT = 0
 
             data = resp.json()
             items = (
@@ -286,6 +317,7 @@ async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
                       query=query, cat=cat, found=len(prices))
 
         except Exception as exc:
+            _FINDING_API_FAIL_COUNT += 1
             log.debug("ebay_sold.request_retry", attempt=1, error=str(exc), search=query)
 
         if len(prices) >= 5:
