@@ -130,12 +130,6 @@ export default function DashboardPage() {
     setFeedsDone(0);
     setElapsedSecs(0);
     try {
-      // Today midnight and 7-days-ago midnight in ISO format
-      const todayMidnight  = new Date(); todayMidnight.setHours(0,0,0,0);
-      const weekAgoMidnight = new Date(todayMidnight); weekAgoMidnight.setDate(weekAgoMidnight.getDate() - 7);
-      const todayISO  = todayMidnight.toISOString();
-      const weekISO   = weekAgoMidnight.toISOString();
-
       const totalCalls = 11;
       let doneCalls = 0;
       const step = async <T,>(p: Promise<T>, timeoutMs: number): Promise<T> => {
@@ -154,15 +148,15 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: top estimated_profit from today, profit > 0
+        // Gem of Day: best amazing_gem by gem_score (active, any age)
         step(api.listings.list({
-          sort_by: "estimated_profit", sort_desc: "true",
-          limit: "1", min_profit: "0", first_seen_after: todayISO,
+          sort_by: "gem_score", sort_desc: "true",
+          limit: "1", classification: "amazing_gem",
         }) as Promise<Listing[]>, 12000),
-        // Gem of Week: top estimated_profit from last 7 days, profit > 0
+        // Gem of Week: best gem (non-amazing) by estimated_profit (active, any age)
         step(api.listings.list({
           sort_by: "estimated_profit", sort_desc: "true",
-          limit: "1", min_profit: "0", first_seen_after: weekISO,
+          limit: "1", classification: "gem", min_profit: "0",
         }) as Promise<Listing[]>, 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
         step(api.sources.list() as Promise<DataSource[]>, 12000),
