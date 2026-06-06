@@ -273,6 +273,13 @@ async def _make_context(
     headless = os.getenv("FB_HEADLESS", "1").lower() not in {"0", "false", "no"}
     if interactive:
         headless = False
+    # If no display is available (e.g. inside Docker), force headless regardless of FB_HEADLESS.
+    # This prevents Chrome from crashing with "Missing X server or $DISPLAY" when FB_HEADLESS=0
+    # is set but no GUI environment exists.
+    if not headless and not (os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY")):
+        headless = True
+        log.debug("playwright.headless_forced_no_display",
+                  reason="FB_HEADLESS=0 but no DISPLAY/WAYLAND_DISPLAY found — forcing headless")
     # Keep headless by default in server environments; explicit FB_HEADLESS=0 can opt into headed mode.
     use_persistent_profile = os.getenv("FB_USE_PROFILE", "0").lower() in {"1", "true", "yes"}
     use_persistent_profile = use_persistent_profile or force_persistent_profile
