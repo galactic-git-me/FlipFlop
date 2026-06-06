@@ -28,6 +28,9 @@ class Listing(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     external_id: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     dedupe_fingerprint: Mapped[str | None] = mapped_column(String(255), index=True)
+    # Spec-based fingerprint: cpu|gpu|ram_gb|storage_gb — groups same-hardware listings
+    # across sources and re-lists so only the cheapest is surfaced in results.
+    spec_fingerprint: Mapped[str | None] = mapped_column(String(255), index=True)
     source_id: Mapped[int] = mapped_column(Integer, index=True)
     source_name: Mapped[str] = mapped_column(String(100))
     source_confidence: Mapped[str] = mapped_column(String(32), default="browser_verified", index=True)

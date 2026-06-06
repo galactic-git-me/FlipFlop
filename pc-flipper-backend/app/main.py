@@ -384,6 +384,7 @@ async def _migrate_add_columns():
         ("listings", "claude_reasoning",          "TEXT"),
         ("listings", "claude_main_risk",          "TEXT"),
         ("listings", "claude_judged_at",          "DATETIME"),
+        ("listings", "spec_fingerprint",           "VARCHAR(255)"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:

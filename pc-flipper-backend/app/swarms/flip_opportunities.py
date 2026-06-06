@@ -81,10 +81,26 @@ def _expand_source_aliases(source_name: str) -> tuple[str, ...]:
 
 
 def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
+    """Legacy title+price fingerprint — kept for same-listing re-scrape detection."""
     t = re.sub(r"[^a-z0-9]+", " ", (title or "").lower()).strip()
     t = " ".join(t.split()[:8])
     p = int(round(float(price or 0)))
     return f"{t}|{cpu or ''}|{gpu or ''}|{p}"
+
+
+def _spec_fingerprint(cpu: str | None, gpu: str | None, ram_gb: int | None, storage_gb: int | None) -> str | None:
+    """Spec-based fingerprint for cross-source/cross-seller duplicate detection.
+
+    Groups listings that represent the same hardware regardless of which platform
+    they appear on or how the title is worded. Returns None when specs are too
+    sparse to make a reliable match (no CPU parsed).
+    """
+    cpu_key = re.sub(r"[^a-z0-9]", "", (cpu or "").lower())
+    gpu_key = re.sub(r"[^a-z0-9]", "", (gpu or "").lower())
+    if not cpu_key:
+        # Without a CPU we can't reliably group — too many false positives
+        return None
+    return f"{cpu_key}|{gpu_key}|{ram_gb or ''}|{storage_gb or ''}"
 
 
 async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
@@ -523,6 +539,7 @@ async def _upsert_listings(
                 if not _passes_filter(raw.price, specs, config, title=raw.title):
                     return None
                 fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu)
+                sfp = _spec_fingerprint(specs.cpu, specs.gpu, specs.ram_gb, specs.storage_gb)
                 expected_buy_price: float | None = None
                 if raw.listing_type == "auction":
                     expected_buy_price = await get_expected_auction_price(specs.cpu, specs.gpu, raw.price)
