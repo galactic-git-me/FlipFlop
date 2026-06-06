@@ -51,6 +51,18 @@ export interface Listing {
   status: ListingStatus;
   first_seen_at: string;
   last_seen_at: string;
+  // Claude LLM evaluation (populated asynchronously after initial save)
+  claude_verdict:            string | null;
+  claude_flipability_score:  number | null;
+  claude_expected_profit:    number | null;
+  claude_roi:                number | null;
+  claude_confidence:         number | null;
+  claude_capital_efficiency: number | null;
+  claude_resale_demand:      number | null;
+  claude_upgrade_complexity: number | null;
+  claude_reasoning:          string | null;
+  claude_main_risk:          string | null;
+  claude_judged_at:          string | null;
 }
 
 export interface Part {
