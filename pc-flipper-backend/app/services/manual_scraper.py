@@ -48,11 +48,37 @@ _HEADERS = {
 async def scrape_url(url: str, price_override: Optional[float] = None) -> RawListing:
     """
     Fetch a listing URL and return a RawListing.
+    For eBay URLs: tries the Browse API first (bot-safe), falls back to HTML.
     Raises ValueError if the page can't be parsed sensibly.
     """
     parsed = urlparse(url)
     host = parsed.netloc.lower()
 
+    if "ebay.co.uk" in host or "ebay.com" in host:
+        item_id_match = re.search(r"/itm/(?:[^/]+/)?(\d+)", url)
+        if item_id_match:
+            try:
+                result = await _ebay_api_fetch_item(
+                    item_id_match.group(1), url, price_override
+                )
+                if result:
+                    return result
+            except ValueError:
+                raise  # price-not-found errors should surface to the caller
+            except Exception:
+                pass  # network / auth failure → fall through to HTML scraping
+
+        # HTML fallback (e.g. no eBay credentials configured)
+        async with httpx.AsyncClient(
+            headers=_HEADERS, follow_redirects=True, timeout=15
+        ) as client:
+            resp = await client.get(url)
+            if resp.status_code >= 400:
+                raise ValueError(f"HTTP {resp.status_code} fetching {url}")
+            html = resp.text
+        return _parse_ebay_item(html, url, price_override)
+
+    # Non-eBay: HTML scraping
     async with httpx.AsyncClient(
         headers=_HEADERS, follow_redirects=True, timeout=15
     ) as client:
@@ -61,16 +87,12 @@ async def scrape_url(url: str, price_override: Optional[float] = None) -> RawLis
             raise ValueError(f"HTTP {resp.status_code} fetching {url}")
         html = resp.text
 
-    if "ebay.co.uk" in host or "ebay.com" in host:
-        return _parse_ebay_item(html, url, price_override)
     if "gumtree.com" in host:
         return _parse_gumtree_item(html, url, price_override)
     if "preloved.co.uk" in host:
         return _parse_preloved_item(html, url, price_override)
     if "facebook.com" in host or "fb.com" in host:
         return _parse_facebook_item(html, url, price_override)
-
-    # Generic fallback
     return _parse_generic(html, url, price_override)
 
 
@@ -188,6 +210,119 @@ def _parse_ebay_item(html: str, url: str, price_override: Optional[float] = None
         listing_ends_at=listing_ends_at,
         seller_name=seller_name,
         seller_type=classify_seller(seller_name, None, title),
+    )
+
+
+async def _ebay_api_fetch_item(
+    item_id: str, url: str, price_override: Optional[float] = None
+) -> "RawListing | None":
+    """
+    Fetch a single eBay listing via Browse API getItemByLegacyId.
+    Returns None if credentials are missing or the API call fails —
+    caller falls back to HTML scraping.
+    """
+    from app.services.scraper import _get_ebay_access_token, _ebay_base_url
+
+    async with httpx.AsyncClient(timeout=15) as client:
+        token = await _get_ebay_access_token(client)
+        if not token:
+            return None
+
+        endpoint = f"{_ebay_base_url()}/buy/browse/v1/item/get_item_by_legacy_id"
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+            "Content-Type": "application/json",
+        }
+        resp = await client.get(
+            endpoint,
+            params={"legacy_item_id": item_id},
+            headers=headers,
+        )
+        if resp.status_code != 200:
+            return None
+        data = resp.json()
+
+    title = str(data.get("title") or "eBay Listing").strip()
+
+    # Price
+    price = price_override
+    if price is None:
+        price_obj = data.get("price") or data.get("currentBidPrice") or {}
+        try:
+            price = float(price_obj.get("value") or 0) or None
+        except (TypeError, ValueError):
+            price = None
+    if not price:
+        raise ValueError("Could not extract price from eBay API response")
+
+    # Images — primary + additionalImages
+    images: list[str] = []
+    if primary_url := (data.get("image") or {}).get("imageUrl"):
+        images.append(primary_url)
+    for extra in data.get("additionalImages") or []:
+        if src := extra.get("imageUrl"):
+            images.append(src)
+
+    # Location
+    loc_obj = data.get("itemLocation") or {}
+    location = loc_obj.get("city") or loc_obj.get("country")
+
+    # Description — strip HTML tags
+    desc_html = data.get("description") or data.get("shortDescription") or ""
+    description = BeautifulSoup(desc_html, "html.parser").get_text(" ", strip=True)[:1000] if desc_html else ""
+
+    # Condition
+    condition = data.get("condition")
+
+    # Seller
+    seller = data.get("seller") or {}
+    seller_name = seller.get("username")
+    feedback_score: Optional[int] = None
+    _fs = seller.get("feedbackScore")
+    if _fs is not None:
+        try:
+            feedback_score = int(_fs)
+        except (TypeError, ValueError):
+            pass
+    feedback_pct: Optional[float] = None
+    try:
+        pct_str = str(seller.get("feedbackPercentage") or "")
+        feedback_pct = float(pct_str.replace("%", "")) if pct_str else None
+    except (TypeError, ValueError):
+        pass
+
+    # Listing type
+    buying_options = data.get("buyingOptions") or []
+    listing_type = "auction" if "AUCTION" in buying_options else "buy_it_now"
+
+    # Auction end datetime
+    listing_ends_at = None
+    if end_date_str := data.get("itemEndDate"):
+        try:
+            listing_ends_at = datetime.fromisoformat(
+                end_date_str.replace("Z", "+00:00")
+            ).replace(tzinfo=None)
+        except ValueError:
+            pass
+
+    return RawListing(
+        external_id=f"ebay_{item_id}",
+        title=title,
+        price=price,
+        url=url,
+        location=location,
+        condition=condition,
+        description=description,
+        image_urls=images[:5],
+        source_name="Manual Submission",
+        source_confidence="official_api",
+        listing_type=listing_type,
+        listing_ends_at=listing_ends_at,
+        seller_name=seller_name,
+        seller_feedback_count=feedback_score,
+        seller_feedback_pct=feedback_pct,
+        seller_type=classify_seller(seller_name, feedback_score, title),
     )
 
 
