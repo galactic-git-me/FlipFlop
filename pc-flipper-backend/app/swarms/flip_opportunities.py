@@ -158,12 +158,14 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
 
     log.info("flip_opportunities_swarm.done", **stats)
 
-    # Ghost lifecycle transitions — NEVER delete listing history.
-    # 3+ days unseen  -> missing
-    # 14+ days unseen -> removed
-    # Listings marked sold are excluded from these transitions.
+    # Ghost lifecycle transitions:
+    # 3+ days unseen   -> missing
+    # 14+ days unseen  -> removed
+    # 30+ days removed -> hard-deleted (keeps the DB lean in production)
+    # Listings marked sold are excluded from missing/removed transitions.
     missing_cutoff = datetime.utcnow() - timedelta(days=3)
     removed_cutoff = datetime.utcnow() - timedelta(days=14)
+    purge_cutoff   = datetime.utcnow() - timedelta(days=30)
     async with AsyncSessionLocal() as db:
         missing_result = await db.execute(
             update(Listing)
@@ -183,17 +185,31 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
             .values(status=ListingStatus.removed)
         )
 
+        # Hard-delete listings that have been in "removed" state for 30+ days.
+        # This prevents the database growing indefinitely with dead listings.
+        from sqlalchemy import delete as sa_delete
+        purge_result = await db.execute(
+            sa_delete(Listing)
+            .where(
+                Listing.status == ListingStatus.removed,
+                Listing.last_seen_at < purge_cutoff,
+            )
+        )
+
         await db.commit()
 
     moved_missing = missing_result.rowcount or 0
     moved_removed = removed_result.rowcount or 0
-    if moved_missing or moved_removed:
+    purged        = purge_result.rowcount or 0
+    if moved_missing or moved_removed or purged:
         log.info(
             "ghost_lifecycle.updated",
             moved_to_missing=moved_missing,
             moved_to_removed=moved_removed,
+            purged=purged,
             missing_cutoff_days=3,
             removed_cutoff_days=14,
+            purge_cutoff_days=30,
         )
 
     return stats

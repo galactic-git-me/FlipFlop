@@ -138,9 +138,9 @@ def _push_history(job_id: str, status: str, started_at: datetime, finished_at: d
 
 async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) -> dict:
     if job_id in _running_jobs:
-        now = datetime.now(timezone.utc)
-        _push_history(job_id, "skipped", now, now, "Skipped: previous run still in progress")
-        log.warning("job.skipped.already_running", job_id=job_id)
+        # Job is already running — don't push a new history entry; the existing
+        # "running" entry already reflects the true state correctly.
+        log.info("job.deduplicated.already_running", job_id=job_id)
         return {"ok": False, "skipped": True, "reason": "already_running"}
 
     _running_jobs.add(job_id)
