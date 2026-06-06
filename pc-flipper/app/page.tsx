@@ -130,6 +130,11 @@ export default function DashboardPage() {
     setFeedsDone(0);
     setElapsedSecs(0);
     try {
+      // Rolling windows for gem picks
+      const now = new Date();
+      const past24hISO = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+      const past7dISO  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
+
       const totalCalls = 11;
       let doneCalls = 0;
       const step = async <T,>(p: Promise<T>, timeoutMs: number): Promise<T> => {
@@ -148,15 +153,15 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: best amazing_gem by gem_score (active, any age)
+        // Gem of Day: best LLM-judged gem from listings first scraped in last 24 h
         step(api.listings.list({
-          sort_by: "gem_score", sort_desc: "true",
-          limit: "1", classification: "amazing_gem",
+          sort_by: "claude_flipability_score", sort_desc: "true",
+          limit: "1", claude_judged_only: "true", first_seen_after: past24hISO,
         }) as Promise<Listing[]>, 12000),
-        // Gem of Week: best gem (non-amazing) by estimated_profit (active, any age)
+        // Gem of Week: best LLM-judged gem from listings first scraped in last 7 days
         step(api.listings.list({
-          sort_by: "estimated_profit", sort_desc: "true",
-          limit: "1", classification: "gem", min_profit: "0",
+          sort_by: "claude_flipability_score", sort_desc: "true",
+          limit: "1", claude_judged_only: "true", first_seen_after: past7dISO,
         }) as Promise<Listing[]>, 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
         step(api.sources.list() as Promise<DataSource[]>, 12000),
