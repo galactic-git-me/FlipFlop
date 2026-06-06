@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   CalendarClock, Play, Pause, RefreshCw, CheckCircle2,
   XCircle, Clock, AlertCircle, Zap, Database, Brain,
@@ -9,7 +9,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { api, ScheduleJob, ScheduleRun } from "@/lib/api";
+import { api, ScheduleJob, ScheduleRun, ScanStatus } from "@/lib/api";
 import { formatRelativeTime } from "@/lib/utils";
 
 /* ── Types ──────────────────────────────────────────────────────────────── */
@@ -63,6 +63,40 @@ function fmtDuration(ms: number | null) {
   if (ms < 1000) return `${ms}ms`;
   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
   return `${Math.floor(ms / 60000)}m ${Math.round((ms % 60000) / 1000)}s`;
+}
+
+/* ── Scan progress bar ───────────────────────────────────────────────────── */
+
+function ScanProgressBar({ scan }: { scan: ScanStatus }) {
+  const pct = scan.total > 0 ? Math.round((scan.completed / scan.total) * 100) : 0;
+  const done  = scan.sites.filter(s => s.status === "done").length;
+  const error = scan.sites.filter(s => s.status === "error").length;
+  const active = scan.current_sites.slice(0, 2);
+
+  return (
+    <div className="min-w-[180px]">
+      {/* bar */}
+      <div className="flex items-center gap-2 mb-1">
+        <div className="flex-1 h-1.5 rounded-full bg-[#1e2d45] overflow-hidden">
+          <div
+            className="h-full rounded-full bg-blue-400 transition-all duration-500"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+        <span className="text-[10px] font-mono text-blue-300 shrink-0">{scan.completed}/{scan.total}</span>
+      </div>
+      {/* label */}
+      <div className="text-[10px] text-slate-500 truncate">
+        {done > 0 && <span className="text-emerald-500/70">{done} done</span>}
+        {error > 0 && <span className="text-red-500/70 ml-1">{error} err</span>}
+        {active.length > 0 && (
+          <span className="ml-1 text-blue-400/70 animate-pulse">
+            · {active.join(", ")}
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 /* ── Default jobs (used when backend returns nothing) ───────────────────── */
@@ -180,6 +214,8 @@ export default function SchedulePage() {
   const [autonomousLastRun, setAutonomousLastRun] = useState<JobRun | null>(null);
   const [triggeringAutoCycle, setTriggeringAutoCycle] = useState(false);
   const [autoCycleMessage, setAutoCycleMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
+  const scanPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   /* fetch jobs from backend (non-fatal) */
   const load = useCallback(async () => {
@@ -215,6 +251,46 @@ export default function SchedulePage() {
     const t = setTimeout(() => { void load(); }, 0);
     return () => clearTimeout(t);
   }, [load]);
+
+  /* poll scan status while any scraping job is running */
+  useEffect(() => {
+    const anyRunning =
+      jobs.some(j => j.last_status === "running" && j.category === "scraping") ||
+      runningIds.size > 0;
+
+    const fetchScan = async () => {
+      try {
+        const s = await api.swarms.scanStatus();
+        setScanStatus(s);
+        // Stop polling once the scan finishes
+        if (!s.running && scanPollRef.current) {
+          clearInterval(scanPollRef.current);
+          scanPollRef.current = null;
+        }
+      } catch { /* ignore */ }
+    };
+
+    if (anyRunning) {
+      void fetchScan();
+      if (!scanPollRef.current) {
+        scanPollRef.current = setInterval(() => { void fetchScan(); }, 2500);
+      }
+    } else {
+      // Fetch once to reflect final state, then stop
+      void fetchScan();
+      if (scanPollRef.current) {
+        clearInterval(scanPollRef.current);
+        scanPollRef.current = null;
+      }
+    }
+
+    return () => {
+      if (scanPollRef.current) {
+        clearInterval(scanPollRef.current);
+        scanPollRef.current = null;
+      }
+    };
+  }, [jobs, runningIds]);
 
   /* toggle enabled */
   const toggleJob = async (id: string) => {
@@ -427,6 +503,11 @@ export default function SchedulePage() {
                 <tbody className="divide-y divide-[#1e2d45]">
                   {items.map(job => {
                     const isRunning = runningIds.has(job.id);
+                    const effectiveStatus = isRunning ? "running" : job.last_status;
+                    const showScanProgress =
+                      effectiveStatus === "running" &&
+                      job.category === "scraping" &&
+                      scanStatus != null;
                     const isExpanded = expanded === job.id;
                     const history = runHistory[job.id] ?? [];
                     return (
@@ -438,7 +519,7 @@ export default function SchedulePage() {
                           {/* Job name */}
                           <td className="px-5 py-3.5">
                             <div className="flex items-center gap-2">
-                              <StatusDot status={isRunning ? "running" : job.last_status} />
+                              <StatusDot status={effectiveStatus} />
                               <div>
                                 <div className="font-medium text-slate-200">{job.name}</div>
                                 <div className="text-xs text-slate-600 mt-0.5">{job.description}</div>
@@ -461,7 +542,10 @@ export default function SchedulePage() {
                           </td>
                           {/* Status */}
                           <td className="px-5 py-3.5">
-                            <StatusBadge status={isRunning ? "running" : job.last_status} />
+                            {showScanProgress
+                              ? <ScanProgressBar scan={scanStatus!} />
+                              : <StatusBadge status={effectiveStatus} />
+                            }
                           </td>
                           {/* Actions */}
                           <td className="px-5 py-3.5">
