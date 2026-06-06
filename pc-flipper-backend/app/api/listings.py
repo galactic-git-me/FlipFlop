@@ -139,7 +139,10 @@ async def get_listings(
 
 
 @router.get("/stats")
-async def get_listing_stats(db: AsyncSession = Depends(get_db)):
+async def get_listing_stats(
+    first_seen_after: datetime | None = Query(None),
+    db: AsyncSession = Depends(get_db),
+):
     """Single-query stats — avoids the N round-trip latency on large SQLite DBs."""
     from sqlalchemy import case, literal_column
     from sqlalchemy.sql.expression import cast
@@ -184,6 +187,9 @@ async def get_listing_stats(db: AsyncSession = Depends(get_db)):
                 else_=None
             )).label("avg_profit"),
         ).select_from(Listing)
+        .where(*(
+            [Listing.first_seen_at >= first_seen_after] if first_seen_after else []
+        ))
     )
     r = row.one()
     return {

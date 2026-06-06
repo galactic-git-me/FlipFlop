@@ -516,11 +516,14 @@ def main() -> int:
         with Live(layout, refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True):
             while True:
                 try:
-                    health = _safe_get(client, f"{api}/health") or {}
+                    # /health is at the root, not under /api
+                    _base = args.base_url.rstrip("/")
+                    health = _safe_get(client, f"{_base}/health") or {}
                     app_env    = str((health or {}).get("app_env") or "").strip()
                     started_at = str((health or {}).get("started_at") or "").strip()
 
-                    listing_stats = _safe_get(client, f"{api}/listings/stats")
+                    _stats_qs = f"?first_seen_after={started_at}" if (app_env == "dev" and started_at) else ""
+                    listing_stats = _safe_get(client, f"{api}/listings/stats{_stats_qs}")
                     demand_summary = _safe_get(client, f"{api}/demand/summary")
                     scan_status = _safe_get(client, f"{api}/swarms/scan/status")
                     schedule_rows = _safe_get(client, f"{api}/schedule") or []
