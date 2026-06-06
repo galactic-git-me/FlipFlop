@@ -53,7 +53,7 @@ export function AntiBotPreflightBanner() {
     })();
   };
 
-  if (!status || status.last_result === "success") return null;
+  if (!status || status.last_result === "success" || !status.enabled) return null;
 
   return (
     <div className="rounded-xl border px-3 py-2 text-sm bg-amber-500/10 border-amber-400/40 text-amber-200">
