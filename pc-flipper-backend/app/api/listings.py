@@ -1,7 +1,8 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, String
+from sqlalchemy.sql.expression import cast as sa_cast
 from app.database import get_db
 from app.models.listing import Listing, ListingStatus, Classification
 from app.schemas.listing import ListingOut, ListingFilter
@@ -47,34 +48,51 @@ async def get_listings(
     sort_desc: bool = Query(True),
     db: AsyncSession = Depends(get_db),
 ):
-    q = select(Listing)
-
+    # Build filter conditions as a list so they can be reused in the dedup subquery
+    conditions = []
     if status:
-        q = q.where(Listing.status == status)
+        conditions.append(Listing.status == status)
     if classification:
-        q = q.where(Listing.classification == classification)
+        conditions.append(Listing.classification == classification)
     if claude_verdict and claude_verdict.upper() in _CLAUDE_VERDICTS:
-        q = q.where(Listing.claude_verdict == claude_verdict.upper())
+        conditions.append(Listing.claude_verdict == claude_verdict.upper())
     if source_name:
-        q = q.where(Listing.source_name == source_name)
+        conditions.append(Listing.source_name == source_name)
     if min_profit is not None:
         # Use Claude expected profit when available, fall back to estimated
-        q = q.where(
+        conditions.append(
             (Listing.claude_expected_profit >= min_profit) |
             ((Listing.claude_expected_profit == None) & (Listing.estimated_profit >= min_profit))
         )
     if max_price is not None:
-        q = q.where(Listing.price <= max_price)
+        conditions.append(Listing.price <= max_price)
     if search:
-        q = q.where(Listing.title.ilike(f"%{search}%"))
+        conditions.append(Listing.title.ilike(f"%{search}%"))
     if first_seen_after is not None:
-        q = q.where(Listing.first_seen_at >= first_seen_after)
+        conditions.append(Listing.first_seen_at >= first_seen_after)
     if claude_judged_only:
-        q = q.where(Listing.claude_judged_at != None)
+        conditions.append(Listing.claude_judged_at != None)
+
+    # Spec-based deduplication: for listings sharing the same hardware spec fingerprint
+    # (same CPU/GPU/RAM/storage), only surface the cheapest one.
+    # Listings without a spec_fingerprint are treated as their own unique group (by id).
+    fp_expr = func.coalesce(Listing.spec_fingerprint, sa_cast(Listing.id, String))
+    rn_col = func.row_number().over(
+        partition_by=fp_expr,
+        order_by=[Listing.price.asc(), Listing.id.asc()],
+    ).label("rn")
+    ranked_sq = select(Listing.id.label("id"), rn_col).where(*conditions).subquery("ranked")
+    cheapest_ids = select(ranked_sq.c.id).where(ranked_sq.c.rn == 1)
 
     sort_col = getattr(Listing, sort_by, Listing.gem_score)
-    q = q.order_by(sort_col.desc() if sort_desc else sort_col.asc())
-    q = q.offset(offset).limit(limit)
+    q = (
+        select(Listing)
+        .where(*conditions)
+        .where(Listing.id.in_(cheapest_ids))
+        .order_by(sort_col.desc() if sort_desc else sort_col.asc())
+        .offset(offset)
+        .limit(limit)
+    )
 
     result = await db.execute(q)
     rows = result.scalars().all()

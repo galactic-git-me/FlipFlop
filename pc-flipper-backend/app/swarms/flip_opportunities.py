@@ -573,6 +573,7 @@ async def _upsert_listings(
                     "raw": raw,
                     "specs": specs,
                     "fp": fp,
+                    "sfp": sfp,
                     "expected_buy_price": expected_buy_price,
                     "resale_range": resale_range,
                     "upgrade_cost": upgrade_cost,
@@ -601,6 +602,7 @@ async def _upsert_listings(
         raw = item["raw"]
         specs = item["specs"]
         fp = item["fp"]
+        sfp = item["sfp"]
         expected_buy_price = item["expected_buy_price"]
         resale_range = item["resale_range"]
         upgrade_cost = item["upgrade_cost"]
@@ -632,6 +634,8 @@ async def _upsert_listings(
             listing.last_seen_at = datetime.utcnow()
             listing.price = raw.price
             listing.status = ListingStatus.active
+            if sfp and not listing.spec_fingerprint:
+                listing.spec_fingerprint = sfp
             listing.source_confidence = getattr(raw, "source_confidence", listing.source_confidence or "browser_verified")
             listing.estimated_resale = resale
             listing.resale_low = resale_range.low
@@ -664,6 +668,7 @@ async def _upsert_listings(
             listing = Listing(
                 external_id=raw.external_id,
                 dedupe_fingerprint=fp,
+                spec_fingerprint=sfp,
                 source_id=source_id,
                 source_name=raw.source_name,
                 source_confidence=getattr(raw, "source_confidence", "browser_verified"),
