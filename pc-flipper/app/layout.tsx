@@ -4,7 +4,6 @@ import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { BackendStatus } from "@/components/backend-status";
 import { TraeBg } from "@/components/trae-bg";
-import { FacebookCookieBanner } from "@/components/facebook-cookie-banner";
 import { TopCommandBar } from "@/components/top-command-bar";
 import { FaviconAnimator } from "@/components/favicon-animator";
 
@@ -43,7 +42,6 @@ export default function RootLayout({
         <div className="node-main-wrap">
           <TopCommandBar />
           <main className="node-content">
-            <FacebookCookieBanner />
             {children}
           </main>
         </div>
