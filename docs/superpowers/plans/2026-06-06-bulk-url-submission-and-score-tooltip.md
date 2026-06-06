@@ -4,9 +4,9 @@
 
 **Goal:** Add a Bulk URLs tab to the manual submit modal (accepting comma- or newline-separated URLs) and add a hover tooltip to every FlippabilityScore display showing the LLM's per-criteria breakdown.
 
-**Architecture:** Three self-contained changes: (1) extend the frontend `Listing` type with already-available `claude_*` fields from the backend, (2) enhance the `FlippabilityScore` component with a Radix UI tooltip that renders the breakdown when claude data is present, (3) add a third "Bulk URLs" tab to `ManualSubmitModal` that sequentially calls the existing `api.manual.submitUrl` endpoint per URL and shows results with the score+tooltip inline.
+**Architecture:** Four self-contained changes: (0) fix the backend `manual_scraper.py` to use the eBay Browse API `getItemByLegacyId` endpoint instead of HTML scraping for eBay URLs (HTML scraping is blocked by eBay's bot detection), (1) extend the frontend `Listing` type with already-available `claude_*` fields from the backend, (2) enhance the `FlippabilityScore` component with a Radix UI tooltip that renders the breakdown when claude data is present, (3) add a third "Bulk URLs" tab to `ManualSubmitModal` that sequentially calls the existing `api.manual.submitUrl` endpoint per URL and shows results with the score+tooltip inline.
 
-**Tech Stack:** Next.js 15 (App Router), React, TypeScript, Tailwind CSS, `@radix-ui/react-tooltip` (already installed), existing `api.manual.submitUrl` backend endpoint.
+**Tech Stack:** Python/FastAPI backend (`httpx`, eBay Browse API OAuth client credentials), Next.js 15 (App Router), React, TypeScript, Tailwind CSS, `@radix-ui/react-tooltip` (already installed).
 
 ---
 
@@ -14,11 +14,224 @@
 
 | Action | File | What changes |
 |--------|------|-------------|
+| Modify | `pc-flipper-backend/app/services/manual_scraper.py` | Add `_ebay_api_fetch_item()`, update `scrape_url()` to use it |
 | Modify | `pc-flipper/lib/types.ts` | Add `claude_*` fields to `Listing` interface |
 | Create | `pc-flipper/components/ui/tooltip.tsx` | Radix Tooltip primitives wrapper |
 | Modify | `pc-flipper/components/flippability-score.tsx` | Optional `listing` prop + hover breakdown tooltip |
 | Modify | `pc-flipper/app/opportunities/page.tsx` | Pass `listing={l}` to `<FlippabilityScore>` at line 434 |
 | Modify | `pc-flipper/components/manual-submit-modal.tsx` | Add Bulk URLs tab; update ResultCard to pass listing |
+
+---
+
+## Task 0: Fix manual scraper to use eBay Browse API for eBay URLs
+
+**Context:** The current `scrape_url()` in `manual_scraper.py` fetches the eBay HTML page directly, which eBay blocks with bot detection. The automated pipeline avoids this by using the eBay Browse API (`/buy/browse/v1/item_summary/search`) with OAuth client credentials — the same token machinery is available in `scraper.py`. The Browse API has a `getItemByLegacyId` endpoint that fetches a single listing by the numeric item ID embedded in the URL (e.g., `127844097717` from `https://www.ebay.co.uk/itm/127844097717`).
+
+**Files:**
+- Modify: `pc-flipper-backend/app/services/manual_scraper.py`
+
+- [ ] **Step 1: Add `_ebay_api_fetch_item()` function to `manual_scraper.py`**
+
+Add this function after the existing `_parse_ebay_item` function (after line 191):
+
+```python
+async def _ebay_api_fetch_item(
+    item_id: str, url: str, price_override: Optional[float] = None
+) -> "RawListing | None":
+    """
+    Fetch a single eBay listing via Browse API getItemByLegacyId.
+    Returns None if credentials are missing or the API call fails — 
+    caller falls back to HTML scraping.
+    """
+    from app.services.scraper import _get_ebay_access_token, _ebay_base_url
+
+    async with httpx.AsyncClient(timeout=15) as client:
+        token = await _get_ebay_access_token(client)
+        if not token:
+            return None
+
+        endpoint = f"{_ebay_base_url()}/buy/browse/v1/item/get_item_by_legacy_id"
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+            "Content-Type": "application/json",
+        }
+        resp = await client.get(
+            endpoint,
+            params={"legacy_item_id": item_id},
+            headers=headers,
+        )
+        if resp.status_code != 200:
+            return None
+        data = resp.json()
+
+    title = str(data.get("title") or "eBay Listing").strip()
+
+    # Price
+    price = price_override
+    if price is None:
+        price_obj = data.get("price") or data.get("currentBidPrice") or {}
+        try:
+            price = float(price_obj.get("value") or 0) or None
+        except (TypeError, ValueError):
+            price = None
+    if not price:
+        raise ValueError("Could not extract price from eBay API response")
+
+    # Images — primary + additionalImages
+    images: list[str] = []
+    if primary_url := (data.get("image") or {}).get("imageUrl"):
+        images.append(primary_url)
+    for extra in data.get("additionalImages") or []:
+        if src := extra.get("imageUrl"):
+            images.append(src)
+
+    # Location
+    loc_obj = data.get("itemLocation") or {}
+    location = loc_obj.get("city") or loc_obj.get("country")
+
+    # Description — strip HTML tags
+    desc_html = data.get("description") or data.get("shortDescription") or ""
+    description = BeautifulSoup(desc_html, "html.parser").get_text(" ", strip=True)[:1000] if desc_html else ""
+
+    # Condition
+    condition = data.get("condition")
+
+    # Seller
+    seller = data.get("seller") or {}
+    seller_name = seller.get("username")
+    feedback_score: Optional[int] = None
+    try:
+        feedback_score = int(seller.get("feedbackScore") or 0) or None
+    except (TypeError, ValueError):
+        pass
+    feedback_pct: Optional[float] = None
+    try:
+        pct_str = str(seller.get("feedbackPercentage") or "")
+        feedback_pct = float(pct_str.replace("%", "")) if pct_str else None
+    except (TypeError, ValueError):
+        pass
+
+    # Listing type
+    buying_options = data.get("buyingOptions") or []
+    listing_type = "auction" if "AUCTION" in buying_options else "buy_it_now"
+
+    # Auction end datetime
+    listing_ends_at = None
+    if end_date_str := data.get("itemEndDate"):
+        try:
+            listing_ends_at = datetime.fromisoformat(
+                end_date_str.replace("Z", "+00:00")
+            ).replace(tzinfo=None)
+        except ValueError:
+            pass
+
+    from app.services.scraper import classify_seller
+
+    return RawListing(
+        external_id=f"ebay_{item_id}",
+        title=title,
+        price=price,
+        url=url,
+        location=location,
+        condition=condition,
+        description=description,
+        image_urls=images[:5],
+        source_name="Manual Submission",
+        source_confidence="official_api",
+        listing_type=listing_type,
+        listing_ends_at=listing_ends_at,
+        seller_name=seller_name,
+        seller_feedback_count=feedback_score,
+        seller_feedback_pct=feedback_pct,
+        seller_type=classify_seller(seller_name, feedback_score, title),
+    )
+```
+
+- [ ] **Step 2: Replace `scrape_url()` to try the API first for eBay URLs**
+
+Replace the existing `scrape_url` function (lines 48–74) with:
+
+```python
+async def scrape_url(url: str, price_override: Optional[float] = None) -> RawListing:
+    """
+    Fetch a listing URL and return a RawListing.
+    For eBay URLs: tries the Browse API first (bot-safe), falls back to HTML.
+    Raises ValueError if the page can't be parsed sensibly.
+    """
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+
+    if "ebay.co.uk" in host or "ebay.com" in host:
+        item_id_match = re.search(r"/itm/(?:[^/]+/)?(\d+)", url)
+        if item_id_match:
+            try:
+                result = await _ebay_api_fetch_item(
+                    item_id_match.group(1), url, price_override
+                )
+                if result:
+                    return result
+            except ValueError:
+                raise  # price-not-found errors should surface to the caller
+            except Exception:
+                pass  # network / auth failure → fall through to HTML scraping
+
+        # HTML fallback (e.g. no eBay credentials configured)
+        async with httpx.AsyncClient(
+            headers=_HEADERS, follow_redirects=True, timeout=15
+        ) as client:
+            resp = await client.get(url)
+            if resp.status_code >= 400:
+                raise ValueError(f"HTTP {resp.status_code} fetching {url}")
+        return _parse_ebay_item(resp.text, url, price_override)
+
+    # Non-eBay: HTML scraping
+    async with httpx.AsyncClient(
+        headers=_HEADERS, follow_redirects=True, timeout=15
+    ) as client:
+        resp = await client.get(url)
+        if resp.status_code >= 400:
+            raise ValueError(f"HTTP {resp.status_code} fetching {url}")
+        html = resp.text
+
+    if "gumtree.com" in host:
+        return _parse_gumtree_item(html, url, price_override)
+    if "preloved.co.uk" in host:
+        return _parse_preloved_item(html, url, price_override)
+    if "facebook.com" in host or "fb.com" in host:
+        return _parse_facebook_item(html, url, price_override)
+    return _parse_generic(html, url, price_override)
+```
+
+- [ ] **Step 3: Verify imports — confirm `BeautifulSoup` is already imported at the top of `manual_scraper.py`**
+
+Check line 23 of `manual_scraper.py` — it should already have `from bs4 import BeautifulSoup`. If not, add it. The `datetime` import is also needed and is already present at line 16.
+
+- [ ] **Step 4: Restart the backend and do a quick smoke test**
+
+```bash
+cd /home/mac/CODING/FlipFlop/pc-flipper-backend
+# If running in venv:
+source .venv/bin/activate 2>/dev/null || true
+python -c "
+import asyncio
+from app.services.manual_scraper import scrape_url
+result = asyncio.run(scrape_url('https://www.ebay.co.uk/itm/127844097717'))
+print('Title:', result.title)
+print('Price:', result.price)
+print('Source confidence:', result.source_confidence)
+"
+```
+
+Expected: prints a title and price, `source_confidence` is `official_api` if eBay credentials are configured, or `browser_verified` if falling back to HTML.
+
+- [ ] **Step 5: Commit**
+
+```bash
+cd /home/mac/CODING/FlipFlop
+git add pc-flipper-backend/app/services/manual_scraper.py
+git commit -m "fix: use eBay Browse API for manual URL submission (avoids bot detection)"
+```
 
 ---
 
