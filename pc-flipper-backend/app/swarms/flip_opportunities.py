@@ -158,15 +158,17 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
 
     log.info("flip_opportunities_swarm.done", **stats)
 
-    # Ghost lifecycle transitions:
-    # 3+ days unseen   -> missing
-    # 14+ days unseen  -> removed
-    # 30+ days removed -> hard-deleted (keeps the DB lean in production)
-    # Listings marked sold are excluded from missing/removed transitions.
-    missing_cutoff = datetime.utcnow() - timedelta(days=3)
-    removed_cutoff = datetime.utcnow() - timedelta(days=14)
-    purge_cutoff   = datetime.utcnow() - timedelta(days=30)
+    # Ghost lifecycle:
+    # 1+ day unseen  -> missing   (hidden from results & stats)
+    # 3+ days unseen -> archived  (moved to listing_archive table, deleted from listings)
+    #
+    # Listings that have been chosen for a flip are NEVER archived — they stay
+    # in the main listings table permanently so flip history remains intact.
+    missing_cutoff = datetime.utcnow() - timedelta(days=1)
+    archive_cutoff = datetime.utcnow() - timedelta(days=3)
+
     async with AsyncSessionLocal() as db:
+        # Step 1: active listings unseen for 1+ day → missing
         missing_result = await db.execute(
             update(Listing)
             .where(
@@ -176,40 +178,101 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
             .values(status=ListingStatus.missing)
         )
 
-        removed_result = await db.execute(
-            update(Listing)
-            .where(
-                Listing.status == ListingStatus.missing,
-                Listing.last_seen_at < removed_cutoff,
-            )
-            .values(status=ListingStatus.removed)
-        )
+        # Step 2: find missing listings unseen for 3+ days that have NO flip
+        from sqlalchemy import delete as sa_delete, select as sa_select
+        from app.models.flip import Flip
+        from app.models.listing_archive import ListingArchive
 
-        # Hard-delete listings that have been in "removed" state for 30+ days.
-        # This prevents the database growing indefinitely with dead listings.
-        from sqlalchemy import delete as sa_delete
-        purge_result = await db.execute(
-            sa_delete(Listing)
-            .where(
-                Listing.status == ListingStatus.removed,
-                Listing.last_seen_at < purge_cutoff,
+        flipped_ids_result = await db.execute(sa_select(Flip.listing_id))
+        flipped_ids = {row[0] for row in flipped_ids_result.fetchall()}
+
+        to_archive_result = await db.execute(
+            sa_select(Listing).where(
+                Listing.status == ListingStatus.missing,
+                Listing.last_seen_at < archive_cutoff,
+                Listing.id.not_in(flipped_ids) if flipped_ids else True,
             )
         )
+        to_archive = to_archive_result.scalars().all()
+
+        archived = 0
+        for listing in to_archive:
+            db.add(ListingArchive(
+                original_id=listing.id,
+                archived_at=datetime.utcnow(),
+                external_id=listing.external_id,
+                dedupe_fingerprint=listing.dedupe_fingerprint,
+                source_id=listing.source_id,
+                source_name=listing.source_name,
+                source_confidence=listing.source_confidence,
+                title=listing.title,
+                description=listing.description,
+                price=listing.price,
+                url=listing.url,
+                image_urls=listing.image_urls,
+                location=listing.location,
+                condition=listing.condition,
+                cpu=listing.cpu,
+                ram_gb=listing.ram_gb,
+                ram_type=listing.ram_type,
+                storage_gb=listing.storage_gb,
+                storage_type=listing.storage_type,
+                gpu=listing.gpu,
+                has_psu=listing.has_psu,
+                raw_specs=listing.raw_specs,
+                gem_score=listing.gem_score,
+                classification=listing.classification,
+                gem_signals=listing.gem_signals,
+                estimated_resale=listing.estimated_resale,
+                resale_low=listing.resale_low,
+                resale_high=listing.resale_high,
+                resale_comp_count=listing.resale_comp_count,
+                estimated_profit=listing.estimated_profit,
+                estimated_upgrade_cost=listing.estimated_upgrade_cost,
+                initial_estimated_profit=listing.initial_estimated_profit,
+                listing_type=listing.listing_type,
+                listing_ends_at=listing.listing_ends_at,
+                expected_buy_price=listing.expected_buy_price,
+                seller_name=listing.seller_name,
+                seller_feedback_count=listing.seller_feedback_count,
+                seller_feedback_pct=listing.seller_feedback_pct,
+                seller_type=listing.seller_type,
+                seller_has_shop=listing.seller_has_shop,
+                listed_at=listing.listed_at,
+                demand_score=listing.demand_score,
+                found_via_term=listing.found_via_term,
+                status=listing.status,
+                first_seen_at=listing.first_seen_at,
+                last_seen_at=listing.last_seen_at,
+                sold_at=listing.sold_at,
+                claude_verdict=listing.claude_verdict,
+                claude_flipability_score=listing.claude_flipability_score,
+                claude_expected_profit=listing.claude_expected_profit,
+                claude_roi=listing.claude_roi,
+                claude_confidence=listing.claude_confidence,
+                claude_capital_efficiency=listing.claude_capital_efficiency,
+                claude_resale_demand=listing.claude_resale_demand,
+                claude_upgrade_complexity=listing.claude_upgrade_complexity,
+                claude_reasoning=listing.claude_reasoning,
+                claude_main_risk=listing.claude_main_risk,
+                claude_judged_at=listing.claude_judged_at,
+            ))
+            archived += 1
+
+        if to_archive:
+            archive_ids = [l.id for l in to_archive]
+            await db.execute(sa_delete(Listing).where(Listing.id.in_(archive_ids)))
 
         await db.commit()
 
     moved_missing = missing_result.rowcount or 0
-    moved_removed = removed_result.rowcount or 0
-    purged        = purge_result.rowcount or 0
-    if moved_missing or moved_removed or purged:
+    if moved_missing or archived:
         log.info(
             "ghost_lifecycle.updated",
             moved_to_missing=moved_missing,
-            moved_to_removed=moved_removed,
-            purged=purged,
-            missing_cutoff_days=3,
-            removed_cutoff_days=14,
-            purge_cutoff_days=30,
+            archived=archived,
+            missing_cutoff_days=1,
+            archive_cutoff_days=3,
         )
 
     return stats

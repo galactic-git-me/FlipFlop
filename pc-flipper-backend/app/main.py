@@ -214,15 +214,17 @@ def _infer_case_attributes(term: str, group_name: str) -> dict:
 
 
 async def _reset_dev_telemetry() -> None:
-    """In dev mode, wipe search_telemetry AND all listings so the dashboard starts from zero."""
+    """In dev mode, wipe search_telemetry, all listings, and the archive so the dashboard starts from zero."""
     from app.database import AsyncSessionLocal
     from app.models.search_telemetry import SearchTelemetry
     from app.models.listing import Listing
+    from app.models.listing_archive import ListingArchive
     from sqlalchemy import delete
     try:
         async with AsyncSessionLocal() as db:
             await db.execute(delete(SearchTelemetry))
             deleted = await db.execute(delete(Listing))
+            await db.execute(delete(ListingArchive))
             await db.commit()
         log.info(
             "dev.telemetry_reset",
