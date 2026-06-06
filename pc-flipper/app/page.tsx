@@ -23,7 +23,7 @@ import { ScanOverlay } from "@/components/scan-overlay";
 import { SellerBadge } from "@/components/seller-badge";
 import { AuctionBadge, AuctionPriceDisplay, useCountdown } from "@/components/auction-display";
 import { Listing, Flip, SearchConfig, DataSource, Playbook, DemandSummary, AuctionIntelItem, TrendDir, DemandStrength } from "@/lib/types";
-import { ScanStatus, api, apiUrl } from "@/lib/api";
+import { ScanStatus, api, apiUrl, API_BASE_URL } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
 import CountUp from "@/components/CountUp";
@@ -509,6 +509,32 @@ export default function DashboardPage() {
             : "bg-red-500/10 border-red-500/30 text-red-300"
         }`}>
           {autoCycleMessage.text}
+        </div>
+      )}
+
+      {/* Dev mode scope toggle — only shown when backend is in dev mode */}
+      {devEnv && (
+        <div className="flex items-center gap-3 px-3 py-2 rounded-xl border border-amber-400/30 bg-amber-400/5 w-fit">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">DEV</span>
+          <span className="text-xs text-slate-400">Data scope:</span>
+          {(["since_restart", "all"] as const).map(opt => (
+            <button
+              key={opt}
+              onClick={() => setDevScope(opt)}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-all ${
+                devScope === opt
+                  ? "bg-amber-400/15 text-amber-300 border-amber-400/40"
+                  : "bg-transparent text-slate-500 border-slate-700 hover:border-slate-500"
+              }`}
+            >
+              {opt === "since_restart" ? "Since Restart" : "All Data"}
+            </button>
+          ))}
+          {startedAt && (
+            <span className="text-[10px] text-slate-600">
+              restarted {new Date(startedAt).toLocaleTimeString()}
+            </span>
+          )}
         </div>
       )}
 
