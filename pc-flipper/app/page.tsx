@@ -97,18 +97,6 @@ export default function DashboardPage() {
   const [retrainReady, setRetrainReady] = useState<boolean | null>(null);
   const [soldSinceCheckpoint, setSoldSinceCheckpoint] = useState<number>(0);
   const [autonomousCycleHealthy, setAutonomousCycleHealthy] = useState<boolean | null>(null);
-  // Dev mode scope toggle — only active when backend reports app_env=dev
-  const [devEnv, setDevEnv] = useState(false);
-  const [startedAt, setStartedAt] = useState<string | null>(null);
-  const [devScope, setDevScope] = useState<"all" | "since_restart">(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("ff_dev_scope") as "all" | "since_restart") ?? "since_restart";
-    }
-    return "since_restart";
-  });
-  // Refs so load() always reads current values without closure staleness
-  const devScopeRef = useRef<"all" | "since_restart">("since_restart");
-  const startedAtRef = useRef<string | null>(null);
   const [autonomousLastRunAt, setAutonomousLastRunAt] = useState<string | null>(null);
   const [flippingId, setFlippingId] = useState<number | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -142,25 +130,10 @@ export default function DashboardPage() {
     setFeedsDone(0);
     setElapsedSecs(0);
     try {
-      // Fetch health to detect dev mode and get startup timestamp
-      try {
-        const h = await fetch(`${API_BASE_URL}/health`).then(r => r.json());
-        if (h.app_env === "dev") {
-          setDevEnv(true);
-          setStartedAt(h.started_at);
-          startedAtRef.current = h.started_at;
-        }
-      } catch { /* backend offline — health check non-critical */ }
-
       // Rolling windows for gem picks
       const now = new Date();
       const past24hISO = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
       const past7dISO  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
-
-      // Dev scope filter: restrict to listings first seen since last container restart
-      const scopeFilter: Record<string, string> = (devScopeRef.current === "since_restart" && startedAtRef.current)
-        ? { first_seen_after: startedAtRef.current }
-        : {};
 
       const totalCalls = 11;
       let doneCalls = 0;
@@ -176,7 +149,7 @@ export default function DashboardPage() {
       };
 
       const results = await Promise.allSettled([
-        step(api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500", ...scopeFilter }) as Promise<Listing[]>, 15000),
+        step(api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>, 15000),
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
@@ -303,14 +276,6 @@ export default function DashboardPage() {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, []);
-
-  // Keep ref in sync and reload when dev scope toggle changes
-  useEffect(() => {
-    devScopeRef.current = devScope;
-    localStorage.setItem("ff_dev_scope", devScope);
-    // Don't reload on initial mount (load() already handles it)
-    if (startedAtRef.current) void load();
-  }, [devScope]);
 
   const triggerScan = async () => {
     setTriggering(true);
@@ -509,32 +474,6 @@ export default function DashboardPage() {
             : "bg-red-500/10 border-red-500/30 text-red-300"
         }`}>
           {autoCycleMessage.text}
-        </div>
-      )}
-
-      {/* Dev mode scope toggle — only shown when backend is in dev mode */}
-      {devEnv && (
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl border border-amber-400/30 bg-amber-400/5 w-fit">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">DEV</span>
-          <span className="text-xs text-slate-400">Data scope:</span>
-          {(["since_restart", "all"] as const).map(opt => (
-            <button
-              key={opt}
-              onClick={() => setDevScope(opt)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-all ${
-                devScope === opt
-                  ? "bg-amber-400/15 text-amber-300 border-amber-400/40"
-                  : "bg-transparent text-slate-500 border-slate-700 hover:border-slate-500"
-              }`}
-            >
-              {opt === "since_restart" ? "Since Restart" : "All Data"}
-            </button>
-          ))}
-          {startedAt && (
-            <span className="text-[10px] text-slate-600">
-              restarted {new Date(startedAt).toLocaleTimeString()}
-            </span>
-          )}
         </div>
       )}
 

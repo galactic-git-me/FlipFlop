@@ -223,6 +223,28 @@ def _loop_exception_handler(loop, context):
     loop.default_exception_handler(context)
 
 
+async def _wipe_dev_data() -> None:
+    """In dev mode: clear all scraped data on every container restart so each
+    session starts fresh. Does NOT touch configuration (sources, search terms,
+    playbooks, settings, flips) — only ephemeral scraped/telemetry data."""
+    from app.database import AsyncSessionLocal
+    from sqlalchemy import text
+    tables = [
+        "listing_archive",
+        "listings",
+        "search_telemetry",
+    ]
+    async with AsyncSessionLocal() as db:
+        for table in tables:
+            try:
+                await db.execute(text(f"DELETE FROM {table}"))
+                log.info("dev.wipe", table=table)
+            except Exception as exc:
+                log.warning("dev.wipe.skipped", table=table, error=str(exc))
+        await db.commit()
+    log.info("dev.wipe.done")
+
+
 async def lifespan(app: FastAPI):
     install_log_capture()          # must be first — before any structlog usage
     loop = asyncio.get_running_loop()
@@ -231,6 +253,8 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     await _migrate_add_columns()
+    if settings.app_env == "dev":
+        await _wipe_dev_data()
     await _seed_default_data()
     await _load_db_settings_into_config()
     if not chromium_available():

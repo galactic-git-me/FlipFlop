@@ -516,14 +516,7 @@ def main() -> int:
         with Live(layout, refresh_per_second=max(1, int(1 / max(args.refresh, 0.2))), screen=True):
             while True:
                 try:
-                    # /health is at the root, not under /api
-                    _base = args.base_url.rstrip("/")
-                    health = _safe_get(client, f"{_base}/health") or {}
-                    app_env    = str((health or {}).get("app_env") or "").strip()
-                    started_at = str((health or {}).get("started_at") or "").strip()
-
-                    _stats_qs = f"?first_seen_after={started_at}" if (app_env == "dev" and started_at) else ""
-                    listing_stats = _safe_get(client, f"{api}/listings/stats{_stats_qs}")
+                    listing_stats = _safe_get(client, f"{api}/listings/stats")
                     demand_summary = _safe_get(client, f"{api}/demand/summary")
                     scan_status = _safe_get(client, f"{api}/swarms/scan/status")
                     schedule_rows = _safe_get(client, f"{api}/schedule") or []
@@ -540,11 +533,6 @@ def main() -> int:
                     telem_items = (telem or {}).get("items") if isinstance(telem, dict) else {}
                     if not isinstance(telem_items, dict):
                         telem_items = {}
-
-                    # In dev mode, only show telemetry from after the last container restart
-                    # so the table reflects this session only (same logic as the web UI scope toggle).
-                    if app_env == "dev" and started_at:
-                        telem_items = _filter_telem_since(telem_items, started_at)
 
                     sources_health = _safe_get(client, f"{api}/sources/health") or {}
                     health_items = (sources_health or {}).get("items") if isinstance(sources_health, dict) else []
