@@ -139,6 +139,11 @@ async def run_cases_swarm(mode: str = "main") -> dict:
     all_themes = (dynamic_themes if dynamic_themes else CASE_THEMES) + playbook_themes
     log.info("cases_swarm.themes", base=len(CASE_THEMES), playbook_extra=len(playbook_themes))
     max_terms = max(1, int(os.getenv("CASES_MAX_TERMS", "10")))
+    # Build term → theme mapping so scrapers can tag parts with the right theme.
+    term_to_theme: dict[str, str] = {}
+    for theme_def in all_themes:
+        for t in theme_def["terms"]:
+            term_to_theme.setdefault(t, theme_def["theme"])
     terms_by_vendor: dict[str, list[str]] = {}
     for source in SOURCES:
         if source_allowlist and source["name"] not in source_allowlist:
@@ -190,7 +195,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
             return rows
         async def _one(term: str):
             async with term_sem:
-                return await _scrape_one(source, "Dynamic", term)
+                return await _scrape_one(source, term_to_theme.get(term, "Dynamic"), term)
         rows = await asyncio.gather(
             *[_one(term) for term in batch_terms.get(source["name"], [])],
             return_exceptions=False,
@@ -1264,8 +1269,9 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
                             const linkEl = card.querySelector('a[href]') || null;
                             let href = linkEl ? (linkEl.href || linkEl.getAttribute('href') || '') : '';
                             if (href.startsWith('/')) href = location.origin + href;
-                            const titleEl = card.querySelector('.product-item-link, h2, h3, a[href]');
-                            const title = ((titleEl?.textContent || card.textContent || '').replace(/\\s+/g, ' ').trim());
+                            const titleEl = card.querySelector('.product-item-link, h2, h3');
+                            const linkWithTitle = card.querySelector('a[title]');
+                            const title = (titleEl?.textContent || linkWithTitle?.getAttribute('title') || '').replace(/\\s+/g, ' ').trim();
                             if (!href || !title || !Number.isFinite(price) || price <= 0) return;
                             out.push({title, href, price, img: (card.querySelector('img')?.src || '')});
                         });

@@ -1745,22 +1745,15 @@ async def fetch_listings(
         )
 
     if "bargainhardware" in name or "bargain hardware" in name:
-        return await _scrape_bargainhardware_http(
-            search_terms=search_terms[:20],
-            min_price=min_price,
-            max_price=max_price,
-        )
-
-    if "bargainhardware" in name or "bargain hardware" in name:
         return await _scrape_generic_marketplace_listings(
             source_name="BargainHardware",
             search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
             build_url=lambda term: f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={term.replace(' ', '+')}",
-            item_selector='a[href*="/de/"]',
-            link_selector='a[href*="/de/"]',
-            title_selector='h1, h2, h3, h4, p, span',
+            item_selector='li.product-item',
+            link_selector='a[href*="/de/"][title]',
+            title_selector='.product-item-link, a[title]',
         )
 
     if "cherrytree" in name:
