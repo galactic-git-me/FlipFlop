@@ -72,9 +72,12 @@ async def get_listings(
     if search:
         conditions.append(Listing.title.ilike(f"%{search}%"))
     if first_seen_after is not None:
-        conditions.append(Listing.first_seen_at >= first_seen_after)
+        # DB stores naive datetimes — strip tzinfo to avoid comparison error
+        fsa = first_seen_after.replace(tzinfo=None)
+        conditions.append(Listing.first_seen_at >= fsa)
     if claude_judged_after is not None:
-        conditions.append(Listing.claude_judged_at >= claude_judged_after)
+        cja = claude_judged_after.replace(tzinfo=None)
+        conditions.append(Listing.claude_judged_at >= cja)
     if gem_only:
         # Include rule-based gems AND LLM-confirmed gems
         conditions.append(
@@ -197,7 +200,7 @@ async def get_listing_stats(
             )).label("avg_profit"),
         ).select_from(Listing)
         .where(*(
-            [Listing.first_seen_at >= first_seen_after] if first_seen_after else []
+            [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
         ))
     )
     r = row.one()
