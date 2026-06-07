@@ -16,6 +16,7 @@ router = APIRouter(prefix="/sources", tags=["sources"])
 
 
 @router.get("/", response_model=list[DataSourceOut])
+@router.get("", response_model=list[DataSourceOut], include_in_schema=False)
 async def get_sources(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(DataSource).order_by(DataSource.name))
     return result.scalars().all()

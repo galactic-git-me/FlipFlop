@@ -21,6 +21,7 @@ log = structlog.get_logger(__name__)
 
 
 @router.get("/", response_model=list[FlipOut])
+@router.get("", response_model=list[FlipOut], include_in_schema=False)
 async def get_flips(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Flip).order_by(Flip.created_at.desc()))
     return result.scalars().all()

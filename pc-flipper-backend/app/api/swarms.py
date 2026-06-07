@@ -7,6 +7,7 @@ router = APIRouter(prefix="/swarms", tags=["swarms"])
 
 
 @router.get("/")
+@router.get("", include_in_schema=False)
 async def list_swarms():
     return get_swarm_status()
 
