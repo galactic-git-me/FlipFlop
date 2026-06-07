@@ -218,7 +218,7 @@ function qs(params?: Record<string, string | undefined>): string {
 
 export const api = {
   listings: {
-    list: (params?: Record<string, string>) => request<unknown[]>(`/listings${qs(params)}`),
+    list: (params?: Record<string, string>) => request<unknown[]>(`/listings/${qs(params)}`),
     stats: () => request<{ total_listings: number; gems_count: number; avg_profit: number }>("/listings/stats"),
     get: (id: number) => request<unknown>(`/listings/${id}`),
   },
