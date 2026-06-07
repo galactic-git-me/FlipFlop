@@ -21,8 +21,8 @@ from app.database import AsyncSessionLocal
 log = structlog.get_logger(__name__)
 
 _MAX_QUEUE     = 2_000
-_NUM_WORKERS   = 2
-_CALL_DELAY    = 2.0   # seconds between successive AI calls per worker
+_NUM_WORKERS   = 1     # single worker keeps us well under free-tier rate limits
+_CALL_DELAY    = 8.0   # ~7 req/min — comfortable under OpenRouter free-tier limits
 
 _queue:   asyncio.Queue | None = None
 _workers: list[asyncio.Task]   = []

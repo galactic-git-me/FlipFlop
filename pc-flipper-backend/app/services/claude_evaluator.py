@@ -20,6 +20,7 @@ Output schema (returned as ClaudeEvalResult):
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 from dataclasses import dataclass
@@ -161,34 +162,46 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
         except Exception as exc:
             log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
-    # 2 — OpenRouter fallback
+    # 2 — OpenRouter fallback (with exponential backoff on 429)
     if not raw and _s.openrouter_api_key:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=60) as client:
-                resp = await client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {_s.openrouter_api_key}",
-                        "HTTP-Referer": "http://localhost:3000",
-                        "X-Title": "PC Flipper Gem Evaluator",
-                    },
-                    json={
-                        "model": _s.openrouter_primary_model or "google/gemma-4-31b-it:free",
-                        "messages": [
-                            {"role": "system", "content": EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "max_tokens": 512,
-                    },
-                )
-                resp.raise_for_status()
-                data = resp.json()
-                raw = data["choices"][0]["message"]["content"]
-                actual = data.get("model", _s.openrouter_primary_model or "")
-                model_used = f"openrouter/{actual.split('/')[-1].replace(':free', '')}"
-        except Exception as exc:
-            log.warning("claude_evaluator.openrouter_failed", error=str(exc))
+        import httpx
+        for attempt in range(4):
+            try:
+                wait = (2 ** attempt) * 5  # 5s, 10s, 20s, 40s
+                if attempt > 0:
+                    await asyncio.sleep(wait)
+                async with httpx.AsyncClient(timeout=60) as client:
+                    resp = await client.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers={
+                            "Authorization": f"Bearer {_s.openrouter_api_key}",
+                            "HTTP-Referer": "http://localhost:3000",
+                            "X-Title": "PC Flipper Gem Evaluator",
+                        },
+                        json={
+                            "model": _s.openrouter_primary_model or "google/gemma-4-31b-it:free",
+                            "messages": [
+                                {"role": "system", "content": EVAL_SYSTEM},
+                                {"role": "user", "content": prompt},
+                            ],
+                            "max_tokens": 512,
+                        },
+                    )
+                    if resp.status_code == 429:
+                        retry_after = int(resp.headers.get("Retry-After", wait))
+                        log.warning("claude_evaluator.openrouter_rate_limited", attempt=attempt, retry_after=retry_after)
+                        await asyncio.sleep(retry_after)
+                        continue
+                    resp.raise_for_status()
+                    data = resp.json()
+                    raw = data["choices"][0]["message"]["content"]
+                    actual = data.get("model", _s.openrouter_primary_model or "")
+                    model_used = f"openrouter/{actual.split('/')[-1].replace(':free', '')}"
+                    break
+            except Exception as exc:
+                log.warning("claude_evaluator.openrouter_failed", attempt=attempt, error=str(exc))
+                if attempt == 3:
+                    break
 
     # 3 — Ollama local fallback
     if not raw and _s.ollama_base_url:
