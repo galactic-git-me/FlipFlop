@@ -192,6 +192,8 @@ async def get_listing_stats(
         ))
     )
     r = row.one()
+    from app.services.claude_eval_queue import queue_size
+    unjudged = int(r.total or 0) - int(r.claude_judged or 0)
     return {
         "total_listings":       int(r.total or 0),
         "gems_count":           int((r.claude_gems or 0) + (r.rule_gems or 0)),
@@ -199,6 +201,8 @@ async def get_listing_stats(
         "claude_judged_count":  int(r.claude_judged or 0),
         "claude_gems_count":    int(r.claude_gems or 0),
         "rule_based_gems_count":int(r.rule_gems or 0),
+        "claude_eval_queue":    queue_size(),
+        "claude_unjudged_count": max(0, unjudged),
     }
 
 
