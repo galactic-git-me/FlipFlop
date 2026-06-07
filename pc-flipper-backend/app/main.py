@@ -265,12 +265,44 @@ async def lifespan(app: FastAPI):
     start_eval_workers(n=2)  # two staggered workers — Anthropic when available, Ollama fallback
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
+    asyncio.create_task(_queue_unevaluated_gems())  # auto-queue gems on startup
     yield
     stop_scheduler()
     await stop_ingest_workers()
     await stop_eval_workers()
     await engine.dispose()
     log.info("app.shutdown")
+
+
+async def _queue_unevaluated_gems():
+    """
+    On startup, queue all rule-based gems that haven't been LLM-evaluated yet.
+    This ensures the eval queue survives backend restarts without manual re-triggering.
+    """
+    import asyncio
+    from app.database import AsyncSessionLocal
+    from app.models.listing import Listing, ListingStatus, Classification
+    from app.services.claude_eval_queue import enqueue_for_claude, should_queue_for_claude
+    from sqlalchemy import select
+
+    await asyncio.sleep(3)  # let the DB pool warm up first
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(
+                select(Listing)
+                .where(
+                    Listing.claude_judged_at == None,
+                    Listing.status == ListingStatus.active,
+                    Listing.classification.in_([Classification.amazing_gem, Classification.gem]),
+                )
+                .order_by(Listing.gem_score.desc())
+                .limit(2000)
+            )
+            listings = result.scalars().all()
+        queued = sum(1 for l in listings if should_queue_for_claude(l) and enqueue_for_claude(l.id))
+        log.info("startup.gem_queue_backfill", queued=queued, candidates=len(listings))
+    except Exception as exc:
+        log.warning("startup.gem_queue_backfill_failed", error=str(exc))
 
 
 async def _load_db_settings_into_config():

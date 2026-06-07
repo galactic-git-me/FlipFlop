@@ -33,6 +33,7 @@ def _build_gem_explainer(listing: Listing) -> str:
 
 
 @router.get("/", response_model=list[ListingOut])
+@router.get("", response_model=list[ListingOut], include_in_schema=False)
 async def get_listings(
     classification: Classification | None = Query(None),
     claude_verdict: str | None = Query(None),
