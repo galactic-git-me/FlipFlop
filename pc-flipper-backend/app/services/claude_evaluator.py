@@ -166,7 +166,7 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 raw = resp.json().get("message", {}).get("content")
                 model_used = f"ollama/{_s.ollama_model}"
         except Exception as exc:
-            log.warning("claude_evaluator.ollama_failed", error=str(exc))
+            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
 
     # 2 — Anthropic cloud fallback
     if not raw and _s.anthropic_api_key:
