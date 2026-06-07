@@ -475,11 +475,20 @@ _FLIP_SEARCH_TERMS_EXTENDED = [
     "Ryzen 5 5600", "Ryzen 7 5700X", "32GB DDR4 2x16", "1TB NVMe SSD", "650W PSU",
 ]
 _UPGRADE_SEARCH_TERMS = [
+    # AM4 platform
     "RTX 3060 12GB used", "RTX 3070 8GB used", "AMD Ryzen 5 5600", "AMD Ryzen 7 5700X",
     "B550 motherboard", "X570 motherboard", "32GB DDR4 2x16 3200", "1TB NVMe M.2 SSD",
     "650W ATX PSU 80 bronze", "AM4 motherboard cpu combo",
     "AM4 motherboard", "AM4 CPU", "i7 CPU", "i9 CPU", "DDR4 RAM", "DDR4 RAM 32GB 2x16GB",
     "NVMe 1TB", "PSU", "NVIDIA GPU", "CPU cooler", "RGB fans",
+    # AM5 platform — CPUs
+    "Ryzen 5 7600", "Ryzen 7 7700X", "Ryzen 7 7800X3D", "Ryzen 9 7900X", "Ryzen 9 7950X",
+    "AM5 CPU", "AM5 motherboard", "B650 motherboard", "X670 motherboard", "B650E motherboard",
+    # AM5 compatible GPUs (RX 7000 series)
+    "RX 7600 GPU", "RX 7700 XT GPU", "RX 7800 XT GPU", "RX 7900 XT GPU", "RX 7900 XTX GPU",
+    "RTX 4060 GPU", "RTX 4060 Ti GPU", "RTX 4070 GPU", "RTX 4070 Super GPU",
+    # DDR5 RAM
+    "DDR5 RAM", "32GB DDR5 kit", "DDR5 6000MHz", "DDR5 5600MHz", "64GB DDR5",
 ]
 _ACCESSORY_SEARCH_TERMS = [
     "gaming keyboard",
