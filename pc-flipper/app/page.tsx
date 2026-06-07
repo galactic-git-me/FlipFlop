@@ -75,7 +75,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [flips, setFlips] = useState<Flip[]>([]);
-  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, avg_profit: 0 });
+  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, avg_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0 });
   const [swarms, setSwarms] = useState<{ id: string; name: string; next_run: string | null }[]>([]);
   const [gemOfDay, setGemOfDay] = useState<Listing | null>(null);
   const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
@@ -176,7 +176,7 @@ export default function DashboardPage() {
       };
 
       const l = getValue<Listing[]>(0, []);
-      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0 });
+      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number; claude_judged_count: number; claude_eval_queue: number; claude_unjudged_count: number }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0 });
       const sw = getValue<{ id: string; name: string; next_run: string | null }[]>(2, []);
       const fl = getValue<Flip[]>(3, []);
       const godResults = getValue<Listing[]>(4, []);
@@ -494,6 +494,34 @@ export default function DashboardPage() {
           <GemHighlightCard period="week" listing={gemOfWeek} />
         </div>
       </div>
+
+      {/* AI Evaluation Queue Indicator */}
+      {stats.total_listings > 0 && (
+        <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-sm text-muted-foreground">
+          {stats.claude_eval_queue > 0 ? (
+            <span className="relative flex h-2 w-2 flex-shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+            </span>
+          ) : (
+            <span className="h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0" />
+          )}
+          <span>
+            <span className="font-medium text-foreground">AI evaluated:</span>{" "}
+            {stats.claude_judged_count.toLocaleString()} / {stats.total_listings.toLocaleString()} listings
+            {stats.claude_eval_queue > 0 && (
+              <span className="ml-2 text-amber-600 dark:text-amber-400">
+                · {stats.claude_eval_queue.toLocaleString()} in queue
+              </span>
+            )}
+            {stats.claude_unjudged_count > 0 && stats.claude_eval_queue === 0 && (
+              <span className="ml-2 text-muted-foreground/70">
+                · {stats.claude_unjudged_count.toLocaleString()} pending
+              </span>
+            )}
+          </span>
+        </div>
+      )}
 
       {listings.length === 0 ? (
         <EmptyState
