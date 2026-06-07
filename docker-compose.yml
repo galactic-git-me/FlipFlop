@@ -60,7 +60,7 @@ services:
       OPENROUTER_API_KEY: OPENROUTER_API_KEY_REDACTED
       OPENROUTER_PRIMARY_MODEL: google/gemma-4-31b-it:free
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-      OLLAMA_MODEL: hermes3:latest
+      OLLAMA_MODEL: gemma4:e4b
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
