@@ -542,6 +542,8 @@ async def _seed_default_data():
             ("Alibaba",           "https://www.alibaba.com",       True),
             ("BargainHardware",   "https://www.bargainhardware.eu", True),
             ("CherryTree Inc",    "https://www.cherrytreeinc.com", True),
+            # Vinted UK — second-hand marketplace, Apify-scraped
+            ("Vinted",            "https://www.vinted.co.uk",      True),
         ]
         for src_name, src_url, src_enabled in _new_sources:
             exists = await db.scalar(

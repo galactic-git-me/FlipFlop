@@ -1756,6 +1756,31 @@ async def fetch_listings(
             title_selector='.product-item-link, a[title]',
         )
 
+    if "vinted" in name:
+        from app.scrapers.vinted_scraper import fetch_vinted_listings
+        raw_dicts = await fetch_vinted_listings(
+            search_terms=search_terms or None,
+            min_price=min_price,
+            max_price=max_price,
+        )
+        rows = []
+        for d in raw_dicts:
+            rows.append(RawListing(
+                external_id=d["external_id"],
+                title=d["title"],
+                price=d["price"],
+                url=d["url"],
+                location=d.get("location"),
+                condition=d.get("condition"),
+                description=d.get("description", ""),
+                image_urls=d.get("image_urls", []),
+                source_name="Vinted",
+                listing_type=d.get("listing_type", "buy_it_now"),
+                seller_name=d.get("seller_name"),
+                found_via_term=d.get("found_via_term", ""),
+            ))
+        return rows
+
     if "cherrytree" in name:
         return await _scrape_generic_marketplace_listings(
             source_name="CherryTree",
