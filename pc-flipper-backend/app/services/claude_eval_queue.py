@@ -21,8 +21,8 @@ from app.database import AsyncSessionLocal
 log = structlog.get_logger(__name__)
 
 _MAX_QUEUE     = 2_000
-_NUM_WORKERS   = 4     # four concurrent workers — Anthropic handles concurrency well
-_CALL_DELAY    = 0.5   # short gap; Anthropic rate limit is generous
+_NUM_WORKERS   = 2     # two staggered workers — Anthropic when available, Ollama fallback
+_CALL_DELAY    = 2.0   # gap between calls per worker
 
 _queue:   asyncio.Queue | None = None
 _workers: list[asyncio.Task]   = []
@@ -77,6 +77,9 @@ async def stop_eval_workers() -> None:
 
 async def _worker(worker_id: int) -> None:
     q = get_queue()
+    # Stagger workers to avoid simultaneous Ollama calls when Anthropic is unavailable
+    if worker_id > 0:
+        await asyncio.sleep(worker_id * 25)
     log.debug("claude_eval_queue.worker_ready", worker=worker_id)
     while True:
         item = await q.get()
