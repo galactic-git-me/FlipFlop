@@ -197,8 +197,9 @@ export function apiUrl(path: string): string {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  // Ensure trailing slash to avoid 307 redirect which breaks cross-origin requests
-  const url = apiUrl(path).replace(/([^/])(\?|$)/, "$1/$2");
+  // Add trailing slash to path only (not end of query string) — backend handles both
+  // NOTE: the old regex /([^/])(\?|$)/ was corrupting query params like status=active → status=active/
+  const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
   const res = await fetch(url, {
     headers: { "Content-Type": "application/json", ...init?.headers },
     signal: AbortSignal.timeout(10_000),
