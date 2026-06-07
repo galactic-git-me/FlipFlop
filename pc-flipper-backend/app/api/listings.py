@@ -44,6 +44,7 @@ async def get_listings(
     first_seen_after: datetime | None = Query(None),
     claude_judged_after: datetime | None = Query(None),
     claude_judged_only: bool = Query(False),
+    gem_only: bool = Query(False),
     limit: int = Query(50, le=1000),
     offset: int = Query(0),
     sort_by: str = Query("gem_score"),
@@ -74,6 +75,11 @@ async def get_listings(
         conditions.append(Listing.first_seen_at >= first_seen_after)
     if claude_judged_after is not None:
         conditions.append(Listing.claude_judged_at >= claude_judged_after)
+    if gem_only:
+        # Include rule-based gems AND LLM-confirmed gems
+        conditions.append(
+            Listing.classification.in_([Classification.amazing_gem, Classification.gem])
+        )
     if claude_judged_only:
         conditions.append(Listing.claude_judged_at != None)
 

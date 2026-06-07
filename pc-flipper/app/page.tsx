@@ -153,15 +153,15 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: best gem evaluated in last 24 h (falls back to all-time best if none)
+        // Gem of Day: best rule-based or LLM gem first seen in last 24 h
         step(api.listings.list({
-          sort_by: "claude_flipability_score", sort_desc: "true",
-          limit: "1", claude_judged_only: "true", claude_judged_after: past24hISO,
+          sort_by: "gem_score", sort_desc: "true",
+          limit: "1", gem_only: "true", first_seen_after: past24hISO,
         }) as Promise<Listing[]>, 12000),
-        // Gem of Week: best gem evaluated in last 7 days (falls back to all-time best if none)
+        // Gem of Week: best rule-based or LLM gem first seen in last 7 days
         step(api.listings.list({
-          sort_by: "claude_flipability_score", sort_desc: "true",
-          limit: "1", claude_judged_only: "true", claude_judged_after: past7dISO,
+          sort_by: "gem_score", sort_desc: "true",
+          limit: "1", gem_only: "true", first_seen_after: past7dISO,
         }) as Promise<Listing[]>, 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
         step(api.sources.list() as Promise<DataSource[]>, 12000),
@@ -279,12 +279,12 @@ export default function DashboardPage() {
         const [s, godResults, gowResults] = await Promise.all([
           api.listings.stats(),
           api.listings.list({
-            sort_by: "claude_flipability_score", sort_desc: "true",
-            limit: "1", claude_judged_only: "true", claude_judged_after: past24hISO,
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>,
           api.listings.list({
-            sort_by: "claude_flipability_score", sort_desc: "true",
-            limit: "1", claude_judged_only: "true", claude_judged_after: past7dISO,
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>,
         ]);
         setStats(s as typeof stats);

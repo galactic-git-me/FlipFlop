@@ -104,14 +104,15 @@ async def _worker(worker_id: int) -> None:
 
 def should_queue_for_claude(listing) -> bool:
     """
-    Lightweight gate — avoid sending clear rejects to Claude.
-    Keeps Claude focused on plausible candidates.
+    Only send rule-based gems to Claude for a second opinion.
+    Everything else is handled by the rule-based system alone — this keeps
+    the LLM queue small and focused so gems appear on the dashboard immediately.
     """
     from app.models.listing import Classification
     if not listing.price or listing.price <= 0:
         return False
-    # Rule-based system already hard-rejected this (faulty, component-only, etc.)
-    if listing.classification == Classification.overpriced:
+    # Only LLM-evaluate listings the rule-based system already flagged as gems
+    if listing.classification not in (Classification.amazing_gem, Classification.gem):
         return False
     # IT / refurb shops have already priced in the flip margin
     if listing.seller_type == "refurb_shop":
