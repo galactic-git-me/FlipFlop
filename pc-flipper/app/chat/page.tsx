@@ -532,13 +532,27 @@ function PurchasePlanView({ plan }: { plan: PurchasePlan; intent: RefinedIntent 
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cost Breakdown</h3>
         <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl overflow-hidden">
           <div className="divide-y divide-[#1e2d45]">
-            <div className="flex justify-between px-4 py-2.5 text-xs">
-              <span className="text-slate-500">Base PC ({b.base_spec.slice(0, 40)}…)</span>
+            <div className="flex justify-between items-center px-4 py-2.5 text-xs">
+              <a
+                href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(b.base_spec)}&LH_ItemCondition=3000`}
+                target="_blank" rel="noopener noreferrer"
+                className="text-slate-500 hover:text-[#00dc82] transition-colors flex items-center gap-1 group"
+              >
+                Base PC ({b.base_spec.slice(0, 40)}…)
+                <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
               <span className="text-slate-300 font-mono">£{b.base_cost.toFixed(0)}</span>
             </div>
             {b.upgrades.map((u, i) => (
-              <div key={i} className="flex justify-between px-4 py-2.5 text-xs">
-                <span className="text-slate-500">{u.item} <span className="text-slate-700">({u.source})</span></span>
+              <div key={i} className="flex justify-between items-center px-4 py-2.5 text-xs">
+                <a
+                  href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(u.item)}&LH_ItemCondition=3000`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-slate-500 hover:text-[#00dc82] transition-colors flex items-center gap-1 group"
+                >
+                  {u.item} <span className="text-slate-700">({u.source})</span>
+                  <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
                 <span className="text-slate-300 font-mono">£{u.cost_estimate.toFixed(0)}</span>
               </div>
             ))}
