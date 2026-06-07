@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import {
   Package, RefreshCw, ExternalLink, Search, X,
   Gem, Zap, SlidersHorizontal, ArrowUpDown, PlusCircle,
-  ChevronLeft, ChevronRight, Copy, type LucideIcon,
+  ChevronLeft, ChevronRight, Copy, LayoutList, LayoutGrid, type LucideIcon,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -119,6 +119,7 @@ function FlipOpportunitiesTab() {
   const [triggering, setTriggering]       = useState(false);
   const [flippingId, setFlippingId]       = useState<number | null>(null);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
+  const [viewMode, setViewMode]           = useState<"list" | "grid">("list");
 
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -202,6 +203,23 @@ function FlipOpportunitiesTab() {
           {listings.length} listings · sorted by {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
         </p>
         <div className="flex items-center gap-2">
+          {/* List / Grid toggle */}
+          <div className="flex items-center rounded-lg border border-[#1e2d45] overflow-hidden">
+            <button
+              onClick={() => setViewMode("list")}
+              title="List view"
+              className={`p-1.5 transition-colors ${viewMode === "list" ? "bg-[#00dc82]/15 text-[#00dc82]" : "text-slate-500 hover:text-slate-300"}`}
+            >
+              <LayoutList className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode("grid")}
+              title="Grid view"
+              className={`p-1.5 transition-colors ${viewMode === "grid" ? "bg-[#00dc82]/15 text-[#00dc82]" : "text-slate-500 hover:text-slate-300"}`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+          </div>
           <Button
             variant="ghost" size="sm"
             onClick={() => setFiltersOpen(o => !o)}
@@ -313,11 +331,19 @@ function FlipOpportunitiesTab() {
           action={{ label: "Run Scan Now", onClick: trigger }} />
       ) : (
         <>
-          <div className="space-y-3">
-            {listings.map(listing => (
-              <ListingRow key={listing.id} listing={listing} onFlip={handleFlip} flippingId={flippingId} />
-            ))}
-          </div>
+          {viewMode === "list" ? (
+            <div className="space-y-3">
+              {listings.map(listing => (
+                <ListingRow key={listing.id} listing={listing} onFlip={handleFlip} flippingId={flippingId} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {listings.map(listing => (
+                <ListingCard key={listing.id} listing={listing} onFlip={handleFlip} flippingId={flippingId} />
+              ))}
+            </div>
+          )}
           {/* Pagination */}
           <div className="flex items-center justify-between pt-2">
             <div className="flex items-center gap-2">
@@ -346,6 +372,87 @@ function FlipOpportunitiesTab() {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+// ── Listing grid card ─────────────────────────────────────────────────────────
+
+function ListingCard({ listing: l, onFlip, flippingId }: {
+  listing: Listing; onFlip: (l: Listing) => void; flippingId: number | null;
+}) {
+  const profit = l.estimated_profit ?? 0;
+  const profitColor = profit > 100 ? "text-[#00dc82]" : profit > 0 ? "text-amber-400" : "text-red-400";
+  const cfg = l.classification !== "all" ? CLASSIFICATION_CONFIG[l.classification as Classification] : null;
+
+  return (
+    <div className={`flex flex-col rounded-xl glass-card overflow-hidden hover:border-[var(--nf-border-strong)] transition-colors ${
+      l.classification === "amazing_gem" ? "border-cyan-400/25" :
+      l.classification === "gem" ? "border-emerald-400/20" : ""
+    }`}>
+      {/* Image */}
+      <div className="relative w-full h-36 bg-[#070d14] overflow-hidden flex-shrink-0">
+        {l.image_urls[0] ? (
+          <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-cover opacity-80" loading="lazy" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center opacity-10">
+            <Gem className="w-10 h-10 text-slate-300" />
+          </div>
+        )}
+        {/* Classification badge overlaid on image */}
+        {cfg && (
+          <div className="absolute top-2 left-2">
+            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${cfg.color} ${cfg.bg}`}>
+              {cfg.emoji} {cfg.label}
+            </span>
+          </div>
+        )}
+        {/* Score badge */}
+        <div className="absolute top-2 right-2">
+          <FlippabilityScore score={l.gem_score} size="sm" listing={l} />
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="flex flex-col flex-1 p-3 gap-2">
+        {/* Title */}
+        <p className="text-sm font-semibold text-slate-100 leading-snug line-clamp-2">{l.title}</p>
+
+        {/* Specs */}
+        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-slate-500">
+          {l.cpu && <span className="font-mono text-slate-400">{l.cpu}</span>}
+          {l.gpu && <span className="text-emerald-400">{l.gpu}</span>}
+          {l.ram_gb && <span>{l.ram_gb}GB {l.ram_type ?? "RAM"}</span>}
+          {l.storage_gb && <span>{l.storage_gb}GB {l.storage_type?.toUpperCase() ?? "SSD"}</span>}
+          {l.location && <span>📍 {l.location}</span>}
+        </div>
+
+        {/* Prices */}
+        <div className="grid grid-cols-2 gap-1.5 mt-auto">
+          <div className="rounded-md bg-black/20 border border-white/5 px-2 py-1">
+            <div className="text-slate-600 text-[9px] uppercase tracking-wide">Buy</div>
+            <div className="text-slate-300 font-semibold text-xs">{formatCurrency(l.price ?? 0)}</div>
+          </div>
+          <div className="rounded-md bg-[#00dc82]/5 border border-[#00dc82]/20 px-2 py-1">
+            <div className="text-slate-600 text-[9px] uppercase tracking-wide">Profit</div>
+            <div className={`font-bold text-xs ${profitColor}`}>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</div>
+          </div>
+        </div>
+
+        {/* Source + actions */}
+        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.04]">
+          <SourceBadge sourceName={l.source_name} url={l.url} />
+          <div className="flex items-center gap-1">
+            <a href={l.url} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm"><ExternalLink className="w-3 h-3" /></Button>
+            </a>
+            <Button variant="primary" size="sm" disabled={flippingId === l.id} onClick={() => onFlip(l)}>
+              {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+              Flip
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
