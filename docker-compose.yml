@@ -57,6 +57,7 @@ services:
       SHOW_SCRAPER_BROWSER: "1"
       FB_HEADLESS: "0"
       APP_ENV: staging
+      ANTHROPIC_API_KEY: ANTHROPIC_API_KEY_REDACTED
       OPENROUTER_API_KEY: OPENROUTER_API_KEY_REDACTED
       OPENROUTER_PRIMARY_MODEL: google/gemma-4-31b-it:free
       OLLAMA_BASE_URL: http://host.docker.internal:11434
