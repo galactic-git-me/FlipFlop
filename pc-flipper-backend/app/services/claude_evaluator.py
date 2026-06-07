@@ -146,8 +146,30 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     raw: str | None = None
     model_used = "none"
 
-    # 1 — Anthropic (most reliable for structured JSON)
-    if _s.anthropic_api_key:
+    # 1 — Ollama local (primary — no rate limits, no cost)
+    if _s.ollama_base_url:
+        try:
+            import httpx
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.post(
+                    f"{_s.ollama_base_url}/api/chat",
+                    json={
+                        "model": _s.ollama_model,
+                        "messages": [
+                            {"role": "system", "content": EVAL_SYSTEM},
+                            {"role": "user", "content": prompt},
+                        ],
+                        "stream": False,
+                    },
+                )
+                resp.raise_for_status()
+                raw = resp.json().get("message", {}).get("content")
+                model_used = f"ollama/{_s.ollama_model}"
+        except Exception as exc:
+            log.warning("claude_evaluator.ollama_failed", error=str(exc))
+
+    # 2 — Anthropic cloud fallback
+    if not raw and _s.anthropic_api_key:
         try:
             import anthropic
             client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
@@ -162,7 +184,7 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
         except Exception as exc:
             log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
-    # 2 — OpenRouter fallback (with exponential backoff on 429)
+    # 3 — OpenRouter fallback (with exponential backoff on 429)
     if not raw and _s.openrouter_api_key:
         import httpx
         for attempt in range(4):
@@ -202,28 +224,6 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 log.warning("claude_evaluator.openrouter_failed", attempt=attempt, error=str(exc))
                 if attempt == 3:
                     break
-
-    # 3 — Ollama local fallback
-    if not raw and _s.ollama_base_url:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=90) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
-        except Exception as exc:
-            log.warning("claude_evaluator.ollama_failed", error=str(exc))
 
     if not raw:
         return None

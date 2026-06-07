@@ -21,8 +21,8 @@ from app.database import AsyncSessionLocal
 log = structlog.get_logger(__name__)
 
 _MAX_QUEUE     = 2_000
-_NUM_WORKERS   = 1     # single worker keeps us well under free-tier rate limits
-_CALL_DELAY    = 8.0   # ~7 req/min — comfortable under OpenRouter free-tier limits
+_NUM_WORKERS   = 2     # two workers — Ollama is local, no rate limit concerns
+_CALL_DELAY    = 1.0   # 1s gap between calls per worker (~2 req/s total)
 
 _queue:   asyncio.Queue | None = None
 _workers: list[asyncio.Task]   = []
