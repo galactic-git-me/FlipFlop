@@ -150,7 +150,7 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     if _s.ollama_base_url:
         try:
             import httpx
-            async with httpx.AsyncClient(timeout=120) as client:
+            async with httpx.AsyncClient(timeout=180) as client:
                 resp = await client.post(
                     f"{_s.ollama_base_url}/api/chat",
                     json={
