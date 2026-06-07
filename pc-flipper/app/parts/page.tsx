@@ -1,44 +1,521 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { Package, RefreshCw, ExternalLink, Search, X } from "lucide-react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import {
+  Package, RefreshCw, ExternalLink, Search, X,
+  Gem, Zap, SlidersHorizontal, ArrowUpDown, PlusCircle,
+  ChevronLeft, ChevronRight, Copy, type LucideIcon,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ClassificationBadge } from "@/components/classification-badge";
+import { FlippabilityScore } from "@/components/flippability-score";
 import { SourceBadge } from "@/components/source-badge";
+import { SellerBadge } from "@/components/seller-badge";
+import { AuctionBadge, AuctionPriceDisplay } from "@/components/auction-display";
 import { EmptyState } from "@/components/empty-state";
-import { GroupedPart, PartCategory } from "@/lib/types";
+import { ManualSubmitModal } from "@/components/manual-submit-modal";
+import { GroupedPart, Listing, Classification, CLASSIFICATION_CONFIG } from "@/lib/types";
 import { api } from "@/lib/api";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 
-const CATEGORIES: { value: PartCategory | "all"; label: string }[] = [
-  { value: "all",       label: "All Parts"       },
-  { value: "cpu",       label: "CPU"             },
-  { value: "gpu",       label: "GPU"             },
-  { value: "ram",       label: "RAM"             },
-  { value: "ssd",       label: "Storage"         },
-  { value: "psu",       label: "PSU"             },
-  { value: "accessory", label: "Accessories 🖱️"  },
+// ── Tab definitions ────────────────────────────────────────────────────────────
+
+type MarketTab = "opportunities" | "components" | "cases" | "accessories";
+
+const TABS: { id: MarketTab; label: string; icon: string }[] = [
+  { id: "opportunities", label: "Flip Opportunities", icon: "💎" },
+  { id: "components",    label: "Components",         icon: "🔧" },
+  { id: "cases",         label: "PC Cases",           icon: "🖥️"  },
+  { id: "accessories",   label: "Accessories",        icon: "🖱️"  },
 ];
 
-export default function PartsPage() {
-  const [parts, setParts]               = useState<GroupedPart[]>([]);
-  const [loading, setLoading]           = useState(true);
-  const [refreshing, setRefreshing]     = useState(false);
-  const [activeCategory, setActiveCategory] = useState<PartCategory | "all">("all");
-  const [query, setQuery]               = useState("");
+// ── Page ───────────────────────────────────────────────────────────────────────
+
+export default function MarketplacePage() {
+  const [activeTab, setActiveTab] = useState<MarketTab>("opportunities");
+
+  return (
+    <div className="p-6 space-y-5">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
+          <Package className="w-5 h-5 text-[var(--nf-primary)]" /> Marketplace
+        </h1>
+        <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
+          Browse flip opportunities and the full parts catalogue
+        </p>
+      </div>
+
+      {/* Tab bar */}
+      <div className="flex gap-2 border-b border-[#1e2d45] pb-0">
+        {TABS.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-all -mb-px ${
+              activeTab === tab.id
+                ? "border-[#00dc82] text-[#00dc82]"
+                : "border-transparent text-slate-500 hover:text-slate-300"
+            }`}
+          >
+            <span>{tab.icon}</span>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      {activeTab === "opportunities" && <FlipOpportunitiesTab />}
+      {activeTab === "components"    && <PartsTab category="components" key="components" />}
+      {activeTab === "cases"         && <PartsTab category="cases"      key="cases"      />}
+      {activeTab === "accessories"   && <PartsTab category="accessories" key="accessories" />}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FLIP OPPORTUNITIES TAB
+// ══════════════════════════════════════════════════════════════════════════════
+
+const CLASS_FILTERS: (Classification | "all")[] = [
+  "all", "amazing_gem", "gem", "already_flipped", "no_profit", "overpriced",
+];
+
+const SELLER_TYPE_OPTIONS = [
+  { value: "all",         label: "All sellers" },
+  { value: "private",     label: "👤 Private"  },
+  { value: "flipper",     label: "🔄 Flipper"  },
+  { value: "shop",        label: "🏪 Shop"     },
+  { value: "refurb_shop", label: "🔧 Refurb"  },
+];
+
+const SORT_OPTIONS = [
+  { value: "gem_score",        label: "Flippability ↓" },
+  { value: "estimated_profit", label: "Profit ↓"       },
+  { value: "price",            label: "Price ↑"        },
+  { value: "first_seen_at",    label: "Newest first"   },
+];
+
+const PAGE_SIZES = [20, 50, 100];
+
+function FlipOpportunitiesTab() {
+  const [classFilter, setClassFilter]     = useState<Classification | "all">("all");
+  const [search, setSearch]               = useState("");
+  const [minProfit, setMinProfit]         = useState("");
+  const [maxPrice, setMaxPrice]           = useState("");
+  const [sourceFilter, setSourceFilter]   = useState("all");
+  const [sellerTypeFilter, setSellerTypeFilter] = useState("all");
+  const [sortBy, setSortBy]               = useState("gem_score");
+  const [filtersOpen, setFiltersOpen]     = useState(false);
+  const [page, setPage]                   = useState(1);
+  const [pageSize, setPageSize]           = useState(20);
+  const [listings, setListings]           = useState<Listing[]>([]);
+  const [total, setTotal]                 = useState(0);
+  const [sources, setSources]             = useState<string[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [triggering, setTriggering]       = useState(false);
+  const [flippingId, setFlippingId]       = useState<number | null>(null);
+  const [showManualSubmit, setShowManualSubmit] = useState(false);
+
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => { setDebouncedSearch(search); setPage(1); }, 350);
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [search]);
+
+  useEffect(() => {
+    const id = setTimeout(() => setPage(1), 0);
+    return () => clearTimeout(id);
+  }, [classFilter, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy]);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const params = activeCategory !== "all" ? activeCategory : undefined;
-      const data = await api.parts.grouped(params) as GroupedPart[];
-      setParts(data);
+      const params: Record<string, string> = {
+        sort_by: sortBy,
+        sort_desc: sortBy === "price" ? "false" : "true",
+        limit: String(pageSize),
+        offset: String((page - 1) * pageSize),
+        status: "active",
+      };
+      if (classFilter !== "all") params.classification = classFilter;
+      if (debouncedSearch)       params.search = debouncedSearch;
+      if (minProfit)             params.min_profit = minProfit;
+      if (maxPrice)              params.max_price = maxPrice;
+      if (sourceFilter !== "all") params.source_name = sourceFilter;
+
+      const data = await api.listings.list(params) as Listing[];
+      const filtered = sellerTypeFilter === "all"
+        ? data
+        : data.filter(l => l.seller_type === sellerTypeFilter);
+
+      setListings(filtered);
+      setTotal(prev => page === 1 ? (data.length < pageSize ? data.length : prev || data.length * 3) : prev);
+
+      if (page === 1 && sources.length === 0) {
+        const all = await api.listings.list({ limit: "500", status: "active" }) as Listing[];
+        setSources([...new Set(all.map(l => l.source_name))].sort());
+      }
+    } catch {
+      setListings([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [classFilter, debouncedSearch, minProfit, maxPrice, sourceFilter, sellerTypeFilter, sortBy, page, pageSize, sources.length]);
+
+  useEffect(() => {
+    const id = setTimeout(() => { void load(); }, 0);
+    return () => clearTimeout(id);
+  }, [load]);
+
+  const trigger = async () => {
+    setTriggering(true);
+    try { await api.swarms.trigger("flip_opportunities"); await load(); }
+    catch { } finally { setTriggering(false); }
+  };
+
+  const handleFlip = async (listing: Listing) => {
+    setFlippingId(listing.id);
+    try { await api.flips.create({ listing_id: listing.id }); window.location.href = "/flips"; }
+    catch { setFlippingId(null); }
+  };
+
+  const hasAdvancedFilters = minProfit || maxPrice || sourceFilter !== "all" || sellerTypeFilter !== "all";
+  const totalPages = Math.ceil(total / pageSize);
+
+  return (
+    <div className="space-y-4">
+      <ManualSubmitModal
+        open={showManualSubmit}
+        onClose={() => setShowManualSubmit(false)}
+        onSuccess={() => { setShowManualSubmit(false); load(); }}
+      />
+
+      {/* Toolbar */}
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <p className="text-sm text-slate-500 font-mono">
+          {listings.length} listings · sorted by {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost" size="sm"
+            onClick={() => setFiltersOpen(o => !o)}
+            className={hasAdvancedFilters ? "text-[#00dc82] border-[#00dc82]/30 border" : ""}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            Filters
+            {hasAdvancedFilters && <Badge variant="success" className="ml-1 text-[9px] px-1 py-0">active</Badge>}
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setShowManualSubmit(true)}>
+            <PlusCircle className="w-3.5 h-3.5" /> Submit Manually
+          </Button>
+          <Button variant="secondary" size="sm" onClick={trigger} disabled={triggering}>
+            <RefreshCw className={`w-3.5 h-3.5 ${triggering ? "animate-spin" : ""}`} />
+            {triggering ? "Scanning…" : "Scan Sources"}
+          </Button>
+        </div>
+      </div>
+
+      {/* Classification tabs */}
+      <div className="flex flex-wrap gap-2">
+        {CLASS_FILTERS.map(cls => {
+          const cfg = cls !== "all" ? CLASSIFICATION_CONFIG[cls] : null;
+          return (
+            <button key={cls} onClick={() => setClassFilter(cls)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                classFilter === cls
+                  ? "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/30"
+                  : "text-slate-500 border-[#1e2d45] hover:border-slate-600 hover:text-slate-400"
+              }`}
+            >
+              {cls === "all" ? "All" : `${cfg?.emoji} ${cfg?.label}`}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Search + sort */}
+      <div className="flex gap-2 items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <input
+            value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Search title, CPU, GPU, location…"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] rounded-xl text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50 transition-colors"
+          />
+          {search && (
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-1 bg-[#0d1320] border border-[#1e2d45] rounded-xl px-2">
+          <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)}
+            className="bg-transparent py-2.5 pr-1 text-xs text-slate-300 outline-none">
+            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Advanced filters */}
+      {filtersOpen && (
+        <div className="bg-[#0d1a2a] border border-white/[0.06] rounded-xl p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div>
+            <label className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 block">Min profit (£)</label>
+            <input type="number" value={minProfit} onChange={e => setMinProfit(e.target.value)} placeholder="e.g. 50"
+              className="w-full bg-[#0a1119] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50" />
+          </div>
+          <div>
+            <label className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 block">Max buy price (£)</label>
+            <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} placeholder="e.g. 300"
+              className="w-full bg-[#0a1119] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50" />
+          </div>
+          <div>
+            <label className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 block">Source</label>
+            <select value={sourceFilter} onChange={e => setSourceFilter(e.target.value)}
+              className="w-full bg-[#0a1119] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 outline-none focus:border-[#00dc82]/50">
+              <option value="all">All sources</option>
+              {sources.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 block">Seller type</label>
+            <select value={sellerTypeFilter} onChange={e => setSellerTypeFilter(e.target.value)}
+              className="w-full bg-[#0a1119] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 outline-none focus:border-[#00dc82]/50">
+              {SELLER_TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+          </div>
+          {hasAdvancedFilters && (
+            <div className="col-span-full flex justify-end">
+              <button onClick={() => { setMinProfit(""); setMaxPrice(""); setSourceFilter("all"); setSellerTypeFilter("all"); }}
+                className="text-[10px] text-slate-500 hover:text-red-400 transition-colors">
+                × Clear all filters
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Results */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
+          <RefreshCw className="w-4 h-4 animate-spin" /> Loading…
+        </div>
+      ) : listings.length === 0 ? (
+        <EmptyState icon={Gem} title="No listings found"
+          description="Try adjusting your filters, or run a scan to discover fresh opportunities."
+          action={{ label: "Run Scan Now", onClick: trigger }} />
+      ) : (
+        <>
+          <div className="space-y-3">
+            {listings.map(listing => (
+              <ListingRow key={listing.id} listing={listing} onFlip={handleFlip} flippingId={flippingId} />
+            ))}
+          </div>
+          {/* Pagination */}
+          <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Page {page}{totalPages > 1 ? ` of ${totalPages}` : ""}</span>
+              <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }}
+                className="bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-400 outline-none focus:border-[#00dc82]/50">
+                {PAGE_SIZES.map(n => <option key={n} value={n}>{n} / page</option>)}
+              </select>
+            </div>
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </Button>
+              {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
+                <button key={p} onClick={() => setPage(p)}
+                  className={`w-7 h-7 rounded-lg text-xs transition-colors ${
+                    page === p ? "bg-[#00dc82]/20 text-[#00dc82] font-semibold" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+                  }`}>
+                  {p}
+                </button>
+              ))}
+              <Button variant="ghost" size="sm" disabled={listings.length < pageSize} onClick={() => setPage(p => p + 1)}>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── Listing row card ──────────────────────────────────────────────────────────
+
+function ListingRow({ listing: l, onFlip, flippingId }: {
+  listing: Listing; onFlip: (l: Listing) => void; flippingId: number | null;
+}) {
+  const profit = l.estimated_profit ?? 0;
+  const profitColor = profit > 100 ? "text-[#00dc82]" : profit > 0 ? "text-amber-400" : "text-red-400";
+  const gemSignals = l.gem_signals ?? [];
+  const isAuction = l.listing_type === "auction";
+  const alternatives = l.alternatives ?? [];
+
+  return (
+    <Card className={
+      l.classification === "amazing_gem" ? "border-cyan-400/25" :
+      l.classification === "gem" ? "border-emerald-400/20" : ""
+    }>
+      <CardContent className="p-0">
+        <div className="flex items-stretch">
+          <div className="w-28 flex-shrink-0 bg-[#080f1a] rounded-l-xl overflow-hidden" style={{ minHeight: 100 }}>
+            {l.image_urls[0] ? (
+              <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-contain" loading="lazy" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center opacity-15">
+                <Gem className="w-6 h-6 text-slate-400" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0 p-3 flex items-center gap-4">
+            <div className="flex-shrink-0">
+              <FlippabilityScore score={l.gem_score} size="lg" listing={l} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                <ClassificationBadge classification={l.classification} />
+                <AuctionBadge listing={l} />
+                {gemSignals.slice(0, 3).map(s => (
+                  <span key={s} className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-[#00dc82]/8 text-[#00dc82] text-[10px] font-medium border border-[#00dc82]/20">
+                    💎 {s}
+                  </span>
+                ))}
+              </div>
+              <h3 className="text-sm font-semibold text-slate-100 leading-snug mb-1 line-clamp-1">{l.title}</h3>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-500 mb-1.5">
+                {l.cpu && <span className="font-mono text-slate-400">{l.cpu}</span>}
+                {l.ram_gb && <span>{l.ram_gb}GB {l.ram_type ?? "RAM"}</span>}
+                {l.gpu ? <span className="text-emerald-400">{l.gpu}</span> : <span className="text-red-400/70">No GPU</span>}
+                {l.storage_gb ? <span>{l.storage_gb}GB {l.storage_type?.toUpperCase() ?? "SSD"}</span> : <span className="text-yellow-400/70">No Storage</span>}
+                {l.location && <span>📍 {l.location}</span>}
+              </div>
+              <div className="flex items-center gap-3 flex-wrap">
+                {l.seller_name && <span className="text-[10px] text-slate-500 truncate max-w-28" title={l.seller_name}>{l.seller_name}</span>}
+                <SellerBadge listing={l} />
+                {l.listed_at && <span className="text-[10px] text-slate-600">Listed {formatRelativeTime(new Date(l.listed_at))}</span>}
+                <span className="text-[10px] text-slate-700">Found {formatRelativeTime(new Date(l.first_seen_at))}</span>
+              </div>
+            </div>
+            <div className="flex-shrink-0 flex flex-col items-end gap-1.5">
+              <SourceBadge sourceName={l.source_name} url={l.url} />
+              {(l.resale_comp_count ?? 0) > 0 && (
+                <span className="text-[9px] text-[#00dc82]/70">{l.resale_comp_count} live comps</span>
+              )}
+            </div>
+            <div className="flex-shrink-0 text-right min-w-32">
+              <div className="text-[10px] text-slate-500 mb-0.5">{isAuction ? "Auction" : "Buy price"}</div>
+              <AuctionPriceDisplay listing={l} />
+              <div className="text-[10px] text-slate-500 mt-1.5">Resale est.</div>
+              <div className="text-sm font-semibold text-slate-300">{formatCurrency(l.estimated_resale ?? 0)}</div>
+              {l.resale_low != null && l.resale_high != null && l.resale_low !== l.resale_high && (
+                <div className="text-[9px] text-slate-600">{formatCurrency(l.resale_low)}–{formatCurrency(l.resale_high)}</div>
+              )}
+              <div className={`text-base font-black mt-1 ${profitColor}`}>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</div>
+              <div className="text-[10px] text-slate-600">est. profit</div>
+            </div>
+            <div className="flex-shrink-0 flex flex-col gap-2 min-w-20">
+              <Button variant="primary" size="sm" disabled={flippingId === l.id} onClick={() => onFlip(l)}>
+                {flippingId === l.id ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
+                Flip
+              </Button>
+              <a href={l.url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm" className="w-full justify-center">
+                  <ExternalLink className="w-3.5 h-3.5" /> View
+                </Button>
+              </a>
+            </div>
+          </div>
+          {alternatives.length > 0 && (
+            <div className="px-3 pb-2.5 flex items-center gap-2 flex-wrap border-t border-white/[0.04] pt-2">
+              <span className="text-[10px] text-slate-600 flex items-center gap-1 flex-shrink-0">
+                <Copy className="w-2.5 h-2.5" /> Also listed on
+              </span>
+              {alternatives.map(alt => (
+                <a key={alt.id} href={alt.url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0d1a2a] border border-[#1e2d45] text-[10px] text-slate-400 hover:border-amber-400/40 hover:text-amber-300 transition-colors">
+                  {alt.source_name}
+                  <span className="text-amber-400/80 font-semibold">£{alt.price.toFixed(0)}</span>
+                  <ExternalLink className="w-2 h-2 opacity-50" />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PARTS CATALOGUE TABS (Components / PC Cases / Accessories)
+// ══════════════════════════════════════════════════════════════════════════════
+
+type PartsTabCategory = "components" | "cases" | "accessories";
+
+const PARTS_TAB_CONFIG: Record<PartsTabCategory, {
+  apiCategory: string | undefined;
+  filterCategory?: string;
+  swarm: string;
+  icon: LucideIcon;
+  emptyTitle: string;
+  emptyDesc: string;
+}> = {
+  components: {
+    apiCategory: undefined,          // backend returns all-except-cases
+    filterCategory: "accessory",     // exclude accessories from this view
+    swarm: "upgrade_parts",
+    icon: Package,
+    emptyTitle: "No components tracked yet",
+    emptyDesc: 'Click "Refresh Prices" to scrape eBay sold listings for median component prices.',
+  },
+  cases: {
+    apiCategory: "case",
+    swarm: "cases",
+    icon: Package,
+    emptyTitle: "No PC cases tracked yet",
+    emptyDesc: 'Click "Refresh Prices" to fetch current case prices from eBay.',
+  },
+  accessories: {
+    apiCategory: "accessory",
+    swarm: "accessories",
+    icon: Package,
+    emptyTitle: "No accessories tracked yet",
+    emptyDesc: 'Click "Refresh Prices" to fetch current accessory prices from eBay.',
+  },
+};
+
+function PartsTab({ category }: { category: PartsTabCategory }) {
+  const cfg = PARTS_TAB_CONFIG[category];
+  const [parts, setParts]         = useState<GroupedPart[]>([]);
+  const [loading, setLoading]     = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [query, setQuery]         = useState("");
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await api.parts.grouped(cfg.apiCategory) as GroupedPart[];
+      // For "components" tab, strip out accessories (they have their own tab)
+      const filtered = cfg.filterCategory
+        ? data.filter(p => p.category !== cfg.filterCategory)
+        : data;
+      setParts(filtered);
     } catch {
       setParts([]);
     } finally {
       setLoading(false);
     }
-  }, [activeCategory]);
+  }, [cfg]);
 
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
@@ -47,17 +524,10 @@ export default function PartsPage() {
 
   const refresh = async () => {
     setRefreshing(true);
-    try {
-      if (activeCategory === "accessory") {
-        await api.swarms.trigger("accessories");
-      } else {
-        await api.swarms.trigger("upgrade_parts");
-      }
-      await load();
-    } catch { } finally { setRefreshing(false); }
+    try { await api.swarms.trigger(cfg.swarm); await load(); }
+    catch { } finally { setRefreshing(false); }
   };
 
-  // Fuzzy search — case-insensitive substring match on name
   const filtered = useMemo(() => {
     if (!query.trim()) return parts;
     const q = query.toLowerCase();
@@ -65,78 +535,44 @@ export default function PartsPage() {
   }, [parts, query]);
 
   return (
-    <div className="p-6 space-y-5">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
-            <Package className="w-5 h-5 text-[var(--nf-primary)]" /> Marketplace
-          </h1>
-          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
-            Refurbed &amp; used parts for flipping · {filtered.length}{query ? ` of ${parts.length}` : ""} tracked · prices updated daily
-          </p>
-        </div>
-        <Button variant="secondary" size="sm" onClick={refresh} disabled={refreshing}>
-          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
-          {refreshing ? "Updating…" : "Refresh Prices"}
-        </Button>
-      </div>
-
-      {/* Search + category filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        {/* Fuzzy search */}
+    <div className="space-y-4">
+      {/* Toolbar */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
           <input
-            type="text"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
+            type="text" value={query} onChange={e => setQuery(e.target.value)}
             placeholder="Search parts…"
             className="w-full pl-9 pr-8 py-2 rounded-lg bg-[#0a1119] border border-[#1e2d45] text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#00dc82]/40 focus:ring-1 focus:ring-[#00dc82]/20 transition-colors"
           />
           {query && (
-            <button
-              onClick={() => setQuery("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400"
-            >
+            <button onClick={() => setQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400">
               <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
-
-        {/* Category tabs */}
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.value}
-              onClick={() => setActiveCategory(cat.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                activeCategory === cat.value
-                  ? "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/30"
-                  : "text-slate-500 border-[#1e2d45] hover:border-slate-600 hover:text-slate-400"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+        <div className="flex items-center gap-2">
+          <p className="text-xs text-slate-600 font-mono">
+            {filtered.length}{query ? ` of ${parts.length}` : ""} items
+          </p>
+          <Button variant="secondary" size="sm" onClick={refresh} disabled={refreshing}>
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
+            {refreshing ? "Updating…" : "Refresh Prices"}
+          </Button>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Grid */}
       {loading ? (
         <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading parts…
+          <RefreshCw className="w-4 h-4 animate-spin" /> Loading…
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState
-          icon={Package}
-          title={query ? "No parts match your search" : "No parts tracked yet"}
-          description={
-            query
-              ? `No parts found for "${query}". Try a different search term.`
-              : 'Click "Refresh Prices" to run the parts swarm — it scrapes eBay sold listings for median used prices on common upgrade components.'
-          }
-          action={query ? { label: "Clear Search", onClick: () => setQuery("") } : { label: "Fetch Part Prices", onClick: refresh }}
+          icon={cfg.icon}
+          title={query ? "No parts match your search" : cfg.emptyTitle}
+          description={query ? `No parts found for "${query}". Try a different search term.` : cfg.emptyDesc}
+          action={query ? { label: "Clear Search", onClick: () => setQuery("") } : { label: "Fetch Prices", onClick: refresh }}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -148,6 +584,8 @@ export default function PartsPage() {
     </div>
   );
 }
+
+// ── Part card ─────────────────────────────────────────────────────────────────
 
 function PartCard({ part }: { part: GroupedPart }) {
   const bestPrice = part.cheapest_price ?? 0;
@@ -165,7 +603,6 @@ function PartCard({ part }: { part: GroupedPart }) {
 
       {/* Body */}
       <div className="flex flex-col flex-1 p-3 gap-2">
-        {/* Name + category */}
         <div>
           <p className="text-sm font-semibold text-slate-100 leading-snug line-clamp-2">{part.name}</p>
           <p className="text-[10px] text-slate-600 uppercase tracking-wider mt-0.5">{part.category}</p>
@@ -202,21 +639,13 @@ function PartCard({ part }: { part: GroupedPart }) {
           <div className="flex flex-wrap gap-1 mt-auto pt-1">
             {part.all_sources.slice(0, 4).map((s, i) =>
               s.url ? (
-                <a
-                  key={i}
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#0a1119] border border-[#1e2d45] hover:border-[#1e3a5a] text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
-                >
+                <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#0a1119] border border-[#1e2d45] hover:border-[#1e3a5a] text-[10px] text-slate-400 hover:text-slate-200 transition-colors">
                   {s.source}
                   {s.price != null && <span className="text-[#00dc82]">{formatCurrency(s.price)}</span>}
                 </a>
               ) : (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#0a1119] border border-[#1e2d45] text-[10px] text-slate-500"
-                >
+                <span key={i} className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#0a1119] border border-[#1e2d45] text-[10px] text-slate-500">
                   {s.source}
                   {s.price != null && <span className="text-slate-400">{formatCurrency(s.price)}</span>}
                 </span>
@@ -225,7 +654,7 @@ function PartCard({ part }: { part: GroupedPart }) {
           </div>
         )}
 
-        {/* Footer: source badge + link */}
+        {/* Footer */}
         <div className="flex items-center justify-between mt-1 pt-2 border-t border-white/[0.04]">
           <div className="flex flex-col gap-0.5">
             {part.cheapest_source && (
