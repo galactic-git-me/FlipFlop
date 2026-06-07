@@ -153,15 +153,15 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: best LLM-judged gem from listings first scraped in last 24 h
+        // Gem of Day: best gem evaluated in last 24 h (falls back to all-time best if none)
         step(api.listings.list({
           sort_by: "claude_flipability_score", sort_desc: "true",
-          limit: "1", claude_judged_only: "true", first_seen_after: past24hISO,
+          limit: "1", claude_judged_only: "true", claude_judged_after: past24hISO,
         }) as Promise<Listing[]>, 12000),
-        // Gem of Week: best LLM-judged gem from listings first scraped in last 7 days
+        // Gem of Week: best gem evaluated in last 7 days (falls back to all-time best if none)
         step(api.listings.list({
           sort_by: "claude_flipability_score", sort_desc: "true",
-          limit: "1", claude_judged_only: "true", first_seen_after: past7dISO,
+          limit: "1", claude_judged_only: "true", claude_judged_after: past7dISO,
         }) as Promise<Listing[]>, 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
         step(api.sources.list() as Promise<DataSource[]>, 12000),
@@ -270,11 +270,26 @@ export default function DashboardPage() {
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
     const id2 = setTimeout(() => { void loadAutonomousHealth(); }, 0);
-    // Poll stats every 30s so dashboard numbers (eval queue, gems, etc.) stay fresh
+    // Poll stats + gems every 30s so dashboard numbers and gem highlights stay fresh
     const statsId = setInterval(async () => {
       try {
-        const s = await api.listings.stats();
+        const now = new Date();
+        const past24hISO = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+        const past7dISO  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
+        const [s, godResults, gowResults] = await Promise.all([
+          api.listings.stats(),
+          api.listings.list({
+            sort_by: "claude_flipability_score", sort_desc: "true",
+            limit: "1", claude_judged_only: "true", claude_judged_after: past24hISO,
+          }) as Promise<Listing[]>,
+          api.listings.list({
+            sort_by: "claude_flipability_score", sort_desc: "true",
+            limit: "1", claude_judged_only: "true", claude_judged_after: past7dISO,
+          }) as Promise<Listing[]>,
+        ]);
         setStats(s as typeof stats);
+        setGemOfDay((godResults as Listing[])[0] ?? null);
+        setGemOfWeek((gowResults as Listing[])[0] ?? null);
       } catch { }
     }, 30_000);
     return () => {

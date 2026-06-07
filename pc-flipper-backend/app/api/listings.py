@@ -42,6 +42,7 @@ async def get_listings(
     max_price: float | None = Query(None),
     search: str | None = Query(None),
     first_seen_after: datetime | None = Query(None),
+    claude_judged_after: datetime | None = Query(None),
     claude_judged_only: bool = Query(False),
     limit: int = Query(50, le=1000),
     offset: int = Query(0),
@@ -71,6 +72,8 @@ async def get_listings(
         conditions.append(Listing.title.ilike(f"%{search}%"))
     if first_seen_after is not None:
         conditions.append(Listing.first_seen_at >= first_seen_after)
+    if claude_judged_after is not None:
+        conditions.append(Listing.claude_judged_at >= claude_judged_after)
     if claude_judged_only:
         conditions.append(Listing.claude_judged_at != None)
 
