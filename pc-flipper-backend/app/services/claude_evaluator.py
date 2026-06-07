@@ -162,29 +162,7 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
         except Exception as exc:
             log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
-    # 2 — Ollama local (free, ~30s/eval — always available as fallback)
-    if not raw and _s.ollama_base_url:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=180) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
-        except Exception as exc:
-            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
-
-    # 3 — OpenRouter fallback (with exponential backoff on 429)
+    # 2 — OpenRouter (paid, fast — primary fallback now credits are loaded)
     if not raw and _s.openrouter_api_key:
         import httpx
         for attempt in range(4):
@@ -201,7 +179,7 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                             "X-Title": "PC Flipper Gem Evaluator",
                         },
                         json={
-                            "model": _s.openrouter_primary_model or "google/gemma-4-31b-it:free",
+                            "model": _s.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct",
                             "messages": [
                                 {"role": "system", "content": EVAL_SYSTEM},
                                 {"role": "user", "content": prompt},
@@ -224,6 +202,28 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 log.warning("claude_evaluator.openrouter_failed", attempt=attempt, error=str(exc))
                 if attempt == 3:
                     break
+
+    # 3 — Ollama local (always-available last resort, ~30s/eval)
+    if not raw and _s.ollama_base_url:
+        try:
+            import httpx
+            async with httpx.AsyncClient(timeout=180) as client:
+                resp = await client.post(
+                    f"{_s.ollama_base_url}/api/chat",
+                    json={
+                        "model": _s.ollama_model,
+                        "messages": [
+                            {"role": "system", "content": EVAL_SYSTEM},
+                            {"role": "user", "content": prompt},
+                        ],
+                        "stream": False,
+                    },
+                )
+                resp.raise_for_status()
+                raw = resp.json().get("message", {}).get("content")
+                model_used = f"ollama/{_s.ollama_model}"
+        except Exception as exc:
+            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
 
     if not raw:
         return None
