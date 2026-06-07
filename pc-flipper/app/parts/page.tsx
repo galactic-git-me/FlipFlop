@@ -383,7 +383,7 @@ function ListingCard({ listing: l, onFlip, flippingId }: {
 }) {
   const profit = l.estimated_profit ?? 0;
   const profitColor = profit > 100 ? "text-[#00dc82]" : profit > 0 ? "text-amber-400" : "text-red-400";
-  const cfg = l.classification !== "all" ? CLASSIFICATION_CONFIG[l.classification as Classification] : null;
+  const cfg = l.classification ? CLASSIFICATION_CONFIG[l.classification] : null;
 
   return (
     <div className={`flex flex-col rounded-xl glass-card overflow-hidden hover:border-[var(--nf-border-strong)] transition-colors ${
