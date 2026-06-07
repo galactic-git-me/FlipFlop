@@ -262,7 +262,7 @@ async def lifespan(app: FastAPI):
     # Run preflight asynchronously so API stays responsive while challenge tabs open.
     asyncio.create_task(run_antibot_preflight())
     start_workers(n=4)
-    start_eval_workers(n=2)  # two workers — Ollama local has no rate limits
+    start_eval_workers(n=4)  # four workers — Anthropic handles concurrency well
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     yield

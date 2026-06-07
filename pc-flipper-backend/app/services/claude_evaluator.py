@@ -146,8 +146,24 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     raw: str | None = None
     model_used = "none"
 
-    # 1 — Ollama local (primary — no rate limits, no cost)
-    if _s.ollama_base_url:
+    # 1 — Anthropic (fastest, best JSON quality — needs credit balance)
+    if _s.anthropic_api_key:
+        try:
+            import anthropic
+            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
+            resp = await client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=512,
+                system=EVAL_SYSTEM,
+                messages=messages,
+            )
+            raw = resp.content[0].text if resp.content else None
+            model_used = "claude-haiku-4-5"
+        except Exception as exc:
+            log.warning("claude_evaluator.anthropic_failed", error=str(exc))
+
+    # 2 — Ollama local (free, ~30s/eval — always available as fallback)
+    if not raw and _s.ollama_base_url:
         try:
             import httpx
             async with httpx.AsyncClient(timeout=180) as client:
@@ -167,22 +183,6 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 model_used = f"ollama/{_s.ollama_model}"
         except Exception as exc:
             log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
-
-    # 2 — Anthropic cloud fallback
-    if not raw and _s.anthropic_api_key:
-        try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=512,
-                system=EVAL_SYSTEM,
-                messages=messages,
-            )
-            raw = resp.content[0].text if resp.content else None
-            model_used = "claude-haiku-4-5"
-        except Exception as exc:
-            log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
     # 3 — OpenRouter fallback (with exponential backoff on 429)
     if not raw and _s.openrouter_api_key:
