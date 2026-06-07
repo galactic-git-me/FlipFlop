@@ -270,9 +270,17 @@ export default function DashboardPage() {
   useEffect(() => {
     const id = setTimeout(() => { void load(); }, 0);
     const id2 = setTimeout(() => { void loadAutonomousHealth(); }, 0);
+    // Poll stats every 30s so dashboard numbers (eval queue, gems, etc.) stay fresh
+    const statsId = setInterval(async () => {
+      try {
+        const s = await api.listings.stats();
+        setStats(s as typeof stats);
+      } catch { }
+    }, 30_000);
     return () => {
       clearTimeout(id);
       clearTimeout(id2);
+      clearInterval(statsId);
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, []);
@@ -457,6 +465,41 @@ export default function DashboardPage() {
               <span className="text-base font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
             </div>
           )}
+          {stats.total_listings > 0 && (() => {
+            const pct = stats.total_listings > 0
+              ? Math.round((stats.claude_judged_count / stats.total_listings) * 100)
+              : 0;
+            const done = pct >= 100;
+            return (
+              <div className="flex flex-col gap-1 min-w-[200px]">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    {!done ? (
+                      <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
+                      </span>
+                    ) : (
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                    )}
+                    <span className="text-[11px] font-mono text-slate-400">AI EVAL</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-400 tabular-nums">
+                    {stats.claude_judged_count.toLocaleString()}/{stats.total_listings.toLocaleString()}
+                    {stats.claude_eval_queue > 0 && (
+                      <span className="text-amber-400"> · {stats.claude_eval_queue.toLocaleString()} queued</span>
+                    )}
+                  </span>
+                </div>
+                <div className="h-1 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${done ? "bg-emerald-500" : "bg-gradient-to-r from-cyan-400 to-amber-400"}`}
+                    style={{ width: `${Math.max(1, pct)}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })()}
           <Button variant="secondary" size="sm" onClick={() => setShowManualSubmit(true)}>
             <PlusCircle className="w-3.5 h-3.5" />
             Submit Manually
@@ -495,33 +538,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* AI Evaluation Queue Indicator */}
-      {stats.total_listings > 0 && (
-        <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-sm text-muted-foreground">
-          {stats.claude_eval_queue > 0 ? (
-            <span className="relative flex h-2 w-2 flex-shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
-            </span>
-          ) : (
-            <span className="h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0" />
-          )}
-          <span>
-            <span className="font-medium text-foreground">AI evaluated:</span>{" "}
-            {stats.claude_judged_count.toLocaleString()} / {stats.total_listings.toLocaleString()} listings
-            {stats.claude_eval_queue > 0 && (
-              <span className="ml-2 text-amber-600 dark:text-amber-400">
-                · {stats.claude_eval_queue.toLocaleString()} in queue
-              </span>
-            )}
-            {stats.claude_unjudged_count > 0 && stats.claude_eval_queue === 0 && (
-              <span className="ml-2 text-muted-foreground/70">
-                · {stats.claude_unjudged_count.toLocaleString()} pending
-              </span>
-            )}
-          </span>
-        </div>
-      )}
 
       {listings.length === 0 ? (
         <EmptyState
