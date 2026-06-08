@@ -1,39 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import {
-  RefreshCw, Plus, Trash2, CheckCircle, XCircle,
-  Globe, Code, AlertTriangle, Database,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { RefreshCw, Play, Gem, CheckCircle2, XCircle, Loader2, Clock, AlertTriangle } from "lucide-react";
 import { api, SearchTelemetryItem, ScheduleJob, ScanStatus, SourceSearchTerm, API_BASE_URL } from "@/lib/api";
-import { DataSource } from "@/lib/types";
-import { formatRelativeTime } from "@/lib/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const REFRESH_MS = 8_000;
-
-const VENDOR_GROUPS: Record<string, string[]> = {
-  eBay:    ["eBay", "eBay UK", "eBay (Worldwide)", "eBay UK Auctions"],
-  Amazon:  ["Amazon", "Amazon UK"],
-  Temu:    ["Temu"],
-  Others:  ["AliExpress","Alibaba","BargainHardware","CherryTree Inc","Gumtree",
-             "BidSpotter","Apex Auctions","Wilsons Auctions","i-bidder","Preloved",
-             "John Pye","Manual Submission","Manual Photo","Merkandi",
-             "Wholesale Clearance UK"],
-};
+const REFRESH_MS = 3_000;
 
 const SCOPES = ["flip_opportunities", "upgrade_parts", "cases", "accessories"] as const;
 type Scope = typeof SCOPES[number];
 
 const SCOPE_LABELS: Record<Scope, string> = {
-  flip_opportunities: "flip_opp",
-  upgrade_parts:      "components",
-  cases:              "cases",
-  accessories:        "accessories",
+  flip_opportunities: "flip_opportuni…",
+  upgrade_parts: "components",
+  cases: "cases",
+  accessories: "accessories",
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -43,19 +25,8 @@ function ageStr(iso: string | null | undefined): string {
   try {
     const secs = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
     const m = Math.floor(secs / 60), h = Math.floor(m / 60);
-    if (h > 0) return `${h}h ${(m % 60).toString().padStart(2,"0")}m`;
-    return `${m.toString().padStart(2,"0")}m ${(secs % 60).toString().padStart(2,"0")}s`;
-  } catch { return "—"; }
-}
-
-function nextAgeStr(iso: string | null | undefined): string {
-  if (!iso) return "—";
-  try {
-    const secs = Math.floor((new Date(iso).getTime() - Date.now()) / 1000);
-    if (secs <= 0) return "now";
-    const m = Math.floor(secs / 60), h = Math.floor(m / 60);
-    if (h > 0) return `in ${h}h ${(m % 60).toString().padStart(2,"0")}m`;
-    return `in ${m}m ${(secs % 60).toString().padStart(2,"0")}s`;
+    if (h > 0) return `${h}h ${(m % 60).toString().padStart(2, "0")}m`;
+    return `${m.toString().padStart(2, "0")}m ${(secs % 60).toString().padStart(2, "0")}s`;
   } catch { return "—"; }
 }
 
@@ -66,166 +37,247 @@ function cellState(item: SearchTelemetryItem | undefined): [CellState, number] {
   const err = (item.error ?? "").toLowerCase();
   const found = item.found ?? 0;
   if (err) {
-    if (["retry","blocked","backoff","429","chromium_not_installed"].some(k => err.includes(k)))
+    if (["retry","blocked","backoff","429","chromium_not_installed","source_timeout","captcha","login_required"].some(k => err.includes(k)))
       return ["retry", found];
     return ["error", found];
   }
   return found > 0 ? ["success", found] : ["zero", 0];
 }
 
-function scopeVendorSources(scope: Scope, vendor: string): string[] {
-  const aliases: Record<string, string[]> = {
-    eBay:   ["eBay","eBay UK","eBay (Worldwide)","eBay UK Auctions"],
-    Amazon: ["Amazon","Amazon UK"],
-    Temu:   ["Temu"],
+function scopedSrc(scope: Scope, vendor: string): string {
+  const prefix: Record<string, string> = {
+    cases: "Cases:",
+    accessories: "Accessories:",
+    upgrade_parts: "UpgradeParts:",
   };
-  const names = aliases[vendor] ?? [vendor];
-  if (scope === "cases")        return names.map(n => `Cases:${n}`);
-  if (scope === "accessories")  return names.map(n => `Accessories:${n}`);
-  if (scope === "upgrade_parts") return names.map(n => `UpgradeParts:${n}`);
-  return names;
+  return (prefix[scope] ?? "") + vendor;
+}
+
+const EBAY_CANONICAL = "eBay UK";
+const EBAY_ALIASES = ["eBay UK", "eBay", "eBay (Worldwide)", "eBay UK Auctions", "eBay Auctions", "eBay (UK)"];
+
+function normaliseVendor(name: string): string {
+  if (name.toLowerCase().startsWith("ebay")) return EBAY_CANONICAL;
+  return name;
+}
+
+// ─── Compute top vendors by yield (matching Python logic) ────────────────────
+
+function computeTopVendors(telemetry: Record<string, SearchTelemetryItem[]>, maxCols = 5): [string, number][] {
+  const totals: Record<string, number> = {};
+  for (const [rawSrc, rows] of Object.entries(telemetry)) {
+    const src = normaliseVendor(rawSrc.replace(/^(?:Cases|Accessories|UpgradeParts):/, ""));
+    const seenTerms = new Set<string>();
+    for (const r of rows ?? []) {
+      const term = (r.term ?? "").trim().toLowerCase();
+      if (!term || seenTerms.has(term)) continue;
+      seenTerms.add(term);
+      const found = r.found ?? 0;
+      if (found > 0) totals[src] = (totals[src] ?? 0) + found;
+    }
+  }
+  return Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, maxCols);
+}
+
+// ─── Log streaming ────────────────────────────────────────────────────────────
+
+interface LogLine { ts: string; level: string; msg: string; extra: Record<string, string>; }
+
+function useLogStream() {
+  const [lines, setLines] = useState<LogLine[]>([]);
+  useEffect(() => {
+    let mounted = true;
+    const es = new EventSource(`${API_BASE_URL}/logs/stream`);
+    es.onmessage = (e) => {
+      if (!mounted) return;
+      try {
+        const entry = JSON.parse(e.data) as LogLine;
+        setLines(prev => {
+          const next = [...prev, entry];
+          return next.length > 120 ? next.slice(-120) : next;
+        });
+      } catch {}
+    };
+    return () => { mounted = false; es.close(); };
+  }, []);
+  return lines;
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function KpiBar({ stats, demand, scan }: {
+function KpiPanel({ stats, demand, scan }: {
   stats: { total_listings: number; gems_count: number; avg_profit: number } | null;
   demand: { gem_rate_pct?: number } | null;
   scan: ScanStatus | null;
 }) {
-  const listings   = stats?.total_listings ?? 0;
-  const gems       = stats?.gems_count ?? 0;
-  const gemRate    = demand?.gem_rate_pct ?? 0;
-  const avgProfit  = stats?.avg_profit ?? 0;
-  const running    = scan?.running ?? false;
-  const done       = scan?.completed ?? 0;
-  const total      = scan?.total ?? 0;
-  const found      = scan?.total_found ?? 0;
-
-  const cells = [
-    { label: "listings",    value: listings.toLocaleString(),         color: "text-slate-200" },
-    { label: "gems",        value: gems.toLocaleString(),              color: "text-[#00dc82]" },
-    { label: "gem-rate",    value: `${gemRate.toFixed(1)}%`,           color: "text-yellow-400" },
-    { label: "avg-profit",  value: `£${Math.round(avgProfit)}`,        color: "text-cyan-400" },
-    { label: running ? `${done}/${total} · ${found} found` : "idle",
-      value: running ? "RUNNING" : "IDLE",
-      color: running ? "text-[#00dc82]" : "text-slate-500" },
-  ];
+  const listings  = stats?.total_listings ?? 0;
+  const gems      = stats?.gems_count ?? 0;
+  const gemRate   = demand?.gem_rate_pct ?? 0;
+  const avgProfit = stats?.avg_profit ?? 0;
+  const running   = scan?.running ?? false;
+  const done      = scan?.completed ?? 0;
+  const total     = scan?.total ?? 0;
+  const found     = scan?.total_found ?? 0;
+  const pct       = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
-    <div className="grid grid-cols-5 gap-px bg-[#1e2d45] rounded-lg overflow-hidden border border-[#1e2d45]">
-      {cells.map((c, i) => (
-        <div key={i} className="bg-[#0a1119] px-3 py-2.5 text-center">
-          <div className={`text-lg font-bold font-mono ${c.color}`}>{c.value}</div>
-          <div className="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">{c.label}</div>
+    <div className="border border-[#1e3a5f] rounded-sm font-mono">
+      {/* Panel title */}
+      <div className="border-b border-[#1e3a5f] px-2 py-0.5 text-center text-[11px] text-[#4499ff]">
+        FlipFlop Live Stats
+      </div>
+      <div className="grid grid-cols-5 divide-x divide-[#1e3a5f]">
+        {/* Listings */}
+        <div className="px-3 py-2 text-center">
+          <div className="text-base font-bold text-slate-100">{listings.toLocaleString()}</div>
+          <div className="text-[10px] text-slate-500">listings</div>
         </div>
-      ))}
+        {/* Gems */}
+        <div className="px-3 py-2 text-center">
+          <div className="text-base font-bold text-[#00dc82]">{gems.toLocaleString()}</div>
+          <div className="text-[10px] text-slate-500">gems</div>
+        </div>
+        {/* Gem rate */}
+        <div className="px-3 py-2 text-center">
+          <div className="text-base font-bold text-yellow-400">{gemRate.toFixed(1)}%</div>
+          <div className="text-[10px] text-slate-500">gem-rate</div>
+        </div>
+        {/* Avg profit */}
+        <div className="px-3 py-2 text-center">
+          <div className="text-base font-bold text-cyan-400">£{Math.round(avgProfit)}</div>
+          <div className="text-[10px] text-slate-500">avg-profit</div>
+        </div>
+        {/* Scan status */}
+        <div className="px-3 py-2 text-center flex flex-col items-center justify-center gap-0.5">
+          {running ? (
+            <>
+              <div className="text-[11px] font-bold text-[#00dc82]">scanning&nbsp;&nbsp;{pct}%</div>
+              {/* Progress bar */}
+              <div className="w-full h-1 bg-[#1e2d45] rounded-full overflow-hidden relative">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${pct}%`, background: "linear-gradient(90deg,#00dc82,#00b8ff)", boxShadow: "0 0 8px rgba(0,220,130,0.6)" }}
+                />
+              </div>
+              <div className="text-[9px] text-slate-500">{done}/{total}&nbsp;search&nbsp;+{found}&nbsp;found</div>
+            </>
+          ) : total > 0 ? (
+            <>
+              <div className="text-[11px] font-bold text-[#00dc82]">done</div>
+              <div className="w-full h-1 bg-[#1e2d45] rounded-full overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: "100%", background: "linear-gradient(90deg,#00dc82,#00b8ff)" }} />
+              </div>
+              <div className="text-[9px] text-slate-500">{done}/{total}&nbsp;+{found}&nbsp;found</div>
+            </>
+          ) : (
+            <div className="text-[11px] text-slate-500">idle</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-function SchedulerTable({ jobs }: { jobs: ScheduleJob[] }) {
-  const shown = jobs.slice(0, 10);
+const JOB_ORDER = [
+  "flip_opportunities","upgrade_parts","cases","accessories",
+  "external_demand","playbook_evolution","autonomous",
+  "outcome_capture","model_retraining","retrain_checkpoint_watchdog",
+];
+
+function SchedulerPanel({ jobs }: { jobs: ScheduleJob[] }) {
+  const sorted = [...jobs].sort((a, b) => {
+    const ai = JOB_ORDER.indexOf(a.id), bi = JOB_ORDER.indexOf(b.id);
+    return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+  });
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-xs font-mono">
-        <thead>
-          <tr className="border-b border-[#1e2d45]">
-            {["Job", "Last", "Next", "Status"].map(h => (
-              <th key={h} className="px-2 py-1.5 text-left text-[10px] uppercase tracking-wider text-slate-500">{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-[#1e2d45]">
-          {shown.length === 0 ? (
-            <tr><td colSpan={4} className="px-2 py-3 text-slate-600 text-center">—</td></tr>
-          ) : shown.map(j => (
-            <tr key={j.id} className="hover:bg-white/[0.02]">
-              <td className="px-2 py-1.5 text-cyan-400 truncate max-w-[120px]">{j.id}</td>
-              <td className="px-2 py-1.5 text-slate-400">{ageStr(j.last_run_at)}</td>
-              <td className="px-2 py-1.5 text-slate-400">{nextAgeStr(j.next_run_at)}</td>
-              <td className="px-2 py-1.5">
-                {j.last_status === "success"
-                  ? <span className="text-[#00dc82]">✓ ok</span>
-                  : j.last_status === "failed"
-                  ? <span className="text-red-400">✗ fail</span>
-                  : j.last_status === "running"
-                  ? <span className="text-yellow-400">▶ run</span>
-                  : <span className="text-slate-600">—</span>}
-              </td>
+    <div className="border border-[#1e3a5f] rounded-sm font-mono flex-1 min-h-0 flex flex-col">
+      <div className="border-b border-[#1e3a5f] px-2 py-0.5 text-center text-[11px] text-[#00b8ff] shrink-0">
+        Scheduler
+      </div>
+      <div className="overflow-y-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-[#1e3a5f]">
+              {["Job","Last","Next","Status"].map(h => (
+                <th key={h} className="px-2 py-1 text-left text-[10px] text-slate-500 font-normal">{h}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sorted.length === 0 ? (
+              <tr><td colSpan={4} className="px-2 py-2 text-slate-600 text-center">—</td></tr>
+            ) : sorted.map(j => {
+              const status = j.last_status ?? "";
+              return (
+                <tr key={j.id} className="border-b border-[#0d1320]">
+                  <td className="px-2 py-0.5 text-cyan-400">{j.id}</td>
+                  <td className="px-2 py-0.5 text-slate-400">{ageStr(j.last_run_at)}</td>
+                  <td className="px-2 py-0.5 text-slate-400">{ageStr(j.next_run_at)}</td>
+                  <td className="px-2 py-0.5">
+                    {status === "success"  ? <span className="text-[#00dc82]">success</span>
+                   : status === "failed"   ? <span className="text-red-400">failed</span>
+                   : status === "running"  ? <span className="text-yellow-400">running</span>
+                   : <span className="text-slate-600">—</span>}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-interface LogLine { ts: string; level: string; msg: string; extra: Record<string, string>; }
-
-function MiniLogs() {
-  const [lines, setLines] = useState<LogLine[]>([]);
+function LogsPanel({ lines }: { lines: LogLine[] }) {
   const bottomRef = useRef<HTMLDivElement>(null);
-  const isMountedRef = useRef(true);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lines]);
 
-  useEffect(() => {
-    isMountedRef.current = true;
-    const es = new EventSource(`${API_BASE_URL}/logs/stream`);
-    es.onmessage = (e) => {
-      if (!isMountedRef.current) return;
-      try {
-        const entry = JSON.parse(e.data) as LogLine;
-        setLines(prev => {
-          if (!isMountedRef.current) return prev;
-          const next = [...prev, entry];
-          return next.length > 80 ? next.slice(-80) : next;
-        });
-      } catch {}
-    };
-    return () => {
-      isMountedRef.current = false;
-      es.close();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isMountedRef.current) return;
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [lines]);
-
-  function lineColor(level: string) {
+  function lineColor(level: string, msg: string) {
     const l = level.toLowerCase();
     if (l === "error" || l === "critical") return "text-red-400";
-    if (l === "warning" || l === "warn")    return "text-yellow-400";
-    if (l === "debug")                      return "text-slate-600";
-    return "text-emerald-400";
+    if (l === "warning" || l === "warn")   return "text-yellow-400";
+    if (msg.includes("/api/"))             return "text-cyan-400";
+    if (l === "debug")                     return "text-slate-600";
+    return "text-[#00dc82]";
   }
 
   return (
-    <div className="h-52 overflow-y-auto bg-[#050a0f] rounded-lg border border-[#1e2d45] p-2 font-mono text-[10px] leading-relaxed">
-      {lines.length === 0
-        ? <span className="text-slate-600">Waiting for backend logs…</span>
-        : lines.map((l, i) => {
-            const extras = Object.entries(l.extra ?? {}).map(([k,v]) => `${k}=${v}`).join(" ");
-            return (
-              <div key={i} className={lineColor(l.level)}>
-                <span className="text-slate-600 mr-1">{l.ts?.slice(11,19)}</span>
-                <span className="text-slate-500 mr-1.5">[{l.level}]</span>
-                {l.msg}{extras ? <span className="text-slate-500 ml-1">{extras}</span> : null}
-              </div>
-            );
-          })}
-      <div ref={bottomRef} />
+    <div className="border border-[#1e3a5f] rounded-sm font-mono flex flex-col" style={{ height: "240px" }}>
+      <div className="border-b border-[#1e3a5f] px-2 py-0.5 text-center text-[11px] text-[#00dc82] shrink-0">
+        Backend Logs: docker/flipflop-backend
+      </div>
+      <div className="flex-1 overflow-y-auto p-2 text-[10px] leading-relaxed bg-[#050a0f]">
+        {lines.length === 0
+          ? <span className="text-slate-600">Waiting for backend logs…</span>
+          : lines.map((l, i) => {
+              const extras = Object.entries(l.extra ?? {}).map(([k,v]) => `${k}=${v}`).join(" ");
+              return (
+                <div key={i} className={lineColor(l.level, l.msg)}>
+                  <span className="text-slate-600 mr-1">{l.ts?.slice(11,19)}</span>
+                  <span className="text-slate-500 mr-1">[{l.level}]</span>
+                  {l.msg}
+                  {extras ? <span className="text-slate-500 ml-1">{extras}</span> : null}
+                </div>
+              );
+            })}
+        <div ref={bottomRef} />
+      </div>
     </div>
   );
 }
 
-function TermsMatrix({ terms, telemetry, enabledSources }: {
+// Spinner frames
+const SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏";
+
+function TermsPanel({ terms, telemetry, scheduleJobs, tick }: {
   terms: SourceSearchTerm[];
   telemetry: Record<string, SearchTelemetryItem[]>;
-  enabledSources: Set<string>;
+  scheduleJobs: ScheduleJob[];
+  tick: number;
 }) {
-  // Build latest telemetry lookup: (source, term_lower) → item
+  // Build latest lookup
   const latest = new Map<string, SearchTelemetryItem>();
   for (const [src, rows] of Object.entries(telemetry)) {
     for (const r of rows ?? []) {
@@ -246,70 +298,115 @@ function TermsMatrix({ terms, telemetry, enabledSources }: {
     if (s in byScope && t.enabled) byScope[s].push(t);
   }
 
-  const vendors = Object.keys(VENDOR_GROUPS);
+  // Dynamic top vendors
+  const topVendors = computeTopVendors(telemetry, 5);
+  const vendorNames = topVendors.length > 0
+    ? topVendors.map(([v]) => v)
+    : [EBAY_CANONICAL, "Gumtree", "Amazon", "BargainHardware"];
+  const vendorTotals = Object.fromEntries(topVendors);
 
-  function renderCell(scope: Scope, term: SourceSearchTerm, vendor: string) {
-    const members = VENDOR_GROUPS[vendor];
-    const allowed = new Set(term.source_names ?? []);
-    let state: CellState = "blank";
-    let totalFound = 0;
+  // Scope → job status map
+  const scopeStatus: Record<string, string> = {};
+  for (const j of scheduleJobs) {
+    if ((SCOPES as readonly string[]).includes(j.id)) scopeStatus[j.id] = j.last_status ?? "";
+  }
 
-    for (const v of members) {
-      if (allowed.size > 0 && !allowed.has(v)) continue;
-      for (const src of scopeVendorSources(scope, v)) {
-        const item = latest.get(`${src}::${term.term.toLowerCase()}`);
-        const [st, found] = cellState(item);
-        totalFound += Math.max(0, found);
-        if (st === "error") state = "error";
-        else if (st === "retry" && state !== "error") state = "retry";
-        else if (st === "success" && !["error","retry"].includes(state)) state = "success";
-        else if (st === "zero" && state === "blank") state = "zero";
+  function scopeIndicator(scope: Scope): string {
+    const st = scopeStatus[scope] ?? "";
+    if (st === "running") return SPINNER[tick % SPINNER.length];
+    if (st === "success") return "✓";
+    if (st === "failed" || st === "error") return "✗";
+    return "";
+  }
+
+  function renderCell(scope: Scope, term: SourceSearchTerm, vendor: string): React.ReactNode {
+    const termLower = term.term.toLowerCase();
+    const key = `${scopedSrc(scope, vendor)}::${termLower}`;
+    let [st, found] = cellState(latest.get(key));
+
+    // Try all eBay aliases
+    if (st === "blank" && vendor === EBAY_CANONICAL) {
+      let totalFound = 0, bestSt: CellState = "blank";
+      for (const alt of EBAY_ALIASES) {
+        const altKey = `${scopedSrc(scope, alt)}::${termLower}`;
+        const [altSt, altFound] = cellState(latest.get(altKey));
+        totalFound += Math.max(0, altFound);
+        if (altSt === "error") bestSt = "error";
+        else if (altSt === "retry" && bestSt !== "error") bestSt = "retry";
+        else if ((altSt === "success" || altSt === "zero") && bestSt === "blank") bestSt = altSt;
       }
+      if (bestSt !== "blank") { st = bestSt; found = totalFound; }
     }
 
-    if (state === "error")   return <span className="text-red-400">✗</span>;
-    if (state === "retry")   return <span className="text-yellow-400">🚦</span>;
-    if (state === "success") return <span className="text-[#00dc82]">✓{totalFound}</span>;
-    if (state === "zero")    return <span className="text-slate-600">0</span>;
-    return <span className="text-slate-800">—</span>;
+    if (st === "error")   return <span className="text-red-400">✗</span>;
+    if (st === "retry")   return <span className="text-yellow-400">~</span>;
+    if (found > 0)        return <span className="text-[#00dc82]">✓{found}</span>;
+    if (st === "zero")    return <span className="text-slate-600">0</span>;
+    return null;
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-xs font-mono">
-        <thead>
-          <tr className="border-b border-[#1e2d45]">
-            <th className="px-2 py-1.5 text-left text-[10px] uppercase tracking-wider text-cyan-500 w-24">Catalogue</th>
-            <th className="px-2 py-1.5 text-left text-[10px] uppercase tracking-wider text-yellow-500">Search Term</th>
-            {vendors.map(v => (
-              <th key={v} className="px-2 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-500 w-16">{v}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-[#0d1320]">
-          {SCOPES.map(scope => {
-            const rows = [...byScope[scope]].sort((a,b) => a.term.localeCompare(b.term));
-            if (rows.length === 0) return null;
-            return rows.map((term, idx) => (
-              <tr key={term.id} className="hover:bg-white/[0.02] transition-colors">
-                <td className="px-2 py-1 text-cyan-400 font-bold whitespace-nowrap">
-                  {idx === 0 ? SCOPE_LABELS[scope] : ""}
-                </td>
-                <td className="px-2 py-1 text-yellow-300 max-w-[220px] truncate">{term.term}</td>
-                {vendors.map(v => (
-                  <td key={v} className="px-2 py-1 text-center">{renderCell(scope, term, v)}</td>
-                ))}
-              </tr>
-            ));
-          })}
-        </tbody>
-      </table>
-      <div className="mt-2 text-[10px] text-slate-600 font-mono px-2">
-        <span className="text-[#00dc82]">✓N</span> scraped &nbsp;
-        <span className="text-slate-600">0</span> searched/none &nbsp;
-        <span className="text-red-400">✗</span> error &nbsp;
-        <span className="text-yellow-400">🚦</span> retry &nbsp;
-        <span className="text-slate-800">—</span> not run
+    <div className="border border-[#1e3a5f] rounded-sm font-mono flex flex-col h-full">
+      <div className="border-b border-[#1e3a5f] px-2 py-0.5 text-center text-[11px] text-[#4499ff] shrink-0">
+        Search Terms × Vendors&nbsp;&nbsp;<span className="text-slate-600">(sorted by yield ↓)</span>
+      </div>
+
+      <div className="flex-1 overflow-auto">
+        <table className="w-full text-[11px] border-collapse">
+          <thead className="sticky top-0 bg-[#070d16] z-10">
+            <tr className="border-b border-[#1e3a5f]">
+              <th className="px-2 py-1 text-left text-cyan-500 w-[120px]">Catalogue</th>
+              <th className="px-2 py-1 text-left text-yellow-500 w-[200px]">Search Term</th>
+              {vendorNames.map(v => {
+                const label = v.length > 10 ? v.slice(0, 9) + "…" : v;
+                const total = vendorTotals[v] ?? 0;
+                return (
+                  <th key={v} className="px-2 py-1 text-center text-slate-500 w-[80px]">
+                    {label}
+                    {total > 0 && <div className="text-[9px] text-slate-600">Σ{total}</div>}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {SCOPES.map(scope => {
+              const rows = [...byScope[scope]].sort((a,b) => a.term.localeCompare(b.term)).slice(0, 14);
+              if (rows.length === 0) return null;
+              const ind = scopeIndicator(scope);
+              return rows.map((term, idx) => (
+                <tr key={term.id} className="border-b border-[#0d1320] hover:bg-white/[0.02]">
+                  <td className="px-2 py-0.5 text-cyan-400 whitespace-nowrap">
+                    {idx === 0 ? (
+                      <span>
+                        {SCOPE_LABELS[scope]}
+                        {ind && (
+                          <span className={ind === "✓" ? "text-[#00dc82]" : ind === "✗" ? "text-red-400" : "text-yellow-400"}>
+                            {"\n"}{ind}
+                          </span>
+                        )}
+                      </span>
+                    ) : ""}
+                  </td>
+                  <td className="px-2 py-0.5 text-yellow-300 max-w-[200px] truncate">{term.term}</td>
+                  {vendorNames.map(v => (
+                    <td key={v} className="px-2 py-0.5 text-center">{renderCell(scope, term, v)}</td>
+                  ))}
+                </tr>
+              ));
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Legend */}
+      <div className="border-t border-[#1e3a5f] px-2 py-1 text-[9px] text-slate-600 flex gap-3 flex-wrap shrink-0">
+        <span><span className="text-[#00dc82]">✓n</span>=listings found</span>
+        <span><span className="text-slate-600">0</span>=ran/none</span>
+        <span><span className="text-red-400">✗</span>=error</span>
+        <span><span className="text-yellow-400">~</span>=retry/blocked</span>
+        <span>blank=not run</span>
+        <span><span className="text-slate-600">Σ</span>=total scraped</span>
       </div>
     </div>
   );
@@ -324,35 +421,29 @@ export default function SourcesPage() {
   const [jobs, setJobs]         = useState<ScheduleJob[]>([]);
   const [terms, setTerms]       = useState<SourceSearchTerm[]>([]);
   const [telemetry, setTelemetry] = useState<Record<string, SearchTelemetryItem[]>>({});
-  const [enabledSources, setEnabledSources] = useState<Set<string>>(new Set());
-  const [sources, setSources]   = useState<DataSource[]>([]);
   const [loading, setLoading]   = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+  const [triggering, setTriggering] = useState(false);
+  const [tick, setTick]         = useState(0);
 
-  // Source management state
-  const [showAdd, setShowAdd]   = useState(false);
-  const [scrapingId, setScrapingId] = useState<number | null>(null);
-  const [newSource, setNewSource] = useState({ name: "", url: "", type: "scrape" as "api" | "scrape" });
-  const [saving, setSaving]     = useState(false);
+  const logLines = useLogStream();
 
   const fetchAll = useCallback(async (quiet = false) => {
     if (quiet) setRefreshing(true); else setLoading(true);
     try {
-      const [s, d, sc, j, t, tel, health, srcs] = await Promise.allSettled([
+      const [s, d, sc, j, t, tel] = await Promise.allSettled([
         api.listings.stats(),
         api.demand.summary(),
         api.swarms.scanStatus(),
         api.schedule.list(),
         api.sourceSearchTerms.list(),
         api.searchTelemetry.bySource(2500),
-        api.sources.health(),
-        api.sources.list(),
       ]);
-      if (s.status === "fulfilled") setStats(s.value as typeof stats);
-      if (d.status === "fulfilled") setDemand(d.value as typeof demand);
+      if (s.status === "fulfilled")  setStats(s.value as typeof stats);
+      if (d.status === "fulfilled")  setDemand(d.value as typeof demand);
       if (sc.status === "fulfilled") setScan(sc.value as ScanStatus);
-      if (j.status === "fulfilled") setJobs((j.value as ScheduleJob[]) ?? []);
+      if (j.status === "fulfilled")  setJobs((j.value as ScheduleJob[]) ?? []);
       if (t.status === "fulfilled") {
         const payload = t.value as { items?: SourceSearchTerm[] } | SourceSearchTerm[];
         setTerms(Array.isArray(payload) ? payload : (payload?.items ?? []));
@@ -361,11 +452,6 @@ export default function SourcesPage() {
         const payload = tel.value as { items?: Record<string, SearchTelemetryItem[]> };
         setTelemetry(payload?.items ?? {});
       }
-      if (health.status === "fulfilled") {
-        const items = (health.value as { items?: { name: string; enabled: boolean }[] })?.items ?? [];
-        setEnabledSources(new Set(items.filter(x => x.enabled).map(x => x.name)));
-      }
-      if (srcs.status === "fulfilled") setSources((srcs.value as DataSource[]) ?? []);
       setLastRefresh(new Date());
     } finally {
       setLoading(false);
@@ -379,190 +465,78 @@ export default function SourcesPage() {
     return () => clearInterval(id);
   }, [fetchAll]);
 
-  const toggle = async (source: DataSource) => {
-    try {
-      const updated = await api.sources.update(source.id, { enabled: !source.enabled }) as DataSource;
-      setSources(prev => prev.map(s => s.id === source.id ? updated : s));
-    } catch {}
-  };
+  // Spinner tick
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 100);
+    return () => clearInterval(id);
+  }, []);
 
-  const remove = async (id: number) => {
-    try {
-      await api.sources.delete(id);
-      setSources(prev => prev.filter(s => s.id !== id));
-    } catch {}
-  };
-
-  const add = async () => {
-    if (!newSource.name || !newSource.url) return;
-    setSaving(true);
-    try {
-      const created = await api.sources.create({ name: newSource.name, url: newSource.url, source_type: newSource.type, enabled: true }) as DataSource;
-      setSources(prev => [...prev, created]);
-      setNewSource({ name: "", url: "", type: "scrape" });
-      setShowAdd(false);
-    } finally { setSaving(false); }
-  };
-
-  const scrape = async (id: number) => {
-    setScrapingId(id);
-    try {
-      await api.sources.trigger(id);
-      await fetchAll(true);
-    } finally { setScrapingId(null); }
+  const triggerScan = async () => {
+    setTriggering(true);
+    try { await api.swarms.trigger("flip_opportunities"); } catch {}
+    finally { setTriggering(false); await fetchAll(true); }
   };
 
   return (
-    <div className="p-4 space-y-4 min-h-screen bg-[#070d16]">
+    <div className="h-screen flex flex-col bg-[#070d16] font-mono overflow-hidden">
 
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
-            <Database className="w-5 h-5" /> Source_Control
-          </h1>
-          <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-            {lastRefresh ? `Last refresh: ${lastRefresh.toLocaleTimeString()}` : "Loading…"}
-            {refreshing && <span className="ml-2 text-[#00dc82] animate-pulse">● refreshing</span>}
-          </p>
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#1e3a5f] shrink-0">
+        <div className="flex items-center gap-3">
+          <span className="text-[12px] text-[#4499ff] font-bold tracking-wider">FLIPFLOP&nbsp;·&nbsp;SOURCING&nbsp;CONSOLE</span>
+          {refreshing && <span className="text-[10px] text-[#00dc82] animate-pulse">● live</span>}
+          {lastRefresh && <span className="text-[10px] text-slate-600">{lastRefresh.toLocaleTimeString()}</span>}
         </div>
-        <div className="flex gap-2">
-          <Button variant="ghost" size="sm" onClick={() => fetchAll(true)} disabled={refreshing}>
-            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
-          </Button>
-          <Button variant="primary" size="sm" onClick={() => setShowAdd(!showAdd)}>
-            <Plus className="w-3.5 h-3.5" /> Add Source
-          </Button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => fetchAll(true)}
+            disabled={refreshing}
+            className="flex items-center gap-1 px-2 py-0.5 text-[10px] border border-[#1e3a5f] text-slate-400 hover:text-slate-200 hover:border-slate-500 rounded-sm transition-colors"
+          >
+            <RefreshCw className={`w-3 h-3 ${refreshing ? "animate-spin" : ""}`} />
+            refresh
+          </button>
+          <button
+            onClick={triggerScan}
+            disabled={triggering || scan?.running}
+            className="flex items-center gap-1 px-2 py-0.5 text-[10px] border border-[#00dc82]/40 text-[#00dc82] hover:bg-[#00dc82]/10 rounded-sm transition-colors disabled:opacity-40"
+          >
+            <Play className="w-3 h-3" />
+            {scan?.running ? "running…" : triggering ? "starting…" : "run scan"}
+          </button>
         </div>
       </div>
 
-      {/* KPI Bar */}
-      <KpiBar stats={stats} demand={demand} scan={scan} />
-
-      {/* Main 2-column layout */}
-      <div className="grid grid-cols-[320px_1fr] gap-4">
-
-        {/* Left column: Scheduler + Logs */}
-        <div className="space-y-4">
-          <Card>
-            <CardContent className="pt-3 pb-3">
-              <p className="text-[10px] uppercase tracking-wider text-cyan-500 font-mono mb-2">Scheduler</p>
-              <SchedulerTable jobs={jobs} />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-3 pb-3">
-              <p className="text-[10px] uppercase tracking-wider text-[#00dc82] font-mono mb-2">Backend Logs</p>
-              <MiniLogs />
-            </CardContent>
-          </Card>
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center text-[#00dc82] text-[11px]">
+          Loading…
         </div>
+      ) : (
+        /* Main layout: left col + right col */
+        <div className="flex-1 flex gap-0 min-h-0 overflow-hidden">
 
-        {/* Right column: Search Terms Matrix */}
-        <Card>
-          <CardContent className="pt-3 pb-3">
-            <p className="text-[10px] uppercase tracking-wider text-[#00dc82] font-mono mb-2">
-              Search Terms × Vendor Groups
-            </p>
-            {loading
-              ? <div className="text-xs text-slate-500 py-8 text-center">Loading…</div>
-              : <TermsMatrix terms={terms} telemetry={telemetry} enabledSources={enabledSources} />
-            }
-          </CardContent>
-        </Card>
-      </div>
+          {/* LEFT column */}
+          <div className="flex flex-col gap-2 p-2 w-[380px] shrink-0 min-h-0">
+            {/* KPI bar */}
+            <KpiPanel stats={stats} demand={demand} scan={scan} />
 
-      {/* Source management */}
-      {showAdd && (
-        <Card className="border-[#00dc82]/20">
-          <CardContent className="pt-4 space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <input placeholder="Source name" value={newSource.name}
-                onChange={e => setNewSource(p => ({ ...p, name: e.target.value }))}
-                className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50" />
-              <input placeholder="URL" value={newSource.url}
-                onChange={e => setNewSource(p => ({ ...p, url: e.target.value }))}
-                className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50" />
-              <select value={newSource.type} onChange={e => setNewSource(p => ({ ...p, type: e.target.value as "api" | "scrape" }))}
-                className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50">
-                <option value="scrape">Web Scraping</option>
-                <option value="api">API</option>
-              </select>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="primary" size="sm" onClick={add} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
-              <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancel</Button>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Scheduler */}
+            <SchedulerPanel jobs={jobs} />
+
+            {/* Backend logs */}
+            <LogsPanel lines={logLines} />
+          </div>
+
+          {/* Divider */}
+          <div className="w-px bg-[#1e3a5f] shrink-0" />
+
+          {/* RIGHT column: search terms matrix */}
+          <div className="flex-1 p-2 min-h-0 flex flex-col">
+            <TermsPanel terms={terms} telemetry={telemetry} scheduleJobs={jobs} tick={tick} />
+          </div>
+
+        </div>
       )}
-
-      <Card>
-        <CardContent className="p-0">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#1e2d45]">
-                {["Source","Type","Status","Last Scraped","Listings",""].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-[10px] font-medium text-slate-500 uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#1e2d45]">
-              {sources.map(source => (
-                <tr key={source.id} className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
-                      <div>
-                        <div className="font-medium text-slate-200 text-sm">{source.name}</div>
-                        <div className="text-xs text-slate-500">{source.url}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge variant={source.source_type === "api" ? "info" : "muted"}>
-                      {source.source_type === "api" ? <Code className="w-3 h-3" /> : <Globe className="w-3 h-3" />}
-                      {source.source_type === "api" ? "API" : "Scraping"}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3">
-                    <button onClick={() => toggle(source)}
-                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
-                        source.enabled
-                          ? "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/30 hover:bg-red-500/10 hover:text-red-400 hover:border-red-400/30"
-                          : "bg-slate-700/30 text-slate-500 border-slate-700/50 hover:bg-[#00dc82]/10 hover:text-[#00dc82] hover:border-[#00dc82]/30"
-                      }`}>
-                      {source.enabled ? <><CheckCircle className="w-3 h-3" /> Active</> : <><XCircle className="w-3 h-3" /> Disabled</>}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-slate-400 font-mono">
-                    {source.last_scraped_at ? formatRelativeTime(new Date(source.last_scraped_at)) : "Never"}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-slate-300">
-                    {(source.listings_found ?? 0).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Button variant="secondary" size="sm" onClick={() => scrape(source.id)} disabled={scrapingId === source.id}>
-                        <RefreshCw className={`w-3 h-3 ${scrapingId === source.id ? "animate-spin" : ""}`} />
-                        {scrapingId === source.id ? "Scraping…" : "Scrape"}
-                      </Button>
-                      <Button variant="danger" size="sm" onClick={() => remove(source.id)}>
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {sources.length === 0 && !loading && (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-sm text-slate-500">No sources configured</td></tr>
-              )}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-
     </div>
   );
 }
