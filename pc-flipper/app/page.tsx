@@ -423,7 +423,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="p-6 space-y-6 dashboard-zoom">
+      <div className="p-4 space-y-3 dashboard-zoom">
         <ManualSubmitModal
         open={showManualSubmit}
         onClose={() => setShowManualSubmit(false)}
@@ -553,18 +553,18 @@ export default function DashboardPage() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:auto-rows-[minmax(0,1fr)]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:auto-rows-[minmax(0,1fr)]">
         <div className="lg:row-span-2">
           <ListingsTrackedCard total={stats.total_listings} listings={listings} sources={sources} />
         </div>
         <div className="lg:row-span-2">
           <GemsFoundCard total={stats.gems_count} listings={listings} />
         </div>
-        <div className="grid grid-rows-2 gap-4">
+        <div className="grid grid-rows-2 gap-3">
           <AvgProfitCard avg={stats.avg_profit} listings={listings} compact />
           <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} compact />
         </div>
-        <div className="grid grid-rows-2 gap-4">
+        <div className="grid grid-rows-2 gap-3">
           <GemHighlightCard period="day" listing={gemOfDay} />
           <GemHighlightCard period="week" listing={gemOfWeek} />
         </div>
@@ -581,7 +581,7 @@ export default function DashboardPage() {
       ) : (
         <>
           {/* ── Trending Categories + Playbook ────────────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             <div className="lg:col-span-2">
               <TrendingCategoriesCard listings={listings} />
             </div>
@@ -589,7 +589,7 @@ export default function DashboardPage() {
           </div>
 
           {/* ── Current Strategy + Auction Intelligence ────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <CurrentStrategyCard playbooks={activePlaybooks} demandSummary={demandSummary} />
             <AuctionIntelCard auctions={auctionIntel} />
           </div>
@@ -644,13 +644,13 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               {pnlData.length === 0 ? (
-                <div className="flex items-center justify-center h-48 text-slate-600 text-base">
+                <div className="flex items-center justify-center h-32 text-slate-600 text-sm">
                   No sold flips in this date range yet — PnL will appear as you log sales.
                 </div>
               ) : (
-                <div style={{ width: "100%", height: 300 }}>
+                <div style={{ width: "100%", height: 250 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart data={pnlData} margin={{ top: 10, right: 60, bottom: 28, left: 10 }}>
+                    <ComposedChart data={pnlData} margin={{ top: 8, right: 50, bottom: 24, left: 8 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
                       <XAxis
                         dataKey="date"
@@ -711,7 +711,7 @@ export default function DashboardPage() {
                 </div>
               )}
               {/* Legend */}
-              <div className="flex items-center gap-4 mt-2 px-2">
+              <div className="flex items-center gap-2 mt-1 px-2 text-[9px]">
                 <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#00dc82]" /><span className="text-[10px] text-slate-500">Flip profit (bars · left axis)</span></div>
                 <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#60a5fa]" /><span className="text-[10px] text-slate-500">Cumulative PnL (line · right axis)</span></div>
                 <div className="ml-auto text-[10px] text-slate-600">{pnlData.length} flips · total {formatCurrency(cumPnl)}</div>
@@ -734,7 +734,7 @@ export default function DashboardPage() {
             <span className="text-[11px] text-slate-500">by score (of {listings.length})</span>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
 
             {/* Chart 1: Buy price vs resale */}
             <Card>
@@ -743,9 +743,9 @@ export default function DashboardPage() {
                 <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
               </CardHeader>
               <CardContent>
-                <div style={{ width: "100%", height: 320 }}>
+                <div style={{ width: "100%", height: 280 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <ScatterChart margin={{ top: 10, right: 20, bottom: 28, left: 10 }}>
+                    <ScatterChart margin={{ top: 8, right: 16, bottom: 24, left: 8 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
                       <XAxis
                         dataKey="x"
@@ -753,10 +753,10 @@ export default function DashboardPage() {
                         type="number"
                         domain={[0, axisMax]}
                         tickFormatter={v => `£${v}`}
-                        tick={{ fill: "#64748b", fontSize: 11 }}
+                        tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Buy Price (£)", position: "insideBottom", offset: -10, fill: "#475569", fontSize: 11 }}
+                        label={{ value: "Buy Price (£)", position: "insideBottom", offset: -8, fill: "#475569", fontSize: 10 }}
                       />
                       <YAxis
                         dataKey="y"
@@ -764,10 +764,10 @@ export default function DashboardPage() {
                         type="number"
                         domain={[0, axisMax]}
                         tickFormatter={v => `£${v}`}
-                        tick={{ fill: "#64748b", fontSize: 11 }}
+                        tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Resale after upgrades (£)", angle: -90, position: "insideLeft", offset: 18, fill: "#475569", fontSize: 11 }}
+                        label={{ value: "Resale (£)", angle: -90, position: "insideLeft", offset: 14, fill: "#475569", fontSize: 10 }}
                       />
                       <Tooltip
                         content={<ScatterTooltip />}
@@ -809,19 +809,19 @@ export default function DashboardPage() {
                 <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
               </CardHeader>
               <CardContent>
-                <div style={{ width: "100%", height: 320 }}>
+                <div style={{ width: "100%", height: 280 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <ScatterChart margin={{ top: 10, right: 20, bottom: 28, left: 16 }}>
+                    <ScatterChart margin={{ top: 8, right: 16, bottom: 24, left: 14 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
                       <XAxis
                         dataKey="x"
                         name="Score"
                         type="number"
                         domain={[0, scoreMax]}
-                        tick={{ fill: "#64748b", fontSize: 11 }}
+                        tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Flippability Score", position: "insideBottom", offset: -10, fill: "#475569", fontSize: 11 }}
+                        label={{ value: "Score", position: "insideBottom", offset: -8, fill: "#475569", fontSize: 10 }}
                       />
                       <YAxis
                         dataKey="y"
@@ -829,10 +829,10 @@ export default function DashboardPage() {
                         type="number"
                         domain={[roiMin, roiMax]}
                         tickFormatter={v => `${v}%`}
-                        tick={{ fill: "#64748b", fontSize: 11 }}
+                        tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "ROI %", angle: -90, position: "insideLeft", offset: 14, fill: "#475569", fontSize: 11 }}
+                        label={{ value: "ROI%", angle: -90, position: "insideLeft", offset: 10, fill: "#475569", fontSize: 10 }}
                       />
                       <Tooltip
                         content={<ScatterTooltip />}
