@@ -371,7 +371,34 @@ function TermsPanel({ terms, telemetry, scheduleJobs, tick }: {
           </thead>
           <tbody>
             {SCOPES.map(scope => {
-              const rows = [...byScope[scope]].sort((a,b) => a.term.localeCompare(b.term)).slice(0, 14);
+              // Sort: terms with any scraped data first (by total found desc), then alphabetically
+              const scopePrefix: Record<Scope, string | null> = {
+                flip_opportunities: null,        // no prefix — raw source names
+                upgrade_parts: "UpgradeParts:",
+                cases: "Cases:",
+                accessories: "Accessories:",
+              };
+              const pfx = scopePrefix[scope];
+              function termTotalFound(t: SourceSearchTerm): number {
+                const tl = t.term.toLowerCase();
+                let total = 0;
+                for (const [src, rows] of Object.entries(telemetry)) {
+                  // for flip_opportunities match un-prefixed sources; for others match the prefix
+                  const prefixMatch = pfx === null ? !src.includes(":") : src.startsWith(pfx);
+                  if (!prefixMatch) continue;
+                  for (const r of rows ?? []) {
+                    if ((r.term ?? "").toLowerCase() === tl) total += (r.found ?? 0);
+                  }
+                }
+                return total;
+              }
+              const rows = [...byScope[scope]]
+                .sort((a, b) => {
+                  const af = termTotalFound(a), bf = termTotalFound(b);
+                  if (bf !== af) return bf - af;  // data-first
+                  return a.term.localeCompare(b.term);
+                })
+                .slice(0, 14);
               if (rows.length === 0) return null;
               const ind = scopeIndicator(scope);
               return rows.map((term, idx) => (
