@@ -18,7 +18,7 @@ from app import models as _models  # noqa: F401  Ensures all ORM models are regi
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
-from app.api import alerts, reselling
+from app.api import alerts, reselling, ebay_listings
 from app.api import ebay_compliance
 from app.api import preflight
 from app.api.build_wizard import router as build_wizard_router
@@ -385,6 +385,7 @@ app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")
+app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
 

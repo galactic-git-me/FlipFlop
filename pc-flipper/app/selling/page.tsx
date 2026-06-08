@@ -29,6 +29,8 @@ export default function SellingPage() {
   const [markingSold, setMarkingSold] = useState(false);
   const [salePrice, setSalePrice] = useState("");
   const [showSoldModal, setShowSoldModal] = useState(false);
+  const [postingToEbay, setPostingToEbay] = useState(false);
+  const [ebayPosted, setEbayPosted] = useState(false);
 
   useEffect(() => {
     api.flips.list().then(data => {
@@ -92,6 +94,22 @@ export default function SellingPage() {
     navigator.clipboard.writeText(text);
     setCopied(type);
     setTimeout(() => setCopied(null), 2000);
+  };
+
+  const postToEbay = async () => {
+    if (!selected || !titles[selectedTitleIdx] || !description) return;
+    setPostingToEbay(true);
+    try {
+      // For now, we'll show a demo message since full OAuth integration requires user auth flow
+      // In production, you would have stored the user's eBay OAuth token
+      alert(
+        `To post to eBay, you need to:\n\n1. Click the "eBay" button above to go to eBay\n2. Copy the title and description using the copy buttons\n3. Paste into your eBay listing form\n4. Review and publish\n\nFull one-click posting coming soon with eBay OAuth integration!`
+      );
+      setEbayPosted(true);
+      setTimeout(() => setEbayPosted(false), 3000);
+    } finally {
+      setPostingToEbay(false);
+    }
   };
 
   const resale = selected?.current_estimated_resale ?? 0;
@@ -333,30 +351,45 @@ export default function SellingPage() {
                       {/* Quick post links */}
                       <div className="space-y-2 pt-3 border-t border-white/5">
                         <label className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Post to Platform</label>
-                        <div className="grid grid-cols-3 gap-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={postToEbay}
+                          disabled={postingToEbay}
+                          className="w-full justify-center"
+                        >
+                          {postingToEbay ? (
+                            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Preparing…</>
+                          ) : ebayPosted ? (
+                            <><CheckCircle className="w-3.5 h-3.5 text-[#00dc82]" /> Ready</>
+                          ) : (
+                            <><Zap className="w-3.5 h-3.5" /> Post to eBay</>
+                          )}
+                        </Button>
+                        <div className="grid grid-cols-3 gap-2 text-[10px]">
                           <a
                             href={`https://www.ebay.co.uk/sl/sell`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-2 rounded-lg bg-[#f1641e]/10 border border-[#f1641e]/30 text-xs font-medium text-[#f1641e] hover:border-[#f1641e]/60 transition-colors flex items-center justify-center gap-1"
+                            className="px-2 py-1.5 rounded-lg bg-[#f1641e]/10 border border-[#f1641e]/30 font-medium text-[#f1641e] hover:border-[#f1641e]/60 transition-colors flex items-center justify-center gap-1"
                           >
-                            <ExternalLink className="w-3 h-3" /> eBay
+                            <ExternalLink className="w-2.5 h-2.5" /> Manual
                           </a>
                           <a
                             href={`https://www.facebook.com/marketplace/create/`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-2 rounded-lg bg-blue-600/10 border border-blue-500/30 text-xs font-medium text-blue-400 hover:border-blue-500/60 transition-colors flex items-center justify-center gap-1"
+                            className="px-2 py-1.5 rounded-lg bg-blue-600/10 border border-blue-500/30 font-medium text-blue-400 hover:border-blue-500/60 transition-colors flex items-center justify-center gap-1"
                           >
-                            <ExternalLink className="w-3 h-3" /> Facebook
+                            <ExternalLink className="w-2.5 h-2.5" /> FB Market
                           </a>
                           <a
                             href={`https://www.gumtree.com/post-ad.html`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-2 rounded-lg bg-amber-600/10 border border-amber-500/30 text-xs font-medium text-amber-400 hover:border-amber-500/60 transition-colors flex items-center justify-center gap-1"
+                            className="px-2 py-1.5 rounded-lg bg-amber-600/10 border border-amber-500/30 font-medium text-amber-400 hover:border-amber-500/60 transition-colors flex items-center justify-center gap-1"
                           >
-                            <ExternalLink className="w-3 h-3" /> Gumtree
+                            <ExternalLink className="w-2.5 h-2.5" /> Gumtree
                           </a>
                         </div>
                       </div>
