@@ -488,10 +488,10 @@ export default function DashboardPage() {
               </Button>
             </div>
           )}
-          {gems.length > 0 && (
+          {stats.gems_count > 0 && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#00dc82]/10 border border-[#00dc82]/25 new-badge-pulse">
               <Bell className="w-3.5 h-3.5 text-[#00dc82]" />
-              <span className="text-base font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
+              <span className="text-base font-semibold text-[#00dc82]">{stats.gems_count} gem{stats.gems_count !== 1 ? "s" : ""} in database</span>
             </div>
           )}
           {stats.claude_judged_count > 0 && (() => {
@@ -554,7 +554,7 @@ export default function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:auto-rows-[minmax(0,1fr)]">
         <div className="lg:row-span-2">
-          <ListingsTrackedCard total={stats.total_listings} listings={listings} />
+          <ListingsTrackedCard total={stats.total_listings} listings={listings} sources={sources} />
         </div>
         <div className="lg:row-span-2">
           <GemsFoundCard total={stats.gems_count} listings={listings} />
@@ -1652,11 +1652,14 @@ function SourceLogo({ source }: { source: string }) {
 }
 
 // ── Listings Tracked ──────────────────────────────────────────────────────────
-function ListingsTrackedCard({ total, listings }: { total: number; listings: Listing[] }) {
-  const bySource = listings.reduce<Record<string, number>>((acc, l) => {
-    acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
-    return acc;
-  }, {});
+function ListingsTrackedCard({ total, listings, sources }: { total: number; listings: Listing[]; sources: DataSource[] }) {
+  // Use real per-source totals from DataSource if available, else fall back to loaded listings
+  const bySource: Record<string, number> = sources.length
+    ? Object.fromEntries(sources.filter(s => s.listings_found_total).map(s => [s.name, s.listings_found_total!]))
+    : listings.reduce<Record<string, number>>((acc, l) => {
+        acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
+        return acc;
+      }, {});
 
   return (
     <Card className="border-slate-500/25 bg-slate-950/55 shadow-[0_10px_40px_rgba(2,6,23,0.42)]">
@@ -1686,7 +1689,7 @@ function ListingsTrackedCard({ total, listings }: { total: number; listings: Lis
 
 // ── Gems Found ────────────────────────────────────────────────────────────────
 function GemsFoundCard({ total, listings }: { total: number; listings: Listing[] }) {
-  const gems = listings.filter((l) => l.classification === "gem");
+  const gems = listings.filter((l) => l.classification === "gem" || l.classification === "amazing_gem");
   const bySource = gems.reduce<Record<string, number>>((acc, l) => {
     acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
     return acc;
@@ -1720,7 +1723,11 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
 
 // ── Avg Profit ────────────────────────────────────────────────────────────────
 function AvgProfitCard({ avg, listings, compact = false }: { avg: number; listings: Listing[]; compact?: boolean }) {
-  const profits = listings.map((l) => l.estimated_profit ?? 0).filter((p) => p !== 0);
+  // Only use gem/amazing_gem listings with positive profit so range matches the same set as avg
+  const profits = listings
+    .filter(l => l.classification === "amazing_gem" || l.classification === "gem")
+    .map(l => l.estimated_profit ?? 0)
+    .filter(p => p > 0);
   const minProfit = profits.length ? Math.min(...profits) : 0;
   const maxProfit = profits.length ? Math.max(...profits) : 0;
 
