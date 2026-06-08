@@ -423,8 +423,7 @@ export default function DashboardPage() {
     .slice(0, 12);
 
   return (
-    <>
-      <div className="p-4 space-y-3 dashboard-zoom">
+    <div className="p-4 space-y-3 dashboard-zoom">
         <ManualSubmitModal
         open={showManualSubmit}
         onClose={() => setShowManualSubmit(false)}
@@ -1136,21 +1135,15 @@ export default function DashboardPage() {
         </>
       )}
 
-      {/* Bottom padding so content isn't hidden behind sticky ticker */}
-      {latestListings.length > 0 && <div className="h-[88px]" />}
-    </div>
-
-      {/* Sticky ticker — fixed to viewport bottom, always visible while scrolling */}
+      {/* Gems marquee — inline at bottom of dashboard */}
       {latestListings.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50">
-          <LatestListingsCarousel
-            listings={latestListings}
-            nowMs={nowMs}
-            onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
-          />
-        </div>
+        <LatestListingsCarousel
+          listings={latestListings}
+          nowMs={nowMs}
+          onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
+        />
       )}
-    </>
+    </div>
   );
 }
 
