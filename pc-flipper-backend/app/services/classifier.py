@@ -81,9 +81,35 @@ _AM4_HINTS = ("am4", "b450", "b550", "x470", "x570")
 _AM5_HINTS = ("am5", "b650", "x670", "a620")
 
 # Keywords that mark a listing as a bare component rather than a complete PC.
-# These listings don't fit the flip model (we can't complete-build from a CPU alone).
-_COMPONENT_ONLY_HINTS = (" cpu", " processor", "bare cpu", "cpu only", "no motherboard")
-_COMPLETE_PC_HINTS    = ("pc", "desktop", "tower", "computer", "workstation", "system")
+# These listings don't fit the flip model.
+_COMPONENT_ONLY_HINTS = (
+    # CPUs
+    " cpu", " processor", "bare cpu", "cpu only", "no motherboard",
+    # GPUs / graphics cards — specific enough that they only appear in component listings
+    "graphics card", "video card", "gpu only", "geforce rtx", "geforce gtx",
+    "radeon rx graphics", "nvidia rtx graphics", "nvidia gtx graphics",
+    # Storage drives (standalone)
+    " ssd", "solid state drive", "nvme drive", "m.2 drive", " hdd ", "hard drive",
+    "hard disk", "2.5\" drive", "3.5\" drive",
+    # RAM / memory sticks
+    "ram stick", "memory stick", "ddr4 ram", "ddr5 ram", "dimm", "sodimm",
+    "16gb ram", "32gb ram", "8gb ram",
+    # Motherboards
+    "motherboard", "mainboard",
+    # PSUs (standalone)
+    "power supply unit", "psu only", "modular psu",
+    # Peripherals / monitors — not flippable PCs
+    "monitor", "keyboard", "mouse", "headset", "webcam", "microphone",
+    "speakers", "gaming chair",
+    # Laptop/console parts
+    "laptop battery", "laptop screen", "laptop keyboard",
+)
+_COMPLETE_PC_HINTS = (
+    "pc", "desktop", "tower", "computer", "workstation", "system", "mini pc",
+    # Brand workstations — always a complete unit
+    "optiplex", "elitedesk", "thinkcentre", "thinkstation", "prodesk",
+    "esprimo", "veriton", "dell precision", "hp z2", "hp z4", "hp z6",
+)
 
 
 @dataclass
