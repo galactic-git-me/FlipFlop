@@ -1170,47 +1170,63 @@ function LatestListingsCarousel({
   nowMs: number;
   onOpen: (listing: Listing) => void;
 }) {
+  const items = [...listings, ...listings];
   return (
     <div className="border-t border-[#1e2d45] bg-[#050b14]/98 backdrop-blur-md shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
-      <div className="px-4 pt-2 pb-2 flex items-center justify-between">
+      <style>{`
+        @keyframes flipflop-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+      <div className="px-4 pt-1.5 pb-0.5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Gem className="w-3.5 h-3.5 text-[#00dc82]" />
-          <span className="text-[10px] uppercase tracking-[0.12em] text-[#00dc82] font-bold">Top Gems by Flippability</span>
+          <span className="text-[9px] uppercase tracking-[0.18em] text-[#00dc82] font-semibold">Top Gems</span>
         </div>
-        <div className="text-[8px] text-slate-600">{listings.length} opportunities</div>
+        <div className="text-[9px] text-slate-600">sorted by flippability score</div>
       </div>
-      <div className="px-3 pb-2 grid grid-cols-12 gap-1 auto-rows-max max-h-[80px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#1e2d45] scrollbar-track-transparent">
-        {listings.map((l) => (
-          <button
-            key={l.id}
-            onClick={() => onOpen(l)}
-            className="col-span-6 sm:col-span-4 lg:col-span-3 xl:col-span-2 p-2 rounded-lg border border-white/10 bg-[#0a1628] hover:border-[#00dc82]/50 hover:bg-[#0f2530] transition-all text-left text-[9px] group"
-            title={l.title}
-          >
-            <div className="flex items-start gap-1.5 min-w-0">
-              {/* Flippability score */}
-              <div className="flex-shrink-0 pt-0.5">
-                <FlippabilityScore score={l.gem_score} size="sm" showLabel={false} />
+      <div className="overflow-hidden pb-2">
+        <div
+          className="flex gap-3 w-max px-4"
+          style={{
+            animation: "flipflop-marquee 208s linear infinite",
+          }}
+        >
+          {items.map((l, idx) => (
+            <button
+              key={`${l.id}-${idx}`}
+              onClick={() => onOpen(l)}
+              className="w-[280px] shrink-0 rounded-xl overflow-hidden border border-white/10 bg-[#0a1628] hover:border-[#00dc82]/50 transition-colors text-left"
+              title={l.title}
+            >
+              <div className="relative h-28 bg-[#060e1c]">
+                {l.image_urls?.[0] ? (
+                  <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center opacity-20">
+                    <Gem className="w-7 h-7 text-slate-400" />
+                  </div>
+                )}
+                <div className="absolute top-1.5 left-1.5">
+                  <FlippabilityScore score={l.gem_score} size="sm" showLabel={false} />
+                </div>
+                <div className="absolute top-1.5 right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/60 border border-white/20 text-[#7ce7b6] tabular-nums">
+                  {formatCurrency(l.estimated_profit ?? 0)}
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 via-black/55 to-transparent">
+                  <div className="text-sm font-semibold text-white line-clamp-1">{l.title}</div>
+                  <div className="text-[10px] text-slate-300 mt-0.5 flex items-center justify-between">
+                    <span>{l.source_name}</span>
+                    <span className={(l.estimated_profit ?? 0) >= 100 ? "text-[#00dc82]" : (l.estimated_profit ?? 0) >= 0 ? "text-amber-400" : "text-red-400"}>
+                      {formatCurrency(l.price)} → {formatCurrency(l.estimated_resale ?? 0)}
+                    </span>
+                  </div>
+                </div>
               </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-slate-200 line-clamp-1 text-[8px] group-hover:text-[#00dc82] transition-colors">
-                  {l.title.slice(0, 25)}…
-                </div>
-                <div className="flex items-center gap-1 mt-0.5 text-slate-500">
-                  <span className="text-[7px]">{l.source_name.slice(0, 6)}</span>
-                  <span className={`text-[8px] font-bold ${(l.estimated_profit ?? 0) >= 100 ? "text-[#00dc82]" : (l.estimated_profit ?? 0) >= 0 ? "text-amber-400" : "text-red-400"}`}>
-                    {(l.estimated_profit ?? 0) >= 0 ? "+" : ""}{formatCurrency(l.estimated_profit ?? 0)}
-                  </span>
-                </div>
-                <div className="text-[7px] text-slate-600 mt-0.5">
-                  {formatCurrency(l.price)} → {formatCurrency(l.estimated_resale ?? 0)}
-                </div>
-              </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
