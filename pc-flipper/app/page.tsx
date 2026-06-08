@@ -422,7 +422,8 @@ export default function DashboardPage() {
     .slice(0, 24);
 
   return (
-    <div className="p-6 space-y-6 dashboard-zoom">
+    <>
+      <div className="p-6 space-y-6 dashboard-zoom">
       <ManualSubmitModal
         open={showManualSubmit}
         onClose={() => setShowManualSubmit(false)}
