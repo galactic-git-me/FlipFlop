@@ -15,5 +15,5 @@ else
   exit 1
 fi
 
-exec "$PY_BIN" "$ROOT_DIR/scripts/rich_dashboard.py" --base-url "$BASE_URL"
+exec "$PY_BIN" "$ROOT_DIR/scripts/rich_dashboard.py" --base-url "$BASE_URL" --docker-container "flipflop-backend"
 
