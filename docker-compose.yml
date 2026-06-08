@@ -62,7 +62,7 @@ services:
       OPENROUTER_PRIMARY_MODEL: meta-llama/llama-3.1-8b-instruct
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       OLLAMA_MODEL: gemma4:e4b
-      APIFY_API_TOKEN: ""   # ← paste your token from apify.com/account/integrations
+      APIFY_API_TOKEN: APIFY_API_TOKEN_REDACTED
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
