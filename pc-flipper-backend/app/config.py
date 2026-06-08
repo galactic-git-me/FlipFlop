@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     ebay_message_poll_interval_seconds: int = 300
     ebay_sales_poll_interval_seconds: int = 1800
     ebay_walkaway_margin_pct: float = 0.15
+    # Set to 0.0 when eBay is running a fee promotion (e.g. private sellers pay 0%)
+    ebay_final_value_fee_pct: float = 0.127
     flipflop_logo_path: str = "public/flipflop-logo.png"
     merkandi_api_key: str = ""
 

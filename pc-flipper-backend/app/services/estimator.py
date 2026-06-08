@@ -132,7 +132,12 @@ AM5_DDR5_COST  = 70    # 32GB DDR5-5600 kit new (~£65-75)
 # well-presented build (good photos, cable management, etc.).
 PRESENTATION_UPLIFT    = 75
 
-PLATFORM_FEE = 0.127  # eBay ~12.7% (Final Value Fee)
+def _platform_fee() -> float:
+    """Live fee rate — override via EBAY_FINAL_VALUE_FEE_PCT env var (e.g. 0.0 when eBay runs a free-fees promo)."""
+    from app.config import get_settings
+    return get_settings().ebay_final_value_fee_pct
+
+PLATFORM_FEE = 0.127  # kept for imports that reference this directly; use _platform_fee() for live rate
 
 
 def estimate_resale(
@@ -220,7 +225,7 @@ def estimate_profit(
     Value adds (GPU, RAM, SSD, case, presentation) are baked into
     estimated_resale — they are NOT profit and must NOT be added here.
     """
-    platform_fees = round(estimated_resale * PLATFORM_FEE, 2)
+    platform_fees = round(estimated_resale * _platform_fee(), 2)
     total_cost    = round(buy_price + upgrade_cost + platform_fees, 2)
     return round(estimated_resale - total_cost, 2)
 

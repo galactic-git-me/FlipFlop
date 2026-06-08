@@ -1134,14 +1134,20 @@ export default function DashboardPage() {
         </>
       )}
 
-      {latestListings.length > 0 && (
+      {/* Bottom padding so content isn't hidden behind sticky ticker */}
+      {latestListings.length > 0 && <div className="h-[88px]" />}
+    </div>
+
+    {/* Sticky ticker — fixed to viewport bottom, always visible while scrolling */}
+    {latestListings.length > 0 && (
+      <div className="fixed bottom-0 left-0 right-0 z-50">
         <LatestListingsCarousel
           listings={latestListings}
           nowMs={nowMs}
           onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
         />
-      )}
-    </div>
+      </div>
+    )}
   );
 }
 
@@ -1163,22 +1169,22 @@ function LatestListingsCarousel({
 }) {
   const items = [...listings, ...listings];
   return (
-    <div className="mt-2 border border-[#1e2d45] rounded-2xl bg-[#050b14]/95 backdrop-blur-md">
+    <div className="border-t border-[#1e2d45] bg-[#050b14]/98 backdrop-blur-md shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
       <style>{`
         @keyframes flipflop-marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
       `}</style>
-      <div className="px-4 pt-2 pb-1 flex items-center justify-between">
-        <div className="text-[10px] uppercase tracking-[0.18em] text-[#7ce7b6] font-semibold">Latest Listings</div>
-        <div className="text-[10px] text-slate-500">newest first · live timers</div>
+      <div className="px-4 pt-1.5 pb-0.5 flex items-center justify-between">
+        <div className="text-[9px] uppercase tracking-[0.18em] text-[#7ce7b6] font-semibold">Latest Listings</div>
+        <div className="text-[9px] text-slate-600">newest first · live timers</div>
       </div>
-      <div className="overflow-hidden pb-3">
+      <div className="overflow-hidden pb-2">
         <div
           className="flex gap-3 w-max px-4"
           style={{
-            animation: "flipflop-marquee 52s linear infinite",
+            animation: "flipflop-marquee 104s linear infinite",
           }}
         >
           {items.map((l, idx) => (
