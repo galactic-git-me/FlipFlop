@@ -42,6 +42,7 @@ class Flip(Base):
 
     # eBay Listing tracking
     ebay_listing_id: Mapped[str | None] = mapped_column(String(50))
+    ebay_listing_url: Mapped[str | None] = mapped_column(String(500))
 
     # Fee snapshots (captured when listing created)
     listing_fee_pct: Mapped[float | None] = mapped_column(Float)

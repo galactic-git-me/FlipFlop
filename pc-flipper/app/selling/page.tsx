@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
-import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap } from "lucide-react";
+import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FlippabilityScore } from "@/components/flippability-score";
@@ -264,7 +264,7 @@ export default function SellingPage() {
                 </CardContent>
               </Card>
 
-              {/* Generated Titles */}
+              {/* Generated Titles & Description */}
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -301,24 +301,96 @@ export default function SellingPage() {
                             {title}
                           </button>
                         ))}
-                        <Button variant="secondary" size="sm" onClick={() => copyText(titles[selectedTitleIdx], "title")}>
-                          {copied === "title" ? <><CheckCircle className="w-3.5 h-3.5 text-[#00dc82]" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy Title</>}
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Description</label>
+                        <pre className="text-xs text-slate-400 whitespace-pre-wrap font-mono bg-[#0a1119] rounded-xl p-4 border border-[#1e2d45] leading-relaxed max-h-48 overflow-y-auto">
+                          {description}
+                        </pre>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        <Button variant="secondary" size="sm" onClick={() => copyText(titles[selectedTitleIdx], "title")} className="justify-center">
+                          {copied === "title" ? <><CheckCircle className="w-3.5 h-3.5 text-[#00dc82]" /></> : <><Copy className="w-3.5 h-3.5" /> Title</>}
+                        </Button>
+                        <Button variant="secondary" size="sm" onClick={() => copyText(description, "desc")} className="justify-center">
+                          {copied === "desc" ? <><CheckCircle className="w-3.5 h-3.5 text-[#00dc82]" /></> : <><Copy className="w-3.5 h-3.5" /> Desc</>}
                         </Button>
                       </div>
 
-                      <div className="space-y-2 pt-2">
-                        <label className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Description</label>
-                        <pre className="text-xs text-slate-400 whitespace-pre-wrap font-mono bg-[#0a1119] rounded-xl p-4 border border-[#1e2d45] leading-relaxed max-h-64 overflow-y-auto">
-                          {description}
-                        </pre>
-                        <Button variant="secondary" size="sm" onClick={() => copyText(description, "desc")}>
-                          {copied === "desc" ? <><CheckCircle className="w-3.5 h-3.5 text-[#00dc82]" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy Description</>}
-                        </Button>
+                      {/* Copy full listing */}
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => copyText(`${titles[selectedTitleIdx]}\n\n${description}`, "title")}
+                        className="w-full"
+                      >
+                        <Copy className="w-3.5 h-3.5" /> Copy Full Listing
+                      </Button>
+
+                      {/* Quick post links */}
+                      <div className="space-y-2 pt-3 border-t border-white/5">
+                        <label className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Post to Platform</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <a
+                            href={`https://www.ebay.co.uk/sl/sell`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-2 rounded-lg bg-[#f1641e]/10 border border-[#f1641e]/30 text-xs font-medium text-[#f1641e] hover:border-[#f1641e]/60 transition-colors flex items-center justify-center gap-1"
+                          >
+                            <ExternalLink className="w-3 h-3" /> eBay
+                          </a>
+                          <a
+                            href={`https://www.facebook.com/marketplace/create/`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-2 rounded-lg bg-blue-600/10 border border-blue-500/30 text-xs font-medium text-blue-400 hover:border-blue-500/60 transition-colors flex items-center justify-center gap-1"
+                          >
+                            <ExternalLink className="w-3 h-3" /> Facebook
+                          </a>
+                          <a
+                            href={`https://www.gumtree.com/post-ad.html`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-2 rounded-lg bg-amber-600/10 border border-amber-500/30 text-xs font-medium text-amber-400 hover:border-amber-500/60 transition-colors flex items-center justify-center gap-1"
+                          >
+                            <ExternalLink className="w-3 h-3" /> Gumtree
+                          </a>
+                        </div>
                       </div>
                     </>
                   )}
                 </CardContent>
               </Card>
+
+              {/* Preview Card */}
+              {selected && titles.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Eye className="w-3.5 h-3.5 text-cyan-400" /> eBay Listing Preview
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 pt-0 text-xs">
+                    <div className="p-3 bg-[#0a1119] rounded-lg border border-[#1e2d45] space-y-2">
+                      <h3 className="font-bold text-sm text-slate-200 line-clamp-2">{titles[selectedTitleIdx]}</h3>
+                      <div className="flex gap-2 flex-wrap">
+                        <span className="px-2 py-1 bg-[#00dc82]/10 text-[#00dc82] rounded text-[9px] font-semibold">Gaming PC</span>
+                        <span className="px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded text-[9px] font-semibold">New</span>
+                      </div>
+                      <div className="space-y-1 text-slate-400">
+                        <div><span className="text-slate-600">Price:</span> <span className="font-bold text-[#00dc82]">{formatCurrency(suggestedPrice)}</span></div>
+                        <div><span className="text-slate-600">Shipping:</span> £15 (estimated)</div>
+                      </div>
+                      <div className="pt-2 border-t border-white/5 text-slate-500 line-clamp-3">
+                        {description.split('\n')[0]}...
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
