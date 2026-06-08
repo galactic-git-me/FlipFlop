@@ -153,16 +153,30 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: best rule-based or LLM gem first seen in last 24 h
-        step(api.listings.list({
-          sort_by: "gem_score", sort_desc: "true",
-          limit: "1", gem_only: "true", first_seen_after: past24hISO,
-        }) as Promise<Listing[]>, 12000),
-        // Gem of Week: best rule-based or LLM gem first seen in last 7 days
-        step(api.listings.list({
-          sort_by: "gem_score", sort_desc: "true",
-          limit: "1", gem_only: "true", first_seen_after: past7dISO,
-        }) as Promise<Listing[]>, 12000),
+        // Gem of Day: prefer Claude-confirmed gems; fall back to rule-based
+        step((async () => {
+          const claude = await (api.listings.list({
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", claude_judged_only: "true", first_seen_after: past24hISO,
+          }) as Promise<Listing[]>);
+          if (claude.length) return claude;
+          return await (api.listings.list({
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", first_seen_after: past24hISO,
+          }) as Promise<Listing[]>);
+        })(), 12000),
+        // Gem of Week: prefer Claude-confirmed gems; fall back to rule-based
+        step((async () => {
+          const claude = await (api.listings.list({
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", claude_judged_only: "true", first_seen_after: past7dISO,
+          }) as Promise<Listing[]>);
+          if (claude.length) return claude;
+          return await (api.listings.list({
+            sort_by: "gem_score", sort_desc: "true",
+            limit: "1", gem_only: "true", first_seen_after: past7dISO,
+          }) as Promise<Listing[]>);
+        })(), 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
         step(api.sources.list() as Promise<DataSource[]>, 12000),
         step(api.playbooks.list("active").catch(() => [] as Playbook[]), 12000),
@@ -1748,6 +1762,7 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
   }
   const profit = listing.estimated_profit ?? 0;
   const resale = listing.estimated_resale ?? 0;
+  const upgradeCost = listing.estimated_upgrade_cost ?? 0;
   return (
     <Card className="border-[#00dc82]/25 bg-[#03150e]/55">
       <CardContent className="pt-4 pb-4 space-y-2.5">
@@ -1783,18 +1798,22 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-sm">
+        <div className="grid grid-cols-4 gap-1.5 text-sm">
           <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
-            <div className="text-slate-500">Buy</div>
-            <div className="text-slate-100 font-semibold tabular-nums">{formatCurrency(listing.price)}</div>
+            <div className="text-slate-500 text-[9px]">Buy</div>
+            <div className="text-slate-100 font-semibold tabular-nums text-xs">{formatCurrency(listing.price)}</div>
           </div>
           <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
-            <div className="text-slate-500">Resale</div>
-            <div className="text-slate-100 font-semibold tabular-nums">{resale ? formatCurrency(resale) : "—"}</div>
+            <div className="text-slate-500 text-[9px]">Upgrade</div>
+            <div className="text-slate-300 font-semibold tabular-nums text-xs">{upgradeCost ? formatCurrency(upgradeCost) : "—"}</div>
           </div>
           <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
-            <div className="text-slate-500">Profit</div>
-            <div className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums`}>
+            <div className="text-slate-500 text-[9px]">Resale</div>
+            <div className="text-slate-100 font-semibold tabular-nums text-xs">{resale ? formatCurrency(resale) : "—"}</div>
+          </div>
+          <div className="rounded-lg px-2 py-1.5 bg-black/20 border border-white/10">
+            <div className="text-slate-500 text-[9px]">Profit</div>
+            <div className={`${profit >= 0 ? "text-[#00dc82]" : "text-red-400"} font-bold tabular-nums text-xs`}>
               {profit >= 0 ? "+" : ""}{formatCurrency(profit)}
             </div>
           </div>
