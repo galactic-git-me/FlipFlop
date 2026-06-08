@@ -424,7 +424,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="p-6 space-y-6 dashboard-zoom">
-      <ManualSubmitModal
+        <ManualSubmitModal
         open={showManualSubmit}
         onClose={() => setShowManualSubmit(false)}
         onSuccess={() => { setShowManualSubmit(false); load(); }}
@@ -1139,16 +1139,17 @@ export default function DashboardPage() {
       {latestListings.length > 0 && <div className="h-[88px]" />}
     </div>
 
-    {/* Sticky ticker — fixed to viewport bottom, always visible while scrolling */}
-    {latestListings.length > 0 && (
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <LatestListingsCarousel
-          listings={latestListings}
-          nowMs={nowMs}
-          onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
-        />
-      </div>
-    )}
+      {/* Sticky ticker — fixed to viewport bottom, always visible while scrolling */}
+      {latestListings.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          <LatestListingsCarousel
+            listings={latestListings}
+            nowMs={nowMs}
+            onOpen={(l) => router.push(`/opportunities?listing=${l.id}`)}
+          />
+        </div>
+      )}
+    </>
   );
 }
 

@@ -6,11 +6,16 @@ Agents run in sequence:
   2. Composer — generates 5 candidate builds grounded in real parts prices
   3. Validator — checks compatibility / completeness / feasibility (hard rules first,
                  AI double-check second); rejects failures; scores survivors
+  3b. Resale Valuation — LLM-based live market pricing for finished builds (PARALLEL)
   4. Ranker   — sorts by composite score (profit × demand × inverse-risk)
   5. Planner  — produces a step-by-step purchase plan for the user's chosen build
 
 The orchestration loop retries Composer up to 3× if fewer than 3 valid builds
 survive Validator.  After 3 attempts the best available set is returned.
+
+Resale Valuation runs in PARALLEL for all valid builds after Validator,
+updating estimated_resale, estimated_profit, and profit_margin_pct before Ranker
+sees them, ensuring all ranking decisions use live market data.
 """
 from __future__ import annotations
 
@@ -53,6 +58,16 @@ class BuildUpgrade:
 
 
 @dataclass
+class ResaleValuation:
+    """LLM-generated resale valuation for a finished build spec."""
+    resale_low: float               # conservative (25th-percentile) market price
+    resale_median: float            # expected selling price
+    resale_high: float              # optimistic (75th-percentile) market price
+    reasoning: str                  # why the LLM set these prices
+    source: str = "llm"             # always "llm" for this agent
+
+
+@dataclass
 class Build:
     id: str
     name: str
@@ -77,6 +92,11 @@ class Build:
     rank: int = 0
     owned_components_applied: list[str] = field(default_factory=list)
     owned_value_offset: float = 0.0
+    # Resale valuation — filled by ResaleValuationAgent (optional, LLM-based)
+    resale_source: str = "rule-based"  # "rule-based" or "llm"
+    resale_low: float = 0.0         # conservative estimate
+    resale_high: float = 0.0        # optimistic estimate
+    resale_reasoning: str = ""      # why the valuation agent set these prices
     # Visualization metadata
     risk_score: float = 5.0         # 0–10 (0=safest, 10=riskiest) for scatter graph
     demand_score: float = 5.0       # 0–10 (demand signal)
@@ -425,6 +445,127 @@ async def validator_agent(builds: list[Build], intent: RefinedIntent) -> list[Bu
     return valid_builds
 
 
+# ─── Agent 3b: Resale Valuation ──────────────────────────────────────────────
+# LLM-based live market pricing for each valid build's finished spec.
+# Runs in PARALLEL for all valid builds.
+
+async def _valuate_single_build(build: Build) -> ResaleValuation:
+    """
+    Ask the LLM: Given this finished PC spec, what is it worth on the market today?
+    Returns conservative/median/optimistic resale estimates.
+    """
+    from app.services.ai_service import chat as ai_chat
+
+    # Describe the finished build spec
+    upgrade_desc = "\n".join([f"  - {u.item} (£{u.cost_estimate:.0f})" for u in build.upgrades])
+
+    prompt = f"""You are a PC-flipping market expert evaluating finished PC build specifications.
+Given this PC specification, estimate what it would sell for on eBay UK TODAY (June 2026).
+
+BASE SYSTEM: {build.base_spec}
+UPGRADES ADDED:
+{upgrade_desc}
+
+FINISHED BUILD SPECIFICS:
+- Total invested: £{build.total_cost:.0f}
+- Themed case: Yes (presentation premium)
+- Condition: Clean, tested, working
+- Platform: eBay UK
+
+Estimate the MARKET PRICE this finished build would fetch if listed now.
+Consider current demand, condition, specs, and competitive listings.
+Return THREE price points:
+  - Resale Low: conservative (if it sells slowly, needs a few bidders)
+  - Resale Median: expected (typical sale at competitive price)
+  - Resale High: optimistic (good demand, multiple bidders, clean presentation)
+
+Respond with ONLY valid JSON:
+{{
+  "resale_low": <number>,
+  "resale_median": <number>,
+  "resale_high": <number>,
+  "reasoning": "<short explanation of the market context and why you set these prices>"
+}}"""
+
+    try:
+        response, _ = await ai_chat(prompt, [], None)
+        clean = re.sub(r"```(?:json)?", "", response).strip()
+        m = re.search(r'\{[\s\S]*\}', clean)
+        if not m:
+            raise ValueError("No JSON found in response")
+
+        data = json.loads(m.group())
+        return ResaleValuation(
+            resale_low=float(data.get("resale_low", build.estimated_resale * 0.85)),
+            resale_median=float(data.get("resale_median", build.estimated_resale)),
+            resale_high=float(data.get("resale_high", build.estimated_resale * 1.15)),
+            reasoning=str(data.get("reasoning", "")),
+            source="llm",
+        )
+    except Exception as exc:
+        log.warning("resale_valuation.failed", build=build.name, error=str(exc))
+        # Fall back to rule-based estimates
+        return ResaleValuation(
+            resale_low=round(build.estimated_resale * 0.85, 2),
+            resale_median=build.estimated_resale,
+            resale_high=round(build.estimated_resale * 1.15, 2),
+            reasoning="Rule-based fallback (LLM call failed)",
+            source="rule-based",
+        )
+
+
+async def resale_valuation_agent(builds: list[Build]) -> list[Build]:
+    """
+    LLM-based resale valuation for ALL valid builds in PARALLEL.
+    Updates estimated_resale, estimated_profit, and profit_margin_pct.
+    """
+    if not builds:
+        return builds
+
+    log.info("resale_valuation.starting", count=len(builds))
+
+    # Fire parallel LLM calls for all builds
+    valuations = await asyncio.gather(
+        *[_valuate_single_build(b) for b in builds],
+        return_exceptions=True
+    )
+
+    # Update each build with LLM valuation
+    for i, build in enumerate(builds):
+        valuation = valuations[i]
+
+        # Handle exceptions (shouldn't happen due to return_exceptions, but be safe)
+        if isinstance(valuation, Exception):
+            log.error("resale_valuation.exception", build=build.name, error=str(valuation))
+            continue
+
+        # Use median estimate as the new resale target
+        old_resale = build.estimated_resale
+        build.estimated_resale = round(valuation.resale_median, 2)
+        build.resale_low = valuation.resale_low
+        build.resale_high = valuation.resale_high
+        build.resale_source = valuation.source
+        build.resale_reasoning = valuation.reasoning
+
+        # Recalculate profit (cost stays the same, resale changed)
+        build.estimated_profit = round(build.estimated_resale - build.total_cost, 2)
+        build.profit_margin_pct = round(
+            (build.estimated_profit / build.total_cost * 100.0) if build.total_cost > 0 else 0.0,
+            1
+        )
+
+        log.info(
+            "resale_valuation.updated",
+            build=build.name,
+            old_resale=old_resale,
+            new_resale=build.estimated_resale,
+            profit=build.estimated_profit,
+        )
+
+    log.info("resale_valuation.complete", count=len(builds))
+    return builds
+
+
 # ─── Agent 4: Ranker ─────────────────────────────────────────────────────────
 
 def ranker_agent(builds: list[Build]) -> list[Build]:
@@ -572,6 +713,11 @@ async def run_build_wizard(
             log.info("composer.regenerating", reason=f"only {len(all_valid)} valid builds")
             await asyncio.sleep(0.5)
 
+    # Phase 3b: LLM Resale Valuation (parallel, for all valid builds)
+    if all_valid:
+        all_valid = await resale_valuation_agent(all_valid)
+        log.info("resale_valuation.complete", builds=len(all_valid))
+
     # Phase 4: Rank
     ranked = ranker_agent(all_valid[:5])  # cap at 5
     log.info("ranker.done", builds=len(ranked))
@@ -629,6 +775,11 @@ def _build_to_dict(b: Build) -> dict:
         "rank": b.rank,
         "owned_components_applied": b.owned_components_applied,
         "owned_value_offset": b.owned_value_offset,
+        # Resale valuation fields
+        "resale_source": b.resale_source,
+        "resale_low": b.resale_low,
+        "resale_high": b.resale_high,
+        "resale_reasoning": b.resale_reasoning,
     }
 
 
@@ -646,4 +797,8 @@ def _dict_to_build(d: dict) -> Build:
         compatibility_confidence=d.get("compatibility_confidence", 0.0),
         compatibility_warnings=d.get("compatibility_warnings", []),
         rank=d.get("rank", 0),
+        resale_source=d.get("resale_source", "rule-based"),
+        resale_low=d.get("resale_low", 0.0),
+        resale_high=d.get("resale_high", 0.0),
+        resale_reasoning=d.get("resale_reasoning", ""),
     )
