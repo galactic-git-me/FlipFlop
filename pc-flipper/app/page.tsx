@@ -418,6 +418,7 @@ export default function DashboardPage() {
   const pagedListings = listings.slice((tablePage - 1) * pageSize, tablePage * pageSize);
 
   const latestListings = [...listings]
+    .filter(l => l.classification === "gem" || l.classification === "amazing_gem")
     .sort((a, b) => new Date(b.first_seen_at).getTime() - new Date(a.first_seen_at).getTime())
     .slice(0, 24);
 
@@ -1186,7 +1187,7 @@ function LatestListingsCarousel({
         <div
           className="flex gap-3 w-max px-4"
           style={{
-            animation: "flipflop-marquee 104s linear infinite",
+            animation: "flipflop-marquee 208s linear infinite",
           }}
         >
           {items.map((l, idx) => (
