@@ -103,6 +103,9 @@ _COMPONENT_ONLY_HINTS = (
     "speakers", "gaming chair",
     # Laptop/console parts
     "laptop battery", "laptop screen", "laptop keyboard",
+    # Games (video games, board games, not gaming PCs)
+    "video game", "board game", "card game", "console game", "nintendo", "playstation", "xbox",
+    "ps4", "ps5", "switch", "retro game", "atari", "sega",
 )
 _COMPLETE_PC_HINTS = (
     "pc", "desktop", "tower", "computer", "workstation", "system", "mini pc",
