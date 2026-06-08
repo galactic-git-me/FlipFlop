@@ -494,11 +494,13 @@ export default function DashboardPage() {
               <span className="text-base font-semibold text-[#00dc82]">{gems.length} gem{gems.length !== 1 ? "s" : ""} in database</span>
             </div>
           )}
-          {stats.total_listings > 0 && (() => {
-            const pct = stats.total_listings > 0
-              ? Math.round((stats.claude_judged_count / stats.total_listings) * 100)
-              : 0;
-            const done = pct >= 100;
+          {stats.claude_judged_count > 0 && (() => {
+            // Denominator = gems evaluated + gems still queued (pipeline total, not all listings)
+            const gemPipelineTotal = stats.claude_judged_count + stats.claude_eval_queue;
+            const pct = gemPipelineTotal > 0
+              ? Math.round((stats.claude_judged_count / gemPipelineTotal) * 100)
+              : 100;
+            const done = stats.claude_eval_queue === 0;
             return (
               <div className="flex flex-col gap-1 min-w-[200px]">
                 <div className="flex items-center justify-between gap-2">
@@ -514,7 +516,7 @@ export default function DashboardPage() {
                     <span className="text-[11px] font-mono text-slate-400">AI EVAL</span>
                   </div>
                   <span className="text-[11px] font-mono text-slate-400 tabular-nums">
-                    {stats.claude_judged_count.toLocaleString()}/{stats.total_listings.toLocaleString()}
+                    {stats.claude_judged_count.toLocaleString()} gems evaluated
                     {stats.claude_eval_queue > 0 && (
                       <span className="text-amber-400"> · {stats.claude_eval_queue.toLocaleString()} queued</span>
                     )}
