@@ -317,9 +317,9 @@ export default function OpportunitiesPage() {
         />
       ) : (
         <>
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {listings.map(listing => (
-              <ListingRow
+              <ListingGridCard
                 key={listing.id}
                 listing={listing}
                 onFlip={handleFlip}
@@ -379,9 +379,9 @@ export default function OpportunitiesPage() {
   );
 }
 
-// ── Listing row card ──────────────────────────────────────────────────────────
+// ── Listing Grid Card ────────────────────────────────────────────────────────
 
-function ListingRow({
+function ListingGridCard({
   listing: l,
   onFlip,
   flippingId,
@@ -395,179 +395,93 @@ function ListingRow({
     profit > 100 ? "text-[#00dc82]" : profit > 0 ? "text-amber-400" : "text-red-400";
   const gemSignals = l.gem_signals ?? [];
   const isAuction = l.listing_type === "auction";
-  const alternatives = l.alternatives ?? [];
 
   return (
     <Card
-      className={
+      className={`overflow-hidden flex flex-col h-full ${
         l.classification === "amazing_gem"
           ? "border-cyan-400/25"
           : l.classification === "gem"
           ? "border-emerald-400/20"
           : ""
-      }
+      }`}
     >
-      <CardContent className="p-0">
-        <div className="flex items-stretch">
-          {/* ── Image ───────────────────────────────────────────────────────── */}
-          <div
-            className="w-28 flex-shrink-0 bg-[#080f1a] rounded-l-xl overflow-hidden"
-            style={{ minHeight: 100 }}
+      {/* Image - top */}
+      <div className="w-full h-40 bg-[#080f1a] overflow-hidden">
+        {l.image_urls[0] ? (
+          <img
+            src={l.image_urls[0]}
+            alt={l.title}
+            className="w-full h-full object-contain"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center opacity-15">
+            <Gem className="w-8 h-8 text-slate-400" />
+          </div>
+        )}
+      </div>
+
+      <CardContent className="p-3 flex-1 flex flex-col gap-2">
+        {/* Score + Classification */}
+        <div className="flex items-start justify-between gap-2">
+          <FlippabilityScore score={l.gem_score} size="sm" listing={l} />
+          <div className="flex gap-1 flex-wrap">
+            <ClassificationBadge classification={l.classification} />
+            <AuctionBadge listing={l} />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-xs font-semibold text-slate-100 line-clamp-2 leading-snug">
+          {l.title}
+        </h3>
+
+        {/* Specs */}
+        <div className="space-y-1 text-[10px] text-slate-500">
+          {l.cpu && <div>🖥️ <span className="font-mono text-slate-400">{l.cpu.slice(0, 20)}</span></div>}
+          <div className="flex gap-2">
+            {l.ram_gb && <span>🔹 {l.ram_gb}GB RAM</span>}
+            {l.gpu ? <span className="text-emerald-400">✓ {l.gpu.slice(0, 15)}</span> : <span className="text-red-400/70">✗ No GPU</span>}
+          </div>
+          {l.source_name && <div className="text-slate-600">📍 {l.source_name}</div>}
+        </div>
+
+        {/* Pricing - prominent */}
+        <div className="mt-auto pt-2 border-t border-white/5 space-y-1">
+          <div className="flex items-baseline justify-between">
+            <span className="text-[9px] text-slate-600">Buy</span>
+            <span className="text-sm font-semibold text-slate-300">
+              {formatCurrency(l.price)}
+            </span>
+          </div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-[9px] text-slate-600">Resale</span>
+            <span className="text-sm font-semibold text-slate-200">
+              {formatCurrency(l.estimated_resale ?? 0)}
+            </span>
+          </div>
+          <div className={`flex items-baseline justify-between pt-1 border-t border-white/5 text-base font-black ${profitColor}`}>
+            <span className="text-[9px]">Profit</span>
+            <span>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</span>
+          </div>
+        </div>
+
+        {/* Actions - bottom */}
+        <div className="flex gap-2 pt-2">
+          <Button
+            variant="primary" size="sm"
+            className="flex-1 h-7"
+            disabled={flippingId === l.id}
+            onClick={() => onFlip(l)}
           >
-            {l.image_urls[0] ? (
-              <img
-                src={l.image_urls[0]}
-                alt={l.title}
-                className="w-full h-full object-contain"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center opacity-15">
-                <Gem className="w-6 h-6 text-slate-400" />
-              </div>
-            )}
-          </div>
-
-          {/* ── Main content ────────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 p-3 flex items-center gap-4">
-            {/* Score */}
-            <div className="flex-shrink-0">
-              <FlippabilityScore score={l.gem_score} size="lg" listing={l} />
-            </div>
-
-            {/* Info block */}
-            <div className="flex-1 min-w-0">
-              {/* Badges row */}
-              <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                <ClassificationBadge classification={l.classification} />
-                <AuctionBadge listing={l} />
-                {gemSignals.slice(0, 3).map(s => (
-                  <span
-                    key={s}
-                    className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-[#00dc82]/8 text-[#00dc82] text-[10px] font-medium border border-[#00dc82]/20"
-                  >
-                    💎 {s}
-                  </span>
-                ))}
-              </div>
-
-              {/* Title */}
-              <h3 className="text-sm font-semibold text-slate-100 leading-snug mb-1 line-clamp-1">
-                {l.title}
-              </h3>
-
-              {/* Specs row */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-500 mb-1.5">
-                {l.cpu && <span className="font-mono text-slate-400">{l.cpu}</span>}
-                {l.ram_gb && <span>{l.ram_gb}GB {l.ram_type ?? "RAM"}</span>}
-                {l.gpu
-                  ? <span className="text-emerald-400">{l.gpu}</span>
-                  : <span className="text-red-400/70">No GPU</span>}
-                {l.storage_gb
-                  ? <span>{l.storage_gb}GB {l.storage_type?.toUpperCase() ?? "SSD"}</span>
-                  : <span className="text-yellow-400/70">No Storage</span>}
-                {l.location && <span>📍 {l.location}</span>}
-              </div>
-
-              {/* Seller + dates row */}
-              <div className="flex items-center gap-3 flex-wrap">
-                {l.seller_name && (
-                  <span
-                    className="text-[10px] text-slate-500 truncate max-w-28"
-                    title={l.seller_name}
-                  >
-                    {l.seller_name}
-                  </span>
-                )}
-                <SellerBadge listing={l} />
-                {l.listed_at && (
-                  <span className="text-[10px] text-slate-600">
-                    Listed {formatRelativeTime(new Date(l.listed_at))}
-                  </span>
-                )}
-                <span className="text-[10px] text-slate-700">
-                  Found {formatRelativeTime(new Date(l.first_seen_at))}
-                </span>
-              </div>
-            </div>
-
-            {/* Source */}
-            <div className="flex-shrink-0 flex flex-col items-end gap-1.5">
-              <SourceBadge sourceName={l.source_name} url={l.url} />
-              {(l.resale_comp_count ?? 0) > 0 && (
-                <span className="text-[9px] text-[#00dc82]/70">
-                  {l.resale_comp_count} live comps
-                </span>
-              )}
-            </div>
-
-            {/* Pricing block */}
-            <div className="flex-shrink-0 text-right min-w-32">
-              <div className="text-[10px] text-slate-500 mb-0.5">
-                {isAuction ? "Auction" : "Buy price"}
-              </div>
-              <AuctionPriceDisplay listing={l} />
-
-              <div className="text-[10px] text-slate-500 mt-1.5">Resale est.</div>
-              <div className="text-sm font-semibold text-slate-300">
-                {formatCurrency(l.estimated_resale ?? 0)}
-              </div>
-              {l.resale_low != null && l.resale_high != null && l.resale_low !== l.resale_high && (
-                <div className="text-[9px] text-slate-600">
-                  {formatCurrency(l.resale_low)}–{formatCurrency(l.resale_high)}
-                </div>
-              )}
-
-              <div className={`text-base font-black mt-1 ${profitColor}`}>
-                {profit > 0 ? "+" : ""}{formatCurrency(profit)}
-              </div>
-              <div className="text-[10px] text-slate-600">est. profit</div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex-shrink-0 flex flex-col gap-2 min-w-20">
-              <Button
-                variant="primary" size="sm"
-                disabled={flippingId === l.id}
-                onClick={() => onFlip(l)}
-              >
-                {flippingId === l.id
-                  ? <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  : <Zap className="w-3.5 h-3.5" />}
-                Flip
-              </Button>
-              <a href={l.url} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="w-full justify-center">
-                  <ExternalLink className="w-3.5 h-3.5" /> View
-                </Button>
-              </a>
-            </div>
-          </div>
-
-          {/* ── Also available on other vendors ─────────────────────────────── */}
-          {alternatives.length > 0 && (
-            <div className="px-3 pb-2.5 flex items-center gap-2 flex-wrap border-t border-white/[0.04] pt-2">
-              <span className="text-[10px] text-slate-600 flex items-center gap-1 flex-shrink-0">
-                <Copy className="w-2.5 h-2.5" />
-                Also listed on
-              </span>
-              {alternatives.map(alt => (
-                <a
-                  key={alt.id}
-                  href={alt.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={e => e.stopPropagation()}
-                  title={`View on ${alt.source_name} — £${alt.price.toFixed(2)}`}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#0d1a2a] border border-[#1e2d45] text-[10px] text-slate-400 hover:border-amber-400/40 hover:text-amber-300 transition-colors"
-                >
-                  {alt.source_name}
-                  <span className="text-amber-400/80 font-semibold">£{alt.price.toFixed(0)}</span>
-                  <ExternalLink className="w-2 h-2 opacity-50" />
-                </a>
-              ))}
-            </div>
-          )}
+            {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+          </Button>
+          <a href={l.url} target="_blank" rel="noopener noreferrer" className="flex-1">
+            <Button variant="outline" size="sm" className="w-full h-7 justify-center">
+              <ExternalLink className="w-3 h-3" />
+            </Button>
+          </a>
         </div>
       </CardContent>
     </Card>

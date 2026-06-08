@@ -356,30 +356,40 @@ export default function IntelPage() {
                   <Clock className="w-3.5 h-3.5 text-slate-400" /> Recent Flip History
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="border-b border-[#1e2d45]">
-                      {["Source", "CPU", "Platform", "Profit", "ROI", "Days"].map(h => (
-                        <th key={h} className="px-4 py-2.5 text-left font-medium text-slate-600 uppercase tracking-wider">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#1e2d45]">
-                    {history.map(row => (
-                      <tr key={row.id} className="hover:bg-white/[0.02]">
-                        <td className="px-4 py-2.5 text-slate-400">{row.source_site}</td>
-                        <td className="px-4 py-2.5 text-slate-400 font-mono">{row.cpu_tier}</td>
-                        <td className="px-4 py-2.5 text-slate-400 capitalize">{row.sell_platform}</td>
-                        <td className={`px-4 py-2.5 font-bold ${row.profit > 0 ? "text-[#00dc82]" : "text-red-400"}`}>
-                          {row.profit > 0 ? "+" : ""}{formatCurrency(row.profit)}
-                        </td>
-                        <td className="px-4 py-2.5 text-cyan-400 font-semibold">{row.roi_pct.toFixed(1)}%</td>
-                        <td className="px-4 py-2.5 text-slate-500">{row.days_to_sell}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <CardContent className="pt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-96 overflow-y-auto">
+                  {history.length === 0 ? (
+                    <div className="text-xs text-slate-600 col-span-full text-center py-4">No flip history yet</div>
+                  ) : (
+                    history.map(row => (
+                      <div key={row.id} className="p-2.5 rounded-lg bg-[#0a1119] border border-[#1e2d45] hover:border-[#2a4d5d] transition-colors">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] text-slate-500 uppercase tracking-wider">{row.source_site}</span>
+                            <span className="text-xs font-mono text-slate-400">{row.cpu_tier}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-600 capitalize">{row.sell_platform}</span>
+                        </div>
+                        <div className="flex items-end justify-between pt-1 border-t border-white/5">
+                          <div className="space-y-0.5">
+                            <div className="text-[9px] text-slate-600">ROI</div>
+                            <div className="text-sm font-semibold text-cyan-400">{row.roi_pct.toFixed(1)}%</div>
+                          </div>
+                          <div className="space-y-0.5">
+                            <div className="text-[9px] text-slate-600">Days</div>
+                            <div className="text-sm font-semibold text-slate-400">{row.days_to_sell}d</div>
+                          </div>
+                          <div className="space-y-0.5 text-right">
+                            <div className="text-[9px] text-slate-600">Profit</div>
+                            <div className={`text-sm font-black ${row.profit > 0 ? "text-[#00dc82]" : "text-red-400"}`}>
+                              {row.profit > 0 ? "+" : ""}{formatCurrency(row.profit)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
