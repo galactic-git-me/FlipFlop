@@ -24,7 +24,7 @@ const PRIMARY_NAV = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/sources", icon: Search, label: "Sourcing" },
   { href: "/chat", icon: Cpu, label: "Build Wizard" },
-  { href: "/flips", icon: Boxes, label: "Inventory" },
+  { href: "/flips", icon: Boxes, label: "Manual Build" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
   { href: "/parts", icon: Store, label: "Marketplace" },
   { href: "/selling", icon: ReceiptText, label: "Reselling" },
