@@ -14,6 +14,7 @@ from app.models.alert_event import AlertEvent
 from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
 from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
+from app.models.manual_build import ManualBuild
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -36,4 +37,5 @@ __all__ = [
     "ListingNormalized",
     "SourceSearchTerm",
     "ListingArchive",
+    "ManualBuild",
 ]

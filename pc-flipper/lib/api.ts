@@ -102,6 +102,47 @@ export interface PurchasePlan {
   tips: string[];
 }
 
+export interface BuildComponent {
+  slot: string;
+  name: string;
+  price_paid: number;
+  source: "catalogue" | "manual";
+  part_id?: number;
+  listing_url?: string;
+  image_url?: string;
+}
+
+export interface ManualBuild {
+  id: number;
+  name: string;
+  components: BuildComponent[];
+  total_cost: number | null;
+  last_evaluation: ManualBuildEvaluation | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ManualBuildSummary {
+  id: number;
+  name: string;
+  total_cost: number | null;
+  component_count: number;
+  updated_at: string;
+}
+
+export interface EvaluationSuggestion {
+  text: string;
+  uplift: number;
+}
+
+export interface ManualBuildEvaluation {
+  low: number;
+  mid: number;
+  high: number;
+  narrative: string;
+  suggestions: EvaluationSuggestion[];
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface ScanSite {
@@ -245,6 +286,29 @@ export const api = {
     grouped: (category?: string) => request<unknown[]>(`/parts/grouped${category ? `?category=${category}` : ""}`),
     cases: (params?: Record<string, string>) => request<unknown[]>(`/parts/cases${qs(params)}`),
     themes: () => request<string[]>("/parts/themes"),
+  },
+
+  manualBuilds: {
+    list: () => request<ManualBuildSummary[]>("/manual-builds/"),
+    get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
+    create: (name: string) =>
+      request<ManualBuild>("/manual-builds/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      }),
+    patch: (id: number, data: { name?: string; components?: BuildComponent[] }) =>
+      request<ManualBuild>(`/manual-builds/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    delete: (id: number) =>
+      fetch(`${API_BASE_URL}/manual-builds/${id}`, { method: "DELETE" }),
+    evaluate: (id: number) =>
+      request<ManualBuildEvaluation>(`/manual-builds/${id}/evaluate`, {
+        method: "POST",
+      }),
   },
 
   sources: {

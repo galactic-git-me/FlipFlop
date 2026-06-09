@@ -22,6 +22,7 @@ from app.api import alerts, reselling, ebay_listings
 from app.api import ebay_compliance
 from app.api import preflight
 from app.api.build_wizard import router as build_wizard_router
+from app.api.manual_builds import router as manual_builds_router
 from app.api.facebook import router as facebook_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
@@ -388,6 +389,7 @@ app.include_router(reselling.router, prefix="/api")
 app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
+app.include_router(manual_builds_router, prefix="/api")
 
 
 _startup_time: datetime = datetime.now(timezone.utc)
