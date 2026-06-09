@@ -26,7 +26,7 @@ const PRIMARY_NAV = [
   { href: "/flips", icon: Boxes, label: "Inventory" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
   { href: "/parts", icon: Store, label: "Marketplace" },
-  { href: "/selling", icon: ReceiptText, label: "Sold Builds" },
+  { href: "/selling", icon: ReceiptText, label: "Reselling" },
   { href: "/intel", icon: BarChart3, label: "Analytics" },
   { href: "/logs", icon: Brain, label: "AI Insights" },
   { href: "/settings", icon: Settings, label: "Settings" },

@@ -475,42 +475,6 @@ function PurchasePlanView({ plan }: { plan: PurchasePlan; intent: RefinedIntent 
         </div>
       </div>
 
-      {/* Search strings */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <Search className="w-3 h-3" /> eBay Searches
-          </h3>
-          <div className="space-y-1.5">
-            {plan.ebay_searches.map((s, i) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded-lg">
-                <span className="text-xs text-slate-400 font-mono flex-1 truncate">{s}</span>
-                <CopyButton text={s} />
-                <a
-                  href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(s)}&LH_ItemCondition=3000`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="text-slate-600 hover:text-[#00dc82] transition-colors"
-                >
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <Search className="w-3 h-3" /> Facebook Searches
-          </h3>
-          <div className="space-y-1.5">
-            {plan.facebook_searches.map((s, i) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded-lg">
-                <span className="text-xs text-slate-400 font-mono flex-1 truncate">{s}</span>
-                <CopyButton text={s} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Pro tips */}
       {plan.tips.length > 0 && (
@@ -532,28 +496,49 @@ function PurchasePlanView({ plan }: { plan: PurchasePlan; intent: RefinedIntent 
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cost Breakdown</h3>
         <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl overflow-hidden">
           <div className="divide-y divide-[#1e2d45]">
-            <div className="flex justify-between items-center px-4 py-2.5 text-xs">
-              <a
-                href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(b.base_spec)}&LH_ItemCondition=3000`}
-                target="_blank" rel="noopener noreferrer"
-                className="text-slate-500 hover:text-[#00dc82] transition-colors flex items-center gap-1 group"
-              >
-                Base PC ({b.base_spec.slice(0, 40)}…)
-                <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
-              <span className="text-slate-300 font-mono">£{b.base_cost.toFixed(0)}</span>
+            {/* Base PC row */}
+            <div className="flex items-center gap-3 px-4 py-2.5 text-xs">
+              {b.base_image_url ? (
+                <img src={b.base_image_url} alt="Base PC" className="w-10 h-10 rounded object-cover flex-shrink-0 border border-[#1e2d45]" />
+              ) : (
+                <div className="w-10 h-10 rounded bg-[#1e2d45] flex-shrink-0 flex items-center justify-center text-slate-600 text-[9px]">IMG</div>
+              )}
+              <div className="flex-1 min-w-0">
+                <a
+                  href={b.base_listing_url || `https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(b.base_spec)}&LH_ItemCondition=3000`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-[#00dc82] transition-colors flex items-center gap-1 group font-medium"
+                >
+                  <span className="truncate">{b.base_spec.slice(0, 55)}{b.base_spec.length > 55 ? "…" : ""}</span>
+                  <ExternalLink className="w-2.5 h-2.5 flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <div className="text-slate-600 mt-0.5">
+                  Base PC {b.base_listing_url ? <span className="text-emerald-500">· verified listing</span> : <span className="text-slate-700">· search</span>}
+                </div>
+              </div>
+              <span className="text-slate-300 font-mono flex-shrink-0">£{b.base_cost.toFixed(0)}</span>
             </div>
             {b.upgrades.map((u, i) => (
-              <div key={i} className="flex justify-between items-center px-4 py-2.5 text-xs">
-                <a
-                  href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(u.item)}&LH_ItemCondition=3000`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="text-slate-500 hover:text-[#00dc82] transition-colors flex items-center gap-1 group"
-                >
-                  {u.item} <span className="text-slate-700">({u.source})</span>
-                  <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-                <span className="text-slate-300 font-mono">£{u.cost_estimate.toFixed(0)}</span>
+              <div key={i} className="flex items-center gap-3 px-4 py-2.5 text-xs">
+                {u.image_url ? (
+                  <img src={u.image_url} alt={u.item} className="w-10 h-10 rounded object-cover flex-shrink-0 border border-[#1e2d45]" />
+                ) : (
+                  <div className="w-10 h-10 rounded bg-[#1e2d45] flex-shrink-0 flex items-center justify-center text-slate-600 text-[9px]">IMG</div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <a
+                    href={u.listing_url || `https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(u.item)}&LH_ItemCondition=3000`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="text-slate-300 hover:text-[#00dc82] transition-colors flex items-center gap-1 group font-medium"
+                  >
+                    <span className="truncate">{u.item}</span>
+                    <ExternalLink className="w-2.5 h-2.5 flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                  <div className="text-slate-600 mt-0.5">
+                    {u.source} {u.listing_url ? <span className="text-emerald-500">· verified listing</span> : <span className="text-slate-700">· search</span>}
+                  </div>
+                </div>
+                <span className="text-slate-300 font-mono flex-shrink-0">£{u.cost_estimate.toFixed(0)}</span>
               </div>
             ))}
             <div className="flex justify-between px-4 py-2.5 text-xs border-t border-[#1e2d45]">
