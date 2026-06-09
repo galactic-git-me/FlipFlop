@@ -47,9 +47,17 @@ async def get_demand_summary(db: AsyncSession = Depends(get_db)):
     categories = await compute_demand(db)
     auctions = await compute_auction_intel(db, limit=5)
 
-    total_listings = sum(c["count"] for c in categories)
+    # Use true total listing count as denominator (not just categorised subset)
+    from sqlalchemy import func as sqlfunc
+    from app.models.listing import Listing, Classification
+    total_row = await db.execute(
+        sqlfunc.count(Listing.id).select().select_from(Listing)
+    )
+    true_total = total_row.scalar() or 0
+
     total_gems = sum(c["gem_count"] for c in categories)
-    gem_rate = round(total_gems / total_listings * 100, 1) if total_listings else 0.0
+    total_listings = true_total or sum(c["count"] for c in categories)
+    gem_rate = round(total_gems / total_listings * 100, 2) if total_listings else 0.0
 
     hottest = next((c for c in categories if c["strength"] == "High"), None)
     rising = [c for c in categories if c["trend"] == "rising"]
