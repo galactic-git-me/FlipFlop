@@ -465,7 +465,7 @@ export default function SourcesPage() {
         api.swarms.scanStatus(),
         api.schedule.list(),
         api.sourceSearchTerms.list(),
-        api.searchTelemetry.bySource(2500),
+        api.searchTelemetry.bySource(50000),
       ]);
       if (s.status === "fulfilled")  setStats(s.value as typeof stats);
       if (d.status === "fulfilled")  setDemand(d.value as typeof demand);
