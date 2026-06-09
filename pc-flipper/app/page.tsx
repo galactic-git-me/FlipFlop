@@ -75,7 +75,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [flips, setFlips] = useState<Flip[]>([]);
-  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, avg_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0 });
+  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {} as Record<string,number>, by_source_gems: {} as Record<string,number> });
   const [swarms, setSwarms] = useState<{ id: string; name: string; next_run: string | null }[]>([]);
   const [gemOfDay, setGemOfDay] = useState<Listing | null>(null);
   const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
@@ -190,7 +190,7 @@ export default function DashboardPage() {
       };
 
       const l = getValue<Listing[]>(0, []);
-      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number; claude_judged_count: number; claude_eval_queue: number; claude_unjudged_count: number }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0 });
+      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number; min_profit: number; max_profit: number; claude_judged_count: number; claude_eval_queue: number; claude_unjudged_count: number; by_source_listings: Record<string,number>; by_source_gems: Record<string,number> }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {}, by_source_gems: {} });
       const sw = getValue<{ id: string; name: string; next_run: string | null }[]>(2, []);
       const fl = getValue<Flip[]>(3, []);
       const godResults = getValue<Listing[]>(4, []);
@@ -517,7 +517,7 @@ export default function DashboardPage() {
                     <span className="text-[11px] font-mono text-slate-400">AI EVAL</span>
                   </div>
                   <span className="text-[11px] font-mono text-slate-400 tabular-nums">
-                    {stats.claude_judged_count.toLocaleString()} gems evaluated
+                    {stats.claude_judged_count.toLocaleString()} listings evaluated
                     {stats.claude_eval_queue > 0 && (
                       <span className="text-amber-400"> · {stats.claude_eval_queue.toLocaleString()} queued</span>
                     )}
@@ -555,13 +555,13 @@ export default function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:auto-rows-[minmax(0,1fr)]">
         <div className="lg:row-span-2">
-          <ListingsTrackedCard total={stats.total_listings} listings={listings} sources={sources} />
+          <ListingsTrackedCard total={stats.total_listings} bySource={stats.by_source_listings} />
         </div>
         <div className="lg:row-span-2">
-          <GemsFoundCard total={stats.gems_count} listings={listings} />
+          <GemsFoundCard total={stats.gems_count} bySource={stats.by_source_gems} />
         </div>
         <div className="grid grid-rows-2 gap-3">
-          <AvgProfitCard avg={stats.avg_profit} listings={listings} compact />
+          <AvgProfitCard avg={stats.avg_profit} minProfit={stats.min_profit} maxProfit={stats.max_profit} compact />
           <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} compact />
         </div>
         <div className="grid grid-rows-2 gap-3">
@@ -1657,14 +1657,7 @@ function SourceLogo({ source }: { source: string }) {
 }
 
 // ── Listings Tracked ──────────────────────────────────────────────────────────
-function ListingsTrackedCard({ total, listings, sources }: { total: number; listings: Listing[]; sources: DataSource[] }) {
-  // Use real per-source totals from DataSource if available, else fall back to loaded listings
-  const bySource: Record<string, number> = sources.length
-    ? Object.fromEntries(sources.filter(s => s.listings_found_total).map(s => [s.name, s.listings_found_total!]))
-    : listings.reduce<Record<string, number>>((acc, l) => {
-        acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
-        return acc;
-      }, {});
+function ListingsTrackedCard({ total, bySource }: { total: number; bySource: Record<string, number> }) {
 
   return (
     <Card className="border-slate-500/25 bg-slate-950/55 shadow-[0_10px_40px_rgba(2,6,23,0.42)]">
@@ -1693,12 +1686,7 @@ function ListingsTrackedCard({ total, listings, sources }: { total: number; list
 }
 
 // ── Gems Found ────────────────────────────────────────────────────────────────
-function GemsFoundCard({ total, listings }: { total: number; listings: Listing[] }) {
-  const gems = listings.filter((l) => l.classification === "gem" || l.classification === "amazing_gem");
-  const bySource = gems.reduce<Record<string, number>>((acc, l) => {
-    acc[l.source_name] = (acc[l.source_name] ?? 0) + 1;
-    return acc;
-  }, {});
+function GemsFoundCard({ total, bySource }: { total: number; bySource: Record<string, number> }) {
 
   return (
     <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
@@ -1727,14 +1715,7 @@ function GemsFoundCard({ total, listings }: { total: number; listings: Listing[]
 }
 
 // ── Avg Profit ────────────────────────────────────────────────────────────────
-function AvgProfitCard({ avg, listings, compact = false }: { avg: number; listings: Listing[]; compact?: boolean }) {
-  // Only use gem/amazing_gem listings with positive profit so range matches the same set as avg
-  const profits = listings
-    .filter(l => l.classification === "amazing_gem" || l.classification === "gem")
-    .map(l => l.estimated_profit ?? 0)
-    .filter(p => p > 0);
-  const minProfit = profits.length ? Math.min(...profits) : 0;
-  const maxProfit = profits.length ? Math.max(...profits) : 0;
+function AvgProfitCard({ avg, minProfit, maxProfit, compact = false }: { avg: number; minProfit: number; maxProfit: number; compact?: boolean }) {
 
   return (
     <Card className="border-[#00dc82]/30 bg-[#041922]/55 shadow-[0_12px_44px_rgba(0,184,255,0.15)]">

@@ -157,65 +157,93 @@ async def get_listing_stats(
     db: AsyncSession = Depends(get_db),
 ):
     """Single-query stats — avoids the N round-trip latency on large SQLite DBs."""
-    from sqlalchemy import case, literal_column
-    from sqlalchemy.sql.expression import cast
-    from sqlalchemy import Integer, Numeric
+    from sqlalchemy import case
 
-    # One pass over the table: count + conditional aggregates in one SQL statement
+    # Profit expression — same field used for avg, min, and max so they're consistent
+    _gem_profit = case(
+        (
+            (Listing.claude_verdict.in_(["GEM", "GOOD"])) &
+            (Listing.claude_expected_profit > 0),
+            Listing.claude_expected_profit,
+        ),
+        (
+            (Listing.classification.in_([Classification.amazing_gem, Classification.gem])) &
+            (Listing.claude_judged_at == None) &
+            (Listing.estimated_profit > 0),
+            Listing.estimated_profit,
+        ),
+        else_=None,
+    )
+
+    # One pass over the table: count + conditional aggregates
     row = await db.execute(
         select(
             func.count().label("total"),
-            # Claude gems: judged + verdict in (GEM, GOOD)
-            func.sum(case(
-                (Listing.claude_verdict.in_(["GEM", "GOOD"]), 1),
-                else_=0
-            )).label("claude_gems"),
-            # Claude judged count
-            func.sum(case(
-                (Listing.claude_judged_at != None, 1),
-                else_=0
-            )).label("claude_judged"),
-            # Rule-based gems (not yet judged by Claude)
+            func.sum(case((Listing.claude_verdict.in_(["GEM", "GOOD"]), 1), else_=0)).label("claude_gems"),
+            func.sum(case((Listing.claude_judged_at != None, 1), else_=0)).label("claude_judged"),
             func.sum(case(
                 (
                     (Listing.classification.in_([Classification.amazing_gem, Classification.gem])) &
                     (Listing.claude_judged_at == None),
-                    1
+                    1,
                 ),
-                else_=0
+                else_=0,
             )).label("rule_gems"),
-            # Avg profit: prefer Claude expected_profit for judged gems, else estimated
-            func.avg(case(
-                (
-                    (Listing.claude_verdict.in_(["GEM", "GOOD"])) &
-                    (Listing.claude_expected_profit > 0),
-                    Listing.claude_expected_profit
-                ),
-                (
-                    (Listing.classification.in_([Classification.amazing_gem, Classification.gem])) &
-                    (Listing.claude_judged_at == None) &
-                    (Listing.estimated_profit > 0),
-                    Listing.estimated_profit
-                ),
-                else_=None
-            )).label("avg_profit"),
+            func.avg(_gem_profit).label("avg_profit"),
+            func.min(_gem_profit).label("min_profit"),
+            func.max(_gem_profit).label("max_profit"),
         ).select_from(Listing)
         .where(*(
             [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
         ))
     )
     r = row.one()
+
+    # Per-source counts from current listings (not cumulative listings_found_total)
+    src_rows = await db.execute(
+        select(Listing.source_name, func.count().label("cnt"))
+        .select_from(Listing)
+        .where(*(
+            [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
+        ))
+        .group_by(Listing.source_name)
+    )
+    by_source_listings: dict[str, int] = {row.source_name: int(row.cnt) for row in src_rows}
+
+    gem_src_rows = await db.execute(
+        select(Listing.source_name, func.count().label("cnt"))
+        .select_from(Listing)
+        .where(
+            *(
+                [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
+            ),
+            (
+                Listing.claude_verdict.in_(["GEM", "GOOD"]) |
+                (
+                    Listing.classification.in_([Classification.amazing_gem, Classification.gem]) &
+                    (Listing.claude_judged_at == None)
+                )
+            ),
+        )
+        .group_by(Listing.source_name)
+    )
+    by_source_gems: dict[str, int] = {row.source_name: int(row.cnt) for row in gem_src_rows}
+
     from app.services.claude_eval_queue import queue_size
     unjudged = int(r.total or 0) - int(r.claude_judged or 0)
     return {
-        "total_listings":       int(r.total or 0),
-        "gems_count":           int((r.claude_gems or 0) + (r.rule_gems or 0)),
-        "avg_profit":           round(float(r.avg_profit or 0), 2),
-        "claude_judged_count":  int(r.claude_judged or 0),
-        "claude_gems_count":    int(r.claude_gems or 0),
-        "rule_based_gems_count":int(r.rule_gems or 0),
-        "claude_eval_queue":    queue_size(),
+        "total_listings":        int(r.total or 0),
+        "gems_count":            int((r.claude_gems or 0) + (r.rule_gems or 0)),
+        "avg_profit":            round(float(r.avg_profit or 0), 2),
+        "min_profit":            round(float(r.min_profit or 0), 2),
+        "max_profit":            round(float(r.max_profit or 0), 2),
+        "claude_judged_count":   int(r.claude_judged or 0),
+        "claude_gems_count":     int(r.claude_gems or 0),
+        "rule_based_gems_count": int(r.rule_gems or 0),
+        "claude_eval_queue":     queue_size(),
         "claude_unjudged_count": max(0, unjudged),
+        "by_source_listings":    by_source_listings,
+        "by_source_gems":        by_source_gems,
     }
 
 
