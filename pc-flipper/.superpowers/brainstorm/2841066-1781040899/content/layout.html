@@ -1,0 +1,139 @@
+<h2>Manual Build — Overall Layout</h2>
+<p class="subtitle">How should the build composer and evaluation results be arranged?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0b111d;padding:12px;font-family:monospace;font-size:11px;">
+      <div style="display:flex;gap:8px;height:200px;">
+        <div style="flex:1;background:#101828;border:1px solid #1e3a5f;border-radius:6px;padding:8px;">
+          <div style="color:#00dc82;font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⚙ BUILD COMPONENTS</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;margin-bottom:4px;border-left:2px solid #00b8ff;color:#cde">CPU</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;margin-bottom:4px;border-left:2px solid #a855f7;color:#cde">GPU</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;margin-bottom:4px;border-left:2px solid #f59e0b;color:#cde">RAM</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;margin-bottom:4px;border-left:2px solid #10b981;color:#cde">Storage</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;margin-bottom:4px;border-left:2px solid #ef4444;color:#cde">PSU</div>
+          <div style="background:#0d1f33;border-radius:4px;padding:5px 7px;border-left:2px solid #6366f1;color:#cde">Case</div>
+          <div style="margin-top:8px;background:#00dc82;color:#04120d;border-radius:4px;padding:4px 8px;text-align:center;font-weight:700;font-size:10px;">+ ADD COMPONENT</div>
+        </div>
+        <div style="width:220px;display:flex;flex-direction:column;gap:6px;">
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:6px;padding:8px;flex:1;">
+            <div style="color:#00dc82;font-size:9px;text-transform:uppercase;margin-bottom:4px;">📋 BUILD SUMMARY</div>
+            <div style="color:#64748b;font-size:10px;">Total cost: <span style="color:#e2e8f0">£0</span></div>
+            <div style="color:#64748b;font-size:10px;">Components: <span style="color:#e2e8f0">0</span></div>
+          </div>
+          <div style="background:#021b12;border:1px solid #00dc82/30;border-radius:6px;padding:8px;flex:1.5;">
+            <div style="color:#00dc82;font-size:9px;text-transform:uppercase;margin-bottom:4px;">🤖 AI VALUATION</div>
+            <div style="display:flex;gap:4px;margin-top:6px;">
+              <div style="flex:1;background:#0a2010;border-radius:3px;padding:4px;text-align:center;">
+                <div style="color:#4ade80;font-size:9px;">LOW</div>
+                <div style="color:#86efac;font-size:11px;font-weight:700;">£—</div>
+              </div>
+              <div style="flex:1;background:#0a2010;border-radius:3px;padding:4px;text-align:center;">
+                <div style="color:#00dc82;font-size:9px;">MID</div>
+                <div style="color:#00dc82;font-size:11px;font-weight:700;">£—</div>
+              </div>
+              <div style="flex:1;background:#0a2010;border-radius:3px;padding:4px;text-align:center;">
+                <div style="color:#34d399;font-size:9px;">HIGH</div>
+                <div style="color:#34d399;font-size:11px;font-weight:700;">£—</div>
+              </div>
+            </div>
+            <div style="margin-top:6px;background:#00dc82;color:#04120d;border-radius:4px;padding:4px;text-align:center;font-weight:700;font-size:10px;">EVALUATE BUILD →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Side-by-side panel</h3>
+      <p>Components list on the left, build summary + AI evaluation panel fixed on the right. Both visible at all times. Best for desktop, everything in view.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0b111d;padding:12px;font-family:monospace;font-size:11px;">
+      <div style="height:200px;display:flex;flex-direction:column;gap:6px;">
+        <div style="background:#101828;border:1px solid #1e3a5f;border-radius:6px;padding:8px;display:flex;align-items:center;gap:8px;">
+          <div style="color:#00dc82;font-size:9px;">⚙ BUILD: "My Gaming PC"</div>
+          <div style="flex:1;background:#0d1f33;height:2px;border-radius:2px;"></div>
+          <div style="color:#64748b;font-size:9px;">Total: £0</div>
+          <div style="background:#00dc82;color:#04120d;border-radius:3px;padding:2px 8px;font-size:9px;font-weight:700;">EVALUATE →</div>
+        </div>
+        <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#00b8ff;font-size:8px;text-transform:uppercase;">CPU</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">Not set</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;cursor:pointer;">+ From catalogue</div>
+            <div style="color:#64748b;font-size:8px;">+ Enter manually</div>
+          </div>
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#a855f7;font-size:8px;text-transform:uppercase;">GPU</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">RTX 3060 12GB</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;">£170 paid</div>
+          </div>
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#f59e0b;font-size:8px;text-transform:uppercase;">RAM</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">Not set</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;cursor:pointer;">+ From catalogue</div>
+          </div>
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#10b981;font-size:8px;text-transform:uppercase;">Storage</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">500GB NVMe</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;">£28 paid</div>
+          </div>
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#ef4444;font-size:8px;text-transform:uppercase;">PSU</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">Not set</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;cursor:pointer;">+ From catalogue</div>
+          </div>
+          <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px;">
+            <div style="color:#6366f1;font-size:8px;text-transform:uppercase;">Case</div>
+            <div style="color:#94a3b8;font-size:9px;margin-top:2px;">Not set</div>
+            <div style="color:#22d3ee;font-size:8px;margin-top:4px;cursor:pointer;">+ From catalogue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Card grid</h3>
+      <p>Each component type gets its own card in a 3-column grid. Sticky top bar shows total cost and evaluate button. More compact — fits more components at once.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0b111d;padding:12px;font-family:monospace;font-size:11px;">
+      <div style="height:200px;display:flex;flex-direction:column;gap:5px;">
+        <div style="background:#101828;border:1px solid #1e3a5f;border-radius:5px;padding:6px 8px;display:flex;align-items:center;gap:6px;">
+          <div style="color:#a855f7;font-size:9px;">BASE PC</div>
+          <div style="flex:1;color:#94a3b8;font-size:9px;">Dell OptiPlex 7060 i7-8700 16GB</div>
+          <div style="color:#22d3ee;font-size:9px;">£85</div>
+          <div style="width:14px;height:14px;background:#0d1f33;border-radius:2px;color:#64748b;text-align:center;font-size:9px;line-height:14px;">✓</div>
+        </div>
+        <div style="background:#101828;border:1px dashed #1e3a5f;border-radius:5px;padding:6px 8px;display:flex;align-items:center;gap:6px;">
+          <div style="color:#a855f7;font-size:9px;">GPU</div>
+          <div style="flex:1;color:#94a3b8;font-size:9px;">RTX 3060 12GB</div>
+          <div style="color:#22d3ee;font-size:9px;">£170</div>
+          <div style="width:14px;height:14px;background:#0d1f33;border-radius:2px;color:#64748b;text-align:center;font-size:9px;line-height:14px;">✓</div>
+        </div>
+        <div style="background:#101828;border:1px dashed #374151;border-radius:5px;padding:6px 8px;display:flex;align-items:center;gap:6px;opacity:0.5;">
+          <div style="color:#64748b;font-size:9px;">RAM</div>
+          <div style="flex:1;color:#4b5563;font-size:9px;">Click to add…</div>
+          <div style="color:#374151;font-size:9px;">£0</div>
+        </div>
+        <div style="background:#101828;border:1px dashed #374151;border-radius:5px;padding:6px 8px;display:flex;align-items:center;gap:6px;opacity:0.5;">
+          <div style="color:#64748b;font-size:9px;">Storage</div>
+          <div style="flex:1;color:#4b5563;font-size:9px;">Click to add…</div>
+        </div>
+        <div style="background:#021b12;border:1px solid #00dc82;border-radius:5px;padding:6px 8px;display:flex;align-items:center;gap:8px;margin-top:2px;">
+          <div style="color:#00dc82;font-size:9px;font-weight:700;">TOTAL: £255</div>
+          <div style="flex:1;"></div>
+          <div style="background:#00dc82;color:#04120d;border-radius:3px;padding:2px 8px;font-size:9px;font-weight:700;">🤖 EVALUATE BUILD →</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Vertical build list</h3>
+      <p>Linear list of component rows top-to-bottom, like a shopping list. Empty slots dim until clicked. Running total pinned at the bottom with evaluate button. Feels like assembling a PC step by step.</p>
+    </div>
+  </div>
+
+</div>
