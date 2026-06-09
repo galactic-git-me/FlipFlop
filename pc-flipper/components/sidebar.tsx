@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 
 const PRIMARY_NAV = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/opportunities", icon: Search, label: "Sourcing" },
+  { href: "/sources", icon: Search, label: "Sourcing" },
   { href: "/chat", icon: Cpu, label: "Build Wizard" },
   { href: "/flips", icon: Boxes, label: "Inventory" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
