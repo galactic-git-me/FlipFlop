@@ -72,3 +72,80 @@ async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     if not build:
         raise HTTPException(404, "Build not found")
     await db.delete(build)
+
+
+@router.post("/{build_id}/evaluate", response_model=EvaluationResult)
+async def evaluate_build(build_id: int, db: AsyncSession = Depends(get_db)):
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.components:
+        raise HTTPException(400, "Build has no components to evaluate")
+
+    # Format component list for the prompt
+    lines = []
+    for c in build.components:
+        name = c["name"] if isinstance(c, dict) else c.name
+        slot = c["slot"] if isinstance(c, dict) else c.slot
+        price = c["price_paid"] if isinstance(c, dict) else c.price_paid
+        lines.append(f"  - {slot}: {name} (paid £{price:.0f})")
+    component_text = "\n".join(lines)
+    total = build.total_cost or sum(
+        (c["price_paid"] if isinstance(c, dict) else c.price_paid)
+        for c in build.components
+    )
+
+    prompt = f"""I have assembled a PC build for resale in the UK secondhand market. Here are the components and what I paid:
+
+{component_text}
+
+Total cost: £{total:.0f}
+
+Please assess this build and respond with ONLY valid JSON (no markdown, no code fences) in this exact format:
+{{
+  "low": <number>,
+  "mid": <number>,
+  "high": <number>,
+  "narrative": "<2-3 sentence assessment>",
+  "suggestions": [
+    {{"text": "<actionable suggestion>", "uplift": <number>}},
+    {{"text": "<actionable suggestion>", "uplift": <number>}},
+    {{"text": "<actionable suggestion>", "uplift": <number>}}
+  ]
+}}
+
+low/mid/high = estimated resale prices in GBP. uplift = estimated price increase in GBP from that suggestion. Max 3 suggestions. Be realistic about UK eBay/Gumtree prices."""
+
+    response_text, _model = await ai_service.chat(prompt, history=[])
+
+    # Parse JSON from response — strip any accidental markdown fences
+    raw = response_text.strip()
+    raw = re.sub(r"^```(?:json)?\s*", "", raw)
+    raw = re.sub(r"\s*```$", "", raw)
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        # Attempt to extract JSON object from response
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if not match:
+            raise HTTPException(502, f"LLM returned unparseable response: {raw[:200]}")
+        data = json.loads(match.group())
+
+    result = EvaluationResult(
+        low=float(data.get("low", 0)),
+        mid=float(data.get("mid", 0)),
+        high=float(data.get("high", 0)),
+        narrative=data.get("narrative", ""),
+        suggestions=[
+            EvaluationSuggestion(text=s["text"], uplift=float(s.get("uplift", 0)))
+            for s in data.get("suggestions", [])[:3]
+        ],
+    )
+
+    # Persist evaluation result back to the build
+    build.last_evaluation = result.model_dump()
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+
+    return result
