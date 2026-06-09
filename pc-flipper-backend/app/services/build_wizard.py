@@ -55,6 +55,8 @@ class BuildUpgrade:
     cost_estimate: float
     source: str                     # "eBay used" | "Amazon" | "included"
     required: bool
+    listing_url: str = ""           # specific catalogue listing URL (filled by catalogue_enrichment_agent)
+    image_url: str = ""             # listing image URL
 
 
 @dataclass
@@ -100,14 +102,15 @@ class Build:
     # Visualization metadata
     risk_score: float = 5.0         # 0–10 (0=safest, 10=riskiest) for scatter graph
     demand_score: float = 5.0       # 0–10 (demand signal)
+    # Catalogue enrichment — filled by catalogue_enrichment_agent
+    base_listing_url: str = ""      # specific eBay listing URL for the base PC
+    base_image_url: str = ""        # image of the base PC listing
 
 
 @dataclass
 class PurchasePlan:
     build: Build
     steps: list[dict]               # ordered action items
-    ebay_searches: list[str]        # copy-paste search strings
-    facebook_searches: list[str]
     total_budget: float
     contingency_buffer: float       # 10% of total_cost
     expected_net_profit: float
@@ -119,13 +122,12 @@ class PurchasePlan:
 # ─── Market context (injected into prompts) ───────────────────────────────────
 
 _MARKET_CONTEXT = """
-Current UK used-parts market (May 2026):
+Current UK used-parts market (June 2026):
 GPU: GTX 1060 6GB ~£75 | RX 580 8GB ~£65 | RTX 3060 ~£170 | RTX 3070 ~£230 | RX 6600 ~£145
 Storage: 256GB SSD ~£18 | 480GB SSD ~£28 | 1TB SSD ~£55 | 1TB HDD ~£20
 RAM: 8GB DDR4 ~£12 | 16GB DDR4 ~£22 | 32GB DDR4 ~£40
 OS: Windows 11 Home key ~£6 (OEM)
-eBay fees: ~12.7% | PayPal: included | Postage: £15 avg tower
-Facebook/Gumtree: 0% fees, local pickup preferred
+eBay fees: ~12.7% | Postage: £15 avg tower
 Typical resale ranges:
   Budget gaming PC (i5+GTX1060): £220–280
   Mid gaming PC (i7+RTX3060): £380–450
@@ -610,6 +612,124 @@ def ranker_agent(builds: list[Build]) -> list[Build]:
     for i, b in enumerate(ranked, 1):
         b.rank = i
     return ranked
+
+
+# ─── Catalogue enrichment ────────────────────────────────────────────────────
+
+def _extract_model_terms(spec: str, is_whole_pc: bool = False) -> list[str]:
+    """Extract key searchable model tokens from a spec/item string."""
+    s = spec.lower()
+    # GPU pattern — most specific, match first
+    gpu_m = re.search(r"(rtx|gtx|rx)\s*(\d{3,4})(\s*(ti|xt|super))?", s)
+    if gpu_m:
+        return [gpu_m.group(0).strip()]
+    # CPU pattern
+    cpu_m = re.search(r"(i[3579]-\d{4,5}[a-z]*|ryzen\s+[3579]\s+\d{4}[a-z]*|xeon\s+[\w-]+)", s)
+    if cpu_m:
+        terms = [cpu_m.group(0).strip()]
+        if is_whole_pc:
+            brand_m = re.search(r"\b(dell|hp|lenovo|asus|acer|fujitsu|nec|optiplex|elitedesk|thinkcentre)\b", s)
+            if brand_m:
+                terms.insert(0, brand_m.group(0).strip())
+        return terms
+    # Storage pattern
+    stor_m = re.search(r"(\d+\s*(?:gb|tb))\s*(?:nvme|ssd|hdd|m\.2)", s)
+    if stor_m:
+        return [stor_m.group(0).strip()]
+    # RAM pattern
+    ram_m = re.search(r"(\d+\s*gb)\s*(?:ddr[345]?|ram)", s)
+    if ram_m:
+        return [ram_m.group(0).strip()]
+    # Fallback: meaningful words
+    stop = {"with", "and", "the", "for", "used", "no", "card", "only", "free", "inc"}
+    tokens = [t for t in spec.split() if len(t) > 2 and t.lower() not in stop]
+    return tokens[:3]
+
+
+async def _find_catalogue_listing(
+    search_terms: list[str],
+    target_price: float,
+    is_whole_pc: bool = True,
+) -> dict | None:
+    """
+    Search the catalogue for a specific matching listing near the target price.
+    Returns {url, image_url, title, price} or None if no match found.
+    """
+    from sqlalchemy import and_
+    from app.models.listing import Listing, ListingStatus
+    from app.models.part import Part
+
+    if not search_terms:
+        return None
+
+    price_low  = max(1.0, target_price * 0.65)
+    price_high = target_price * 1.45
+
+    try:
+        async with AsyncSessionLocal() as db:
+            if is_whole_pc:
+                filters: list = [
+                    Listing.price.between(price_low, price_high),
+                    Listing.status == ListingStatus.active,
+                ]
+                for term in search_terms[:3]:
+                    filters.append(Listing.title.ilike(f"%{term}%"))
+                result = await db.execute(
+                    select(Listing)
+                    .where(and_(*filters))
+                    .order_by(Listing.gem_score.desc().nullslast(), Listing.price.asc())
+                    .limit(1)
+                )
+                listing = result.scalar_one_or_none()
+                if listing:
+                    image = (listing.image_urls or [None])[0] if listing.image_urls else None
+                    return {"url": listing.url, "image_url": image, "title": listing.title, "price": listing.price}
+            else:
+                # Components: check Parts table first
+                part_filters: list = [Part.is_active == True]
+                if target_price > 0:
+                    part_filters.append(Part.price.between(price_low, price_high))
+                for term in search_terms[:2]:
+                    part_filters.append(Part.name.ilike(f"%{term}%"))
+                result = await db.execute(
+                    select(Part).where(and_(*part_filters)).order_by(Part.price.asc()).limit(1)
+                )
+                part = result.scalar_one_or_none()
+                if part:
+                    return {"url": part.source_url, "image_url": part.image_url, "title": part.name, "price": part.price}
+    except Exception as exc:
+        log.warning("catalogue_enrichment.search_error", terms=search_terms, error=str(exc))
+
+    return None
+
+
+async def catalogue_enrichment_agent(plan: "PurchasePlan") -> "PurchasePlan":
+    """
+    For each component in the plan, find a specific matching listing from the catalogue.
+    Attaches listing_url and image_url to the base PC and each upgrade.
+    Runs in parallel for all components.
+    """
+    build = plan.build
+
+    async def _enrich_base():
+        terms = _extract_model_terms(build.base_spec, is_whole_pc=True)
+        match = await _find_catalogue_listing(terms, build.base_cost, is_whole_pc=True)
+        if match:
+            build.base_listing_url = match.get("url") or ""
+            build.base_image_url   = match.get("image_url") or ""
+            log.info("catalogue_enrichment.base_matched", spec=build.base_spec[:40], url=build.base_listing_url[:60])
+        else:
+            log.info("catalogue_enrichment.base_no_match", spec=build.base_spec[:40])
+
+    async def _enrich_upgrade(u: BuildUpgrade):
+        terms = _extract_model_terms(u.item, is_whole_pc=False)
+        match = await _find_catalogue_listing(terms, u.cost_estimate, is_whole_pc=False)
+        if match:
+            u.listing_url = match.get("url") or ""
+            u.image_url   = match.get("image_url") or ""
+
+    await asyncio.gather(_enrich_base(), *[_enrich_upgrade(u) for u in build.upgrades])
+    return plan
 
 
 # ─── Agent 5: Planner ────────────────────────────────────────────────────────
