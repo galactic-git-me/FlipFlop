@@ -273,12 +273,18 @@ Playbook profit strategy: {json.dumps(profit_strategy)}
 {_MARKET_CONTEXT}
 
 Generate EXACTLY 5 distinct PC-flip builds that fit this playbook and budget.
-IMPORTANT: Use REAL components from the library above when composing upgrades.
-You can combine: a base listing + real upgrade components from the library.
-You can also recommend CPUs and motherboards as SEPARATE upgrade components if needed.
+
+CRITICAL RULES FOR base_spec:
+- base_spec MUST be a COMPLETE PC SYSTEM (desktop, tower, mini PC, workstation)
+- Examples of VALID base_spec: "Dell OptiPlex 7060 i7-8700 16GB no GPU", "HP EliteDesk 800 G4 SFF no graphics card", "Lenovo ThinkCentre M720 i5-8500", "Custom ATX tower i7-9700 no GPU"
+- NEVER use individual components as base_spec — RAM sticks, SSDs, GPUs, CPUs, PSUs are UPGRADES, not base systems
+- If a component from the library looks like RAM/DDR/SSD/GPU/CPU, it belongs in "upgrades", NOT in "base_spec"
+- The base PC must be a whole machine you can buy on eBay as a complete unit
+
+COMPONENTS FROM THE LIBRARY are UPGRADE PARTS ONLY — use them in the "upgrades" array, never as the base system.
 
 Each build must be a real, practical flip — not theoretical.
-Make them DIFFERENT from each other: vary the base PC, GPU tier, risk level.
+Make them DIFFERENT from each other: vary the base PC model, GPU tier, risk level.
 Include risk_score (0=safest, 10=riskiest) and demand_score (0=low, 10=excellent).
 
 {"This is attempt " + str(attempt) + " of 3 — make builds more conservative and achievable." if attempt > 1 else ""}
@@ -371,11 +377,41 @@ _DEMAND_SCORE = {"excellent": 4, "good": 3, "moderate": 2, "poor": 1}
 _RISK_SCORE   = {"low": 1, "medium": 2, "high": 3}
 
 
+_COMPONENT_KEYWORDS = {
+    # RAM
+    "ddr3", "ddr4", "ddr5", "dimm", "sodimm", "rdimm", "lpddr", "ecc ram", "server ram",
+    "memory module", "memory stick", "ram stick", "2x8gb", "2x16gb", "4x8gb",
+    "pc4-", "pc3-", "m393", "m391", "kt/s",
+    # Storage
+    "nvme", "m.2 ssd", "sata ssd", "2.5\" ssd", "3.5\" hdd", "solid state drive",
+    "hard drive only", "hdd only", "ssd only",
+    # GPU
+    "rtx 30", "rtx 40", "rtx 20", "gtx 10", "gtx 16", "rx 6", "rx 7", "radeon rx",
+    "graphics card", "gpu only", "video card",
+    # CPU
+    "core i7-", "core i5-", "core i9-", "ryzen 5 ", "ryzen 7 ", "ryzen 9 ",
+    "xeon e5-", "xeon e3-", "threadripper", "cpu only", "processor only",
+    # PSU
+    "power supply", "psu", "atx psu", "modular psu",
+    # Other components
+    "motherboard only", "mainboard",
+}
+
+def _base_spec_is_component(base_spec: str) -> bool:
+    """Return True if base_spec looks like an individual component rather than a complete PC."""
+    lower = base_spec.lower()
+    return any(kw in lower for kw in _COMPONENT_KEYWORDS)
+
+
 def _hard_validate(build: Build, intent: RefinedIntent) -> tuple[bool, str]:
     """
     Hard rule checks — no AI needed.
     Returns (passed, rejection_reason).
     """
+    # Reject builds where base_spec is a component, not a whole PC
+    if _base_spec_is_component(build.base_spec):
+        return False, f"base_spec '{build.base_spec[:60]}' appears to be an individual component, not a complete PC system"
+
     # Budget check
     if build.total_cost > intent.budget_max * 1.05:   # 5% tolerance
         return False, f"Total cost £{build.total_cost:.0f} exceeds budget £{intent.budget_max:.0f}"
