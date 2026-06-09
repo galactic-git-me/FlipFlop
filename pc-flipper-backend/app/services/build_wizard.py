@@ -747,7 +747,7 @@ async def planner_agent(build: Build, intent: RefinedIntent) -> PurchasePlan:
 
 The user has selected this build:
 Name: {build.name}
-Base PC to find: {build.base_spec}
+Base PC to source: {build.base_spec}
 Base cost target: £{build.base_cost:.0f}
 Upgrades needed:
 {upgrade_list}
@@ -758,16 +758,16 @@ Estimated profit: £{build.estimated_profit:.0f}
 {_MARKET_CONTEXT}
 
 Generate a practical, step-by-step purchase and flip plan.
+Do NOT include any geographic location in the tips or steps (no city names like Birmingham, London etc.).
+All sourcing is done through eBay UK — no Facebook Marketplace or Gumtree.
 
 Respond with ONLY valid JSON:
 {{
   "steps": [
-    {{"step": 1, "action": "Search eBay for base PC", "detail": "Use search: ...", "estimated_time": "1-2 days"}},
+    {{"step": 1, "action": "Source base PC on eBay", "detail": "Search eBay UK for: {build.base_spec}", "estimated_time": "1-2 days"}},
     {{"step": 2, "action": "Inspect and test", "detail": "Check POST, RAM slots, PCIe slot", "estimated_time": "1 hour"}},
     ...
   ],
-  "ebay_searches": ["Dell OptiPlex 7060 i7 no GPU", "HP EliteDesk 800 G4 no graphics"],
-  "facebook_searches": ["Dell OptiPlex i7 Birmingham", "gaming pc base unit no gpu"],
   "tips": [
     "Buy on a Sunday evening — more auctions end, less competition",
     "Check the PSU rating — 300W won't run an RTX 3060"
@@ -776,16 +776,14 @@ Respond with ONLY valid JSON:
 }}"""
 
     contingency = round(build.total_cost * 0.10, 2)
-    ebay_searches = [build.base_spec]
-    facebook_searches = [build.base_spec.split(" ")[:4].__str__().strip("[]'\"").replace("', '", " ")]
     steps = [
-        {"step": 1, "action": "Source base PC", "detail": f"Search for: {build.base_spec}", "estimated_time": "1-3 days"},
+        {"step": 1, "action": "Source base PC on eBay", "detail": f"Search eBay UK for: {build.base_spec}", "estimated_time": "1-3 days"},
         {"step": 2, "action": "Test on arrival", "detail": "POST test, check all slots, run memtest", "estimated_time": "1 hour"},
     ]
     for i, u in enumerate(build.upgrades, 3):
-        steps.append({"step": i, "action": f"Source {u.item}", "detail": f"Buy via {u.source} for ~£{u.cost_estimate:.0f}", "estimated_time": "1-2 days"})
+        steps.append({"step": i, "action": f"Source {u.item}", "detail": f"Source via {u.source} for ~£{u.cost_estimate:.0f}", "estimated_time": "1-2 days"})
     steps.append({"step": len(steps) + 1, "action": "Build and test", "detail": "Install upgrades, run benchmarks, clean thoroughly", "estimated_time": "2-3 hours"})
-    steps.append({"step": len(steps) + 1, "action": "List on " + build.sell_platform, "detail": f"Target price £{build.sell_price_target:.0f} — use keyword-rich title", "estimated_time": "30 minutes"})
+    steps.append({"step": len(steps) + 1, "action": f"List on {build.sell_platform}", "detail": f"Target price £{build.sell_price_target:.0f} — use keyword-rich title", "estimated_time": "30 minutes"})
     tips = [
         "Buy base unit on Sunday evenings — more auctions end, fewer bidders",
         f"Keep a £{contingency:.0f} contingency buffer (10%) for unexpected costs",
@@ -799,8 +797,6 @@ Respond with ONLY valid JSON:
         if m:
             data = json.loads(m.group())
             steps = data.get("steps", steps)
-            ebay_searches = data.get("ebay_searches", ebay_searches)
-            facebook_searches = data.get("facebook_searches", facebook_searches)
             tips = data.get("tips", tips)
             timeline_days = data.get("timeline_days", timeline_days)
     except Exception as exc:
@@ -809,8 +805,6 @@ Respond with ONLY valid JSON:
     return PurchasePlan(
         build=build,
         steps=steps,
-        ebay_searches=ebay_searches,
-        facebook_searches=facebook_searches,
         total_budget=build.total_cost + contingency,
         contingency_buffer=contingency,
         expected_net_profit=build.estimated_profit,
@@ -891,11 +885,10 @@ async def run_planner(build_data: dict, intent_data: dict) -> dict:
     build = _dict_to_build(build_data)
     intent = RefinedIntent(**intent_data)
     plan = await planner_agent(build, intent)
+    plan = await catalogue_enrichment_agent(plan)
     return {
         "build": _build_to_dict(plan.build),
         "steps": plan.steps,
-        "ebay_searches": plan.ebay_searches,
-        "facebook_searches": plan.facebook_searches,
         "total_budget": plan.total_budget,
         "contingency_buffer": plan.contingency_buffer,
         "expected_net_profit": plan.expected_net_profit,
@@ -913,7 +906,20 @@ def _build_to_dict(b: Build) -> dict:
         "name": b.name,
         "base_spec": b.base_spec,
         "base_cost": b.base_cost,
-        "upgrades": [asdict(u) for u in b.upgrades],
+        "base_listing_url": b.base_listing_url,
+        "base_image_url": b.base_image_url,
+        "upgrades": [
+            {
+                "role": u.role,
+                "item": u.item,
+                "cost_estimate": u.cost_estimate,
+                "source": u.source,
+                "required": u.required,
+                "listing_url": u.listing_url,
+                "image_url": u.image_url,
+            }
+            for u in b.upgrades
+        ],
         "total_cost": b.total_cost,
         "estimated_resale": b.estimated_resale,
         "estimated_profit": b.estimated_profit,
@@ -931,7 +937,6 @@ def _build_to_dict(b: Build) -> dict:
         "rank": b.rank,
         "owned_components_applied": b.owned_components_applied,
         "owned_value_offset": b.owned_value_offset,
-        # Resale valuation fields
         "resale_source": b.resale_source,
         "resale_low": b.resale_low,
         "resale_high": b.resale_high,
@@ -940,7 +945,18 @@ def _build_to_dict(b: Build) -> dict:
 
 
 def _dict_to_build(d: dict) -> Build:
-    upgrades = [BuildUpgrade(**u) for u in d.get("upgrades", [])]
+    upgrades = [
+        BuildUpgrade(
+            role=u.get("role", ""),
+            item=u.get("item", ""),
+            cost_estimate=float(u.get("cost_estimate", 0)),
+            source=u.get("source", ""),
+            required=bool(u.get("required", True)),
+            listing_url=u.get("listing_url", ""),
+            image_url=u.get("image_url", ""),
+        )
+        for u in d.get("upgrades", [])
+    ]
     return Build(
         id=d["id"], name=d["name"], base_spec=d["base_spec"],
         base_cost=d["base_cost"], upgrades=upgrades,
@@ -957,4 +973,6 @@ def _dict_to_build(d: dict) -> Build:
         resale_low=d.get("resale_low", 0.0),
         resale_high=d.get("resale_high", 0.0),
         resale_reasoning=d.get("resale_reasoning", ""),
+        base_listing_url=d.get("base_listing_url", ""),
+        base_image_url=d.get("base_image_url", ""),
     )

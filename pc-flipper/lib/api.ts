@@ -26,6 +26,8 @@ export interface BuildUpgrade {
   cost_estimate: number;
   source: string;
   required: boolean;
+  listing_url?: string;
+  image_url?: string;
 }
 
 export interface WizardBuild {
@@ -58,6 +60,8 @@ export interface WizardBuild {
   seller_label?: string;
   sourcing_lane?: string;
   listing_url?: string;
+  base_listing_url?: string;
+  base_image_url?: string;
 }
 
 export interface GenerateRequest {
@@ -90,8 +94,6 @@ export interface PlanStep {
 export interface PurchasePlan {
   build: WizardBuild;
   steps: PlanStep[];
-  ebay_searches: string[];
-  facebook_searches: string[];
   total_budget: number;
   contingency_buffer: number;
   expected_net_profit: number;
