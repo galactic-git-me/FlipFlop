@@ -116,26 +116,67 @@ export function TopCommandBar() {
     };
   }, []);
 
-  const pendingCount = pendingProposals.length + alerts.length;
-  const notifList = useMemo(
+  const [notifTab, setNotifTab] = useState<"all" | "errors" | "flips" | "proposals" | "system">("all");
+  const [clearing, setClearing] = useState(false);
+
+  const clearAll = async () => {
+    setClearing(true);
+    try {
+      await Promise.all(alerts.map((a) => api.alerts.ack(a.id).catch(() => {})));
+      setAlerts([]);
+      seenAlertIdsRef.current = new Set();
+    } finally {
+      setClearing(false);
+    }
+  };
+
+  const allNotifs = useMemo(
     () => [
-      ...pendingProposals.slice(0, 6).map((n) => ({
+      ...pendingProposals.map((n) => ({
         key: `proposal-${n.id}`,
         kind: "proposal" as const,
+        tab: "proposals" as const,
         title: `${n.action} Proposal`,
         name: n.playbook_name ?? "Unnamed playbook",
         reason: n.reason ?? "",
       })),
-      ...alerts.slice(0, 6).map((a) => ({
-        key: `alert-${a.id}`,
-        kind: "alert" as const,
-        title: "Alert",
-        name: a.message,
-        reason: a.code,
-      })),
-    ].slice(0, 10),
+      ...alerts.map((a) => {
+        const code = (a.code ?? "").toLowerCase();
+        const msg  = (a.message ?? "").toLowerCase();
+        const tab =
+          code.includes("fail") || code.includes("error") || msg.includes("failed") || msg.includes("error")
+            ? ("errors" as const)
+            : code.includes("flip") || code.includes("resale") || code.includes("sale") || code.includes("sold")
+            ? ("flips" as const)
+            : ("system" as const);
+        return {
+          key: `alert-${a.id}`,
+          kind: "alert" as const,
+          tab,
+          title: tab === "errors" ? "Error" : tab === "flips" ? "Flip Alert" : "System",
+          name: a.message,
+          reason: a.code,
+          createdAt: a.created_at,
+        };
+      }),
+    ],
     [pendingProposals, alerts],
   );
+
+  const tabCounts = useMemo(() => ({
+    all:       allNotifs.length,
+    errors:    allNotifs.filter(n => n.tab === "errors").length,
+    flips:     allNotifs.filter(n => n.tab === "flips").length,
+    proposals: allNotifs.filter(n => n.tab === "proposals").length,
+    system:    allNotifs.filter(n => n.tab === "system").length,
+  }), [allNotifs]);
+
+  const notifList = useMemo(
+    () => (notifTab === "all" ? allNotifs : allNotifs.filter(n => n.tab === notifTab)).slice(0, 20),
+    [allNotifs, notifTab],
+  );
+
+  const pendingCount = pendingProposals.length + alerts.length;
 
   return (
     <>
@@ -168,21 +209,75 @@ export function TopCommandBar() {
           <UserCircle2 className="h-5 w-5" />
 
           {notifOpen && (
-            <div className="absolute right-0 top-7 w-[360px] max-h-[360px] overflow-auto rounded-xl border border-white/10 bg-[#0b111d]/95 backdrop-blur-md p-3 shadow-2xl z-50">
-              <div className="text-xs uppercase tracking-wider text-slate-400 mb-2">Notifications</div>
-              {notifList.length === 0 ? (
-                <div className="text-sm text-slate-500">No new notifications.</div>
-              ) : (
-                <div className="space-y-2">
-                  {notifList.map((n) => (
-                    <div key={n.key} className="rounded-lg border border-[#00dc82]/20 bg-[#00dc82]/8 p-2.5">
-                      <div className="text-xs text-[#8debc2] uppercase tracking-wide">{n.title}</div>
-                      <div className="text-sm text-slate-100 mt-0.5">{n.name}</div>
-                      {n.reason && <div className="text-xs text-slate-400 mt-1 line-clamp-2">{n.reason}</div>}
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="absolute right-0 top-7 w-[400px] rounded-xl border border-white/10 bg-[#0b111d]/98 backdrop-blur-md shadow-2xl z-50 flex flex-col" style={{ maxHeight: "480px" }}>
+
+              {/* Header */}
+              <div className="flex items-center justify-between px-3 pt-3 pb-2 border-b border-white/8 shrink-0">
+                <span className="text-xs uppercase tracking-wider text-slate-300 font-semibold">Notifications</span>
+                <button
+                  onClick={clearAll}
+                  disabled={clearing || alerts.length === 0}
+                  className="text-[10px] px-2 py-0.5 rounded border border-red-500/30 text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                >
+                  {clearing ? "Clearing…" : "Clear All"}
+                </button>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex gap-0 border-b border-white/8 shrink-0">
+                {(["all", "errors", "flips", "proposals", "system"] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setNotifTab(tab)}
+                    className={`flex-1 py-1.5 text-[10px] uppercase tracking-wide font-medium transition-colors relative ${
+                      notifTab === tab
+                        ? "text-[#00dc82]"
+                        : "text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    {tab}
+                    {tabCounts[tab] > 0 && (
+                      <span className={`ml-1 px-1 rounded-full text-[9px] font-bold ${
+                        tab === "errors" ? "bg-red-500/20 text-red-400" :
+                        tab === "flips"  ? "bg-[#00dc82]/20 text-[#00dc82]" :
+                        "bg-slate-700 text-slate-400"
+                      }`}>
+                        {tabCounts[tab]}
+                      </span>
+                    )}
+                    {notifTab === tab && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00dc82] rounded-full" />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Notification list */}
+              <div className="overflow-y-auto flex-1 p-2 space-y-1.5">
+                {notifList.length === 0 ? (
+                  <div className="text-sm text-slate-500 text-center py-6">No notifications in this category.</div>
+                ) : (
+                  notifList.map((n) => {
+                    const borderColor =
+                      n.tab === "errors"    ? "border-red-500/30 bg-red-500/5" :
+                      n.tab === "flips"     ? "border-[#00dc82]/25 bg-[#00dc82]/5" :
+                      n.tab === "proposals" ? "border-cyan-500/25 bg-cyan-500/5" :
+                                              "border-white/8 bg-white/3";
+                    const titleColor =
+                      n.tab === "errors"    ? "text-red-400" :
+                      n.tab === "flips"     ? "text-[#00dc82]" :
+                      n.tab === "proposals" ? "text-cyan-400" :
+                                              "text-slate-400";
+                    return (
+                      <div key={n.key} className={`rounded-lg border p-2.5 ${borderColor}`}>
+                        <div className={`text-[10px] uppercase tracking-wide font-semibold ${titleColor}`}>{n.title}</div>
+                        <div className="text-xs text-slate-100 mt-0.5 leading-snug">{n.name}</div>
+                        {n.reason && <div className="text-[10px] text-slate-500 mt-1 font-mono line-clamp-1">{n.reason}</div>}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           )}
         </div>
