@@ -1727,7 +1727,7 @@ function AvgProfitCard({ avg, minProfit, maxProfit, compact = false }: { avg: nu
         <div className={`${compact ? "text-3xl" : "text-4xl"} leading-none font-black text-cyan-200 tabular-nums`}>
           £<CountUp to={avg} from={0} duration={1.5} />
         </div>
-        {profits.length > 0 && (
+        {maxProfit > 0 && (
           <div className="mt-3 flex items-center gap-1.5 text-base text-cyan-100/65">
             <span className="text-red-300/90">£<CountUp to={minProfit} duration={1.2} /></span>
             <span className="text-slate-600">→</span>
