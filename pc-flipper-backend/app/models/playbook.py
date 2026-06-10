@@ -86,6 +86,32 @@ class Playbook(Base):
     # }
     upsell_strategy: Mapped[dict] = mapped_column(JSON, default=dict)
 
+    # ── Customer profile ───────────────────────────────────────────────────────
+    target_customer: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    what_they_use_it_for: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    what_they_want_from_build: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    critical_success_factors: Mapped[list] = mapped_column(JSON, default=list)
+
+    # ── Scores (0-10 floats, updated by evolution engine) ─────────────────────
+    profit_opportunity_score: Mapped[float] = mapped_column(Float, default=0.0)
+    market_size_score: Mapped[float] = mapped_column(Float, default=0.0)
+    resellability_score: Mapped[float] = mapped_column(Float, default=0.0)
+    liquidity_score: Mapped[float] = mapped_column(Float, default=0.0)
+    risk_score: Mapped[float] = mapped_column(Float, default=5.0)
+    composite_rank_score: Mapped[float] = mapped_column(Float, default=0.0)
+
+    # ── Market intelligence ────────────────────────────────────────────────────
+    market_growth_direction: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+
+    # ── JSON strategy fields ───────────────────────────────────────────────────
+    seasonality: Mapped[dict] = mapped_column(JSON, default=dict)
+    ideal_build: Mapped[dict] = mapped_column(JSON, default=dict)
+    pricing_model: Mapped[dict] = mapped_column(JSON, default=dict)
+    profit_model: Mapped[dict] = mapped_column(JSON, default=dict)
+
+    # ── Last reviewed by evolution engine ─────────────────────────────────────
+    last_reviewed: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
     # ── Performance metrics (updated by the evaluator) ────────────────────────
     flip_count: Mapped[int] = mapped_column(Integer, default=0)
     avg_profit_gbp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
