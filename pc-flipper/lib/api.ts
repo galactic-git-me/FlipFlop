@@ -480,6 +480,8 @@ export const api = {
 
   playbooks: {
     list: (status?: string) => request<import("./types").Playbook[]>(`/playbooks${status ? `?status=${status}` : ""}`),
+    ranked: () => request<import("./types").Playbook[]>("/playbooks/ranked"),
+    seed: () => request<{ ok: boolean; created: number }>("/playbooks/seed", { method: "POST" }),
     get: (id: number) => request<import("./types").Playbook>(`/playbooks/${id}`),
     create: (data: Record<string, unknown>) =>
       request<import("./types").Playbook>("/playbooks", { method: "POST", body: JSON.stringify(data) }),

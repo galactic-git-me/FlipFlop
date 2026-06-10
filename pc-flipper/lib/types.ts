@@ -212,6 +212,37 @@ export interface PlaybookProfitStrategy {
   notes?: string;
 }
 
+export interface PlaybookIdealBuildComponent {
+  candidate_models: string[];
+  target_price: number;
+  walk_away_price: number;
+  search_terms: string[];
+  negative_search_terms: string[];
+}
+
+export interface PlaybookPricingModel {
+  minimum_build_cost?: number;
+  expected_build_cost?: number;
+  maximum_build_cost?: number;
+}
+
+export interface PlaybookProfitModel {
+  minimum_profit?: number;
+  expected_profit?: number;
+  maximum_profit?: number;
+  expected_roi_pct?: number;
+}
+
+export interface PlaybookSeasonality {
+  jan?: number; feb?: number; mar?: number; apr?: number;
+  may?: number; jun?: number; jul?: number; aug?: number;
+  sep?: number; oct?: number; nov?: number; dec?: number;
+  peak_months?: string[];
+  slow_months?: string[];
+  current_position?: string;
+  days_until_peak?: number;
+}
+
 export interface Playbook {
   id: number;
   name: string;
@@ -232,6 +263,26 @@ export interface Playbook {
   updated_at: string;
   activated_at: string | null;
   deprecated_at: string | null;
+  // Customer profile
+  target_customer?: string | null;
+  what_they_use_it_for?: string | null;
+  what_they_want_from_build?: string | null;
+  critical_success_factors?: string[];
+  // Scores
+  profit_opportunity_score?: number;
+  market_size_score?: number;
+  resellability_score?: number;
+  liquidity_score?: number;
+  risk_score?: number;
+  composite_rank_score?: number;
+  market_growth_direction?: string | null;
+  // Intelligence
+  seasonality?: PlaybookSeasonality;
+  ideal_build?: Record<string, PlaybookIdealBuildComponent>;
+  pricing_model?: PlaybookPricingModel;
+  profit_model?: PlaybookProfitModel;
+  // Evolution metadata
+  last_reviewed?: string | null;
 }
 
 export interface PlaybookProposal {

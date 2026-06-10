@@ -14,6 +14,9 @@ import {
   PLAYBOOK_STATUS_CONFIG, PROPOSAL_ACTION_CONFIG, USE_CASE_CONFIG,
   PlaybookStatus,
 } from "@/lib/types";
+import { SeasonalityChart } from "@/components/playbooks/SeasonalityChart";
+import { ScoreBadges } from "@/components/playbooks/ScoreBadges";
+import { IdealBuildPanel } from "@/components/playbooks/IdealBuildPanel";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -423,6 +426,7 @@ function PlaybookCard({
   onRollback: (id: number) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [tab, setTab] = useState<"scores" | "build" | "season">("scores");
   const ss = playbook.search_strategy || {};
   const us = playbook.upgrade_strategy || {};
   const ps = playbook.profit_strategy || {};
@@ -480,6 +484,43 @@ function PlaybookCard({
             )}
           </div>
         </div>
+
+        {/* Profit/cost summary */}
+        {(() => {
+          const pm = playbook.profit_model ?? {};
+          const pricing = playbook.pricing_model ?? {};
+          const hasProfit = (pm.expected_profit ?? 0) > 0;
+          const hasBuildCost = (pricing.expected_build_cost ?? 0) > 0;
+          if (!hasProfit && !hasBuildCost) return null;
+          return (
+            <div className="flex items-center gap-4 px-4 py-2 bg-[#0a1220] border-b border-[#1e2d45] text-sm -mx-4 mt-3">
+              {hasBuildCost && (
+                <div>
+                  <div className="text-[11px] text-slate-500">Build cost</div>
+                  <div className="font-bold text-slate-300">£{pricing.minimum_build_cost ?? "?"}–£{pricing.maximum_build_cost ?? "?"}</div>
+                </div>
+              )}
+              {hasProfit && (
+                <div>
+                  <div className="text-[11px] text-slate-500">Profit range</div>
+                  <div className="font-bold text-[#00dc82]">£{pm.minimum_profit ?? "?"}–£{pm.maximum_profit ?? "?"}</div>
+                </div>
+              )}
+              {(pm.expected_roi_pct ?? 0) > 0 && (
+                <div>
+                  <div className="text-[11px] text-slate-500">ROI</div>
+                  <div className="font-bold text-blue-400">{pm.expected_roi_pct?.toFixed(0)}%</div>
+                </div>
+              )}
+              {playbook.avg_days_to_sell != null && (
+                <div className="ml-auto">
+                  <div className="text-[11px] text-slate-500">Avg sell</div>
+                  <div className="font-bold text-slate-300">{playbook.avg_days_to_sell.toFixed(0)}d</div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Metrics row */}
         {(playbook.flip_count > 0 || playbook.avg_profit_gbp != null) && (
@@ -593,6 +634,58 @@ function PlaybookCard({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab navigation */}
+      <div className="flex border-t border-[#1e2d45]">
+        {(["scores", "build", "season"] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)}
+            className={`flex-1 py-2 text-xs font-medium transition-colors ${
+              tab === t ? "text-[#00dc82] bg-[#00dc82]/5" : "text-slate-500 hover:text-slate-300"
+            }`}>
+            {t === "scores" ? "📊 Scores" : t === "build" ? "🔧 Ideal Build" : "📅 Seasonality"}
+          </button>
+        ))}
+      </div>
+      {/* Tab content */}
+      <div className="p-4 border-t border-[#1e2d45]">
+        {tab === "scores" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ScoreBadges playbook={playbook} />
+            <div>
+              {playbook.what_they_use_it_for && (
+                <div className="mb-3">
+                  <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1">What they use it for</div>
+                  <p className="text-xs text-slate-400">{playbook.what_they_use_it_for}</p>
+                </div>
+              )}
+              {(playbook.critical_success_factors ?? []).length > 0 && (
+                <div>
+                  <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Success factors</div>
+                  <ul className="space-y-0.5">
+                    {(playbook.critical_success_factors ?? []).map(f => (
+                      <li key={f} className="text-xs text-slate-300 flex items-center gap-1.5">
+                        <span className="w-1 h-1 bg-[#00dc82] rounded-full flex-shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {tab === "build" && (
+          <IdealBuildPanel idealBuild={playbook.ideal_build ?? {}} />
+        )}
+        {tab === "season" && (
+          <SeasonalityChart seasonality={playbook.seasonality ?? {}} />
+        )}
+      </div>
+      {playbook.last_reviewed && (
+        <div className="px-4 py-2 border-t border-[#1e2d45]">
+          <span className="text-[11px] text-slate-600">Last reviewed {relTime(playbook.last_reviewed)}</span>
         </div>
       )}
     </div>
@@ -737,6 +830,16 @@ export default function PlaybooksPage() {
             className="p-2 text-slate-500 hover:text-slate-200 hover:bg-white/5 rounded-lg transition-colors">
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
+          <Button
+            onClick={async () => {
+              await api.playbooks.seed();
+              await load();
+            }}
+            variant="outline"
+            className="border-[#1e2d45] text-slate-400 hover:text-slate-200 text-sm"
+          >
+            Seed Playbooks
+          </Button>
           <Button onClick={() => setShowCreate(true)}
             className="bg-[#00dc82] text-black hover:bg-[#00dc82]/90 font-semibold flex items-center gap-1.5">
             <Plus className="w-4 h-4" /> New Playbook
