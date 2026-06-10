@@ -22,6 +22,7 @@ from app.services.outcome_capture import capture_outcomes_and_check_retrain
 from app.services.retraining_pipeline import run_retraining_if_ready
 from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
 from app.services.compliant_market_ingestion import run_compliant_market_ingestion
+from app.services.benchmark_refresh_job import run_benchmark_refresh
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -40,6 +41,8 @@ _job_history: dict[str, deque[dict]] = {
     "model_retraining": deque(maxlen=50),
     "retrain_checkpoint_watchdog": deque(maxlen=50),
     "compliant_market_ingestion": deque(maxlen=50),
+    "benchmark_refresh_daily": deque(maxlen=50),
+    "benchmark_refresh_weekly": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -326,6 +329,31 @@ def start_scheduler():
         next_run_time=compliant_ingestion_start,
     )
 
+    benchmark_daily_start = now + timedelta(hours=2)
+    benchmark_weekly_start = now + timedelta(hours=3)
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="benchmark_refresh_daily",
+        name="Benchmark Refresh (Daily)",
+        kwargs={"job_id": "benchmark_refresh_daily", "fn": partial(run_benchmark_refresh, "daily")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=benchmark_daily_start,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(days=7),
+        id="benchmark_refresh_weekly",
+        name="Benchmark Refresh (Weekly)",
+        kwargs={"job_id": "benchmark_refresh_weekly", "fn": partial(run_benchmark_refresh, "weekly")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=benchmark_weekly_start,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -411,6 +439,10 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("model_retraining", run_retraining_if_ready)
     if swarm_id == "compliant_market_ingestion":
         return await _run_job_with_history("compliant_market_ingestion", run_compliant_market_ingestion)
+    if swarm_id == "benchmark_refresh_daily":
+        return await _run_job_with_history("benchmark_refresh_daily", partial(run_benchmark_refresh, "daily"))
+    if swarm_id == "benchmark_refresh_weekly":
+        return await _run_job_with_history("benchmark_refresh_weekly", partial(run_benchmark_refresh, "weekly"))
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 
