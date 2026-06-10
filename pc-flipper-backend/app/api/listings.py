@@ -88,27 +88,37 @@ async def get_listings(
     if claude_judged_only:
         conditions.append(Listing.claude_judged_at != None)
     if whole_pc_only:
-        # Exclude listings whose titles look like standalone components rather than
-        # whole PC systems. Filter: title must NOT match component-only keywords
-        # (unless offset by PC indicator words).
+        # Exclude listings whose titles are unambiguously standalone components
+        # (not whole PC systems). Uses conservative patterns that are very unlikely
+        # to appear in whole-PC system listings.
         _COMPONENT_PATTERNS = [
-            "%DDR3%", "%DDR4%", "%DDR5%", "%DIMM%",
-            "%NVMe%M.2%", "%M.2%NVMe%",
-            "%Graphics Card%", "%Video Card%",
-            "% GPU %", "%VRAM%",
-            "%Laptop Memory%", "%Desktop Memory%",
-            "%SO-DIMM%", "%SODIMM%",
+            # Memory modules — these substrings identify RAM sticks, not PCs with RAM
+            "%Laptop Memory%",
+            "%Desktop Memory%",
+            "%Server Memory%",
+            "% DIMM%",            # e.g. "16GB DIMM" — RAM module
+            "%SO-DIMM%",
+            "%SODIMM%",
+            # Explicit GPU/graphics card listings (not PCs containing a GPU)
+            "%Graphics Card%",
+            "%Video Card%",
+            "%Graphic Card%",
+            # NVMe/M.2 drives explicitly sold as drives (Job Lot = bulk component sale)
+            "%Job Lot%NVMe%",
+            "%Job Lot%SSD%",
+            "%Job Lot%DDR%",
+            # M.2 SSD explicitly listed as a drive product
+            "%M.2%NVMe%SSD%",    # "256GB M.2 NVMe SSD" — drive listing
+            # CPU-only listings
+            "%Processor%OEM%",
+            "%CPU Tray%",
+            # PSU-only
+            "%Power Supply Unit%",
+            "%Modular PSU%",
         ]
-        _PC_INDICATORS = [
-            "%PC%", "%Desktop%", "%Workstation%", "%Tower%",
-            "%SFF%", "%USFF%", "%Mini PC%", "%Computer%",
-            "%OptiPlex%", "%ThinkCentre%", "%EliteDesk%",
-        ]
-        from sqlalchemy import and_, or_, not_
-        # Build: NOT (matches a component pattern AND NOT matches a PC indicator)
+        from sqlalchemy import or_, not_
         is_component = or_(*[Listing.title.ilike(p) for p in _COMPONENT_PATTERNS])
-        is_pc = or_(*[Listing.title.ilike(p) for p in _PC_INDICATORS])
-        conditions.append(not_(and_(is_component, not_(is_pc))))
+        conditions.append(not_(is_component))
 
     # Spec-based deduplication: for listings sharing the same hardware spec fingerprint
     # (same CPU/GPU/RAM/storage), only surface the cheapest one.
