@@ -16,6 +16,27 @@ class PlaybookBase(BaseModel):
     upgrade_strategy: dict[str, Any] = {}
     profit_strategy: dict[str, Any] = {}
 
+    # Customer profile
+    target_customer: Optional[str] = None
+    what_they_use_it_for: Optional[str] = None
+    what_they_want_from_build: Optional[str] = None
+    critical_success_factors: list[str] = []
+
+    # Scores
+    profit_opportunity_score: float = 0.0
+    market_size_score: float = 0.0
+    resellability_score: float = 0.0
+    liquidity_score: float = 0.0
+    risk_score: float = 5.0
+    composite_rank_score: float = 0.0
+    market_growth_direction: Optional[str] = None
+
+    # Intelligence
+    seasonality: dict[str, Any] = {}
+    ideal_build: dict[str, Any] = {}
+    pricing_model: dict[str, Any] = {}
+    profit_model: dict[str, Any] = {}
+
 
 class PlaybookCreate(PlaybookBase):
     status: str = "candidate"
@@ -46,6 +67,7 @@ class PlaybookOut(PlaybookBase):
     updated_at: datetime
     activated_at: Optional[datetime]
     deprecated_at: Optional[datetime]
+    last_reviewed: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
 

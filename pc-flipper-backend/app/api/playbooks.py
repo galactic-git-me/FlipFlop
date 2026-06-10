@@ -57,6 +57,25 @@ async def list_playbooks(
     return result.scalars().all()
 
 
+@router.post("/seed", status_code=201)
+async def seed_initial_playbooks(db: AsyncSession = Depends(get_db)):
+    """Create the 10 canonical starting playbooks if they don't already exist."""
+    from app.services.playbook_seeder import seed_playbooks
+    created = await seed_playbooks(db)
+    return {"ok": True, "created": created}
+
+
+@router.get("/ranked", response_model=list[PlaybookOut])
+async def list_playbooks_ranked(db: AsyncSession = Depends(get_db)):
+    """Return active playbooks sorted by composite_rank_score descending."""
+    result = await db.execute(
+        select(Playbook)
+        .where(Playbook.status == "active")
+        .order_by(Playbook.composite_rank_score.desc())
+    )
+    return result.scalars().all()
+
+
 @router.post("", response_model=PlaybookOut, status_code=201)
 async def create_playbook(body: PlaybookCreate, db: AsyncSession = Depends(get_db)):
     pb = Playbook(**body.model_dump())
