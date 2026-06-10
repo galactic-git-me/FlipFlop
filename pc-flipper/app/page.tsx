@@ -296,11 +296,11 @@ export default function DashboardPage() {
           api.listings.stats(),
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", first_seen_after: past24hISO,
+            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>,
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", first_seen_after: past7dISO,
+            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>,
         ]);
         setStats(s as typeof stats);
@@ -1757,9 +1757,13 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
       </Card>
     );
   }
-  const profit = listing.estimated_profit ?? 0;
   const resale = listing.estimated_resale ?? 0;
   const upgradeCost = listing.estimated_upgrade_cost ?? 0;
+  // Compute profit consistently from the values we display (buy + upgrade → resale)
+  // rather than the stored estimated_profit which can be stale / computed differently.
+  const profit = resale > 0
+    ? resale - listing.price - upgradeCost
+    : (listing.estimated_profit ?? 0);
   return (
     <Card className="border-[#00dc82]/25 bg-[#03150e]/55">
       <CardContent className="pt-4 pb-4 space-y-2.5">
