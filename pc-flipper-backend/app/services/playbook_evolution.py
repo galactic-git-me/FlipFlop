@@ -111,6 +111,145 @@ async def _create_demand_rule_update(
     return True
 
 
+# ─── Score computation helpers ─────────────────────────────────────────────────
+
+def _compute_market_size_score(listing_count: int, gem_count: int) -> float:
+    """0-10 score: more active listings + gems = larger addressable market."""
+    base = min(10.0, listing_count / 20.0)
+    gem_boost = min(2.0, gem_count / 5.0)
+    return round(min(10.0, base + gem_boost), 1)
+
+
+def _compute_liquidity_score(avg_days_to_sell: float | None) -> float:
+    """0-10 score: faster sales = higher liquidity."""
+    if avg_days_to_sell is None:
+        return 5.0
+    if avg_days_to_sell <= 3:
+        return 10.0
+    if avg_days_to_sell <= 7:
+        return 9.0
+    if avg_days_to_sell <= 14:
+        return 7.5
+    if avg_days_to_sell <= 30:
+        return 5.5
+    if avg_days_to_sell <= 60:
+        return 3.0
+    return 1.0
+
+
+def _compute_resellability_score(sold_count: int, listing_count: int, gem_count: int) -> float:
+    """0-10: sell-through rate proxy."""
+    if listing_count == 0:
+        return 5.0
+    sell_through = min(1.0, sold_count / max(1, listing_count))
+    base = sell_through * 8.0
+    gem_boost = min(2.0, gem_count / 3.0)
+    return round(min(10.0, base + gem_boost), 1)
+
+
+def _compute_risk_score(avg_days_to_sell: float | None, margin_pct: float | None, listing_count: int) -> float:
+    """0-10: higher = more risky."""
+    risk = 3.0
+    if avg_days_to_sell and avg_days_to_sell > 30:
+        risk += 2.0
+    if avg_days_to_sell and avg_days_to_sell > 60:
+        risk += 1.5
+    if margin_pct and margin_pct < 20:
+        risk += 2.0
+    if listing_count < 5:
+        risk += 1.0
+    return round(min(10.0, risk), 1)
+
+
+def _compute_composite_rank(
+    profit_opportunity_score: float,
+    market_size_score: float,
+    liquidity_score: float,
+    resellability_score: float,
+    risk_score: float,
+    expected_roi_pct: float,
+) -> float:
+    """Composite rank normalised to 0-100."""
+    roi_factor = min(3.0, max(0.1, expected_roi_pct / 40.0))
+    demand_factor = market_size_score / 10.0
+    liquidity_factor = liquidity_score / 10.0
+    resellability_factor = resellability_score / 10.0
+    profit_factor = max(0.1, profit_opportunity_score / 5.0)
+    risk_factor = max(0.1, (10.0 - risk_score) / 10.0)
+    raw = roi_factor * demand_factor * liquidity_factor * resellability_factor * profit_factor * risk_factor
+    return round(min(100.0, raw * 100.0), 2)
+
+
+_USE_CASE_CAT_MAP: dict[str, list[str]] = {
+    "gaming": ["Gaming PCs", "Budget Builders"],
+    "budget": ["Budget Builders", "Office Clearance"],
+    "workstation": ["Workstations"],
+    "office": ["Office Clearance"],
+    "ai_workstation": ["Workstations"],
+    "htpc": ["HTPC / SFF"],
+}
+
+
+async def _refresh_playbook_scores(
+    playbook: "Playbook",
+    sold_flips: list,
+    demand_categories: list,
+) -> None:
+    """Update all scores on a single playbook in-place (no DB flush — caller does that)."""
+    use_case = str(playbook.target_use_case or "").lower()
+
+    # Profit range from profit_model (seeded or previously computed)
+    pm = dict(playbook.profit_model or {})
+    expected_profit = float(pm.get("expected_profit") or 0)
+    pricing = dict(playbook.pricing_model or {})
+    expected_build = float(pricing.get("expected_build_cost") or 0)
+
+    expected_roi_pct = 0.0
+    if expected_build > 0 and expected_profit > 0:
+        expected_roi_pct = round((expected_profit / expected_build) * 100, 1)
+
+    # Market size from demand categories matching use_case
+    relevant_cats = _USE_CASE_CAT_MAP.get(use_case, [])
+    cat_listings = sum(c.get("count", 0) for c in demand_categories if c.get("name") in relevant_cats)
+    cat_gems = sum(c.get("gem_count", 0) for c in demand_categories if c.get("name") in relevant_cats)
+    playbook.market_size_score = _compute_market_size_score(cat_listings, cat_gems)
+
+    # Liquidity from actual sold history or playbook avg_days_to_sell
+    avg_days = float(playbook.avg_days_to_sell or 14)
+    playbook.liquidity_score = _compute_liquidity_score(avg_days)
+
+    # Resellability
+    matching_sold = len([f for f in sold_flips if f.actual_profit is not None])
+    playbook.resellability_score = _compute_resellability_score(matching_sold, max(1, cat_listings), cat_gems)
+
+    # Risk
+    margin_pct = expected_roi_pct if expected_roi_pct > 0 else None
+    playbook.risk_score = _compute_risk_score(avg_days, margin_pct, cat_listings)
+
+    # Growth direction from demand categories
+    trend_votes = [c.get("trend", "") for c in demand_categories if c.get("name") in relevant_cats]
+    growing = sum(1 for t in trend_votes if t == "Growing")
+    shrinking = sum(1 for t in trend_votes if t == "Shrinking")
+    if growing > shrinking:
+        playbook.market_growth_direction = "Growing"
+    elif shrinking > growing:
+        playbook.market_growth_direction = "Shrinking"
+    else:
+        playbook.market_growth_direction = "Stable"
+
+    # Composite rank
+    playbook.composite_rank_score = _compute_composite_rank(
+        playbook.profit_opportunity_score,
+        playbook.market_size_score,
+        playbook.liquidity_score,
+        playbook.resellability_score,
+        playbook.risk_score,
+        expected_roi_pct,
+    )
+
+    playbook.last_reviewed = datetime.utcnow()
+
+
 async def run_playbook_evolution() -> dict:
     """
     Nightly proposal generator.
@@ -144,6 +283,13 @@ async def run_playbook_evolution() -> dict:
         demand_categories = await compute_demand(db)
         external = await latest_external_signal_snapshot(limit_per_source=50)
         proposals_created = 0
+
+        # ── Phase 2-9: Score all active playbooks ─────────────────────────────
+        playbooks_scored = 0
+        for pb in playbooks:
+            await _refresh_playbook_scores(pb, sold_flips, demand_categories)
+            playbooks_scored += 1
+        await db.flush()
 
         # Explicit demand rules from Google Trends buyer-intent queries.
         # These rules propose search-strategy updates; they do not auto-apply.
@@ -286,7 +432,7 @@ async def run_playbook_evolution() -> dict:
 
         if not sold_flips or not playbooks:
             await db.commit()
-            return {"ok": True, "proposals_created": proposals_created, "reason": "insufficient_sold_flip_data"}
+            return {"ok": True, "proposals_created": proposals_created, "playbooks_scored": playbooks_scored, "reason": "insufficient_sold_flip_data"}
 
         avg_profit = sum(float(f.actual_profit or 0.0) for f in sold_flips) / max(1, len(sold_flips))
 
@@ -371,7 +517,13 @@ async def run_playbook_evolution() -> dict:
             )
         except Exception as exc:
             log.warning("playbook_evolution.alert_emit_error", error=str(exc))
-    return {"ok": True, "proposals_created": proposals_created, "sold_flips": len(sold_flips)}
+    return {
+        "ok": True,
+        "proposals_created": proposals_created,
+        "playbooks_scored": playbooks_scored,
+        "sold_flips": len(sold_flips),
+        "terms_upserted": terms_result.get("upserted", 0),
+    }
 
 
 # ─── Baseline search terms ────────────────────────────────────────────────────
