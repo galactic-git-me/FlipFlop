@@ -526,52 +526,34 @@ async def run_playbook_evolution() -> dict:
     }
 
 
-# ─── Baseline search terms ────────────────────────────────────────────────────
-# These always exist, are never auto-disabled, and get a fixed demand score of 5.
-# They ensure broad coverage even when demand signals are thin.
+# ── Static flip_opportunities terms (always present) ─────────────────────────
+_FLIP_STATIC_TERMS = [
+    {"term": "ex-workstation pc builds",  "group": "static"},
+    {"term": "motherboard cpu combo",      "group": "static"},
+    {"term": "HP pc",                      "group": "static"},
+    {"term": "Lenovo pc",                  "group": "static"},
+    {"term": "Dell pc",                    "group": "static"},
+    {"term": "office pc",                  "group": "static"},
+    {"term": "No GPU pc",                  "group": "static"},
+    {"term": "No memory pc",               "group": "static"},
+    {"term": "pc tower",                   "group": "static"},
+    {"term": "gaming pc",                  "group": "static"},
+    {"term": "desktop pc",                 "group": "static"},
+]
 
-_BASELINE_TERMS: dict[str, list[dict]] = {
-    "flip_opportunities": [
-        {"term": "gaming PC",              "group": "core"},
-        {"term": "gaming pc fault",        "group": "core"},
-        {"term": "gaming pc untested",     "group": "core"},
-        {"term": "gaming pc no gpu",       "group": "core"},
-        {"term": "pc tower",               "group": "core"},
-        {"term": "desktop pc",             "group": "core"},
-        {"term": "desktop pcs lot",        "group": "core"},
-        {"term": "Dell OptiPlex",          "group": "office_fleet"},
-        {"term": "HP EliteDesk",           "group": "office_fleet"},
-        {"term": "HP workstation",         "group": "office_fleet"},
-        {"term": "Ryzen 5 5600",           "group": "components"},
-        {"term": "Ryzen 7 5700X",          "group": "components"},
-    ],
-    "cases": [
-        {"term": "atx pc case",            "group": "generic"},
-        {"term": "midi tower case",        "group": "generic"},
-        {"term": "gaming case",            "group": "generic"},
-        {"term": "rgb pc case",            "group": "generic"},
-        {"term": "mesh airflow case",      "group": "generic"},
-        {"term": "tempered glass case",    "group": "generic"},
-        {"term": "white pc case",          "group": "generic"},
-        {"term": "black pc case",          "group": "generic"},
-    ],
-    "accessories": [
-        {"term": "gaming keyboard",        "group": "peripherals"},
-        {"term": "gaming mouse",           "group": "peripherals"},
-        {"term": "gaming headset",         "group": "peripherals"},
-        {"term": "gaming controller",      "group": "peripherals"},
-        {"term": "gaming monitor",         "group": "peripherals"},
-    ],
-    "upgrade_parts": [
-        {"term": "RTX 3060",               "group": "gpu"},
-        {"term": "RTX 3070",               "group": "gpu"},
-        {"term": "DDR4 RAM 16GB",          "group": "ram"},
-        {"term": "DDR4 RAM 32GB",          "group": "ram"},
-        {"term": "NVMe SSD 1TB",           "group": "storage"},
-        {"term": "AMD Ryzen 5 5600",       "group": "cpu"},
-        {"term": "AMD Ryzen 7 5700X",      "group": "cpu"},
-    ],
-}
+# ── Static accessories terms (never auto-changed) ─────────────────────────────
+_ACCESSORY_TERMS = [
+    {"term": "gaming keyboard",            "group": "accessories"},
+    {"term": "gaming mouse",               "group": "accessories"},
+    {"term": "gaming headset",             "group": "accessories"},
+    {"term": "gaming monitor",             "group": "accessories"},
+    {"term": "gaming controller",          "group": "accessories"},
+    {"term": "gaming speakers",            "group": "accessories"},
+    {"term": "mechanical keyboard",        "group": "accessories"},
+    {"term": "rgb keyboard",               "group": "accessories"},
+    {"term": "wireless gaming mouse",      "group": "accessories"},
+    {"term": "webcam streaming",           "group": "accessories"},
+]
 
 # Demand signal → additional search terms with score mapping.
 # Keys are Google Trends query names; value = list of terms to upsert if score > threshold.
@@ -607,13 +589,72 @@ _DEMAND_TERM_RULES: list[dict] = [
 _ZERO_RESULTS_DISABLE_THRESHOLD = 5  # disable after this many consecutive zero-result runs
 
 
+async def _build_component_terms_from_playbooks(db) -> list[dict]:
+    """Build generic component search terms from active playbook ideal_build fields."""
+    from sqlalchemy import select as sa_select
+    result = await db.execute(sa_select(Playbook).where(Playbook.status == "active"))
+    playbooks = result.scalars().all()
+
+    terms: set[str] = set()
+    always = [
+        "i5 cpu", "i7 cpu", "i9 cpu", "ryzen cpu", "am4 cpu", "am5 cpu",
+        "am4 motherboard", "am5 motherboard", "b450 motherboard", "b550 motherboard",
+        "b650 motherboard", "x670 motherboard", "ddr4 ram", "ddr5 ram",
+        "32gb ram", "rgb ram", "ddr5 rgb", "650w psu", "750w psu",
+        "gaming psu", "nvidia gpu", "amd gpu", "rtx gpu", "radeon gpu",
+        "cpu cooler", "aio cooler", "rgb cpu cooler", "rgb fans", "argb fans",
+        "nvme ssd", "m.2 ssd",
+    ]
+    for t in always:
+        terms.add(t)
+
+    for pb in playbooks:
+        ideal = pb.ideal_build or {}
+        for component_key, comp_data in ideal.items():
+            if component_key in ("case", "rgb_fans"):
+                continue
+            if not isinstance(comp_data, dict):
+                continue
+            for st in comp_data.get("search_terms", []):
+                if st and len(st) > 3:
+                    terms.add(str(st).strip().lower())
+
+    return [{"term": t, "group": "components"} for t in sorted(terms)]
+
+
+async def _build_case_terms_from_playbooks(db) -> list[dict]:
+    """Build case search terms from active playbook ideal_build case preferences."""
+    from sqlalchemy import select as sa_select
+    result = await db.execute(sa_select(Playbook).where(Playbook.status == "active"))
+    playbooks = result.scalars().all()
+
+    terms: set[str] = set()
+    base_case_terms = [
+        "gaming pc case", "atx gaming case", "rgb gaming case", "white gaming case",
+        "tempered glass case", "fish tank case", "panoramic case", "argb case",
+        "showcase case", "white pc case", "black rgb case", "micro atx case",
+    ]
+    for t in base_case_terms:
+        terms.add(t)
+
+    for pb in playbooks:
+        ideal = pb.ideal_build or {}
+        case_data = ideal.get("case", {})
+        if isinstance(case_data, dict):
+            for st in case_data.get("search_terms", []):
+                if st and len(st) > 3:
+                    terms.add(str(st).strip().lower())
+
+    return [{"term": t, "group": "cases"} for t in sorted(terms)]
+
+
 async def _sync_search_terms(external: dict, demand_categories: list) -> dict:
     """
-    Upsert baseline and demand-driven search terms.
-    - Baselines: always present, never disabled, demand_score = 5.0
-    - Demand terms: upserted when Google Trends score exceeds threshold,
-      score = normalised trend score (0-10)
-    - Terms with zero_results_streak >= threshold and is_baseline=False are disabled
+    Sync search terms per catalogue spec:
+    - flip_opportunities: static terms + 5 dynamic terms from demand data
+    - components: generic terms derived from active playbook ideal_builds
+    - cases: derived from active playbook case preferences
+    - accessories: static
     """
     signal_map = _latest_query_signal_map(external)
     upserted = 0
@@ -626,10 +667,66 @@ async def _sync_search_terms(external: dict, demand_categories: list) -> dict:
     ]
 
     async with AsyncSessionLocal() as db:
-        # ── 1. Upsert baselines ───────────────────────────────────────────────
-        for scope, terms in _BASELINE_TERMS.items():
+        component_terms = await _build_component_terms_from_playbooks(db)
+        case_terms = await _build_case_terms_from_playbooks(db)
+
+        # ── Generate 5 dynamic flip_opportunities terms ───────────────────────
+        sorted_cats = sorted(demand_categories, key=lambda c: c.get("count", 0), reverse=True)
+        _CAT_TO_FLIP_TERMS: dict[str, list[str]] = {
+            "Gaming PCs": ["gaming pc", "rtx gaming desktop", "custom gaming build"],
+            "Workstations": ["hp workstation", "dell workstation", "ex workstation pc"],
+            "Budget Builders": ["budget gaming pc", "no gpu gaming pc", "cheap gaming desktop"],
+            "Office Clearance": ["office clearance pc", "ex office desktop pc"],
+            "HTPC / SFF": ["mini pc gaming", "small form factor gaming pc"],
+        }
+        dynamic_terms: list[str] = []
+        for cat in sorted_cats:
+            if len(dynamic_terms) >= 5:
+                break
+            candidates = _CAT_TO_FLIP_TERMS.get(cat.get("name", ""), [])
+            for t in candidates:
+                if t not in dynamic_terms:
+                    dynamic_terms.append(t)
+                    if len(dynamic_terms) >= 5:
+                        break
+
+        # Supplement with Google Trends if needed
+        trend_map = {
+            "budget gaming pc": "budget gaming pc desktop",
+            "ai pc": "AI workstation desktop",
+            "white pc build": "white RGB gaming PC",
+            "rtx 3070": "RTX 3070 gaming PC build",
+            "gaming pc": "gaming pc desktop tower",
+        }
+        for query, term in trend_map.items():
+            if len(dynamic_terms) >= 5:
+                break
+            if _score_for(signal_map, query) >= 2.0 and term not in dynamic_terms:
+                dynamic_terms.append(term)
+
+        # Fallback to ensure exactly 5
+        fallback = ["AM5 gaming PC", "RTX 4060 gaming desktop", "Ryzen 7 gaming PC",
+                    "mini ITX gaming PC", "white RGB gaming PC"]
+        for fb in fallback:
+            if len(dynamic_terms) >= 5:
+                break
+            if fb not in dynamic_terms:
+                dynamic_terms.append(fb)
+
+        dynamic_term_dicts = [{"term": t, "group": "dynamic"} for t in dynamic_terms[:5]]
+
+        # ── Upsert all terms ───────────────────────────────────────────────────
+        catalogue_terms: dict[str, list[dict]] = {
+            "flip_opportunities": _FLIP_STATIC_TERMS + dynamic_term_dicts,
+            "components": component_terms,
+            "cases": case_terms,
+            "accessories": _ACCESSORY_TERMS,
+        }
+
+        for scope, terms in catalogue_terms.items():
             for entry in terms:
                 term_text = entry["term"]
+                is_baseline = entry.get("group") not in ("dynamic",)
                 result = await db.execute(
                     select(SourceSearchTerm).where(
                         SourceSearchTerm.scope == scope,
@@ -643,51 +740,20 @@ async def _sync_search_terms(external: dict, demand_categories: list) -> dict:
                         group_name=entry.get("group", "baseline"),
                         term=term_text,
                         source_names=all_sources,
-                        notes="auto_baseline",
+                        notes="auto_baseline" if is_baseline else "dynamic",
                         enabled=True,
-                        is_baseline=True,
+                        is_baseline=is_baseline,
                         demand_score=5.0,
                     ))
                     upserted += 1
                 else:
-                    row.is_baseline = True
                     row.enabled = True
+                    if is_baseline:
+                        row.is_baseline = True
                     if row.demand_score == 0.0:
                         row.demand_score = 5.0
 
-        # ── 2. Upsert demand-driven terms ─────────────────────────────────────
-        for rule in _DEMAND_TERM_RULES:
-            raw_score = _score_for(signal_map, rule["query"])
-            if raw_score < rule["threshold"]:
-                continue
-            # Normalise to 0-10 (scores rarely exceed 10 from our signal source)
-            demand_score = min(10.0, round(raw_score, 1))
-            for term_text in rule["terms"]:
-                result = await db.execute(
-                    select(SourceSearchTerm).where(
-                        SourceSearchTerm.scope == rule["scope"],
-                        SourceSearchTerm.term == term_text,
-                    )
-                )
-                row = result.scalar_one_or_none()
-                if row is None:
-                    db.add(SourceSearchTerm(
-                        scope=rule["scope"],
-                        group_name=rule.get("group", "demand"),
-                        term=term_text,
-                        source_names=all_sources,
-                        notes=f"demand_driven|query={rule['query']}|score={demand_score}",
-                        enabled=True,
-                        is_baseline=False,
-                        demand_score=demand_score,
-                    ))
-                    upserted += 1
-                else:
-                    row.demand_score = demand_score
-                    row.enabled = True
-                    row.zero_results_streak = 0
-
-        # ── 3. Auto-disable dead terms ─────────────────────────────────────────
+        # ── Auto-disable dead non-baseline terms ───────────────────────────────
         dead_result = await db.execute(
             select(SourceSearchTerm).where(
                 SourceSearchTerm.is_baseline == False,  # noqa: E712
@@ -704,5 +770,6 @@ async def _sync_search_terms(external: dict, demand_categories: list) -> dict:
 
         await db.commit()
 
-    log.info("search_terms.synced", upserted=upserted, disabled=disabled)
-    return {"upserted": upserted, "disabled": disabled}
+    log.info("search_terms.synced", upserted=upserted, disabled=disabled,
+             dynamic_flip_terms=dynamic_terms[:5])
+    return {"upserted": upserted, "disabled": disabled, "dynamic_flip_terms": dynamic_terms[:5]}
