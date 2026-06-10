@@ -514,6 +514,50 @@ export const api = {
       ),
   },
 
+  benchmarks: {
+    status: () => request<{
+      total_benchmarks: number;
+      cpu_count: number;
+      gpu_count: number;
+      storage_count: number;
+      last_run: {
+        run_type: string | null;
+        status: string | null;
+        started_at: string | null;
+        completed_at: string | null;
+        components_checked: number;
+        components_updated: number;
+        components_failed: number;
+      } | null;
+    }>("/benchmarks/status"),
+    top: (component_type = "cpu", limit = 20) =>
+      request<Array<{
+        model: string;
+        normalized_model: string;
+        overall_score: number;
+        gaming_score: number | null;
+        last_refreshed_at: string | null;
+        confidence_score: number;
+      }>>(`/benchmarks/top?component_type=${component_type}&limit=${limit}`),
+    refreshRuns: (limit = 10) =>
+      request<Array<{
+        id: number;
+        run_type: string;
+        status: string;
+        started_at: string;
+        completed_at: string | null;
+        components_checked: number;
+        components_updated: number;
+        components_failed: number;
+        error_log: string | null;
+      }>>(`/benchmarks/refresh-runs?limit=${limit}`),
+    triggerRefresh: async (run_type = "manual") => {
+      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const resp = await fetch(`${base}/api/benchmarks/refresh?run_type=${run_type}`, { method: "POST" });
+      return resp.json();
+    },
+  },
+
   reselling: {
     getSellerFees: () => request<{
       insertion_fee: number;
