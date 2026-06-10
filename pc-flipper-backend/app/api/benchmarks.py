@@ -6,7 +6,7 @@ import asyncio
 from fastapi import APIRouter, Depends
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.api.deps import get_db
+from app.database import get_db
 from app.models.benchmark import HardwareBenchmark, BenchmarkRefreshRun
 from app.services.benchmark_refresh_job import run_benchmark_refresh
 

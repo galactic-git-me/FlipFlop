@@ -135,6 +135,7 @@ def score_listing(
     location: str | None,
     profit_low: float | None = None,   # conservative (25th-pct resale) profit
     profit_high: float | None = None,  # optimistic  (75th-pct resale) profit
+    benchmark_data: dict | None = None,
 ) -> ScoringResult:
     result = ScoringResult()
     title_lower = title.lower()
@@ -240,6 +241,22 @@ def score_listing(
             result.signals.append("tight profit spread")
         elif spread_pct < 0.35:
             result.score += 10
+
+    # ── Benchmark performance/£ bonus ────────────────────────────────────────
+    if benchmark_data:
+        cpu_ppp = benchmark_data.get("cpu_performance_per_pound") or 0
+        cat_avg = benchmark_data.get("category_avg_ppp") or 0
+        if cpu_ppp > 0 and cat_avg > 0:
+            ratio = cpu_ppp / cat_avg
+            if ratio >= 1.5:
+                result.score += 30
+                result.signals.append(f"performance/£ {ratio:.1f}x above average")
+            elif ratio >= 1.25:
+                result.score += 18
+                result.signals.append(f"performance/£ {ratio:.1f}x above average")
+            elif ratio >= 1.0:
+                result.score += 8
+                result.signals.append("performance/£ at market average")
 
     # Normalise raw score to 0–100.
     # Raw score without profit tops out at ~150; with £200+ profit it hits ~450.
