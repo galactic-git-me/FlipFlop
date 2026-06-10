@@ -24,6 +24,7 @@ from app.api import preflight
 from app.api.build_wizard import router as build_wizard_router
 from app.api.manual_builds import router as manual_builds_router
 from app.api.facebook import router as facebook_router
+from app.api.benchmarks import router as benchmarks_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -390,6 +391,7 @@ app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
 app.include_router(manual_builds_router, prefix="/api")
+app.include_router(benchmarks_router, prefix="/api")
 
 
 _startup_time: datetime = datetime.now(timezone.utc)
