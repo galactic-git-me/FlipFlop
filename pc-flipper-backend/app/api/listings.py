@@ -105,10 +105,16 @@ async def get_listings(
             "%Graphic Card%",
             # NVMe/M.2 drives explicitly sold as drives (Job Lot = bulk component sale)
             "%Job Lot%NVMe%",
+            "%NVMe%Job Lot%",
             "%Job Lot%SSD%",
+            "%SSD%Job Lot%",
             "%Job Lot%DDR%",
-            # M.2 SSD explicitly listed as a drive product
+            "%DDR%Job Lot%",
+            "%Job Lot%M.2%",
+            "%M.2%Job Lot%",
+            # M.2 SSD explicitly listed as a drive product (has capacity + M.2 + NVMe/SSD)
             "%M.2%NVMe%SSD%",    # "256GB M.2 NVMe SSD" — drive listing
+            "%NVMe%SSD%M.2%",
             # CPU-only listings
             "%Processor%OEM%",
             "%CPU Tray%",
