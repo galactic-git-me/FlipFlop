@@ -153,28 +153,30 @@ export default function DashboardPage() {
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
-        // Gem of Day: prefer Claude-confirmed gems; fall back to rule-based
+        // Gem of Day: prefer Claude-confirmed gems; fall back to rule-based. whole_pc_only excludes components.
         step((async () => {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", claude_judged_only: "true", first_seen_after: past24hISO,
+            limit: "1", gem_only: "true", claude_judged_only: "true",
+            whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", first_seen_after: past24hISO,
+            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>);
         })(), 12000),
-        // Gem of Week: prefer Claude-confirmed gems; fall back to rule-based
+        // Gem of Week: prefer Claude-confirmed gems; fall back to rule-based. whole_pc_only excludes components.
         step((async () => {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", claude_judged_only: "true", first_seen_after: past7dISO,
+            limit: "1", gem_only: "true", claude_judged_only: "true",
+            whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", first_seen_after: past7dISO,
+            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>);
         })(), 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),

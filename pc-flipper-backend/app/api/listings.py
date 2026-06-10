@@ -46,6 +46,7 @@ async def get_listings(
     claude_judged_after: datetime | None = Query(None),
     claude_judged_only: bool = Query(False),
     gem_only: bool = Query(False),
+    whole_pc_only: bool = Query(False),
     limit: int = Query(50, le=1000),
     offset: int = Query(0),
     sort_by: str = Query("gem_score"),
@@ -86,6 +87,28 @@ async def get_listings(
         )
     if claude_judged_only:
         conditions.append(Listing.claude_judged_at != None)
+    if whole_pc_only:
+        # Exclude listings whose titles look like standalone components rather than
+        # whole PC systems. Filter: title must NOT match component-only keywords
+        # (unless offset by PC indicator words).
+        _COMPONENT_PATTERNS = [
+            "%DDR3%", "%DDR4%", "%DDR5%", "%DIMM%",
+            "%NVMe%M.2%", "%M.2%NVMe%",
+            "%Graphics Card%", "%Video Card%",
+            "% GPU %", "%VRAM%",
+            "%Laptop Memory%", "%Desktop Memory%",
+            "%SO-DIMM%", "%SODIMM%",
+        ]
+        _PC_INDICATORS = [
+            "%PC%", "%Desktop%", "%Workstation%", "%Tower%",
+            "%SFF%", "%USFF%", "%Mini PC%", "%Computer%",
+            "%OptiPlex%", "%ThinkCentre%", "%EliteDesk%",
+        ]
+        from sqlalchemy import and_, or_, not_
+        # Build: NOT (matches a component pattern AND NOT matches a PC indicator)
+        is_component = or_(*[Listing.title.ilike(p) for p in _COMPONENT_PATTERNS])
+        is_pc = or_(*[Listing.title.ilike(p) for p in _PC_INDICATORS])
+        conditions.append(not_(and_(is_component, not_(is_pc))))
 
     # Spec-based deduplication: for listings sharing the same hardware spec fingerprint
     # (same CPU/GPU/RAM/storage), only surface the cheapest one.
