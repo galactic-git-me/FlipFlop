@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import LogoAnimation from "@/components/logo-animation";
 import { useEffect, useRef } from "react";
 import {
   LayoutDashboard,
@@ -111,7 +111,7 @@ export function Sidebar() {
       {/* All content sits above the canvas */}
       <div className="relative z-10 flex flex-col gap-4 h-full">
         <div className="node-brand-wrap">
-          <Image src="/pics/logo.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
+          <LogoAnimation className="h-[120px]" />
           <p className="node-version">Operational v1.0.4</p>
         </div>
 
