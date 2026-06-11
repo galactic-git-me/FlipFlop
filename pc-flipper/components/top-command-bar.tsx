@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import LogoAnimation from "@/components/logo-animation";
+import Image from "next/image";
 import { Bell, Radio, Search, UserCircle2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
@@ -189,7 +189,7 @@ export function TopCommandBar() {
       <div className="node-topbar-right">
         <div className="node-live-chip">
           <span className="node-live-dot" />
-          <LogoAnimation className="h-[60px]" />
+          <Image src="/pics/logo.png" alt="FlipFlop" width={120} height={60} className="h-[60px] w-auto object-contain" />
         </div>
         <div className="node-top-icons relative">
           <Radio className="h-4 w-4" />

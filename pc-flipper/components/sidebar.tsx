@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import LogoAnimation from "@/components/logo-animation";
 import { useEffect, useRef } from "react";
 import {
   LayoutDashboard,
@@ -15,8 +15,6 @@ import {
   BarChart3,
   Brain,
   Settings,
-  Plus,
-  User,
   Gauge,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -111,14 +109,8 @@ export function Sidebar() {
       {/* All content sits above the canvas */}
       <div className="relative z-10 flex flex-col gap-4 h-full">
         <div className="node-brand-wrap">
-          <LogoAnimation className="h-[120px]" />
-          <p className="node-version">Operational v1.0.4</p>
+          <Image src="/pics/logo.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
         </div>
-
-        <button className="node-new-build-btn" type="button">
-          <Plus className="h-4 w-4" />
-          <span>NEW BUILD</span>
-        </button>
 
         <nav className="node-nav">
           {PRIMARY_NAV.map((item) => {
@@ -136,15 +128,6 @@ export function Sidebar() {
           })}
         </nav>
 
-        <div className="node-profile-wrap">
-          <div className="node-profile-icon">
-            <User className="h-4 w-4" />
-          </div>
-          <div>
-            <p className="node-profile-name">Specialist Profile</p>
-            <p className="node-profile-tier">Tier 3 Merchant</p>
-          </div>
-        </div>
       </div>
 
       <style jsx global>{`
