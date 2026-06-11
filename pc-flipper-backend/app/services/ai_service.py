@@ -1,6 +1,6 @@
 """
 Hermes AI service.
-Primary: OpenRouter (gemma-4-31b) → Ollama (local Gemma3:4b) → Claude Haiku last resort.
+Primary: Ollama (local gemma4:e4b) → OpenRouter free models → Anthropic Claude last resort.
 """
 import httpx
 import urllib.parse
@@ -55,9 +55,19 @@ async def chat(
     """Returns (response_text, model_used)."""
     messages = _build_messages(message, history, listing_context)
 
-    # 1. Try OpenRouter primary (gemma-4-31b) — preferred over local Ollama
     # Re-read settings so in-process changes (via /settings PUT) take effect without restart
     _s = get_settings()
+
+    # 1. Try Ollama (local gemma4:e4b) — primary
+    if _s.ollama_base_url:
+        try:
+            response = await _ollama_chat(messages, _s)
+            if response:
+                return response, _s.ollama_model
+        except Exception as e:
+            print(f"[hermes] Ollama failed: {e}")
+
+    # 2. Try OpenRouter free models as fallback
     if _s.openrouter_api_key:
         primary = _s.openrouter_primary_model or OPENROUTER_FREE_MODELS[0]
         try:
@@ -68,7 +78,6 @@ async def chat(
         except Exception as e:
             print(f"[hermes] OpenRouter primary ({primary}) failed: {e}")
 
-        # Try remaining fallback models
         for model in OPENROUTER_FREE_MODELS:
             if model == primary:
                 continue
@@ -80,16 +89,7 @@ async def chat(
             except Exception as e:
                 print(f"[hermes] OpenRouter {model} failed: {e}")
 
-    # 2. Try Ollama (local Gemma3:4b) as fallback when OpenRouter unavailable
-    if _s.ollama_base_url:
-        try:
-            response = await _ollama_chat(messages, _s)
-            if response:
-                return response, _s.ollama_model
-        except Exception as e:
-            print(f"[hermes] Ollama failed: {e}")
-
-    # 3. Try Claude Haiku as last resort
+    # 3. Try Claude as last resort
     if _s.anthropic_api_key:
         try:
             response = await _claude_chat(messages)
@@ -99,7 +99,7 @@ async def chat(
             print(f"[hermes] Claude failed: {e}")
 
     return (
-        "All AI backends offline. Add an OpenRouter API key in Settings, or ensure Ollama is running (`ollama serve`).",
+        "All AI backends offline. Ensure Ollama is running (`ollama serve`) or add an OpenRouter API key in Settings.",
         "none",
     )
 
