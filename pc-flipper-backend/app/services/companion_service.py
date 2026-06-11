@@ -95,14 +95,14 @@ async def get_catalogue_snapshot(db: AsyncSession) -> str:
         select(
             func.count().label("total"),
             func.sum((Listing.classification == Classification.gem).cast(Integer)).label("gems"),
-            func.sum((Listing.classification == Classification.watching).cast(Integer)).label("watching"),
-            func.max(Listing.seen_at).label("last_seen"),
+            func.sum((Listing.classification == Classification.amazing_gem).cast(Integer)).label("amazing_gems"),
+            func.max(Listing.last_seen_at).label("last_seen"),
         ).select_from(Listing)
     )
     stats = row.one()
     total = stats.total or 0
     gems = int(stats.gems or 0)
-    watching = int(stats.watching or 0)
+    amazing_gems = int(stats.amazing_gems or 0)
 
     top_gems_q = await db.execute(
         select(Listing.title, Listing.price)
@@ -114,7 +114,7 @@ async def get_catalogue_snapshot(db: AsyncSession) -> str:
     gems_str = ", ".join(f"{t[:35]} £{p:.0f}" for t, p in top_gems) if top_gems else "none"
 
     return (
-        f"Total listings: {total} | Gems: {gems} | Watching: {watching}\n"
+        f"Total listings: {total} | Gems: {gems} | Amazing gems: {amazing_gems}\n"
         f"Top gems: {gems_str}"
     )
 
