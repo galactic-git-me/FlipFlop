@@ -193,19 +193,6 @@ def score_listing(
         result.score += 8
         result.signals.append("amd platform")
 
-    # Price band — heavier penalties above £200 to reflect capital risk
-    if price <= 50:
-        result.score += 20
-    elif price <= 100:
-        result.score += 10
-    elif price <= 150:
-        result.score += 5
-    elif price <= 200:
-        result.score -= 10
-    elif price <= 350:
-        result.score -= 25
-    else:
-        result.score -= 40  # >£350 requires exceptional margin to be worthwhile
 
     # Collection-only location hints
     if location and any(x in location.lower() for x in ["only", "local"]):
