@@ -116,6 +116,11 @@ _COMPONENT_ONLY_HINTS = (
     # Peripherals / monitors — not flippable PCs
     "monitor", "keyboard", "mouse", "headset", "webcam", "microphone",
     "speakers", "gaming chair",
+    # Laptops and AIOs — not flippable under desktop model
+    "laptop", "notebook", "chromebook", "macbook", "thinkpad", "ideapad",
+    "elitebook", "probook", "latitude", "zenbook", "vivobook",
+    "surface laptop", "surface pro", "surface book",
+    "all-in-one", "all in one", "aio pc", "aio desktop", "imac", "eliteone",
     # Laptop/console parts
     "laptop battery", "laptop screen", "laptop keyboard",
     # Games (video games, board games, not gaming PCs)
