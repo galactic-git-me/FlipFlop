@@ -64,9 +64,13 @@ Keep replies short unless the user asks for detail. Use markdown sparingly."""
 
 
 def parse_search_args(args: dict) -> dict:
+    try:
+        max_price = float(args["max_price"]) if args.get("max_price") is not None else None
+    except (ValueError, TypeError):
+        max_price = None
     return {
         "query": str(args.get("query", "")),
-        "max_price": float(args["max_price"]) if args.get("max_price") is not None else None,
+        "max_price": max_price,
         "classification": str(args["classification"]) if args.get("classification") else None,
     }
 
@@ -124,7 +128,9 @@ async def do_search_listings(
 ) -> list[dict]:
     from sqlalchemy import or_
     words = query.lower().split()
-    conditions = [Listing.title.ilike(f"%{w}%") for w in words if len(w) > 2]
+    conditions = [Listing.title.ilike(f"%{w}%") for w in words if len(w) >= 2]
+    if not conditions and query.strip():
+        return []
     stmt = select(Listing)
     if conditions:
         stmt = stmt.where(or_(*conditions))
@@ -157,8 +163,8 @@ async def stream_companion(
 
     messages = [{"role": "system", "content": system}] + history + [{"role": "user", "content": message}]
 
-    try:
-        async with httpx.AsyncClient(timeout=60) as client:
+    async with httpx.AsyncClient(timeout=60) as client:
+        try:
             resp = await client.post(ollama_url, json={
                 "model": model,
                 "messages": messages,
@@ -167,33 +173,31 @@ async def stream_companion(
             })
             resp.raise_for_status()
             data = resp.json()
-    except Exception as exc:
-        log.warning("companion.ollama_error", error=str(exc))
-        err_msg = "I'm having trouble connecting to my brain right now. Try again in a moment."
-        yield "data: " + json.dumps({"type": "token", "content": err_msg}) + "\n\n"
-        yield "data: " + json.dumps({"type": "done", "model_used": "none"}) + "\n\n"
-        return
+        except Exception as exc:
+            log.warning("companion.ollama_error", error=str(exc))
+            yield f"data: {json.dumps({'type': 'token', 'content': \"I'm having trouble connecting to my brain right now. Try again in a moment.\"})}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'model_used': 'none'})}\n\n"
+            return
 
-    assistant_msg = data.get("message", {})
-    tool_calls = assistant_msg.get("tool_calls") or []
+        assistant_msg = data.get("message", {})
+        tool_calls = assistant_msg.get("tool_calls") or []
 
-    if tool_calls:
-        tool_call = tool_calls[0]
-        fn = tool_call.get("function", {})
-        raw_args = fn.get("arguments", {})
-        args = parse_search_args(raw_args if isinstance(raw_args, dict) else json.loads(raw_args))
+        if tool_calls:
+            tool_call = tool_calls[0]
+            fn = tool_call.get("function", {})
+            raw_args = fn.get("arguments", {})
+            args = parse_search_args(raw_args if isinstance(raw_args, dict) else json.loads(raw_args))
 
-        results = await do_search_listings(db, **args)
-        yield f"data: {json.dumps({'type': 'search_results', 'results': results})}\n\n"
+            results = await do_search_listings(db, **args)
+            yield f"data: {json.dumps({'type': 'search_results', 'results': results})}\n\n"
 
-        messages.append(assistant_msg)
-        messages.append({
-            "role": "tool",
-            "content": json.dumps(results),
-            "name": "search_listings",
-        })
-        try:
-            async with httpx.AsyncClient(timeout=60) as client:
+            messages.append(assistant_msg)
+            messages.append({
+                "role": "tool",
+                "content": json.dumps(results),
+                "name": "search_listings",
+            })
+            try:
                 resp2 = await client.post(ollama_url, json={
                     "model": model,
                     "messages": messages,
@@ -201,11 +205,11 @@ async def stream_companion(
                 })
                 resp2.raise_for_status()
                 final_text = resp2.json().get("message", {}).get("content", "")
-        except Exception as exc:
-            log.warning("companion.ollama_followup_error", error=str(exc))
-            final_text = ""
-    else:
-        final_text = assistant_msg.get("content", "")
+            except Exception as exc:
+                log.warning("companion.ollama_followup_error", error=str(exc))
+                final_text = "Found those results — had a hiccup summarising them, but they're above."
+        else:
+            final_text = assistant_msg.get("content", "")
 
     chunk_size = 5
     for i in range(0, len(final_text), chunk_size):
