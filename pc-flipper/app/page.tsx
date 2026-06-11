@@ -116,7 +116,7 @@ export default function DashboardPage() {
   const [pnlPlatform, setPnlPlatform] = useState("all");
 
   // Scatter chart top-N filter (0 = show all)
-  const [topN, setTopN] = useState(50);
+
   const [nowMs, setNowMs] = useState(() => Date.now());
 
   useEffect(() => {
@@ -1487,77 +1487,6 @@ function WaterfallMini({ d }: { d: Listing & { profit: number } }) {
   );
 }
 
-function ScatterTooltip({ active, payload }: { active?: boolean; payload?: { payload: Listing & { profit: number } }[] }) {
-  if (!active || !payload?.[0]) return null;
-  const d = payload[0].payload;
-  const hasLiveComps = (d.resale_comp_count ?? 0) > 0;
-  const hasRange     = d.resale_low != null && d.resale_high != null && d.resale_low !== d.resale_high;
-  const upgradeCost  = d.estimated_upgrade_cost ?? 0;
-  const profitAt     = (r: number) => r * (1 - FC.FEE) - d.price - upgradeCost;
-  const profitLow    = d.resale_low  != null ? profitAt(d.resale_low)  : null;
-  const profitHigh   = d.resale_high != null ? profitAt(d.resale_high) : null;
-  const profitMid    = d.estimated_profit ?? 0;
-  const isRejected   = profitLow !== null && profitLow < 0;
-  const verdictColor = isRejected
-    ? "text-red-400 bg-red-400/10 border-red-400/30"
-    : "text-[#00dc82] bg-[#00dc82]/10 border-[#00dc82]/30";
-  const params = new URLSearchParams();
-  if (d.cpu)          params.set("cpu", d.cpu);
-  if (d.gpu)          params.set("gpu", d.gpu);
-  if (d.ram_gb)       params.set("ram_gb", String(d.ram_gb));
-  if (d.ram_type)     params.set("ram_type", d.ram_type);
-  if (d.storage_gb)   params.set("storage_gb", String(d.storage_gb));
-  if (d.storage_type) params.set("storage_type", d.storage_type);
-  params.set("buy_price", String(d.price));
-  const auditUrl = apiUrl(`/debug/resale?${params.toString()}`);
-  const fmt = (v: number) => `${v >= 0 ? "+" : ""}${formatCurrency(v)}`;
-
-  return (
-    <div className="glass-card rounded-xl p-3 text-base shadow-2xl" style={{ maxWidth: 284, background: "rgba(8,15,26,0.97)", border: "1px solid rgba(255,255,255,0.1)" }}>
-      <p className="text-slate-100 font-semibold mb-2 leading-snug line-clamp-2">{d.title}</p>
-      <div className="flex justify-between items-start gap-3 mb-1">
-        <span className="text-slate-400 font-medium shrink-0">
-          Market&nbsp;
-          {hasLiveComps
-            ? <span className="text-[9px] text-[#00dc82] font-bold uppercase tracking-wide">{d.resale_comp_count} live comps</span>
-            : <span className="text-[9px] text-slate-500 uppercase tracking-wide">estimated</span>}
-        </span>
-        <span className="text-slate-100 font-semibold text-right tabular-nums">
-          {hasRange
-            ? <>{formatCurrency(d.resale_low!)} – {formatCurrency(d.resale_high!)}<br />
-                <span className="text-slate-400 text-[9px] font-normal">mid {formatCurrency(d.estimated_resale ?? 0)}</span></>
-            : formatCurrency(d.estimated_resale ?? 0)}
-        </span>
-      </div>
-      {(profitLow !== null || profitHigh !== null) && (
-        <div className="flex justify-between gap-3 mb-2">
-          <span className="text-slate-400 font-medium">Profit range</span>
-          <span className="tabular-nums text-right text-[10px]">
-            <span className={profitLow != null && profitLow < 0 ? "text-red-400 font-semibold" : "text-slate-300 font-semibold"}>{profitLow != null ? fmt(profitLow) : "—"}</span>
-            <span className="text-slate-500"> / </span>
-            <span className={profitMid > 100 ? "text-[#00dc82] font-bold" : profitMid > 0 ? "text-amber-400 font-bold" : "text-red-400 font-bold"}>{fmt(profitMid)}</span>
-            <span className="text-slate-500"> / </span>
-            <span className="text-slate-300 font-semibold">{profitHigh != null ? fmt(profitHigh) : "—"}</span>
-          </span>
-        </div>
-      )}
-      <div className={`flex items-center justify-between gap-2 rounded-lg px-2 py-1 mb-2 border text-[9px] font-bold uppercase tracking-wide ${verdictColor}`}>
-        <span>{isRejected ? "REJECT – risk of loss" : "ACCEPT"}</span>
-        {isRejected && <span className="font-normal normal-case">conservative price = loss</span>}
-      </div>
-      <div className="border-t border-slate-700/60 pt-2 mt-1">
-        <WaterfallMini d={d} />
-      </div>
-      <div className="flex items-center justify-between gap-3 mt-2 pt-1 border-t border-slate-700/40">
-        <span className="text-slate-400 font-medium">Score <span className="text-[#00dc82] font-bold">{d.gem_score.toFixed(0)}</span></span>
-        <button
-          onClick={() => window.open(auditUrl, "_blank", "noopener,noreferrer")}
-          className="text-[9px] text-slate-400 hover:text-[#00dc82] transition-colors underline underline-offset-2 cursor-pointer font-medium"
-        >Full audit →</button>
-      </div>
-    </div>
-  );
-}
 
 function RecentCard({ listing: l }: { listing: Listing }) {
   const domain = (() => { try { return new URL(l.url).hostname.replace("www.", ""); } catch { return ""; } })();
