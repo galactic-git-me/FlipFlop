@@ -4,7 +4,7 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Cell,
   ResponsiveContainer, ReferenceLine, ComposedChart, Bar, Line,
   BarChart, LabelList,
 } from "recharts";
@@ -375,22 +375,6 @@ export default function DashboardPage() {
 
   // Scatter chart data — listings already sorted by gem_score desc from the API
   const chartListings = topN > 0 ? listings.slice(0, topN) : listings;
-  const maxProfit = Math.max(...chartListings.map(l => l.estimated_profit ?? 0), 1);
-  const scatterData = chartListings.map(l => ({ ...l, x: l.price, y: l.estimated_resale ?? 0, profit: l.estimated_profit ?? 0 }));
-  const allVals = scatterData.flatMap(d => [d.x, d.y]).filter(v => v > 0);
-  const axisMax = allVals.length ? Math.ceil(Math.max(...allVals) / 50) * 50 + 50 : 600;
-
-  const roiScatterData = chartListings
-    .filter(l => l.estimated_profit != null)
-    .map(l => {
-      const totalInvested = l.price + (l.estimated_upgrade_cost ?? 0);
-      const roi = totalInvested > 0 ? ((l.estimated_profit ?? 0) / totalInvested) * 100 : 0;
-      return { ...l, x: l.gem_score, y: Math.round(roi * 10) / 10, profit: l.estimated_profit ?? 0 };
-    });
-  const scoreMax = Math.ceil((Math.max(...roiScatterData.map(d => d.x), 80) + 10) / 10) * 10;
-  const roiVals = roiScatterData.map(d => d.y);
-  const roiMin = Math.floor((Math.min(...roiVals, -10)) / 10) * 10;
-  const roiMax = Math.ceil((Math.max(...roiVals, 50)) / 10) * 10;
 
   // ── Profit histogram ─────────────────────────────────────────────────────────
   const profitHistogram = useMemo(() => {
@@ -756,145 +740,109 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* ── Scatter charts ─────────────────────────────────────────────────── */}
-          {/* Shared top-N control */}
-          <div className="flex items-center gap-2 justify-end -mb-2">
-            <span className="text-[11px] text-slate-500">Show top</span>
-            <input
-              type="number"
-              min={1}
-              max={listings.length}
-              value={topN}
-              onChange={e => setTopN(Math.max(1, Math.min(listings.length, Number(e.target.value) || 1)))}
-              className="w-16 bg-[#0d1a2a] border border-white/10 rounded-lg px-2 py-1 text-base text-slate-300 focus:outline-none focus:border-[#00dc82]/50 text-center"
-            />
-            <span className="text-[11px] text-slate-500">by score (of {listings.length})</span>
-          </div>
-
+          {/* ── Distribution charts ────────────────────────────────────────────── */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
 
-            {/* Chart 1: Buy price vs resale */}
+            {/* Chart 1: Profit distribution histogram */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Buy price vs resale — bubble = profit</CardTitle>
-                <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
+                <CardTitle className="text-base">Profit distribution</CardTitle>
+                <p className="text-[10px] text-slate-600 mt-0.5">How estimated profits are spread across gem listings (£50 buckets)</p>
               </CardHeader>
               <CardContent>
                 <div style={{ width: "100%", height: 280 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <ScatterChart margin={{ top: 8, right: 16, bottom: 24, left: 8 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
+                    <BarChart data={profitHistogram} margin={{ top: 8, right: 16, bottom: 40, left: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" vertical={false} />
                       <XAxis
-                        dataKey="x"
-                        name="Cost"
-                        type="number"
-                        domain={[0, axisMax]}
-                        tickFormatter={v => `£${v}`}
-                        tick={{ fill: "#64748b", fontSize: 10 }}
+                        dataKey="label"
+                        tick={{ fill: "#64748b", fontSize: 9 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Buy Price (£)", position: "insideBottom", offset: -8, fill: "#475569", fontSize: 10 }}
+                        angle={-40}
+                        textAnchor="end"
+                        interval={0}
                       />
                       <YAxis
-                        dataKey="y"
-                        name="Resale"
-                        type="number"
-                        domain={[0, axisMax]}
-                        tickFormatter={v => `£${v}`}
+                        allowDecimals={false}
                         tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Resale (£)", angle: -90, position: "insideLeft", offset: 14, fill: "#475569", fontSize: 10 }}
+                        label={{ value: "Listings", angle: -90, position: "insideLeft", offset: 14, fill: "#475569", fontSize: 10 }}
                       />
                       <Tooltip
-                        content={<ScatterTooltip />}
-                        trigger="click"
-                        wrapperStyle={{ pointerEvents: "auto", zIndex: 50 }}
+                        contentStyle={{ background: "#0b111d", border: "1px solid #1e2d45", borderRadius: 8, fontSize: 11 }}
+                        labelStyle={{ color: "#94a3b8" }}
+                        itemStyle={{ color: "#e2e8f0" }}
+                        formatter={(v: number) => [v, "listings"]}
                       />
-                      <ReferenceLine
-                        segment={[{ x: 0, y: 0 }, { x: axisMax, y: axisMax }] as const}
-                        stroke="#475569"
-                        strokeDasharray="4 4"
-                        strokeOpacity={0.4}
-                      />
-                      <Scatter
-                        data={scatterData}
-                        shape={(props: { cx?: number; cy?: number; payload?: Listing & { profit: number } }) => {
-                          const { cx = 0, cy = 0, payload } = props;
-                          const profit = payload?.profit ?? 0;
-                          const r = Math.max(5, Math.min(18, (Math.abs(profit) / maxProfit) * 18));
-                          const fill = profit > 100 ? "#00dc82" : profit > 0 ? "#f59e0b" : "#ef4444";
-                          return (
-                            <circle cx={cx} cy={cy} r={r}
-                              fill={fill} fillOpacity={0.8}
-                              stroke={fill} strokeWidth={1.5} strokeOpacity={0.5}
-                              style={{ cursor: "pointer" }}
-                            />
-                          );
-                        }}
-                      />
-                    </ScatterChart>
+                      <Bar dataKey="count" radius={[3, 3, 0, 0]}>
+                        {profitHistogram.map((entry, i) => (
+                          <Cell key={i} fill={entry.fill} fillOpacity={0.85} />
+                        ))}
+                        <LabelList dataKey="count" position="top" style={{ fill: "#64748b", fontSize: 10 }} />
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="flex items-center gap-4 mt-1 px-2">
+                  <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#00dc82]" /><span className="text-[10px] text-slate-500">&gt;£100 profit</span></div>
+                  <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#f59e0b]" /><span className="text-[10px] text-slate-500">£0–100</span></div>
+                  <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#ef4444]" /><span className="text-[10px] text-slate-500">loss</span></div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Chart 2: Flippability score vs ROI% */}
+            {/* Chart 2: Gems by source */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Flippability score vs ROI% — bubble = profit</CardTitle>
-                <p className="text-[10px] text-slate-600 mt-0.5">🟢 &gt;£100 profit · 🟡 £0–100 · 🔴 loss · click bubble for detail</p>
+                <CardTitle className="text-base">Gems by source</CardTitle>
+                <p className="text-[10px] text-slate-600 mt-0.5">Gem count per platform — label shows gem rate %</p>
               </CardHeader>
               <CardContent>
                 <div style={{ width: "100%", height: 280 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <ScatterChart margin={{ top: 8, right: 16, bottom: 24, left: 14 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
+                    <BarChart data={sourceGemData} layout="vertical" margin={{ top: 8, right: 48, bottom: 8, left: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" horizontal={false} />
                       <XAxis
-                        dataKey="x"
-                        name="Score"
                         type="number"
-                        domain={[0, scoreMax]}
+                        allowDecimals={false}
                         tick={{ fill: "#64748b", fontSize: 10 }}
                         axisLine={{ stroke: "#1e2d45" }}
                         tickLine={false}
-                        label={{ value: "Score", position: "insideBottom", offset: -8, fill: "#475569", fontSize: 10 }}
+                        label={{ value: "Gems", position: "insideBottom", offset: -2, fill: "#475569", fontSize: 10 }}
                       />
                       <YAxis
-                        dataKey="y"
-                        name="ROI"
-                        type="number"
-                        domain={[roiMin, roiMax]}
-                        tickFormatter={v => `${v}%`}
-                        tick={{ fill: "#64748b", fontSize: 10 }}
-                        axisLine={{ stroke: "#1e2d45" }}
+                        type="category"
+                        dataKey="source"
+                        width={72}
+                        tick={{ fill: "#94a3b8", fontSize: 10 }}
+                        axisLine={false}
                         tickLine={false}
-                        label={{ value: "ROI%", angle: -90, position: "insideLeft", offset: 10, fill: "#475569", fontSize: 10 }}
                       />
                       <Tooltip
-                        content={<ScatterTooltip />}
-                        trigger="click"
-                        wrapperStyle={{ pointerEvents: "auto", zIndex: 50 }}
+                        contentStyle={{ background: "#0b111d", border: "1px solid #1e2d45", borderRadius: 8, fontSize: 11 }}
+                        labelStyle={{ color: "#94a3b8" }}
+                        itemStyle={{ color: "#e2e8f0" }}
+                        formatter={(v: number, _name: string, props: { payload?: { total: number; rate: number } }) => [
+                          `${v} gems (${props.payload?.rate ?? 0}% of ${props.payload?.total ?? 0})`,
+                          "Source",
+                        ]}
                       />
-                      <ReferenceLine y={0} stroke="#475569" strokeDasharray="4 4" strokeOpacity={0.5} />
-                      <Scatter
-                        data={roiScatterData}
-                        shape={(props: { cx?: number; cy?: number; payload?: Listing & { y: number; profit: number } }) => {
-                          const { cx = 0, cy = 0, payload } = props;
-                          const profit = payload?.profit ?? 0;
-                          const r = Math.max(5, Math.min(18, (Math.abs(profit) / maxProfit) * 18));
-                          const fill = profit > 100 ? "#00dc82" : profit > 0 ? "#f59e0b" : "#ef4444";
-                          return (
-                            <circle cx={cx} cy={cy} r={r}
-                              fill={fill} fillOpacity={0.8}
-                              stroke={fill} strokeWidth={1.5} strokeOpacity={0.5}
-                              style={{ cursor: "pointer" }}
-                            />
-                          );
-                        }}
-                      />
-                    </ScatterChart>
+                      <Bar dataKey="gems" fill="#00b8ff" fillOpacity={0.8} radius={[0, 3, 3, 0]}>
+                        <LabelList
+                          dataKey="rate"
+                          position="right"
+                          formatter={(v: number) => `${v}%`}
+                          style={{ fill: "#64748b", fontSize: 10 }}
+                        />
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 px-2">
+                  <div className="w-3 h-3 rounded-sm bg-[#00b8ff] opacity-80" />
+                  <span className="text-[10px] text-slate-500">Gem count — % label = gems / total listings for that source</span>
                 </div>
               </CardContent>
             </Card>
