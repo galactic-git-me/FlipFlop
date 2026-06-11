@@ -1197,7 +1197,7 @@ function LatestListingsCarousel({
             >
               <div className="relative h-28 bg-[#060e1c]">
                 {l.image_urls?.[0] ? (
-                  <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-contain" loading="lazy" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-20">
                     <Gem className="w-7 h-7 text-slate-400" />
@@ -1261,7 +1261,7 @@ function GemOfPeriod({
         {/* Image */}
         <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-[#0a1119]">
           {l.image_urls?.[0] ? (
-            <img src={l.image_urls[0]} alt="" className="w-full h-full object-cover" />
+            <img src={l.image_urls[0]} alt="" className="w-full h-full object-contain" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Gem className="w-8 h-8 text-[#00dc82]/30" />
@@ -1775,7 +1775,7 @@ function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing
         <div className="flex gap-3">
           <div className="w-20 h-20 rounded-lg overflow-hidden border border-[#00dc82]/20 bg-black/20 shrink-0">
             {listing.image_urls?.[0] ? (
-              <img src={listing.image_urls[0]} alt={listing.title} className="w-full h-full object-cover" />
+              <img src={listing.image_urls[0]} alt={listing.title} className="w-full h-full object-contain" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-slate-600 text-sm">No image</div>
             )}
@@ -2482,7 +2482,7 @@ function AuctionIntelCard({ auctions }: { auctions: AuctionIntelItem[] }) {
                   className={`flex items-center gap-2.5 p-2.5 rounded-xl border hover:border-[#2a3d5c] transition-colors ${urgColor}`}>
                   <div className="w-10 h-10 flex-shrink-0 rounded-lg overflow-hidden bg-[#0d1726]">
                     {a.image_url
-                      ? <img src={a.image_url} alt="" className="w-full h-full object-cover" />
+                      ? <img src={a.image_url} alt="" className="w-full h-full object-contain" />
                       : <div className="w-full h-full flex items-center justify-center"><Gavel className="w-4 h-4 text-slate-600" /></div>
                     }
                   </div>

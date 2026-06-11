@@ -393,7 +393,7 @@ function ListingCard({ listing: l, onFlip, flippingId }: {
       {/* Image */}
       <div className="relative w-full h-36 bg-[#070d14] overflow-hidden flex-shrink-0">
         {l.image_urls[0] ? (
-          <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-cover opacity-80" loading="lazy" />
+          <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-contain opacity-80" loading="lazy" />
         ) : (
           <div className="w-full h-full flex items-center justify-center opacity-10">
             <Gem className="w-10 h-10 text-slate-300" />
@@ -702,7 +702,7 @@ function PartCard({ part }: { part: GroupedPart }) {
       {/* Image */}
       <div className="w-full h-36 bg-[#070d14] border-b border-[#1e2d45] flex items-center justify-center overflow-hidden">
         {part.image_url ? (
-          <img src={part.image_url} alt={part.name} className="w-full h-full object-cover opacity-80" />
+          <img src={part.image_url} alt={part.name} className="w-full h-full object-contain opacity-80" />
         ) : (
           <Package className="w-10 h-10 text-slate-700" />
         )}

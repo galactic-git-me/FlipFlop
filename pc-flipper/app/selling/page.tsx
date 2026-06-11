@@ -263,7 +263,7 @@ export default function SellingPage() {
                     <div className="grid grid-cols-3 gap-3">
                       {images.map((url, i) => (
                         <div key={i} className="relative group">
-                          <img src={url} alt={`Product shot ${i + 1}`} className="w-full h-32 object-cover rounded-xl border border-[#1e2d45]" />
+                          <img src={url} alt={`Product shot ${i + 1}`} className="w-full h-32 object-contain rounded-xl border border-[#1e2d45]" />
                           <a
                             href={url}
                             target="_blank"

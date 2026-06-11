@@ -228,7 +228,7 @@ function CaseCard({ item }: { item: Part }) {
     <Card hover>
       <div className="relative">
         {item.image_url ? (
-          <img src={item.image_url} alt="" className="w-full h-44 object-cover rounded-t-xl" />
+          <img src={item.image_url} alt="" className="w-full h-44 object-contain rounded-t-xl" />
         ) : (
           <div className="w-full h-44 rounded-t-xl bg-gradient-to-br from-[#0a1119] to-[#0d1320] flex items-center justify-center">
             <Box className="w-10 h-10 text-slate-700" />

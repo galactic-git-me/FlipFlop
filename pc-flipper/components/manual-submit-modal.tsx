@@ -28,7 +28,7 @@ function ResultCard({ listing }: { listing: Listing }) {
       <div className="flex gap-3 p-3">
         <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-[#080c14]">
           {listing.image_urls?.[0] ? (
-            <img src={listing.image_urls[0]} alt="" className="w-full h-full object-cover" />
+            <img src={listing.image_urls[0]} alt="" className="w-full h-full object-contain" />
           ) : (
             <div className="w-full h-full flex items-center justify-center opacity-20">
               <Gem className="w-7 h-7 text-slate-400" />
