@@ -535,6 +535,10 @@ async def _upsert_listings(
     async def _enrich_listing(raw):
         async with sem:
             try:
+                from app.services.classifier import detect_component_category
+                part_category = detect_component_category(raw.title)
+                if part_category:
+                    return {"is_component": True, "raw": raw, "part_category": part_category}
                 specs = parse_specs(raw.title, raw.description)
                 if not _passes_filter(raw.price, specs, config, title=raw.title):
                     return None
@@ -598,6 +602,10 @@ async def _upsert_listings(
 
     for item in enriched:
         if not item:
+            continue
+        if item.get("is_component"):
+            from app.services.listing_ingest_queue import _save_as_part
+            await _save_as_part(item["raw"], item["part_category"])
             continue
         raw = item["raw"]
         specs = item["specs"]
