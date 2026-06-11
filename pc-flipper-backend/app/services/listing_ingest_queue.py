@@ -129,9 +129,42 @@ _MINI_PC_KW = {
 }
 
 
+async def _save_as_part(raw: Any, category: str) -> None:
+    from app.models.part import Part, PartCategory, PartCondition
+    async with AsyncSessionLocal() as db:
+        existing = await db.execute(
+            select(Part).where(Part.source_url == raw.url).limit(1)
+        )
+        if existing.scalar_one_or_none():
+            return
+        cond_raw = (raw.condition or "used").lower()
+        condition = (
+            PartCondition.new if "new" in cond_raw
+            else PartCondition.refurb if "refurb" in cond_raw
+            else PartCondition.used
+        )
+        image_url = (raw.image_urls[0] if raw.image_urls else None)
+        part = Part(
+            name=raw.title[:300],
+            category=PartCategory(category),
+            price=raw.price,
+            price_used=raw.price if condition == PartCondition.used else None,
+            price_new=raw.price if condition == PartCondition.new else None,
+            price_refurb=raw.price if condition == PartCondition.refurb else None,
+            source_site=raw.source_name,
+            source_url=raw.url,
+            condition=condition,
+            image_url=image_url,
+            last_price_update=datetime.utcnow(),
+        )
+        db.add(part)
+        await db.commit()
+        log.info("part.routed_from_flip_scan", title=raw.title[:80], category=category, price=raw.price)
+
+
 async def _process(item: IngestItem) -> None:
     from app.services.spec_parser import parse_specs, validate_pc_listing
-    from app.services.classifier import score_listing
+    from app.services.classifier import score_listing, detect_component_category
     from app.services.estimator import estimate_upgrade_cost, estimate_profit
     from app.services.resale_scraper import get_resale_range
     from app.services.claude_eval_queue import enqueue_for_claude, should_queue_for_claude
@@ -141,6 +174,12 @@ async def _process(item: IngestItem) -> None:
 
     # Quick filter — mini PCs are not flippable gaming PCs
     if any(kw in raw.title.lower() for kw in _MINI_PC_KW):
+        return
+
+    # Route standalone components/accessories to the parts catalogue
+    part_category = detect_component_category(raw.title)
+    if part_category:
+        await _save_as_part(raw, part_category)
         return
 
     # ── Validate listing is actually a PC (filter false positives) ──────────────

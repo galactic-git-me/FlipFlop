@@ -80,6 +80,21 @@ POOR_TITLE_PATTERNS = [
 _AM4_HINTS = ("am4", "b450", "b550", "x470", "x570")
 _AM5_HINTS = ("am5", "b650", "x670", "a620")
 
+# Maps component hint substrings to their PartCategory value.
+# Order matters — first match wins.
+_COMPONENT_CATEGORY_MAP: list[tuple[tuple[str, ...], str]] = [
+    (("graphics card", "video card", "gpu only", "geforce rtx", "geforce gtx",
+      "radeon rx graphics", "nvidia rtx graphics", "nvidia gtx graphics"), "gpu"),
+    ((" cpu", " processor", "bare cpu", "cpu only", "no motherboard"), "cpu"),
+    ((" ssd", "solid state drive", "nvme drive", "m.2 drive", " hdd ", "hard drive",
+      "hard disk", '2.5" drive', '3.5" drive'), "ssd"),
+    (("ram stick", "memory stick", "ddr4 ram", "ddr5 ram", "dimm", "sodimm",
+      "16gb ram", "32gb ram", "8gb ram"), "ram"),
+    (("motherboard", "mainboard"), "motherboard"),
+    (("power supply unit", "psu only", "modular psu"), "psu"),
+    (("keyboard", "mouse", "headset", "webcam", "microphone", "speakers", "gaming chair", "monitor"), "accessory"),
+]
+
 # Keywords that mark a listing as a bare component rather than a complete PC.
 # These listings don't fit the flip model.
 _COMPONENT_ONLY_HINTS = (
@@ -285,3 +300,18 @@ def _classify(
     if profit >= -30:
         return Classification.no_profit
     return Classification.overpriced
+
+
+def detect_component_category(title: str) -> str | None:
+    """
+    Returns the PartCategory value string if the title is a standalone component
+    that belongs in the parts catalogue rather than the flip_opportunities catalogue.
+    Returns None if the listing looks like a complete PC.
+    """
+    t = title.lower()
+    if any(h in t for h in _COMPLETE_PC_HINTS):
+        return None
+    for hints, category in _COMPONENT_CATEGORY_MAP:
+        if any(h in t for h in hints):
+            return category
+    return None
