@@ -175,7 +175,8 @@ async def stream_companion(
             data = resp.json()
         except Exception as exc:
             log.warning("companion.ollama_error", error=str(exc))
-            yield f"data: {json.dumps({'type': 'token', 'content': \"I'm having trouble connecting to my brain right now. Try again in a moment.\"})}\n\n"
+            _err_msg = "I'm having trouble connecting to my brain right now. Try again in a moment."
+            yield f"data: {json.dumps({'type': 'token', 'content': _err_msg})}\n\n"
             yield f"data: {json.dumps({'type': 'done', 'model_used': 'none'})}\n\n"
             return
 
