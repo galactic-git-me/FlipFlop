@@ -1,0 +1,108 @@
+<h2>Hermes — with Catalogue Search</h2>
+<p class="subtitle">The bot can search live listings mid-conversation and show results inline.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Chat with search results inline</div>
+  <div class="mockup-body" style="background:#12151f;border-radius:12px;padding:0;overflow:hidden;max-width:340px;margin:0 auto;">
+    <!-- header -->
+    <div style="background:#1a1d2e;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #2a2d3e;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#7c85ff;display:flex;align-items:center;justify-content:center;font-size:15px;">🤖</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#e0e0ff;">Hermes</div>
+        <div style="font-size:10px;color:#00c896;">● online · gemma4:e4b</div>
+      </div>
+    </div>
+    <!-- messages -->
+    <div style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+
+      <!-- user message -->
+      <div style="background:#7c85ff22;border:1px solid #7c85ff33;border-radius:10px 10px 2px 10px;padding:8px 10px;font-size:11px;color:#c0c0e0;max-width:85%;margin-left:auto;">
+        Find me RTX 3060 PCs under £200
+      </div>
+
+      <!-- bot: searching indicator -->
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:24px;height:24px;border-radius:50%;background:#7c85ff;display:flex;align-items:center;justify-content:center;font-size:11px;">🤖</div>
+        <div style="font-size:10px;color:#7c85ff;font-style:italic;">🔍 searching catalogue...</div>
+      </div>
+
+      <!-- bot: results card -->
+      <div style="background:#1a1d2e;border-radius:2px 10px 10px 10px;padding:10px;font-size:11px;color:#c0c0e0;max-width:95%;">
+        <div style="margin-bottom:8px;color:#e0e0ff;">Found 3 listings matching that:</div>
+
+        <!-- result 1 -->
+        <div style="background:#0d0f1a;border:1px solid #2a2d3e;border-radius:8px;padding:8px;margin-bottom:6px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px;">
+            <div style="font-size:10px;color:#e0e0ff;line-height:1.3;">Gaming PC i7 RTX 3060 16GB No Storage</div>
+            <div style="font-size:11px;font-weight:700;color:#00c896;white-space:nowrap;">£149</div>
+          </div>
+          <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;">
+            <span style="background:#00c89622;color:#00c896;font-size:9px;padding:2px 6px;border-radius:4px;">GEM</span>
+            <span style="background:#1a1d2e;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;">eBay</span>
+            <span style="color:#f59e0b;font-size:9px;">score 81</span>
+          </div>
+        </div>
+
+        <!-- result 2 -->
+        <div style="background:#0d0f1a;border:1px solid #2a2d3e;border-radius:8px;padding:8px;margin-bottom:6px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px;">
+            <div style="font-size:10px;color:#e0e0ff;line-height:1.3;">i5-10400F RTX 3060 Bundle PC</div>
+            <div style="font-size:11px;font-weight:700;color:#f59e0b;white-space:nowrap;">£185</div>
+          </div>
+          <div style="margin-top:4px;display:flex;gap:4px;">
+            <span style="background:#f59e0b22;color:#f59e0b;font-size:9px;padding:2px 6px;border-radius:4px;">WATCH</span>
+            <span style="background:#1a1d2e;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;">Gumtree</span>
+          </div>
+        </div>
+
+        <!-- result 3 -->
+        <div style="background:#0d0f1a;border:1px solid #2a2d3e;border-radius:8px;padding:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px;">
+            <div style="font-size:10px;color:#e0e0ff;line-height:1.3;">RTX 3060 Gaming Rig i7 32GB RAM</div>
+            <div style="font-size:11px;font-weight:700;color:#e0e0ff;white-space:nowrap;">£199</div>
+          </div>
+          <div style="margin-top:4px;display:flex;gap:4px;">
+            <span style="background:#2a2d3e;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;">OK</span>
+            <span style="background:#1a1d2e;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;">eBay</span>
+          </div>
+        </div>
+
+        <div style="margin-top:8px;color:#888;font-size:10px;">
+          The first one's your best bet — no storage is your upgrade margin. Want me to break down the flip potential?
+        </div>
+      </div>
+
+    </div>
+    <!-- input -->
+    <div style="padding:10px;border-top:1px solid #2a2d3e;display:flex;gap:6px;">
+      <div style="flex:1;background:#1a1d2e;border:1px solid #2a2d3e;border-radius:8px;padding:6px 10px;font-size:11px;color:#555;">Ask anything...</div>
+      <div style="background:#7c85ff;border-radius:8px;padding:6px 10px;font-size:11px;color:#fff;">→</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>Full design summary</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+    <div style="background:#1a1d2e;border:1px solid #2a2d3e;border-radius:10px;padding:14px;">
+      <div style="font-size:11px;color:#7c85ff;font-weight:700;margin-bottom:8px;">Frontend</div>
+      <ul style="font-size:10px;color:#888;margin:0;padding-left:14px;line-height:1.8;">
+        <li>Floating GIF button in root layout.tsx</li>
+        <li>Chat panel slides up from bottom-right</li>
+        <li>Inline listing result cards</li>
+        <li>Persists across page navigation</li>
+        <li>Streaming responses from Ollama</li>
+      </ul>
+    </div>
+    <div style="background:#1a1d2e;border:1px solid #2a2d3e;border-radius:10px;padding:14px;">
+      <div style="font-size:11px;color:#00c896;font-weight:700;margin-bottom:8px;">Backend</div>
+      <ul style="font-size:10px;color:#888;margin:0;padding-left:14px;line-height:1.8;">
+        <li>New /api/chat/companion endpoint</li>
+        <li>search_listings() tool Gemma can call</li>
+        <li>Context snapshot injected on open</li>
+        <li>Streaming SSE response</li>
+        <li>Catalogue context refreshed on change</li>
+      </ul>
+    </div>
+  </div>
+</div>
