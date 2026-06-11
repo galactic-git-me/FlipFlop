@@ -1,5 +1,6 @@
 import structlog
 import asyncio
+import os
 import sys
 
 # Playwright requires ProactorEventLoop on Windows to launch browser subprocesses.
@@ -247,6 +248,19 @@ async def _wipe_dev_data() -> None:
     log.info("dev.wipe.done")
 
 
+async def _reap_zombie_children() -> None:
+    """Periodically reap zombie children left by Playwright's headless_shell subprocesses."""
+    while True:
+        try:
+            while True:
+                pid, _ = os.waitpid(-1, os.WNOHANG)
+                if pid == 0:
+                    break
+        except ChildProcessError:
+            pass
+        await asyncio.sleep(30)
+
+
 async def lifespan(app: FastAPI):
     install_log_capture()          # must be first — before any structlog usage
     loop = asyncio.get_running_loop()
@@ -268,7 +282,9 @@ async def lifespan(app: FastAPI):
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     asyncio.create_task(_queue_unevaluated_gems())  # auto-queue gems on startup
+    reaper = asyncio.create_task(_reap_zombie_children())
     yield
+    reaper.cancel()
     stop_scheduler()
     await stop_ingest_workers()
     await stop_eval_workers()
