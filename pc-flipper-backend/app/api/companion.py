@@ -1,3 +1,5 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -10,7 +12,7 @@ router = APIRouter(prefix="/companion", tags=["companion"])
 
 
 class CompanionMessage(BaseModel):
-    role: str
+    role: Literal["user", "assistant"]
     content: str
 
 
