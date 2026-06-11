@@ -374,7 +374,7 @@ export default function DashboardPage() {
     .slice(0, 10);
 
   // Scatter chart data — listings already sorted by gem_score desc from the API
-  const chartListings = topN > 0 ? listings.slice(0, topN) : listings;
+  const chartListings = listings;
 
   // ── Profit histogram ─────────────────────────────────────────────────────────
   const profitHistogram = useMemo(() => {
@@ -774,7 +774,7 @@ export default function DashboardPage() {
                         contentStyle={{ background: "#0b111d", border: "1px solid #1e2d45", borderRadius: 8, fontSize: 11 }}
                         labelStyle={{ color: "#94a3b8" }}
                         itemStyle={{ color: "#e2e8f0" }}
-                        formatter={(v: number) => [v, "listings"]}
+                        formatter={(v) => [v, "listings"]}
                       />
                       <Bar dataKey="count" radius={[3, 3, 0, 0]}>
                         {profitHistogram.map((entry, i) => (
@@ -824,8 +824,8 @@ export default function DashboardPage() {
                         contentStyle={{ background: "#0b111d", border: "1px solid #1e2d45", borderRadius: 8, fontSize: 11 }}
                         labelStyle={{ color: "#94a3b8" }}
                         itemStyle={{ color: "#e2e8f0" }}
-                        formatter={(v: number, _name: string, props: { payload?: { total: number; rate: number } }) => [
-                          `${v} gems (${props.payload?.rate ?? 0}% of ${props.payload?.total ?? 0})`,
+                        formatter={(v, _name, props) => [
+                          `${v} gems (${(props as { payload?: { total: number; rate: number } }).payload?.rate ?? 0}% of ${(props as { payload?: { total: number; rate: number } }).payload?.total ?? 0})`,
                           "Source",
                         ]}
                       />
@@ -833,7 +833,7 @@ export default function DashboardPage() {
                         <LabelList
                           dataKey="rate"
                           position="right"
-                          formatter={(v: number) => `${v}%`}
+                          formatter={(v) => `${v}%`}
                           style={{ fill: "#64748b", fontSize: 10 }}
                         />
                       </Bar>
