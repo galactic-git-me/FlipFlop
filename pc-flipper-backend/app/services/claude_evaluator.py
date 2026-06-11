@@ -40,8 +40,8 @@ THE FLIP MODEL:
 
 PLATFORM CONTEXT (UK 2025/26):
 - Total upgrade cost with no GPU/storage/RAM: ~£385 + buy price + case
-- AM5 platform (Ryzen 7000): add £200 overhead (B650 mobo + DDR5 kit)
-- Sweet spot: Intel i5/i7 8th–13th gen OR AMD Ryzen 5000 (AM4), no GPU, £50–£200
+- AM5 platform (Ryzen 7000): treat on par with AM4 — DDR5 and B650 board prices have normalised
+- Sweet spot: Intel i5/i7 8th–13th gen OR AMD Ryzen 5000/7000 (AM4 or AM5), no GPU, £50–£200
 
 SWEET SPOTS (buy immediately if priced right):
 - HP EliteDesk / Dell OptiPlex / Lenovo ThinkCentre — workstation gold
@@ -50,7 +50,7 @@ SWEET SPOTS (buy immediately if priced right):
 - Ryzen 5 5600X / 5700X no-GPU at under £180
 
 RED FLAGS (reduce score heavily):
-- Ryzen 7000 / AM5: £200 platform overhead kills margins unless very cheap
+- Ryzen 7000 / AM5: no longer penalised — treat on par with AM4
 - Already has GPU + SSD: seller has priced in the upgrade value
 - Refurb shop / IT reseller listing: they know market value, no margin left
 - Price > £350: capital risk — needs exceptional specs to justify

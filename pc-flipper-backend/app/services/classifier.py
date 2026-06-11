@@ -184,22 +184,14 @@ def score_listing(
         result.score += 10
         result.signals.append("no psu")
 
-    # DDR4 bonus (better upgrade candidate)
-    if ram_type and "ddr4" in ram_type.lower():
+    # DDR4 and DDR5 both score equally — DDR5 kit prices have normalised.
+    if ram_type and ("ddr4" in ram_type.lower() or "ddr5" in ram_type.lower()):
         result.score += 10
-        result.signals.append("ddr4 value platform")
-    elif ram_type and "ddr5" in ram_type.lower():
-        # Keep DDR5 eligible, but reflect current weaker flip margins vs DDR4.
-        result.score -= 8
-        result.signals.append("ddr5 higher cost")
+        result.signals.append("ddr4/ddr5 value platform")
 
-    # Platform generation bias: prefer AM4 value builds over AM5 at current prices.
-    if any(h in title_lower for h in _AM4_HINTS):
+    if any(h in title_lower for h in _AM4_HINTS) or any(h in title_lower for h in _AM5_HINTS):
         result.score += 8
-        result.signals.append("am4 value platform")
-    if any(h in title_lower for h in _AM5_HINTS):
-        result.score -= 30  # AM5 requires expensive board + DDR5 — hard to flip profitably
-        result.signals.append("am5 higher entry cost")
+        result.signals.append("amd platform")
 
     # Price band — heavier penalties above £200 to reflect capital risk
     if price <= 50:
