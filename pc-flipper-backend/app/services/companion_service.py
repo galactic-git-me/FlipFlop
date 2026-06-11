@@ -9,7 +9,7 @@ from typing import AsyncIterator
 
 import httpx
 import structlog
-from sqlalchemy import select, func
+from sqlalchemy import select, func, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -94,8 +94,8 @@ async def get_catalogue_snapshot(db: AsyncSession) -> str:
     row = await db.execute(
         select(
             func.count().label("total"),
-            func.sum((Listing.classification == Classification.gem).cast(int)).label("gems"),
-            func.sum((Listing.classification == Classification.watching).cast(int)).label("watching"),
+            func.sum((Listing.classification == Classification.gem).cast(Integer)).label("gems"),
+            func.sum((Listing.classification == Classification.watching).cast(Integer)).label("watching"),
             func.max(Listing.seen_at).label("last_seen"),
         ).select_from(Listing)
     )
