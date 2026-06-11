@@ -644,3 +644,55 @@ export const api = {
     }>(`/reselling/flips/${flipId}/listing-preview`),
   },
 };
+
+// ── Hermes Companion ──────────────────────────────────────────────────────────
+
+export interface CompanionMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface CompanionSSEEvent {
+  type: "token" | "search_results" | "done";
+  content?: string;
+  results?: import("@/components/hermes-context").SearchResult[];
+  model_used?: string;
+}
+
+export async function streamCompanion(
+  message: string,
+  history: CompanionMessage[],
+  pageContext: string,
+  onEvent: (event: CompanionSSEEvent) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  const res = await fetch(apiUrl("/companion/stream"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, history, page_context: pageContext }),
+    signal,
+  });
+  if (!res.ok || !res.body) throw new Error(`Companion stream failed: ${res.status}`);
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    for (const line of lines) {
+      if (line.startsWith("data: ")) {
+        try {
+          const event: CompanionSSEEvent = JSON.parse(line.slice(6));
+          onEvent(event);
+        } catch {
+          // malformed SSE line, skip
+        }
+      }
+    }
+  }
+}
