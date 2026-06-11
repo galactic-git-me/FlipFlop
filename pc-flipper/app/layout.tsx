@@ -6,6 +6,8 @@ import { BackendStatus } from "@/components/backend-status";
 import { TraeBg } from "@/components/trae-bg";
 import { TopCommandBar } from "@/components/top-command-bar";
 import { FaviconAnimator } from "@/components/favicon-animator";
+import { HermesProvider } from "@/components/hermes-context";
+import { HermesCompanion } from "@/components/hermes-companion";
 
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
@@ -42,7 +44,10 @@ export default function RootLayout({
         <div className="node-main-wrap">
           <TopCommandBar />
           <main className="node-content">
-            {children}
+            <HermesProvider>
+              {children}
+              <HermesCompanion />
+            </HermesProvider>
           </main>
         </div>
 
