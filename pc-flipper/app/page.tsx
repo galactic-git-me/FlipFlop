@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
   ResponsiveContainer, ReferenceLine, ComposedChart, Bar, Line,
+  BarChart, LabelList,
 } from "recharts";
 import {
   TrendingUp, Gem, Zap, Clock, Bell, ArrowRight, RefreshCw,
@@ -390,6 +391,40 @@ export default function DashboardPage() {
   const roiVals = roiScatterData.map(d => d.y);
   const roiMin = Math.floor((Math.min(...roiVals, -10)) / 10) * 10;
   const roiMax = Math.ceil((Math.max(...roiVals, 50)) / 10) * 10;
+
+  // ── Profit histogram ─────────────────────────────────────────────────────────
+  const profitHistogram = useMemo(() => {
+    const BUCKET = 50;
+    const profits = chartListings.map(l => l.estimated_profit ?? 0);
+    if (!profits.length) return [];
+    const lo = Math.floor(Math.min(...profits) / BUCKET) * BUCKET;
+    const hi = Math.ceil(Math.max(...profits) / BUCKET) * BUCKET;
+    const buckets: { label: string; count: number; fill: string }[] = [];
+    for (let b = lo; b < hi; b += BUCKET) {
+      const count = profits.filter(p => p >= b && p < b + BUCKET).length;
+      buckets.push({
+        label: `£${b}–${b + BUCKET}`,
+        count,
+        fill: b + BUCKET <= 0 ? "#ef4444" : b >= 100 ? "#00dc82" : "#f59e0b",
+      });
+    }
+    return buckets;
+  }, [chartListings]);
+
+  // ── Gems by source ────────────────────────────────────────────────────────────
+  const sourceGemData = useMemo(() => {
+    return Object.entries(stats.by_source_gems)
+      .map(([source, gems]) => ({
+        source: source.replace("eBay UK", "eBay").replace(" Auctions", " Auct."),
+        gems,
+        total: stats.by_source_listings[source] ?? 0,
+        rate: stats.by_source_listings[source]
+          ? Math.round((gems / stats.by_source_listings[source]) * 100)
+          : 0,
+      }))
+      .filter(d => d.gems > 0)
+      .sort((a, b) => b.gems - a.gems);
+  }, [stats.by_source_gems, stats.by_source_listings]);
 
   // ── PnL chart data ───────────────────────────────────────────────────────────
   const allSources  = [...new Set(flips.map(f => f.listing?.source_name).filter((s): s is string => !!s))];
