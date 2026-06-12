@@ -170,6 +170,25 @@ _STRONG_COMPONENT_SIGNALS = (
     "game---",
     " game pc cd",        # "action game pc cd"
     " game pc dvd",
+    # ── GPU cards — titles like "GeForce 7900 GS ... Retro PC Gaming Graphics Card"
+    # contain "pc" which overrides the _COMPONENT_ONLY_HINTS "graphics card" check.
+    "graphics card",
+    "video card",
+    "gpu card",
+    # ── Component bundles containing "pc" ─────────────────────────────────────
+    "pc bundle",
+    "mobo bundle",
+    "cpu bundle",
+    # ── External storage — "External Desktop HDD", etc. ──────────────────────
+    "external hdd",
+    "external hard drive",
+    "external desktop hdd",
+    "portable hard drive",
+    "portable ssd",
+    "usb hard drive",
+    "external ssd",
+    # ── All-in-ones ──────────────────────────────────────────────────────────
+    "aio workstation",
     # ── RAM sticks ────────────────────────────────────────────────────────────
     # RAM titles routinely contain "pc" (PC4-25600, "Desktop PC RAM", "Gaming PC RAM")
     "desktop memory",
@@ -233,6 +252,21 @@ def score_listing(
     if is_component_only:
         result.classification = Classification.overpriced
         result.signals.append("component-only listing")
+        return result
+
+    # Require at least some evidence this is a real PC.
+    # A listing with no detected specs (no CPU, no GPU, no RAM, no storage)
+    # and no known workstation brand in the title is likely a game, peripheral,
+    # or bare mystery item — not a flippable PC.
+    _KNOWN_BRANDS = (
+        "elitedesk", "optiplex", "thinkcentre", "thinkstation", "prodesk",
+        "esprimo", "veriton", "hp z2", "hp z4", "hp z6", "dell precision",
+        "vostro", "hp elite", "lenovo", "dell", "hp ", "acer ", "asus ",
+    )
+    has_spec = cpu or gpu or ram_gb or storage_gb
+    has_brand = any(b in title_lower for b in _KNOWN_BRANDS)
+    if not has_spec and not has_brand:
+        result.classification = Classification.unclassified
         return result
 
     # Gem signals from title
