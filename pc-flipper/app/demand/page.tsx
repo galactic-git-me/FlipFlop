@@ -313,116 +313,386 @@ function TrendIcon({ trend }: { trend: string }) {
   return <span className="flex items-center gap-1 text-slate-500"><Minus className="w-3 h-3" /> stable</span>;
 }
 
-// ── External Signals tab ──────────────────────────────────────────────────────
+// ── External Signals tab — three sub-source views ────────────────────────────
 
-type SigSource = "All" | "Reddit" | "Google Trends" | "Steam";
-type SigSort = "Score ↓" | "Confidence ↓" | "Date ↓";
-
-const SOURCE_LABEL: Record<string, string> = {
-  reddit: "Reddit",
-  google_trends: "Google Trends",
-  steam_hardware: "Steam",
-};
-
-const SOURCE_COLOR: Record<string, string> = {
-  reddit: "#ff6b6b",
-  google_trends: "#4fc3f7",
-  steam_hardware: "#81c784",
-};
+type SigSubTab = "google" | "reddit" | "steam";
 
 function ExternalSignalsTab({ data, loading, error, onRetry }: {
-  data: { summary: Record<string, { count: number; avg_score: number; avg_confidence: number }>; items: Record<string, ExternalSignalItem[]> };
+  data: RichSignals;
   loading: boolean;
   error: string | null;
   onRetry: () => void;
 }) {
-  const [source, setSource] = useState<SigSource>("All");
-  const [sort, setSort] = useState<SigSort>("Score ↓");
-
-  const allItems: ExternalSignalItem[] = useMemo(() => {
-    return Object.values(data.items ?? {}).flat() as ExternalSignalItem[];
-  }, [data.items]);
-
-  const filtered = useMemo(() => {
-    let rows = [...allItems];
-    if (source !== "All") {
-      const key = source === "Reddit" ? "reddit" : source === "Google Trends" ? "google_trends" : "steam_hardware";
-      rows = rows.filter((r) => r.source === key);
-    }
-    if (sort === "Score ↓") rows.sort((a, b) => b.score - a.score);
-    else if (sort === "Confidence ↓") rows.sort((a, b) => b.confidence - a.confidence);
-    else if (sort === "Date ↓") rows.sort((a, b) => new Date(b.signal_time).getTime() - new Date(a.signal_time).getTime());
-    return rows;
-  }, [allItems, source, sort]);
-
-  // Build chart data: avg score per topic per source
-  const chartData = useMemo(() => {
-    const topicMap: Record<string, Record<string, { total: number; count: number }>> = {};
-    allItems.forEach((item) => {
-      if (!topicMap[item.topic]) topicMap[item.topic] = {};
-      if (!topicMap[item.topic][item.source]) topicMap[item.topic][item.source] = { total: 0, count: 0 };
-      topicMap[item.topic][item.source].total += item.score;
-      topicMap[item.topic][item.source].count += 1;
-    });
-    return Object.entries(topicMap).map(([topic, sources]) => ({
-      topic: topic.replace(/_/g, " ").slice(0, 18),
-      reddit: sources.reddit ? Math.round(sources.reddit.total / sources.reddit.count) : 0,
-      google_trends: sources.google_trends ? Math.round(sources.google_trends.total / sources.google_trends.count) : 0,
-      steam_hardware: sources.steam_hardware ? Math.round(sources.steam_hardware.total / sources.steam_hardware.count) : 0,
-    }));
-  }, [allItems]);
+  const [subTab, setSubTab] = useState<SigSubTab>("google");
 
   if (loading) return <Spinner />;
   if (error) return <ErrorBanner msg={`Failed to load signals — ${error}`} onRetry={onRetry} />;
-  if (!allItems.length) return (
+
+  const isEmpty =
+    data.google_trends.queries.length === 0 &&
+    data.reddit.posts.length === 0 &&
+    data.steam.stats.length === 0;
+
+  if (isEmpty) return (
     <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
-      <p className="text-sm">No external signals — click Refresh to fetch.</p>
+      <p className="text-sm">No signal data yet — click <strong>Refresh</strong> to fetch from Google Trends, Reddit, and Steam.</p>
     </div>
   );
+
+  const subTabs: { id: SigSubTab; label: string }[] = [
+    { id: "google", label: "📈 Google Trends" },
+    { id: "reddit", label: "💬 Reddit" },
+    { id: "steam", label: "🎮 Steam Hardware" },
+  ];
+
+  return (
+    <div className="space-y-4">
+      {/* Sub-tab bar */}
+      <div className="flex gap-1 border-b border-white/8">
+        {subTabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setSubTab(t.id)}
+            className={`px-4 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
+              subTab === t.id
+                ? "border-[#4fc3f7] text-[#4fc3f7]"
+                : "border-transparent text-slate-500 hover:text-slate-300"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {subTab === "google" && <GoogleTrendsView data={data.google_trends} />}
+      {subTab === "reddit" && <RedditView posts={data.reddit.posts} />}
+      {subTab === "steam" && <SteamView stats={data.steam.stats} />}
+    </div>
+  );
+}
+
+// ── Google Trends view ────────────────────────────────────────────────────────
+
+import { LineChart, Line } from "recharts";
+
+function GoogleTrendsView({ data }: {
+  data: RichSignals["google_trends"];
+}) {
+  const queries = data.queries;
+  const [selectedQuery, setSelectedQuery] = useState<string>(queries[0] ?? "");
+
+  const tsData = useMemo(
+    () => (selectedQuery && data.timeseries[selectedQuery]) ? data.timeseries[selectedQuery] : [],
+    [data.timeseries, selectedQuery],
+  );
+
+  const geoData = useMemo(
+    () => (selectedQuery && data.geo[selectedQuery]) ? data.geo[selectedQuery].slice(0, 15) : [],
+    [data.geo, selectedQuery],
+  );
+
+  if (queries.length === 0) return <Empty label="No Google Trends data — click Refresh." />;
+
+  return (
+    <div className="space-y-4">
+      {/* Query picker */}
+      <div className="flex flex-wrap gap-1.5">
+        {queries.map((q) => (
+          <button
+            key={q}
+            onClick={() => setSelectedQuery(q)}
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+              selectedQuery === q
+                ? "bg-[#4fc3f7]/15 border-[#4fc3f7]/50 text-[#4fc3f7]"
+                : "bg-transparent border-white/10 text-slate-400 hover:border-white/25 hover:text-slate-300"
+            }`}
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Time series chart */}
+        <div className="bg-[#070e1a] rounded-lg border border-white/5 p-3">
+          <p className="text-[10px] text-slate-500 mb-2">Interest over time (7 days) — <span className="text-[#4fc3f7]">{selectedQuery}</span></p>
+          {tsData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={tsData} margin={{ top: 4, right: 8, bottom: 20, left: 0 }}>
+                <XAxis
+                  dataKey="date"
+                  tick={{ fill: "#64748b", fontSize: 9 }}
+                  angle={-30}
+                  textAnchor="end"
+                  interval={Math.floor(tsData.length / 6)}
+                />
+                <YAxis tick={{ fill: "#64748b", fontSize: 10 }} domain={[0, 100]} />
+                <Tooltip content={<ChartTooltip />} />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#4fc3f7"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 4, fill: "#4fc3f7" }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-[180px] text-slate-600 text-xs">No time-series data</div>
+          )}
+        </div>
+
+        {/* Geo chart */}
+        <div className="bg-[#070e1a] rounded-lg border border-white/5 p-3">
+          <p className="text-[10px] text-slate-500 mb-2">Top regions by interest — <span className="text-[#4fc3f7]">{selectedQuery}</span></p>
+          {geoData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={geoData} layout="vertical" margin={{ top: 0, right: 40, bottom: 0, left: 80 }}>
+                <XAxis type="number" tick={{ fill: "#64748b", fontSize: 9 }} domain={[0, 100]} />
+                <YAxis
+                  type="category"
+                  dataKey="region"
+                  tick={{ fill: "#94a3b8", fontSize: 9 }}
+                  width={76}
+                />
+                <Tooltip content={<ChartTooltip />} />
+                <Bar dataKey="value" fill="#4fc3f7" radius={[0, 3, 3, 0]} opacity={0.8}>
+                  <LabelList dataKey="value" position="right" style={{ fill: "#64748b", fontSize: 9 }} formatter={(v: unknown) => `${v}`} />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-[180px] text-slate-600 text-xs">No geo data</div>
+          )}
+        </div>
+      </div>
+
+      {/* All queries summary table */}
+      <div className="overflow-x-auto rounded-lg border border-white/5">
+        <table className="w-full text-xs text-left">
+          <thead className="bg-[#070e1a] text-slate-500 uppercase text-[10px] tracking-wide">
+            <tr>
+              <th className="px-3 py-2">Search Term</th>
+              <th className="px-3 py-2">Data Points</th>
+              <th className="px-3 py-2">Latest Value</th>
+              <th className="px-3 py-2">Peak (7d)</th>
+              <th className="px-3 py-2">Top Region</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {queries.map((q) => {
+              const ts = data.timeseries[q] ?? [];
+              const geo = data.geo[q] ?? [];
+              const latest = ts[ts.length - 1]?.value ?? 0;
+              const peak = ts.length ? Math.max(...ts.map((r) => r.value)) : 0;
+              return (
+                <tr
+                  key={q}
+                  className="hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  onClick={() => setSelectedQuery(q)}
+                >
+                  <td className="px-3 py-2 font-medium" style={{ color: selectedQuery === q ? "#4fc3f7" : "#cbd5e1" }}>{q}</td>
+                  <td className="px-3 py-2 text-slate-500">{ts.length}</td>
+                  <td className="px-3 py-2 font-mono" style={{ color: latest >= 60 ? "#00dc82" : latest >= 30 ? "#f59e0b" : "#ef4444" }}>
+                    {Math.round(latest)}
+                  </td>
+                  <td className="px-3 py-2 font-mono text-slate-400">{Math.round(peak)}</td>
+                  <td className="px-3 py-2 text-slate-500">{geo[0]?.region ?? "—"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ── Reddit view ───────────────────────────────────────────────────────────────
+
+function RedditView({ posts }: { posts: RichSignals["reddit"]["posts"] }) {
+  const [topicFilter, setTopicFilter] = useState("All");
+  const [queryFilter, setQueryFilter] = useState("All");
+  const [sort, setSort] = useState<"Score ↓" | "Comments ↓" | "Date ↓">("Score ↓");
+
+  const topics = useMemo(() => ["All", ...Array.from(new Set(posts.map((p) => p.topic)))], [posts]);
+  const queries = useMemo(() => {
+    const filtered = topicFilter === "All" ? posts : posts.filter((p) => p.topic === topicFilter);
+    return ["All", ...Array.from(new Set(filtered.map((p) => p.query)))];
+  }, [posts, topicFilter]);
+
+  const filtered = useMemo(() => {
+    let rows = [...posts];
+    if (topicFilter !== "All") rows = rows.filter((p) => p.topic === topicFilter);
+    if (queryFilter !== "All") rows = rows.filter((p) => p.query === queryFilter);
+    if (sort === "Score ↓") rows.sort((a, b) => b.score - a.score);
+    else if (sort === "Comments ↓") rows.sort((a, b) => b.comments - a.comments);
+    else if (sort === "Date ↓") rows.sort((a, b) => new Date(b.created_utc ?? 0).getTime() - new Date(a.created_utc ?? 0).getTime());
+    return rows;
+  }, [posts, topicFilter, queryFilter, sort]);
+
+  // Subreddit bar chart
+  const subredditChart = useMemo(() => {
+    const counts: Record<string, number> = {};
+    filtered.forEach((p) => { counts[p.subreddit] = (counts[p.subreddit] ?? 0) + 1; });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([sub, cnt]) => ({ sub, cnt }));
+  }, [filtered]);
+
+  if (posts.length === 0) return <Empty label="No Reddit posts — click Refresh." />;
 
   return (
     <div className="space-y-4">
       {/* Slicers */}
-      <div className="flex flex-wrap gap-4 items-center">
+      <div className="flex flex-wrap gap-3 items-center">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">Source</span>
-          <Pills<SigSource>
-            options={["All", "Reddit", "Google Trends", "Steam"]}
-            value={source}
-            onChange={setSource}
-          />
+          <span className="text-xs text-slate-500">Topic</span>
+          <select value={topicFilter} onChange={(e) => { setTopicFilter(e.target.value); setQueryFilter("All"); }}
+            className="bg-[#0a1628] border border-white/10 text-slate-300 text-xs rounded-md px-2 py-1">
+            {topics.map((t) => <option key={t}>{t.replace(/_/g, " ")}</option>)}
+          </select>
         </div>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as SigSort)}
-          className="ml-auto bg-[#0a1628] border border-white/10 text-slate-300 text-xs rounded-md px-2 py-1"
-        >
-          {(["Score ↓", "Confidence ↓", "Date ↓"] as SigSort[]).map((o) => (
-            <option key={o}>{o}</option>
-          ))}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-500">Query</span>
+          <select value={queryFilter} onChange={(e) => setQueryFilter(e.target.value)}
+            className="bg-[#0a1628] border border-white/10 text-slate-300 text-xs rounded-md px-2 py-1">
+            {queries.map((q) => <option key={q}>{q}</option>)}
+          </select>
+        </div>
+        <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}
+          className="ml-auto bg-[#0a1628] border border-white/10 text-slate-300 text-xs rounded-md px-2 py-1">
+          {(["Score ↓", "Comments ↓", "Date ↓"] as const).map((o) => <option key={o}>{o}</option>)}
         </select>
       </div>
 
-      {/* Chart */}
-      <div className="bg-[#070e1a] rounded-lg border border-white/5 p-3">
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 36, left: 0 }}>
-            <XAxis dataKey="topic" tick={{ fill: "#64748b", fontSize: 10 }} angle={-30} textAnchor="end" interval={0} />
-            <YAxis tick={{ fill: "#64748b", fontSize: 10 }} domain={[0, 100]} />
-            <Tooltip content={<ChartTooltip />} />
-            <Bar dataKey="reddit" name="Reddit" fill={SOURCE_COLOR.reddit} radius={[2, 2, 0, 0]} />
-            <Bar dataKey="google_trends" name="Google Trends" fill={SOURCE_COLOR.google_trends} radius={[2, 2, 0, 0]} />
-            <Bar dataKey="steam_hardware" name="Steam" fill={SOURCE_COLOR.steam_hardware} radius={[2, 2, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        <div className="flex gap-4 justify-center mt-1">
-          {["reddit", "google_trends", "steam_hardware"].map((s) => (
-            <div key={s} className="flex items-center gap-1 text-[10px] text-slate-500">
-              <div className="w-2 h-2 rounded-sm" style={{ background: SOURCE_COLOR[s] }} />
-              {SOURCE_LABEL[s]}
-            </div>
+      {/* Subreddit distribution chart */}
+      {subredditChart.length > 0 && (
+        <div className="bg-[#070e1a] rounded-lg border border-white/5 p-3">
+          <p className="text-[10px] text-slate-500 mb-2">Posts by subreddit</p>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={subredditChart} layout="vertical" margin={{ top: 0, right: 40, bottom: 0, left: 90 }}>
+              <XAxis type="number" tick={{ fill: "#64748b", fontSize: 9 }} />
+              <YAxis type="category" dataKey="sub" tick={{ fill: "#94a3b8", fontSize: 9 }} width={86} />
+              <Tooltip content={<ChartTooltip />} />
+              <Bar dataKey="cnt" fill="#ff6b6b" radius={[0, 3, 3, 0]} opacity={0.8}>
+                <LabelList dataKey="cnt" position="right" style={{ fill: "#64748b", fontSize: 9 }} formatter={(v: unknown) => `${v}`} />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* Posts table */}
+      <div className="overflow-x-auto rounded-lg border border-white/5">
+        <div className="px-3 py-2 bg-[#070e1a] text-[10px] text-slate-500">{filtered.length} posts</div>
+        <table className="w-full text-xs text-left">
+          <thead className="bg-[#070e1a] text-slate-500 uppercase text-[10px] tracking-wide border-t border-white/5">
+            <tr>
+              {["Title", "Subreddit", "Score", "Comments", "Query", "Posted"].map((h) => (
+                <th key={h} className="px-3 py-2 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {filtered.slice(0, 100).map((p) => (
+              <tr key={p.reddit_id} className="hover:bg-white/[0.02] transition-colors">
+                <td className="px-3 py-2 max-w-[280px]">
+                  {p.url ? (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer"
+                      className="flex items-start gap-1 text-slate-200 hover:text-[#ff6b6b] transition-colors line-clamp-2">
+                      <ExternalLink className="w-3 h-3 flex-shrink-0 mt-0.5 opacity-50" />
+                      {p.title}
+                    </a>
+                  ) : (
+                    <span className="text-slate-300 line-clamp-2">{p.title}</span>
+                  )}
+                </td>
+                <td className="px-3 py-2 whitespace-nowrap text-[#ff6b6b]/80">r/{p.subreddit}</td>
+                <td className="px-3 py-2 font-mono text-slate-300">{p.score.toLocaleString()}</td>
+                <td className="px-3 py-2 text-slate-500">{p.comments}</td>
+                <td className="px-3 py-2">
+                  <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 text-[10px]">{p.query}</span>
+                </td>
+                <td className="px-3 py-2 text-slate-600 whitespace-nowrap">
+                  {p.created_utc ? fmtRelative(p.created_utc) : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {filtered.length === 0 && (
+          <div className="text-center py-8 text-slate-600 text-xs">No posts match filters.</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Steam view ────────────────────────────────────────────────────────────────
+
+type SteamCat = "GPU" | "CPU" | "RAM" | "OS";
+
+function SteamView({ stats }: { stats: RichSignals["steam"]["stats"] }) {
+  const [cat, setCat] = useState<SteamCat>("GPU");
+
+  const categories = useMemo(
+    () => Array.from(new Set(stats.map((s) => s.category))) as SteamCat[],
+    [stats],
+  );
+
+  const filtered = useMemo(
+    () => stats.filter((s) => s.category === cat).sort((a, b) => b.percentage - a.percentage).slice(0, 20),
+    [stats, cat],
+  );
+
+  const collectedAt = stats[0]?.collected_at ? fmtRelative(stats[0].collected_at) : null;
+
+  if (stats.length === 0) return <Empty label="No Steam data — click Refresh." />;
+
+  return (
+    <div className="space-y-4">
+      {/* Category pills + collected timestamp */}
+      <div className="flex items-center gap-3">
+        <div className="flex gap-1.5">
+          {(categories.length > 0 ? categories : (["GPU", "CPU", "RAM", "OS"] as SteamCat[])).map((c) => (
+            <button
+              key={c}
+              onClick={() => setCat(c)}
+              className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+                cat === c
+                  ? "bg-[#81c784]/15 border-[#81c784]/50 text-[#81c784]"
+                  : "bg-transparent border-white/10 text-slate-400 hover:border-white/25 hover:text-slate-300"
+              }`}
+            >
+              {c}
+            </button>
           ))}
         </div>
+        {collectedAt && <span className="ml-auto text-[10px] text-slate-600">Updated {collectedAt}</span>}
+      </div>
+
+      {/* Bar chart */}
+      <div className="bg-[#070e1a] rounded-lg border border-white/5 p-3">
+        <p className="text-[10px] text-slate-500 mb-2">Market share % — Steam Hardware Survey</p>
+        {filtered.length > 0 ? (
+          <ResponsiveContainer width="100%" height={filtered.length * 26 + 20}>
+            <BarChart data={filtered} layout="vertical" margin={{ top: 0, right: 60, bottom: 0, left: 160 }}>
+              <XAxis type="number" tick={{ fill: "#64748b", fontSize: 9 }} tickFormatter={(v) => `${v}%`} />
+              <YAxis type="category" dataKey="name" tick={{ fill: "#94a3b8", fontSize: 9 }} width={156} />
+              <Tooltip content={<ChartTooltip />} />
+              <Bar dataKey="percentage" fill="#81c784" radius={[0, 3, 3, 0]} opacity={0.85}>
+                <LabelList
+                  dataKey="percentage"
+                  position="right"
+                  style={{ fill: "#64748b", fontSize: 9 }}
+                  formatter={(v: unknown) => `${v}%`}
+                />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex items-center justify-center h-24 text-slate-600 text-xs">No {cat} data</div>
+        )}
       </div>
 
       {/* Table */}
@@ -430,49 +700,35 @@ function ExternalSignalsTab({ data, loading, error, onRetry }: {
         <table className="w-full text-xs text-left">
           <thead className="bg-[#070e1a] text-slate-500 uppercase text-[10px] tracking-wide">
             <tr>
-              {["Query", "Topic", "Source", "Score", "Confidence", "Samples", "Collected", "Notes"].map((h) => (
-                <th key={h} className="px-3 py-2 whitespace-nowrap">{h}</th>
-              ))}
+              <th className="px-3 py-2">Item</th>
+              <th className="px-3 py-2">Market Share</th>
+              <th className="px-3 py-2">Change</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {filtered.map((item, i) => (
+            {filtered.map((s, i) => (
               <tr key={i} className="hover:bg-white/[0.02] transition-colors">
-                <td className="px-3 py-2 text-slate-300 max-w-[200px] truncate" title={item.query ?? ""}>{item.query ?? "—"}</td>
+                <td className="px-3 py-2 text-slate-200">{s.name}</td>
                 <td className="px-3 py-2">
-                  <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 text-[10px]">
-                    {item.topic.replace(/_/g, " ")}
-                  </span>
-                </td>
-                <td className="px-3 py-2 whitespace-nowrap" style={{ color: SOURCE_COLOR[item.source] ?? "#94a3b8" }}>
-                  {SOURCE_LABEL[item.source] ?? item.source}
-                </td>
-                <td className="px-3 py-2 font-mono" style={{
-                  color: item.score >= 60 ? "#00dc82" : item.score >= 35 ? "#f59e0b" : "#ef4444"
-                }}>
-                  {Math.round(item.score)}
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-12 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#4fc3f7]"
-                        style={{ width: `${Math.round(item.confidence * 100)}%` }}
+                        className="h-full rounded-full bg-[#81c784]"
+                        style={{ width: `${Math.min(100, (s.percentage / (filtered[0]?.percentage || 1)) * 100)}%` }}
                       />
                     </div>
-                    <span className="text-slate-400 text-[10px]">{Math.round(item.confidence * 100)}%</span>
+                    <span className="font-mono text-slate-300">{s.percentage.toFixed(2)}%</span>
                   </div>
                 </td>
-                <td className="px-3 py-2 text-slate-500">{item.sample_size ?? "—"}</td>
-                <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{fmtRelative(item.signal_time)}</td>
-                <td className="px-3 py-2 text-slate-600 max-w-[160px] truncate" title={item.notes ?? ""}>{item.notes ?? "—"}</td>
+                <td className="px-3 py-2 font-mono whitespace-nowrap" style={{
+                  color: s.change == null ? "#64748b" : s.change > 0 ? "#00dc82" : s.change < 0 ? "#ef4444" : "#64748b"
+                }}>
+                  {s.change != null ? `${s.change > 0 ? "+" : ""}${s.change.toFixed(2)}%` : "—"}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {filtered.length === 0 && (
-          <div className="text-center py-8 text-slate-600 text-xs">No signals match filters.</div>
-        )}
       </div>
     </div>
   );
@@ -675,14 +931,12 @@ function KpiChip({ label, value, color }: { label: string; value: string | numbe
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-const EMPTY_SIGNALS = { summary: {}, items: {} };
-
 export default function DemandPage() {
   const [tab, setTab] = useState<Tab>("categories");
 
   const [summary, setSummary] = useState<DemandSummary | null>(null);
   const [categories, setCategories] = useState<DemandCategory[]>([]);
-  const [signals, setSignals] = useState<typeof EMPTY_SIGNALS>(EMPTY_SIGNALS);
+  const [richSignals, setRichSignals] = useState<RichSignals>(EMPTY_RICH);
   const [auctions, setAuctions] = useState<AuctionIntelItem[]>([]);
 
   const [loadingSummary, setLoadingSummary] = useState(true);
@@ -713,8 +967,8 @@ export default function DemandPage() {
       .catch((e: Error) => setErrorCat(e.message))
       .finally(() => setLoadingCat(false));
 
-    api.demand.externalSignals()
-      .then((d) => setSignals(d as typeof EMPTY_SIGNALS))
+    api.demand.richSignals()
+      .then(setRichSignals)
       .catch((e: Error) => setErrorSig(e.message))
       .finally(() => setLoadingSig(false));
 
@@ -798,7 +1052,7 @@ export default function DemandPage() {
         )}
         {tab === "signals" && (
           <ExternalSignalsTab
-            data={signals as { summary: Record<string, { count: number; avg_score: number; avg_confidence: number }>; items: Record<string, ExternalSignalItem[]> }}
+            data={richSignals}
             loading={loadingSig}
             error={errorSig}
             onRetry={fetchAll}
