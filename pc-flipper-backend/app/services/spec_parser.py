@@ -35,11 +35,14 @@ CPU_PATTERNS = [
 ]
 
 GPU_PATTERNS = [
-    r"(gtx\s*\d{3,4}(?:\s*ti)?(?:\s*\d+gb)?)",
     r"(rtx\s*\d{4}(?:\s*ti)?(?:\s*super)?(?:\s*\d+gb)?)",
+    r"(gtx\s*\d{3,4}(?:\s*ti)?(?:\s*\d+gb)?)",
+    r"(geforce\s*(?:rtx|gtx)?\s*\d{3,4}(?:\s*ti)?(?:\s*super)?)",   # GeForce 2060, GeForce RTX 3060
+    r"(\d{3,4}\s*(?:nvidia\s*)?geforce(?:\s*(?:rtx|gtx))?)",          # 2060 Nvidia Geforce, 2060 Geforce
     r"(rx\s*\d{3,4}(?:\s*xt)?(?:\s*\d+gb)?)",
     r"(radeon\s+[a-z]+\s*\d+(?:\s*xt)?)",
     r"(quadro\s+[a-z]?\d+)",
+    r"(arc\s+[ab]\d{3}(?:\s*\d+gb)?)",                                # Intel Arc A380, B580
 ]
 
 RAM_PATTERN = r"(\d+)\s*gb\s*(ddr[345]?(?:-?\d+)?|lpddr\d?)?\s*(ram|memory|dimm|ecc)?"
