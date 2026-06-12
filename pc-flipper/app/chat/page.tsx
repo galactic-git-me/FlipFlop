@@ -1019,235 +1019,257 @@ function BuildWizardPageContent() {
 
   const reset = () => {
     setPhase("playbook");
-    setSelectedPb(null);
-    setResult(null);
-    setIntent(null);
-    setSelectedBuild(null);
-    setPlan(null);
-    setGenError(null);
+    setSelectedPb(playbooks[0] ?? null);
+    setResult(null); setIntent(null); setSelectedBuild(null);
+    setSelectedParts({}); setSelectedCase(null); setPlan(null);
+    setLoadingPlan(false); setAgents([]); setGenError(null);
+    setBudget(300); setNotes(""); setPriorities(["Maximum profit"]); setConstraints([]);
+    setHistory([]);
+    setBotText("Hey! Which strategy are you going for?");
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────────
-  return (
-    <div className="p-6">
-      <div className="max-w-5xl mx-auto">
+  // ── Chat input send ──────────────────────────────────────────────────────────
+  const handleSend = useCallback(() => {
+    const text = chatInput.trim();
+    if (!text) return;
+    setChatInput("");
+    addHistory("user", text);
+    if (phase === "intent" || phase === "playbook") {
+      setNotes(prev => prev ? `${prev}. ${text}` : text);
+      addHistory("bot", "Got it — I'll factor that in.");
+    } else if (phase === "builds") {
+      addHistory("bot", "Pick a build from the list above to continue.");
+    } else {
+      addHistory("bot", "Noted!");
+    }
+  }, [chatInput, phase, addHistory]);
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-[var(--nf-border)] bg-[rgba(164,230,255,0.08)] flex items-center justify-center">
-              <Wand2 className="w-5 h-5 text-[var(--nf-primary)]" />
+  // Active widget embedded in current bot message
+  const activeWidget = (() => {
+    switch (phase) {
+      case "playbook":
+        return loadingPbs
+          ? <div className="flex gap-2 items-center text-xs text-slate-500 mt-2"><Loader2 className="w-3 h-3 animate-spin" /> Loading playbooks…</div>
+          : (
+            <div className="mt-3">
+              <PlaybookPicker
+                playbooks={playbooks}
+                selected={selectedPb}
+                onSelect={(pb) => {
+                  setSelectedPb(pb);
+                  addHistory("user", pb.name);
+                  addHistory("bot", `${pb.name} — solid choice. What's your budget and any notes?`);
+                  setBotText("Tell me your budget and goals:");
+                  setPhase("intent");
+                }}
+              />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase">Build_Wizard</h1>
-              <p className="text-xs text-[var(--nf-text-muted)] font-mono">Multi-agent · Wizard · Composer · Validator · Planner</p>
-            </div>
-          </div>
-          {phase !== "playbook" && phase !== "generating" && (
-            <button
-              onClick={reset}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-lg text-xs text-slate-500 hover:text-slate-400 transition-colors"
-            >
-              <RotateCcw className="w-3 h-3" /> Start over
-            </button>
-          )}
-        </div>
+          );
 
-        {/* Progress */}
-        {phase !== "generating" && <WizardProgress phase={phase} />}
-
-        {/* Error banner */}
-        {genError && (
-          <div className="mb-4 flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-            <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-red-300">{genError}</p>
-          </div>
-        )}
-
-        {/* Phase content */}
-        <div className="glass-card rounded-md p-6">
-          {/* ── Phase 1: Playbook ── */}
-          {phase === "playbook" && (
-            <>
-              {loadingPbs ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-5 h-5 text-[#00dc82] animate-spin" />
-                </div>
-              ) : (
-                <PlaybookPicker playbooks={playbooks} selected={selectedPb} onSelect={setSelectedPb} />
-              )}
-            </>
-          )}
-
-          {/* ── Phase 2: Intent ── */}
-          {phase === "intent" && selectedPb && (
+      case "intent":
+        return (
+          <div className="mt-3 space-y-4">
+            {genError && (
+              <div className="flex items-start gap-2 p-3 bg-red-400/10 border border-red-400/25 rounded-lg text-xs text-red-300">
+                <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />{genError}
+              </div>
+            )}
             <IntentForm
-              playbook={selectedPb}
+              playbook={selectedPb!}
               budget={budget} setBudget={setBudget}
               notes={notes} setNotes={setNotes}
               priorities={priorities} setPriorities={setPriorities}
               constraints={constraints} setConstraints={setConstraints}
             />
-          )}
+            <button
+              onClick={() => {
+                const summary = `Budget £${budget}${notes ? ` · "${notes}"` : ""} · ${priorities.join(", ")}`;
+                addHistory("user", summary);
+                addHistory("bot", "On it! Spinning up my agents…");
+                setBotText("Running agents…");
+                setPhase("generating");
+                void runGeneration();
+              }}
+              className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+            >
+              <Zap className="w-4 h-4" /> Generate Builds
+            </button>
+          </div>
+        );
 
-          {/* ── Phase 3: Generating ── */}
-          {phase === "generating" && <AgentPipeline agents={agents} />}
+      case "generating":
+        return <div className="mt-3"><AgentPipeline agents={agents} /></div>;
 
-          {/* ── Phase 4: Builds ── */}
-          {phase === "builds" && result && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-100">
-                    {result.builds.length} Validated Builds
-                  </h2>
-                  <p className="text-sm text-slate-500 mt-0.5">
-                    {result.matrix_meta
-                      ? `${result.matrix_meta.gem_count} gems × ${result.matrix_meta.playbook_count} playbooks · ranked by profit`
-                      : "Ranked by profit · demand · risk"}
-                  </p>
-                </div>
-                <span className="text-xs text-slate-600 font-mono">
-                  Budget: £{budget}
-                </span>
+      case "builds":
+        return result ? (
+          <div className="mt-3 space-y-4">
+            {result.builds.length > 0 && (
+              <div className="bg-[#070e1a] border border-[#1e2d45] rounded-xl p-4">
+                <BuildScatterGraph builds={result.builds} selectedBuild={selectedBuild ?? undefined} onSelectBuild={setSelectedBuild} />
               </div>
-
-              {/* Scatter Graph */}
-              {result.builds.length > 0 && (
-                <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl p-4">
-                  <BuildScatterGraph
-                    builds={result.builds}
-                    selectedBuild={selectedBuild ?? undefined}
-                    onSelectBuild={setSelectedBuild}
-                  />
-                </div>
-              )}
-
-              <div className="space-y-3">
-                {result.builds.map(b => (
-                  <BuildCard
-                    key={b.id}
-                    build={b}
-                    selected={selectedBuild?.id === b.id}
-                    onSelect={() => setSelectedBuild(b)}
-                  />
-                ))}
-              </div>
-              {result.builds.length === 0 && (
-                <div className="py-8 text-center">
-                  <AlertTriangle className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-                  <p className="text-sm text-slate-400">No valid builds found for this budget and playbook.</p>
-                  <p className="text-xs text-slate-600 mt-1">Try increasing the budget or choosing a different playbook.</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ── Phase 4.5: Component selection ── */}
-          {phase === "components" && selectedBuild && (
-            <ComponentSelector
-              build={selectedBuild}
-              selectedParts={selectedParts}
-              onSelectPart={(role, part) => setSelectedParts((prev) => ({ ...prev, [role]: part }))}
-              selectedCase={selectedCase}
-              onSelectCase={setSelectedCase}
-            />
-          )}
-
-          {/* ── Phase 5: Plan ── */}
-          {phase === "plan" && plan && intent && (
-            <PurchasePlanView plan={plan} intent={intent} />
-          )}
-          {phase === "plan" && loadingPlan && (
-            <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-              <Loader2 className="w-5 h-5 text-[#00dc82] animate-spin" /> Building your purchase plan…
-            </div>
-          )}
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-4">
-          <div>
-            {phase === "intent" && (
-              <button
-                onClick={() => setPhase("playbook")}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" /> Back
-              </button>
             )}
-            {phase === "builds" && (
+            <div className="space-y-3">
+              {result.builds.map(b => (
+                <BuildCard key={b.id} build={b} selected={selectedBuild?.id === b.id} onSelect={() => setSelectedBuild(b)} />
+              ))}
+            </div>
+            {result.builds.length === 0 && (
+              <div className="py-6 text-center">
+                <AlertTriangle className="w-7 h-7 text-yellow-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-400">No valid builds found — try increasing budget or changing playbook.</p>
+              </div>
+            )}
+            <div className="flex gap-3 pt-1">
               <button
-                onClick={() => setPhase("intent")}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
+                onClick={() => {
+                  addHistory("user", "← Change intent");
+                  setBotText("What would you like to change?");
+                  setPhase("intent");
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" /> Change intent
               </button>
-            )}
-            {phase === "components" && (
               <button
-                onClick={() => setPhase("builds")}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" /> Back to builds
-              </button>
-            )}
-            {phase === "plan" && (
-              <button
-                onClick={() => setPhase("components")}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" /> Back to components
-              </button>
-            )}
-          </div>
-
-          <div>
-            {phase === "playbook" && (
-              <button
-                onClick={() => setPhase("intent")}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
-              >
-                Next <ChevronRight className="w-4 h-4" />
-              </button>
-            )}
-            {phase === "intent" && (
-              <button
-                onClick={runGeneration}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
-              >
-                <Zap className="w-4 h-4" /> Generate Builds
-              </button>
-            )}
-            {phase === "builds" && (
-              <button
-                onClick={() => { setSelectedParts({}); setSelectedCase(null); setPhase("components"); }}
+                onClick={() => {
+                  if (!selectedBuild) return;
+                  addHistory("user", `Selected: ${selectedBuild.name}`);
+                  addHistory("bot", "Nice! Let's pick specific parts from the catalogue:");
+                  setBotText("Choose components for each upgrade, plus an optional case:");
+                  setSelectedParts({}); setSelectedCase(null);
+                  setPhase("components");
+                }}
                 disabled={!selectedBuild}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+                className="flex items-center gap-1.5 px-5 py-2 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
               >
                 <Package className="w-4 h-4" /> Select Components
               </button>
-            )}
-            {phase === "components" && (
+            </div>
+          </div>
+        ) : null;
+
+      case "components":
+        return selectedBuild ? (
+          <div className="mt-3 space-y-4">
+            <ComponentSelector
+              build={selectedBuild}
+              selectedParts={selectedParts}
+              onSelectPart={(role, part) => setSelectedParts(prev => ({ ...prev, [role]: part }))}
+              selectedCase={selectedCase}
+              onSelectCase={setSelectedCase}
+            />
+            <div className="flex gap-3">
               <button
-                onClick={generatePlan}
-                disabled={loadingPlan}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+                onClick={() => {
+                  addHistory("user", "← Back to builds");
+                  setBotText(`Here are your ${result?.builds.length ?? 0} builds:`);
+                  setPhase("builds");
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 transition-colors"
               >
-                {loadingPlan ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Generating plan…</>
-                ) : (
-                  <><ClipboardList className="w-4 h-4" /> Generate Plan</>
-                )}
+                <ChevronLeft className="w-4 h-4" /> Back
               </button>
-            )}
+              <button
+                onClick={() => { addHistory("user", "Generate plan"); void generatePlan(); }}
+                className="flex items-center gap-1.5 px-5 py-2 bg-[#00dc82] hover:bg-[#00dc82]/90 rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+              >
+                <ClipboardList className="w-4 h-4" /> Generate Plan
+              </button>
+            </div>
+          </div>
+        ) : null;
+
+      case "plan":
+        return loadingPlan
+          ? (
+            <div className="flex gap-2 items-center text-slate-400 text-sm mt-3 py-4">
+              <Loader2 className="w-4 h-4 animate-spin text-[#00dc82]" /> Building plan…
+            </div>
+          )
+          : (plan && intent)
+          ? (
+            <div className="mt-3 space-y-4">
+              <PurchasePlanView plan={plan} intent={intent} />
+              <button
+                onClick={() => {
+                  addHistory("user", "← Back to components");
+                  setBotText("Choose components for each upgrade:");
+                  setPhase("components");
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Back to components
+              </button>
+            </div>
+          ) : null;
+
+      default:
+        return null;
+    }
+  })();
+
+  return (
+    <div className="flex flex-col bg-[#070e1a]" style={{ height: "calc(100vh - 57px)" }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3 border-b border-[#1e2d45] flex-shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00dc82]/25 to-cyan-500/15 border border-[#00dc82]/30 flex items-center justify-center">
+            <Wand2 className="w-3.5 h-3.5 text-[#00dc82]" />
+          </div>
+          <div>
+            <span className="text-sm font-bold text-slate-200">Build Wizard</span>
+            <span className="text-[10px] text-slate-600 font-mono ml-2">Hermes AI · 5 agents</span>
+          </div>
+        </div>
+        <button
+          onClick={reset}
+          className="flex items-center gap-1 text-xs text-slate-600 hover:text-slate-400 transition-colors px-2 py-1"
+        >
+          <RotateCcw className="w-3 h-3" /> New session
+        </button>
+      </div>
+
+      {/* Chat thread */}
+      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 min-h-0">
+        {history.map(msg => <HistoryBubble key={msg.id} msg={msg} />)}
+
+        {/* Current bot turn: text + active widget */}
+        <div className="flex gap-3">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00dc82]/25 to-cyan-500/15 border border-[#00dc82]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Wand2 className="w-3.5 h-3.5 text-[#00dc82]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm text-slate-300">{botText}</p>
+            {activeWidget}
           </div>
         </div>
 
-        {/* Footer hint */}
-        <p className="text-[10px] text-slate-700 text-center mt-4">
-          Wizard · Composer · Validator · Ranker · Planner — 5 agents · powered by Hermes AI
-        </p>
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input bar */}
+      <div className="flex-shrink-0 border-t border-[#1e2d45] px-4 py-3 bg-[#070e1a]">
+        <div className="flex gap-2">
+          <input
+            value={chatInput}
+            onChange={e => setChatInput(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+            placeholder={
+              phase === "intent"   ? "Add extra context or notes…" :
+              phase === "playbook" ? "Or describe your preferred strategy…" :
+              "Type a message…"
+            }
+            className="flex-1 bg-[#0d1320] border border-[#1e2d45] focus:border-[#00dc82]/40 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none transition-colors"
+          />
+          <button
+            onClick={handleSend}
+            disabled={!chatInput.trim()}
+            className="px-4 py-2.5 bg-[#00dc82]/12 hover:bg-[#00dc82]/20 disabled:opacity-40 border border-[#00dc82]/25 rounded-xl text-[#00dc82] text-sm font-semibold transition-all"
+          >
+            Send
+          </button>
+        </div>
+        <p className="text-[10px] text-slate-700 mt-2 text-center">Wizard · Composer · Validator · Ranker · Planner — 5 agents</p>
       </div>
     </div>
   );
