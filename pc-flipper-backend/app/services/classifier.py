@@ -75,6 +75,28 @@ NEGATIVE_SIGNALS = {
     "rtx 4090": -20,        # top-end GPU — already priced at premium
     "rtx 4080": -15,
     "rx 7900": -15,
+    # Already-upgraded / pre-built signals — seller has added value, margin is gone
+    "upgraded": -20,
+    "custom build": -20,
+    "custom built": -20,
+    "hand built": -15,
+    "self build": -15,
+    "self built": -15,
+    "ready to game": -15,
+    "ready to play": -10,
+    "gaming beast": -15,
+    "budget gaming": -10,
+    "great for gaming": -10,
+    "perfect for gaming": -10,
+    "includes gpu": -15,
+    "with gpu": -10,
+    "comes with gpu": -15,
+    "installed gpu": -15,
+    "added gpu": -15,
+    "upgraded gpu": -20,
+    "upgraded ram": -15,
+    "upgraded storage": -10,
+    "with graphics card": -15,
 }
 
 POOR_TITLE_PATTERNS = [
@@ -103,7 +125,9 @@ _COMPONENT_CATEGORY_MAP: list[tuple[tuple[str, ...], str]] = [
       "16gb ram", "32gb ram", "8gb ram"), "ram"),
     (("motherboard", "mainboard"), "motherboard"),
     (("power supply unit", "psu only", "modular psu"), "psu"),
-    (("keyboard", "mouse", "headset", "webcam", "microphone", "speakers", "gaming chair", "monitor"), "accessory"),
+    (("keyboard", "mouse", "headset", "headphones", "earphones", "earbuds",
+      "webcam", "microphone", "speakers", "gaming chair", "monitor",
+      "mousepad", "mouse pad", "desk chair"), "accessory"),
 ]
 
 # Keywords that mark a listing as a bare component rather than a complete PC.
@@ -131,8 +155,11 @@ _COMPONENT_ONLY_HINTS = (
     # PSUs (standalone)
     "power supply unit", "psu only", "modular psu",
     # Peripherals / monitors — not flippable PCs
-    "monitor", "keyboard", "mouse", "headset", "webcam", "microphone",
-    "speakers", "gaming chair",
+    "monitor", "keyboard", "mouse", "headset", "headphones", "headphone",
+    "earphones", "earphone", "earbuds", "earbud", "in-ear", "over-ear",
+    "wireless headphones", "gaming headset", "stereo headphones",
+    "webcam", "microphone", "mic stand", "speakers", "speaker system",
+    "gaming chair", "desk chair", "mousepad", "mouse pad",
     # Laptops and AIOs — not flippable under desktop model
     "laptop", "notebook", "chromebook", "macbook", "thinkpad", "ideapad",
     "elitebook", "probook", "latitude", "zenbook", "vivobook",
