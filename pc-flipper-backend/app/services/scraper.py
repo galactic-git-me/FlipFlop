@@ -341,7 +341,71 @@ async def _get_ebay_access_token(client: httpx.AsyncClient) -> str | None:
     return _EBAY_TOKEN
 
 
-def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> list[RawListing]:
+_EBAY_SPEC_KEYS = {
+    # Maps eBay aspect name (lowercase) → our description key
+    "processor": "Processor",
+    "gpu": "GPU",
+    "graphics processing unit": "GPU",
+    "graphics card": "GPU",
+    "ram size": "RAM",
+    "memory ram": "RAM",
+    "storage capacity": "Storage",
+    "hard drive capacity": "Storage",
+    "ssd capacity": "Storage",
+    "operating system": "OS",
+    "form factor": "FormFactor",
+    "type": "Type",
+    "model": "Model",
+}
+
+
+async def _fetch_ebay_item_specifics(
+    client: httpx.AsyncClient,
+    token: str,
+    item_ids: list[str],
+) -> dict[str, str]:
+    """
+    Fetch Item Specifics (localizedAspects) for a batch of eBay item IDs.
+    Returns {item_id: "Processor: i5-9400F\nGPU: RTX 3060\nRAM: 32GB\n..."}.
+    Failures are silently ignored — title parsing is the fallback.
+    """
+    base = _ebay_base_url()
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+    }
+    results: dict[str, str] = {}
+
+    async def _fetch_one(iid: str) -> None:
+        try:
+            resp = await client.get(
+                f"{base}/buy/browse/v1/item/v1|{iid}|0",
+                headers=headers,
+                timeout=10,
+            )
+            if resp.status_code != 200:
+                return
+            data = resp.json()
+            aspects = data.get("localizedAspects") or []
+            lines = []
+            for aspect in aspects:
+                name_raw = (aspect.get("name") or "").lower().strip()
+                value = (aspect.get("value") or "").strip()
+                if not value:
+                    continue
+                mapped = _EBAY_SPEC_KEYS.get(name_raw)
+                if mapped:
+                    lines.append(f"{mapped}: {value}")
+            if lines:
+                results[iid] = "\n".join(lines)
+        except Exception:
+            pass
+
+    await asyncio.gather(*[_fetch_one(iid) for iid in item_ids])
+    return results
+
+
+def _parse_ebay_api_items(items: list[dict], term: str, source_name: str, specifics: dict[str, str] | None = None) -> list[RawListing]:
     out: list[RawListing] = []
     for it in items or []:
         title = str(it.get("title") or "").strip()
@@ -362,6 +426,9 @@ def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> lis
             external_id = f"ebay_{item_id}"
         else:
             external_id = f"ebay_{_extract_ebay_id(item_web_url)}"
+        # Use eBay Item Specifics if available, otherwise fall back to title parsing
+        spec_text = (specifics or {}).get(item_id, "")
+        description = f"{spec_text}\nterm:{term}" if spec_text else f"term:{term}"
         out.append(
             RawListing(
                 external_id=external_id,
@@ -370,7 +437,7 @@ def _parse_ebay_api_items(items: list[dict], term: str, source_name: str) -> lis
                 url=item_web_url,
                 location=loc,
                 condition=condition,
-                description=f"term:{term}",
+                description=description,
                 image_urls=[image] if image else [],
                 source_name=source_name,
                 source_confidence="official_api",
@@ -432,7 +499,21 @@ async def _scrape_ebay_api_term(
         return None
     payload = resp.json()
     items = payload.get("itemSummaries") or []
-    return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK")
+    if not items:
+        return []
+
+    # Fetch Item Specifics (structured data) for items that pass the price filter.
+    # Avoids calling getItem for obvious rejects. Cap at 30 to stay within rate limits.
+    candidate_ids = [
+        str(it.get("itemId") or "")
+        for it in items
+        if it.get("itemId") and _parse_price(str((it.get("price") or {}).get("value") or "0")) > 0
+    ][:30]
+    specifics: dict[str, str] = {}
+    if candidate_ids:
+        specifics = await _fetch_ebay_item_specifics(client, token, candidate_ids)
+
+    return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK", specifics)
 
 
 async def _scrape_ebay_playwright_term(
