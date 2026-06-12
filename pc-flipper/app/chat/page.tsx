@@ -7,7 +7,7 @@ import {
   ChevronRight, ChevronLeft, RotateCcw, Search,
   AlertTriangle, Zap,
   CheckCircle2, Circle, Loader2, ExternalLink,
-  Clock, Copy, Check,
+  Clock, Copy, Check, Package, HardDrive,
 } from "lucide-react";
 import { api, WizardPlaybook, WizardBuild, RefinedIntent, PurchasePlan, PlanStep } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -15,15 +15,44 @@ import { BuildScatterGraph } from "@/components/build-scatter-graph";
 
 // ─── Phase definitions ────────────────────────────────────────────────────────
 
-type Phase = "playbook" | "intent" | "generating" | "builds" | "plan";
+type Phase = "playbook" | "intent" | "generating" | "builds" | "components" | "plan";
 
 const PHASES: { id: Phase; label: string; icon: React.ElementType }[] = [
-  { id: "playbook",    label: "Playbook",  icon: Wand2        },
-  { id: "intent",      label: "Intent",    icon: Cpu          },
-  { id: "generating",  label: "Agents",    icon: Zap          },
-  { id: "builds",      label: "Builds",    icon: Trophy       },
-  { id: "plan",        label: "Plan",      icon: ClipboardList },
+  { id: "playbook",    label: "Playbook",   icon: Wand2        },
+  { id: "intent",      label: "Intent",     icon: Cpu          },
+  { id: "generating",  label: "Agents",     icon: Zap          },
+  { id: "builds",      label: "Builds",     icon: Trophy       },
+  { id: "components",  label: "Components", icon: Package      },
+  { id: "plan",        label: "Plan",       icon: ClipboardList },
 ];
+
+// ─── Part type (from /api/parts catalogue) ────────────────────────────────────
+
+interface CataloguePart {
+  id: number;
+  name: string;
+  brand: string | null;
+  model: string | null;
+  category: string;
+  condition: string;
+  specs: string | null;
+  source_site: string | null;
+  source_url: string | null;
+  price: number | null;
+  image_url: string | null;
+  theme: string | null;
+  resale_value_add: number;
+}
+
+// Map upgrade role → parts category
+const ROLE_TO_CATEGORY: Record<string, string> = {
+  gpu: "gpu", graphics: "gpu",
+  ram: "ram", memory: "ram",
+  storage: "ssd", ssd: "ssd", hdd: "ssd",
+  psu: "psu", "power supply": "psu",
+  cpu: "cpu", processor: "cpu",
+  motherboard: "motherboard", mobo: "motherboard",
+};
 
 // ─── Colour helpers ───────────────────────────────────────────────────────────
 
