@@ -887,6 +887,8 @@ function BuildWizardPageContent() {
   const [result, setResult]           = useState<import("@/lib/api").GenerateResult | null>(null);
   const [intent, setIntent]           = useState<RefinedIntent | null>(null);
   const [selectedBuild, setSelectedBuild] = useState<WizardBuild | null>(null);
+  const [selectedParts, setSelectedParts] = useState<Record<string, CataloguePart | null>>({});
+  const [selectedCase, setSelectedCase]   = useState<CataloguePart | null>(null);
   const [plan, setPlan]               = useState<PurchasePlan | null>(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
   const autoStartedForListingRef = useRef<number | null>(null);
@@ -978,16 +980,32 @@ function BuildWizardPageContent() {
   const generatePlan = useCallback(async () => {
     if (!selectedBuild || !intent) return;
     setLoadingPlan(true);
+    setPhase("plan");
     try {
-      const planData = await api.buildWizard.plan({ build: selectedBuild, intent });
+      // Patch upgrades with any manually-selected catalogue parts
+      const patchedBuild: WizardBuild = {
+        ...selectedBuild,
+        upgrades: selectedBuild.upgrades.map((u) => {
+          const role = u.role.toLowerCase();
+          const chosen = selectedParts[role];
+          if (!chosen) return u;
+          return {
+            ...u,
+            item: chosen.name,
+            cost_estimate: chosen.price ?? u.cost_estimate,
+            listing_url: chosen.source_url ?? u.listing_url,
+          };
+        }),
+      };
+      const planData = await api.buildWizard.plan({ build: patchedBuild, intent });
       setPlan(planData);
-      setPhase("plan");
     } catch {
       alert("Failed to generate plan — check backend");
+      setPhase("components");
     } finally {
       setLoadingPlan(false);
     }
-  }, [selectedBuild, intent]);
+  }, [selectedBuild, selectedParts, intent]);
 
   const reset = () => {
     setPhase("playbook");
@@ -1115,9 +1133,25 @@ function BuildWizardPageContent() {
             </div>
           )}
 
+          {/* ── Phase 4.5: Component selection ── */}
+          {phase === "components" && selectedBuild && (
+            <ComponentSelector
+              build={selectedBuild}
+              selectedParts={selectedParts}
+              onSelectPart={(role, part) => setSelectedParts((prev) => ({ ...prev, [role]: part }))}
+              selectedCase={selectedCase}
+              onSelectCase={setSelectedCase}
+            />
+          )}
+
           {/* ── Phase 5: Plan ── */}
           {phase === "plan" && plan && intent && (
             <PurchasePlanView plan={plan} intent={intent} />
+          )}
+          {phase === "plan" && loadingPlan && (
+            <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
+              <Loader2 className="w-5 h-5 text-[#00dc82] animate-spin" /> Building your purchase plan…
+            </div>
           )}
         </div>
 
@@ -1140,12 +1174,20 @@ function BuildWizardPageContent() {
                 <ChevronLeft className="w-4 h-4" /> Change intent
               </button>
             )}
-            {phase === "plan" && (
+            {phase === "components" && (
               <button
                 onClick={() => setPhase("builds")}
                 className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" /> Back to builds
+              </button>
+            )}
+            {phase === "plan" && (
+              <button
+                onClick={() => setPhase("components")}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0d1320] border border-[#1e2d45] hover:border-slate-600 rounded-xl text-sm text-slate-400 hover:text-slate-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Back to components
               </button>
             )}
           </div>
@@ -1169,14 +1211,23 @@ function BuildWizardPageContent() {
             )}
             {phase === "builds" && (
               <button
+                onClick={() => { setSelectedParts({}); setSelectedCase(null); setPhase("components"); }}
+                disabled={!selectedBuild}
+                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
+              >
+                <Package className="w-4 h-4" /> Select Components
+              </button>
+            )}
+            {phase === "components" && (
+              <button
                 onClick={generatePlan}
-                disabled={!selectedBuild || loadingPlan}
+                disabled={loadingPlan}
                 className="flex items-center gap-1.5 px-5 py-2.5 bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-bold text-[#0a0f1a] transition-all"
               >
                 {loadingPlan ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> Generating plan…</>
                 ) : (
-                  <><ClipboardList className="w-4 h-4" /> Get Purchase Plan</>
+                  <><ClipboardList className="w-4 h-4" /> Generate Plan</>
                 )}
               </button>
             )}
