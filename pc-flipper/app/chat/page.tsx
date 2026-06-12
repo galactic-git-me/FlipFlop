@@ -435,6 +435,239 @@ function BuildCard({
   );
 }
 
+// ─── Phase 4.5: Component selector ───────────────────────────────────────────
+
+function PartCard({
+  part,
+  selected,
+  onSelect,
+}: {
+  part: CataloguePart;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      onClick={onSelect}
+      className={cn(
+        "text-left w-full rounded-xl border p-3 transition-all",
+        selected
+          ? "border-[#00dc82]/60 bg-[#00dc82]/8"
+          : "border-[#1e2d45] bg-[#0d1320] hover:border-slate-600",
+      )}
+    >
+      <div className="flex gap-2.5">
+        {part.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={part.image_url} alt={part.name} className="w-12 h-12 object-contain rounded bg-[#070e1a] flex-shrink-0" />
+        ) : (
+          <div className="w-12 h-12 rounded bg-[#070e1a] flex items-center justify-center flex-shrink-0">
+            <HardDrive className="w-5 h-5 text-slate-700" />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-1">
+            <p className="text-xs font-semibold text-slate-200 line-clamp-2 leading-snug">{part.name}</p>
+            {selected && <CheckCircle2 className="w-4 h-4 text-[#00dc82] flex-shrink-0 mt-0.5" />}
+          </div>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
+            {part.price != null && (
+              <span className="text-xs font-bold text-[#00dc82]">£{part.price.toFixed(0)}</span>
+            )}
+            <span className="text-[10px] text-slate-600 capitalize">{part.condition}</span>
+            {part.source_site && (
+              <span className="text-[10px] text-slate-600">{part.source_site}</span>
+            )}
+          </div>
+          {part.specs && (
+            <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{part.specs}</p>
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function ComponentSelector({
+  build,
+  selectedParts,
+  onSelectPart,
+  selectedCase,
+  onSelectCase,
+}: {
+  build: WizardBuild;
+  selectedParts: Record<string, CataloguePart | null>;
+  onSelectPart: (role: string, part: CataloguePart | null) => void;
+  selectedCase: CataloguePart | null;
+  onSelectCase: (part: CataloguePart | null) => void;
+}) {
+  const [partsByRole, setPartsByRole] = useState<Record<string, CataloguePart[]>>({});
+  const [cases, setCases] = useState<CataloguePart[]>([]);
+  const [caseThemes, setCaseThemes] = useState<string[]>([]);
+  const [caseTheme, setCaseTheme] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+
+  // Roles that have a catalogue category
+  const sourceableUpgrades = build.upgrades.filter((u) => ROLE_TO_CATEGORY[u.role.toLowerCase()]);
+
+  useEffect(() => {
+    const roles = Array.from(new Set(sourceableUpgrades.map((u) => u.role.toLowerCase())));
+    const promises = roles.map(async (role) => {
+      const cat = ROLE_TO_CATEGORY[role];
+      const parts = await api.parts.list(cat).catch(() => []) as CataloguePart[];
+      return [role, parts] as [string, CataloguePart[]];
+    });
+
+    Promise.all([
+      Promise.all(promises),
+      api.parts.cases().catch(() => []) as Promise<CataloguePart[]>,
+      api.parts.themes().catch(() => []) as Promise<string[]>,
+    ]).then(([roleParts, caseList, themes]) => {
+      setPartsByRole(Object.fromEntries(roleParts));
+      setCases(caseList as CataloguePart[]);
+      setCaseThemes(themes as string[]);
+    }).finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [build.id]);
+
+  const filteredCases = caseTheme ? cases.filter((c) => c.theme === caseTheme) : cases;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
+        <Loader2 className="w-4 h-4 animate-spin" /> Loading catalogue…
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-xl font-bold text-slate-100">{build.name}</h2>
+        <p className="text-sm text-slate-500 mt-0.5">
+          Select catalogue items for each component — or skip to use AI suggestions
+        </p>
+      </div>
+
+      {/* Upgrade components */}
+      {sourceableUpgrades.map((upgrade) => {
+        const role = upgrade.role.toLowerCase();
+        const parts = partsByRole[role] ?? [];
+        const selected = selectedParts[role] ?? null;
+
+        return (
+          <div key={role} className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#00dc82]">{upgrade.role}</span>
+              <span className="text-xs text-slate-600">— AI suggests: {upgrade.item} (~£{upgrade.cost_estimate.toFixed(0)})</span>
+              {selected && (
+                <button
+                  onClick={() => onSelectPart(role, null)}
+                  className="ml-auto text-[10px] text-slate-600 hover:text-slate-400 underline"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {parts.length === 0 ? (
+              <p className="text-xs text-slate-600 italic">No {upgrade.role} items in catalogue — AI suggestion will be used.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
+                {parts.slice(0, 24).map((part) => (
+                  <PartCard
+                    key={part.id}
+                    part={part}
+                    selected={selected?.id === part.id}
+                    onSelect={() => onSelectPart(role, selected?.id === part.id ? null : part)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Case selection */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Case</span>
+          <span className="text-xs text-slate-600">— Optional: add a themed case to boost resale appeal</span>
+          {caseThemes.length > 0 && (
+            <div className="flex gap-1.5 flex-wrap ml-auto">
+              <button
+                onClick={() => setCaseTheme("")}
+                className={cn(
+                  "px-2.5 py-0.5 rounded-full text-[10px] border transition-all",
+                  !caseTheme ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-400" : "border-white/10 text-slate-500 hover:border-white/25"
+                )}
+              >
+                All
+              </button>
+              {caseThemes.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setCaseTheme(t === caseTheme ? "" : t)}
+                  className={cn(
+                    "px-2.5 py-0.5 rounded-full text-[10px] border transition-all",
+                    caseTheme === t ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-400" : "border-white/10 text-slate-500 hover:border-white/25"
+                  )}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          )}
+          {selectedCase && (
+            <button
+              onClick={() => onSelectCase(null)}
+              className="text-[10px] text-slate-600 hover:text-slate-400 underline"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {filteredCases.length === 0 ? (
+          <p className="text-xs text-slate-600 italic">No cases found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1">
+            {filteredCases.slice(0, 24).map((part) => (
+              <PartCard
+                key={part.id}
+                part={part}
+                selected={selectedCase?.id === part.id}
+                onSelect={() => onSelectCase(selectedCase?.id === part.id ? null : part)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Summary of selections */}
+      {(Object.values(selectedParts).some(Boolean) || selectedCase) && (
+        <div className="rounded-xl border border-[#1e2d45] bg-[#0a0f1a] p-4 space-y-2">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Your selections</p>
+          {Object.entries(selectedParts).map(([role, part]) =>
+            part ? (
+              <div key={role} className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 capitalize">{role}</span>
+                <span className="text-slate-300 font-medium">{part.name.slice(0, 40)} — <span className="text-[#00dc82]">£{part.price?.toFixed(0) ?? "?"}</span></span>
+              </div>
+            ) : null
+          )}
+          {selectedCase && (
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-500">Case</span>
+              <span className="text-slate-300 font-medium">{selectedCase.name.slice(0, 40)} — <span className="text-cyan-400">£{selectedCase.price?.toFixed(0) ?? "?"}</span></span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Phase 5: Purchase plan ───────────────────────────────────────────────────
 
 function CopyButton({ text }: { text: string }) {
