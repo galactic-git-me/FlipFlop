@@ -154,25 +154,39 @@ _COMPONENT_ONLY_HINTS = (
     # Handled via _STRONG_COMPONENT_OVERRIDES below.
 )
 
-# RAM product titles routinely contain "pc" (PC4-25600, "Desktop PC RAM", "Gaming PC RAM")
-# which would normally suppress component detection via _COMPLETE_PC_HINTS.
-# These patterns are so specific to RAM-as-product that they override that check.
-_STRONG_RAM_SIGNALS = (
-    "desktop memory",     # "Desktop Memory" in product name
-    "desktop ram",        # "Desktop RAM" / "Desktop PC RAM MEMORY"
-    "pc ram",             # "PC RAM", "Gaming PC RAM MEMORY"
-    "pc memory",          # "PC Memory" product category
-    "memory kit",         # standalone RAM kit
-    "ram kit",            # standalone RAM kit
-    "ram memory",         # "DDR4 RAM MEMORY" product title
-    "gaming memory",      # "Gaming Memory" — always a RAM product category
-    "gaming ram",         # same
-    "(2x16gb)", "(2x8gb)", "(4x8gb)", "(4x16gb)", "(2x32gb)",  # kit notation
+# These patterns are so specific to non-PC products that they override _COMPLETE_PC_HINTS
+# even when the title contains "pc" (e.g. "PC CD", "PC RAM", "PC4-25600").
+_STRONG_COMPONENT_SIGNALS = (
+    # ── PC CD-ROM / DVD games ─────────────────────────────────────────────────
+    # eBay game listings: "Finding Nemo---PC CD", "Age of Empires---PC DVD"
+    "pc cd",              # "PC CD" suffix on game titles
+    "pc dvd",             # "PC DVD" suffix on game titles
+    "mac cd",             # "PC / Mac CD" multi-platform games
+    "mac dvd",
+    "cd-rom game",
+    "dvd game",
+    "expansion pack",     # game DLC / expansion — not a PC
+    "---game",            # eBay game title pattern "Title---GAME---PC CD"
+    "game---",
+    " game pc cd",        # "action game pc cd"
+    " game pc dvd",
+    # ── RAM sticks ────────────────────────────────────────────────────────────
+    # RAM titles routinely contain "pc" (PC4-25600, "Desktop PC RAM", "Gaming PC RAM")
+    "desktop memory",
+    "desktop ram",
+    "pc ram",
+    "pc memory",
+    "memory kit",
+    "ram kit",
+    "ram memory",
+    "gaming memory",
+    "gaming ram",
+    "(2x16gb)", "(2x8gb)", "(4x8gb)", "(4x16gb)", "(2x32gb)",
     "(2 x 16gb)", "(2 x 8gb)", "(4 x 8gb)", "(4 x 16gb)",
-    "memory module",      # single DIMM module listing
-    "288-pin",            # DDR4/5 DIMM pin spec — never in complete PC titles
+    "memory module",
+    "288-pin",            # DDR4/5 DIMM pin spec
     "260-pin",            # SO-DIMM pin spec
-    " cl16 ", " cl18 ", " cl22 ", " cl36 ", "cl16,", "cl18,", "cl22,",  # CAS latency spec
+    " cl16 ", " cl18 ", " cl22 ", " cl36 ", "cl16,", "cl18,", "cl22,",
 )
 _COMPLETE_PC_HINTS = (
     "pc", "desktop", "tower", "computer", "workstation", "system", "mini pc",
@@ -211,7 +225,7 @@ def score_listing(
     # be flipped under our model (missing motherboard, DDR5, etc.).
     # Strong RAM signals override _COMPLETE_PC_HINTS because RAM product titles
     # routinely contain "pc" (e.g. "PC4-25600", "Desktop PC RAM MEMORY").
-    is_strong_ram = any(h in title_lower for h in _STRONG_RAM_SIGNALS)
+    is_strong_ram = any(h in title_lower for h in _STRONG_COMPONENT_SIGNALS)
     is_component_only = is_strong_ram or (
         any(h in title_lower for h in _COMPONENT_ONLY_HINTS)
         and not any(h in title_lower for h in _COMPLETE_PC_HINTS)

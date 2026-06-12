@@ -131,14 +131,15 @@ def _validate_is_pc(title: str, text_lower: str, specs: "ParsedSpecs") -> tuple[
     Quick validation to filter obvious false positives (games, peripherals).
     Returns (is_valid, rejection_reason).
     """
+    # Reject PC CD-ROM / DVD game listings (eBay format: "Title---Game---PC CD")
+    if "pc cd" in text_lower or "pc dvd" in text_lower or "mac cd" in text_lower:
+        return False, "PC CD/DVD game listing"
+
     # Reject games and software
-    game_indicators = [
-        "game", "cd-rom", "dvd", "expansion", "addon", "dlc", "software",
-        "windows", "linux", "os "
-    ]
-    if any(indicator in text_lower for indicator in game_indicators):
-        if "cd-rom" in text_lower or "game" in text_lower:
-            return False, "Likely a game or software, not a PC"
+    if "cd-rom" in text_lower:
+        return False, "CD-ROM listing — not a PC"
+    if "expansion pack" in text_lower or "---game" in text_lower or "game---" in text_lower:
+        return False, "Game listing"
 
     # Reject obvious peripherals
     peripheral_keywords = [
