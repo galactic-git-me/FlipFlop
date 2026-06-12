@@ -8,6 +8,12 @@ from app.models.flip_intelligence import FlipIntelligence
 from app.models.app_settings import AppSettings
 from app.models.search_telemetry import SearchTelemetry
 from app.models.external_demand_signal import ExternalDemandSignal
+from app.models.demand_rich import (
+    GoogleTrendsTimeSeries,
+    GoogleTrendsGeo,
+    RedditPost,
+    SteamHardwareStat,
+)
 from app.models.outcome_event import OutcomeEvent, RetrainCheckpoint
 from app.models.model_registry import ModelVersion, TrainingRun
 from app.models.alert_event import AlertEvent
@@ -28,6 +34,10 @@ __all__ = [
     "AppSettings",
     "SearchTelemetry",
     "ExternalDemandSignal",
+    "GoogleTrendsTimeSeries",
+    "GoogleTrendsGeo",
+    "RedditPost",
+    "SteamHardwareStat",
     "OutcomeEvent",
     "RetrainCheckpoint",
     "ModelVersion",
