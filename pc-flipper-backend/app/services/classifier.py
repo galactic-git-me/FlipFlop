@@ -61,9 +61,20 @@ NEGATIVE_SIGNALS = {
     "monitor included": -5,
     "keyboard and mouse": -5,
     "gaming setup": -10,
+    "gaming pc": -10,       # complete gaming rig — seller has priced in GPU value
+    "gaming desktop": -10,
+    "rgb gaming": -8,
     "high end": -15,
     "mint condition": -5,
+    "complete pc": -10,
+    "full build": -10,
+    "full setup": -10,
     "boxed": -5,
+    "brand new": -10,
+    "sealed": -10,
+    "rtx 4090": -20,        # top-end GPU — already priced at premium
+    "rtx 4080": -15,
+    "rx 7900": -15,
 }
 
 POOR_TITLE_PATTERNS = [
@@ -139,6 +150,27 @@ _COMPONENT_ONLY_HINTS = (
     "video game", "board game", "card game", "console game", "nintendo", "playstation", "xbox",
     "ps4", "ps5", "switch", "retro game", "atari", "sega",
 )
+
+# RAM product titles routinely contain "pc" (PC4-25600, "Desktop PC RAM", "Gaming PC RAM")
+# which would normally suppress component detection via _COMPLETE_PC_HINTS.
+# These patterns are so specific to RAM-as-product that they override that check.
+_STRONG_RAM_SIGNALS = (
+    "desktop memory",     # "Desktop Memory" in product name
+    "desktop ram",        # "Desktop RAM" / "Desktop PC RAM MEMORY"
+    "pc ram",             # "PC RAM", "Gaming PC RAM MEMORY"
+    "pc memory",          # "PC Memory" product category
+    "memory kit",         # standalone RAM kit
+    "ram kit",            # standalone RAM kit
+    "ram memory",         # "DDR4 RAM MEMORY" product title
+    "gaming memory",      # "Gaming Memory" — always a RAM product category
+    "gaming ram",         # same
+    "(2x16gb)", "(2x8gb)", "(4x8gb)", "(4x16gb)", "(2x32gb)",  # kit notation
+    "(2 x 16gb)", "(2 x 8gb)", "(4 x 8gb)", "(4 x 16gb)",
+    "memory module",      # single DIMM module listing
+    "288-pin",            # DDR4/5 DIMM pin spec — never in complete PC titles
+    "260-pin",            # SO-DIMM pin spec
+    " cl16 ", " cl18 ", " cl22 ", " cl36 ", "cl16,", "cl18,", "cl22,",  # CAS latency spec
+)
 _COMPLETE_PC_HINTS = (
     "pc", "desktop", "tower", "computer", "workstation", "system", "mini pc",
     # Brand workstations — always a complete unit
@@ -174,7 +206,10 @@ def score_listing(
 
     # Reject bare component listings — a CPU/processor without a PC body can't
     # be flipped under our model (missing motherboard, DDR5, etc.).
-    is_component_only = (
+    # Strong RAM signals override _COMPLETE_PC_HINTS because RAM product titles
+    # routinely contain "pc" (e.g. "PC4-25600", "Desktop PC RAM MEMORY").
+    is_strong_ram = any(h in title_lower for h in _STRONG_RAM_SIGNALS)
+    is_component_only = is_strong_ram or (
         any(h in title_lower for h in _COMPONENT_ONLY_HINTS)
         and not any(h in title_lower for h in _COMPLETE_PC_HINTS)
     )
