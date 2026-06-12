@@ -149,6 +149,9 @@ _COMPONENT_ONLY_HINTS = (
     # Games (video games, board games, not gaming PCs)
     "video game", "board game", "card game", "console game", "nintendo", "playstation", "xbox",
     "ps4", "ps5", "switch", "retro game", "atari", "sega",
+    # PC CD-ROM / DVD games — eBay game listings contain "PC CD" or "PC DVD"
+    # These must come before _COMPLETE_PC_HINTS overrides them via "pc" substring.
+    # Handled via _STRONG_COMPONENT_OVERRIDES below.
 )
 
 # RAM product titles routinely contain "pc" (PC4-25600, "Desktop PC RAM", "Gaming PC RAM")
