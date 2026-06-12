@@ -435,6 +435,23 @@ export const api = {
         `/demand/external-signals${limit_per_source ? `?limit_per_source=${limit_per_source}` : ""}`,
       ),
     refreshExternalSignals: () => request<{ ok: boolean; inserted: number; topics: number; signals: number }>("/demand/external-signals/refresh", { method: "POST" }),
+    richSignals: () => request<{
+      google_trends: {
+        queries: string[];
+        timeseries: Record<string, { date: string; value: number }[]>;
+        geo: Record<string, { region: string; code: string | null; value: number }[]>;
+      };
+      reddit: {
+        posts: {
+          reddit_id: string; query: string; topic: string; title: string;
+          subreddit: string; score: number; comments: number;
+          url: string | null; created_utc: string | null;
+        }[];
+      };
+      steam: {
+        stats: { category: string; name: string; percentage: number; change: number | null; collected_at: string | null }[];
+      };
+    }>("/demand/rich-signals"),
     pricingMultipliers: () =>
       request<{
         window_days: number;

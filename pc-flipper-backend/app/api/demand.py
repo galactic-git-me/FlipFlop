@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.demand_service import compute_demand, compute_auction_intel
 from app.services.external_demand import latest_external_signal_snapshot, ingest_external_demand_signals
+from app.services.rich_demand_collector import get_rich_signals
 from app.services.demand_pricing import compute_demand_pricing_multipliers
 
 router = APIRouter(prefix="/demand", tags=["demand"])
@@ -88,6 +89,15 @@ async def get_external_signals(limit_per_source: int = Query(25, ge=1, le=100)):
 @router.post("/external-signals/refresh")
 async def refresh_external_signals():
     return await ingest_external_demand_signals()
+
+
+@router.get("/rich-signals")
+async def get_rich_demand_signals():
+    """
+    Rich demand data: Google Trends time-series + geo, Reddit posts, Steam hardware stats.
+    Returns empty collections if Refresh has not been run yet.
+    """
+    return await get_rich_signals()
 
 
 @router.get("/pricing-multipliers")

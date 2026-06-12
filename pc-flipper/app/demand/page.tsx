@@ -12,17 +12,29 @@ import type { DemandCategory, AuctionIntelItem, DemandSummary } from "@/lib/type
 
 // ── Local types ───────────────────────────────────────────────────────────────
 
-interface ExternalSignalItem {
-  id?: number;
-  source: string;
-  topic: string;
-  query: string | null;
-  score: number;
-  confidence: number;
-  sample_size: number | null;
-  signal_time: string;
-  notes: string | null;
-}
+type RichSignals = {
+  google_trends: {
+    queries: string[];
+    timeseries: Record<string, { date: string; value: number }[]>;
+    geo: Record<string, { region: string; code: string | null; value: number }[]>;
+  };
+  reddit: {
+    posts: {
+      reddit_id: string; query: string; topic: string; title: string;
+      subreddit: string; score: number; comments: number;
+      url: string | null; created_utc: string | null;
+    }[];
+  };
+  steam: {
+    stats: { category: string; name: string; percentage: number; change: number | null; collected_at: string | null }[];
+  };
+};
+
+const EMPTY_RICH: RichSignals = {
+  google_trends: { queries: [], timeseries: {}, geo: {} },
+  reddit: { posts: [] },
+  steam: { stats: [] },
+};
 
 type Tab = "categories" | "signals" | "auctions";
 
