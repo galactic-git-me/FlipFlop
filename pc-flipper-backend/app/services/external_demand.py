@@ -35,6 +35,11 @@ TOPIC_QUERIES: dict[str, list[str]] = {
 
 
 async def ingest_external_demand_signals() -> dict:
+    from app.services.rich_demand_collector import (
+        collect_google_trends_rich,
+        collect_reddit_rich,
+        collect_steam_rich,
+    )
     now = datetime.utcnow()
     signals: list[DemandSignal] = []
 
@@ -45,7 +50,23 @@ async def ingest_external_demand_signals() -> dict:
 
     inserted = await _persist_signals(signals)
     await _prune_old(days=30)
-    return {"ok": True, "inserted": inserted, "topics": len(TOPIC_QUERIES), "signals": len(signals)}
+
+    # Collect rich detail data (time-series, geo, posts, hardware stats)
+    gt_result = await collect_google_trends_rich(now)
+    reddit_result = await collect_reddit_rich(now)
+    steam_result = await collect_steam_rich(now)
+
+    return {
+        "ok": True,
+        "inserted": inserted,
+        "topics": len(TOPIC_QUERIES),
+        "signals": len(signals),
+        "rich": {
+            "google_trends": gt_result,
+            "reddit": reddit_result,
+            "steam": steam_result,
+        },
+    }
 
 
 async def _fetch_reddit_signals(topic: str, queries: Iterable[str], now: datetime) -> list[DemandSignal]:
