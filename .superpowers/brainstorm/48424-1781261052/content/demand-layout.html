@@ -1,0 +1,139 @@
+<h2>Demand Explorer — Page Layout</h2>
+<p class="subtitle">Which layout works best for exploring demand data?</p>
+
+<div class="cards">
+
+  <!-- Option A: Tabbed data explorer -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a1628;padding:14px;border-radius:6px;font-family:monospace;font-size:11px;">
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <div style="padding:4px 10px;background:#00dc82;color:#000;border-radius:4px;font-size:10px;font-weight:700;">📦 Categories</div>
+        <div style="padding:4px 10px;background:#1e2d3d;color:#7a9ab0;border-radius:4px;font-size:10px;">📡 External Signals</div>
+        <div style="padding:4px 10px;background:#1e2d3d;color:#7a9ab0;border-radius:4px;font-size:10px;">⏱ Auctions</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+        <div style="padding:3px 8px;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Strength: All ▾</div>
+        <div style="padding:3px 8px;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Trend: All ▾</div>
+        <div style="padding:3px 8px;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Sort: Count ▾</div>
+      </div>
+      <div style="height:70px;background:#0f2235;border-radius:4px;margin-bottom:8px;display:flex;align-items:flex-end;gap:6px;padding:6px 8px;">
+        <div style="flex:1;background:#00dc82;height:90%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+        <div style="flex:1;background:#00dc82;height:55%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+        <div style="flex:1;background:#f59e0b;height:40%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+        <div style="flex:1;background:#f59e0b;height:30%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+        <div style="flex:1;background:#ef4444;height:15%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+        <div style="flex:1;background:#ef4444;height:10%;border-radius:2px 2px 0 0;opacity:0.8;"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="display:flex;justify-content:space-between;padding:4px 6px;background:#0f2235;border-radius:3px;font-size:9px;color:#9bb8cc;">
+          <span>🎮 Gaming PCs</span><span style="color:#00dc82;font-weight:700;">High</span><span>📈 rising</span><span>142 listings</span><span style="color:#00dc82;">+£187 avg</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 6px;background:#0f2235;border-radius:3px;font-size:9px;color:#9bb8cc;">
+          <span>🔧 No-GPU Flips</span><span style="color:#00dc82;font-weight:700;">High</span><span>→ stable</span><span>89 listings</span><span style="color:#00dc82;">+£241 avg</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 6px;background:#0f2235;border-radius:3px;font-size:9px;color:#9bb8cc;">
+          <span>🖥️ Workstations</span><span style="color:#f59e0b;">Medium</span><span>→ stable</span><span>54 listings</span><span style="color:#00dc82;">+£165 avg</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Tabbed Explorer</h3>
+      <p>Three tabs (Categories / External Signals / Auctions). Slicers above the chart, table below. Clean, focused — one dataset at a time.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Dashboard with pinned summary + expandable sections -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a1628;padding:14px;border-radius:6px;font-family:monospace;font-size:11px;">
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <div style="flex:1;background:#0f2235;border-radius:4px;padding:6px;text-align:center;">
+          <div style="color:#00dc82;font-weight:700;font-size:13px;">🔥 Hot</div>
+          <div style="color:#7a9ab0;font-size:9px;">market health</div>
+        </div>
+        <div style="flex:1;background:#0f2235;border-radius:4px;padding:6px;text-align:center;">
+          <div style="color:#00f49a;font-weight:700;font-size:13px;">+£212</div>
+          <div style="color:#7a9ab0;font-size:9px;">avg profit</div>
+        </div>
+        <div style="flex:1;background:#0f2235;border-radius:4px;padding:6px;text-align:center;">
+          <div style="color:#f59e0b;font-weight:700;font-size:13px;">3↑ 1↓</div>
+          <div style="color:#7a9ab0;font-size:9px;">rising/falling</div>
+        </div>
+      </div>
+      <div style="margin-bottom:6px;padding:5px 8px;background:#0f2235;border-radius:4px;border-left:3px solid #00dc82;font-size:9px;color:#9bb8cc;">
+        📦 <span style="color:#00dc82;font-weight:700;">Categories</span> — bar chart + table expanded
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:50px;background:#071520;border-radius:3px;padding:4px 6px;margin-bottom:5px;">
+        <div style="flex:1;background:#00dc82;height:90%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+        <div style="flex:1;background:#00dc82;height:55%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+        <div style="flex:1;background:#f59e0b;height:40%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+        <div style="flex:1;background:#f59e0b;height:30%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+        <div style="flex:1;background:#ef4444;height:15%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+        <div style="flex:1;background:#ef4444;height:10%;border-radius:1px 1px 0 0;opacity:0.7;"></div>
+      </div>
+      <div style="margin-bottom:4px;padding:4px 8px;background:#0f2235;border-radius:4px;border-left:3px solid #444;font-size:9px;color:#7a9ab0;">
+        📡 External Signals <span style="float:right;">▶ expand</span>
+      </div>
+      <div style="padding:4px 8px;background:#0f2235;border-radius:4px;border-left:3px solid #444;font-size:9px;color:#7a9ab0;">
+        ⏱ Auction Intel <span style="float:right;">▶ expand</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Summary Dashboard</h3>
+      <p>KPI row at top, then collapsible sections for each data source. Always shows market health at a glance. Good for monitoring; less good for deep dives.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Split — chart left, live table right -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a1628;padding:14px;border-radius:6px;font-family:monospace;font-size:11px;">
+      <div style="display:flex;gap:4px;margin-bottom:8px;">
+        <div style="padding:3px 8px;background:#1e2d3d;border-radius:12px;color:#7a9ab0;font-size:9px;">📦 Categories</div>
+        <div style="padding:3px 8px;background:#1e2d3d;border-radius:12px;color:#7a9ab0;font-size:9px;">📡 Signals</div>
+        <div style="padding:3px 8px;background:#1e2d3d;border-radius:12px;color:#7a9ab0;font-size:9px;">⏱ Auctions</div>
+        <div style="margin-left:auto;padding:3px 8px;background:#1e2d3d;border-radius:12px;color:#7a9ab0;font-size:9px;">Strength ▾ Trend ▾</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:#0f2235;border-radius:4px;padding:8px;">
+          <div style="font-size:9px;color:#7a9ab0;margin-bottom:6px;">Listings by Category</div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;color:#9bb8cc;width:55px;">Gaming PCs</span><div style="flex:1;height:8px;background:#00dc82;border-radius:1px;opacity:0.8;"></div></div>
+            <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;color:#9bb8cc;width:55px;">No-GPU</span><div style="width:60%;height:8px;background:#00dc82;border-radius:1px;opacity:0.8;"></div></div>
+            <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;color:#9bb8cc;width:55px;">Workstations</span><div style="width:40%;height:8px;background:#f59e0b;border-radius:1px;opacity:0.8;"></div></div>
+            <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;color:#9bb8cc;width:55px;">Clearance</span><div style="width:30%;height:8px;background:#f59e0b;border-radius:1px;opacity:0.8;"></div></div>
+            <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;color:#9bb8cc;width:55px;">HTPC/SFF</span><div style="width:15%;height:8px;background:#ef4444;border-radius:1px;opacity:0.8;"></div></div>
+          </div>
+          <div style="margin-top:8px;font-size:8px;color:#7a9ab0;border-top:1px solid #1a3050;padding-top:6px;">
+            Click bar to filter →
+          </div>
+        </div>
+        <div style="flex:1;background:#0f2235;border-radius:4px;padding:8px;">
+          <div style="font-size:9px;color:#7a9ab0;margin-bottom:6px;">Live Table</div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;gap:3px;font-size:8px;color:#5a7a90;border-bottom:1px solid #1a3050;padding-bottom:3px;">
+              <span style="flex:2">Category</span><span style="flex:1">Count</span><span style="flex:1">Gems</span><span style="flex:1">Avg£</span>
+            </div>
+            <div style="display:flex;gap:3px;font-size:8px;color:#9bb8cc;background:#071520;border-radius:2px;padding:2px 3px;">
+              <span style="flex:2">🎮 Gaming</span><span style="flex:1">142</span><span style="flex:1;color:#00dc82">12</span><span style="flex:1;color:#00dc82">£187</span>
+            </div>
+            <div style="display:flex;gap:3px;font-size:8px;color:#9bb8cc;padding:2px 3px;">
+              <span style="flex:2">🔧 No-GPU</span><span style="flex:1">89</span><span style="flex:1;color:#00dc82">18</span><span style="flex:1;color:#00dc82">£241</span>
+            </div>
+            <div style="display:flex;gap:3px;font-size:8px;color:#9bb8cc;padding:2px 3px;">
+              <span style="flex:2">🖥️ Workstns</span><span style="flex:1">54</span><span style="flex:1;color:#f59e0b">4</span><span style="flex:1;color:#f59e0b">£165</span>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:8px;color:#7a9ab0;border-top:1px solid #1a3050;padding-top:6px;">
+            Sortable, filterable
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Split View</h3>
+      <p>Chart on left, live data table on right. Click a bar to filter the table. Slicers in the header. Best for simultaneous visual + detailed exploration.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;">All three options include: category chart, external signals, auction intel, and slicers. The difference is how they're organised.</p>
