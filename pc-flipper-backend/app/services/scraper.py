@@ -113,6 +113,52 @@ _MINI_PC_EXCLUDE: set[str] = {
     "surface laptop",
     "surface pro",
     "surface book",
+    # Dell laptop model lines (no "laptop" in title)
+    "xps 13",
+    "xps 15",
+    "xps 17",
+    "precision 5570",
+    "precision 5580",
+    "precision 7570",
+    "precision 7670",
+    "precision 7770",
+    "inspiron 13",
+    "inspiron 14",
+    "inspiron 15",
+    "inspiron 16",
+    "vostro 14",
+    "vostro 15",
+    # HP laptop model lines
+    "omen 15",
+    "omen 16",
+    "omen 17",
+    "pavilion 14",
+    "pavilion 15",
+    "pavilion 16",
+    "spectre x360",
+    "envy x360",
+    "envy 13",
+    "envy 14",
+    "envy 15",
+    "hp 15s",
+    "hp 14s",
+    # Lenovo laptop lines
+    "yoga",          # Yoga = always a laptop/tablet
+    "legion 5",
+    "legion 7",
+    "legion slim",
+    "slim 5",
+    "slim 7",
+    "flex 5",
+    "flex 7",
+    # ASUS/Acer laptop lines
+    "rog zephyrus",
+    "rog strix g",
+    "tuf gaming a",
+    "predator helios",
+    "predator triton",
+    "nitro 5",
+    "nitro an515",
     # All-in-one PCs — soldered components, no upgrade path
     "all-in-one",
     "all in one",
@@ -907,10 +953,25 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
     return listings
 
 
+# Mobile CPU suffixes: Intel H/HK/HX/HQ, U, P, Y — AMD H/HS/HX, U
+# These always indicate a laptop — desktop CPUs never carry these suffixes.
+_MOBILE_CPU_RE = re.compile(
+    r'\bi[3579]-\d{4,5}[HUPY][HKXQS]?\b'  # Intel: i7-12700H, i5-1135G7-style handled below
+    r'|\bi[3579]-\d{4}G\d\b'               # Intel Iris Xe: i5-1135G7
+    r'|\bcore\s+ultra\s+[579]\s+\d{3}[HU]\b'  # Core Ultra H/U
+    r'|\bryzen\s+[3579]\s+\d{4}[HU]S?\b',  # AMD: Ryzen 7 6800H, 5600U, 6600HS
+    re.IGNORECASE,
+)
+
 def _is_mini_pc(title: str) -> bool:
-    """Return True if the listing title looks like a mini PC / NUC (skip it)."""
+    """Return True if the listing is a mini PC, NUC, laptop, or AIO (skip it)."""
     t = title.lower()
-    return any(kw in t for kw in _MINI_PC_EXCLUDE)
+    if any(kw in t for kw in _MINI_PC_EXCLUDE):
+        return True
+    # Detect laptops by mobile CPU model number in the title (e.g. i7-12700H)
+    if _MOBILE_CPU_RE.search(title):
+        return True
+    return False
 
 
 def _parse_price(text: str) -> float:

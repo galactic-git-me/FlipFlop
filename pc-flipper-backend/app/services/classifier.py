@@ -120,6 +120,12 @@ _COMPONENT_ONLY_HINTS = (
     "laptop", "notebook", "chromebook", "macbook", "thinkpad", "ideapad",
     "elitebook", "probook", "latitude", "zenbook", "vivobook",
     "surface laptop", "surface pro", "surface book",
+    "xps 13", "xps 15", "xps 17",
+    "precision 5570", "precision 5580", "precision 7570", "precision 7670", "precision 7770",
+    "yoga", "legion 5", "legion 7", "legion slim", "flex 5",
+    "omen 15", "omen 16", "omen 17",
+    "spectre x360", "envy x360", "rog zephyrus", "rog strix g",
+    "nitro 5", "predator helios",
     "all-in-one", "all in one", "aio pc", "aio desktop", "imac", "eliteone",
     # Laptop/console parts
     "laptop battery", "laptop screen", "laptop keyboard",

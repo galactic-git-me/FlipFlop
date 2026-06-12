@@ -49,6 +49,11 @@ SWEET SPOTS (buy immediately if priced right):
 - "No GPU, no storage" bundle at £80–150 — near-guaranteed £150+ profit
 - Ryzen 5 5600X / 5700X no-GPU at under £180
 
+IMMEDIATE REJECT — do not evaluate further:
+- Laptop / mobile device: any CPU with H, HK, HX, HQ, U, P, Y suffix (e.g. i7-12700H, i5-1135G7, Ryzen 7 6800H) = laptop CPU → REJECT. Also reject if title contains laptop model names (XPS 15, Precision 5570, Yoga, etc.).
+- Mobile-only GPU: RTX A1000, A2000 Laptop GPU, RTX 4060 Laptop, etc. → indicates laptop → REJECT.
+- The flip model ONLY works on desktop towers. Laptops have no upgrade path for GPU/PSU.
+
 RED FLAGS (reduce score heavily):
 - Ryzen 7000 / AM5: no longer penalised — treat on par with AM4
 - Already has GPU + SSD: seller has priced in the upgrade value
