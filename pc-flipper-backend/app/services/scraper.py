@@ -171,6 +171,16 @@ _MINI_PC_EXCLUDE: set[str] = {
     "pavilion aio",
     "veriton z",
     "esprimo x",
+    # Standalone RAM sticks — not PCs
+    "server ram",
+    "server memory",
+    "ecc registered",
+    "ecc reg",
+    "rdimm",
+    "lrdimm",
+    "pc4-2",    # JEDEC DDR4 spec prefix (pc4-2133, pc4-2400, etc.)
+    "pc4-3",
+    "mt/s",
 }
 
 

@@ -106,11 +106,17 @@ _COMPONENT_ONLY_HINTS = (
     # Storage drives (standalone)
     " ssd", "solid state drive", "nvme drive", "m.2 drive", " hdd ", "hard drive",
     "hard disk", "2.5\" drive", "3.5\" drive",
-    # RAM / memory sticks
+    # RAM / memory sticks — standalone modules, server RAM, ECC/registered
     "ram stick", "memory stick", "ddr4 ram", "ddr5 ram", "dimm", "sodimm",
-    "16gb ram", "32gb ram", "8gb ram",
-    # Motherboards
+    "16gb ram", "32gb ram", "8gb ram", "64gb ram",
+    "server ram", "server memory", "ecc ram", "ecc registered", "ecc reg",
+    "registered ram", "rdimm", "lrdimm", "udimm",
+    "pc4-", "pc3-", "pc5-",          # raw JEDEC memory part numbers
+    "mt/s",                           # memory speed unit (only in RAM listings)
+    "hma", "m393", "m471", "mta36",   # Samsung/Micron/SK Hynix RAM part number prefixes
+    # Motherboards and component bundles
     "motherboard", "mainboard",
+    "cpu bundle", "mobo bundle", "pc bundle",   # bundles of parts, not complete PCs
     # PSUs (standalone)
     "power supply unit", "psu only", "modular psu",
     # Peripherals / monitors — not flippable PCs
