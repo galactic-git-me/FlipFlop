@@ -545,7 +545,7 @@ function AuctionIntelTab({ auctions, loading, error, onRetry }: {
             />
             <Tooltip content={<ChartTooltip />} />
             <Bar dataKey="profit" radius={[0, 3, 3, 0]}>
-              <LabelList dataKey="profit" position="right" style={{ fill: "#94a3b8", fontSize: 10 }} formatter={(v: number) => `£${v}`} />
+              <LabelList dataKey="profit" position="right" style={{ fill: "#94a3b8", fontSize: 10 }} formatter={(v: unknown) => `£${v}`} />
               {top10.map((d, i) => (
                 <Cell key={i} fill={urgencyColor(d.urgency)} />
               ))}
