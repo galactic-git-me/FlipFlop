@@ -818,43 +818,32 @@ function PurchasePlanView({ plan }: { plan: PurchasePlan; intent: RefinedIntent 
   );
 }
 
-// ─── Progress bar ─────────────────────────────────────────────────────────────
+// ─── Chat history bubble ──────────────────────────────────────────────────────
 
-function WizardProgress({ phase }: { phase: Phase }) {
-  const idx = PHASES.findIndex(p => p.id === phase);
+interface HistoryMsg {
+  id: string;
+  from: "user" | "bot";
+  text: string;
+}
+
+function HistoryBubble({ msg }: { msg: HistoryMsg }) {
+  if (msg.from === "user") {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[75%] rounded-2xl rounded-tr-sm bg-[#00dc82]/12 border border-[#00dc82]/20 px-4 py-2.5">
+          <p className="text-sm text-slate-200">{msg.text}</p>
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="flex items-center gap-0 mb-8">
-      {PHASES.map((p, i) => {
-        const Icon = p.icon;
-        const done    = i < idx;
-        const current = i === idx;
-        return (
-          <div key={p.id} className="flex items-center flex-1">
-            <div className={cn(
-              "flex flex-col items-center gap-1 flex-shrink-0",
-            )}>
-              <div className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center border transition-all",
-                done    ? "border-emerald-400/50 bg-emerald-400/15 text-emerald-400" : "",
-                current ? "border-[#00dc82]/60 bg-[#00dc82]/15 text-[#00dc82] ring-2 ring-[#00dc82]/20" : "",
-                !done && !current ? "border-[#1e2d45] bg-[#0d1320] text-slate-600" : "",
-              )}>
-                {done ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
-              </div>
-              <span className={cn(
-                "text-[9px] uppercase tracking-wider font-semibold",
-                current ? "text-[#00dc82]" : done ? "text-emerald-400" : "text-slate-700",
-              )}>{p.label}</span>
-            </div>
-            {i < PHASES.length - 1 && (
-              <div className={cn(
-                "flex-1 h-px mx-2 mb-4 transition-all",
-                i < idx ? "bg-emerald-400/40" : "bg-[#1e2d45]",
-              )} />
-            )}
-          </div>
-        );
-      })}
+    <div className="flex gap-3">
+      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00dc82]/25 to-cyan-500/15 border border-[#00dc82]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+        <Wand2 className="w-3.5 h-3.5 text-[#00dc82]" />
+      </div>
+      <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#0d1320] border border-[#1e2d45] px-4 py-2.5">
+        <p className="text-sm text-slate-300">{msg.text}</p>
+      </div>
     </div>
   );
 }
@@ -892,6 +881,25 @@ function BuildWizardPageContent() {
   const [plan, setPlan]               = useState<PurchasePlan | null>(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
   const autoStartedForListingRef = useRef<number | null>(null);
+
+  // Chat
+  const [history, setHistory]         = useState<HistoryMsg[]>([]);
+  const [botText, setBotText]         = useState(
+    prefillListingId
+      ? "I've loaded your listing. Set your budget and goals, then I'll find the best builds:"
+      : "Hey! I'm Hermes — your PC flip advisor. Which strategy are you going for?"
+  );
+  const [chatInput, setChatInput]     = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const addHistory = useCallback((from: "user" | "bot", text: string) => {
+    setHistory(prev => [...prev, { id: `${Date.now()}-${Math.random()}`, from, text }]);
+  }, []);
+
+  // Auto-scroll whenever history or phase changes
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [history, phase, loadingPlan]);
 
   // Load playbooks on mount
   useEffect(() => {
@@ -958,14 +966,18 @@ function BuildWizardPageContent() {
 
       setResult(data);
       setIntent(data.intent);
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 400));
+      addHistory("bot", `Done! Found ${data.builds.length} valid builds:`);
+      setBotText(`Here are your ${data.builds.length} builds, ranked by profit. Pick one to continue:`);
       setPhase("builds");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setGenError(msg || "Generation failed — is the backend running?");
+      addHistory("bot", `Something went wrong: ${msg || "backend error"}. Adjust your settings and try again.`);
+      setBotText("What would you like to change?");
       setPhase("intent");
     }
-  }, [budget, notes, priorities, constraints, prefillListingId]);
+  }, [budget, notes, priorities, constraints, selectedPb, prefillListingId, addHistory]);
 
   useEffect(() => {
     if (!prefillListingId) return;
@@ -981,31 +993,29 @@ function BuildWizardPageContent() {
     if (!selectedBuild || !intent) return;
     setLoadingPlan(true);
     setPhase("plan");
+    setBotText("Building your purchase plan…");
     try {
-      // Patch upgrades with any manually-selected catalogue parts
       const patchedBuild: WizardBuild = {
         ...selectedBuild,
         upgrades: selectedBuild.upgrades.map((u) => {
           const role = u.role.toLowerCase();
           const chosen = selectedParts[role];
           if (!chosen) return u;
-          return {
-            ...u,
-            item: chosen.name,
-            cost_estimate: chosen.price ?? u.cost_estimate,
-            listing_url: chosen.source_url ?? u.listing_url,
-          };
+          return { ...u, item: chosen.name, cost_estimate: chosen.price ?? u.cost_estimate, listing_url: chosen.source_url ?? u.listing_url };
         }),
       };
       const planData = await api.buildWizard.plan({ build: patchedBuild, intent });
       setPlan(planData);
+      addHistory("bot", "Your purchase plan is ready!");
+      setBotText("Here's your purchase plan:");
     } catch {
-      alert("Failed to generate plan — check backend");
+      addHistory("bot", "Plan generation failed — please try again.");
+      setBotText("Something went wrong. Want to go back and try again?");
       setPhase("components");
     } finally {
       setLoadingPlan(false);
     }
-  }, [selectedBuild, selectedParts, intent]);
+  }, [selectedBuild, selectedParts, intent, addHistory]);
 
   const reset = () => {
     setPhase("playbook");
