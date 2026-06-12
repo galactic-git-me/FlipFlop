@@ -76,7 +76,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [flips, setFlips] = useState<Flip[]>([]);
-  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {} as Record<string,number>, by_source_gems: {} as Record<string,number> });
+  const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, super_gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {} as Record<string,number>, by_source_gems: {} as Record<string,number> });
   const [swarms, setSwarms] = useState<{ id: string; name: string; next_run: string | null }[]>([]);
   const [gemOfDay, setGemOfDay] = useState<Listing | null>(null);
   const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
@@ -579,7 +579,7 @@ export default function DashboardPage() {
           <ListingsTrackedCard total={stats.total_listings} bySource={stats.by_source_listings} />
         </div>
         <div className="lg:row-span-2">
-          <GemsFoundCard total={stats.gems_count} bySource={stats.by_source_gems} />
+          <GemsFoundCard total={stats.gems_count} superGems={stats.super_gems_count} bySource={stats.by_source_gems} />
         </div>
         <div className="grid grid-rows-2 gap-3">
           <AvgProfitCard avg={stats.avg_profit} minProfit={stats.min_profit} maxProfit={stats.max_profit} compact />
@@ -1600,7 +1600,8 @@ function ListingsTrackedCard({ total, bySource }: { total: number; bySource: Rec
 }
 
 // ── Gems Found ────────────────────────────────────────────────────────────────
-function GemsFoundCard({ total, bySource }: { total: number; bySource: Record<string, number> }) {
+function GemsFoundCard({ total, superGems, bySource }: { total: number; superGems: number; bySource: Record<string, number> }) {
+  const router = useRouter();
 
   return (
     <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
@@ -1612,6 +1613,17 @@ function GemsFoundCard({ total, bySource }: { total: number; bySource: Record<st
         <div className="text-4xl leading-none font-black text-[#00f49a] tabular-nums">
           <CountUp to={total} duration={1.5} separator="," />
         </div>
+        {superGems > 0 && (
+          <button
+            onClick={() => router.push("/super-gems")}
+            className="mt-2 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-cyan-400/10 border border-cyan-400/25 hover:bg-cyan-400/20 transition-colors cursor-pointer"
+          >
+            <Zap className="w-3 h-3 text-cyan-300" />
+            <span className="text-xs font-bold text-cyan-300">
+              <CountUp to={superGems} duration={1.0} /> super gem{superGems !== 1 ? "s" : ""}
+            </span>
+          </button>
+        )}
         <div className="mt-3 flex flex-col gap-1.5">
           {Object.entries(bySource).map(([src, count]) => (
             <div key={src} className="flex items-center justify-between text-base text-[#89eabf]/85">

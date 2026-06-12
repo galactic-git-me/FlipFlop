@@ -228,6 +228,15 @@ async def get_listing_stats(
                 ),
                 else_=0,
             )).label("rule_gems"),
+            func.sum(case(
+                (Listing.claude_verdict == "GEM", 1),
+                (
+                    (Listing.classification == Classification.amazing_gem) &
+                    (Listing.claude_judged_at == None),
+                    1,
+                ),
+                else_=0,
+            )).label("super_gems"),
             func.avg(_gem_profit).label("avg_profit"),
             func.min(_gem_profit).label("min_profit"),
             func.max(_gem_profit).label("max_profit"),
@@ -273,6 +282,7 @@ async def get_listing_stats(
     return {
         "total_listings":        int(r.total or 0),
         "gems_count":            int((r.claude_gems or 0) + (r.rule_gems or 0)),
+        "super_gems_count":      int(r.super_gems or 0),
         "avg_profit":            round(float(r.avg_profit or 0), 2),
         "min_profit":            round(float(r.min_profit or 0), 2),
         "max_profit":            round(float(r.max_profit or 0), 2),
