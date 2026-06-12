@@ -1,0 +1,234 @@
+<h2>Demand Explorer — Full Design</h2>
+<p class="subtitle">Here's what each tab looks like. Let me know if anything needs changing.</p>
+
+<div class="mockup">
+  <div class="mockup-header">📦 Categories tab (default view)</div>
+  <div class="mockup-body" style="background:#07101e;padding:16px;font-family:monospace;font-size:11px;">
+
+    <!-- Market health bar -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:#00dc8218;border:1px solid #00dc8240;border-radius:20px;">
+        <span style="color:#00dc82;font-size:13px;">🔥</span>
+        <span style="color:#00dc82;font-weight:700;font-size:11px;">Hot market</span>
+      </div>
+      <span style="color:#5a7a90;font-size:10px;">3 rising · 0 falling · 6 categories tracked</span>
+      <button style="margin-left:auto;padding:4px 10px;background:#1a2d3f;border:1px solid #2a4060;border-radius:4px;color:#7a9ab0;font-size:10px;cursor:pointer;">↻ Refresh</button>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid #1a3050;margin-bottom:12px;">
+      <div style="padding:7px 16px;background:#07101e;border:1px solid #1a3050;border-bottom:2px solid #00dc82;color:#00dc82;font-size:11px;font-weight:700;margin-bottom:-1px;">📦 Categories</div>
+      <div style="padding:7px 16px;color:#5a7a90;font-size:11px;border-bottom:1px solid #1a3050;">📡 External Signals</div>
+      <div style="padding:7px 16px;color:#5a7a90;font-size:11px;border-bottom:1px solid #1a3050;">⏱ Auction Intel</div>
+    </div>
+
+    <!-- Slicers -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+      <span style="color:#5a7a90;font-size:10px;">Filter:</span>
+      <div style="padding:4px 10px;background:#0f1e30;border:1px solid #00dc8240;border-radius:12px;color:#00dc82;font-size:10px;">Strength: All ▾</div>
+      <div style="padding:4px 10px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:10px;">Trend: All ▾</div>
+      <div style="padding:4px 10px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:10px;">Sort: Count ↓ ▾</div>
+      <div style="margin-left:auto;display:flex;gap:4px;">
+        <div style="padding:4px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:4px;color:#7a9ab0;font-size:10px;">📊 Chart: Listings</div>
+        <div style="padding:4px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:4px;color:#7a9ab0;font-size:10px;">📊 Chart: Profit</div>
+      </div>
+    </div>
+
+    <!-- Bar chart -->
+    <div style="background:#0a1828;border-radius:6px;padding:12px;margin-bottom:12px;">
+      <div style="font-size:10px;color:#5a7a90;margin-bottom:10px;">Listings by Category · coloured by demand strength</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:80px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#00dc82;">142</span>
+          <div style="width:100%;background:#00dc82;height:75px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">🎮 Gaming</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#00dc82;">89</span>
+          <div style="width:100%;background:#00dc82;height:47px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">🔧 No-GPU</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#f59e0b;">54</span>
+          <div style="width:100%;background:#f59e0b;height:28px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">🖥️ Workstns</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#f59e0b;">31</span>
+          <div style="width:100%;background:#f59e0b;height:16px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">💼 Clear</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#ef4444;">14</span>
+          <div style="width:100%;background:#ef4444;height:7px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">📺 HTPC</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="font-size:8px;color:#ef4444;">9</span>
+          <div style="width:100%;background:#ef4444;height:4px;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <span style="font-size:8px;color:#7a9ab0;text-align:center;">💸 Budget</span>
+        </div>
+        <!-- Gem overlay bars -->
+        <div style="position:absolute;opacity:0.4;" title="gem overlay would be shown here"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;font-size:9px;color:#5a7a90;">
+        <span>🟩 High demand</span><span>🟨 Medium</span><span>🟥 Low</span>
+        <span style="margin-left:auto;">◫ = gems within bar</span>
+      </div>
+    </div>
+
+    <!-- Data table -->
+    <div style="background:#0a1828;border-radius:6px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:1.8fr 0.7fr 0.6fr 0.6fr 0.7fr 0.9fr 1fr 1.4fr;gap:0;background:#0d2040;padding:6px 10px;font-size:9px;color:#5a7a90;font-weight:700;letter-spacing:0.05em;">
+        <span>CATEGORY</span><span>STRENGTH</span><span>TREND</span><span>LISTINGS</span><span>GEMS</span><span>GEM RATE</span><span>AVG PROFIT</span><span>7-DAY SPARKLINE</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1.8fr 0.7fr 0.6fr 0.6fr 0.7fr 0.9fr 1fr 1.4fr;gap:0;padding:6px 10px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;align-items:center;">
+        <span style="font-weight:700;">🎮 Gaming PCs</span>
+        <span style="color:#00dc82;font-weight:700;">High</span>
+        <span style="color:#10b981;">📈 rising</span>
+        <span>142</span>
+        <span style="color:#00dc82;">12</span>
+        <span style="color:#00dc82;">8.5%</span>
+        <span style="color:#00dc82;">+£187</span>
+        <div style="display:flex;gap:1px;align-items:flex-end;height:16px;">
+          <div style="flex:1;background:#00dc8260;height:40%;"></div>
+          <div style="flex:1;background:#00dc8260;height:60%;"></div>
+          <div style="flex:1;background:#00dc8260;height:50%;"></div>
+          <div style="flex:1;background:#00dc8260;height:70%;"></div>
+          <div style="flex:1;background:#00dc8260;height:80%;"></div>
+          <div style="flex:1;background:#00dc82;height:100%;"></div>
+          <div style="flex:1;background:#00dc82;height:90%;"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.8fr 0.7fr 0.6fr 0.6fr 0.7fr 0.9fr 1fr 1.4fr;gap:0;padding:6px 10px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;align-items:center;background:#0a1828;">
+        <span style="font-weight:700;">🔧 No-GPU Flips</span>
+        <span style="color:#00dc82;font-weight:700;">High</span>
+        <span style="color:#6b7280;">→ stable</span>
+        <span>89</span>
+        <span style="color:#00dc82;">18</span>
+        <span style="color:#00dc82;">20.2%</span>
+        <span style="color:#00dc82;">+£241</span>
+        <div style="display:flex;gap:1px;align-items:flex-end;height:16px;">
+          <div style="flex:1;background:#00dc8260;height:70%;"></div>
+          <div style="flex:1;background:#00dc8260;height:65%;"></div>
+          <div style="flex:1;background:#00dc8260;height:72%;"></div>
+          <div style="flex:1;background:#00dc8260;height:68%;"></div>
+          <div style="flex:1;background:#00dc82;height:75%;"></div>
+          <div style="flex:1;background:#00dc82;height:70%;"></div>
+          <div style="flex:1;background:#00dc82;height:78%;"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.8fr 0.7fr 0.6fr 0.6fr 0.7fr 0.9fr 1fr 1.4fr;gap:0;padding:6px 10px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;align-items:center;">
+        <span style="font-weight:700;">🖥️ Workstations</span>
+        <span style="color:#f59e0b;">Medium</span>
+        <span style="color:#6b7280;">→ stable</span>
+        <span>54</span>
+        <span style="color:#f59e0b;">4</span>
+        <span style="color:#f59e0b;">7.4%</span>
+        <span style="color:#f59e0b;">+£165</span>
+        <div style="display:flex;gap:1px;align-items:flex-end;height:16px;">
+          <div style="flex:1;background:#f59e0b60;height:50%;"></div>
+          <div style="flex:1;background:#f59e0b60;height:45%;"></div>
+          <div style="flex:1;background:#f59e0b60;height:55%;"></div>
+          <div style="flex:1;background:#f59e0b60;height:48%;"></div>
+          <div style="flex:1;background:#f59e0b60;height:52%;"></div>
+          <div style="flex:1;background:#f59e0b;height:50%;"></div>
+          <div style="flex:1;background:#f59e0b;height:46%;"></div>
+        </div>
+      </div>
+      <div style="padding:5px 10px;font-size:9px;color:#5a7a90;text-align:center;">+ 3 more rows (Office Clearance · HTPC/SFF · Budget Builders)</div>
+    </div>
+
+  </div>
+</div>
+
+<div style="height:12px;"></div>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">📡 External Signals tab</div>
+    <div class="mockup-body" style="background:#07101e;padding:12px;font-family:monospace;font-size:10px;">
+      <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;">
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Source: All ▾</div>
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Topic: All ▾</div>
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Sort: Score ▾</div>
+      </div>
+      <div style="background:#0a1828;border-radius:4px;padding:8px;margin-bottom:8px;">
+        <div style="font-size:9px;color:#5a7a90;margin-bottom:6px;">Avg Score by Topic · grouped by source</div>
+        <div style="display:flex;gap:4px;align-items:flex-end;height:50px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px;align-items:stretch;justify-content:flex-end;">
+            <div style="background:#ff6b6b;height:30px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#4fc3f7;height:20px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#81c784;height:15px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px;align-items:stretch;justify-content:flex-end;">
+            <div style="background:#ff6b6b;height:40px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#4fc3f7;height:25px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#81c784;height:10px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px;align-items:stretch;justify-content:flex-end;">
+            <div style="background:#ff6b6b;height:20px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#4fc3f7;height:35px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#81c784;height:18px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px;align-items:stretch;justify-content:flex-end;">
+            <div style="background:#ff6b6b;height:15px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#4fc3f7;height:30px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+            <div style="background:#81c784;height:22px;opacity:0.8;border-radius:1px 1px 0 0;"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:5px;font-size:8px;">
+          <span>🔴 Reddit</span><span>🔵 Google</span><span>🟢 Steam</span>
+        </div>
+      </div>
+      <div style="background:#0a1828;border-radius:4px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 0.7fr 0.7fr;padding:4px 8px;background:#0d2040;font-size:9px;color:#5a7a90;font-weight:700;">
+          <span>TOPIC / QUERY</span><span>SOURCE</span><span>SCORE</span><span>CONFIDENCE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 0.7fr 0.7fr;padding:4px 8px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;">
+          <span>gaming pc</span><span style="color:#4fc3f7;">Google Trends</span><span style="color:#00dc82;">72.4</span><span>0.70</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 0.7fr 0.7fr;padding:4px 8px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;background:#090f1c;">
+          <span>rtx 3060</span><span style="color:#ff6b6b;">Reddit</span><span style="color:#00dc82;">64.0</span><span>0.55</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 0.7fr 0.7fr;padding:4px 8px;font-size:9px;color:#9bb8cc;">
+          <span>am5 bundle</span><span style="color:#4fc3f7;">Google Trends</span><span style="color:#f59e0b;">48.2</span><span>0.70</span>
+        </div>
+        <div style="padding:4px 8px;font-size:9px;color:#5a7a90;text-align:center;">+ more rows…</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">⏱ Auction Intel tab</div>
+    <div class="mockup-body" style="background:#07101e;padding:12px;font-family:monospace;font-size:10px;">
+      <div style="display:flex;gap:5px;margin-bottom:8px;">
+        <div style="padding:3px 8px;background:#ef444420;border:1px solid #ef444440;border-radius:12px;color:#ef4444;font-size:9px;font-weight:700;">🔴 Ending Soon (3)</div>
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Today (7)</div>
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">Upcoming (12)</div>
+        <div style="padding:3px 8px;background:#0f1e30;border:1px solid #2a4060;border-radius:12px;color:#7a9ab0;font-size:9px;">All</div>
+      </div>
+      <div style="background:#0a1828;border-radius:4px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.9fr;padding:4px 8px;background:#0d2040;font-size:9px;color:#5a7a90;font-weight:700;">
+          <span>LISTING</span><span>BID</span><span>PROFIT</span><span>TIME LEFT</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.9fr;padding:5px 8px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;border-left:3px solid #ef4444;">
+          <span style="color:#fff;">HP Z440 no GPU</span><span>£112</span><span style="color:#00dc82;">+£180</span><span style="color:#ef4444;">⏱ 22 min</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.9fr;padding:5px 8px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;border-left:3px solid #ef4444;background:#090f1c;">
+          <span style="color:#fff;">Dell OptiPlex 7060</span><span>£89</span><span style="color:#00dc82;">+£145</span><span style="color:#ef4444;">⏱ 48 min</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.9fr;padding:5px 8px;font-size:9px;color:#9bb8cc;border-bottom:1px solid #0d2040;border-left:3px solid #f59e0b;">
+          <span>Ryzen 5 3600 SFF</span><span>£74</span><span style="color:#f59e0b;">+£95</span><span style="color:#f59e0b;">6 hr</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.9fr;padding:5px 8px;font-size:9px;color:#9bb8cc;border-left:3px solid #374151;">
+          <span>i7 EliteDesk 800</span><span>£65</span><span style="color:#00dc82;">+£210</span><span style="color:#6b7280;">2 days</span>
+        </div>
+        <div style="padding:4px 8px;font-size:9px;color:#5a7a90;text-align:center;">+ more rows…</div>
+      </div>
+      <div style="margin-top:8px;font-size:9px;color:#5a7a90;text-align:center;">🔴 ending &lt;1hr · 🟡 ending today · ⬜ upcoming</div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Does this look right? The chart metric toggle (Listings / Avg Profit) lets you switch the bar chart between volume and profitability views. Any changes needed before I write up the spec?</p>
