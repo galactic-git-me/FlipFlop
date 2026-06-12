@@ -193,7 +193,7 @@ export default function DashboardPage() {
       };
 
       const l = getValue<Listing[]>(0, []);
-      const s = getValue<{ total_listings: number; gems_count: number; avg_profit: number; min_profit: number; max_profit: number; claude_judged_count: number; claude_eval_queue: number; claude_unjudged_count: number; by_source_listings: Record<string,number>; by_source_gems: Record<string,number> }>(1, { total_listings: 0, gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {}, by_source_gems: {} });
+      const s = getValue<{ total_listings: number; gems_count: number; super_gems_count: number; avg_profit: number; min_profit: number; max_profit: number; claude_judged_count: number; claude_eval_queue: number; claude_unjudged_count: number; by_source_listings: Record<string,number>; by_source_gems: Record<string,number> }>(1, { total_listings: 0, gems_count: 0, super_gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {}, by_source_gems: {} });
       const sw = getValue<{ id: string; name: string; next_run: string | null }[]>(2, []);
       const fl = getValue<Flip[]>(3, []);
       const godResults = getValue<Listing[]>(4, []);
