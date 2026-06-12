@@ -16,12 +16,14 @@ import {
   Brain,
   Settings,
   Gauge,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PRIMARY_NAV = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/sources", icon: Search, label: "Sourcing" },
+  { href: "/demand", icon: TrendingUp, label: "Demand" },
   { href: "/chat", icon: Cpu, label: "Build Wizard" },
   { href: "/flips", icon: Boxes, label: "Manual Build" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
