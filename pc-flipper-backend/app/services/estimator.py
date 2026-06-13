@@ -45,8 +45,10 @@ CPU_BASE_RESALE: dict[str, float] = {
     "ryzen 3 3": 125, "ryzen 5 3": 155, "ryzen 7 3": 205, "ryzen 9 3": 260,
     # AMD Ryzen 5000
     "ryzen 3 5": 145, "ryzen 5 5": 195, "ryzen 7 5": 275, "ryzen 9 5": 355,
-    # AMD Ryzen 7000
+    # AMD Ryzen 7000 (AM5 — DDR5)
     "ryzen 5 7": 245, "ryzen 7 7": 335, "ryzen 9 7": 435,
+    # AMD Ryzen 9000 (AM5 — newest gen, June 2026 estimates)
+    "ryzen 5 9": 285, "ryzen 7 9": 385, "ryzen 9 9": 525,
     # Xeon
     "xeon e3": 115, "xeon e5": 155, "xeon w": 195,
 }
@@ -149,8 +151,16 @@ def get_budget_costs() -> dict[str, float]:
     except Exception:
         b = {}
 
-    gpu_cost = b.get("cost_gpu_rtx3060", _BUDGET_GPU_COST_DEFAULT)
-    ram_cost = b.get("cost_ram_32gb_ddr4", _BUDGET_RAM_COST_DEFAULT)
+    gpu_cost  = b.get("cost_gpu_rtx3060",   _BUDGET_GPU_COST_DEFAULT)
+    ram_cost  = b.get("cost_ram_32gb_ddr4", _BUDGET_RAM_COST_DEFAULT)
+    case_cost = b.get("cost_case_rgb_atx",  _BUDGET_CASE_COST_DEFAULT)
+
+    # Case resale: take the live resale benchmark if available, otherwise 2× cost rule
+    case_resale = b.get("resale_case_atx_rgb", round(case_cost * 2, 2))
+
+    # AM5 platform costs — live or hardcoded AM5 defaults
+    am5_mobo  = b.get("cost_mobo_am5_b650", AM5_MOBO_COST)
+    am5_ddr5  = b.get("cost_ram_32gb_ddr5", AM5_DDR5_COST)
 
     return {
         "gpu_cost":        gpu_cost,
@@ -159,10 +169,18 @@ def get_budget_costs() -> dict[str, float]:
         "ssd_resale_add":  _BUDGET_SSD_RESALE_ADD_DEFAULT,
         "psu_cost":        b.get("cost_psu_650w",      _BUDGET_PSU_COST_DEFAULT),
         "psu_resale_add":  _BUDGET_PSU_RESALE_ADD_DEFAULT,
-        "case_cost":       b.get("cost_case_rgb",      _BUDGET_CASE_COST_DEFAULT),
-        "case_resale_add": round(b.get("cost_case_rgb", _BUDGET_CASE_COST_DEFAULT) * 2, 2),
+        "case_cost":       case_cost,
+        "case_resale_add": case_resale,
         "ram_cost":        ram_cost,
         "ram_resale_add":  round(ram_cost * 0.85, 2) if b.get("cost_ram_32gb_ddr4") else _BUDGET_RAM_RESALE_ADD_DEFAULT,
+        # AM5 platform
+        "am5_mobo_cost":   am5_mobo,
+        "am5_ddr5_cost":   am5_ddr5,
+        # Accessories (bundled peripherals add to perceived value)
+        "keyboard_cost":   b.get("cost_keyboard_rgb",   15.0),
+        "mouse_cost":      b.get("cost_mouse_gaming",   10.0),
+        "keyboard_resale": b.get("resale_keyboard_rgb", 25.0),
+        "mouse_resale":    b.get("resale_mouse_gaming", 20.0),
     }
 
 
@@ -266,8 +284,8 @@ def estimate_upgrade_cost(
     if not ram_gb or ram_gb < 32:   # 32 GB is the 2026 gaming minimum
         cost += bc["ram_cost"]
     if is_am5:
-        # AM5 needs a new motherboard and DDR5 kit — not in the standard model
-        cost += AM5_MOBO_COST + AM5_DDR5_COST
+        # AM5 needs a new motherboard and DDR5 kit — use live eBay prices
+        cost += bc.get("am5_mobo_cost", AM5_MOBO_COST) + bc.get("am5_ddr5_cost", AM5_DDR5_COST)
     return cost
 
 
