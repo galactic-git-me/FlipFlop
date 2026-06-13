@@ -333,13 +333,18 @@ _GPU_BENCH_KEYS: dict[str, str] = {
 
 # CPU: CPU_BASE_RESALE key → system price benchmark key
 _CPU_BENCH_KEYS: dict[str, str] = {
-    "i5-8": "sys_i5_8",  "i7-8": "sys_i7_8",
-    "i5-9": "sys_i5_9",  "i7-9": "sys_i7_9",  "i9-9": "sys_i9_9",
+    "i5-8": "sys_i5_8",   "i7-8": "sys_i7_8",
+    "i5-9": "sys_i5_9",   "i7-9": "sys_i7_9",   "i9-9": "sys_i9_9",
     "i5-10": "sys_i5_10", "i7-10": "sys_i7_10",
     "i5-12": "sys_i5_12", "i7-12": "sys_i7_12",
     "i5-13": "sys_i5_13", "i7-13": "sys_i7_13",
+    "i5-14": "sys_i5_14", "i7-14": "sys_i7_14",
     "ryzen 5 3": "sys_r5_3600", "ryzen 7 3": "sys_r7_3700", "ryzen 9 3": "sys_r9_3900",
     "ryzen 5 5": "sys_r5_5600", "ryzen 7 5": "sys_r7_5800", "ryzen 9 5": "sys_r9_5900",
+    # AM5 (Ryzen 7000 / 9000)
+    "ryzen 5 7": "sys_r5_7600", "ryzen 7 7": "sys_r7_7700",
+    "ryzen 9 7": "sys_r9_7900",
+    "ryzen 5 9": "sys_r5_9600", "ryzen 7 9": "sys_r7_9700",
 }
 
 

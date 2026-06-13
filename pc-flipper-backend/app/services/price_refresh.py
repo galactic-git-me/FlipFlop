@@ -46,14 +46,40 @@ _ua = UserAgent()
 # ─────────────────────────────────────────────────────────────────────────────
 
 BUDGET_COMPONENT_QUERIES: list[tuple[str, str, float, float]] = [
-    ("cost_ram_32gb_ddr4",  "32gb ddr4 desktop ram kit 3200",       30.0,  400.0),
-    ("cost_ram_32gb_ddr5",  "32gb ddr5 desktop ram kit 5600",       50.0,  600.0),
-    ("cost_gpu_rtx3060",    "rtx 3060 12gb graphics card",         120.0,  380.0),
-    ("cost_gpu_rtx4060",    "rtx 4060 8gb graphics card",          150.0,  450.0),
-    ("cost_gpu_rx6700xt",   "rx 6700 xt graphics card",            100.0,  360.0),
-    ("cost_ssd_1tb_nvme",   "1tb nvme m.2 ssd 2280",                25.0,  130.0),
-    ("cost_psu_650w",       "650w 80 plus bronze psu modular",       25.0,  120.0),
-    ("cost_case_rgb",       "rgb gaming pc case atx mid tower",      25.0,  120.0),
+    # RAM
+    ("cost_ram_32gb_ddr4",      "32gb ddr4 desktop ram kit 3200",          30.0,  400.0),
+    ("cost_ram_64gb_ddr4",      "64gb ddr4 desktop ram kit 3200",          60.0,  600.0),
+    ("cost_ram_32gb_ddr5",      "32gb ddr5 desktop ram kit 5600",          50.0,  500.0),
+    ("cost_ram_64gb_ddr5",      "64gb ddr5 desktop ram kit 5600",          80.0,  700.0),
+    # GPUs (our buy cost)
+    ("cost_gpu_rtx3060",        "rtx 3060 12gb graphics card",            120.0,  380.0),
+    ("cost_gpu_rtx4060",        "rtx 4060 8gb graphics card",             150.0,  450.0),
+    ("cost_gpu_rx6700xt",       "rx 6700 xt graphics card",               100.0,  360.0),
+    # Storage
+    ("cost_ssd_1tb_nvme",       "1tb nvme m.2 ssd 2280",                   25.0,  130.0),
+    ("cost_ssd_2tb_nvme",       "2tb nvme m.2 ssd 2280",                   40.0,  200.0),
+    # PSU
+    ("cost_psu_650w",           "650w 80 plus bronze psu modular",          25.0,  120.0),
+    ("cost_psu_750w",           "750w 80 plus gold psu modular",            35.0,  150.0),
+    # Cases — themed RGB gaming (what we pay to upgrade)
+    ("cost_case_rgb_atx",       "rgb gaming pc case atx mid tower",         25.0,  120.0),
+    ("cost_case_rgb_mesh",      "mesh gaming pc case argb mid tower",       30.0,  150.0),
+    ("cost_case_mini_itx",      "mini itx gaming case rgb",                 25.0,  130.0),
+    # AM5 platform (mobo + DDR5 — needed before any AM5 system can be upgraded)
+    ("cost_mobo_am5_b650",      "am5 b650 motherboard",                     80.0,  250.0),
+    ("cost_mobo_am5_x670",      "am5 x670 motherboard",                    120.0,  380.0),
+    # AM4 platform (mobo — often the upgrade needed for R5 5600 flips)
+    ("cost_mobo_am4_b550",      "am4 b550 motherboard",                     40.0,  180.0),
+    ("cost_mobo_am4_x570",      "am4 x570 motherboard",                     60.0,  250.0),
+    # Accessories — commonly bundled or sold with flips
+    ("cost_wifi_card_pcie",     "pcie wifi 6 card desktop",                 15.0,   80.0),
+    ("cost_cpu_cooler_120mm",   "120mm aio liquid cooler",                   20.0,  100.0),
+    ("cost_cpu_cooler_air",     "cpu air cooler tower 120mm",                10.0,   70.0),
+    ("cost_keyboard_rgb",       "rgb gaming keyboard mechanical",            15.0,  100.0),
+    ("cost_mouse_gaming",       "gaming mouse rgb",                          10.0,   70.0),
+    ("cost_headset_gaming",     "gaming headset usb rgb",                    15.0,   80.0),
+    ("cost_monitor_1080p",      "24 inch 1080p gaming monitor 144hz",        50.0,  250.0),
+    ("cost_monitor_1440p",      "27 inch 1440p gaming monitor 144hz",        80.0,  400.0),
 ]
 
 GPU_RESALE_QUERIES: list[tuple[str, str, float, float]] = [
@@ -104,25 +130,67 @@ GPU_RESALE_QUERIES: list[tuple[str, str, float, float]] = [
 # Bare gaming PC (no GPU, working, just CPU + RAM + storage) sold prices.
 # Used to build CPU_BASE_RESALE dynamically.
 CPU_SYSTEM_QUERIES: list[tuple[str, str, float, float]] = [
-    # Intel 8th-10th gen
-    ("sys_i5_8",      "gaming pc i5 8400 desktop tower",     60.0,  300.0),
-    ("sys_i7_8",      "gaming pc i7 8700 desktop tower",     80.0,  350.0),
-    ("sys_i5_9",      "gaming pc i5 9600 desktop tower",     80.0,  320.0),
-    ("sys_i7_9",      "gaming pc i7 9700 desktop tower",    100.0,  380.0),
-    ("sys_i9_9",      "gaming pc i9 9900 desktop tower",    120.0,  420.0),
-    ("sys_i5_10",     "gaming pc i5 10400 desktop tower",   100.0,  360.0),
-    ("sys_i7_10",     "gaming pc i7 10700 desktop tower",   120.0,  420.0),
-    ("sys_i5_12",     "gaming pc i5 12400 desktop tower",   150.0,  450.0),
-    ("sys_i7_12",     "gaming pc i7 12700 desktop tower",   180.0,  550.0),
-    ("sys_i5_13",     "gaming pc i5 13600 desktop tower",   180.0,  550.0),
-    ("sys_i7_13",     "gaming pc i7 13700 desktop tower",   220.0,  650.0),
-    # AMD Ryzen
-    ("sys_r5_3600",   "gaming pc ryzen 5 3600 desktop",     100.0,  350.0),
-    ("sys_r7_3700",   "gaming pc ryzen 7 3700x desktop",    120.0,  400.0),
-    ("sys_r9_3900",   "gaming pc ryzen 9 3900x desktop",    140.0,  480.0),
-    ("sys_r5_5600",   "gaming pc ryzen 5 5600 desktop",     130.0,  420.0),
-    ("sys_r7_5800",   "gaming pc ryzen 7 5800x desktop",    160.0,  500.0),
-    ("sys_r9_5900",   "gaming pc ryzen 9 5900x desktop",    190.0,  580.0),
+    # Intel 8th-10th gen (AM4-era — common flip source)
+    ("sys_i5_8",       "gaming pc i5 8400 desktop tower",       60.0,  300.0),
+    ("sys_i7_8",       "gaming pc i7 8700 desktop tower",       80.0,  350.0),
+    ("sys_i5_9",       "gaming pc i5 9600 desktop tower",       80.0,  320.0),
+    ("sys_i7_9",       "gaming pc i7 9700 desktop tower",      100.0,  380.0),
+    ("sys_i9_9",       "gaming pc i9 9900 desktop tower",      120.0,  420.0),
+    ("sys_i5_10",      "gaming pc i5 10400 desktop tower",     100.0,  360.0),
+    ("sys_i7_10",      "gaming pc i7 10700 desktop tower",     120.0,  420.0),
+    # Intel 12th-13th gen (LGA1700 — growing used market)
+    ("sys_i5_12",      "gaming pc i5 12400 desktop tower",     150.0,  450.0),
+    ("sys_i7_12",      "gaming pc i7 12700 desktop tower",     180.0,  550.0),
+    ("sys_i5_13",      "gaming pc i5 13600 desktop tower",     180.0,  550.0),
+    ("sys_i7_13",      "gaming pc i7 13700 desktop tower",     220.0,  650.0),
+    # Intel 14th gen (LGA1700 — premium tier)
+    ("sys_i5_14",      "gaming pc i5 14600 desktop tower",     200.0,  600.0),
+    ("sys_i7_14",      "gaming pc i7 14700 desktop tower",     250.0,  750.0),
+    # AMD Ryzen 3000 (AM4)
+    ("sys_r5_3600",    "gaming pc ryzen 5 3600 desktop",       100.0,  350.0),
+    ("sys_r7_3700",    "gaming pc ryzen 7 3700x desktop",      120.0,  400.0),
+    ("sys_r9_3900",    "gaming pc ryzen 9 3900x desktop",      140.0,  480.0),
+    # AMD Ryzen 5000 (AM4 — primary flip target)
+    ("sys_r5_5600",    "gaming pc ryzen 5 5600 desktop",       130.0,  420.0),
+    ("sys_r7_5800",    "gaming pc ryzen 7 5800x desktop",      160.0,  500.0),
+    ("sys_r9_5900",    "gaming pc ryzen 9 5900x desktop",      190.0,  580.0),
+    # AMD Ryzen 7000 (AM5 — DDR5 platform, higher value tier)
+    ("sys_r5_7600",    "gaming pc ryzen 5 7600 desktop",       200.0,  580.0),
+    ("sys_r7_7700",    "gaming pc ryzen 7 7700x desktop",      250.0,  700.0),
+    ("sys_r9_7900",    "gaming pc ryzen 9 7900x desktop",      300.0,  850.0),
+    ("sys_r9_7950",    "gaming pc ryzen 9 7950x desktop",      380.0, 1100.0),
+    # AMD Ryzen 9000 (AM5 — newest gen)
+    ("sys_r5_9600",    "gaming pc ryzen 5 9600x desktop",      220.0,  650.0),
+    ("sys_r7_9700",    "gaming pc ryzen 7 9700x desktop",      280.0,  780.0),
+]
+
+# Standalone component sold prices — for accessories and case resale benchmarks.
+# These tell us both what buyers pay AND let us sanity-check our sourcing costs.
+ACCESSORY_QUERIES: list[tuple[str, str, float, float]] = [
+    # Cases — what themed RGB cases actually sell for second-hand
+    ("resale_case_atx_rgb",     "rgb gaming pc case atx used",              20.0,  120.0),
+    ("resale_case_mesh_argb",   "mesh argb gaming case used",               20.0,  130.0),
+    ("resale_case_mini_itx",    "mini itx gaming case used",                15.0,  100.0),
+    # Peripherals — resale value (what buyers pay on eBay UK)
+    ("resale_keyboard_rgb",     "rgb gaming keyboard mechanical used",       10.0,   80.0),
+    ("resale_mouse_gaming",     "gaming mouse used",                          5.0,   60.0),
+    ("resale_headset_gaming",   "gaming headset used",                        8.0,   70.0),
+    ("resale_monitor_1080p",    "24 inch 1080p 144hz gaming monitor used",   40.0,  220.0),
+    ("resale_monitor_1440p",    "27 inch 1440p 144hz gaming monitor used",   70.0,  380.0),
+    # AM5 components standalone (what they sell for if listed separately)
+    ("resale_mobo_am5_b650",    "am5 b650 motherboard used",                 60.0,  220.0),
+    ("resale_mobo_am5_x670",    "am5 x670 motherboard used",                 90.0,  350.0),
+    ("resale_mobo_am4_b550",    "am4 b550 motherboard used",                 30.0,  160.0),
+    ("resale_mobo_am4_x570",    "am4 x570 motherboard used",                 40.0,  220.0),
+    # DDR5 kits standalone resale
+    ("resale_ram_32gb_ddr5",    "32gb ddr5 desktop ram kit used",            40.0,  400.0),
+    ("resale_ram_64gb_ddr5",    "64gb ddr5 desktop ram kit used",            70.0,  600.0),
+    # DDR4 kits standalone resale
+    ("resale_ram_32gb_ddr4",    "32gb ddr4 desktop ram kit used",            30.0,  350.0),
+    ("resale_ram_64gb_ddr4",    "64gb ddr4 desktop ram kit used",            50.0,  500.0),
+    # Cooling
+    ("resale_aio_120mm",        "120mm aio liquid cpu cooler used",          15.0,   90.0),
+    ("resale_aio_240mm",        "240mm aio liquid cpu cooler used",          20.0,  130.0),
 ]
 
 
@@ -228,6 +296,7 @@ async def run_price_refresh() -> dict:
         await _run_batch(client, BUDGET_COMPONENT_QUERIES, updated, failed)
         await _run_batch(client, GPU_RESALE_QUERIES, updated, failed)
         await _run_batch(client, CPU_SYSTEM_QUERIES, updated, failed)
+        await _run_batch(client, ACCESSORY_QUERIES, updated, failed)
 
     if updated:
         merged = {**existing, **updated}
