@@ -140,6 +140,8 @@ def get_budget_costs() -> dict[str, float]:
 
     Tries data/price_benchmarks.json (written by the daily price_refresh job)
     first. Falls back to hardcoded defaults if the file is missing or stale.
+    Keys in price_benchmarks.json match the BUDGET_COMPONENT_QUERIES names in
+    price_refresh.py (e.g. "cost_gpu_rtx3060", "cost_ram_32gb_ddr4").
     """
     try:
         from app.services.price_refresh import load_benchmarks
@@ -147,18 +149,20 @@ def get_budget_costs() -> dict[str, float]:
     except Exception:
         b = {}
 
+    gpu_cost = b.get("cost_gpu_rtx3060", _BUDGET_GPU_COST_DEFAULT)
+    ram_cost = b.get("cost_ram_32gb_ddr4", _BUDGET_RAM_COST_DEFAULT)
+
     return {
-        "gpu_cost":        b.get("gpu_rtx3060_cost",   _BUDGET_GPU_COST_DEFAULT),
-        "gpu_resale_add":  _BUDGET_GPU_RESALE_ADD_DEFAULT,
-        "ssd_cost":        b.get("ssd_1tb_nvme_cost",  _BUDGET_SSD_COST_DEFAULT),
+        "gpu_cost":        gpu_cost,
+        "gpu_resale_add":  round(gpu_cost * 1.15, 2) if b.get("cost_gpu_rtx3060") else _BUDGET_GPU_RESALE_ADD_DEFAULT,
+        "ssd_cost":        b.get("cost_ssd_1tb_nvme",  _BUDGET_SSD_COST_DEFAULT),
         "ssd_resale_add":  _BUDGET_SSD_RESALE_ADD_DEFAULT,
-        "psu_cost":        b.get("psu_650w_cost",      _BUDGET_PSU_COST_DEFAULT),
+        "psu_cost":        b.get("cost_psu_650w",      _BUDGET_PSU_COST_DEFAULT),
         "psu_resale_add":  _BUDGET_PSU_RESALE_ADD_DEFAULT,
-        "case_cost":       _BUDGET_CASE_COST_DEFAULT,
-        "case_resale_add": _BUDGET_CASE_RESALE_ADD_DEFAULT,
-        "ram_cost":        b.get("ram_32gb_ddr4_cost",  _BUDGET_RAM_COST_DEFAULT),
-        "ram_resale_add":  b.get("ram_32gb_ddr4_cost",  _BUDGET_RAM_RESALE_ADD_DEFAULT) * 0.85
-                           if b.get("ram_32gb_ddr4_cost") else _BUDGET_RAM_RESALE_ADD_DEFAULT,
+        "case_cost":       b.get("cost_case_rgb",      _BUDGET_CASE_COST_DEFAULT),
+        "case_resale_add": round(b.get("cost_case_rgb", _BUDGET_CASE_COST_DEFAULT) * 2, 2),
+        "ram_cost":        ram_cost,
+        "ram_resale_add":  round(ram_cost * 0.85, 2) if b.get("cost_ram_32gb_ddr4") else _BUDGET_RAM_RESALE_ADD_DEFAULT,
     }
 
 
@@ -287,17 +291,86 @@ def estimate_profit(
     return round(estimated_resale - total_cost, 2)
 
 
+# ── benchmark key maps ────────────────────────────────────────────────────────
+# Map estimator lookup strings → price_benchmarks.json keys (from price_refresh.py)
+
+# GPU: benchmark key → contribution when installed in a complete PC (90% of standalone)
+_GPU_BENCH_KEYS: dict[str, str] = {
+    "gtx 1060 6gb":  "gpu_gtx1060_6gb",
+    "gtx 1070":      "gpu_gtx1070",
+    "gtx 1080":      "gpu_gtx1080",
+    "gtx 1080 ti":   "gpu_gtx1080ti",
+    "gtx 1660 super":"gpu_gtx1660super",
+    "gtx 1660 ti":   "gpu_gtx1660ti",
+    "rtx 2060":      "gpu_rtx2060",
+    "rtx 2070":      "gpu_rtx2070",
+    "rtx 2080":      "gpu_rtx2080",
+    "rtx 3060 ti":   "gpu_rtx3060ti",   # must come before "rtx 3060"
+    "rtx 3060":      "gpu_rtx3060",
+    "rtx 3070":      "gpu_rtx3070",
+    "rtx 3080":      "gpu_rtx3080",
+    "rtx 3090":      "gpu_rtx3090",
+    "rtx 4060 ti":   "gpu_rtx4060ti",   # before "rtx 4060"
+    "rtx 4060":      "gpu_rtx4060",
+    "rtx 4070 super":"gpu_rtx4070super",
+    "rtx 4070":      "gpu_rtx4070",
+    "rtx 4080":      "gpu_rtx4080",
+    "rx 580":        "gpu_rx580",
+    "rx 5700 xt":    "gpu_rx5700xt",
+    "rx 6600 xt":    "gpu_rx6600xt",    # before "rx 6600"
+    "rx 6600":       "gpu_rx6600",
+    "rx 6700 xt":    "gpu_rx6700xt",
+    "rx 6750 xt":    "gpu_rx6750xt",
+    "rx 6800 xt":    "gpu_rx6800xt",    # before "rx 6800"
+    "rx 6800":       "gpu_rx6800",
+    "rx 6900 xt":    "gpu_rx6900xt",
+    "rx 7600":       "gpu_rx7600",
+    "rx 7700 xt":    "gpu_rx7700xt",
+    "rx 7800 xt":    "gpu_rx7800xt",
+    "rx 7900 xtx":   "gpu_rx7900xtx",  # before "rx 7900 xt"
+    "rx 7900 xt":    "gpu_rx7900xt",
+}
+
+# CPU: CPU_BASE_RESALE key → system price benchmark key
+_CPU_BENCH_KEYS: dict[str, str] = {
+    "i5-8": "sys_i5_8",  "i7-8": "sys_i7_8",
+    "i5-9": "sys_i5_9",  "i7-9": "sys_i7_9",  "i9-9": "sys_i9_9",
+    "i5-10": "sys_i5_10", "i7-10": "sys_i7_10",
+    "i5-12": "sys_i5_12", "i7-12": "sys_i7_12",
+    "i5-13": "sys_i5_13", "i7-13": "sys_i7_13",
+    "ryzen 5 3": "sys_r5_3600", "ryzen 7 3": "sys_r7_3700", "ryzen 9 3": "sys_r9_3900",
+    "ryzen 5 5": "sys_r5_5600", "ryzen 7 5": "sys_r7_5800", "ryzen 9 5": "sys_r9_5900",
+}
+
+
+def _benchmarks() -> dict[str, float]:
+    """Single call point — cached per-process via price_refresh's module globals."""
+    try:
+        from app.services.price_refresh import load_benchmarks
+        return load_benchmarks()
+    except Exception:
+        return {}
+
+
 # ── internal helpers ──────────────────────────────────────────────────────────
 
 def _cpu_base(cpu: str | None) -> float:
     if not cpu:
         return 55   # completely unknown machine — conservative
     cpu_lower = cpu.lower()
+    b = _benchmarks()
+
+    # Check live benchmark keys first (daily eBay UK sold medians)
+    for table_key, bench_key in _CPU_BENCH_KEYS.items():
+        if table_key in cpu_lower and bench_key in b:
+            return b[bench_key]
+
+    # Fall back to static table
     for key, val in CPU_BASE_RESALE.items():
         if key in cpu_lower:
             return val
-    # Tier-based fallback for unrecognised generations (e.g. future CPUs,
-    # unusual model numbers).  Much better than a flat £75.
+
+    # Tier-based fallback for unrecognised generations
     if "ryzen 9"        in cpu_lower: return 260
     if "ryzen 7"        in cpu_lower: return 195
     if "ryzen 5"        in cpu_lower: return 155
@@ -315,9 +388,19 @@ def _gpu_add(gpu: str | None) -> float:
     if not gpu:
         return 0
     gpu_lower = gpu.lower()
+    b = _benchmarks()
+
+    # Live benchmark: standalone eBay sold price × 0.90 = in-system contribution
+    # (buyers pay ~10% less for a GPU inside a PC than buying it standalone)
+    for label, bench_key in _GPU_BENCH_KEYS.items():
+        if label in gpu_lower and bench_key in b:
+            return round(b[bench_key] * 0.90, 2)
+
+    # Fall back to static table
     for key, val in GPU_ADD_RESALE.items():
         if key in gpu_lower:
             return val
+
     return 28   # unrecognised GPU — a little value
 
 
