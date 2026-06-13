@@ -154,6 +154,31 @@ async def _upsert_accessory(db, acc: RawAccessory):
     ))
 
 
+async def _scrape_dropreference_accessories() -> list[RawAccessory]:
+    """Pull new peripheral listings from DropReference and convert to RawAccessory."""
+    try:
+        from app.scrapers.dropreference_scraper import scrape_dropreference_peripherals
+        result = await scrape_dropreference_peripherals()
+        out: list[RawAccessory] = []
+        for l in result.get("listings", []):
+            price = float(l.get("price_gbp") or 0)
+            if price <= 0 or price > MAX_PRICE:
+                continue
+            out.append(RawAccessory(
+                name=str(l.get("title") or "")[:200],
+                price=price,
+                source_site="DropReference",
+                source_url=str(l.get("source_url") or "")[:MAX_SOURCE_URL_LEN],
+                image_url="",
+                theme=str(l.get("theme") or "Accessory"),
+                condition=PartCondition.new,
+            ))
+        return out
+    except Exception as exc:
+        log.warning("accessories_swarm.dropreference.error", error=str(exc))
+        return []
+
+
 async def run_accessories_swarm(mode: str = "main") -> dict:
     log.info("accessories_swarm.start")
     stats = {"found": 0, "upserted": 0, "errors": 0}
@@ -267,6 +292,22 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                         log.error("accessories.upsert.error", term=search_def["term"], source=source_name, error=str(row_exc))
 
         await db.commit()
+
+    # DropReference peripherals — scraped as a full category pass, not per search term
+    dr_accessories = await _scrape_dropreference_accessories()
+    stats["found"] += len(dr_accessories)
+    if dr_accessories:
+        async with AsyncSessionLocal() as db:
+            for acc in dr_accessories:
+                try:
+                    await _upsert_accessory(db, acc)
+                    stats["upserted"] += 1
+                except Exception as exc:
+                    stats["errors"] += 1
+                    await db.rollback()
+                    log.error("accessories.dropreference.upsert_error", name=acc.name, error=str(exc))
+            await db.commit()
+        log.info("accessories_swarm.dropreference.done", upserted=len(dr_accessories))
 
     log.info("accessories_swarm.done", **stats)
     return stats

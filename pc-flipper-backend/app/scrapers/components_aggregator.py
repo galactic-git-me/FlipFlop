@@ -36,6 +36,7 @@ class ComponentSource(str, Enum):
 
     TEMU = "Temu"
     BARGAIN_HARDWARE = "BargainHardware"
+    DROPREFERENCE = "DropReference"
     VINTED = "Vinted"
     AMAZON = "Amazon"
     EBAY = "eBay"
@@ -54,6 +55,7 @@ class ComponentAggregatorConfig:
     sources_priority = [
         ComponentSource.TEMU,
         ComponentSource.BARGAIN_HARDWARE,
+        ComponentSource.DROPREFERENCE,
         ComponentSource.VINTED,
         ComponentSource.AMAZON,
         ComponentSource.EBAY,
@@ -166,6 +168,12 @@ async def aggregate_components() -> dict:
                     result = await scrape_bargain_hardware_components()
                     components = _convert_bh_to_components(result.get("listings", []))
 
+                elif source == ComponentSource.DROPREFERENCE:
+                    from app.scrapers.dropreference_scraper import scrape_dropreference_components
+
+                    result = await scrape_dropreference_components()
+                    components = _convert_dropreference_to_components(result.get("listings", []))
+
                 elif source == ComponentSource.VINTED:
                     from app.scrapers.vinted_scraper import scrape_vinted_tech
 
@@ -273,6 +281,32 @@ def _convert_bh_to_components(bh_listings: List[dict]) -> List[AggregatedCompone
             log.debug("components_aggregator.bh_conversion_error", error=str(e))
             continue
 
+    return components
+
+
+def _convert_dropreference_to_components(dr_listings: List[dict]) -> List[AggregatedComponent]:
+    """Convert DropReference scraper output to AggregatedComponent objects."""
+    components = []
+    for listing in dr_listings:
+        try:
+            component = AggregatedComponent(
+                title=listing.get("title", ""),
+                source=ComponentSource.DROPREFERENCE.value,
+                source_url=listing.get("source_url", ""),
+                price_gbp=listing.get("price_gbp", 0),
+                shipping_cost_gbp=0.0,
+                condition="new",
+                component_type=_parse_component_type(listing.get("category", "")),
+                component_model=listing.get("component_type"),
+                seller="DropReference",
+                seller_rating=4.8,
+                in_stock=listing.get("in_stock", True),
+                discount_pct=0,
+            )
+            components.append(component)
+        except Exception as e:
+            log.debug("components_aggregator.dropreference_conversion_error", error=str(e))
+            continue
     return components
 
 
