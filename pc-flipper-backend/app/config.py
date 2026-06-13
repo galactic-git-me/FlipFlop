@@ -61,8 +61,12 @@ class Settings(BaseSettings):
     auto_buy_daily_limit: int = 3
 
     ntfy_topic: str = ""
-    ram_watch_threshold_gbp: float = 240.0
     ram_watch_enabled: bool = True
+    ram_watch_threshold_gbp: float = 240.0   # DDR5 RAM
+    ram_watch_ddr4_threshold_gbp: float = 55.0
+    ram_watch_cpu_threshold_gbp: float = 100.0
+    ram_watch_mobo_threshold_gbp: float = 70.0
+    ram_watch_gpu_threshold_gbp: float = 200.0
 
     frontend_url: str = "http://localhost:3000"
     admin_api_key: str = ""

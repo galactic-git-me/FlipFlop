@@ -74,16 +74,22 @@ async def _fetch_feed() -> list[dict]:
 @router.get("/deals")
 async def get_ram_deals(limit: int = 100):
     alerts = await list_alerts(limit=limit, include_acked=True)
-    return [a for a in alerts if a["code"] == "ram_deal"]
+    return [a for a in alerts if a["code"] in ("ram_deal", "pc_deal")]
 
 
 @router.get("/config")
 async def get_config():
     s = get_settings()
     return {
-        "threshold_gbp": s.ram_watch_threshold_gbp,
         "ntfy_topic": s.ntfy_topic,
         "enabled": s.ram_watch_enabled,
+        "thresholds": {
+            "ddr5_ram_gbp": s.ram_watch_threshold_gbp,
+            "ddr4_ram_gbp": s.ram_watch_ddr4_threshold_gbp,
+            "cpu_gbp": s.ram_watch_cpu_threshold_gbp,
+            "mobo_gbp": s.ram_watch_mobo_threshold_gbp,
+            "gpu_gbp": s.ram_watch_gpu_threshold_gbp,
+        },
     }
 
 
@@ -105,10 +111,14 @@ async def test_notification():
         return {"ok": False, "reason": "ntfy_topic not configured in .env"}
     await _send_ntfy(
         s.ntfy_topic,
-        "FlipFlop RAM Watch — Test",
-        "Your DDR5 price watcher is working. Deals below £"
-        + str(int(s.ram_watch_threshold_gbp))
-        + " will ping here.",
+        "FlipFlop PC Watch — Test",
+        "Component deal watcher is live. Watching: "
+        f"DDR5 RAM <£{s.ram_watch_threshold_gbp:.0f}, "
+        f"DDR4 RAM <£{s.ram_watch_ddr4_threshold_gbp:.0f}, "
+        f"AM4 CPU <£{s.ram_watch_cpu_threshold_gbp:.0f}, "
+        f"MOBO <£{s.ram_watch_mobo_threshold_gbp:.0f}, "
+        f"GPU <£{s.ram_watch_gpu_threshold_gbp:.0f}",
         "https://reddit.com/r/buildapcsales",
+        tags="test,deal",
     )
     return {"ok": True}
