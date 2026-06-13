@@ -37,14 +37,41 @@ VINTED_SEARCH_TERMS = [
     "desktop PC",
     "workstation PC",
     "gaming setup",
-    # Components
-    "graphics card GPU",
-    "CPU processor",
-    "RAM DDR4 DDR5",
-    "SSD NVMe",
-    "motherboard",
-    "power supply PSU",
-    "PC case tower ATX",
+    # GPUs
+    "graphics card",
+    "GPU",
+    "RTX",
+    "GTX",
+    "Radeon RX",
+    # CPUs
+    "Intel Core i5",
+    "Intel Core i7",
+    "Intel Core i9",
+    "AMD Ryzen 5",
+    "AMD Ryzen 7",
+    "AMD Ryzen 9",
+    # RAM — split by type, short terms work better on Vinted
+    "DDR4 RAM",
+    "DDR5 RAM",
+    "16GB RAM",
+    "32GB RAM",
+    # Storage
+    "NVMe SSD",
+    "M.2 SSD",
+    "SSD 1TB",
+    "SSD 2TB",
+    # Motherboards
+    "motherboard ATX",
+    "motherboard AM4",
+    "motherboard AM5",
+    "motherboard LGA1700",
+    # PSUs
+    "power supply 650W",
+    "power supply 750W",
+    "power supply 850W",
+    # Cases
+    "PC case ATX",
+    "PC case tower",
     # Accessories
     "gaming keyboard",
     "gaming mouse",
@@ -236,12 +263,12 @@ async def scrape_vinted_tech() -> dict:
     """
     items = await fetch_vinted_listings(
         search_terms=[
-            "graphics card GPU",
-            "CPU processor",
-            "RAM DDR4 DDR5",
-            "SSD NVMe M.2",
-            "motherboard",
-            "power supply PSU",
+            "graphics card", "GPU", "RTX", "GTX",
+            "Intel Core i5", "Intel Core i7", "AMD Ryzen 5", "AMD Ryzen 7",
+            "DDR4 RAM", "DDR5 RAM", "16GB RAM", "32GB RAM",
+            "NVMe SSD", "M.2 SSD",
+            "motherboard ATX", "motherboard AM4", "motherboard AM5",
+            "power supply 650W", "power supply 750W",
             "PC case ATX",
         ],
         min_price=5,
