@@ -259,6 +259,22 @@ def classify_seller(
     return "private"
 
 
+def _normalise_ebay_condition(raw: str) -> str:
+    """Map eBay condition labels (from HTML or API) to our internal strings."""
+    t = raw.lower()
+    if not t:
+        return "used"
+    if "new" in t and "not" not in t:
+        return "new"
+    if "refurb" in t or "renewed" in t or "restored" in t:
+        return "refurbished"
+    if "open" in t:          # "Open box"
+        return "open_box"
+    if "for parts" in t or "not working" in t:
+        return "for_parts"
+    return "used"
+
+
 def _parse_ebay_time_left(text: str) -> Optional[datetime]:
     """
     Parse eBay relative-time strings like '2d 5h left', '3h 45m', '59m 30s'.
@@ -428,7 +444,7 @@ def _parse_ebay_api_items(items: list[dict], term: str, source_name: str, specif
         if price <= 0:
             continue
         image = (it.get("image") or {}).get("imageUrl") or ""
-        condition = it.get("condition")
+        condition = _normalise_ebay_condition(it.get("condition") or "")
         loc = (it.get("itemLocation") or {}).get("country")
         buying = (it.get("buyingOptions") or [])
         listing_type = "auction" if "AUCTION" in buying else "buy_it_now"
@@ -910,6 +926,12 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
                 item.select_one("[class*='location']")
                 or item.select_one(".s-item__location")
             )
+            # Condition — eBay renders this in SECONDARY_INFO or the subtitle span
+            cond_el = (
+                item.select_one("span.SECONDARY_INFO")
+                or item.select_one(".s-item__subtitle span")
+                or item.select_one("[class*='s-item__condition']")
+            )
 
             if not title_el or not url_el:
                 continue
@@ -1019,13 +1041,16 @@ def _parse_ebay_html(html: str, term: str) -> list[RawListing]:
 
             seller_type = classify_seller(seller_name, seller_feedback_count, title, seller_has_shop)
 
+            raw_cond = cond_el.get_text(strip=True) if cond_el else ""
+            condition = _normalise_ebay_condition(raw_cond)
+
             listings.append(RawListing(
                 external_id=f"ebay_{external_id}",
                 title=title,
                 price=price,
                 url=url,
                 location=location,
-                condition="used",
+                condition=condition,
                 description="",
                 image_urls=[image_url] if image_url else [],
                 source_name="eBay UK",
