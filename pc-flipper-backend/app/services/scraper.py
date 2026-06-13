@@ -385,6 +385,24 @@ _EBAY_SPEC_KEYS = {
 }
 
 
+async def enrich_gem_with_specifics(ebay_external_id: str) -> dict[str, str]:
+    """
+    Fetch eBay Item Specifics for a single gem/amazing_gem listing.
+    Called post-classification so we only spend API quota on worthwhile items.
+    Returns a dict of spec key → value (empty dict on any failure).
+    """
+    item_id = ebay_external_id.removeprefix("ebay_")
+    if not item_id or not item_id.isdigit():
+        return {}
+    client_kwargs = apply_httpx_proxy({"timeout": 15, "follow_redirects": True})
+    async with httpx.AsyncClient(**client_kwargs) as client:
+        token = await _get_ebay_access_token(client)
+        if not token:
+            return {}
+        specifics = await _fetch_ebay_item_specifics(client, token, [item_id])
+        return specifics.get(item_id, {})  # type: ignore[return-value]
+
+
 async def _fetch_ebay_item_specifics(
     client: httpx.AsyncClient,
     token: str,
@@ -536,19 +554,9 @@ async def _scrape_ebay_api_term(
     if not items:
         return []
 
-    # Fetch Item Specifics for the top candidates only.
-    # Cap tightly: each getItem call counts against the Browse API quota and
-    # too many concurrent calls trigger 429s, forcing fallback to HTML.
-    candidate_ids = [
-        str(it.get("itemId") or "")
-        for it in items
-        if it.get("itemId") and _parse_price(str((it.get("price") or {}).get("value") or "0")) > 0
-    ][:10]
-    specifics: dict[str, str] = {}
-    if candidate_ids:
-        specifics = await _fetch_ebay_item_specifics(client, token, candidate_ids)
-
-    return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK", specifics)
+    # Item specifics (getItem calls) are deferred until after classification —
+    # only gem/amazing_gem listings will request them, keeping API usage minimal.
+    return _parse_ebay_api_items(items, term, "eBay UK Auctions" if auction_mode else "eBay UK")
 
 
 async def _scrape_ebay_playwright_term(

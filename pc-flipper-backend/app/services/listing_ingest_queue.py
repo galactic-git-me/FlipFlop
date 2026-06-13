@@ -129,6 +129,43 @@ _MINI_PC_KW = {
 }
 
 
+async def _enrich_ebay_gem(listing_id: int, external_id: str) -> None:
+    """Fetch eBay Item Specifics for a gem listing and patch its spec fields."""
+    try:
+        from app.services.scraper import enrich_gem_with_specifics
+        from app.services.spec_parser import parse_specs
+        from app.models.listing import Listing
+
+        specifics_str = await enrich_gem_with_specifics(external_id)
+        if not specifics_str:
+            return
+
+        # Re-parse specs using the enriched description
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(Listing).where(Listing.id == listing_id).limit(1))
+            listing = result.scalar_one_or_none()
+            if not listing:
+                return
+            enriched_desc = f"{specifics_str}\n{listing.description or ''}"
+            specs = parse_specs(listing.title, enriched_desc)
+            if specs.cpu and not listing.cpu:
+                listing.cpu = specs.cpu
+            if specs.ram_gb and not listing.ram_gb:
+                listing.ram_gb = specs.ram_gb
+            if specs.ram_type and not listing.ram_type:
+                listing.ram_type = specs.ram_type
+            if specs.storage_gb and not listing.storage_gb:
+                listing.storage_gb = specs.storage_gb
+            if specs.storage_type and not listing.storage_type:
+                listing.storage_type = specs.storage_type
+            if specs.gpu and not listing.gpu:
+                listing.gpu = specs.gpu
+            await db.commit()
+            log.info("listing.gem_specifics_enriched", listing_id=listing_id, external_id=external_id)
+    except Exception as exc:
+        log.debug("listing.gem_specifics_error", listing_id=listing_id, error=str(exc))
+
+
 async def _save_as_part(raw: Any, category: str) -> None:
     from app.models.part import Part, PartCategory, PartCondition
     async with AsyncSessionLocal() as db:
@@ -278,3 +315,11 @@ async def _process(item: IngestItem) -> None:
     # Queue for Claude evaluation (checked inside session while attrs are live)
     if listing_id and needs_claude:
         enqueue_for_claude(listing_id)
+
+    # Enrich gems with eBay Item Specifics post-classification.
+    # We defer this until after scoring so we only spend API quota on listings
+    # that are actually worth investigating.
+    is_gem = score_result.classification in ("gem", "amazing_gem")
+    is_ebay = raw.source_name and "ebay" in raw.source_name.lower()
+    if listing_id and is_gem and is_ebay and raw.external_id:
+        asyncio.create_task(_enrich_ebay_gem(listing_id, raw.external_id))
