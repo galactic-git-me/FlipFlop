@@ -195,14 +195,85 @@ function NtfySetup({ topic }: { topic: string }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
+interface FeedPost {
+  subreddit: string;
+  id: string;
+  title: string;
+  url: string;
+  link_url: string;
+  flair: string;
+  score: number;
+  comments: number;
+  created_utc: number;
+  selftext: string;
+}
+
+function fmtUtc(ts: number) {
+  const diff = Date.now() / 1000 - ts;
+  if (diff < 60) return "just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+}
+
+function FeedRow({ post }: { post: FeedPost }) {
+  const isUK = post.subreddit === "buildapcuk";
+  return (
+    <a
+      href={post.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-start gap-3 rounded-lg border border-white/8 bg-white/3 px-4 py-3 transition-colors hover:border-emerald-500/30 hover:bg-emerald-500/5"
+    >
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-1.5 mb-1">
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+            isUK ? "bg-blue-500/20 text-blue-400" : "bg-orange-500/20 text-orange-400"
+          }`}>
+            r/{post.subreddit}
+          </span>
+          {post.flair && (
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/8 text-white/40 truncate max-w-[140px]">
+              {post.flair}
+            </span>
+          )}
+          <span className="text-[10px] text-white/30 ml-auto">{fmtUtc(post.created_utc)}</span>
+        </div>
+        <p className="text-sm text-white/80 leading-snug group-hover:text-white transition-colors line-clamp-2">
+          {post.title}
+        </p>
+        {post.selftext && (
+          <p className="mt-0.5 text-xs text-white/30 line-clamp-1">{post.selftext}</p>
+        )}
+        <div className="mt-1.5 flex items-center gap-3 text-[10px] text-white/25">
+          <span>↑ {post.score}</span>
+          <span>💬 {post.comments}</span>
+        </div>
+      </div>
+      <ExternalLink className="h-3.5 w-3.5 shrink-0 mt-1 text-white/20 group-hover:text-emerald-400 transition-colors" />
+    </a>
+  );
+}
+
 export default function RamWatchPage() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [config, setConfig] = useState<Config | null>(null);
+  const [feed, setFeed] = useState<FeedPost[]>([]);
+  const [feedLoading, setFeedLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+
+  const loadFeed = useCallback(async () => {
+    setFeedLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/ram-watch/feed?limit=50`);
+      if (res.ok) setFeed(await res.json());
+    } catch { /* noop */ }
+    finally { setFeedLoading(false); }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -221,7 +292,13 @@ export default function RamWatchPage() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); loadFeed(); }, [load, loadFeed]);
+
+  // Auto-refresh feed every 5 minutes
+  useEffect(() => {
+    const t = setInterval(loadFeed, 5 * 60 * 1000);
+    return () => clearInterval(t);
+  }, [loadFeed]);
 
   const triggerScan = async () => {
     setTriggering(true);
@@ -374,6 +451,37 @@ export default function RamWatchPage() {
             {deals.map((d) => (
               <DealRow key={d.id} deal={d} />
             ))}
+          </div>
+        )}
+      </div>
+
+      {/* Live Reddit feed */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-white/40">
+            Live Reddit feed
+          </h2>
+          <button
+            onClick={loadFeed}
+            disabled={feedLoading}
+            className="flex items-center gap-1.5 rounded px-2 py-1 text-xs text-white/40 hover:text-white/70 transition-colors"
+          >
+            <RefreshCw className={`h-3 w-3 ${feedLoading ? "animate-spin" : ""}`} />
+            Refresh
+          </button>
+        </div>
+        {feedLoading ? (
+          <div className="flex items-center justify-center py-10 text-white/30 gap-2">
+            <RefreshCw className="h-4 w-4 animate-spin" />
+            <span className="text-xs">Loading feed…</span>
+          </div>
+        ) : feed.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-white/10 py-10 text-center text-xs text-white/30">
+            No posts loaded
+          </div>
+        ) : (
+          <div className="space-y-1.5 max-h-[600px] overflow-y-auto pr-1">
+            {feed.map(post => <FeedRow key={`${post.subreddit}-${post.id}`} post={post} />)}
           </div>
         )}
       </div>
