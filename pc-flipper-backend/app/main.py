@@ -1030,6 +1030,8 @@ async def _seed_default_data():
                 deduped = [s for s in deduped if s in flip_allowed]
                 if not deduped:
                     deduped = ["eBay UK", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "Vinted"]
+                elif "Vinted" not in deduped:
+                    deduped = deduped + ["Vinted"]
             elif scope == "cases":
                 deduped = [s for s in deduped if s in cases_allowed]
                 if not deduped:
