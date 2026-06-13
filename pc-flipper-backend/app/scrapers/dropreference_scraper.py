@@ -109,44 +109,111 @@ def _extract_ng_state(html: str) -> dict:
 
 def _parse_component_entries(html: str, slug: str) -> List[dict]:
     """
-    Extract component model groups from the ng-state transfer state.
+    Extract component listings from a DropReference category page.
 
-    board.entries format: [{"value": "RTX 5060 Ti", "nbr": 108, "price": 319}, ...]
-    Each entry represents a model grouping with the lowest available retail price.
+    Primary path: Angular SSR may embed model-group summaries in #ng-state
+    (board.entries: [{value, nbr, price}]).  When that data is present it gives
+    one "starting at" price per model family.
+
+    Fallback path: individual product cards rendered in HTML carry
+    aria-label="View details for {name}" and /en/product/{ean} hrefs.  This is
+    used when the SSR cache is stale or the page is loaded client-side.
     """
+    category_label = COMPONENT_CATEGORIES.get(slug, "Other")
+    now = datetime.utcnow().isoformat()
+
+    # --- Primary: ng-state model groups ---
     ng = _extract_ng_state(html)
     raw = ng.get("board.entries", [])
-    if not raw:
-        log.debug("dropreference.components.no_entries", slug=slug)
-        return []
+    if raw:
+        results: List[dict] = []
+        for entry in raw:
+            name = str(entry.get("value") or "").strip()
+            price_eur = entry.get("price") or 0
+            nbr = entry.get("nbr") or 0
+            if not name or not price_eur:
+                continue
+            price_eur = float(price_eur)
+            if price_eur < DropReferenceConfig.min_price_eur or price_eur > DropReferenceConfig.max_price_eur:
+                continue
+            results.append({
+                "title": name,
+                "source_url": f"{BASE_URL}/en/stock/{slug}/{_url_slug(name)}",
+                "price_gbp": _eur_to_gbp(price_eur),
+                "original_price_eur": price_eur,
+                "nbr_listings": nbr,
+                "shipping_cost_gbp": 0.0,
+                "in_stock": True,
+                "condition": "new",
+                "seller": "DropReference",
+                "category": category_label,
+                "component_type": name,
+                "source": "DropReference",
+                "fetched_at": now,
+            })
+        if results:
+            return results
 
-    category_label = COMPONENT_CATEGORIES.get(slug, "Other")
-    results: List[dict] = []
+    # --- Fallback: individual product cards via aria-label ---
+    log.debug("dropreference.components.fallback_to_aria_label", slug=slug)
+    soup = BeautifulSoup(html, "html.parser")
+    results = []
+    seen_hrefs: set[str] = set()
 
-    for entry in raw:
-        name = str(entry.get("value") or "").strip()
-        price_eur = entry.get("price") or 0
-        nbr = entry.get("nbr") or 0
-        if not name or not price_eur:
+    product_anchors = soup.find_all(
+        "a",
+        href=re.compile(r"/en/product/\d+"),
+        attrs={"aria-label": re.compile(r"^View details for ")},
+    )
+    for anchor in product_anchors:
+        href = str(anchor.get("href") or "")
+        if not href:
             continue
-        price_eur = float(price_eur)
+        if not href.startswith("http"):
+            href = f"{BASE_URL}{href}"
+        if href in seen_hrefs:
+            continue
+
+        title = str(anchor.get("aria-label") or "").replace("View details for ", "").strip()
+        if not title:
+            continue
+
+        container = anchor.parent
+        price_match = None
+        for _ in range(8):
+            if container is None:
+                break
+            price_match = _PRICE_RE.search(container.get_text())
+            if price_match:
+                break
+            container = container.parent
+
+        if not price_match:
+            continue
+
+        try:
+            price_eur = float(price_match.group(1).replace(",", ""))
+        except ValueError:
+            continue
+
         if price_eur < DropReferenceConfig.min_price_eur or price_eur > DropReferenceConfig.max_price_eur:
             continue
 
+        seen_hrefs.add(href)
         results.append({
-            "title": name,
-            "source_url": f"{BASE_URL}/en/stock/{slug}/{_url_slug(name)}",
+            "title": title,
+            "source_url": href,
             "price_gbp": _eur_to_gbp(price_eur),
             "original_price_eur": price_eur,
-            "nbr_listings": nbr,
+            "nbr_listings": 1,
             "shipping_cost_gbp": 0.0,
             "in_stock": True,
             "condition": "new",
             "seller": "DropReference",
             "category": category_label,
-            "component_type": name,
+            "component_type": title,
             "source": "DropReference",
-            "fetched_at": datetime.utcnow().isoformat(),
+            "fetched_at": now,
         })
 
     return results
