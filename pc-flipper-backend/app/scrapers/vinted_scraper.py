@@ -13,12 +13,9 @@ Coverage:
 
 import asyncio
 import re
-import time
 import structlog
 import httpx
 from typing import Optional
-
-MAX_AGE_SECONDS = 7 * 24 * 3600   # drop listings older than 1 week
 
 log = structlog.get_logger(__name__)
 
@@ -27,11 +24,13 @@ log = structlog.get_logger(__name__)
 VINTED_BASE    = "https://www.vinted.co.uk"
 VINTED_API     = f"{VINTED_BASE}/api/v2/catalog/items"
 PER_PAGE       = 96     # Vinted max per page
-MAX_PAGES      = 10     # up to 960 results per term before we stop
+MAX_PAGES      = 10     # absolute page cap per term
 REQUEST_DELAY  = 1.0    # seconds between page requests
 
-# Category IDs on vinted.co.uk — 2187 = Electronics, 2399 = Computers & Networking
-ELECTRONICS_CATALOG_ID = "2187"
+# Highest item ID seen on the previous run, per search term.
+# Vinted IDs are monotonically increasing, so we can stop paginating
+# the moment we hit an ID we've already seen — equivalent to "only new since last run".
+_last_seen_ids: dict[str, int] = {}
 
 VINTED_SEARCH_TERMS = [
     # Whole systems (flip opportunities)
@@ -211,18 +210,24 @@ async def _search_term(
             items = data.get("items") or []
             if not items:
                 break
-            cutoff = time.time() - MAX_AGE_SECONDS
-            hit_old = False
+            # Vinted IDs are monotonically increasing (newest = highest ID).
+            # Stop as soon as we see an ID we processed in a previous run.
+            prev_max = _last_seen_ids.get(term, 0)
+            hit_seen = False
+            max_id_this_page = 0
             for item in items:
-                ts = item.get("created_at_ts") or 0
-                if ts and ts < cutoff:
-                    hit_old = True
+                item_id = int(item.get("id") or 0)
+                if item_id > max_id_this_page:
+                    max_id_this_page = item_id
+                if prev_max and item_id <= prev_max:
+                    hit_seen = True
                     continue
                 parsed = _parse_item(item, term)
                 if parsed:
                     results.append(parsed)
-            # Sorted newest_first — once we hit an old item the rest are older too
-            if hit_old or len(items) < PER_PAGE:
+            if max_id_this_page > _last_seen_ids.get(term, 0):
+                _last_seen_ids[term] = max_id_this_page
+            if hit_seen or len(items) < PER_PAGE:
                 break
         except Exception as exc:
             log.warning("vinted.request_error", term=term, page=page, error=str(exc))
