@@ -402,30 +402,38 @@ async def _fetch_ebay_item_specifics(
     }
     results: dict[str, str] = {}
 
+    # Limit concurrency to avoid bursting the Browse API rate limit.
+    # 30 simultaneous getItem calls per search term was causing 429s.
+    sem = asyncio.Semaphore(4)
+
     async def _fetch_one(iid: str) -> None:
-        try:
-            resp = await client.get(
-                f"{base}/buy/browse/v1/item/v1|{iid}|0",
-                headers=headers,
-                timeout=10,
-            )
-            if resp.status_code != 200:
-                return
-            data = resp.json()
-            aspects = data.get("localizedAspects") or []
-            lines = []
-            for aspect in aspects:
-                name_raw = (aspect.get("name") or "").lower().strip()
-                value = (aspect.get("value") or "").strip()
-                if not value:
-                    continue
-                mapped = _EBAY_SPEC_KEYS.get(name_raw)
-                if mapped:
-                    lines.append(f"{mapped}: {value}")
-            if lines:
-                results[iid] = "\n".join(lines)
-        except Exception:
-            pass
+        async with sem:
+            try:
+                resp = await client.get(
+                    f"{base}/buy/browse/v1/item/v1|{iid}|0",
+                    headers=headers,
+                    timeout=10,
+                )
+                if resp.status_code == 429:
+                    await asyncio.sleep(2)
+                    return
+                if resp.status_code != 200:
+                    return
+                data = resp.json()
+                aspects = data.get("localizedAspects") or []
+                lines = []
+                for aspect in aspects:
+                    name_raw = (aspect.get("name") or "").lower().strip()
+                    value = (aspect.get("value") or "").strip()
+                    if not value:
+                        continue
+                    mapped = _EBAY_SPEC_KEYS.get(name_raw)
+                    if mapped:
+                        lines.append(f"{mapped}: {value}")
+                if lines:
+                    results[iid] = "\n".join(lines)
+            except Exception:
+                pass
 
     await asyncio.gather(*[_fetch_one(iid) for iid in item_ids])
     return results
@@ -528,13 +536,14 @@ async def _scrape_ebay_api_term(
     if not items:
         return []
 
-    # Fetch Item Specifics (structured data) for items that pass the price filter.
-    # Avoids calling getItem for obvious rejects. Cap at 30 to stay within rate limits.
+    # Fetch Item Specifics for the top candidates only.
+    # Cap tightly: each getItem call counts against the Browse API quota and
+    # too many concurrent calls trigger 429s, forcing fallback to HTML.
     candidate_ids = [
         str(it.get("itemId") or "")
         for it in items
         if it.get("itemId") and _parse_price(str((it.get("price") or {}).get("value") or "0")) > 0
-    ][:30]
+    ][:10]
     specifics: dict[str, str] = {}
     if candidate_ids:
         specifics = await _fetch_ebay_item_specifics(client, token, candidate_ids)
