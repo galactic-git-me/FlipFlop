@@ -18,6 +18,7 @@ const PLACEHOLDERS: Record<string, string> = {
   "/intel": "QUERY ANALYTICS...",
   "/logs": "QUERY AI INSIGHTS...",
   "/settings": "QUERY SETTINGS...",
+  "/community": "SEARCH COMMUNITY POSTS...",
 };
 
 export function TopCommandBar() {
