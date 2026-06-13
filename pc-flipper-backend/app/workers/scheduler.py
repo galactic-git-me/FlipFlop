@@ -24,6 +24,7 @@ from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
 from app.services.compliant_market_ingestion import run_compliant_market_ingestion
 from app.services.benchmark_refresh_job import run_benchmark_refresh
 from app.services.ram_watcher import run_ram_watcher
+from app.services.price_refresh import run_price_refresh
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -44,6 +45,7 @@ _job_history: dict[str, deque[dict]] = {
     "compliant_market_ingestion": deque(maxlen=50),
     "benchmark_refresh_daily": deque(maxlen=50),
     "benchmark_refresh_weekly": deque(maxlen=50),
+    "price_refresh": deque(maxlen=50),
     "ram_watcher": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
@@ -333,6 +335,7 @@ def start_scheduler():
 
     benchmark_daily_start = now + timedelta(hours=2)
     benchmark_weekly_start = now + timedelta(hours=3)
+    price_refresh_start = now + timedelta(minutes=5)  # first run shortly after startup
 
     scheduler.add_job(
         _run_job_with_history,
@@ -354,6 +357,17 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=benchmark_weekly_start,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="price_refresh",
+        name="Component Price Refresh (eBay UK Sold)",
+        kwargs={"job_id": "price_refresh", "fn": run_price_refresh},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=price_refresh_start,
     )
 
     scheduler.add_job(
@@ -456,6 +470,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("benchmark_refresh_daily", partial(run_benchmark_refresh, "daily"))
     if swarm_id == "benchmark_refresh_weekly":
         return await _run_job_with_history("benchmark_refresh_weekly", partial(run_benchmark_refresh, "weekly"))
+    if swarm_id == "price_refresh":
+        return await _run_job_with_history("price_refresh", run_price_refresh)
     if swarm_id == "ram_watcher":
         return await _run_job_with_history("ram_watcher", run_ram_watcher)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink, RefreshCw, Rss } from "lucide-react";
-import { API_BASE } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 
 interface FeedPost {
   subreddit: string;
@@ -81,7 +81,7 @@ export default function CommunityPage() {
 
   const load = async () => {
     try {
-      const resp = await fetch(`${API_BASE}/ram-watch/community-feed`);
+      const resp = await fetch(`${API_BASE_URL}/ram-watch/community-feed`);
       if (resp.ok) {
         const data: FeedPost[] = await resp.json();
         setPosts(data);

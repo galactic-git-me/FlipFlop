@@ -81,9 +81,11 @@ GPU_ADD_RESALE: dict[str, float] = {
     "rx 7600": 245,      "rx 7700": 310,   "rx 7800": 380,
 }
 
-# What different RAM amounts add to the resale value of a complete system
+# What different RAM amounts add to the resale value of a complete system.
+# Updated June 2026: DDR4 prices have surged ~2-3× due to AI supply crunch.
+# 32GB is now the buyer expectation for a gaming PC; 64GB commands a premium.
 RAM_ADD_RESALE: dict[int, float] = {
-    4: 0, 8: 15, 16: 35, 32: 60, 64: 90,
+    4: 0, 8: 15, 16: 50, 32: 110, 64: 160,
 }
 
 # What storage adds to resale value (customer perception of included storage)
@@ -104,23 +106,76 @@ STORAGE_ADD_RESALE: dict[str, float] = {
 # Case: themed RGB, £60-80 to buy.  RESALE ADD = 2 × cost (per flip spec rule).
 # Presentation uplift: premium for a clean, tested, well-photographed build.
 
-BUDGET_GPU_COST        = 185   # RTX 3060 12GB used UK (£170-200 typical)
-BUDGET_GPU_RESALE_ADD  = 240   # RTX 3060 customer-perceived value in a complete system
 
-BUDGET_SSD_COST        = 65    # 1TB NVMe new Amazon UK (~£60-70)
-BUDGET_SSD_RESALE_ADD  = 70    # 1TB NVMe customer value
+# ── Budget component costs ────────────────────────────────────────────────────
+#
+# These are FALLBACK constants used only when data/price_benchmarks.json is
+# missing or older than 48 hours. Under normal operation the daily price_refresh
+# job writes live eBay UK sold prices to that file and get_budget_costs() reads
+# from it, keeping all profit calculations current.
+#
+# Last manually reviewed: June 2026. DDR4/DDR5 prices are in a supply crisis
+# (AI datacenter demand + production cuts). Update here if price_refresh breaks.
 
-BUDGET_PSU_COST        = 50    # 650W 80+ Bronze new (~£45-55)
-BUDGET_PSU_RESALE_ADD  = 35    # modest — buyers expect a PSU, don't pay premium for it
+_BUDGET_GPU_COST_DEFAULT       = 220   # RTX 3060 12GB used UK (£200-250 in June 2026)
+_BUDGET_GPU_RESALE_ADD_DEFAULT = 260   # RTX 3060 contribution to completed PC resale
 
-BUDGET_CASE_COST       = 70    # Themed RGB gaming case new (Amazon/eBay £60-80)
-# Case premium RULE: buyer perceives a themed case as worth 2× what we paid.
-# This reflects the transformation premium — the same PC in a £70 themed case
-# is meaningfully more desirable than a bare tower.
-BUDGET_CASE_RESALE_ADD = 2 * BUDGET_CASE_COST   # = £140
+_BUDGET_SSD_COST_DEFAULT       = 60    # 1TB NVMe new Amazon UK (~£55-65)
+_BUDGET_SSD_RESALE_ADD_DEFAULT = 70    # 1TB NVMe customer value
 
-BUDGET_RAM_COST        = 65    # 32GB DDR4-3200 kit (2×16GB used, ~£60-70)
-BUDGET_RAM_RESALE_ADD  = 60    # 32GB adds meaningful value — gaming minimum is now 32GB
+_BUDGET_PSU_COST_DEFAULT       = 50    # 650W 80+ Bronze new (~£45-55)
+_BUDGET_PSU_RESALE_ADD_DEFAULT = 35
+
+_BUDGET_CASE_COST_DEFAULT      = 70    # Themed RGB gaming case (Amazon/eBay £60-80)
+_BUDGET_CASE_RESALE_ADD_DEFAULT = 2 * _BUDGET_CASE_COST_DEFAULT   # = £140
+
+_BUDGET_RAM_COST_DEFAULT       = 130   # 32GB DDR4 kit used UK (£100-160 in June 2026;
+                                        # DDR4 in supply crisis — was £65 in 2024)
+_BUDGET_RAM_RESALE_ADD_DEFAULT = 110   # 32GB DDR4 adds ~£110 to a completed PC in 2026
+
+
+def get_budget_costs() -> dict[str, float]:
+    """
+    Return current budget-component costs and resale values.
+
+    Tries data/price_benchmarks.json (written by the daily price_refresh job)
+    first. Falls back to hardcoded defaults if the file is missing or stale.
+    """
+    try:
+        from app.services.price_refresh import load_benchmarks
+        b = load_benchmarks()
+    except Exception:
+        b = {}
+
+    return {
+        "gpu_cost":        b.get("gpu_rtx3060_cost",   _BUDGET_GPU_COST_DEFAULT),
+        "gpu_resale_add":  _BUDGET_GPU_RESALE_ADD_DEFAULT,
+        "ssd_cost":        b.get("ssd_1tb_nvme_cost",  _BUDGET_SSD_COST_DEFAULT),
+        "ssd_resale_add":  _BUDGET_SSD_RESALE_ADD_DEFAULT,
+        "psu_cost":        b.get("psu_650w_cost",      _BUDGET_PSU_COST_DEFAULT),
+        "psu_resale_add":  _BUDGET_PSU_RESALE_ADD_DEFAULT,
+        "case_cost":       _BUDGET_CASE_COST_DEFAULT,
+        "case_resale_add": _BUDGET_CASE_RESALE_ADD_DEFAULT,
+        "ram_cost":        b.get("ram_32gb_ddr4_cost",  _BUDGET_RAM_COST_DEFAULT),
+        "ram_resale_add":  b.get("ram_32gb_ddr4_cost",  _BUDGET_RAM_RESALE_ADD_DEFAULT) * 0.85
+                           if b.get("ram_32gb_ddr4_cost") else _BUDGET_RAM_RESALE_ADD_DEFAULT,
+    }
+
+
+# Module-level shims so existing imports of BUDGET_* still work.
+# These read from the live benchmarks at call time — not at import time.
+# Any code that does `from estimator import BUDGET_RAM_COST` will get the
+# stale constant; prefer calling get_budget_costs() directly instead.
+BUDGET_GPU_COST        = _BUDGET_GPU_COST_DEFAULT
+BUDGET_GPU_RESALE_ADD  = _BUDGET_GPU_RESALE_ADD_DEFAULT
+BUDGET_SSD_COST        = _BUDGET_SSD_COST_DEFAULT
+BUDGET_SSD_RESALE_ADD  = _BUDGET_SSD_RESALE_ADD_DEFAULT
+BUDGET_PSU_COST        = _BUDGET_PSU_COST_DEFAULT
+BUDGET_PSU_RESALE_ADD  = _BUDGET_PSU_RESALE_ADD_DEFAULT
+BUDGET_CASE_COST       = _BUDGET_CASE_COST_DEFAULT
+BUDGET_CASE_RESALE_ADD = _BUDGET_CASE_RESALE_ADD_DEFAULT
+BUDGET_RAM_COST        = _BUDGET_RAM_COST_DEFAULT
+BUDGET_RAM_RESALE_ADD  = _BUDGET_RAM_RESALE_ADD_DEFAULT
 
 # AM5 platform overhead — motherboard + DDR5 RAM are required before anything else.
 # These are NOT included in standard upgrade_cost because the default model assumes
@@ -160,25 +215,26 @@ def estimate_resale(
       + Case premium             (= 2 × case cost, per flip spec rule)
       + Presentation uplift      (clean tested build premium)
     """
+    bc = get_budget_costs()
     base = _cpu_base(cpu)
 
     # GPU: existing GPU lookup or RTX 3060-class upgrade contribution
-    base += _gpu_add(gpu) if gpu else BUDGET_GPU_RESALE_ADD
+    base += _gpu_add(gpu) if gpu else bc["gpu_resale_add"]
 
     # RAM: finished product always has ≥ 32 GB (per flip spec).
     # If the listing already has 32 GB+ use its actual resale contribution.
     # Otherwise (anything < 32 GB, or unknown) we buy a 32 GB kit, so the
     # finished product has 32 GB and commands the 32 GB resale value.
     if ram_gb and ram_gb >= 32:
-        base += RAM_ADD_RESALE.get(ram_gb, RAM_ADD_RESALE[32])
+        base += RAM_ADD_RESALE.get(ram_gb, bc["ram_resale_add"])
     else:
-        base += BUDGET_RAM_RESALE_ADD   # finished product has 32 GB → £60
+        base += bc["ram_resale_add"]
 
     # Storage: existing type value or 1TB NVMe upgrade
-    base += _storage_add(storage_gb, storage_type) if storage_gb else BUDGET_SSD_RESALE_ADD
+    base += _storage_add(storage_gb, storage_type) if storage_gb else bc["ssd_resale_add"]
 
     # Themed case (2 × cost rule) + clean-build presentation premium
-    base += BUDGET_CASE_RESALE_ADD   # = 2 × £70 = £140
+    base += bc["case_resale_add"]
     base += PRESENTATION_UPLIFT      # = £75
 
     return round(base, 2)
@@ -195,15 +251,16 @@ def estimate_upgrade_cost(
     Actual cash spend to make the listing a finished themed product.
     Always includes a themed case — it is a required part of every flip.
     """
-    cost = float(BUDGET_CASE_COST)  # always buy a case
+    bc = get_budget_costs()
+    cost = float(bc["case_cost"])   # always buy a case
     if not gpu:
-        cost += BUDGET_GPU_COST
+        cost += bc["gpu_cost"]
     if not storage_gb:
-        cost += BUDGET_SSD_COST
+        cost += bc["ssd_cost"]
     if not has_psu:
-        cost += BUDGET_PSU_COST
+        cost += bc["psu_cost"]
     if not ram_gb or ram_gb < 32:   # 32 GB is the 2026 gaming minimum
-        cost += BUDGET_RAM_COST
+        cost += bc["ram_cost"]
     if is_am5:
         # AM5 needs a new motherboard and DDR5 kit — not in the standard model
         cost += AM5_MOBO_COST + AM5_DDR5_COST
