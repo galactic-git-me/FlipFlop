@@ -39,13 +39,147 @@ const CAT_BADGE: Record<string, string> = {
   motherboard: "Mobo", cooling: "Cooling", ssd: "Storage", psu: "PSU",
 };
 
+// ── Slicers ───────────────────────────────────────────────────────────────────
+
+interface SlicerDef {
+  id: string;
+  label: string;
+  options: string[];
+  match: (name: string, val: string) => boolean;
+}
+
+const CATEGORY_SLICERS: Partial<Record<CatId, SlicerDef[]>> = {
+  ram: [
+    {
+      id: "type",
+      label: "Type",
+      options: ["DDR4", "DDR5"],
+      match: (name, val) => name.toUpperCase().includes(val),
+    },
+    {
+      id: "capacity",
+      label: "Capacity",
+      options: ["8GB", "16GB", "32GB", "64GB", "128GB"],
+      match: (name, val) => new RegExp(`\\b${val}\\b`, "i").test(name),
+    },
+  ],
+  gpu: [
+    {
+      id: "brand",
+      label: "Brand",
+      options: ["NVIDIA", "AMD"],
+      match: (name, val) => {
+        const u = name.toUpperCase();
+        if (val === "NVIDIA") return u.includes("RTX") || u.includes("GTX") || u.includes("GEFORCE") || u.includes("NVIDIA");
+        if (val === "AMD")    return u.includes("RADEON") || / RX /.test(u) || u.startsWith("AMD ");
+        return false;
+      },
+    },
+    {
+      id: "vram",
+      label: "VRAM",
+      options: ["4GB", "6GB", "8GB", "12GB", "16GB", "24GB"],
+      match: (name, val) => new RegExp(`\\b${val}\\b`, "i").test(name),
+    },
+  ],
+  cpu: [
+    {
+      id: "brand",
+      label: "Brand",
+      options: ["Intel", "AMD"],
+      match: (name, val) => name.toUpperCase().includes(val.toUpperCase()),
+    },
+    {
+      id: "gen",
+      label: "Platform",
+      options: ["LGA1700", "LGA1851", "AM4", "AM5"],
+      match: (name, val) => name.toUpperCase().includes(val.toUpperCase()),
+    },
+  ],
+  ssd: [
+    {
+      id: "interface",
+      label: "Interface",
+      options: ["NVMe", "SATA", "M.2"],
+      match: (name, val) => name.toUpperCase().includes(val.toUpperCase()),
+    },
+    {
+      id: "capacity",
+      label: "Capacity",
+      options: ["250GB", "500GB", "512GB", "1TB", "2TB", "4TB"],
+      match: (name, val) => new RegExp(`\\b${val}\\b`, "i").test(name),
+    },
+  ],
+  motherboard: [
+    {
+      id: "socket",
+      label: "Socket",
+      options: ["AM4", "AM5", "LGA1700", "LGA1851"],
+      match: (name, val) => name.toUpperCase().includes(val.toUpperCase()),
+    },
+    {
+      id: "form_factor",
+      label: "Form Factor",
+      options: ["ATX", "mATX", "ITX"],
+      match: (name, val) => {
+        const u = name.toUpperCase();
+        if (val === "mATX") return u.includes("MATX") || u.includes("MICRO-ATX") || u.includes("MICRO ATX");
+        if (val === "ITX")  return /\bITX\b/.test(u);
+        if (val === "ATX")  return /\bATX\b/.test(u) && !u.includes("MATX") && !/\bITX\b/.test(u) && !u.includes("MICRO");
+        return false;
+      },
+    },
+  ],
+  psu: [
+    {
+      id: "wattage",
+      label: "Wattage",
+      options: ["550W", "650W", "750W", "850W", "1000W", "1200W"],
+      match: (name, val) => new RegExp(`\\b${val}\\b`, "i").test(name),
+    },
+    {
+      id: "rating",
+      label: "Efficiency",
+      options: ["Gold", "Platinum", "Titanium"],
+      match: (name, val) => name.toUpperCase().includes(val.toUpperCase()),
+    },
+  ],
+  cooling: [
+    {
+      id: "type",
+      label: "Type",
+      options: ["AIO", "Air"],
+      match: (name, val) => {
+        const u = name.toUpperCase();
+        if (val === "AIO") return u.includes("AIO") || u.includes("LIQUID") || u.includes("WATER");
+        if (val === "Air") return !u.includes("AIO") && !u.includes("LIQUID") && !u.includes("WATER");
+        return false;
+      },
+    },
+    {
+      id: "size",
+      label: "Radiator",
+      options: ["120mm", "240mm", "280mm", "360mm"],
+      match: (name, val) => name.includes(val),
+    },
+  ],
+  case: [
+    {
+      id: "form_factor",
+      label: "Size",
+      options: ["Full Tower", "Mid Tower", "Mini ITX", "mATX"],
+      match: (name, val) => name.toLowerCase().includes(val.toLowerCase()),
+    },
+  ],
+};
+
 const SORT_OPTIONS = [
-  { value: "name",        label: "Name A→Z"       },
-  { value: "used_desc",   label: "Used price ↓"   },
-  { value: "used_asc",    label: "Used price ↑"   },
-  { value: "new_desc",    label: "New price ↓"    },
-  { value: "new_asc",     label: "New price ↑"    },
-  { value: "spread_desc", label: "Spread ↓"       },
+  { value: "name",        label: "Name A→Z"        },
+  { value: "used_desc",   label: "Used price ↓"    },
+  { value: "used_asc",    label: "Used price ↑"    },
+  { value: "new_desc",    label: "New price ↓"     },
+  { value: "new_asc",     label: "New price ↑"     },
+  { value: "spread_desc", label: "Spread ↓"        },
   { value: "updated",     label: "Recently updated" },
 ];
 
@@ -58,6 +192,7 @@ export default function MarketPricingPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [query, setQuery]           = useState("");
   const [sortBy, setSortBy]         = useState("name");
+  const [slicerSel, setSlicerSel]   = useState<Record<string, string | null>>({});
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -80,11 +215,22 @@ export default function MarketPricingPage() {
     finally { setRefreshing(false); }
   };
 
+  const activeCatSlicers = activeCat !== "all" ? (CATEGORY_SLICERS[activeCat] ?? []) : [];
+
+  const toggleSlicer = (slicerId: string, val: string) => {
+    const key = `${activeCat}::${slicerId}`;
+    setSlicerSel(prev => ({ ...prev, [key]: prev[key] === val ? null : val }));
+  };
+
   const displayed = useMemo(() => {
     let list = activeCat === "all" ? parts : parts.filter(p => p.category === activeCat);
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter(p => p.name.toLowerCase().includes(q));
+    }
+    for (const slicer of activeCatSlicers) {
+      const val = slicerSel[`${activeCat}::${slicer.id}`] ?? null;
+      if (val) list = list.filter(p => slicer.match(p.name, val));
     }
     return [...list].sort((a, b) => {
       switch (sortBy) {
@@ -105,10 +251,11 @@ export default function MarketPricingPage() {
         default: return a.name.localeCompare(b.name);
       }
     });
-  }, [parts, activeCat, query, sortBy]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parts, activeCat, query, sortBy, slicerSel, activeCatSlicers]);
 
-  const withBoth   = displayed.filter(p => p.price_used != null && p.price_new != null);
-  const avgSpread  = withBoth.length
+  const withBoth  = displayed.filter(p => p.price_used != null && p.price_new != null);
+  const avgSpread = withBoth.length
     ? withBoth.reduce((s, p) => s + (p.price_new! - p.price_used!), 0) / withBoth.length
     : null;
 
@@ -149,28 +296,35 @@ export default function MarketPricingPage() {
         ))}
       </div>
 
-      {/* Summary strip */}
-      {!loading && displayed.length > 0 && (
-        <div className="flex flex-wrap gap-3 text-xs font-mono">
-          <span className="px-3 py-1.5 rounded-lg bg-[#0a1119] border border-[#1e2d45] text-slate-400">
-            <span className="text-slate-600">Showing </span>
-            <span className="text-slate-200 font-bold">{displayed.length}</span>
-            <span className="text-slate-600"> parts</span>
-          </span>
-          <span className="px-3 py-1.5 rounded-lg bg-[#00dc82]/8 border border-[#00dc82]/20 text-[#00dc82]">
-            <span className="text-slate-500">Both prices </span>
-            <span className="font-bold">{withBoth.length}</span>
-          </span>
-          {avgSpread != null && (
-            <span className={`px-3 py-1.5 rounded-lg border font-bold ${
-              avgSpread >= 0
-                ? "bg-[#00b8ff]/8 border-[#00b8ff]/20 text-[#00b8ff]"
-                : "bg-amber-500/8 border-amber-500/20 text-amber-400"
-            }`}>
-              <span className="text-slate-500 font-normal">Avg new premium </span>
-              {formatCurrency(avgSpread)}
-            </span>
-          )}
+      {/* Slicers */}
+      {activeCatSlicers.length > 0 && (
+        <div className="flex flex-wrap gap-x-6 gap-y-2.5 pb-3 border-b border-[#1e2d45]">
+          {activeCatSlicers.map(slicer => {
+            const key = `${activeCat}::${slicer.id}`;
+            const selected = slicerSel[key] ?? null;
+            return (
+              <div key={slicer.id} className="flex items-center gap-2.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 whitespace-nowrap w-16 text-right">
+                  {slicer.label}
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {slicer.options.map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => toggleSlicer(slicer.id, opt)}
+                      className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${
+                        selected === opt
+                          ? "bg-[#00dc82]/15 text-[#00dc82] border-[#00dc82]/40"
+                          : "text-slate-500 border-[#1a2535] hover:border-slate-600 hover:text-slate-300"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -200,7 +354,32 @@ export default function MarketPricingPage() {
         </select>
       </div>
 
-      {/* Table */}
+      {/* Summary strip */}
+      {!loading && displayed.length > 0 && (
+        <div className="flex flex-wrap gap-3 text-xs font-mono">
+          <span className="px-3 py-1.5 rounded-lg bg-[#0a1119] border border-[#1e2d45] text-slate-400">
+            <span className="text-slate-600">Showing </span>
+            <span className="text-slate-200 font-bold">{displayed.length}</span>
+            <span className="text-slate-600"> parts</span>
+          </span>
+          <span className="px-3 py-1.5 rounded-lg bg-[#00dc82]/8 border border-[#00dc82]/20 text-[#00dc82]">
+            <span className="text-slate-500">Both prices </span>
+            <span className="font-bold">{withBoth.length}</span>
+          </span>
+          {avgSpread != null && (
+            <span className={`px-3 py-1.5 rounded-lg border font-bold ${
+              avgSpread >= 0
+                ? "bg-[#00b8ff]/8 border-[#00b8ff]/20 text-[#00b8ff]"
+                : "bg-amber-500/8 border-amber-500/20 text-amber-400"
+            }`}>
+              <span className="text-slate-500 font-normal">Avg new premium </span>
+              {formatCurrency(avgSpread)}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Grid */}
       {loading ? (
         <div className="flex items-center justify-center py-24 text-slate-500 text-sm gap-2">
           <RefreshCw className="w-4 h-4 animate-spin" /> Loading market data…
@@ -215,52 +394,26 @@ export default function MarketPricingPage() {
             : { label: "Refresh Now",  onClick: refresh }}
         />
       ) : (
-        <div className="rounded-xl border border-[#1e2d45] overflow-hidden">
-          {/* Column headers */}
-          <div className="grid grid-cols-[1fr_72px_128px_128px_96px_1fr_76px] bg-[#080f1a] border-b border-[#1e2d45] px-4 py-2.5 gap-2">
-            <ColHead label="Component" />
-            <ColHead label="Type" />
-            <ColHead label="Used price"  sub="eBay sold / BIN used"           color="amber" />
-            <ColHead label="New price"   sub="DropRef · BargainHW · Temu"      color="blue"  />
-            <ColHead label="Spread"      sub="New − Used" />
-            <ColHead label="Sources" />
-            <ColHead label="Updated" />
-          </div>
-
-          {/* Rows */}
-          <div className="divide-y divide-[#0c1520]">
-            {displayed.map((part, i) => (
-              <PricingRow key={`${part.category}::${part.name}::${i}`} part={part} />
-            ))}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {displayed.map((part, i) => (
+            <PricingCard key={`${part.category}::${part.name}::${i}`} part={part} />
+          ))}
         </div>
       )}
     </div>
   );
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Card ──────────────────────────────────────────────────────────────────────
 
-function ColHead({ label, sub, color }: { label: string; sub?: string; color?: "amber" | "blue" }) {
-  const cls = color === "amber" ? "text-amber-400/80"
-            : color === "blue"  ? "text-[#00b8ff]/80"
-            : "text-slate-500";
-  return (
-    <div className="flex flex-col gap-0.5">
-      <span className={`text-[10px] font-semibold uppercase tracking-wider ${cls}`}>{label}</span>
-      {sub && <span className="text-[9px] text-slate-700 leading-none">{sub}</span>}
-    </div>
-  );
-}
-
-function PricingRow({ part }: { part: GroupedPart }) {
+function PricingCard({ part }: { part: GroupedPart }) {
   const used   = part.price_used;
   const newP   = part.price_new;
   const spread = newP != null && used != null ? newP - used : null;
 
-  const spreadCls = spread == null ? "text-slate-600"
-    : spread >  50 ? "text-[#00b8ff]"
-    : spread >   0 ? "text-slate-400"
+  const spreadColor = spread == null ? "text-slate-600"
+    : spread > 50  ? "text-[#00b8ff]"
+    : spread > 0   ? "text-slate-400"
     : spread === 0 ? "text-slate-500"
     : "text-amber-400";
 
@@ -271,103 +424,99 @@ function PricingRow({ part }: { part: GroupedPart }) {
   const newSrc  = part.all_sources.find(s => s.condition === "new"  && s.price != null);
 
   return (
-    <div className="grid grid-cols-[1fr_72px_128px_128px_96px_1fr_76px] px-4 py-3 gap-2 hover:bg-white/[0.015] transition-colors items-center">
+    <div className="rounded-xl border border-[#1e2d45] bg-[#080f1a] flex flex-col overflow-hidden hover:border-[#2a3f5a] transition-colors">
 
-      {/* Name + thumbnail */}
-      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+      {/* Name + image + badge */}
+      <div className="p-3 flex items-start gap-3 border-b border-[#0c1520]">
         {part.image_url ? (
-          <img src={part.image_url} alt={part.name}
-            className="w-8 h-8 object-contain rounded bg-[#070d14] flex-shrink-0 border border-white/5"
+          <img
+            src={part.image_url}
+            alt={part.name}
+            className="w-12 h-12 object-contain rounded bg-[#050b12] flex-shrink-0 border border-white/5 p-0.5"
           />
         ) : (
-          <div className="w-8 h-8 rounded bg-[#070d14] flex-shrink-0 border border-white/5" />
+          <div className="w-12 h-12 rounded bg-[#050b12] flex-shrink-0 border border-white/5" />
         )}
-        <span className="text-sm text-slate-200 font-medium leading-snug truncate" title={part.name}>
-          {part.name}
-        </span>
-      </div>
-
-      {/* Category badge */}
-      <div>
-        <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#0a1119] border border-[#1e2d45] text-slate-400 whitespace-nowrap">
-          {CAT_BADGE[part.category] ?? part.category}
-        </span>
-      </div>
-
-      {/* Used price */}
-      <div>
-        {used != null ? (
-          <div className="flex flex-col gap-0.5">
-            <span className="text-amber-400 font-bold text-sm font-mono">{formatCurrency(used)}</span>
-            {usedSrc?.source && (
-              <span className="text-[9px] text-slate-600">{usedSrc.source}</span>
-            )}
-          </div>
-        ) : (
-          <span className="text-slate-700 text-xs">—</span>
-        )}
-      </div>
-
-      {/* New price */}
-      <div>
-        {newP != null ? (
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[#00b8ff] font-bold text-sm font-mono">{formatCurrency(newP)}</span>
-            {newSrc?.source && (
-              <span className="text-[9px] text-slate-600">{newSrc.source}</span>
-            )}
-          </div>
-        ) : (
-          <span className="text-slate-700 text-xs">—</span>
-        )}
-      </div>
-
-      {/* Spread */}
-      <div className={`flex items-center gap-1 ${spreadCls}`}>
-        <SpreadIcon className="w-3.5 h-3.5 flex-shrink-0" />
-        {spread != null ? (
-          <span className="text-sm font-semibold font-mono">
-            {spread > 0 ? "+" : ""}{formatCurrency(spread)}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm text-slate-200 font-medium leading-snug line-clamp-2" title={part.name}>
+            {part.name}
+          </p>
+          <span className="mt-1 inline-block px-1.5 py-0.5 rounded text-[9px] font-semibold bg-[#0a1119] border border-[#1e2d45] text-slate-500 uppercase tracking-wide">
+            {CAT_BADGE[part.category] ?? part.category}
           </span>
-        ) : (
-          <span className="text-slate-700 text-xs">—</span>
-        )}
+        </div>
       </div>
 
-      {/* Source chips */}
-      <div className="flex flex-wrap gap-1">
-        {part.all_sources.slice(0, 4).map((s, i) => {
-          const chip = (
-            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] ${
-              s.condition === "new"
-                ? "bg-[#00b8ff]/5 border-[#00b8ff]/15 text-[#00b8ff]/70"
-                : "bg-amber-500/5 border-amber-500/15 text-amber-400/70"
-            }`}>
-              {s.source}
-              {s.price != null && <span className="opacity-80 font-mono">{formatCurrency(s.price)}</span>}
-              {s.url && <ExternalLink className="w-2 h-2 opacity-40" />}
+      {/* Used / New prices */}
+      <div className="grid grid-cols-2 divide-x divide-[#0c1520]">
+        <div className="p-3 flex flex-col gap-0.5">
+          <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-500/60">Used</span>
+          {used != null ? (
+            <>
+              <span className="text-amber-400 font-bold text-base font-mono leading-none">{formatCurrency(used)}</span>
+              {usedSrc?.source && <span className="text-[9px] text-slate-700 mt-0.5">{usedSrc.source}</span>}
+            </>
+          ) : (
+            <span className="text-slate-700 text-sm font-mono">—</span>
+          )}
+        </div>
+        <div className="p-3 flex flex-col gap-0.5">
+          <span className="text-[9px] font-semibold uppercase tracking-wider text-[#00b8ff]/60">New</span>
+          {newP != null ? (
+            <>
+              <span className="text-[#00b8ff] font-bold text-base font-mono leading-none">{formatCurrency(newP)}</span>
+              {newSrc?.source && <span className="text-[9px] text-slate-700 mt-0.5">{newSrc.source}</span>}
+            </>
+          ) : (
+            <span className="text-slate-700 text-sm font-mono">—</span>
+          )}
+        </div>
+      </div>
+
+      {/* Footer: spread + source chips */}
+      <div className="px-3 py-2 border-t border-[#0c1520] flex items-center justify-between gap-2 mt-auto">
+        <div className={`flex items-center gap-1 ${spreadColor}`}>
+          <SpreadIcon className="w-3 h-3 flex-shrink-0" />
+          {spread != null ? (
+            <span className="text-xs font-semibold font-mono">
+              {spread > 0 ? "+" : ""}{formatCurrency(spread)}
             </span>
-          );
-          return s.url ? (
-            <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
-               className="hover:opacity-100 opacity-90 transition-opacity">
-              {chip}
-            </a>
-          ) : <span key={i}>{chip}</span>;
-        })}
-        {part.all_sources.length > 4 && (
-          <span className="px-1.5 py-0.5 rounded border border-[#1e2d45] text-[9px] text-slate-600">
-            +{part.all_sources.length - 4}
-          </span>
-        )}
+          ) : (
+            <span className="text-xs text-slate-700">—</span>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-1 justify-end">
+          {part.all_sources.slice(0, 3).map((s, i) => {
+            const chip = (
+              <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] border ${
+                s.condition === "new"
+                  ? "bg-[#00b8ff]/5 border-[#00b8ff]/15 text-[#00b8ff]/60"
+                  : "bg-amber-500/5 border-amber-500/15 text-amber-400/60"
+              }`}>
+                {s.source?.split(" ")[0]}
+                {s.url && <ExternalLink className="w-2 h-2 opacity-40 ml-0.5" />}
+              </span>
+            );
+            return s.url ? (
+              <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+                 className="hover:opacity-100 opacity-80 transition-opacity">
+                {chip}
+              </a>
+            ) : <span key={i}>{chip}</span>;
+          })}
+          {part.all_sources.length > 3 && (
+            <span className="px-1.5 py-0.5 rounded border border-[#1e2d45] text-[8px] text-slate-600">
+              +{part.all_sources.length - 3}
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* Last updated */}
-      <div className="text-[10px] text-slate-700 text-right whitespace-nowrap">
-        {part.last_price_update
-          ? formatRelativeTime(new Date(part.last_price_update))
-          : "—"}
-      </div>
+      {part.last_price_update && (
+        <div className="px-3 pb-2 text-[9px] text-slate-700 text-right -mt-1">
+          {formatRelativeTime(new Date(part.last_price_update))}
+        </div>
+      )}
     </div>
   );
 }
