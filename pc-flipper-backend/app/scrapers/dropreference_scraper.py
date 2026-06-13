@@ -159,24 +159,24 @@ def _parse_component_entries(html: str, slug: str) -> List[dict]:
 _PRICE_RE = re.compile(r"([\d,]+)€")
 
 
-_UI_CHROME = {"filters", "reset", "search", "sign in", "menu", "components", "peripherals & more"}
-
-
 def _parse_peripheral_entries(html: str, slug: str) -> List[dict]:
     """
     Extract individual product listings from a rendered peripheral category page.
 
-    Products link via /en/product/{ean} anchors; the h2 within the same anchor
-    (or at most 3 levels above) gives the title.  Prices come from €-suffixed
-    text in the same container.  UI chrome elements (Filters, Reset, etc.) are
-    excluded by title guard.
+    Product anchors carry aria-label="View details for {product name}" and link
+    to /en/product/{ean}.  The price (e.g. "177€") lives in a parent container
+    reachable within 8 levels above the anchor.
     """
     soup = BeautifulSoup(html, "html.parser")
     theme = PERIPHERAL_CATEGORIES.get(slug, "Accessory")
     results: List[dict] = []
     seen_hrefs: set[str] = set()
 
-    product_anchors = soup.find_all("a", href=re.compile(r"/en/product/\d+"))
+    product_anchors = soup.find_all(
+        "a",
+        href=re.compile(r"/en/product/\d+"),
+        attrs={"aria-label": re.compile(r"^View details for ")},
+    )
     for anchor in product_anchors:
         href = str(anchor.get("href") or "")
         if not href:
@@ -186,28 +186,22 @@ def _parse_peripheral_entries(html: str, slug: str) -> List[dict]:
         if href in seen_hrefs:
             continue
 
-        # Prefer h2 inside the anchor itself; if missing walk up at most 3 levels.
-        h2 = anchor.find("h2")
-        if not h2:
-            container = anchor.parent
-            for _ in range(3):
-                if container is None:
-                    break
-                h2 = container.find("h2")
-                if h2:
-                    break
-                container = container.parent
-
-        if not h2:
+        aria = str(anchor.get("aria-label") or "")
+        title = aria.replace("View details for ", "").strip()
+        if not title:
             continue
 
-        title = h2.get_text(strip=True)
-        if not title or title.lower() in _UI_CHROME:
-            continue
+        # Walk up to find a container that includes the price
+        container = anchor.parent
+        price_match = None
+        for _ in range(8):
+            if container is None:
+                break
+            price_match = _PRICE_RE.search(container.get_text())
+            if price_match:
+                break
+            container = container.parent
 
-        # Price lives in a sibling/parent scope — use the same container
-        scope = h2.parent or anchor.parent
-        price_match = _PRICE_RE.search(scope.get_text() if scope else "")
         if not price_match:
             continue
 
