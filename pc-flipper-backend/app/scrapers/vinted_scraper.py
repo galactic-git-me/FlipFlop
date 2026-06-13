@@ -24,8 +24,8 @@ log = structlog.get_logger(__name__)
 VINTED_BASE    = "https://www.vinted.co.uk"
 VINTED_API     = f"{VINTED_BASE}/api/v2/catalog/items"
 PER_PAGE       = 96     # Vinted max per page
-MAX_PAGES      = 3      # cap to avoid hammering
-REQUEST_DELAY  = 1.5    # seconds between requests
+MAX_PAGES      = 10     # up to 960 results per term before we stop
+REQUEST_DELAY  = 1.0    # seconds between page requests
 
 # Category IDs on vinted.co.uk — 2187 = Electronics, 2399 = Computers & Networking
 ELECTRONICS_CATALOG_ID = "2187"
@@ -190,7 +190,6 @@ async def _search_term(
             "per_page":     PER_PAGE,
             "page":         page,
             "order":        "newest_first",
-            "catalog_ids":  ELECTRONICS_CATALOG_ID,
         }
         if min_price > 0:
             params["price_from"] = min_price
