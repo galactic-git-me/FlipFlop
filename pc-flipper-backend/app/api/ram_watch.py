@@ -32,11 +32,14 @@ _NS  = {"atom": "http://www.w3.org/2005/Atom"}
 async def _fetch_feed() -> list[dict]:
     global _feed_cache, _feed_cache_ts
     async with _feed_lock:
-        if _feed_cache and time.monotonic() - _feed_cache_ts < _feed_cache_ttl:
+        age = time.monotonic() - _feed_cache_ts
+        if _feed_cache_ts > 0 and age < _feed_cache_ttl:
             return _feed_cache
         posts: list[dict] = []
         async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
-            for feed in _FEEDS:
+            for i, feed in enumerate(_FEEDS):
+                if i > 0:
+                    await asyncio.sleep(12)
                 rss_url = f"https://www.reddit.com/r/{feed['subreddit']}/new.rss?limit=100"
                 try:
                     resp = await client.get(rss_url, headers={"User-Agent": _UA})
@@ -81,11 +84,15 @@ async def _fetch_feed() -> list[dict]:
 async def _fetch_community_feed() -> list[dict]:
     global _community_cache, _community_cache_ts
     async with _community_lock:
-        if _community_cache and time.monotonic() - _community_cache_ts < _feed_cache_ttl:
+        # Return cached result (even empty) if we tried recently (avoid 429 storms)
+        age = time.monotonic() - _community_cache_ts
+        if _community_cache_ts > 0 and age < _feed_cache_ttl:
             return _community_cache
         posts: list[dict] = []
         async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
-            for feed in _COMMUNITY_FEEDS:
+            for i, feed in enumerate(_COMMUNITY_FEEDS):
+                if i > 0:
+                    await asyncio.sleep(12)  # Reddit rate limit: ~1 req / 10s per IP
                 rss_url = f"https://www.reddit.com/r/{feed['subreddit']}/new.rss?limit=100"
                 try:
                     resp = await client.get(rss_url, headers={"User-Agent": _UA})
