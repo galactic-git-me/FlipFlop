@@ -26,12 +26,15 @@ async def get_config():
 @router.get("/feed")
 async def get_reddit_feed(limit: int = 50):
     """Return recent posts from both subreddits, newest first."""
-    headers = {"User-Agent": "FlipFlop/1.0"}
+    ua = "FlipFlop/1.0 RAM price watcher (contact: flipflop-app)"
     posts = []
-    async with httpx.AsyncClient(timeout=10.0, headers=headers) as client:
+    async with httpx.AsyncClient(timeout=15.0) as client:
         for feed in _FEEDS:
             try:
-                resp = await client.get(feed["url"].replace("limit=50", f"limit={limit}"))
+                resp = await client.get(
+                    feed["url"].replace("limit=50", f"limit={limit}"),
+                    headers={"User-Agent": ua},
+                )
                 if resp.status_code != 200:
                     continue
                 children = resp.json().get("data", {}).get("children", [])
