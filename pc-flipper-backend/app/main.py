@@ -1012,7 +1012,7 @@ async def _seed_default_data():
         }
         rows = (await db.execute(select(SourceSearchTerm))).scalars().all()
         updated_rows = 0
-        flip_allowed = {"eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
+        flip_allowed = {"eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "Vinted"}
         common_allowed = {"eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
         cases_allowed = set(common_allowed) | {"eBay (Worldwide)", "CherryTree Inc"}
         upgrade_allowed = set(common_allowed)
@@ -1029,7 +1029,7 @@ async def _seed_default_data():
             if scope == "flip_opportunities":
                 deduped = [s for s in deduped if s in flip_allowed]
                 if not deduped:
-                    deduped = ["eBay UK", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+                    deduped = ["eBay UK", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "Vinted"]
             elif scope == "cases":
                 deduped = [s for s in deduped if s in cases_allowed]
                 if not deduped:
