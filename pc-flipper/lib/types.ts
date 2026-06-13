@@ -8,7 +8,7 @@ export type Classification =
 
 export type ListingStatus = "active" | "missing" | "removed" | "sold";
 export type FlipStage = "selected" | "building" | "ready_for_sale" | "sold";
-export type PartCategory = "ram" | "gpu" | "ssd" | "psu" | "case" | "cpu" | "motherboard" | "accessory";
+export type PartCategory = "ram" | "gpu" | "ssd" | "psu" | "case" | "cpu" | "motherboard" | "cooling" | "accessory";
 export type PartCondition = "new" | "used" | "refurb";
 
 export interface Listing {
