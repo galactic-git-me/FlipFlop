@@ -60,6 +60,10 @@ class Settings(BaseSettings):
     auto_buy_autonomous: bool = False
     auto_buy_daily_limit: int = 3
 
+    ntfy_topic: str = ""
+    ram_watch_threshold_gbp: float = 240.0
+    ram_watch_enabled: bool = True
+
     frontend_url: str = "http://localhost:3000"
     admin_api_key: str = ""
 

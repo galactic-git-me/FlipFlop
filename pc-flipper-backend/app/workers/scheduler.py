@@ -23,6 +23,7 @@ from app.services.retraining_pipeline import run_retraining_if_ready
 from app.services.alerts import emit_alert, check_stale_retrain_checkpoint
 from app.services.compliant_market_ingestion import run_compliant_market_ingestion
 from app.services.benchmark_refresh_job import run_benchmark_refresh
+from app.services.ram_watcher import run_ram_watcher
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -43,6 +44,7 @@ _job_history: dict[str, deque[dict]] = {
     "compliant_market_ingestion": deque(maxlen=50),
     "benchmark_refresh_daily": deque(maxlen=50),
     "benchmark_refresh_weekly": deque(maxlen=50),
+    "ram_watcher": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -354,6 +356,17 @@ def start_scheduler():
         next_run_time=benchmark_weekly_start,
     )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=15),
+        id="ram_watcher",
+        name="RAM Price Watcher",
+        kwargs={"job_id": "ram_watcher", "fn": run_ram_watcher},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
 
@@ -443,6 +456,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("benchmark_refresh_daily", partial(run_benchmark_refresh, "daily"))
     if swarm_id == "benchmark_refresh_weekly":
         return await _run_job_with_history("benchmark_refresh_weekly", partial(run_benchmark_refresh, "weekly"))
+    if swarm_id == "ram_watcher":
+        return await _run_job_with_history("ram_watcher", run_ram_watcher)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 

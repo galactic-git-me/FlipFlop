@@ -17,6 +17,7 @@ import {
   Settings,
   Gauge,
   TrendingUp,
+  MemoryStick,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const PRIMARY_NAV = [
   { href: "/selling", icon: ReceiptText, label: "Reselling" },
   { href: "/intel", icon: BarChart3, label: "Analytics" },
   { href: "/benchmarks", icon: Gauge, label: "Benchmarks" },
+  { href: "/ram-watch", icon: MemoryStick, label: "RAM Watch" },
   { href: "/logs", icon: Brain, label: "AI Insights" },
   { href: "/settings", icon: Settings, label: "Settings" },
 ];
