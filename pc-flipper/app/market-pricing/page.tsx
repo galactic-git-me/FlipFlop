@@ -411,10 +411,10 @@ function PricingCard({ part }: { part: GroupedPart }) {
   const newP   = part.price_new;
   const spread = newP != null && used != null ? newP - used : null;
 
-  const spreadColor = spread == null ? "text-slate-600"
+  const spreadColor = spread == null ? "text-slate-400"
     : spread > 50  ? "text-[#00b8ff]"
-    : spread > 0   ? "text-slate-400"
-    : spread === 0 ? "text-slate-500"
+    : spread > 0   ? "text-slate-300"
+    : spread === 0 ? "text-slate-400"
     : "text-amber-400";
 
   const SpreadIcon = spread == null || spread === 0 ? Minus
@@ -424,99 +424,107 @@ function PricingCard({ part }: { part: GroupedPart }) {
   const newSrc  = part.all_sources.find(s => s.condition === "new"  && s.price != null);
 
   return (
-    <div className="rounded-xl border border-[#1e2d45] bg-[#080f1a] flex flex-col overflow-hidden hover:border-[#2a3f5a] transition-colors">
+    <div className="relative rounded-xl border border-[#1e2d45] overflow-hidden hover:border-[#2a3f5a] transition-colors h-56 flex flex-col group">
 
-      {/* Name + image + badge */}
-      <div className="p-3 flex items-start gap-3 border-b border-[#0c1520]">
-        {part.image_url ? (
-          <img
-            src={part.image_url}
-            alt={part.name}
-            className="w-12 h-12 object-contain rounded bg-[#050b12] flex-shrink-0 border border-white/5 p-0.5"
-          />
-        ) : (
-          <div className="w-12 h-12 rounded bg-[#050b12] flex-shrink-0 border border-white/5" />
-        )}
-        <div className="min-w-0 flex-1">
-          <p className="text-sm text-slate-200 font-medium leading-snug line-clamp-2" title={part.name}>
-            {part.name}
-          </p>
-          <span className="mt-1 inline-block px-1.5 py-0.5 rounded text-[9px] font-semibold bg-[#0a1119] border border-[#1e2d45] text-slate-500 uppercase tracking-wide">
+      {/* Full-card background image */}
+      {part.image_url ? (
+        <img
+          src={part.image_url}
+          alt={part.name}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[#080f1a]" />
+      )}
+
+      {/* Gradient overlay — dark at bottom for legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/25" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col h-full p-3">
+
+        {/* Top row: category badge + spread */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-black/60 backdrop-blur-sm border border-white/15 text-white uppercase tracking-wide">
             {CAT_BADGE[part.category] ?? part.category}
           </span>
-        </div>
-      </div>
-
-      {/* Used / New prices */}
-      <div className="grid grid-cols-2 divide-x divide-[#0c1520]">
-        <div className="p-3 flex flex-col gap-0.5">
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-500/60">Used</span>
-          {used != null ? (
-            <>
-              <span className="text-amber-400 font-bold text-base font-mono leading-none">{formatCurrency(used)}</span>
-              {usedSrc?.source && <span className="text-[9px] text-slate-700 mt-0.5">{usedSrc.source}</span>}
-            </>
-          ) : (
-            <span className="text-slate-700 text-sm font-mono">—</span>
-          )}
-        </div>
-        <div className="p-3 flex flex-col gap-0.5">
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-[#00b8ff]/60">New</span>
-          {newP != null ? (
-            <>
-              <span className="text-[#00b8ff] font-bold text-base font-mono leading-none">{formatCurrency(newP)}</span>
-              {newSrc?.source && <span className="text-[9px] text-slate-700 mt-0.5">{newSrc.source}</span>}
-            </>
-          ) : (
-            <span className="text-slate-700 text-sm font-mono">—</span>
-          )}
-        </div>
-      </div>
-
-      {/* Footer: spread + source chips */}
-      <div className="px-3 py-2 border-t border-[#0c1520] flex items-center justify-between gap-2 mt-auto">
-        <div className={`flex items-center gap-1 ${spreadColor}`}>
-          <SpreadIcon className="w-3 h-3 flex-shrink-0" />
-          {spread != null ? (
-            <span className="text-xs font-semibold font-mono">
-              {spread > 0 ? "+" : ""}{formatCurrency(spread)}
-            </span>
-          ) : (
-            <span className="text-xs text-slate-700">—</span>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-1 justify-end">
-          {part.all_sources.slice(0, 3).map((s, i) => {
-            const chip = (
-              <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] border ${
-                s.condition === "new"
-                  ? "bg-[#00b8ff]/5 border-[#00b8ff]/15 text-[#00b8ff]/60"
-                  : "bg-amber-500/5 border-amber-500/15 text-amber-400/60"
-              }`}>
-                {s.source?.split(" ")[0]}
-                {s.url && <ExternalLink className="w-2 h-2 opacity-40 ml-0.5" />}
+          <div className={`flex items-center gap-1 ${spreadColor} bg-black/60 backdrop-blur-sm rounded px-1.5 py-0.5`}>
+            <SpreadIcon className="w-2.5 h-2.5 flex-shrink-0" />
+            {spread != null ? (
+              <span className="text-[10px] font-semibold font-mono">
+                {spread > 0 ? "+" : ""}{formatCurrency(spread)}
               </span>
-            );
-            return s.url ? (
-              <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
-                 className="hover:opacity-100 opacity-80 transition-opacity">
-                {chip}
-              </a>
-            ) : <span key={i}>{chip}</span>;
-          })}
-          {part.all_sources.length > 3 && (
-            <span className="px-1.5 py-0.5 rounded border border-[#1e2d45] text-[8px] text-slate-600">
-              +{part.all_sources.length - 3}
-            </span>
-          )}
+            ) : (
+              <span className="text-[10px]">—</span>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom: name + prices */}
+        <div className="mt-auto">
+          <p className="text-sm font-semibold text-white leading-snug line-clamp-2 mb-2.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+            {part.name}
+          </p>
+
+          {/* Prices row */}
+          <div className="flex items-end justify-between gap-2">
+            <div>
+              <div className="text-[9px] font-semibold uppercase tracking-wider text-amber-400/80 mb-0.5">Used</div>
+              {used != null ? (
+                <>
+                  <div className="text-amber-400 font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">{formatCurrency(used)}</div>
+                  {usedSrc?.source && <div className="text-[9px] text-white/40 mt-0.5">{usedSrc.source}</div>}
+                </>
+              ) : (
+                <div className="text-white/30 text-base font-mono">—</div>
+              )}
+            </div>
+            <div className="text-right">
+              <div className="text-[9px] font-semibold uppercase tracking-wider text-[#00b8ff]/80 mb-0.5">New</div>
+              {newP != null ? (
+                <>
+                  <div className="text-[#00b8ff] font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">{formatCurrency(newP)}</div>
+                  {newSrc?.source && <div className="text-[9px] text-white/40 mt-0.5 text-right">{newSrc.source}</div>}
+                </>
+              ) : (
+                <div className="text-white/30 text-base font-mono">—</div>
+              )}
+            </div>
+          </div>
+
+          {/* Source chips */}
+          <div className="flex flex-wrap gap-1 mt-2">
+            {part.all_sources.slice(0, 3).map((s, i) => {
+              const chip = (
+                <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] border backdrop-blur-sm ${
+                  s.condition === "new"
+                    ? "bg-[#00b8ff]/10 border-[#00b8ff]/20 text-[#00b8ff]/80"
+                    : "bg-amber-500/10 border-amber-500/20 text-amber-400/80"
+                }`}>
+                  {s.source?.split(" ")[0]}
+                  {s.url && <ExternalLink className="w-2 h-2 opacity-60 ml-0.5" />}
+                </span>
+              );
+              return s.url ? (
+                <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+                   className="hover:opacity-100 opacity-80 transition-opacity">
+                  {chip}
+                </a>
+              ) : <span key={i}>{chip}</span>;
+            })}
+            {part.all_sources.length > 3 && (
+              <span className="px-1.5 py-0.5 rounded border border-white/10 bg-black/40 text-[8px] text-white/40">
+                +{part.all_sources.length - 3}
+              </span>
+            )}
+            {part.last_price_update && (
+              <span className="ml-auto text-[8px] text-white/30">
+                {formatRelativeTime(new Date(part.last_price_update))}
+              </span>
+            )}
+          </div>
         </div>
       </div>
-
-      {part.last_price_update && (
-        <div className="px-3 pb-2 text-[9px] text-slate-700 text-right -mt-1">
-          {formatRelativeTime(new Date(part.last_price_update))}
-        </div>
-      )}
     </div>
   );
 }
