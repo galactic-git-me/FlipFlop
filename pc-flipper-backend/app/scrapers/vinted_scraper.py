@@ -124,11 +124,55 @@ _CONDITION_MAP = {
     6: "for_parts",    # Not working / for parts
 }
 
+# At least one of these must appear in the title for the listing to be kept.
+# "pc" alone is too broad (matches "pc game", "pirate yakuza ... Edition PC" etc.)
+# so it is only counted when flanked by spaces or a digit (e.g. "gaming pc ", "pc build").
+_TECH_KEYWORDS = frozenset([
+    # GPUs
+    "rtx", "gtx", "radeon", "geforce", "graphics card", "gpu",
+    "rx 580", "rx 590", "rx 6600", "rx 6700", "rx 6800", "rx 6900",
+    "rx 7600", "rx 7700", "rx 7800", "rx 7900",
+    # CPUs
+    "ryzen", "intel core", "core i3", "core i5", "core i7", "core i9",
+    "xeon", "threadripper", "celeron", "pentium",
+    # Memory / Storage
+    "ddr4", "ddr5", "dimm", "nvme", "m.2 ssd", "ssd ", "nvme ssd",
+    "16gb ram", "32gb ram", "8gb ram", "64gb ram",
+    # Motherboards / PSUs / Cases
+    "motherboard", "mobo", "power supply", "psu", "atx case", "pc case",
+    # Explicit PC terms (specific enough)
+    "gaming pc", "gaming computer", "desktop pc", "workstation pc",
+    "pc tower", "pc build", "gaming tower", "gaming rig", "gaming setup",
+    "mini pc", "nuc pc", "htpc",
+    # Known brands with their PC context baked in
+    "optiplex", "thinkcentre", "elitedesk", "prodesk", "thinkstation",
+    "alienware", "chillblast", "cyberpower pc", "scan 3xs",
+])
+
+import re as _re
+_PC_STANDALONE = _re.compile(r"\bpc\b", _re.IGNORECASE)
+
+
+def _is_tech_listing(title: str) -> bool:
+    tl = title.lower()
+    if any(kw in tl for kw in _TECH_KEYWORDS):
+        return True
+    # Allow bare "pc" only when it sits next to a non-game qualifier
+    # Reject: "Edition PC", "PC Game", "PC CD ROM", "PC DVD"
+    if _PC_STANDALONE.search(tl):
+        if _re.search(r"\b(game|cd.?rom|dvd|edition|version|steelbook|simulator|simulator)\b", tl):
+            return False
+        return True
+    return False
+
+
 def _parse_item(item: dict, term: str) -> Optional[dict]:
     try:
         item_id   = str(item.get("id") or "")
         title     = str(item.get("title") or "").strip()
         if not title or not item_id:
+            return None
+        if not _is_tech_listing(title):
             return None
 
         price_obj = item.get("price") or item.get("priceNumeric") or {}

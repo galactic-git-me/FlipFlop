@@ -950,12 +950,18 @@ _INITIAL_PLAYBOOKS: list[dict] = [
     },
 ]
 
-# Playbooks that existed in the previous version and are now retired
+# Playbooks that existed in previous versions and are now retired
 _RETIRE_NAMES = {
+    # v2 playbooks being replaced
     "Mainstream Gamer",
     "RGB Showcase Build",
     "Competitive Gaming Build",
     "Premium Showcase",
+    # v1 inline-seeded playbooks from main.py
+    "Budget Gaming PC",
+    "Office Workstation Flip",
+    "AI / ML Workstation",
+    "Budget Builder (Sub-£100)",
 }
 
 # Old name → new name renames to apply if the old record exists

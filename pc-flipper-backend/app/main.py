@@ -701,10 +701,17 @@ async def _seed_default_data():
             ))
             log.info("seeded.app_settings", model=settings.ollama_model)
 
-        # ── Seed default playbooks ────────────────────────────────────────────
-        from app.models.playbook import Playbook
-        pb_count = await db.scalar(select(func.count()).select_from(Playbook))
-        if pb_count == 0:
+        # ── Seed / migrate canonical playbooks ───────────────────────────────
+        # Handled by playbook_seeder: retires old playbooks, renames, inserts
+        # missing ones, and refreshes live pricing from benchmarks each startup.
+        from app.services.playbook_seeder import seed_playbooks
+        _pb_created = await seed_playbooks(db)
+        if _pb_created:
+            log.info("seeded.playbooks", created=_pb_created)
+
+        if False:  # dead code — kept so git diff is minimal; remove next cleanup
+            from app.models.playbook import Playbook
+            pb_count = await db.scalar(select(func.count()).select_from(Playbook))
             _default_playbooks = [
                 Playbook(
                     name="Budget Gaming PC",
