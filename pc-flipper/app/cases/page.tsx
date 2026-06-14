@@ -225,56 +225,59 @@ function CaseCard({ item }: { item: Part }) {
   const themeIcon = THEME_ICONS[item.theme ?? ""] ?? "🎨";
 
   return (
-    <Card hover>
-      <div className="relative">
-        {item.image_url ? (
-          <img src={item.image_url} alt="" className="w-full h-44 object-contain rounded-t-xl" />
-        ) : (
-          <div className="w-full h-44 rounded-t-xl bg-gradient-to-br from-[#0a1119] to-[#0d1320] flex items-center justify-center">
-            <Box className="w-10 h-10 text-slate-700" />
-          </div>
-        )}
-        {/* Theme badge */}
-        <div className="absolute top-2 left-2">
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#080c14]/90 backdrop-blur-sm border border-purple-400/30 text-xs font-semibold text-purple-300">
+    <div className="relative rounded-xl border border-[#1e2d45] overflow-hidden h-72 flex flex-col group hover:border-[#2a3f5a] transition-colors">
+      {/* Full-card background image */}
+      {item.image_url ? (
+        <img src={item.image_url} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1119] to-[#0d1320] flex items-center justify-center opacity-30">
+          <Box className="w-16 h-16 text-slate-700" />
+        </div>
+      )}
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/97 via-black/50 to-black/15" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col h-full p-3">
+
+        {/* Top badges */}
+        <div className="flex items-start justify-between">
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm border border-purple-400/30 text-xs font-semibold text-purple-300">
             {themeIcon} {item.theme ?? "Themed"}
           </span>
-        </div>
-        {/* New badge */}
-        <div className="absolute top-2 right-2">
           <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-[#00dc82] text-[#080c14] text-[10px] font-black uppercase">NEW</span>
         </div>
-        {/* Price */}
-        <div className="absolute bottom-2 right-2 bg-[#080c14]/90 backdrop-blur-sm border border-[#1e2d45] rounded-lg px-2.5 py-1">
-          <span className="text-lg font-black text-slate-100">{formatCurrency(price)}</span>
-        </div>
-      </div>
 
-      <CardContent className="pt-3">
-        <h3 className="text-sm font-medium text-slate-200 leading-snug line-clamp-2 mb-3">{item.name}</h3>
+        {/* Bottom: name + specs + price + action */}
+        <div className="mt-auto space-y-2">
+          <h3 className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">{item.name}</h3>
 
-        {item.specs && (
-          <p className="text-xs text-slate-500 font-mono mb-3">{item.specs}</p>
-        )}
-
-        {/* Source — prominent with link */}
-        <div className="mb-3">
-          <SourceBadge sourceName={item.source_site ?? "Unknown"} url={item.source_url} />
-          {item.last_price_update && (
-            <span className="text-[10px] text-slate-600 ml-2">
-              Updated {new Date(item.last_price_update).toLocaleDateString("en-GB")}
-            </span>
+          {item.specs && (
+            <p className="text-xs text-white/50 font-mono line-clamp-1">{item.specs}</p>
           )}
-        </div>
 
-        <div className="flex gap-2">
-          <a href={item.source_url ?? "#"} target="_blank" rel="noopener noreferrer" className="flex-1">
+          <div className="flex items-end justify-between gap-2">
+            <div>
+              <SourceBadge sourceName={item.source_site ?? "Unknown"} url={item.source_url} />
+              {item.last_price_update && (
+                <div className="text-[9px] text-white/35 mt-0.5">
+                  Updated {new Date(item.last_price_update).toLocaleDateString("en-GB")}
+                </div>
+              )}
+            </div>
+            <div className="bg-black/70 backdrop-blur-sm border border-[#1e2d45] rounded-lg px-2.5 py-1 flex-shrink-0">
+              <span className="text-xl font-black text-white">{formatCurrency(price)}</span>
+            </div>
+          </div>
+
+          <a href={item.source_url ?? "#"} target="_blank" rel="noopener noreferrer">
             <Button variant="primary" size="sm" className="w-full justify-center">
               <ExternalLink className="w-3.5 h-3.5" /> View on {item.source_site ?? "Store"}
             </Button>
           </a>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

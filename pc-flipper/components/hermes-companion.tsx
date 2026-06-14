@@ -53,7 +53,7 @@ function MessageBubble({ msg }: { msg: ReturnType<typeof useHermes>["messages"][
       )}
       {(msg.content || msg.isStreaming) && (
         <div className={cn(
-          "max-w-[90%] rounded-2xl px-3 py-2 text-xs leading-relaxed",
+          "max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
           isUser
             ? "bg-[#7c85ff]/20 border border-[#7c85ff]/30 text-slate-200 rounded-tr-sm"
             : "bg-[#1a1d2e] text-slate-200 rounded-tl-sm"
@@ -120,7 +120,7 @@ export function HermesCompanion() {
     <>
       {/* Chat panel */}
       {isOpen && (
-        <div className="fixed bottom-24 right-5 z-50 w-[340px] flex flex-col bg-[#12151f] border border-[#2a2d3e] rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
+        <div className="fixed bottom-24 right-5 z-50 w-[680px] flex flex-col bg-[#12151f] border border-[#2a2d3e] rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
           {/* Header */}
           <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-[#1a1d2e] border-b border-[#2a2d3e]">
             <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#7c85ff]/40 flex-shrink-0">
@@ -139,7 +139,7 @@ export function HermesCompanion() {
           </div>
 
           {/* Messages */}
-          <div className="flex flex-col gap-3 p-3 overflow-y-auto max-h-[400px] min-h-[200px]">
+          <div className="flex flex-col gap-3 p-3 overflow-y-auto max-h-[600px] min-h-[400px]">
             {messages.map((msg, i) => <MessageBubble key={i} msg={msg} />)}
             <div ref={messagesEndRef} />
           </div>
@@ -152,12 +152,12 @@ export function HermesCompanion() {
               onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(); } }}
               placeholder="Ask anything..."
               disabled={isSending}
-              className="flex-1 bg-[#1a1d2e] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#7c85ff]/50 disabled:opacity-50"
+              className="flex-1 bg-[#1a1d2e] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#7c85ff]/50 disabled:opacity-50"
             />
             <button
               onClick={() => void send()}
               disabled={isSending || !input.trim()}
-              className="flex-shrink-0 w-8 h-8 bg-[#7c85ff] hover:bg-[#9099ff] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors"
+              className="flex-shrink-0 w-10 h-10 bg-[#7c85ff] hover:bg-[#9099ff] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors"
             >
               {isSending
                 ? <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />

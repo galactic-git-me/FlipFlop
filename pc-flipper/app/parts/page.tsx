@@ -386,70 +386,70 @@ function ListingCard({ listing: l, onFlip, flippingId }: {
   const cfg = l.classification ? CLASSIFICATION_CONFIG[l.classification] : null;
 
   return (
-    <div className={`flex flex-col rounded-xl glass-card overflow-hidden hover:border-[var(--nf-border-strong)] transition-colors ${
+    <div className={`relative rounded-xl overflow-hidden hover:border-[var(--nf-border-strong)] transition-colors h-64 flex flex-col group border ${
       l.classification === "amazing_gem" ? "border-cyan-400/25" :
-      l.classification === "gem" ? "border-emerald-400/20" : ""
+      l.classification === "gem" ? "border-emerald-400/20" : "border-[#1e2d45]"
     }`}>
-      {/* Image */}
-      <div className="relative w-full h-36 bg-[#070d14] overflow-hidden flex-shrink-0">
-        {l.image_urls[0] ? (
-          <img src={l.image_urls[0]} alt={l.title} className="w-full h-full object-contain opacity-80" loading="lazy" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center opacity-10">
-            <Gem className="w-10 h-10 text-slate-300" />
-          </div>
-        )}
-        {/* Classification badge overlaid on image */}
-        {cfg && (
-          <div className="absolute top-2 left-2">
+      {/* Full-card background image */}
+      {l.image_urls[0] ? (
+        <img src={l.image_urls[0]} alt={l.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+      ) : (
+        <div className="absolute inset-0 bg-[#070d14] flex items-center justify-center opacity-10">
+          <Gem className="w-10 h-10 text-slate-300" />
+        </div>
+      )}
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/97 via-black/55 to-black/20" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col h-full p-3">
+
+        {/* Top: classification + score */}
+        <div className="flex items-start justify-between gap-2">
+          {cfg && (
             <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${cfg.color} ${cfg.bg}`}>
               {cfg.emoji} {cfg.label}
             </span>
-          </div>
-        )}
-        {/* Score badge */}
-        <div className="absolute top-2 right-2">
-          <FlippabilityScore score={l.gem_score} size="sm" listing={l} />
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="flex flex-col flex-1 p-3 gap-2">
-        {/* Title */}
-        <p className="text-sm font-semibold text-slate-100 leading-snug line-clamp-2">{l.title}</p>
-
-        {/* Specs */}
-        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-slate-500">
-          {l.cpu && <span className="font-mono text-slate-400">{l.cpu}</span>}
-          {l.gpu && <span className="text-emerald-400">{l.gpu}</span>}
-          {l.ram_gb && <span>{l.ram_gb}GB {l.ram_type ?? "RAM"}</span>}
-          {l.storage_gb && <span>{l.storage_gb}GB {l.storage_type?.toUpperCase() ?? "SSD"}</span>}
-          {l.location && <span>📍 {l.location}</span>}
-        </div>
-
-        {/* Prices */}
-        <div className="grid grid-cols-2 gap-1.5 mt-auto">
-          <div className="rounded-md bg-black/20 border border-white/5 px-2 py-1">
-            <div className="text-slate-600 text-[9px] uppercase tracking-wide">Buy</div>
-            <div className="text-slate-300 font-semibold text-xs">{formatCurrency(l.price ?? 0)}</div>
-          </div>
-          <div className="rounded-md bg-[#00dc82]/5 border border-[#00dc82]/20 px-2 py-1">
-            <div className="text-slate-600 text-[9px] uppercase tracking-wide">Profit</div>
-            <div className={`font-bold text-xs ${profitColor}`}>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</div>
+          )}
+          <div className="ml-auto">
+            <FlippabilityScore score={l.gem_score} size="sm" listing={l} />
           </div>
         </div>
 
-        {/* Source + actions */}
-        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.04]">
-          <SourceBadge sourceName={l.source_name} url={l.url} />
-          <div className="flex items-center gap-1">
-            <a href={l.url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm"><ExternalLink className="w-3 h-3" /></Button>
-            </a>
-            <Button variant="primary" size="sm" disabled={flippingId === l.id} onClick={() => onFlip(l)}>
-              {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
-              Flip
-            </Button>
+        {/* Bottom */}
+        <div className="mt-auto space-y-2">
+          <p className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">{l.title}</p>
+
+          <div className="flex flex-wrap gap-1 text-[10px]">
+            {l.cpu && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/70 font-mono">{l.cpu}</span>}
+            {l.gpu && <span className="bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 rounded px-1.5 py-0.5 text-emerald-300">{l.gpu}</span>}
+            {l.ram_gb && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/60">{l.ram_gb}GB</span>}
+            {l.location && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/50">📍 {l.location}</span>}
+          </div>
+
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-[9px] text-white/50 uppercase">Buy</div>
+              <div className="text-white font-bold text-sm font-mono">{formatCurrency(l.price ?? 0)}</div>
+            </div>
+            <div className={`text-right ${profitColor}`}>
+              <div className="text-[9px] text-white/50 uppercase">Profit</div>
+              <div className="font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">{profit > 0 ? "+" : ""}{formatCurrency(profit)}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <SourceBadge sourceName={l.source_name} url={l.url} />
+            <div className="flex items-center gap-1 ml-auto">
+              <a href={l.url} target="_blank" rel="noopener noreferrer">
+                <Button variant="secondary" size="sm"><ExternalLink className="w-3 h-3" /></Button>
+              </a>
+              <Button variant="primary" size="sm" disabled={flippingId === l.id} onClick={() => onFlip(l)}>
+                {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+                Flip
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -397,33 +397,32 @@ function ListingGridCard({
   const isAuction = l.listing_type === "auction";
 
   return (
-    <Card
-      className={`overflow-hidden flex flex-col h-full ${
-        l.classification === "amazing_gem"
-          ? "border-cyan-400/25"
-          : l.classification === "gem"
-          ? "border-emerald-400/20"
-          : ""
-      }`}
-    >
-      {/* Image - top */}
-      <div className="w-full h-40 bg-[#080f1a] overflow-hidden">
-        {l.image_urls[0] ? (
-          <img
-            src={l.image_urls[0]}
-            alt={l.title}
-            className="w-full h-full object-contain"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center opacity-15">
-            <Gem className="w-8 h-8 text-slate-400" />
-          </div>
-        )}
-      </div>
+    <div className={`relative rounded-xl border overflow-hidden flex flex-col h-72 group ${
+      l.classification === "amazing_gem" ? "border-cyan-400/25"
+      : l.classification === "gem" ? "border-emerald-400/20"
+      : "border-[#1e2d45]"
+    }`}>
+      {/* Full-card background image */}
+      {l.image_urls[0] ? (
+        <img
+          src={l.image_urls[0]}
+          alt={l.title}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[#080f1a] flex items-center justify-center opacity-10">
+          <Gem className="w-12 h-12 text-slate-400" />
+        </div>
+      )}
 
-      <CardContent className="p-3 flex-1 flex flex-col gap-2">
-        {/* Score + Classification */}
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/97 via-black/55 to-black/20" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col h-full p-3">
+
+        {/* Top: score + badges */}
         <div className="flex items-start justify-between gap-2">
           <FlippabilityScore score={l.gem_score} size="sm" listing={l} />
           <div className="flex gap-1 flex-wrap">
@@ -432,58 +431,57 @@ function ListingGridCard({
           </div>
         </div>
 
-        {/* Title */}
-        <h3 className="text-xs font-semibold text-slate-100 line-clamp-2 leading-snug">
-          {l.title}
-        </h3>
+        {/* Bottom section */}
+        <div className="mt-auto space-y-2">
+          {/* Title */}
+          <h3 className="text-xs font-semibold text-white line-clamp-2 leading-snug drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+            {l.title}
+          </h3>
 
-        {/* Specs */}
-        <div className="space-y-1 text-[10px] text-slate-500">
-          {l.cpu && <div>🖥️ <span className="font-mono text-slate-400">{l.cpu.slice(0, 20)}</span></div>}
+          {/* Specs chips */}
+          <div className="flex flex-wrap gap-1 text-[10px]">
+            {l.cpu && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/70 font-mono">{l.cpu.slice(0, 20)}</span>}
+            {l.gpu
+              ? <span className="bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 rounded px-1.5 py-0.5 text-emerald-300">{l.gpu.slice(0, 15)}</span>
+              : <span className="bg-red-500/15 backdrop-blur-sm border border-red-400/20 rounded px-1.5 py-0.5 text-red-300/70">No GPU</span>}
+            {l.ram_gb && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/60">{l.ram_gb}GB</span>}
+          </div>
+
+          {/* Pricing */}
+          <div className="flex items-end justify-between gap-2">
+            <div>
+              <div className="text-[9px] text-white/50 uppercase tracking-wide">Buy · Resale</div>
+              <div className="text-white/80 font-semibold text-xs font-mono">
+                {formatCurrency(l.price)} · {formatCurrency(l.estimated_resale ?? 0)}
+              </div>
+            </div>
+            <div className={`text-right ${profitColor}`}>
+              <div className="text-[9px] text-white/50 uppercase tracking-wide">Profit</div>
+              <div className="font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
+                {profit > 0 ? "+" : ""}{formatCurrency(profit)}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
           <div className="flex gap-2">
-            {l.ram_gb && <span>🔹 {l.ram_gb}GB RAM</span>}
-            {l.gpu ? <span className="text-emerald-400">✓ {l.gpu.slice(0, 15)}</span> : <span className="text-red-400/70">✗ No GPU</span>}
-          </div>
-          {l.source_name && <div className="text-slate-600">📍 {l.source_name}</div>}
-        </div>
-
-        {/* Pricing - prominent */}
-        <div className="mt-auto pt-2 border-t border-white/5 space-y-1">
-          <div className="flex items-baseline justify-between">
-            <span className="text-[9px] text-slate-600">Buy</span>
-            <span className="text-sm font-semibold text-slate-300">
-              {formatCurrency(l.price)}
-            </span>
-          </div>
-          <div className="flex items-baseline justify-between">
-            <span className="text-[9px] text-slate-600">Resale</span>
-            <span className="text-sm font-semibold text-slate-200">
-              {formatCurrency(l.estimated_resale ?? 0)}
-            </span>
-          </div>
-          <div className={`flex items-baseline justify-between pt-1 border-t border-white/5 text-base font-black ${profitColor}`}>
-            <span className="text-[9px]">Profit</span>
-            <span>{profit > 0 ? "+" : ""}{formatCurrency(profit)}</span>
-          </div>
-        </div>
-
-        {/* Actions - bottom */}
-        <div className="flex gap-2 pt-2">
-          <Button
-            variant="primary" size="sm"
-            className="flex-1 h-7"
-            disabled={flippingId === l.id}
-            onClick={() => onFlip(l)}
-          >
-            {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
-          </Button>
-          <a href={l.url} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button variant="outline" size="sm" className="w-full h-7 justify-center">
-              <ExternalLink className="w-3 h-3" />
+            <Button
+              variant="primary" size="sm"
+              className="flex-1 h-8 justify-center"
+              disabled={flippingId === l.id}
+              onClick={() => onFlip(l)}
+            >
+              {flippingId === l.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+              Flip
             </Button>
-          </a>
+            <a href={l.url} target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="sm" className="h-8 px-3">
+                <ExternalLink className="w-3 h-3" />
+              </Button>
+            </a>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
