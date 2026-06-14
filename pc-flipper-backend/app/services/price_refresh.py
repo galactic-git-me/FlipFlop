@@ -317,6 +317,15 @@ async def run_price_refresh() -> dict:
             file=str(_BENCHMARKS_FILE),
         )
 
+    # Refresh playbook pricing_model / profit_model in the DB from the new benchmarks
+    if updated:
+        try:
+            from app.services.playbook_seeder import refresh_playbook_economics_from_benchmarks
+            playbooks_updated = await refresh_playbook_economics_from_benchmarks()
+            log.info("price_refresh.playbook_economics_updated", count=playbooks_updated)
+        except Exception as exc:
+            log.warning("price_refresh.playbook_economics_update_failed", error=str(exc))
+
     return {
         "ok": True,
         "updated": updated,

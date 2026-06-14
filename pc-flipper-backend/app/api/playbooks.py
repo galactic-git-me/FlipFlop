@@ -59,7 +59,7 @@ async def list_playbooks(
 
 @router.post("/seed", status_code=201)
 async def seed_initial_playbooks(db: AsyncSession = Depends(get_db)):
-    """Create the 10 canonical starting playbooks if they don't already exist."""
+    """Migrate to 11 canonical playbooks and refresh live pricing from benchmarks."""
     from app.services.playbook_seeder import seed_playbooks
     created = await seed_playbooks(db)
     return {"ok": True, "created": created}
