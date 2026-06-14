@@ -917,6 +917,7 @@ async def _seed_default_data():
                 "note": "Basic peripherals make it feel like a full package. Adds £10-15.",
             },
         }
+        from app.models.playbook import Playbook
         for _pb_name, _upsell in _upsell_map.items():
             existing_pb = await db.execute(
                 select(Playbook).where(Playbook.name == _pb_name)

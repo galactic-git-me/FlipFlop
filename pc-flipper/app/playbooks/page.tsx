@@ -491,6 +491,7 @@ function PlaybookCard({
           const pricing = playbook.pricing_model ?? {};
           const hasProfit = (pm.expected_profit ?? 0) > 0;
           const hasBuildCost = (pricing.expected_build_cost ?? 0) > 0;
+          const sellTarget = pricing.sell_target_exp ?? pricing.sell_target_min ?? 0;
           if (!hasProfit && !hasBuildCost) return null;
           return (
             <div className="flex items-center gap-4 px-4 py-2 bg-[#0a1220] border-b border-[#1e2d45] text-sm -mx-4 mt-3">
@@ -498,6 +499,12 @@ function PlaybookCard({
                 <div>
                   <div className="text-[11px] text-slate-500">Build cost</div>
                   <div className="font-bold text-slate-300">£{pricing.minimum_build_cost ?? "?"}–£{pricing.maximum_build_cost ?? "?"}</div>
+                </div>
+              )}
+              {sellTarget > 0 && (
+                <div>
+                  <div className="text-[11px] text-slate-500">Target sell</div>
+                  <div className="font-bold text-amber-400">~£{sellTarget}</div>
                 </div>
               )}
               {hasProfit && (
