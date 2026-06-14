@@ -60,6 +60,10 @@ class Settings(BaseSettings):
     auto_buy_autonomous: bool = False
     auto_buy_daily_limit: int = 3
 
+    reddit_client_id: str = ""
+    reddit_client_secret: str = ""
+    reddit_user_agent: str = "FlipFlop/1.0 PC deal scanner (by /u/flipflop_bot)"
+
     ntfy_topic: str = ""
     ram_watch_enabled: bool = True
     ram_watch_threshold_gbp: float = 240.0   # DDR5 RAM

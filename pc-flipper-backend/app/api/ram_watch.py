@@ -2,11 +2,11 @@ from fastapi import APIRouter
 import asyncio
 import httpx
 import time
-import xml.etree.ElementTree as ET
 from datetime import datetime
 from app.config import get_settings
 from app.services.alerts import list_alerts
 from app.services.ram_watcher import run_ram_watcher, _send_ntfy, _FEEDS
+from app.services import reddit_client as _reddit
 
 router = APIRouter(prefix="/ram-watch", tags=["ram-watch"])
 
@@ -25,8 +25,29 @@ _community_cache: list[dict] = []
 _community_cache_ts: float = 0.0
 _community_lock = asyncio.Lock()
 
-_UA  = "FlipFlop/1.0 RAM price watcher (contact: flipflop-app)"
-_NS  = {"atom": "http://www.w3.org/2005/Atom"}
+def _reddit_children_to_posts(children: list[dict], subreddit: str) -> list[dict]:
+    posts = []
+    for child in children:
+        d = child.get("data", {})
+        title = (d.get("title") or "").strip()
+        flair = (d.get("link_flair_text") or "").strip()
+        url   = d.get("url") or ""
+        permalink = d.get("permalink") or ""
+        if permalink and not url.startswith("http"):
+            url = f"https://reddit.com{permalink}"
+        post_id = d.get("id") or url.rstrip("/").split("/")[-1]
+        ts = int(d.get("created_utc") or 0)
+        selftext = (d.get("selftext") or "")[:400]
+        posts.append({
+            "subreddit":   subreddit,
+            "id":          post_id,
+            "title":       title,
+            "url":         url,
+            "flair":       flair,
+            "created_utc": ts,
+            "selftext":    selftext,
+        })
+    return posts
 
 
 async def _fetch_feed() -> list[dict]:
@@ -39,41 +60,10 @@ async def _fetch_feed() -> list[dict]:
         async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
             for i, feed in enumerate(_FEEDS):
                 if i > 0:
-                    await asyncio.sleep(12)
-                rss_url = f"https://www.reddit.com/r/{feed['subreddit']}/new.rss?limit=100"
-                try:
-                    resp = await client.get(rss_url, headers={"User-Agent": _UA})
-                    if resp.status_code != 200:
-                        continue
-                    root = ET.fromstring(resp.content)
-                    for entry in root.findall("atom:entry", _NS):
-                        title = (entry.findtext("atom:title", "", _NS) or "").strip()
-                        link_el = entry.find("atom:link", _NS)
-                        url = link_el.get("href", "") if link_el is not None else ""
-                        published = entry.findtext("atom:published", "", _NS) or ""
-                        content = (entry.findtext("atom:content", "", _NS) or "")[:400]
-                        try:
-                            ts = int(datetime.fromisoformat(published).timestamp()) if published else 0
-                        except Exception:
-                            ts = 0
-                        post_id = url.rstrip("/").split("/")[-1] if url else ""
-                        flair = ""
-                        if title.startswith("["):
-                            end = title.find("]")
-                            if end > 0:
-                                flair = title[1:end]
-                                title = title[end + 1:].strip()
-                        posts.append({
-                            "subreddit":   feed["subreddit"],
-                            "id":          post_id,
-                            "title":       title,
-                            "url":         url,
-                            "flair":       flair,
-                            "created_utc": ts,
-                            "selftext":    content,
-                        })
-                except Exception:
-                    continue
+                    await asyncio.sleep(2)
+                children = await _reddit.fetch_new_posts(client, feed["subreddit"], limit=100)
+                if children:
+                    posts.extend(_reddit_children_to_posts(children, feed["subreddit"]))
         posts.sort(key=lambda p: p["created_utc"], reverse=True)
         if posts:
             _feed_cache = posts
@@ -84,7 +74,6 @@ async def _fetch_feed() -> list[dict]:
 async def _fetch_community_feed() -> list[dict]:
     global _community_cache, _community_cache_ts
     async with _community_lock:
-        # Return cached result (even empty) if we tried recently (avoid 429 storms)
         age = time.monotonic() - _community_cache_ts
         if _community_cache_ts > 0 and age < _feed_cache_ttl:
             return _community_cache
@@ -92,41 +81,10 @@ async def _fetch_community_feed() -> list[dict]:
         async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
             for i, feed in enumerate(_COMMUNITY_FEEDS):
                 if i > 0:
-                    await asyncio.sleep(12)  # Reddit rate limit: ~1 req / 10s per IP
-                rss_url = f"https://www.reddit.com/r/{feed['subreddit']}/new.rss?limit=100"
-                try:
-                    resp = await client.get(rss_url, headers={"User-Agent": _UA})
-                    if resp.status_code != 200:
-                        continue
-                    root = ET.fromstring(resp.content)
-                    for entry in root.findall("atom:entry", _NS):
-                        title = (entry.findtext("atom:title", "", _NS) or "").strip()
-                        link_el = entry.find("atom:link", _NS)
-                        url = link_el.get("href", "") if link_el is not None else ""
-                        published = entry.findtext("atom:published", "", _NS) or ""
-                        content = (entry.findtext("atom:content", "", _NS) or "")[:400]
-                        try:
-                            ts = int(datetime.fromisoformat(published).timestamp()) if published else 0
-                        except Exception:
-                            ts = 0
-                        post_id = url.rstrip("/").split("/")[-1] if url else ""
-                        flair = ""
-                        if title.startswith("["):
-                            end = title.find("]")
-                            if end > 0:
-                                flair = title[1:end]
-                                title = title[end + 1:].strip()
-                        posts.append({
-                            "subreddit":   feed["subreddit"],
-                            "id":          post_id,
-                            "title":       title,
-                            "url":         url,
-                            "flair":       flair,
-                            "created_utc": ts,
-                            "selftext":    content,
-                        })
-                except Exception:
-                    continue
+                    await asyncio.sleep(2)
+                children = await _reddit.fetch_new_posts(client, feed["subreddit"], limit=100)
+                if children:
+                    posts.extend(_reddit_children_to_posts(children, feed["subreddit"]))
         posts.sort(key=lambda p: p["created_utc"], reverse=True)
         if posts:
             _community_cache = posts

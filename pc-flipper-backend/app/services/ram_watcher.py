@@ -14,6 +14,7 @@ import structlog
 
 from app.config import get_settings
 from app.services.alerts import emit_alert
+from app.services import reddit_client as _reddit
 
 log = structlog.get_logger(__name__)
 
@@ -136,17 +137,11 @@ def _price_gbp(title: str) -> float | None:
 
 
 async def _fetch_posts(client: httpx.AsyncClient, feed: dict) -> list[dict]:
-    try:
-        r = await client.get(
-            feed["url"],
-            headers={"User-Agent": "FlipFlop/1.0 component watcher (contact: flipflop-app)"},
-            timeout=15,
-        )
-        r.raise_for_status()
-        return r.json().get("data", {}).get("children", [])
-    except Exception as exc:
-        log.warning("ram_watcher.fetch_failed", subreddit=feed["subreddit"], error=str(exc))
+    posts = await _reddit.fetch_new_posts(client, feed["subreddit"], limit=50)
+    if posts is None:
+        log.warning("ram_watcher.fetch_failed", subreddit=feed["subreddit"], reason="no_oauth_or_error")
         return []
+    return posts
 
 
 async def _send_ntfy(topic: str, title: str, body: str, click_url: str, tags: str = "deal,alert") -> None:

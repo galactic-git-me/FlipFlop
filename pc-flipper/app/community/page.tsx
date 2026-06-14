@@ -79,6 +79,8 @@ export default function CommunityPage() {
   const [filter, setFilter] = useState<string>("all");
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const [noCredentials, setNoCredentials] = useState(false);
+
   const load = async () => {
     try {
       const resp = await fetch(`${API_BASE_URL}/ram-watch/community-feed`);
@@ -86,6 +88,7 @@ export default function CommunityPage() {
         const data: FeedPost[] = await resp.json();
         setPosts(data);
         setLastRefresh(new Date());
+        setNoCredentials(data.length === 0);
       }
     } catch {
       // silent
@@ -168,8 +171,29 @@ export default function CommunityPage() {
           ))}
         </div>
       ) : visible.length === 0 ? (
-        <div className="text-center py-16 text-slate-500 text-sm">
-          No posts loaded yet — Reddit RSS may be rate-limited. Try refreshing in a moment.
+        <div className="text-center py-16">
+          {noCredentials ? (
+            <div className="max-w-md mx-auto space-y-3">
+              <p className="text-amber-400 font-semibold text-sm">Reddit API credentials required</p>
+              <p className="text-slate-500 text-xs leading-relaxed">
+                Reddit now requires OAuth for all API access. Add these to <code className="text-slate-300">.env</code>:
+              </p>
+              <pre className="text-left text-xs bg-white/5 border border-white/10 rounded-lg p-3 text-slate-300 font-mono">
+{`REDDIT_CLIENT_ID=your_id
+REDDIT_CLIENT_SECRET=your_secret
+REDDIT_USER_AGENT=FlipFlop/1.0 by /u/you`}
+              </pre>
+              <p className="text-slate-600 text-xs">
+                Get credentials free at{" "}
+                <a href="https://www.reddit.com/prefs/apps" target="_blank" rel="noopener noreferrer" className="text-[#00dc82] hover:underline">
+                  reddit.com/prefs/apps
+                </a>{" "}
+                → Create app → Script type
+              </p>
+            </div>
+          ) : (
+            <p className="text-slate-500 text-sm">No posts found. Try refreshing in a moment.</p>
+          )}
         </div>
       ) : (
         <div className="space-y-2.5">
