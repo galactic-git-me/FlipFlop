@@ -962,6 +962,10 @@ _RETIRE_NAMES = {
     "Office Workstation Flip",
     "AI / ML Workstation",
     "Budget Builder (Sub-£100)",
+    # Playbooks created by AI proposal/evolution engine — now superseded
+    "Software Engineer Workstation",
+    "High-End Gaming PC",
+    "Mid-Range Gaming PC",
 }
 
 # Old name → new name renames to apply if the old record exists
