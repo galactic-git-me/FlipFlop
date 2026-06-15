@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import { X, Zap, ExternalLink, TrendingUp, Cpu, HardDrive, MemoryStick, RefreshCw } from "lucide-react";
 import { Listing } from "@/lib/types";
 import { api, API_BASE_URL } from "@/lib/api";
-import { formatCurrency, formatRelativeTime } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 
 // ── Fetch super gems ──────────────────────────────────────────────────────────
 async function fetchSuperGems(): Promise<Listing[]> {
@@ -269,10 +269,10 @@ function FlipCard({ listing: l }: { listing: Listing }) {
                   <span>{l.ram_gb}GB RAM</span>
                 </div>
               )}
-              {l.storage && (
+              {l.storage_gb && (
                 <div className="flex items-center gap-1 text-slate-400">
                   <HardDrive className="w-2.5 h-2.5 text-slate-600 flex-shrink-0" />
-                  <span className="truncate">{l.storage.slice(0, 10)}</span>
+                  <span>{l.storage_gb}GB {l.storage_type ?? "SSD"}</span>
                 </div>
               )}
             </div>

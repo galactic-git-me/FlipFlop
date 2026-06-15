@@ -30,6 +30,7 @@ import Link from "next/link";
 import CountUp from "@/components/CountUp";
 import { ManualSubmitModal } from "@/components/manual-submit-modal";
 import { AntiBotPreflightBanner } from "@/components/antibot-preflight-banner";
+import { SuperGemsModal } from "@/components/super-gems-modal";
 
 // ── Column definitions ───────────────────────────────────────────────────────
 const ALL_COLS = [
@@ -1601,9 +1602,11 @@ function ListingsTrackedCard({ total, bySource }: { total: number; bySource: Rec
 
 // ── Gems Found ────────────────────────────────────────────────────────────────
 function GemsFoundCard({ total, superGems, bySource }: { total: number; superGems: number; bySource: Record<string, number> }) {
-  const router = useRouter();
+  const [showGemsModal, setShowGemsModal] = useState(false);
 
   return (
+    <>
+      <SuperGemsModal open={showGemsModal} onClose={() => setShowGemsModal(false)} />
     <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
       <CardContent className="pt-5 pb-5 min-h-[220px]">
         <div className="flex items-center justify-between mb-2">
@@ -1615,7 +1618,7 @@ function GemsFoundCard({ total, superGems, bySource }: { total: number; superGem
         </div>
         {superGems > 0 && (
           <button
-            onClick={() => router.push("/super-gems")}
+            onClick={() => setShowGemsModal(true)}
             className="mt-2 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-cyan-400/10 border border-cyan-400/25 hover:bg-cyan-400/20 transition-colors cursor-pointer"
           >
             <Zap className="w-3 h-3 text-cyan-300" />
@@ -1637,6 +1640,7 @@ function GemsFoundCard({ total, superGems, bySource }: { total: number; superGem
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
 
