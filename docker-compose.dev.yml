@@ -9,6 +9,10 @@ services:
       NODE_ENV: development
       BACKEND_URL: http://backend:8000
       NEXT_PUBLIC_API_URL: /api
+      # Forces Next.js to use polling instead of inotify — required on Linux
+      # containers where inotify events from volume mounts are unreliable.
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./pc-flipper:/app
       - /app/node_modules
@@ -17,4 +21,4 @@ services:
   backend:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      - ./pc-flipper-backend/app:/app/app
+      - ./pc-flipper-backend:/app
