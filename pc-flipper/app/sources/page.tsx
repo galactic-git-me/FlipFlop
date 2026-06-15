@@ -298,11 +298,15 @@ function TermsPanel({ terms, telemetry, scheduleJobs, tick }: {
     if (s in byScope && t.enabled) byScope[s].push(t);
   }
 
-  // Dynamic top vendors
+  // Dynamic top vendors — Vinted is always pinned as a column
   const topVendors = computeTopVendors(telemetry, 5);
-  const vendorNames = topVendors.length > 0
+  const topNames = topVendors.length > 0
     ? topVendors.map(([v]) => v)
     : [EBAY_CANONICAL, "Gumtree", "Amazon", "BargainHardware"];
+  // Insert Vinted after the first column if not already present
+  const vendorNames = topNames.includes("Vinted")
+    ? topNames
+    : [topNames[0], "Vinted", ...topNames.slice(1)];
   const vendorTotals = Object.fromEntries(topVendors);
 
   // Scope → job status map

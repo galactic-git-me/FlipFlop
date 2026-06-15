@@ -1667,35 +1667,89 @@ function AvgProfitCard({ avg, minProfit, maxProfit, compact = false }: { avg: nu
   );
 }
 
-function GemHighlightCard({ period, listing }: { period: "day" | "week"; listing: Listing | null }) {
+const BASIC_MODE_BUDGET = 500;
+
+function GemHighlightCard({ period, candidates }: { period: "day" | "week"; candidates: Listing[] }) {
+  const [basicMode, setBasicMode] = useState(false);
   const label = period === "day" ? "Gem of the Day" : "Gem of the Week";
+
+  const listing = basicMode
+    ? (candidates.find(l => l.price + (l.estimated_upgrade_cost ?? 0) <= BASIC_MODE_BUDGET) ?? null)
+    : (candidates[0] ?? null);
+
+  const emptyMsg = basicMode
+    ? `No gem under £${BASIC_MODE_BUDGET} found`
+    : "No qualifying listing yet";
+
+  const header = (
+    <div className="flex items-center justify-between mb-1.5">
+      <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setBasicMode(m => !m)}
+          title={basicMode ? "Showing listings under £500 total — click to disable" : "Enable basic mode (under £500 total budget)"}
+          className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[9px] font-bold uppercase tracking-wider transition-colors ${
+            basicMode
+              ? "bg-amber-400/20 border-amber-400/50 text-amber-300"
+              : "bg-white/5 border-white/10 text-slate-500 hover:text-slate-300"
+          }`}
+        >
+          <span>Basic</span>
+          {basicMode && <span className="text-amber-400">£{BASIC_MODE_BUDGET}</span>}
+        </button>
+        <Gem className="w-4 h-4 text-[#00dc82]/70" />
+      </div>
+    </div>
+  );
+
   if (!listing) {
     return (
       <Card className="border-[#00dc82]/20 bg-[#03150e]/45">
         <CardContent className="pt-4 pb-4">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
-            <Gem className="w-4 h-4 text-[#00dc82]/70" />
-          </div>
-          <div className="text-base text-slate-500">No qualifying listing yet</div>
+          {header}
+          <div className="text-base text-slate-500">{emptyMsg}</div>
         </CardContent>
       </Card>
     );
   }
+
   const resale = listing.estimated_resale ?? 0;
   const upgradeCost = listing.estimated_upgrade_cost ?? 0;
-  // Compute profit consistently from the values we display (buy + upgrade → resale)
-  // rather than the stored estimated_profit which can be stale / computed differently.
+  const totalCost = listing.price + upgradeCost;
   const profit = resale > 0
-    ? resale - listing.price - upgradeCost
+    ? resale - totalCost
     : (listing.estimated_profit ?? 0);
+
   return (
     <Card className="border-[#00dc82]/25 bg-[#03150e]/55">
       <CardContent className="pt-4 pb-4 space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="text-[10px] text-[#7ce7b6] font-semibold uppercase tracking-[0.18em]">{label}</span>
-          <Gem className="w-4 h-4 text-[#00dc82]" />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setBasicMode(m => !m)}
+              title={basicMode ? "Showing listings under £500 total — click to disable" : "Enable basic mode (under £500 total budget)"}
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[9px] font-bold uppercase tracking-wider transition-colors ${
+                basicMode
+                  ? "bg-amber-400/20 border-amber-400/50 text-amber-300"
+                  : "bg-white/5 border-white/10 text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              <span>Basic</span>
+              {basicMode && <span className="text-amber-400">£{BASIC_MODE_BUDGET}</span>}
+            </button>
+            <Gem className="w-4 h-4 text-[#00dc82]" />
+          </div>
         </div>
+
+        {basicMode && (
+          <div className="flex items-center gap-1.5 text-[9px] text-amber-400/80 bg-amber-400/8 border border-amber-400/20 rounded-md px-2 py-1">
+            <span>Budget mode: buy + upgrade ≤ £{BASIC_MODE_BUDGET}</span>
+            {totalCost <= BASIC_MODE_BUDGET && (
+              <span className="ml-auto font-bold text-amber-300">Total {formatCurrency(totalCost)}</span>
+            )}
+          </div>
+        )}
 
         <div className="flex gap-3">
           <div className="w-20 h-20 rounded-lg overflow-hidden border border-[#00dc82]/20 bg-black/20 shrink-0">
