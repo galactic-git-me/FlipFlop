@@ -413,8 +413,8 @@ async def get_resale_range(
         high     = round(median * 1.12, 2)
         result   = ResaleRange(low=low, median=median, high=high,
                                count=0, query=query)
-        log.info("resale_scraper.fallback_buy_price",
-                 query=query, buy_price=buy_price, median=median)
+        log.debug("resale_scraper.fallback_buy_price",
+                  query=query, buy_price=buy_price, median=median)
         # Do NOT cache — specific to this listing's price
 
     else:
@@ -428,7 +428,7 @@ async def get_resale_range(
             count=0,
             query=query,
         )
-        log.info("resale_scraper.fallback_static", query=query, static=static)
+        log.debug("resale_scraper.fallback_static", query=query, static=static)
         _cache[key] = result
 
     return result
