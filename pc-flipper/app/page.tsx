@@ -79,8 +79,8 @@ export default function DashboardPage() {
   const [flips, setFlips] = useState<Flip[]>([]);
   const [stats, setStats] = useState({ total_listings: 0, gems_count: 0, super_gems_count: 0, avg_profit: 0, min_profit: 0, max_profit: 0, claude_judged_count: 0, claude_eval_queue: 0, claude_unjudged_count: 0, by_source_listings: {} as Record<string,number>, by_source_gems: {} as Record<string,number> });
   const [swarms, setSwarms] = useState<{ id: string; name: string; next_run: string | null }[]>([]);
-  const [gemOfDay, setGemOfDay] = useState<Listing | null>(null);
-  const [gemOfWeek, setGemOfWeek] = useState<Listing | null>(null);
+  const [gemDayCandidates, setGemDayCandidates] = useState<Listing[]>([]);
+  const [gemWeekCandidates, setGemWeekCandidates] = useState<Listing[]>([]);
   const [searchConfig, setSearchConfig] = useState<SearchConfig | null>(null);
   const [sources, setSources] = useState<DataSource[]>([]);
   const [activePlaybooks, setActivePlaybooks] = useState<Playbook[]>([]);
@@ -159,26 +159,26 @@ export default function DashboardPage() {
         step((async () => {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", claude_judged_only: "true",
+            limit: "10", gem_only: "true", claude_judged_only: "true",
             whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>);
         })(), 12000),
         // Gem of Week: prefer Claude-confirmed gems; fall back to rule-based. whole_pc_only excludes components.
         step((async () => {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", claude_judged_only: "true",
+            limit: "10", gem_only: "true", claude_judged_only: "true",
             whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>);
         })(), 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
@@ -214,14 +214,10 @@ export default function DashboardPage() {
       setActivePlaybooks(pbs);
       setDemandSummary(demand);
       setAuctionIntel(auctions);
-      setGemOfDay(godResults[0] ?? null);
-      // Only show week gem if it differs from day gem
-      const gowListing = gowResults[0] ?? null;
-      setGemOfWeek(
-        gowListing && godResults[0] && gowListing.id === godResults[0].id
-          ? null
-          : gowListing
-      );
+      setGemDayCandidates(godResults);
+      // Deduplicate: exclude from week candidates any listing that appears in day candidates
+      const dayIds = new Set(godResults.map((l: Listing) => l.id));
+      setGemWeekCandidates(gowResults.filter((l: Listing) => !dayIds.has(l.id)));
     } catch {
       // API offline — show empty state
     } finally {
@@ -298,16 +294,17 @@ export default function DashboardPage() {
           api.listings.stats(),
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
           }) as Promise<Listing[]>,
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "1", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
           }) as Promise<Listing[]>,
         ]);
         setStats(s as typeof stats);
-        setGemOfDay((godResults as Listing[])[0] ?? null);
-        setGemOfWeek((gowResults as Listing[])[0] ?? null);
+        setGemDayCandidates(godResults as Listing[]);
+        const pollDayIds = new Set((godResults as Listing[]).map(l => l.id));
+        setGemWeekCandidates((gowResults as Listing[]).filter(l => !pollDayIds.has(l.id)));
       } catch { }
     }, 30_000);
     return () => {
@@ -587,8 +584,8 @@ export default function DashboardPage() {
           <NextScanCard swarm={swarms[0] ?? null} intervalMinutes={60} compact />
         </div>
         <div className="grid grid-rows-2 gap-3">
-          <GemHighlightCard period="day" listing={gemOfDay} />
-          <GemHighlightCard period="week" listing={gemOfWeek} />
+          <GemHighlightCard period="day" candidates={gemDayCandidates} />
+          <GemHighlightCard period="week" candidates={gemWeekCandidates} />
         </div>
       </div>
 
