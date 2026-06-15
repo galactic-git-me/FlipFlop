@@ -224,6 +224,10 @@ export interface PlaybookPricingModel {
   minimum_build_cost?: number;
   expected_build_cost?: number;
   maximum_build_cost?: number;
+  sell_target_min?: number;
+  sell_target_exp?: number;
+  sell_target_max?: number;
+  [key: string]: number | undefined;
 }
 
 export interface PlaybookProfitModel {
