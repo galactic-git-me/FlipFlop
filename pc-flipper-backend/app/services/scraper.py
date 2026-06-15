@@ -1992,6 +1992,8 @@ async def fetch_listings(
             max_price=max_price,
         )
         rows = []
+        # Track per-term counts for the sourcing telemetry table
+        term_counts: dict[str, int] = {}
         for d in raw_dicts:
             rows.append(RawListing(
                 external_id=d["external_id"],
@@ -2007,6 +2009,10 @@ async def fetch_listings(
                 seller_name=d.get("seller_name"),
                 found_via_term=d.get("found_via_term", ""),
             ))
+            t = d.get("found_via_term") or "vinted"
+            term_counts[t] = term_counts.get(t, 0) + 1
+        for term, count in term_counts.items():
+            record_term_result(term=term, found=count, new=count, source_name="Vinted")
         return rows
 
     if "cherrytree" in name:

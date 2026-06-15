@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X, Zap, ExternalLink, TrendingUp, Cpu, HardDrive, MemoryStick, RefreshCw } from "lucide-react";
 import { Listing } from "@/lib/types";
 import { api, API_BASE_URL } from "@/lib/api";
@@ -56,7 +57,7 @@ export function SuperGemsModal({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[200] flex flex-col bg-black/85 backdrop-blur-md"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
@@ -107,7 +108,8 @@ export function SuperGemsModal({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
