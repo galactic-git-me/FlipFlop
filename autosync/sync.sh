@@ -60,6 +60,11 @@ while true; do
     TS="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
     git commit -m "$COMMIT_MSG_PREFIX ($TS)"
     COMMIT_RC=$?
+    # Re-touch any TS/TSX files in the commit so Next.js HMR fires correctly.
+    # git commit doesn't update file mtimes, which silently breaks HMR.
+    git diff-tree --no-commit-id -r --name-only HEAD 2>/dev/null \
+      | grep -E '\.(ts|tsx|css|js|jsx)$' \
+      | xargs -r touch --
   else
     COMMIT_RC=0
   fi

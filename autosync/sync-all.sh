@@ -74,6 +74,10 @@ sync_repo() {
     local ts
     ts="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
     git commit -m "$COMMIT_MSG_PREFIX ($ts)" || commit_rc=$?
+    # Re-touch TS/TSX/JS/CSS files so Next.js HMR fires — git commit doesn't update mtimes.
+    git diff-tree --no-commit-id -r --name-only HEAD 2>/dev/null \
+      | grep -E '\.(ts|tsx|css|js|jsx)$' \
+      | xargs -r touch --
   fi
 
   if git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
