@@ -339,6 +339,38 @@ async def re_evaluate_listing(listing_id: int, db: AsyncSession = Depends(get_db
     return {"ok": True, "queued": True, "listing_id": listing_id}
 
 
+@router.post("/force-eval-source")
+async def force_eval_source(
+    source_name: str = Query(...),
+    limit: int = Query(2000, le=5000),
+    db: AsyncSession = Depends(get_db),
+):
+    """Force Claude evaluation of ALL active listings from a given source,
+    bypassing the should_queue_for_claude gem-only gate. Clears previous verdicts."""
+    from app.services.claude_eval_queue import enqueue_for_claude, queue_size
+    result = await db.execute(
+        select(Listing)
+        .where(
+            Listing.source_name == source_name,
+            Listing.status == ListingStatus.active,
+        )
+        .order_by(Listing.gem_score.desc().nulls_last())
+        .limit(limit)
+    )
+    listings = result.scalars().all()
+    for listing in listings:
+        listing.claude_judged_at = None
+    await db.commit()
+    queued = sum(1 for l in listings if enqueue_for_claude(l.id))
+    return {
+        "ok": True,
+        "source": source_name,
+        "queued": queued,
+        "total": len(listings),
+        "queue_size": queue_size(),
+    }
+
+
 @router.post("/queue-for-claude")
 async def queue_unjudged_for_claude(
     limit: int = Query(500, le=5000),
