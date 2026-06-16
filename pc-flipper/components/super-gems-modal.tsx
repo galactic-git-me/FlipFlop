@@ -29,8 +29,11 @@ export function SuperGemsModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const [mounted, setMounted] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -55,7 +58,7 @@ export function SuperGemsModal({
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!mounted || !open) return null;
 
   return createPortal(
     <div
