@@ -517,7 +517,7 @@ async def _fetch_amazon(search_term: str) -> tuple[float | None, int]:
         item_selector='[data-component-type="s-search-result"]',
         title_selector='h2 span, h2',
         link_selector='h2 a, a.a-link-normal[href*="/dp/"]',
-        price_selector='.a-price-whole',
+        price_selector='.a-price',  # .a-price-whole has no £ symbol; .a-price includes the offscreen £ text
         source_name="amazon",
         max_price=2500.0,
     )
