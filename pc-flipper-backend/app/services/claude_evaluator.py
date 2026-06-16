@@ -151,29 +151,23 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     raw: str | None = None
     model_used = "none"
 
-    # 1 — Ollama local (primary — free, always available)
-    if not raw and _s.ollama_base_url:
+    # 1 — Anthropic Claude Haiku (primary — fast, reliable, structured JSON)
+    if not raw and _s.anthropic_api_key:
         try:
-            import httpx
-            async with httpx.AsyncClient(timeout=180) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
+            import anthropic
+            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
+            resp = await client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=512,
+                system=EVAL_SYSTEM,
+                messages=messages,
+            )
+            raw = resp.content[0].text if resp.content else None
+            model_used = "claude-haiku-4-5"
         except Exception as exc:
-            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
+            log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
-    # 2 — OpenRouter (fallback when Ollama unavailable)
+    # 2 — OpenRouter (fallback when Anthropic unavailable)
     if not raw and _s.openrouter_api_key:
         import httpx
         for attempt in range(4):
@@ -214,21 +208,27 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 if attempt == 3:
                     break
 
-    # 3 — Anthropic Claude (last resort)
-    if not raw and _s.anthropic_api_key:
+    # 3 — Ollama local (last resort — free but slow)
+    if not raw and _s.ollama_base_url:
         try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=512,
-                system=EVAL_SYSTEM,
-                messages=messages,
-            )
-            raw = resp.content[0].text if resp.content else None
-            model_used = "claude-haiku-4-5"
+            import httpx
+            async with httpx.AsyncClient(timeout=180) as client:
+                resp = await client.post(
+                    f"{_s.ollama_base_url}/api/chat",
+                    json={
+                        "model": _s.ollama_model,
+                        "messages": [
+                            {"role": "system", "content": EVAL_SYSTEM},
+                            {"role": "user", "content": prompt},
+                        ],
+                        "stream": False,
+                    },
+                )
+                resp.raise_for_status()
+                raw = resp.json().get("message", {}).get("content")
+                model_used = f"ollama/{_s.ollama_model}"
         except Exception as exc:
-            log.warning("claude_evaluator.anthropic_failed", error=str(exc))
+            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
 
     if not raw:
         return None
