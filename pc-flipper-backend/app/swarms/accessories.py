@@ -201,7 +201,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
         } for r in rows if str(r.term or "").strip()]
     terms_by_vendor: dict[str, list[str]] = {}
     for d in search_defs:
-        srcs = d.get("source_names") or ["eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
+        srcs = d.get("source_names") or ["eBay", "Gumtree", "Vinted", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"]
         for s in srcs:
             terms_by_vendor.setdefault(str(s), []).append(d["term"])
     terms_by_vendor = {k: list(dict.fromkeys(v)) for k, v in terms_by_vendor.items()}
@@ -230,6 +230,11 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                     direct_tasks.append((
                         "Accessories:Gumtree",
                         asyncio.create_task(_scrape_gumtree_accessories(term, theme)),
+                    ))
+                if term in vendor_term_sets.get("Vinted", set()):
+                    direct_tasks.append((
+                        "Accessories:Vinted",
+                        asyncio.create_task(_scrape_vinted_accessories(term, theme)),
                     ))
 
                 if direct_tasks:
@@ -397,6 +402,32 @@ async def _scrape_gumtree_accessories(term: str, theme: str) -> list[RawAccessor
     except Exception as exc:
         log.warning("gumtree.accessories.error", term=term, error=str(exc))
         return []
+    return out
+
+
+async def _scrape_vinted_accessories(term: str, theme: str) -> list[RawAccessory]:
+    out: list[RawAccessory] = []
+    try:
+        from app.scrapers.vinted_scraper import fetch_vinted_listings
+        rows = await fetch_vinted_listings(search_terms=[term], min_price=1, max_price=int(MAX_PRICE))
+        for r in rows[:24]:
+            title = str(r.get("title", "")).strip()
+            price = float(r.get("price", 0) or 0)
+            url = str(r.get("url", ""))
+            if not title or price <= 0 or not url:
+                continue
+            imgs = r.get("image_urls") or []
+            out.append(RawAccessory(
+                name=title[:200],
+                price=price,
+                source_site="Vinted",
+                source_url=url,
+                image_url=imgs[0] if imgs else "",
+                theme=theme,
+                condition=PartCondition.used,
+            ))
+    except Exception as exc:
+        log.debug("vinted.accessories.error", term=term, error=str(exc))
     return out
 
 
