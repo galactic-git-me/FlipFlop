@@ -19,6 +19,6 @@ services:
       - /app/.next
 
   backend:
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-graceful-shutdown 5
     volumes:
       - ./pc-flipper-backend:/app
