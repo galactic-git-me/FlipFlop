@@ -241,9 +241,12 @@ async def get_listing_stats(
             func.min(_gem_profit).label("min_profit"),
             func.max(_gem_profit).label("max_profit"),
         ).select_from(Listing)
-        .where(*(
-            [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
-        ))
+        .where(
+            Listing.status == ListingStatus.active,
+            *(
+                [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
+            ),
+        )
     )
     r = row.one()
 
@@ -251,9 +254,12 @@ async def get_listing_stats(
     src_rows = await db.execute(
         select(Listing.source_name, func.count().label("cnt"))
         .select_from(Listing)
-        .where(*(
-            [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
-        ))
+        .where(
+            Listing.status == ListingStatus.active,
+            *(
+                [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
+            ),
+        )
         .group_by(Listing.source_name)
     )
     by_source_listings: dict[str, int] = {row.source_name: int(row.cnt) for row in src_rows}
@@ -262,6 +268,7 @@ async def get_listing_stats(
         select(Listing.source_name, func.count().label("cnt"))
         .select_from(Listing)
         .where(
+            Listing.status == ListingStatus.active,
             *(
                 [Listing.first_seen_at >= first_seen_after.replace(tzinfo=None)] if first_seen_after else []
             ),
