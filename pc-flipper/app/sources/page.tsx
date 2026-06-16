@@ -83,11 +83,23 @@ function computeTopVendors(telemetry: Record<string, SearchTelemetryItem[]>, max
 
 interface LogLine { ts: string; level: string; msg: string; extra: Record<string, string>; }
 
+// Next.js rewrites buffer SSE — connect directly to the backend port so the
+// stream arrives in real-time instead of hanging until the connection closes.
+function sseUrl(path: string): string {
+  if (typeof window === "undefined") return "";
+  const direct = process.env.NEXT_PUBLIC_SSE_URL;
+  if (direct) return `${direct}${path}`;
+  // Derive from current hostname + backend port (4311 in dev, same as API_BASE_URL host in prod)
+  const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
+  if (apiBase.startsWith("http")) return `${apiBase}${path}`;
+  return `${window.location.protocol}//${window.location.hostname}:4311${path}`;
+}
+
 function useLogStream() {
   const [lines, setLines] = useState<LogLine[]>([]);
   useEffect(() => {
     let mounted = true;
-    const es = new EventSource(`${API_BASE_URL}/logs/stream`);
+    const es = new EventSource(sseUrl("/api/logs/stream"));
     es.onmessage = (e) => {
       if (!mounted) return;
       try {
