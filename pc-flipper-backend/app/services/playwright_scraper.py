@@ -1557,9 +1557,8 @@ async def scrape_bidspotter_playwright(
     """
     def url_fn(term, lo, hi):
         return (
-            f"https://www.bidspotter.co.uk/en-us/auction-catalogues"
-            f"?search={term.replace(' ', '+')}"
-            f"&country=gb"
+            f"https://www.bidspotter.co.uk/en-us/search-results"
+            f"?searchTerm={term.replace(' ', '+')}"
         )
 
     async with managed_playwright() as p:
@@ -1568,34 +1567,28 @@ async def scrape_bidspotter_playwright(
             site_name="BidSpotter",
             search_url_fn=url_fn,
             lot_selectors=[
-                ".bsp-lot-card",
-                "[class*='lot-card']",
-                ".item-card",
-                "[class*='item-card']",
-                ".auction-item",
-                "[class*='auction-item']",
+                ".lot-single",
+                "[class*='lot-single']",
                 "li[class*='lot']",
-                "article",
             ],
             title_selectors=[
-                ".bsp-lot-card__title", ".lot-title", ".item-title",
-                "h3", "h2", "[class*='title']", "a"
+                "h3 a", ".lot-title", "[class*='title']", "a"
             ],
             price_selectors=[
-                ".bsp-lot-card__estimate", ".estimate", ".current-bid",
-                "[class*='estimate']", "[class*='price']", "[class*='bid']"
+                "#openingPrice-* span strong", ".opening-price strong",
+                "[id*='openingPrice'] strong", "[class*='price'] strong",
+                "[class*='bid'] strong", "strong",
             ],
             link_selectors=[
-                "a[href*='/lot/']", "a[href*='/lots/']",
-                "a[href*='/auction-catalogues/']", "a[href]"
+                "a[href*='/lot-']", "a[href*='/catalogue-id-']", "a[href]"
             ],
             search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
-            wait_selector=".bsp-lot-card, .item-card, .auction-item, [class*='lot-card'], article",
+            wait_selector=".lot-single, [class*='lot-single']",
             base_url="https://www.bidspotter.co.uk",
-            required_href_tokens=None,
-            enforce_pc_keywords=False,
+            required_href_tokens=["/lot-"],
+            enforce_pc_keywords=True,
             strict_price_cap=False,
         )
 
