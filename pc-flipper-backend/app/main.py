@@ -281,7 +281,7 @@ async def lifespan(app: FastAPI):
     # Run preflight asynchronously so API stays responsive while challenge tabs open.
     asyncio.create_task(run_antibot_preflight())
     start_workers(n=4)
-    start_eval_workers(n=2)  # two staggered workers — Anthropic when available, Ollama fallback
+    start_eval_workers()  # worker count set in claude_eval_queue._NUM_WORKERS
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     asyncio.create_task(_queue_unevaluated_gems())  # auto-queue gems on startup
