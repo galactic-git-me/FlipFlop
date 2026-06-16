@@ -44,6 +44,7 @@ _COOLDOWN_BYPASS_SOURCES = {
     "Gumtree",
     "Preloved",
     "BidSpotter",
+    "Lots.co.uk",
     "i-bidder",
     "Wilsons Auctions",
     "Apex Auctions",

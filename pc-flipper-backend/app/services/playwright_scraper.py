@@ -1600,6 +1600,60 @@ async def scrape_bidspotter_playwright(
         )
 
 
+async def scrape_lots_co_uk_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    Lots.co.uk — UK auction aggregator with frequent corporate IT liquidation
+    lots (ex-lease desktops, workstation pallets, office clearances).
+    """
+    def url_fn(term, lo, hi):
+        return (
+            f"https://www.lots.co.uk/search"
+            f"?q={term.replace(' ', '+')}"
+        )
+
+    async with managed_playwright() as p:
+        return await _scrape_auction_site(
+            p,
+            site_name="Lots.co.uk",
+            search_url_fn=url_fn,
+            lot_selectors=[
+                ".lot-card",
+                "[class*='lot-card']",
+                ".search-result-item",
+                "[class*='search-result']",
+                "article.lot",
+                ".auction-lot",
+                "li[class*='lot']",
+                "div[class*='lot']",
+                "article",
+            ],
+            title_selectors=[
+                ".lot-title", ".lot-card__title", "h3", "h2",
+                "[class*='title']", "a[title]", "a"
+            ],
+            price_selectors=[
+                ".current-bid", ".estimate", "[class*='price']",
+                "[class*='bid']", "[class*='estimate']", "strong"
+            ],
+            link_selectors=[
+                "a[href*='/lot/']", "a[href*='/lots/']",
+                "a[href*='/auction/']", "a[href]"
+            ],
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            wait_selector=".lot-card, .search-result-item, article, [class*='lot-card']",
+            base_url="https://www.lots.co.uk",
+            required_href_tokens=None,
+            enforce_pc_keywords=False,
+            strict_price_cap=False,
+        )
+
+
 def _load_fb_cookies() -> list | None:
     """Load Facebook session cookies from fb_cookies.json if it exists."""
     if not FB_COOKIES_PATH.exists():
