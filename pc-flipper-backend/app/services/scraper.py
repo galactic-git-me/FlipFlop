@@ -1973,15 +1973,11 @@ async def fetch_listings(
         )
 
     if "bargainhardware" in name or "bargain hardware" in name:
-        return await _scrape_generic_marketplace_listings(
-            source_name="BargainHardware",
+        from app.services.playwright_scraper import scrape_bargainhardware_playwright
+        return await scrape_bargainhardware_playwright(
             search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
-            build_url=lambda term: f"https://www.bargainhardware.eu/de/catalogsearch/result/?q={term.replace(' ', '+')}",
-            item_selector='li.product-item',
-            link_selector='a[href*="/de/"][title]',
-            title_selector='.product-item-link, a[title]',
         )
 
     if "vinted" in name:

@@ -1644,3 +1644,164 @@ def _load_fb_cookies() -> list | None:
             record_term_result(term=term, found=0, new=0, error=reason, source_name="Facebook Marketplace")
         log.info("facebook.playwright.deferred", reason=reason)
         return []
+
+
+# ── BargainHardware ──────────────────────────────────────────────────────────
+
+async def scrape_bargainhardware_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    BargainHardware.eu — blocked by Cloudflare managed challenge with plain
+    httpx, so we use a real headless browser with anti-detection stealth.
+
+    REQUIREMENT: playwright install chromium
+    """
+    results: list[RawListing] = []
+    seen: set[str] = set()
+
+    async with managed_playwright() as p:
+        try:
+            browser, context = await _launch_browser(p)
+        except Exception:
+            return []
+
+        page = await context.new_page()
+
+        for term in search_terms[:8]:
+            try:
+                url = (
+                    "https://www.bargainhardware.co.uk/catalogsearch/result/"
+                    f"?q={term.replace(' ', '+')}"
+                )
+                log.info("bargainhardware.playwright.fetch", term=term, url=url)
+                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+                # Scroll to trigger lazy-loaded Magento product grid
+                await asyncio.sleep(1.0)
+                await page.evaluate("window.scrollBy(0, 700)")
+                await asyncio.sleep(0.7)
+                await page.evaluate("window.scrollBy(0, 1200)")
+                await asyncio.sleep(0.5)
+
+                # Detect Cloudflare challenge page
+                page_title = await page.title()
+                if "just a moment" in page_title.lower() or "checking your" in page_title.lower():
+                    log.warning("bargainhardware.playwright.cloudflare_challenge", term=term)
+                    # Wait longer for CF challenge to resolve
+                    await asyncio.sleep(8)
+                    page_title = await page.title()
+                    if "just a moment" in page_title.lower():
+                        record_term_result(term=term, found=0, new=0, error="cloudflare_blocked", source_name="BargainHardware")
+                        continue
+
+                raw = await page.evaluate(
+                    """() => {
+                        const out = [];
+                        const re = /(?:[£€$])\\s*([\\d,]+\\.?\\d*)/i;
+
+                        // Primary: structured product cards (Magento li.product-item)
+                        const cards = document.querySelectorAll('li.product-item, .product-item, [data-price-amount]');
+                        cards.forEach(card => {
+                            if (out.length >= 30) return;
+                            const priceAttr = card.getAttribute('data-price-amount')
+                                || card.querySelector('[data-price-amount]')?.getAttribute('data-price-amount')
+                                || '';
+                            let price = parseFloat((priceAttr || '').replace(/,/g, ''));
+                            if (!Number.isFinite(price) || price <= 0) {
+                                const m = re.exec(card.textContent || '');
+                                price = m ? parseFloat((m[1] || '').replace(/,/g, '')) : 0;
+                            }
+                            const linkEl = card.querySelector('a[href]');
+                            let href = linkEl ? (linkEl.href || linkEl.getAttribute('href') || '') : '';
+                            if (href.startsWith('/')) href = location.origin + href;
+                            const titleEl = card.querySelector('.product-item-link, a[title], h2, h3');
+                            const title = (
+                                titleEl?.getAttribute('title')
+                                || titleEl?.textContent
+                                || ''
+                            ).replace(/\\s+/g, ' ').trim();
+                            const img = (card.querySelector('img')?.src || '');
+                            if (!href || !title || title.length < 5 || !Number.isFinite(price) || price <= 0) return;
+                            out.push({title, href, price, img});
+                        });
+
+                        // Fallback: generic anchor sweep for any remaining products
+                        if (out.length === 0) {
+                            const seen = new Set(out.map(x => x.href.split('?')[0]));
+                            const anchors = Array.from(document.querySelectorAll('a[href]')).slice(0, 500);
+                            for (const a of anchors) {
+                                if (out.length >= 30) break;
+                                let href = a.href || a.getAttribute('href') || '';
+                                if (!href || href.includes('catalogsearch') || href.includes('#')) continue;
+                                if (href.startsWith('/')) href = location.origin + href;
+                                const key = href.split('?')[0];
+                                if (seen.has(key)) continue;
+                                const node = a.closest('article,li,div') || a;
+                                const title = ((a.title || a.textContent || node.textContent || '').replace(/\\s+/g, ' ').trim());
+                                if (!title || title.length < 8) continue;
+                                const m = re.exec(node.textContent || '');
+                                if (!m) continue;
+                                const price = parseFloat((m[1] || '').replace(/,/g, ''));
+                                if (!Number.isFinite(price) || price <= 0) continue;
+                                const img = (node.querySelector('img')?.src || '');
+                                seen.add(key);
+                                out.push({title, href, price, img});
+                            }
+                        }
+                        return out;
+                    }"""
+                )
+
+                term_added = 0
+                for item in raw or []:
+                    try:
+                        title = str(item.get("title", "")).strip()[:200]
+                        price = float(item.get("price", 0) or 0)
+                        href = str(item.get("href", ""))
+                        img = str(item.get("img", ""))
+
+                        if not title or len(title) < 5 or price <= 0:
+                            continue
+                        if price < min_price or price > max_price:
+                            continue
+                        if not href.startswith("http"):
+                            continue
+
+                        external_id = f"bargainhardware_{abs(hash(href.split('?')[0]))}"
+                        if external_id in seen:
+                            continue
+                        seen.add(external_id)
+
+                        results.append(RawListing(
+                            external_id=external_id,
+                            title=title,
+                            price=price,
+                            url=href,
+                            location=None,
+                            condition="refurb",
+                            description="",
+                            image_urls=[img] if img else [],
+                            source_name="BargainHardware",
+                        ))
+                        term_added += 1
+                    except Exception:
+                        continue
+
+                log.info("bargainhardware.playwright.term_done", term=term, found=term_added)
+                record_term_result(term=term, found=term_added, new=term_added, source_name="BargainHardware")
+
+            except Exception as exc:
+                log.error("bargainhardware.playwright.error", term=term, error=str(exc))
+                record_term_result(term=term, found=0, new=0, error=str(exc)[:120], source_name="BargainHardware")
+                continue
+
+        try:
+            await browser.close()
+        except Exception:
+            pass
+
+    log.info("bargainhardware.playwright.done", total=len(results))
+    return results
