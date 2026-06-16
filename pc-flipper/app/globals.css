@@ -320,3 +320,8 @@ body {
     padding-right: 1rem;
   }
 }
+
+@keyframes flipflop-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

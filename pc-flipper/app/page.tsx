@@ -1149,12 +1149,6 @@ function LatestListingsCarousel({
   const items = [...listings, ...listings];
   return (
     <div className="border-t border-[#1e2d45] bg-[#050b14]/98 backdrop-blur-md shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
-      <style>{`
-        @keyframes flipflop-marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
       <div className="px-4 pt-1.5 pb-0.5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Gem className="w-3.5 h-3.5 text-[#00dc82]" />
