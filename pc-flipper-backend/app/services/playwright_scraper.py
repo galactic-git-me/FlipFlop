@@ -1575,8 +1575,8 @@ async def scrape_bidspotter_playwright(
                 "h3 a", ".lot-title", "[class*='title']", "a"
             ],
             price_selectors=[
-                "#openingPrice-* span strong", ".opening-price strong",
-                "[id*='openingPrice'] strong", "[class*='price'] strong",
+                ".opening-price strong",
+                "[id^='openingPrice'] strong", "[class*='price'] strong",
                 "[class*='bid'] strong", "strong",
             ],
             link_selectors=[
