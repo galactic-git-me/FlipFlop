@@ -50,6 +50,7 @@ SOURCES = [
     {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
     {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
     {"name": "Gumtree",           "fn": "gumtree"},
+    {"name": "Vinted",            "fn": "vinted"},          # httpx — secondhand UK
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
     {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
     {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
@@ -398,6 +399,32 @@ async def _scrape_gumtree(search: str, theme: str) -> list[RawCase]:
         return out
     except Exception as exc:
         log.warning("gumtree.cases.error", term=search, error=str(exc))
+        return []
+
+
+async def _scrape_vinted(search: str, theme: str) -> list[RawCase]:
+    try:
+        from app.scrapers.vinted_scraper import fetch_vinted_listings
+        rows = await fetch_vinted_listings(search_terms=[search], min_price=1, max_price=350)
+        out: list[RawCase] = []
+        for r in rows[:20]:
+            title = str(r.get("title", "")).strip()
+            price = float(r.get("price", 0) or 0)
+            url = str(r.get("url", ""))
+            if not title or price <= 0 or not url:
+                continue
+            imgs = r.get("image_urls") or []
+            out.append(RawCase(
+                name=title[:200],
+                price=price,
+                source_site="Vinted",
+                source_url=url,
+                image_url=imgs[0] if imgs else "",
+                theme=theme,
+            ))
+        return out
+    except Exception as exc:
+        log.debug("vinted.cases.error", term=search, error=str(exc))
         return []
 
 

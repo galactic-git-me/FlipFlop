@@ -256,7 +256,11 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
         if v and not isinstance(v, Exception):
             stats["box"] += 1
 
-    # ── Phase 3b: Amazon / Temu / AliExpress — sequential per vendor, parallel across vendors ───
+    # ── Phase 3b: Amazon / Temu / AliExpress / Vinted — sequential per vendor, parallel across vendors ───
+    # Vinted uses HTTP (no Playwright) so always runs regardless of has_chromium.
+    vint_r, = await asyncio.gather(
+        _fetch_lane_concurrent(_fetch_vinted_component, lane_concurrency),
+    )
     if has_chromium:
         amz_r, temu_r, ali_r, ali_b_r, gum_r = await asyncio.gather(
             _fetch_lane_concurrent(_fetch_amazon, lane_concurrency),
@@ -309,12 +313,14 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 ali_v   = ali_r[i]  if not isinstance(ali_r[i], Exception)  else None
                 ali_b_v = ali_b_r[i] if not isinstance(ali_b_r[i], Exception) else None
                 gum_v   = gum_r[i] if not isinstance(gum_r[i], Exception) else None
+                vint_v  = vint_r[i] if not isinstance(vint_r[i], Exception) else None
 
                 amz_new, amz_count = _val_count(amz_v)
                 temu_new, temu_count = _val_count(temu_v)
                 ali_new, ali_count = _val_count(ali_v)
                 ali_b_new, ali_b_count = _val_count(ali_b_v)
                 gum_new, gum_count = _val_count(gum_v)
+                vint_new, vint_count = _val_count(vint_v)
 
                 search = part_def["ebay_search"]
                 record_term_result(source_name="UpgradeParts:Amazon", term=search, found=amz_count, new=0)
@@ -322,6 +328,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 record_term_result(source_name="UpgradeParts:AliExpress", term=search, found=ali_count, new=0)
                 record_term_result(source_name="UpgradeParts:Alibaba", term=search, found=ali_b_count, new=0)
                 record_term_result(source_name="UpgradeParts:Gumtree", term=search, found=gum_count, new=0)
+                record_term_result(source_name="UpgradeParts:Vinted", term=search, found=vint_count, new=0)
 
                 if any([ebay_used, ebay_sold, bh_refurb, scan_new, oc_new, box_new, amz_new, temu_new, ali_new, ali_b_new, gum_new]):
                     await _upsert_part(
@@ -576,6 +583,17 @@ async def _fetch_facebook_component(search_term: str) -> tuple[float | None, int
         return (round(min(prices), 2), len(prices)) if prices else (None, 0)
     except Exception as exc:
         log.warning("upgrade_parts.facebook_fetch.error", search=search_term, error=str(exc))
+        return None, 0
+
+
+async def _fetch_vinted_component(search_term: str) -> tuple[float | None, int]:
+    try:
+        from app.scrapers.vinted_scraper import fetch_vinted_listings
+        rows = await fetch_vinted_listings(search_terms=[search_term], min_price=1, max_price=2500)
+        prices = [float(r["price"]) for r in rows if float(r.get("price", 0)) > 0]
+        return (round(sorted(prices)[0], 2), len(prices)) if prices else (None, 0)
+    except Exception as exc:
+        log.debug("upgrade_parts.vinted_fetch.error", search=search_term, error=str(exc))
         return None, 0
 
 
