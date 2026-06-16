@@ -10,9 +10,11 @@ function framePath(i: number): string {
   return `/pics/logo_animation/${String(i).padStart(2, "0")}.png`;
 }
 
+const ANIM_ATTR = "data-favicon-animator";
+
 function setFavicon(href: string): void {
-  const existing = document.head.querySelectorAll('link[rel*="icon"]');
-  existing.forEach((el) => el.parentElement?.removeChild(el));
+  // Only remove elements we previously injected — never touch React-managed head nodes.
+  document.head.querySelectorAll(`link[${ANIM_ATTR}]`).forEach((el) => el.remove());
 
   const rels = ["icon", "shortcut icon", "apple-touch-icon"];
   for (const rel of rels) {
@@ -20,6 +22,7 @@ function setFavicon(href: string): void {
     el.rel = rel;
     el.type = "image/png";
     el.href = href;
+    el.setAttribute(ANIM_ATTR, "true");
     document.head.appendChild(el);
   }
 }
