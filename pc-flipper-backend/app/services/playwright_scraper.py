@@ -1195,6 +1195,19 @@ async def scrape_apex_playwright(
 
 # ── Shared auction-search Playwright helper ───────────────────────────────────
 
+# "PC" preceded by a number means "pieces" in UK auction lot listings
+# (e.g. "350 PC LINEA", "21 PC KITS SETS") — not a personal computer.
+_PC_AS_PIECE_COUNT = re.compile(r"\b\d+\s*[xX]?\s*pc\b", re.IGNORECASE)
+
+
+def _matches_auction_pc_keyword(title_lower: str, keywords: set[str]) -> bool:
+    if _PC_AS_PIECE_COUNT.search(title_lower) and not any(
+        kw in title_lower for kw in keywords if kw != "pc"
+    ):
+        return False
+    return any(kw in title_lower for kw in keywords)
+
+
 _AUCTION_PC_KW = {
     "pc", "computer", "desktop", "tower", "workstation", "server",
     "i3", "i5", "i7", "i9", "ryzen", "xeon", "amd", "intel",
@@ -1348,7 +1361,7 @@ async def _scrape_auction_site(
                             skipped_no_title += 1
                             continue
                     t = title.lower()
-                    if enforce_pc_keywords and not any(kw in t for kw in _AUCTION_PC_KW):
+                    if enforce_pc_keywords and not _matches_auction_pc_keyword(t, _AUCTION_PC_KW):
                         skipped_keyword += 1
                         continue
                     if _is_mini_pc(title):
