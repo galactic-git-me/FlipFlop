@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # ── PlaybookSlot ──────────────────────────────────────────────────────────────
@@ -7,10 +7,10 @@ from pydantic import BaseModel
 class PlaybookSlotBase(BaseModel):
     slot_type: str
     is_customer_visible: bool = True
-    tier_names: dict = {"budget": "Budget", "mid": "Mid-Range", "high": "High End"}
-    score_band_budget: list[int] = [40, 65]
-    score_band_mid: list[int] = [65, 80]
-    score_band_high: list[int] = [80, 100]
+    tier_names: dict = Field(default_factory=lambda: {"budget": "Budget", "mid": "Mid-Range", "high": "High End"})
+    score_band_budget: list[int] = Field(default_factory=lambda: [40, 65])
+    score_band_mid: list[int] = Field(default_factory=lambda: [65, 80])
+    score_band_high: list[int] = Field(default_factory=lambda: [80, 100])
 
 
 class PlaybookSlotUpdate(BaseModel):
@@ -59,7 +59,7 @@ class CaseCatalogueCreate(BaseModel):
     name: str
     brand: str
     form_factor: str
-    images: list[str] = []
+    images: list[str] = Field(default_factory=list)
     rrp_gbp: float
     is_transparent_panel: bool = True
     notes: Optional[str] = None
