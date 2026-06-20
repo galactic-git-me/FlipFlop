@@ -26,6 +26,7 @@ from app.services.compliant_market_ingestion import run_compliant_market_ingesti
 from app.services.benchmark_refresh_job import run_benchmark_refresh
 from app.services.ram_watcher import run_ram_watcher
 from app.services.price_refresh import run_price_refresh
+from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -48,6 +49,8 @@ _job_history: dict[str, deque[dict]] = {
     "benchmark_refresh_weekly": deque(maxlen=50),
     "price_refresh": deque(maxlen=50),
     "ram_watcher": deque(maxlen=50),
+    "catalogue_pipeline": deque(maxlen=50),
+    "catalogue_digest": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -380,6 +383,28 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now,
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=1),
+        id="catalogue_pipeline",
+        name="Catalogue Pipeline (auto-publish, freshness, prices)",
+        kwargs={"job_id": "catalogue_pipeline", "fn": run_catalogue_pipeline_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(hours=1),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger="cron",
+        hour=8,
+        minute=0,
+        id="catalogue_digest",
+        name="Catalogue Review Digest",
+        kwargs={"job_id": "catalogue_digest", "fn": run_catalogue_digest_job},
+        replace_existing=True,
+        max_instances=1,
     )
 
     scheduler.start()

@@ -253,3 +253,17 @@ async def run_catalogue_pipeline(db: AsyncSession) -> dict:
     hidden = await check_freshness(db)
     updated = await update_prices(db)
     return {"variants_created": created, "variants_hidden": hidden, "prices_updated": updated}
+
+
+async def run_catalogue_pipeline_job() -> dict:
+    """Self-contained wrapper for scheduler — opens its own DB session."""
+    from app.database import AsyncSessionLocal
+    async with AsyncSessionLocal() as db:
+        return await run_catalogue_pipeline(db)
+
+
+async def run_catalogue_digest_job() -> None:
+    """Self-contained wrapper for scheduler — opens its own DB session."""
+    from app.database import AsyncSessionLocal
+    async with AsyncSessionLocal() as db:
+        await send_review_digest(db)
