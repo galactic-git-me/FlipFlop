@@ -55,24 +55,33 @@ export default function CatalogueReviewQueuePage() {
 
   const approve = async (id: number) => {
     setBusy(true);
-    await api.catalogue.approve(id);
-    setItems(prev => prev.filter(i => i.id !== id));
-    setBusy(false);
+    try {
+      await api.catalogue.approve(id);
+      setItems(prev => prev.filter(i => i.id !== id));
+    } finally {
+      setBusy(false);
+    }
   };
 
   const reject = async (id: number) => {
     setBusy(true);
-    await api.catalogue.reject(id, rejectReason);
-    setItems(prev => prev.filter(i => i.id !== id));
-    setRejectingId(null);
-    setBusy(false);
+    try {
+      await api.catalogue.reject(id, rejectReason);
+      setItems(prev => prev.filter(i => i.id !== id));
+      setRejectingId(null);
+    } finally {
+      setBusy(false);
+    }
   };
 
   const approveAll = async () => {
     setBusy(true);
-    await api.catalogue.approveAll();
-    setItems([]);
-    setBusy(false);
+    try {
+      await api.catalogue.approveAll();
+      setItems([]);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
