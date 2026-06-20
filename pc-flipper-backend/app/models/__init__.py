@@ -22,6 +22,7 @@ from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
+from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -52,4 +53,7 @@ __all__ = [
     "HardwareBenchmark",
     "ComponentPerformanceMetric",
     "BenchmarkRefreshRun",
+    "PlaybookSlot",
+    "CatalogueVariant",
+    "CaseCatalogue",
 ]
