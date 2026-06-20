@@ -63,6 +63,9 @@ class CatalogueVariant(Base):
     reviewed_at: Mapped[Optional[str]] = mapped_column(String(50))
     reviewed_by: Mapped[Optional[str]] = mapped_column(String(100))
     reject_reason: Mapped[Optional[str]] = mapped_column(String(200))
+    updated_at: Mapped[str] = mapped_column(
+        String(50), default=lambda: datetime.utcnow().isoformat()
+    )
 
 
 class CaseCatalogue(Base):
