@@ -17,6 +17,7 @@ from app.schemas.catalogue import (
     CaseCatalogueCreate,
     CaseCatalogueOut,
     CaseCatalogueUpdate,
+    PlaybookSlotUpdate,
     RejectBody,
 )
 from app.services.catalogue_service import approve_variant, reject_variant
@@ -201,21 +202,13 @@ async def list_slots(
 
 
 @router.patch("/slots/{slot_id}")
-async def update_slot(slot_id: int, body: dict, db: AsyncSession = Depends(get_db)):
+async def update_slot(slot_id: int, body: PlaybookSlotUpdate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(PlaybookSlot).where(PlaybookSlot.id == slot_id))
     slot = result.scalar_one_or_none()
     if not slot:
         raise HTTPException(status_code=404, detail="Slot not found")
-    allowed = {
-        "is_customer_visible",
-        "tier_names",
-        "score_band_budget",
-        "score_band_mid",
-        "score_band_high",
-    }
-    for k, v in body.items():
-        if k in allowed:
-            setattr(slot, k, v)
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(slot, field, value)
     slot.updated_at = datetime.utcnow().isoformat()
     await db.commit()
     return {"id": slot.id, "slot_type": slot.slot_type, "updated": True}
