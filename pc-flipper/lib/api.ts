@@ -687,6 +687,32 @@ export const api = {
       ready_to_post: boolean;
     }>(`/reselling/flips/${flipId}/listing-preview`),
   },
+
+  catalogue: {
+    reviewQueue: () => request<unknown[]>("/catalogue/review-queue"),
+    approve: (id: number) =>
+      request<unknown>(`/catalogue/variants/${id}/approve`, { method: "POST" }),
+    reject: (id: number, reason: string) =>
+      request<unknown>(`/catalogue/variants/${id}/reject`, {
+        method: "POST",
+        body: JSON.stringify({ reason }),
+      }),
+    approveAll: () =>
+      request<unknown>("/catalogue/variants/approve-all", { method: "POST" }),
+    variants: (params?: Record<string, string>) =>
+      request<unknown[]>(`/catalogue/variants${params ? "?" + new URLSearchParams(params) : ""}`),
+    toggleVariantStatus: (id: number) =>
+      request<unknown>(`/catalogue/variants/${id}/toggle-status`, { method: "PATCH" }),
+    cases: () => request<unknown[]>("/catalogue/cases"),
+    createCase: (data: Record<string, unknown>) =>
+      request<unknown>("/catalogue/cases", { method: "POST", body: JSON.stringify(data) }),
+    updateCase: (id: number, data: Record<string, unknown>) =>
+      request<unknown>(`/catalogue/cases/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+    slots: (playbookId?: number) =>
+      request<unknown[]>(`/catalogue/slots${playbookId ? `?playbook_id=${playbookId}` : ""}`),
+    updateSlot: (id: number, data: Record<string, unknown>) =>
+      request<unknown>(`/catalogue/slots/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  },
 };
 
 // ── Hermes Companion ──────────────────────────────────────────────────────────
