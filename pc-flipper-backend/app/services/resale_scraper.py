@@ -55,13 +55,6 @@ _RESALE_EBAY_BLOCK_LOGGED: bool = False
 _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
 _RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
 
-# Circuit breaker for the eBay Finding API.
-# After _FINDING_API_FAIL_THRESHOLD consecutive 503/non-200 responses we stop
-# hitting the endpoint for _FINDING_API_COOLDOWN_SECONDS, then try again.
-_FINDING_API_FAIL_COUNT: int = 0
-_FINDING_API_BLOCK_UNTIL_TS: float = 0.0
-_FINDING_API_FAIL_THRESHOLD: int = 3        # trip after 3 consecutive failures
-_FINDING_API_COOLDOWN_SECONDS: float = 300.0  # 5-minute cool-down
 
 
 def _info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -236,89 +229,50 @@ def _extract_prices(soup: BeautifulSoup) -> list[float]:
     return prices
 
 
-async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
+async def _fetch_sold_prices(query: str) -> list[float]:
     """
-    eBay Finding API — findCompletedItems (sold, fixed-price, UK).
+    Scrape eBay UK completed/sold listings for fixed-price comps.
     Two passes: Desktop PCs category (179) first, then all categories.
-    No scraping, no bot-detection, no 403s.
-
-    Circuit breaker: after _FINDING_API_FAIL_THRESHOLD consecutive non-200
-    responses the function returns [] immediately and stays dark for
-    _FINDING_API_COOLDOWN_SECONDS before trying again.
+    Uses the same approach as get_expected_auction_price().
     """
-    global _FINDING_API_FAIL_COUNT, _FINDING_API_BLOCK_UNTIL_TS
-
-    now = time.monotonic()
-    if _FINDING_API_BLOCK_UNTIL_TS > now:
-        return []
-
-    url = "https://svcs.ebay.com/services/search/FindingService/v1"
     prices: list[float] = []
 
-    for cat in ("179", "0"):
-        params: dict[str, str] = {
-            "OPERATION-NAME":        "findCompletedItems",
-            "SERVICE-VERSION":       "1.0.3",
-            "SECURITY-APPNAME":      app_id,
-            "RESPONSE-DATA-FORMAT":  "JSON",
-            "GLOBAL-ID":             "EBAY-GB",
-            "keywords":              query,
-            "itemFilter(0).name":    "SoldItemsOnly",
-            "itemFilter(0).value":   "true",
-            "itemFilter(1).name":    "ListingType",
-            "itemFilter(1).value":   "FixedPrice",
-            "itemFilter(2).name":    "LocatedIn",
-            "itemFilter(2).value":   "GB",
-            "paginationInput.entriesPerPage": "50",
-            "sortOrder":             "EndTimeSoonest",
+    for sacat in ("179", "0"):
+        params = {
+            "_nkw": query,
+            "LH_Sold": "1",
+            "LH_Complete": "1",
+            "LH_BIN": "1",         # Fixed-price (BIN) only — exclude auction starting bids
+            "_sacat": sacat,
+            "_sop": "12",          # Most recent first
+            "LH_PrefLoc": "1",     # UK sellers preferred
+            "_ipg": "60",
         }
-        if cat != "0":
-            params["categoryId"] = cat
-
+        headers = {
+            "User-Agent": ua.random,
+            "Accept-Language": "en-GB,en;q=0.9",
+            "Accept": "text/html,application/xhtml+xml",
+        }
         try:
-            async with httpx.AsyncClient(timeout=12, follow_redirects=True) as client:
-                resp = await client.get(url, params=params)
-
-            if resp.status_code != 200:
-                _FINDING_API_FAIL_COUNT += 1
-                if _FINDING_API_FAIL_COUNT >= _FINDING_API_FAIL_THRESHOLD:
-                    _FINDING_API_BLOCK_UNTIL_TS = time.monotonic() + _FINDING_API_COOLDOWN_SECONDS
-                    log.warning(
-                        "resale_scraper.finding_api_circuit_open",
-                        status=resp.status_code,
-                        fail_count=_FINDING_API_FAIL_COUNT,
-                        cooldown_seconds=_FINDING_API_COOLDOWN_SECONDS,
-                    )
-                    return []
-                log.debug("resale_scraper.finding_api_error", query=query, cat=cat,
-                          status=resp.status_code)
+            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
+                resp = await client.get(
+                    "https://www.ebay.co.uk/sch/i.html",
+                    params=params,
+                    headers=headers,
+                )
+            if resp.status_code != 200 or len(resp.text) < 2000:
+                log.debug("resale_scraper.ebay_sold_bad_response",
+                          query=query, sacat=sacat, status=resp.status_code)
                 continue
 
-            # Successful response — reset the fail counter
-            _FINDING_API_FAIL_COUNT = 0
-
-            data = resp.json()
-            items = (
-                data.get("findCompletedItemsResponse", [{}])[0]
-                    .get("searchResult", [{}])[0]
-                    .get("item", [])
-            )
-            for item in items:
-                try:
-                    price_val = float(
-                        item["sellingStatus"][0]["currentPrice"][0]["__value__"]
-                    )
-                    if 80.0 < price_val < 1_400.0:
-                        prices.append(price_val)
-                except (KeyError, ValueError, IndexError):
-                    continue
-
-            log.debug("resale_scraper.finding_api_pass",
-                      query=query, cat=cat, found=len(prices))
+            soup = BeautifulSoup(resp.text, "lxml")
+            batch = _extract_prices(soup)
+            prices.extend(batch)
+            log.debug("resale_scraper.ebay_sold_pass",
+                      query=query, sacat=sacat, found=len(batch))
 
         except Exception as exc:
-            _FINDING_API_FAIL_COUNT += 1
-            log.debug("ebay_sold.request_retry", attempt=1, error=str(exc), search=query)
+            log.debug("resale_scraper.ebay_sold_error", query=query, error=str(exc))
 
         if len(prices) >= 5:
             break
@@ -328,24 +282,55 @@ async def _fetch_via_finding_api(query: str, app_id: str) -> list[float]:
     return prices
 
 
-async def _fetch_sold_prices(query: str) -> list[float]:
+async def _fetch_active_prices(query: str) -> list[float]:
     """
-    Primary: eBay Finding API (no scraping, no bot detection).
-    Requires EBAY_APP_ID to be set to a production key.
+    Scrape current live BIN listings for the same spec — what sellers are
+    asking RIGHT NOW.  Used as Tier 2 when sold comps are unavailable.
+    Results are discounted by 0.92 at the call site so we price below competition.
     """
-    from app.config import get_settings
-    settings = get_settings()
-    app_id = getattr(settings, "ebay_app_id", "") or ""
+    prices: list[float] = []
 
-    if app_id and not app_id.startswith("SBX-"):
-        prices = await _fetch_via_finding_api(query, app_id)
-        if prices:
-            return prices
-        log.debug("resale_scraper.finding_api_empty", query=query)
+    for sacat in ("179", "0"):
+        params = {
+            "_nkw": query,
+            "LH_BIN": "1",
+            "_sacat": sacat,
+            "_sop": "12",
+            "LH_PrefLoc": "1",
+            "_ipg": "60",
+        }
+        headers = {
+            "User-Agent": ua.random,
+            "Accept-Language": "en-GB,en;q=0.9",
+            "Accept": "text/html,application/xhtml+xml",
+        }
+        try:
+            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
+                resp = await client.get(
+                    "https://www.ebay.co.uk/sch/i.html",
+                    params=params,
+                    headers=headers,
+                )
+            if resp.status_code != 200 or len(resp.text) < 2000:
+                log.debug("resale_scraper.ebay_active_bad_response",
+                          query=query, sacat=sacat, status=resp.status_code)
+                continue
 
-    # Fallback: return empty so get_resale_range uses the buy-price formula.
-    # (HTML scraping removed — eBay blocks it consistently in production.)
-    return []
+            soup = BeautifulSoup(resp.text, "lxml")
+            batch = _extract_prices(soup)
+            prices.extend(batch)
+            log.debug("resale_scraper.ebay_active_pass",
+                      query=query, sacat=sacat, found=len(batch))
+
+        except Exception as exc:
+            log.debug("resale_scraper.ebay_active_error", query=query, error=str(exc))
+
+        if len(prices) >= 5:
+            break
+
+        await asyncio.sleep(0.3)
+
+    return prices
 
 
 async def get_resale_range(
@@ -358,49 +343,56 @@ async def get_resale_range(
     buy_price: float | None = None,
 ) -> ResaleRange:
     """
-    Main entry point. Returns a ResaleRange from real eBay comps when possible.
+    Main entry point. Returns a ResaleRange from real eBay data when possible.
 
-    Fallback priority when fewer than 2 comps are found:
-      1. Buy-price-based formula (preferred when buy_price supplied):
-           (listing_price + upgrade_resale_adds + £100 case premium) × 1.20
-         This anchors the estimate to what the market has already priced the PC
-         at, rather than relying on a lookup table that may not cover the CPU.
-      2. Static CPU-table estimate — used only when no buy_price is supplied
-         (e.g. called from tests or tooling).
+    Fallback priority:
+      1. eBay sold/completed BIN comps  — what buyers actually paid
+      2. eBay active BIN listings × 0.92 — current ask prices, discounted to
+         undercut competition and sell quickly
+      3. Buy-price formula              — floor when eBay is unreachable
+      4. Static CPU-table              — last resort, no buy_price available
 
-    Results from live comps are cached by spec key for the swarm run.
-    Fallback results are NOT cached — the formula is listing-specific.
+    Tier 1 and Tier 2 results are cached by spec key for the swarm run.
+    Tier 3 is NOT cached — it is listing-specific.
     """
     key = _spec_key(cpu, ram_gb, gpu, storage_gb)
     if key in _cache:
         return _cache[key]
 
     query = _build_query(cpu, gpu)
-    prices = await _fetch_sold_prices(query)
+    case_add = BUDGET_CASE_RESALE_ADD
 
+    # ── Tier 1: eBay sold comps ───────────────────────────────────────────────
+    prices = await _fetch_sold_prices(query)
     if len(prices) >= 2:
-        # ── Tier 1: whole-system eBay comps ─────────────────────────────────
         prices.sort()
         n = len(prices)
-        # eBay comps are plain/generic gaming PCs.  Our finished product has a
-        # premium themed case, so add that uplift to every percentile.
-        case_add = BUDGET_CASE_RESALE_ADD
-        low    = round(prices[n // 4]                    + case_add, 2)
-        median = round(prices[n // 2]                    + case_add, 2)
-        high   = round(prices[min(n - 1, (n*3)//4)]     + case_add, 2)
+        low    = round(prices[n // 4]                + case_add, 2)
+        median = round(prices[n // 2]                + case_add, 2)
+        high   = round(prices[min(n - 1, (n*3)//4)] + case_add, 2)
         result = ResaleRange(low=low, median=median, high=high, count=n, query=query)
-        log.info("resale_scraper.comps", query=query, count=n,
+        log.info("resale_scraper.tier1_sold_comps", query=query, count=n,
                  low=low, median=median, high=high)
         _cache[key] = result
+        return result
 
-    elif buy_price is not None:
-        # ── Tier 2: buy-price formula ─────────────────────────────────────────
-        # The market has already priced this PC — anchor to that price, then
-        # add what each planned upgrade will add to the resale value, plus the
-        # themed-case premium, plus a 20 % flip surcharge for a ready-to-go build.
-        #
-        # This stays market-grounded: the seller has priced to what similar
-        # bare/unupgraded systems sell for, so their ask is a genuine market signal.
+    # ── Tier 2: eBay active listings × 0.92 ──────────────────────────────────
+    active = await _fetch_active_prices(query)
+    if len(active) >= 2:
+        active.sort()
+        n = len(active)
+        # Discount to price below current competition; add case uplift
+        low    = round(active[n // 4]                * 0.92 + case_add, 2)
+        median = round(active[n // 2]                * 0.92 + case_add, 2)
+        high   = round(active[min(n - 1, (n*3)//4)] * 0.92 + case_add, 2)
+        result = ResaleRange(low=low, median=median, high=high, count=n, query=query)
+        log.info("resale_scraper.tier2_active_listings", query=query, count=n,
+                 low=low, median=median, high=high)
+        _cache[key] = result
+        return result
+
+    # ── Tier 3: buy-price formula ─────────────────────────────────────────────
+    if buy_price is not None:
         upgrade_resale = 0.0
         if not gpu:
             upgrade_resale += BUDGET_GPU_RESALE_ADD
@@ -413,24 +405,21 @@ async def get_resale_range(
         high     = round(median * 1.12, 2)
         result   = ResaleRange(low=low, median=median, high=high,
                                count=0, query=query)
-        log.debug("resale_scraper.fallback_buy_price",
+        log.debug("resale_scraper.tier3_buy_price_formula",
                   query=query, buy_price=buy_price, median=median)
-        # Do NOT cache — specific to this listing's price
+        return result  # not cached — listing-specific
 
-    else:
-        # ── Tier 3: static CPU-table estimate ────────────────────────────────
-        # Last resort when no buy_price is available (e.g. tests / tooling).
-        static = _static_estimate(cpu, ram_gb, ram_type, storage_gb, storage_type, gpu)
-        result = ResaleRange(
-            low=round(static * 0.85, 2),
-            median=static,
-            high=round(static * 1.15, 2),
-            count=0,
-            query=query,
-        )
-        log.debug("resale_scraper.fallback_static", query=query, static=static)
-        _cache[key] = result
-
+    # ── Tier 4: static CPU-table ──────────────────────────────────────────────
+    static = _static_estimate(cpu, ram_gb, ram_type, storage_gb, storage_type, gpu)
+    result = ResaleRange(
+        low=round(static * 0.85, 2),
+        median=static,
+        high=round(static * 1.15, 2),
+        count=0,
+        query=query,
+    )
+    log.debug("resale_scraper.tier4_static_table", query=query, static=static)
+    _cache[key] = result
     return result
 
 

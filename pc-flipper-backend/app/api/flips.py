@@ -185,6 +185,140 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     }
 
 
+@router.get("/{flip_id}/purchase-plan")
+async def get_purchase_plan(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Returns every selected upgrade part with full details (name, specs, price,
+    source URL) so the frontend can render a purchasable shopping checklist.
+    Also includes the base listing URL so the user can buy the base PC too.
+    """
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+
+    items = []
+
+    # Base PC is always first
+    if listing:
+        items.append({
+            "category": "base_pc",
+            "label": "Base PC",
+            "name": listing.title,
+            "specs": f"{listing.cpu or ''} · {listing.ram_gb or '?'}GB {listing.ram_type or ''} · {listing.gpu or 'No GPU'}".strip(" ·"),
+            "price": listing.price,
+            "url": listing.url,
+            "source": listing.source_name,
+            "part_id": None,
+        })
+
+    # Upgrades
+    for category, part_id in (flip.selected_upgrade_ids or {}).items():
+        try:
+            part = await db.get(Part, int(part_id))
+            if not part:
+                continue
+            price = part.price_used or part.price or 0.0
+            items.append({
+                "category": category,
+                "label": category.replace("_", " ").title(),
+                "name": part.name,
+                "specs": part.specs or "",
+                "price": price,
+                "url": part.source_url or "",
+                "source": part.source_site or "",
+                "part_id": part.id,
+            })
+        except Exception:
+            continue
+
+    total = sum(i["price"] for i in items)
+    return {"flip_id": flip_id, "items": items, "total": total}
+
+
+@router.post("/{flip_id}/compatibility-check")
+async def compatibility_check(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Ask the local LLM to evaluate whether all selected upgrade components are
+    compatible with the base PC specs.  Returns a structured verdict so the UI
+    can gate progression from 'building' → 'ready_for_sale'.
+    """
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+
+    # Build base PC description
+    base_lines = []
+    if listing:
+        if listing.cpu:        base_lines.append(f"CPU: {listing.cpu}")
+        if listing.ram_gb:     base_lines.append(f"RAM: {listing.ram_gb}GB {listing.ram_type or ''}")
+        if listing.storage_gb: base_lines.append(f"Storage: {listing.storage_gb}GB {listing.storage_type or ''}")
+        if listing.gpu:        base_lines.append(f"GPU: {listing.gpu}")
+        base_lines.append(f"Buy price: £{listing.price:.0f}")
+    base_desc = "\n".join(base_lines) if base_lines else "Unknown base PC"
+
+    # Collect selected upgrade parts
+    upgrade_lines = []
+    for category, part_id in (flip.selected_upgrade_ids or {}).items():
+        try:
+            part = await db.get(Part, int(part_id))
+            if part:
+                specs_note = f" ({part.specs})" if part.specs else ""
+                upgrade_lines.append(f"- {category.upper()}: {part.name}{specs_note}")
+        except Exception:
+            continue
+
+    upgrades_desc = "\n".join(upgrade_lines) if upgrade_lines else "No upgrades selected"
+
+    prompt = f"""You are a PC hardware compatibility expert. Evaluate whether the selected upgrade components are compatible with the base PC.
+
+BASE PC:
+{base_desc}
+
+SELECTED UPGRADES:
+{upgrades_desc}
+
+Check for these compatibility issues:
+1. RAM type mismatch (e.g. DDR5 stick in a DDR4 board)
+2. RAM speed/capacity exceeding motherboard limits
+3. GPU power requirements vs PSU wattage
+4. PCIe slot availability and version
+5. CASE compatibility: form factor (ATX/mATX/ITX motherboard vs case support), maximum GPU length clearance vs selected GPU, CPU cooler height vs case max clearance, PSU form factor (ATX vs SFX)
+6. CPU socket mismatch if a CPU upgrade is included
+7. Storage interface mismatch (NVMe M.2 vs SATA)
+8. PSU wattage adequacy: total system TDP (CPU + GPU + other components) must be comfortably below PSU rating
+
+Respond in this EXACT JSON format (no markdown, no extra text):
+{{
+  "compatible": true or false,
+  "confidence": "high" or "medium" or "low",
+  "issues": ["list of specific incompatibility issues, empty if none"],
+  "warnings": ["list of potential concerns that should be verified"],
+  "summary": "one sentence summary"
+}}"""
+
+    try:
+        response_text, model_used = await ai_service.chat(prompt, [])
+        # Strip markdown code fences if present
+        clean = response_text.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
+        import json
+        result = json.loads(clean)
+        result["model_used"] = model_used
+        log.info("flips.compatibility_check", flip_id=flip_id, compatible=result.get("compatible"), model=model_used)
+        return result
+    except Exception as exc:
+        log.warning("flips.compatibility_check.failed", flip_id=flip_id, error=str(exc))
+        return {
+            "compatible": None,
+            "confidence": "low",
+            "issues": [],
+            "warnings": ["Compatibility check could not complete — AI backend may be offline."],
+            "summary": "Unable to verify compatibility automatically.",
+            "model_used": "none",
+        }
+
+
 @router.post("/{flip_id}/generate-listing")
 async def generate_listing_content(flip_id: int, db: AsyncSession = Depends(get_db)):
     flip = await db.get(Flip, flip_id)

@@ -45,6 +45,7 @@ _COOLDOWN_BYPASS_SOURCES = {
     "Preloved",
     "BidSpotter",
     "Lots.co.uk",
+    "The Saleroom",
     "i-bidder",
     "Wilsons Auctions",
     "Apex Auctions",
@@ -81,8 +82,21 @@ def _expand_source_aliases(source_name: str) -> tuple[str, ...]:
     return _SOURCE_ALIASES.get(key, (source_name,))
 
 
-def _fingerprint(title: str, price: float, cpu: str | None, gpu: str | None) -> str:
-    """Legacy title+price fingerprint — kept for same-listing re-scrape detection."""
+def _fingerprint(
+    title: str,
+    price: float,
+    cpu: str | None,
+    gpu: str | None,
+    external_id: str | None = None,
+    listing_type: str | None = None,
+) -> str:
+    """Stable dedup fingerprint. Auction lots get a stable per-lot key; classifieds
+    use title+price so re-posted/mirrored listings collapse to one row."""
+    if listing_type == "auction" and external_id:
+        # Auction lot IDs are globally unique — use them directly so bulk lots
+        # with identical titles don't collapse into each other.
+        clean = re.sub(r"[^a-z0-9_-]", "", external_id.lower())
+        return f"auction:{clean}"
     t = re.sub(r"[^a-z0-9]+", " ", (title or "").lower()).strip()
     t = " ".join(t.split()[:8])
     p = int(round(float(price or 0)))
@@ -543,7 +557,7 @@ async def _upsert_listings(
                 specs = parse_specs(raw.title, raw.description)
                 if not _passes_filter(raw.price, specs, config, title=raw.title):
                     return None
-                fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu)
+                fp = _fingerprint(raw.title, raw.price, specs.cpu, specs.gpu, raw.external_id, raw.listing_type)
                 sfp = _spec_fingerprint(specs.cpu, specs.gpu, specs.ram_gb, specs.storage_gb)
                 expected_buy_price: float | None = None
                 if raw.listing_type == "auction":

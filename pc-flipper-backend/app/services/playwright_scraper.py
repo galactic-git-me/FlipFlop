@@ -1050,7 +1050,11 @@ async def scrape_apex_playwright(
             log.info("apex.playwright.uk_auctions", count=len(auction_links))
 
             # Navigate into each auction via click to let the SPA route properly
-            for auction_href in auction_links[:6]:
+            # Check all UK auctions — there's no category/title info exposed on the
+            # listing grid itself, so we can't pre-filter to IT-only auctions before
+            # visiting each one. Sampling only the first few risks missing the IT
+            # auctions entirely (observed: 0/6 were IT-related in one run).
+            for auction_href in auction_links[:16]:
                 try:
                     # Go back to list and re-click to avoid SPA routing errors
                     await page.goto(
@@ -1068,18 +1072,16 @@ async def scrape_apex_playwright(
                     await link_el.click()
                     await asyncio.sleep(5)
 
-                    # BidJS renders lots as <li> elements inside the auction section
+                    # BidJS renders lots as ".lot.timed-listing" panel cards
+                    # (NOT plain <li> — earlier selectors matched pagination controls instead).
                     lot_els = await page.query_selector_all(
-                        "section[aria-label='Auction Listings'] li, "
-                        "ul.timed-auction__lots li, "
-                        "#lot-list li, "
-                        ".bidjs-lot, [class*='timed-lot']"
+                        ".lot.timed-listing, [class*='timed-listing']"
                     )
                     log.info("apex.playwright.lots", href=auction_href, count=len(lot_els))
 
                     for lot_el in lot_els:
                         try:
-                            title_el = await lot_el.query_selector("h3, h2, h4, .lot-title, .title, a[title]")
+                            title_el = await lot_el.query_selector(".lot__info--title a, .lot__info--title, h3, h2, h4, .lot-title, .title, a[title]")
                             title = ""
                             if title_el:
                                 title = (await title_el.inner_text()).strip()
@@ -1096,12 +1098,13 @@ async def scrape_apex_playwright(
                             if _is_mini_pc(title):
                                 continue
 
-                            link_el = await lot_el.query_selector("a[href]")
+                            link_el = await lot_el.query_selector(".lot__info--title a, a[href]")
                             href_val = await link_el.get_attribute("href") if link_el else ""
                             if href_val and not href_val.startswith("http"):
                                 href_val = "https://www.apexauctions.co.uk/auction/" + href_val.lstrip("/")
 
                             price_el = await lot_el.query_selector(
+                                ".lot__info--current-bid, "
                                 "[class*='price'], [class*='bid'], [class*='estimate'], [class*='amount'], "
                                 ".timed-lot__bid, .current-bid, .lot-price"
                             )
@@ -1463,9 +1466,7 @@ async def scrape_wilsons_playwright(
     def url_fn(term, lo, hi):
         return (
             f"https://www.wilsonsauctions.com/lots"
-            f"?query={term.replace(' ', '+')}"
-            f"&priceMin={int(lo)}&priceMax={int(hi)}"
-            f"&categoryId=65"  # IT / Technology category
+            f"?search={term.replace(' ', '+')}"
         )
 
     async with managed_playwright() as p:
@@ -1474,28 +1475,30 @@ async def scrape_wilsons_playwright(
             site_name="Wilsons Auctions",
             search_url_fn=url_fn,
             lot_selectors=[
-                ".lot-card",
-                ".auction-lot",
-                "[class*='lot-item']",
-                "article.lot",
-                ".search-result-item",
-                "[class*='search-result']",
+                ".cc-card",
+                "[class*='cc-card']",
                 "li[class*='lot']",
-                "div[class*='lot']",
             ],
-            title_selectors=["h3", "h2", ".lot-title", ".title", "[class*='title']", "a"],
+            title_selectors=[
+                ".cc-card__headline", "h3 a", "[class*='title']", "a"
+            ],
+            # Wilsons doesn't surface a current-bid price on the search-results
+            # card itself (only on the individual lot page) — these selectors
+            # rarely match, so price falls back to min_price. Real price is
+            # visible when the listing URL is opened.
             price_selectors=[
-                ".current-bid", ".estimate", "[class*='price']",
-                "[class*='bid']", "[class*='estimate']", "strong"
+                "[class*='price']", "[class*='bid']", "[class*='estimate']", "strong"
             ],
-            link_selectors=["a[href*='/lot/']", "a[href*='/lots/']", "a[href]"],
+            link_selectors=[
+                "a.cc-card__headline", "a[href*='/lots/']", "a[href]"
+            ],
             search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
-            wait_selector=".lot-card, .auction-lot, [class*='lot-item'], article",
+            wait_selector=".cc-card, [class*='cc-card']",
             base_url="https://www.wilsonsauctions.com",
-            required_href_tokens=None,
-            enforce_pc_keywords=False,
+            required_href_tokens=["/lots/"],
+            enforce_pc_keywords=True,
             strict_price_cap=False,
         )
 
@@ -1513,10 +1516,8 @@ async def scrape_ibidder_playwright(
     """
     def url_fn(term, lo, hi):
         return (
-            f"https://www.i-bidder.com/en-gb/auction-catalogues/all/search"
-            f"?q={term.replace(' ', '+')}"
-            f"&country=gb"
-            f"&priceFrom={int(lo)}&priceTo={int(hi)}"
+            f"https://www.i-bidder.com/en-gb/search-results"
+            f"?searchTerm={term.replace(' ', '+')}"
         )
 
     async with managed_playwright() as p:
@@ -1525,34 +1526,78 @@ async def scrape_ibidder_playwright(
             site_name="i-bidder",
             search_url_fn=url_fn,
             lot_selectors=[
-                ".lot-card",
-                "[class*='lot-card']",
-                ".search-result",
-                "[class*='search-result']",
-                "article.lot",
-                ".auction-lot",
-                "li.lot",
-                "[data-lot-id]",
+                ".lot-single",
+                "[class*='lot-single']",
+                "li[class*='lot']",
             ],
             title_selectors=[
-                ".lot-card__title", ".lot-title", "h3", "h2",
-                "[class*='title']", "a[title]", "a"
+                "h3 a", ".lot-title", "[class*='title']", "a"
             ],
             price_selectors=[
-                ".lot-card__estimate", ".current-bid", ".estimate",
-                "[class*='estimate']", "[class*='price']", "[class*='bid']"
+                ".opening-price strong",
+                "[id^='openingPrice'] strong", "[class*='price'] strong",
+                "[class*='bid'] strong", "strong",
             ],
             link_selectors=[
-                "a[href*='/lot/']", "a[href*='/catalogue/']",
-                "a[href*='/auction/']", "a[href]"
+                "a[href*='/lot-']", "a[href*='/catalogue-id-']", "a[href]"
             ],
             search_terms=search_terms[:20],
             min_price=min_price,
             max_price=max_price,
-            wait_selector=".lot-card, .search-result, [class*='lot-card'], article",
+            wait_selector=".lot-single, [class*='lot-single']",
             base_url="https://www.i-bidder.com",
-            required_href_tokens=None,
-            enforce_pc_keywords=False,
+            required_href_tokens=["/lot-"],
+            enforce_pc_keywords=True,
+            strict_price_cap=False,
+        )
+
+
+# ── The Saleroom ──────────────────────────────────────────────────────────────
+
+async def scrape_the_saleroom_playwright(
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """
+    The Saleroom — UK's largest auction marketplace aggregator.
+    Shares the same backend platform as BidSpotter/i-bidder (identical
+    robots.txt and DOM structure), so the same selectors apply.
+    """
+    def url_fn(term, lo, hi):
+        return (
+            f"https://www.the-saleroom.com/en-gb/search-results"
+            f"?searchTerm={term.replace(' ', '+')}"
+        )
+
+    async with managed_playwright() as p:
+        return await _scrape_auction_site(
+            p,
+            site_name="The Saleroom",
+            search_url_fn=url_fn,
+            lot_selectors=[
+                ".lot-single",
+                "[class*='lot-single']",
+                "li[class*='lot']",
+            ],
+            title_selectors=[
+                "h3 a", ".lot-title", "[class*='title']", "a"
+            ],
+            price_selectors=[
+                ".opening-price strong",
+                "[id^='openingPrice'] strong", "[class*='price'] strong",
+                "[class*='bid'] strong", "strong",
+            ],
+            link_selectors=[
+                "a[href*='/lot-']", "a[href*='/catalogue-id-']", "a[href]"
+            ],
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            wait_selector=".lot-single, [class*='lot-single']",
+            base_url="https://www.the-saleroom.com",
+            required_href_tokens=["/lot-"],
+            enforce_pc_keywords=True,
             strict_price_cap=False,
         )
 

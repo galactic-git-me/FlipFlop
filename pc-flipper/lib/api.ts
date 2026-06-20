@@ -269,12 +269,39 @@ export const api = {
 
   flips: {
     list: () => request<unknown[]>("/flips"),
+    get: (id: number) => request<unknown>(`/flips/${id}`),
     create: (data: Record<string, unknown>) =>
       request<unknown>("/flips", { method: "POST", body: JSON.stringify(data) }),
+    patch: (id: number, data: Record<string, unknown>) =>
+      request<unknown>(`/flips/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
     update: (id: number, data: Record<string, unknown>) =>
       request<unknown>(`/flips/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
     markSold: (id: number, data: { actual_sale_price: number; sale_platform: string }) =>
       request<unknown>(`/flips/${id}/sold`, { method: "POST", body: JSON.stringify(data) }),
+    purchasePlan: (id: number) =>
+      request<{
+        flip_id: number;
+        items: {
+          category: string;
+          label: string;
+          name: string;
+          specs: string;
+          price: number;
+          url: string;
+          source: string;
+          part_id: number | null;
+        }[];
+        total: number;
+      }>(`/flips/${id}/purchase-plan`),
+    compatibilityCheck: (id: number) =>
+      request<{
+        compatible: boolean | null;
+        confidence: "high" | "medium" | "low";
+        issues: string[];
+        warnings: string[];
+        summary: string;
+        model_used: string;
+      }>(`/flips/${id}/compatibility-check`, { method: "POST" }),
     generateListing: (id: number) =>
       request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
     generateImages: (id: number) =>

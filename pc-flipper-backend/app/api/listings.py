@@ -40,6 +40,7 @@ async def get_listings(
     status: ListingStatus | None = Query(ListingStatus.active),
     source_name: str | None = Query(None),
     min_profit: float | None = Query(None),
+    min_price: float | None = Query(None),
     max_price: float | None = Query(None),
     search: str | None = Query(None),
     first_seen_after: datetime | None = Query(None),
@@ -69,6 +70,8 @@ async def get_listings(
             (Listing.claude_expected_profit >= min_profit) |
             ((Listing.claude_expected_profit == None) & (Listing.estimated_profit >= min_profit))
         )
+    if min_price is not None:
+        conditions.append(Listing.price >= min_price)
     if max_price is not None:
         conditions.append(Listing.price <= max_price)
     if search:
@@ -99,6 +102,11 @@ async def get_listings(
             "% DIMM%",            # e.g. "16GB DIMM" — RAM module
             "%SO-DIMM%",
             "%SODIMM%",
+            "%DDR4 (%",           # "32GB DDR4 (2x16@2400T MHz)" — RAM kit spec in parens
+            "%DDR5 (%",
+            "%DDR3 (%",
+            "%for server%",       # "DDR4 for server/workstation" — component listing
+            "%for workstation%",
             # Explicit GPU/graphics card listings (not PCs containing a GPU)
             "%Graphics Card%",
             "%Video Card%",
@@ -118,9 +126,121 @@ async def get_listings(
             # CPU-only listings
             "%Processor%OEM%",
             "%CPU Tray%",
-            # PSU-only
+            "%- Brand New%",      # "Ryzen 7 7800X3D - Brand New" — boxed component, not a PC
+            "% Brand New Sealed%",
+            "% Brand New Boxed%",
+            # PSU / power supply standalone listings
             "%Power Supply Unit%",
             "%Modular PSU%",
+            "% PSU%",             # "275W PSU H275P-00", "Modular PSU"
+            "%W PSU%",            # "750W PSU", "550W PSU"
+            "%Power Supply%",     # "Dell Power supply N750P-00" (broader than "Power Supply Unit")
+            # CPU cooling / heatsink standalone
+            "%CPU Fan%",
+            "%CPU Cooling Fan%",
+            "%CPU Cooler%",
+            "% Heatsink%",
+            "%Heat Sink%",
+            # Motherboard standalone (explicit keyword or common mobo-only bundle patterns)
+            "%Motherboard%",
+            "%Mainboard%",
+            "%RGB Bundle%",        # "Corsair RGB Bundle" — component RGB bundle, not a PC
+            "%AM4 +%",            # "X570 AM4 + Ryzen 9..." — mobo+CPU bundle, not a whole PC
+            "%AM4,%",             # "X570 AM4, Ryzen 9..." — same bundle with comma separator
+            "%AM5 +%",
+            "%AM5,%",
+            "%LGA1700 +%",
+            "%LGA1700,%",
+            "%LGA1200 +%",
+            "%LGA1200,%",
+            "%LGA1151 +%",
+            "%LGA1151,%",
+            "%AM4+%",
+            "%AM5+%",
+            # For parts / not working — incomplete systems not worth flipping
+            "%For Parts%",
+            "%For Spares%",
+            "%Parts Only%",
+            "%Spares Only%",
+            "%For Repair%",
+            "% - Spares%",
+            # Missing key components (no CPU, no RAM etc in title signals incomplete)
+            "%No CPU%",
+            "%No GPU%",
+            "%No RAM%",
+            "%No SSD%",
+            "%No HDD%",
+            "%No Hard Drive%",
+            "%No Storage%",
+            "%No Drives%",
+            "%No Drive%",
+            # Barebones chassis (no CPU/RAM/storage)
+            "%Barebones%",
+            "%Bare Bones%",
+            "%Barebone%",
+            # Peripherals and accessories
+            "% Speakers%",        # "Stereo Speakers", "USB Speakers" — not a PC
+            "%Speaker System%",
+            "%Wireless Antenna%",
+            "%Network Antenna%",
+            "%WiFi Antenna%",
+            "% Antenna%",         # standalone antenna part
+            "%Stand for%",        # "Stand for Dell AIO" — not the PC itself
+            "%Monitor Stand%",
+            "%AIO Stand%",
+            # Drive caddies / trays / enclosures
+            "%Hard Drive Caddy%",
+            "%Hard Drive Tray%",
+            "%HDD Caddy%",
+            "%SSD Caddy%",
+            "%Drive Caddy%",
+            "%Drive Tray%",
+            # Standalone storage drives (not job lots — those covered above)
+            "%External Hard Drive%",
+            "%External SSD%",
+            "%Portable SSD%",
+            "%Portable Hard%",
+            "%Internal Solid State Drive%",   # "NVMe M.2 Internal Solid State Drive" — SSD listing
+            "%Internal Solid State%",
+            "%Solid State Drive%",            # catches titles that spell it out instead of SSD
+            "%Internal Hard Drive%",
+            # Standalone networking cards
+            "%WiFi Card%",
+            "%Wireless Card%",
+            "%Network Card%",
+            "%WiFi Adapter%",
+            "%WiFi Module%",
+            # Case fans (not whole-PC cooling)
+            "%Case Fan%",
+            "%Case Cooling Fan%",
+            "% mm Fan%",          # "140mm Fan", "120mm Fan" — clearly a fan, not a PC
+            # PC case (chassis only, not a complete system)
+            "%PC Case%",
+            "%ATX Case%",
+            "%mATX Case%",
+            "%ITX Case%",
+            "%Tower Case%",
+            # Laptop / notebook / handheld signals
+            "% Notebook%",        # "HP Pavilion TS 11 Notebook PC"
+            "%Laptop PC%",
+            "%Mobile Workstation%",   # HP ZBook, Dell Precision mobile — laptops
+            "%ZBook%",                # All HP ZBook models are laptops/mobile workstations
+            "%Steam Deck%",           # Valve handheld gaming console
+            "%Handheld Console%",
+            "%Portable Console%",
+            # Thin clients are not flippable desktop PCs
+            "%Thin Client%",
+            # Upgrade / starter kits — not a complete PC
+            "%Upgrade Kit%",
+            "%Starter Kit%",
+            "% upgrade /starter%",
+            # Laptop (screen size in title is a reliable laptop signal)
+            "% 15.6%inch%",
+            "% 14%inch%",
+            "% 13.3%inch%",
+            "% 15.6\"%",
+            "% 14\"%",
+            "% 13.3\"%",
         ]
         from sqlalchemy import or_, not_
         is_component = or_(*[Listing.title.ilike(p) for p in _COMPONENT_PATTERNS])

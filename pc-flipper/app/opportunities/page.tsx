@@ -116,7 +116,7 @@ export default function OpportunitiesPage() {
 
       // Collect unique sources for dropdown (first load only)
       if (page === 1 && sources.length === 0) {
-        const allSources = await api.listings.list({ limit: "500", status: "active" }) as Listing[];
+        const allSources = await api.listings.list({ limit: "500", status: "active", whole_pc_only: "true" }) as Listing[];
         const uniqueSources = [...new Set(allSources.map(l => l.source_name))].sort();
         setSources(uniqueSources);
       }
@@ -142,7 +142,7 @@ export default function OpportunitiesPage() {
     setFlippingId(listing.id);
     try {
       await api.flips.create({ listing_id: listing.id });
-      window.location.href = "/flips";
+      window.location.href = "/selling";
     } catch { setFlippingId(null); }
   };
 

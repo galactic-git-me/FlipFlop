@@ -251,20 +251,47 @@ async def _wipe_dev_data() -> None:
     log.info("dev.wipe.done")
 
 
+def _install_sigchld_reaper() -> None:
+    """
+    Prevent headless_shell zombie accumulation.
+
+    Setting SIGCHLD to SIG_IGN tells the Linux kernel to auto-reap child
+    processes the moment they exit — no zombie entries are created at all.
+    This is the most reliable approach: the periodic waitpid() loop can miss
+    children if the task is cancelled or the event loop is busy.
+
+    Side-effect: os.waitpid() calls will raise ChildProcessError because there
+    are no zombies to collect.  Playwright manages its own children internally
+    and does not rely on the parent calling waitpid(), so this is safe.
+    """
+    import signal as _signal
+    _signal.signal(_signal.SIGCHLD, _signal.SIG_IGN)
+    log.info("browser_pool.sigchld_reaper_installed")
+
+
 async def _reap_zombie_children() -> None:
-    """Periodically reap zombie children left by Playwright's headless_shell subprocesses."""
+    """
+    Belt-and-braces zombie reaper — runs every 5 s as a backup to the
+    SIGCHLD=SIG_IGN approach above.  Catches both ChildProcessError and
+    the broader OSError so it never silently dies.
+    """
     while True:
         try:
+            reaped = 0
             while True:
                 pid, _ = os.waitpid(-1, os.WNOHANG)
                 if pid == 0:
                     break
-        except ChildProcessError:
+                reaped += 1
+            if reaped:
+                log.debug("browser_pool.zombies_reaped", count=reaped)
+        except (ChildProcessError, OSError):
             pass
-        await asyncio.sleep(30)
+        await asyncio.sleep(5)
 
 
 async def lifespan(app: FastAPI):
+    _install_sigchld_reaper()      # prevent headless_shell zombie accumulation
     install_log_capture()          # must be first — before any structlog usage
     loop = asyncio.get_running_loop()
     loop.set_exception_handler(_loop_exception_handler)

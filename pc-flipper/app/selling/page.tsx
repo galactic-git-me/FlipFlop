@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ const PLATFORM_FEES: Record<string, number> = { ebay: 0.127, facebook: 0, gumtre
 const PLATFORMS = ["ebay", "facebook", "gumtree"] as const;
 
 export default function SellingPage() {
+  const router = useRouter();
   const [flips, setFlips] = useState<Flip[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Flip | null>(null);
@@ -172,8 +174,16 @@ export default function SellingPage() {
                           Cost: {formatCurrency(flip.total_cost)} · Stage: {flip.stage.replace("_", " ")}
                         </p>
                       </div>
-                      <div className="text-xs font-bold text-[#00dc82]">
-                        {formatCurrency(flip.current_estimated_profit ?? 0)}
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="text-xs font-bold text-[#00dc82]">
+                          {formatCurrency(flip.current_estimated_profit ?? 0)}
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); router.push(`/flips/${flip.id}`); }}
+                          className="text-[9px] text-slate-600 hover:text-slate-400 transition-colors"
+                        >
+                          Manage →
+                        </button>
                       </div>
                     </div>
                   </CardContent>

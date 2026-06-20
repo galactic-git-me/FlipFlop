@@ -8,14 +8,13 @@ import { Listing } from "@/lib/types";
 import { api, API_BASE_URL } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
-// ── Fetch super gems ──────────────────────────────────────────────────────────
-async function fetchSuperGems(): Promise<Listing[]> {
-  const params = new URLSearchParams({
-    classification: "amazing_gem",
-    sort_by: "gem_score",
-    page: "1",
-    page_size: "60",
-  });
+// ── Fetch gems ────────────────────────────────────────────────────────────────
+async function fetchGems(superOnly: boolean): Promise<Listing[]> {
+  const params = new URLSearchParams(
+    superOnly
+      ? { claude_verdict: "GEM", sort_by: "gem_score", sort_desc: "true", limit: "60", whole_pc_only: "true", min_price: "50" }
+      : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50" }
+  );
   const res = await fetch(`${API_BASE_URL}/listings/?${params}`);
   const data = await res.json();
   return Array.isArray(data) ? data : (data.items ?? []);
@@ -25,9 +24,11 @@ async function fetchSuperGems(): Promise<Listing[]> {
 export function SuperGemsModal({
   open,
   onClose,
+  superOnly = true,
 }: {
   open: boolean;
   onClose: () => void;
+  superOnly?: boolean;
 }) {
   const [mounted, setMounted] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
@@ -38,13 +39,13 @@ export function SuperGemsModal({
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      setListings(await fetchSuperGems());
+      setListings(await fetchGems(superOnly));
     } catch {
       setListings([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [superOnly]);
 
   useEffect(() => {
     if (open) void load();
@@ -69,7 +70,7 @@ export function SuperGemsModal({
       <div className="flex items-center justify-between px-6 py-4 border-b border-cyan-400/20 bg-[#030d1a]/90 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-cyan-300 animate-pulse" />
-          <h2 className="text-lg font-black text-cyan-100 tracking-wide">Super Gems</h2>
+          <h2 className="text-lg font-black text-cyan-100 tracking-wide">{superOnly ? "Super Gems" : "All Gems"}</h2>
           {!loading && listings.length > 0 && (
             <span className="text-xs text-slate-500 ml-1">{listings.length} found</span>
           )}
@@ -101,7 +102,7 @@ export function SuperGemsModal({
         ) : listings.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
             <Zap className="w-12 h-12 opacity-20" />
-            <p className="text-sm">No super gems found yet — run a scan first.</p>
+            <p className="text-sm">No {superOnly ? "super gems" : "gems"} found yet — run a scan first.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

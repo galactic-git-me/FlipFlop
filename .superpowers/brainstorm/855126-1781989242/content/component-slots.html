@@ -1,0 +1,72 @@
+<h2>Which slots does the customer choose?</h2>
+<p class="subtitle">Select all that should appear as customer-facing options. Unselected = you decide for them (best value pick auto-selected).</p>
+
+<div class="options" data-multiselect>
+
+  <div class="option" data-choice="cpu" onclick="toggleSelect(this)">
+    <div class="letter">CPU</div>
+    <div class="content">
+      <h3>Processor</h3>
+      <p>e.g. Core i5 vs Core i7 — customers understand "more cores = faster". Clear value ladder.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="gpu" onclick="toggleSelect(this)">
+    <div class="letter">GPU</div>
+    <div class="content">
+      <h3>Graphics Card</h3>
+      <p>High relevance for gaming/AI/creative playbooks. Less relevant for office builds.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="ram" onclick="toggleSelect(this)">
+    <div class="letter">RAM</div>
+    <div class="content">
+      <h3>Memory</h3>
+      <p>8GB / 16GB / 32GB — easy for customers to understand. "More = better multitasking."</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="storage" onclick="toggleSelect(this)">
+    <div class="letter">SSD</div>
+    <div class="content">
+      <h3>Storage</h3>
+      <p>256GB / 512GB / 1TB — customers understand this from their phones. Easy upsell.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="case" onclick="toggleSelect(this)">
+    <div class="letter">CASE</div>
+    <div class="content">
+      <h3>Case</h3>
+      <p>The hero choice — the visual product. Always customer-facing. This is the whole point.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="cooling" onclick="toggleSelect(this)">
+    <div class="letter">COOL</div>
+    <div class="content">
+      <h3>Cooling</h3>
+      <p>Air vs AIO liquid cooler. Relevant for high-performance or aesthetic builds (visible through glass).</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="os" onclick="toggleSelect(this)">
+    <div class="letter">OS</div>
+    <div class="content">
+      <h3>Operating System</h3>
+      <p>Windows 11 Home / Pro / No OS. Affects price meaningfully. Most customers want this choice.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="warranty" onclick="toggleSelect(this)">
+    <div class="letter">WTY</div>
+    <div class="content">
+      <h3>Warranty / Support</h3>
+      <p>12 months / 24 months / extended. Pure upsell. Low friction add-on at checkout.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:20px">Select as many as apply. Unselected slots = you pick best value, not shown to customer.</p>

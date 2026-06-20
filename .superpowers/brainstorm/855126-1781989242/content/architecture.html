@@ -1,0 +1,79 @@
+<h2>Catalogue Layer — Architecture</h2>
+<p class="subtitle">How the pieces connect. FlipFlop grows three new concepts: Slots, Variants, and Cases.</p>
+
+<div class="section">
+  <h3>Data model</h3>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;font-family:monospace;font-size:12px;line-height:2">
+
+    <span style="color:var(--accent);font-size:11px;font-family:sans-serif;font-weight:600">EXISTING</span><br>
+    <span style="color:#7dd3fc">Playbook</span> (id, name, status, keywords…)<br>
+    <span style="color:#7dd3fc">Listing</span> (id, title, price, gem_score, component_type…)<br><br>
+
+    <span style="color:var(--accent);font-size:11px;font-family:sans-serif;font-weight:600">NEW</span><br>
+
+    <span style="color:#86efac">playbook_slots</span><br>
+    &nbsp;&nbsp;playbook_id → Playbook<br>
+    &nbsp;&nbsp;slot_type: cpu | gpu | ram | storage | cooling | os<br>
+    &nbsp;&nbsp;is_customer_visible: bool<br>
+    &nbsp;&nbsp;tier_names: json <span style="color:#6b7280">→ {"budget":"Starter","mid":"Battle-Ready","high":"Beast Mode"}</span><br>
+    &nbsp;&nbsp;score_band_budget: [40, 65] &nbsp;score_band_mid: [65, 80] &nbsp;score_band_high: [80, 100]<br><br>
+
+    <span style="color:#86efac">catalogue_variants</span><br>
+    &nbsp;&nbsp;listing_id → Listing<br>
+    &nbsp;&nbsp;slot_id → playbook_slots<br>
+    &nbsp;&nbsp;status: pending_review | active | hidden | rejected<br>
+    &nbsp;&nbsp;display_price: float <span style="color:#6b7280">→ scrape_price × 1.15, rounded to £5</span><br>
+    &nbsp;&nbsp;consecutive_misses: int <span style="color:#6b7280">→ auto-hide at 2</span><br>
+    &nbsp;&nbsp;last_seen_at: datetime<br>
+    &nbsp;&nbsp;auto_published_at: datetime<br><br>
+
+    <span style="color:#86efac">case_catalogue</span><br>
+    &nbsp;&nbsp;name, brand, form_factor: atx | matx | itx<br>
+    &nbsp;&nbsp;images: json <span style="color:#6b7280">→ [manufacturer photos]</span><br>
+    &nbsp;&nbsp;rrp_gbp: float<br>
+    &nbsp;&nbsp;is_transparent_panel: bool<br>
+    &nbsp;&nbsp;status: active | hidden<br>
+    &nbsp;&nbsp;component_image_slots: json <span style="color:#6b7280">→ where GPU/CPU cooler appear through glass</span><br>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Hourly scrape run additions</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px">
+      <div class="label" style="color:var(--accent)">Auto-publish step</div>
+      <p style="color:var(--text-secondary);margin:6px 0 0">After gem detection: any gem with score ≥ threshold AND matching a defined slot → create catalogue_variant with status=pending_review. Runs silently in background.</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px">
+      <div class="label" style="color:var(--accent)">Freshness step</div>
+      <p style="color:var(--text-secondary);margin:6px 0 0">For every active variant: if listing not seen this run → consecutive_misses++. At 2 → status=hidden. If seen again within 24h → status=active, misses reset to 0.</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px">
+      <div class="label" style="color:var(--accent)">Price update step</div>
+      <p style="color:var(--text-secondary);margin:6px 0 0">For every active variant: recalculate display_price from current listing price × 1.15, round up to nearest £5. No admin action needed.</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px">
+      <div class="label" style="color:var(--accent)">Review digest</div>
+      <p style="color:var(--text-secondary);margin:6px 0 0">Once daily (morning): count pending_review variants → if > 0, emit alert to admin. Admin reviews in FlipFlop, approves or rejects. Approved → status=active.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>New API endpoints</h3>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:monospace;font-size:12px;line-height:2">
+    <span style="color:#6b7280"># Admin (FlipFlop)</span><br>
+    GET &nbsp;<span style="color:var(--accent)">/api/catalogue/review-queue</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7280">→ pending_review variants for admin</span><br>
+    POST <span style="color:var(--accent)">/api/catalogue/variants/{id}/approve</span><br>
+    POST <span style="color:var(--accent)">/api/catalogue/variants/{id}/reject</span><br>
+    GET &nbsp;<span style="color:var(--accent)">/api/catalogue/cases</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7280">→ admin list</span><br>
+    POST <span style="color:var(--accent)">/api/catalogue/cases</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7280">→ add a case</span><br>
+    PATCH <span style="color:var(--accent)">/api/catalogue/cases/{id}</span><br><br>
+    <span style="color:#6b7280"># Public (customer site)</span><br>
+    GET &nbsp;<span style="color:var(--accent)">/api/public/playbooks</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7280">→ active playbooks + tier names</span><br>
+    GET &nbsp;<span style="color:var(--accent)">/api/public/playbooks/{id}/slots</span> &nbsp;<span style="color:#6b7280">→ slots + variants grouped by tier</span><br>
+    GET &nbsp;<span style="color:var(--accent)">/api/public/cases</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7280">→ active cases for configurator</span><br>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:20px">Does this architecture look right? Any changes before we look at the admin UI?</p>

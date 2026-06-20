@@ -1,0 +1,99 @@
+<h2>Admin UI — Catalogue Management</h2>
+<p class="subtitle">A new "Catalogue" section in the FlipFlop sidebar with three sub-pages.</p>
+
+<div style="display:grid;grid-template-columns:200px 1fr;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:16px;min-height:420px">
+
+  <!-- Sidebar -->
+  <div style="background:var(--surface);border-right:1px solid var(--border);padding:16px 0">
+    <div style="padding:8px 16px;font-size:11px;color:var(--text-secondary);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px">Catalogue</div>
+    <div style="padding:8px 16px;background:var(--accent);color:#000;font-size:13px;font-weight:600;border-radius:0">
+      ⚠️ Review Queue <span style="background:#000;color:var(--accent);border-radius:9999px;padding:1px 7px;font-size:11px;margin-left:6px">12</span>
+    </div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">📦 Component Variants</div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">🖥️ Case Catalogue</div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">⚙️ Slot Config</div>
+
+    <div style="padding:8px 16px;font-size:11px;color:var(--text-secondary);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin:16px 0 4px">Existing</div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">Inventory</div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">Super Gems</div>
+    <div style="padding:8px 16px;font-size:13px;color:var(--text-secondary)">Playbooks</div>
+  </div>
+
+  <!-- Main content: Review Queue -->
+  <div style="padding:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <h3 style="margin:0">Review Queue</h3>
+        <p style="margin:2px 0 0;font-size:12px;color:var(--text-secondary)">12 new auto-published variants waiting for approval</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="mock-button" style="font-size:12px;padding:4px 12px;opacity:.7">Reject All</button>
+        <button class="mock-button" style="font-size:12px;padding:4px 12px;background:var(--accent);color:#000;border:none">Approve All</button>
+      </div>
+    </div>
+
+    <!-- Review item -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr auto auto auto auto;gap:12px;align-items:center;padding:12px 14px;background:var(--surface)">
+        <div>
+          <div style="font-size:13px;font-weight:600">Intel Core i7-12700 12-Core</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">CPU · Gaming Rig → Mid tier · auto-published 2h ago</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600">£189</div>
+          <div style="font-size:11px;color:var(--text-secondary)">display price</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:16px;font-weight:700;color:#4ade80">87</div>
+          <div style="font-size:11px;color:var(--text-secondary)">gem score</div>
+        </div>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#ef4444;border:none;color:#fff">Reject</button>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#4ade80;border:none;color:#000">Approve</button>
+      </div>
+    </div>
+
+    <!-- Review item 2 -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr auto auto auto auto;gap:12px;align-items:center;padding:12px 14px;background:var(--surface)">
+        <div>
+          <div style="font-size:13px;font-weight:600">Samsung 870 EVO 1TB SSD</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Storage · AI Machine → High tier · auto-published 2h ago</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600">£82</div>
+          <div style="font-size:11px;color:var(--text-secondary)">display price</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:16px;font-weight:700;color:#4ade80">91</div>
+          <div style="font-size:11px;color:var(--text-secondary)">gem score</div>
+        </div>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#ef4444;border:none;color:#fff">Reject</button>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#4ade80;border:none;color:#000">Approve</button>
+      </div>
+    </div>
+
+    <!-- Review item 3 -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr auto auto auto auto;gap:12px;align-items:center;padding:12px 14px;background:var(--surface)">
+        <div>
+          <div style="font-size:13px;font-weight:600">RTX 3060 Ti 8GB VRAM</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">GPU · Gaming Rig → High tier · auto-published 2h ago</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600">£274</div>
+          <div style="font-size:11px;color:var(--text-secondary)">display price</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:16px;font-weight:700;color:#4ade80">83</div>
+          <div style="font-size:11px;color:var(--text-secondary)">gem score</div>
+        </div>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#ef4444;border:none;color:#fff">Reject</button>
+        <button class="mock-button" style="font-size:11px;padding:4px 10px;background:#4ade80;border:none;color:#000">Approve</button>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:12px;text-align:center">+ 9 more · <a style="color:var(--accent)">View all</a></p>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:20px">Does this review queue feel right? The other three sub-pages (Component Variants list, Case Catalogue, Slot Config) follow the same sidebar layout.</p>

@@ -125,6 +125,15 @@ async def get_parts_grouped(
     return output
 
 
+@router.get("/{part_id}", response_model=PartOut)
+async def get_part(part_id: int, db: AsyncSession = Depends(get_db)):
+    from fastapi import HTTPException
+    part = await db.get(Part, part_id)
+    if not part:
+        raise HTTPException(404, "Part not found")
+    return part
+
+
 @router.post("/", response_model=PartOut, status_code=201)
 async def create_part(body: PartCreate, db: AsyncSession = Depends(get_db)):
     part = Part(**body.model_dump())

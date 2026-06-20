@@ -1816,6 +1816,7 @@ async def fetch_listings(
         scrape_ibidder_playwright,
         scrape_bidspotter_playwright,
         scrape_lots_co_uk_playwright,
+        scrape_the_saleroom_playwright,
         RawListing as PlRawListing,
     )
     from app.services.auction_scrapers import (
@@ -1906,6 +1907,10 @@ async def fetch_listings(
 
     if "lots.co.uk" in name or name == "lots":
         pl_results = await scrape_lots_co_uk_playwright(prioritized_auction_terms, min_price, max_price)
+        return [_convert(r) for r in pl_results]
+
+    if "saleroom" in name:
+        pl_results = await scrape_the_saleroom_playwright(prioritized_auction_terms, min_price, max_price)
         return [_convert(r) for r in pl_results]
 
     if "amazon" in name:

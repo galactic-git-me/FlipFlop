@@ -1,0 +1,66 @@
+<h2>Subsystem 1: Catalogue Layer</h2>
+<p class="subtitle">Changes to FlipFlop that power the customer website. Everything the site shows comes from here.</p>
+
+<div class="section">
+  <h3>What this subsystem does</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div class="label" style="color:var(--accent)">Component Slots</div>
+      <h3 style="margin:8px 0 4px">Playbook → Parts</h3>
+      <p style="font-size:13px;color:var(--text-secondary)">Each playbook defines which component slots it has (CPU, GPU, RAM, Storage) and which inventory items are available as variants in each slot. Admin curates which super-gems "go live".</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div class="label" style="color:var(--accent)">Case Catalogue</div>
+      <h3 style="margin:8px 0 4px">The Hero Product</h3>
+      <p style="font-size:13px;color:var(--text-secondary)">A managed list of cases (Lian Li, Fractal, NZXT, etc.) with manufacturer images. Admin adds cases manually. Cases are not scraped — they're curated.</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div class="label" style="color:var(--accent)">Freshness Engine</div>
+      <h3 style="margin:8px 0 4px">2-Run Rule</h3>
+      <p style="font-size:13px;color:var(--text-secondary)">Component variants auto-hide if not seen in 2 consecutive hourly scrape runs. Reappear if seen again within 24h. Never more than 2 hours stale.</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div class="label" style="color:var(--accent)">Pricing Layer</div>
+      <h3 style="margin:8px 0 4px">Live + Buffer</h3>
+      <p style="font-size:13px;color:var(--text-secondary)">Prices update every hourly run. A 15% buffer margin is baked in at publish time. Display price = latest scrape price × 1.15 (rounded up to nearest £5).</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Data flow</h3>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;font-family:monospace;font-size:13px;line-height:1.8">
+    <span style="color:var(--accent)">Hourly scrape</span> → Listings table<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ gem detection<br>
+    <span style="color:var(--accent)">Super gems</span> → Admin reviews → "Publish to site" toggle<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ assigned to playbook slot<br>
+    <span style="color:var(--accent)">Component variants</span> → exposed via <code>/api/catalogue</code><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ freshness check every run<br>
+    <span style="color:var(--accent)">Customer site</span> reads catalogue → shows live options
+  </div>
+</div>
+
+<div class="section">
+  <h3>New database tables needed</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px">
+      <div class="label">playbook_slots</div>
+      <p style="color:var(--text-secondary);margin:4px 0 0">Maps playbook → component type slots (CPU, GPU etc) with display name per playbook type</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px">
+      <div class="label">catalogue_variants</div>
+      <p style="color:var(--text-secondary);margin:4px 0 0">Links listing → slot, stores publish status, display price, consecutive-miss counter</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px">
+      <div class="label">case_catalogue</div>
+      <p style="color:var(--text-secondary);margin:4px 0 0">Case name, brand, form factor, images[], RRP, status. Admin-managed, no scraping.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:24px">Does this scope feel right? Anything missing or to cut?</p>

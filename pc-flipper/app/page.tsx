@@ -151,21 +151,22 @@ export default function DashboardPage() {
       };
 
       const results = await Promise.allSettled([
-        step(api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500" }) as Promise<Listing[]>, 15000),
+        step(api.listings.list({ sort_by: "estimated_profit", sort_desc: "true", limit: "500", whole_pc_only: "true", min_price: "50" }) as Promise<Listing[]>, 15000),
         step(api.listings.stats(), 12000),
         step(api.swarms.list() as Promise<{ id: string; name: string; next_run: string | null }[]>, 12000),
         step(api.flips.list() as Promise<Flip[]>, 12000),
         // Gem of Day: prefer Claude-confirmed gems; fall back to rule-based. whole_pc_only excludes components.
+        // min_price=50 guards against cheap accessories that slip through the title filter.
         step((async () => {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
             limit: "10", gem_only: "true", claude_judged_only: "true",
-            whole_pc_only: "true", first_seen_after: past24hISO,
+            whole_pc_only: "true", first_seen_after: past24hISO, max_price: "9999", min_price: "50",
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO, min_price: "50",
           }) as Promise<Listing[]>);
         })(), 12000),
         // Gem of Week: prefer Claude-confirmed gems; fall back to rule-based. whole_pc_only excludes components.
@@ -173,12 +174,12 @@ export default function DashboardPage() {
           const claude = await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
             limit: "10", gem_only: "true", claude_judged_only: "true",
-            whole_pc_only: "true", first_seen_after: past7dISO,
+            whole_pc_only: "true", first_seen_after: past7dISO, min_price: "50",
           }) as Promise<Listing[]>);
           if (claude.length) return claude;
           return await (api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO, min_price: "50",
           }) as Promise<Listing[]>);
         })(), 12000),
         step(api.config.get() as Promise<SearchConfig>, 12000),
@@ -294,11 +295,11 @@ export default function DashboardPage() {
           api.listings.stats(),
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past24hISO, min_price: "50",
           }) as Promise<Listing[]>,
           api.listings.list({
             sort_by: "gem_score", sort_desc: "true",
-            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO,
+            limit: "10", gem_only: "true", whole_pc_only: "true", first_seen_after: past7dISO, min_price: "50",
           }) as Promise<Listing[]>,
         ]);
         setStats(s as typeof stats);
@@ -327,7 +328,7 @@ export default function DashboardPage() {
     setFlippingId(listing.id);
     try {
       await api.flips.create({ listing_id: listing.id });
-      router.push("/flips");
+      router.push("/selling");
     } catch {
       setFlippingId(null);
     }
@@ -1594,19 +1595,25 @@ function ListingsTrackedCard({ total, bySource }: { total: number; bySource: Rec
 // ── Gems Found ────────────────────────────────────────────────────────────────
 function GemsFoundCard({ total, superGems, bySource }: { total: number; superGems: number; bySource: Record<string, number> }) {
   const [showGemsModal, setShowGemsModal] = useState(false);
+  const [showAllGemsModal, setShowAllGemsModal] = useState(false);
 
   return (
     <>
-      <SuperGemsModal open={showGemsModal} onClose={() => setShowGemsModal(false)} />
+      <SuperGemsModal open={showGemsModal} onClose={() => setShowGemsModal(false)} superOnly={true} />
+      <SuperGemsModal open={showAllGemsModal} onClose={() => setShowAllGemsModal(false)} superOnly={false} />
     <Card className="border-[#00dc82]/30 bg-[#021b12]/55 shadow-[0_12px_44px_rgba(0,220,130,0.16)]">
       <CardContent className="pt-5 pb-5 min-h-[220px]">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] text-[#7ce7b6] font-semibold uppercase tracking-[0.2em]">Gems Found</span>
           <Gem className="w-4.5 h-4.5 text-[#00dc82]" />
         </div>
-        <div className="text-4xl leading-none font-black text-[#00f49a] tabular-nums">
+        <button
+          onClick={() => total > 0 && setShowAllGemsModal(true)}
+          className="text-4xl leading-none font-black text-[#00f49a] tabular-nums hover:text-[#00ffaa] transition-colors cursor-pointer disabled:cursor-default"
+          disabled={total === 0}
+        >
           <CountUp to={total} duration={1.5} separator="," />
-        </div>
+        </button>
         {superGems > 0 && (
           <button
             onClick={() => setShowGemsModal(true)}
