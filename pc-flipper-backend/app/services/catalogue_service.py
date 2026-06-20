@@ -11,18 +11,14 @@ from __future__ import annotations
 import math
 import logging
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.catalogue import PlaybookSlot, CatalogueVariant
 from app.models.listing import Listing, Classification
 from app.services.classifier import detect_component_category
 from app.services.alerts import emit_alert
-
-if TYPE_CHECKING:
-    pass
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +32,7 @@ _CATEGORY_TO_SLOT: dict[str, str] = {
 }
 
 FRESH_WINDOW_HOURS = 2
+MIN_GEM_SCORE = 40
 
 
 def compute_display_price(scrape_price: float) -> float:
@@ -71,7 +68,7 @@ async def auto_publish_gems(db: AsyncSession) -> int:
     result = await db.execute(
         select(Listing).where(
             Listing.classification.in_(gem_classifications),
-            Listing.gem_score >= 40,
+            Listing.gem_score >= MIN_GEM_SCORE,
         )
     )
     gem_listings = result.scalars().all()
@@ -135,6 +132,7 @@ async def check_freshness(db: AsyncSession) -> int:
     rows = result.all()
 
     hidden = 0
+    newly_hidden_ids: set[int] = set()
     now = datetime.utcnow().isoformat()
 
     for variant, listing in rows:
@@ -147,15 +145,19 @@ async def check_freshness(db: AsyncSession) -> int:
             if variant.consecutive_misses >= 2:
                 variant.status = "hidden"
                 hidden += 1
+                newly_hidden_ids.add(variant.id)
 
-    hidden_result = await db.execute(
+    q = (
         select(CatalogueVariant, Listing)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
         .where(CatalogueVariant.status == "hidden")
     )
+    if newly_hidden_ids:
+        q = q.where(CatalogueVariant.id.notin_(newly_hidden_ids))
+    hidden_result = await db.execute(q)
     for variant, listing in hidden_result.all():
         last_seen = listing.last_seen_at  # datetime object
-        if last_seen and last_seen >= reinstate_cutoff and last_seen >= cutoff:
+        if last_seen and last_seen >= reinstate_cutoff:
             variant.status = "active"
             variant.consecutive_misses = 0
             variant.last_seen_at = now
