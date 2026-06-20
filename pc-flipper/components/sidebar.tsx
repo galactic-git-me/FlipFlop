@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LayoutDashboard,
   Search,
@@ -39,6 +39,13 @@ const PRIMARY_NAV = [
   { href: "/community", icon: Rss, label: "Community" },
   { href: "/logs", icon: Brain, label: "AI Insights" },
   { href: "/settings", icon: Settings, label: "Settings" },
+];
+
+const CATALOGUE_NAV = [
+  { href: "/catalogue", label: "Review Queue" },
+  { href: "/catalogue/variants", label: "Component Variants" },
+  { href: "/catalogue/cases", label: "Cases" },
+  { href: "/catalogue/slots", label: "Slot Config" },
 ];
 
 // ─── Twinkling stars canvas ───────────────────────────────────────────────────
@@ -109,6 +116,14 @@ function StarsCanvas() {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/catalogue/review-queue")
+      .then(r => r.json())
+      .then((data: unknown[]) => setPendingCount(data.length))
+      .catch(() => {});
+  }, []);
 
   return (
     <aside className="node-sidebar" style={{ overflow: "hidden" }}>
@@ -135,6 +150,30 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        {/* Catalogue section */}
+        <div className="px-2">
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1 px-2" style={{ color: "rgba(201,211,217,0.5)" }}>
+            Catalogue
+          </p>
+          {CATALOGUE_NAV.map(item => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn("node-nav-item-fancy", active && "node-nav-item-fancy-active")}
+              >
+                <span>{item.label}</span>
+                {item.href === "/catalogue" && pendingCount > 0 && (
+                  <span className="ml-auto text-xs bg-amber-400 text-black rounded-full px-1.5 py-0.5 font-bold leading-none">
+                    {pendingCount}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
 
       </div>
 
