@@ -262,8 +262,9 @@ async def run_catalogue_pipeline_job() -> dict:
         return await run_catalogue_pipeline(db)
 
 
-async def run_catalogue_digest_job() -> None:
+async def run_catalogue_digest_job() -> dict:
     """Self-contained wrapper for scheduler — opens its own DB session."""
     from app.database import AsyncSessionLocal
     async with AsyncSessionLocal() as db:
         await send_review_digest(db)
+        return {"ok": True}

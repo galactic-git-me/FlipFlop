@@ -500,6 +500,10 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("price_refresh", run_price_refresh)
     if swarm_id == "ram_watcher":
         return await _run_job_with_history("ram_watcher", run_ram_watcher)
+    if swarm_id == "catalogue_pipeline":
+        return await _run_job_with_history("catalogue_pipeline", run_catalogue_pipeline_job)
+    if swarm_id == "catalogue_digest":
+        return await _run_job_with_history("catalogue_digest", run_catalogue_digest_job)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 
