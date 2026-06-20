@@ -2,6 +2,8 @@
 Public catalogue endpoints — no auth required.
 Consumed by the customer website (Subsystem 3).
 """
+from collections import defaultdict
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,24 +24,31 @@ async def public_list_playbooks(db: AsyncSession = Depends(get_db)):
     )
     playbooks = result.scalars().all()
 
+    playbook_ids = [pb.id for pb in playbooks]
+    if playbook_ids:
+        all_slots_result = await db.execute(
+            select(PlaybookSlot).where(PlaybookSlot.playbook_id.in_(playbook_ids))
+        )
+        all_slots = all_slots_result.scalars().all()
+    else:
+        all_slots = []
+
+    # Group slots by playbook_id in Python
+    slots_by_playbook: dict[int, list] = defaultdict(list)
+    for s in all_slots:
+        slots_by_playbook[s.playbook_id].append({
+            "id": s.id,
+            "slot_type": s.slot_type,
+            "is_customer_visible": s.is_customer_visible,
+            "tier_names": s.tier_names,
+        })
+
     output = []
     for pb in playbooks:
-        slots_result = await db.execute(
-            select(PlaybookSlot).where(PlaybookSlot.playbook_id == pb.id)
-        )
-        slots = slots_result.scalars().all()
         output.append({
             "id": pb.id,
             "name": pb.name,
-            "slots": [
-                {
-                    "id": s.id,
-                    "slot_type": s.slot_type,
-                    "is_customer_visible": s.is_customer_visible,
-                    "tier_names": s.tier_names,
-                }
-                for s in slots
-            ],
+            "slots": slots_by_playbook[pb.id],
         })
     return output
 
@@ -64,34 +73,43 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
         )
     )
     slots = slots_result.scalars().all()
+    slot_ids = [s.id for s in slots]
 
-    output = []
-    for slot in slots:
+    # Single query for all active variants across all customer-visible slots
+    if slot_ids:
         variants_result = await db.execute(
             select(CatalogueVariant, Listing)
             .join(Listing, CatalogueVariant.listing_id == Listing.id)
             .where(
-                CatalogueVariant.slot_id == slot.id,
+                CatalogueVariant.slot_id.in_(slot_ids),
                 CatalogueVariant.status == "active",
             )
-            .order_by(CatalogueVariant.display_price)
+            .order_by(CatalogueVariant.slot_id, CatalogueVariant.display_price)
         )
-        rows = variants_result.all()
+        all_rows = variants_result.all()
+    else:
+        all_rows = []
 
-        by_tier: dict[str, list] = {"budget": [], "mid": [], "high": []}
-        for v, l in rows:
-            by_tier[v.tier].append({
-                "id": v.id,
-                "title": l.title,
-                "display_price": v.display_price,
-                "gem_score": l.gem_score,
-            })
+    # Group by slot_id in Python, guarding against unexpected tier values
+    variants_by_slot: dict[int, dict[str, list]] = defaultdict(
+        lambda: {"budget": [], "mid": [], "high": []}
+    )
+    for v, l in all_rows:
+        tier = v.tier if v.tier in ("budget", "mid", "high") else "budget"
+        variants_by_slot[v.slot_id][tier].append({
+            "id": v.id,
+            "title": l.title,
+            "display_price": v.display_price,
+            "gem_score": l.gem_score,
+        })
 
+    output = []
+    for slot in slots:
         output.append({
             "slot_id": slot.id,
             "slot_type": slot.slot_type,
             "tier_names": slot.tier_names,
-            "variants_by_tier": by_tier,
+            "variants_by_tier": variants_by_slot[slot.id],
         })
 
     return output
