@@ -5,19 +5,10 @@ import type { PublicSlotWithVariants, PublicCase } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  let playbooks: typeof import("@/lib/types").PublicPlaybook[] = [];
-  let cases: typeof import("@/lib/types").PublicCase[] = [];
-
-  try {
-    const result = await Promise.all([
-      getPlaybooks(),
-      getCases(),
-    ]);
-    playbooks = result[0];
-    cases = result[1];
-  } catch (error) {
-    console.error("Failed to load playbooks/cases:", error);
-  }
+  const [playbooks, cases] = await Promise.all([
+    getPlaybooks(),
+    getCases(),
+  ]).catch(() => [[], []]);
 
   // Fetch slots for all playbooks in parallel (needed for budget total)
   const slotsPerPlaybook: Record<number, PublicSlotWithVariants[]> = {};

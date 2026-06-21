@@ -6,30 +6,81 @@ export async function GET() {
     {
       id: 1,
       name: "Productivity",
-      description: "Perfect for everyday computing, office work, and streaming",
-      color: "blue",
-      gem_score: 75,
-      budget_total: 45000,
-      tier_count: 3,
+      slots: [
+        {
+          id: 1,
+          slot_type: "cpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "Ryzen 5 7500F",
+            mid: "Ryzen 7 7700",
+            high: "Ryzen 9 7950X"
+          }
+        },
+        {
+          id: 2,
+          slot_type: "gpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "RTX 4070",
+            mid: "RTX 4070 Ti",
+            high: "RTX 4090"
+          }
+        }
+      ]
     },
     {
       id: 2,
       name: "Gaming",
-      description: "High performance for AAA games at 1440p 144Hz+",
-      color: "red",
-      gem_score: 88,
-      budget_total: 72000,
-      tier_count: 3,
+      slots: [
+        {
+          id: 3,
+          slot_type: "cpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "Ryzen 5 7600X",
+            mid: "Ryzen 7 7700X",
+            high: "Ryzen 9 7950X3D"
+          }
+        },
+        {
+          id: 4,
+          slot_type: "gpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "RTX 4070",
+            mid: "RTX 4080",
+            high: "RTX 4090"
+          }
+        }
+      ]
     },
     {
       id: 3,
       name: "Creator",
-      description: "Video editing, 3D rendering, streaming, and more",
-      color: "purple",
-      gem_score: 92,
-      budget_total: 95000,
-      tier_count: 3,
-    },
+      slots: [
+        {
+          id: 5,
+          slot_type: "cpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "Ryzen 7 7700X",
+            mid: "Ryzen 9 7950X",
+            high: "Ryzen 9 7950X3D"
+          }
+        },
+        {
+          id: 6,
+          slot_type: "gpu",
+          is_customer_visible: true,
+          tier_names: {
+            budget: "RTX 4080",
+            mid: "RTX 6000 Ada",
+            high: "RTX 6000 Ada"
+          }
+        }
+      ]
+    }
   ];
 
   return NextResponse.json(playbooks);
