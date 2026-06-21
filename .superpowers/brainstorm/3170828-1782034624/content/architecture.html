@@ -1,0 +1,86 @@
+<h2>System Architecture</h2>
+<p class="subtitle">How the three subsystems connect</p>
+
+<div class="mockup">
+  <div class="mockup-header">FlipFlop — Made-to-Order System</div>
+  <div class="mockup-body" style="padding:20px;font-size:0.82em;">
+
+    <!-- Row 1: External -->
+    <div style="display:flex;gap:10px;margin-bottom:8px;justify-content:center;">
+      <div style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 14px;text-align:center;color:#60a5fa;font-weight:600;">Customer Browser</div>
+      <div style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 14px;text-align:center;color:#60a5fa;font-weight:600;">Stripe</div>
+      <div style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 14px;text-align:center;color:#60a5fa;font-weight:600;">Gmail / IMAP</div>
+    </div>
+
+    <div style="text-align:center;color:var(--text-secondary);margin-bottom:8px;font-size:0.9em;">↕ ↕ ↕</div>
+
+    <!-- Row 2: New apps -->
+    <div style="display:flex;gap:10px;margin-bottom:8px;">
+      <div style="flex:1;background:rgba(34,197,94,0.08);border:2px solid rgba(34,197,94,0.4);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;color:#22c55e;margin-bottom:6px;">① pc-flipper-customer/</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          Next.js 14 · new app<br>
+          / — playbook landing<br>
+          /configure/[slug] — configurator<br>
+          /order/[id] — confirmation
+        </div>
+      </div>
+      <div style="flex:1;background:rgba(251,191,36,0.08);border:2px solid rgba(251,191,36,0.3);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;color:#fbbf24;margin-bottom:6px;">② Order + Capacity (backend)</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          POST /api/orders (checkout)<br>
+          GET /api/orders/slots (availability)<br>
+          Stripe webhook handler<br>
+          Auto slot assignment<br>
+          build_capacity table
+        </div>
+      </div>
+      <div style="flex:1;background:rgba(167,139,250,0.08);border:2px solid rgba(167,139,250,0.3);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;color:#a78bfa;margin-bottom:6px;">③ Delivery Tracker (backend)</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          IMAP poller (hourly)<br>
+          Subject pattern match<br>
+          LLM → delivery status<br>
+          Risk flag if arrival &gt; slot<br>
+          delivery_events table
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;color:var(--text-secondary);margin-bottom:8px;font-size:0.9em;">↕ all read from ↕</div>
+
+    <!-- Row 3: Existing -->
+    <div style="display:flex;gap:10px;margin-bottom:8px;">
+      <div style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:6px;">Existing: Catalogue API</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          /api/public/playbooks<br>
+          /api/public/playbooks/[id]/slots<br>
+          /api/public/cases<br>
+          <span style="color:#22c55e;">✓ already built</span>
+        </div>
+      </div>
+      <div style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:6px;">Existing: FlipFlop Admin</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          pc-flipper/ (Next.js)<br>
+          + Build Calendar page (new)<br>
+          + Orders list page (new)<br>
+          + Delivery tracker page (new)
+        </div>
+      </div>
+      <div style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:6px;">Existing: DB + Backend</div>
+        <div style="color:var(--text-secondary);font-size:0.9em;line-height:1.6;">
+          PostgreSQL<br>
+          FastAPI / SQLAlchemy<br>
+          APScheduler<br>
+          Claude API (LLM)
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;text-align:center;">Does this architecture look right before we go into each section?</p>
