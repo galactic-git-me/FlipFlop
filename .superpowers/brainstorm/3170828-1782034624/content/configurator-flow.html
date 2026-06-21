@@ -1,0 +1,90 @@
+<h2>How does the build configurator work?</h2>
+<p class="subtitle">Three different customer journeys — same end result</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Wizard / Step-by-step</h3>
+      <p>Customer moves through a guided sequence of screens:</p>
+      <div style="margin-top:10px;font-size:0.85em;color:var(--text-secondary);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Pick Playbook</span>
+        <span style="opacity:0.5">→</span>
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Pick Tier</span>
+        <span style="opacity:0.5">→</span>
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Customise Slots</span>
+        <span style="opacity:0.5">→</span>
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Pick Case</span>
+        <span style="opacity:0.5">→</span>
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Book Slot</span>
+        <span style="opacity:0.5">→</span>
+        <span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:12px;">Checkout</span>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Hard to get lost</li><li>Great on mobile</li><li>Natural for first-timers</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Slow if you know what you want</li><li>Can't see the full picture at once</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Single-page Configurator</h3>
+      <p>Everything on one scrollable page. Live price updates as you pick. Summary panel sticks to the side.</p>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <div style="flex:2;background:var(--bg-tertiary);border-radius:8px;padding:10px;font-size:0.8em;color:var(--text-secondary);">
+          <div style="margin-bottom:6px;font-weight:600;color:var(--text-primary);">Build It</div>
+          <div style="background:var(--bg-secondary);border-radius:4px;padding:5px 8px;margin-bottom:4px;">🎮 Gaming Rig ▾</div>
+          <div style="background:var(--bg-secondary);border-radius:4px;padding:5px 8px;margin-bottom:4px;">Tier: Battle-Ready ●●○</div>
+          <div style="background:var(--bg-secondary);border-radius:4px;padding:5px 8px;margin-bottom:4px;">CPU: Ryzen 5 5600X</div>
+          <div style="background:var(--bg-secondary);border-radius:4px;padding:5px 8px;">GPU: RTX 3060 Ti</div>
+        </div>
+        <div style="flex:1;background:var(--bg-tertiary);border-radius:8px;padding:10px;font-size:0.8em;color:var(--text-secondary);">
+          <div style="font-weight:600;color:var(--text-primary);margin-bottom:6px;">Your Build</div>
+          <div>CPU £125</div><div>GPU £275</div><div>RAM £45</div>
+          <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;font-weight:700;color:var(--text-primary);">Total £495</div>
+          <div style="margin-top:8px;background:#22c55e;color:#000;border-radius:4px;padding:5px;text-align:center;font-weight:600;">Order Now</div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>See everything at once</li><li>Fast for decisive buyers</li><li>Live price feedback</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More complex to build</li><li>Busier on mobile</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Landing → Playbook Cards → Configurator</h3>
+      <p>Homepage shows playbook cards (Gaming Rig, AI Machine, etc.). Customer picks one, lands on a full single-page configurator for that playbook.</p>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="background:var(--bg-tertiary);border-radius:8px;padding:8px 12px;font-size:0.8em;text-align:center;">
+          <div style="font-size:1.4em;margin-bottom:4px;">🎮</div>
+          <div style="font-weight:600;font-size:0.85em;">Gaming Rig</div>
+          <div style="color:var(--text-secondary);font-size:0.75em;">Starter → Beast Mode</div>
+        </div>
+        <div style="background:var(--bg-tertiary);border-radius:8px;padding:8px 12px;font-size:0.8em;text-align:center;">
+          <div style="font-size:1.4em;margin-bottom:4px;">🤖</div>
+          <div style="font-weight:600;font-size:0.85em;">AI Machine</div>
+          <div style="color:var(--text-secondary);font-size:0.75em;">Foundation → Powerhouse</div>
+        </div>
+        <div style="background:var(--bg-tertiary);border-radius:8px;padding:8px 12px;font-size:0.8em;text-align:center;">
+          <div style="font-size:1.4em;margin-bottom:4px;">🏠</div>
+          <div style="font-weight:600;font-size:0.85em;">Home Office</div>
+          <div style="color:var(--text-secondary);font-size:0.75em;">Basic → Premium</div>
+        </div>
+        <div style="background:var(--bg-tertiary);border-radius:8px;padding:8px 12px;font-size:0.8em;text-align:center;border:1px dashed var(--border);">
+          <div style="font-size:1.4em;margin-bottom:4px;">⚙️</div>
+          <div style="font-weight:600;font-size:0.85em;">Build Your Own</div>
+          <div style="color:var(--text-secondary);font-size:0.75em;">Full control</div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Great first impression</li><li>Guides clueless buyers</li><li>SEO-friendly landing page</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>One extra click to get started</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
