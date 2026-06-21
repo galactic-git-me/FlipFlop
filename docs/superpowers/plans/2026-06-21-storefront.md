@@ -279,7 +279,9 @@ export interface AvailableWeek {
 // pc-flipper-customer/lib/api.ts
 import type { PublicCase, PublicPlaybook, PublicSlotWithVariants, AvailableWeek } from "./types";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "";
+// All fetches in this file run inside Server Components — relative paths don't work
+// from the server process, so we use BACKEND_URL directly to hit the backend.
+const API = process.env.BACKEND_URL ?? "http://localhost:4311";
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${API}${path}`, { next: { revalidate: 60 } });
