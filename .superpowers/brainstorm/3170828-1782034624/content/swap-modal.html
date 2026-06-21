@@ -1,0 +1,142 @@
+<h2>The "swap" modal — comparing variants</h2>
+<p class="subtitle">What the customer sees when they click "swap ▾" on the GPU slot</p>
+
+<div class="mockup">
+  <div class="mockup-header">Configurator — swap modal overlay</div>
+  <div class="mockup-body" style="padding:0;position:relative;">
+
+    <!-- Blurred background hint -->
+    <div style="padding:16px;opacity:0.25;filter:blur(1px);font-size:0.8em;color:var(--text-secondary);">
+      [configurator page behind modal]
+    </div>
+
+    <!-- Modal -->
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;width:100%;max-width:600px;overflow:hidden;">
+
+        <!-- Modal header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-weight:700;font-size:0.95em;">Choose a GPU</div>
+            <div style="font-size:0.72em;color:var(--text-secondary);margin-top:2px;">3 options available · your tier: Battle-Ready</div>
+          </div>
+          <div style="cursor:pointer;color:var(--text-secondary);font-size:1.2em;">✕</div>
+        </div>
+
+        <!-- Variant cards -->
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+
+          <!-- Current selection (highlighted) -->
+          <div style="border:2px solid #22c55e;border-radius:10px;padding:12px;background:rgba(34,197,94,0.05);position:relative;">
+            <div style="position:absolute;top:8px;right:10px;font-size:0.65em;background:#22c55e;color:#000;border-radius:10px;padding:2px 8px;font-weight:700;">CURRENT</div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="flex:1;">
+                <div style="font-weight:700;font-size:0.88em;">NVIDIA RTX 3060 Ti</div>
+                <div style="font-size:0.72em;color:var(--text-secondary);margin-top:2px;">8GB GDDR6 · Battle-Ready tier</div>
+                <!-- Metrics -->
+                <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#22c55e;">74</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Gem score</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">12,450</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">PassMark</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">8GB</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">VRAM</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#60a5fa;">£3.9/pt</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Value</div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;font-size:1em;">£275</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upgrade option -->
+          <div style="border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#60a5fa'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div style="font-weight:700;font-size:0.88em;">NVIDIA RTX 3070</div>
+                  <span style="font-size:0.65em;background:rgba(251,191,36,0.15);color:#fbbf24;border-radius:8px;padding:1px 7px;font-weight:600;">↑ UPGRADE</span>
+                </div>
+                <div style="font-size:0.72em;color:var(--text-secondary);margin-top:2px;">8GB GDDR6 · Beast Mode tier</div>
+                <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#22c55e;">88</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Gem score</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">16,200</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">PassMark</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">8GB</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">VRAM</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#60a5fa;">£2.6/pt</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Value</div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;font-size:1em;">£420</div>
+                <div style="font-size:0.7em;color:#fbbf24;margin-top:2px;">+£145</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Budget option -->
+          <div style="border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;" onmouseover="this.style.borderColor='#60a5fa'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div style="font-weight:700;font-size:0.88em;">AMD RX 6600</div>
+                  <span style="font-size:0.65em;background:rgba(96,165,250,0.15);color:#60a5fa;border-radius:8px;padding:1px 7px;font-weight:600;">↓ SAVE £110</span>
+                </div>
+                <div style="font-size:0.72em;color:var(--text-secondary);margin-top:2px;">8GB GDDR6 · Starter tier</div>
+                <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#22c55e;">61</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Gem score</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">9,800</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">PassMark</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;">8GB</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">VRAM</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.1em;font-weight:800;color:#60a5fa;">£1.7/pt</div>
+                    <div style="font-size:0.65em;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Value</div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;font-size:1em;">£165</div>
+                <div style="font-size:0.7em;color:#60a5fa;margin-top:2px;">−£110</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="padding:10px 16px;border-top:1px solid var(--border);font-size:0.72em;color:var(--text-secondary);text-align:center;">
+          All components are sourced from eBay · prices update hourly · availability not guaranteed until order placed
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;text-align:center;">Gem score, PassMark, VRAM, and value/pt pulled from the benchmark layer. Happy with this, or want different metrics?</p>
