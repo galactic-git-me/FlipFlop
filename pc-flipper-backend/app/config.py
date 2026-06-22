@@ -79,6 +79,11 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
     stripe_publishable_key: str = ""
 
+    smtp_host: str = ""
+    smtp_user: str = ""
+    smtp_pass: str = ""
+    smtp_from: str = "noreply@flipflop.co.uk"
+
     # "dev" clears search_telemetry on every startup so figures start fresh.
     # "production" preserves history across restarts.
     app_env: str = "dev"

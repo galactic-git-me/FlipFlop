@@ -15,8 +15,10 @@ from app.schemas.order import (
     CapacityOverrideIn,
 )
 from app.services.stripe_service import create_checkout_session, verify_webhook_signature
+from app.services.email_service import send_order_confirmation_email
 import random
 import string
+import json
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
@@ -290,9 +292,19 @@ async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)):
                 assigned_week = await assign_build_week(db, order)
                 order.assigned_build_week = assigned_week
             except RuntimeError:
-                pass
+                assigned_week = None
 
             await db.commit()
+
+            if assigned_week:
+                build_summary = json.dumps(order.build_config, indent=2)
+                await send_order_confirmation_email(
+                    customer_email=order.customer_email,
+                    customer_name=order.customer_name,
+                    order_reference=order.reference,
+                    build_summary=build_summary,
+                    assigned_week=assigned_week,
+                )
 
     return {"status": "ok"}
 
