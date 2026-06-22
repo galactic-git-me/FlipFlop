@@ -29,6 +29,10 @@ export class PCBuilderScene {
   lastInteractionTime: number = Date.now();
   interactionIdleTime: number = 3000; // Resume auto-rotate after 3s of no interaction
   animationFrameId: number | null = null;
+  isDragging: boolean = false;
+  previousMousePosition: { x: number; y: number } = { x: 0, y: 0 };
+  rotation: { x: number; y: number } = { x: 0, y: 0 };
+  dragSensitivity: number = 0.005;
 
   constructor(config: SceneConfig) {
     // Scene setup
@@ -257,6 +261,38 @@ export class PCBuilderScene {
     await Promise.all(promises);
   }
 
+  // Get component at mouse position for hover detection
+  getComponentAtMousePosition(event: MouseEvent, canvas: HTMLCanvasElement): string | null {
+    const rect = canvas.getBoundingClientRect();
+    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    const allMeshes = Array.from(this.models.values()).map(ref => {
+      const meshes: THREE.Object3D[] = [];
+      ref.mesh.traverse((child: THREE.Object3D) => {
+        if (child instanceof THREE.Mesh) meshes.push(child);
+      });
+      return meshes;
+    }).flat();
+
+    const intersects = this.raycaster.intersectObjects(allMeshes);
+
+    if (intersects.length > 0) {
+      const hovered = intersects[0].object;
+      let obj: THREE.Object3D | null = hovered;
+      while (obj) {
+        if (obj.userData?.slotType && obj.userData.slotType !== 'case') {
+          return obj.userData.slotType;
+        }
+        obj = obj.parent;
+      }
+    }
+
+    return null;
+  }
+
   // Get clicked component (raycasting)
   getClickedComponent(event: MouseEvent, canvas: HTMLCanvasElement): string | null {
     const rect = canvas.getBoundingClientRect();
@@ -336,6 +372,56 @@ export class PCBuilderScene {
   // Record user interaction to pause auto-rotation
   recordInteraction() {
     this.lastInteractionTime = Date.now();
+  }
+
+  // Start drag interaction
+  startDrag(event: MouseEvent | TouchEvent) {
+    this.isDragging = true;
+    this.recordInteraction();
+
+    const clientX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
+    const clientY = event instanceof TouchEvent ? event.touches[0].clientY : event.clientY;
+
+    this.previousMousePosition = { x: clientX, y: clientY };
+  }
+
+  // Handle drag movement
+  moveDrag(event: MouseEvent | TouchEvent) {
+    if (!this.isDragging) return;
+
+    const clientX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
+    const clientY = event instanceof TouchEvent ? event.touches[0].clientY : event.clientY;
+
+    const deltaX = clientX - this.previousMousePosition.x;
+    const deltaY = clientY - this.previousMousePosition.y;
+
+    this.rotation.y += deltaX * this.dragSensitivity;
+    this.rotation.x += deltaY * this.dragSensitivity;
+
+    // Clamp X rotation to prevent flip
+    this.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.rotation.x));
+
+    // Apply rotation to all models
+    this.models.forEach(ref => {
+      ref.mesh.rotation.order = 'YXZ';
+      ref.mesh.rotation.y = this.rotation.y;
+      ref.mesh.rotation.x = this.rotation.x;
+    });
+
+    this.previousMousePosition = { x: clientX, y: clientY };
+  }
+
+  // End drag interaction
+  endDrag() {
+    this.isDragging = false;
+  }
+
+  // Reset rotation to default
+  resetRotation() {
+    this.rotation = { x: 0, y: 0 };
+    this.models.forEach(ref => {
+      ref.mesh.rotation.set(0, 0, 0);
+    });
   }
 
   // Set the speed of auto-rotation

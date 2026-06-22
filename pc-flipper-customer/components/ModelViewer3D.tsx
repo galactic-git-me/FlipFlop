@@ -12,11 +12,21 @@ interface Props {
   onComponentClick: (slotType: string) => void;
 }
 
+const SLOT_LABELS: Record<string, string> = {
+  gpu: "Graphics Card",
+  cpu: "Processor",
+  ram: "Memory",
+  storage: "Storage",
+  cooling: "Cooling",
+};
+
 export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<PCBuilderScene | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hoveredComponent, setHoveredComponent] = useState<string | null>(null);
+  const [hoverPosition, setHoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const modelUpdateRef = useRef<Map<string, string>>(new Map());
 
   // Initialize scene on mount
@@ -90,7 +100,86 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     }
   }, [slots]);
 
-  // Handle mouse clicks on 3D objects
+  // Handle mouse hover for labels
+  useEffect(() => {
+    if (!containerRef.current || !sceneRef.current) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      sceneRef.current!.recordInteraction();
+
+      const hovered = sceneRef.current!.getComponentAtMousePosition(
+        event,
+        sceneRef.current!.renderer.domElement
+      );
+
+      setHoveredComponent(hovered);
+      setHoverPosition({ x: event.clientX, y: event.clientY });
+    };
+
+    const canvas = sceneRef.current.renderer.domElement;
+    canvas.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  // Add touch and drag control handlers
+  useEffect(() => {
+    if (!containerRef.current || !sceneRef.current) return;
+
+    const canvas = sceneRef.current.renderer.domElement;
+
+    const handleMouseDown = (event: MouseEvent) => {
+      // Only drag on left click (not right click)
+      if (event.button !== 0) return;
+      sceneRef.current!.startDrag(event);
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      sceneRef.current!.moveDrag(event);
+    };
+
+    const handleMouseUp = () => {
+      sceneRef.current!.endDrag();
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      sceneRef.current!.startDrag(event);
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      event.preventDefault(); // Prevent page scroll while dragging
+      sceneRef.current!.moveDrag(event);
+    };
+
+    const handleTouchEnd = () => {
+      sceneRef.current!.endDrag();
+    };
+
+    // Mouse events
+    canvas.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    // Touch events
+    canvas.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      // Cleanup
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
+  // Handle clicks
   useEffect(() => {
     if (!containerRef.current || !sceneRef.current) return;
 
@@ -114,31 +203,6 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       canvas.removeEventListener('click', handleCanvasClick);
     };
   }, [onComponentClick]);
-
-  // Handle mouse movement to detect user interaction
-  useEffect(() => {
-    if (!containerRef.current || !sceneRef.current) return;
-
-    let moveTimeout: NodeJS.Timeout | null = null;
-
-    const handleMouseMove = () => {
-      sceneRef.current!.recordInteraction();
-
-      // Debounce frequent moves
-      if (moveTimeout) clearTimeout(moveTimeout);
-      moveTimeout = setTimeout(() => {
-        // User stopped moving mouse, auto-rotate will resume after idleTime
-      }, 100);
-    };
-
-    const canvas = sceneRef.current.renderer.domElement;
-    canvas.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      if (moveTimeout) clearTimeout(moveTimeout);
-    };
-  }, []);
 
   // Update 3D models when build state changes
   useEffect(() => {
@@ -191,6 +255,21 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const getComponentInfo = () => {
+    if (!hoveredComponent || !build.slots[hoveredComponent as keyof typeof build.slots]) {
+      return null;
+    }
+
+    const variant = build.slots[hoveredComponent as keyof typeof build.slots];
+    return {
+      label: SLOT_LABELS[hoveredComponent] || hoveredComponent,
+      name: variant?.title || 'Unknown',
+      price: variant ? `£${Math.round(variant.display_price)}` : '',
+    };
+  };
+
+  const info = getComponentInfo();
+
   return (
     <div className="w-full h-full flex flex-col bg-gradient-to-b from-[var(--color-bg-card)] to-[var(--color-bg)]">
       {isLoading && (
@@ -201,13 +280,31 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
           </div>
         </div>
       )}
+
       <div
         ref={containerRef}
-        className="w-full flex-1 rounded-xl overflow-hidden border border-[var(--color-border)]"
+        className="w-full flex-1 rounded-xl overflow-hidden border border-[var(--color-border)] relative"
         style={{ minHeight: '500px' }}
       />
+
+      {/* Hover label */}
+      {hoveredComponent && info && (
+        <div
+          className="fixed bg-[var(--color-bg-card)] border border-[var(--color-accent)] rounded-lg px-3 py-2 text-xs pointer-events-none z-20"
+          style={{
+            left: `${hoverPosition.x + 12}px`,
+            top: `${hoverPosition.y - 50}px`,
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <p className="font-bold text-[var(--color-accent)]">{info.label}</p>
+          <p className="text-muted text-[11px] truncate max-w-[200px]">{info.name}</p>
+          {info.price && <p className="text-white font-semibold text-[10px] mt-1">{info.price}</p>}
+        </div>
+      )}
+
       <div className="text-xs text-muted text-center py-2">
-        Click components to swap them · Models: {slots.length} loaded
+        Hover over components for details · Click to swap
       </div>
     </div>
   );
