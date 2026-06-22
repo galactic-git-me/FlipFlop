@@ -6,6 +6,55 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const modelCache = new Map<string, THREE.Group>();
 const gltfLoader = new GLTFLoader();
 
+// localStorage management for persisting models across sessions
+const STORAGE_KEY = 'flipflop_3d_models';
+
+const storageManager = {
+  async saveToStorage(url: string, gltf: any) {
+    try {
+      // Only cache if localStorage is available and size is reasonable
+      const serialized = JSON.stringify(gltf);
+      if (serialized.length > 5 * 1024 * 1024) {
+        // Skip if > 5MB
+        return;
+      }
+
+      const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      store[url] = {
+        data: gltf,
+        cached_at: Date.now(),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    } catch (error) {
+      // Silently fail if localStorage is full or disabled
+      console.debug('Failed to cache model:', error);
+    }
+  },
+
+  getFromStorage(url: string): any | null {
+    try {
+      const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const cached = store[url];
+
+      if (cached) {
+        // Cache hit - return the data
+        return cached.data;
+      }
+    } catch (error) {
+      console.debug('Failed to retrieve cached model:', error);
+    }
+    return null;
+  },
+
+  clearStorage() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.debug('Failed to clear storage:', error);
+    }
+  },
+};
+
 export interface SceneConfig {
   canvasContainer: HTMLDivElement;
   width: number;
@@ -96,28 +145,37 @@ export class PCBuilderScene {
           const cached = modelCache.get(url)!;
           modelGroup = cached.clone();
         } else {
-          // Load from URL
-          try {
-            const gltf = await new Promise<any>((resolve, reject) => {
-              gltfLoader.load(url, resolve, undefined, reject);
-            });
-
-            modelGroup = gltf.scene as THREE.Group;
-
-            // Ensure all meshes cast/receive shadows
-            modelGroup.traverse((child) => {
-              if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-              }
-            });
-
-            // Cache for future use
+          // Check localStorage cache first
+          const cachedGltf = storageManager.getFromStorage(url);
+          if (cachedGltf && cachedGltf.scene) {
+            modelGroup = (cachedGltf.scene as THREE.Group).clone();
+            // Also cache in memory for this session
             modelCache.set(url, modelGroup.clone());
-          } catch (error) {
-            console.warn(`Failed to load model from ${url}, using placeholder`, error);
-            // Fall back to placeholder
-            modelGroup = this.createPlaceholder(slotType, scale);
+          } else {
+            // Load from URL
+            try {
+              const gltf = await new Promise<any>((resolve, reject) => {
+                gltfLoader.load(url, resolve, undefined, reject);
+              });
+
+              modelGroup = gltf.scene as THREE.Group;
+
+              // Ensure all meshes cast/receive shadows
+              modelGroup.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                  child.castShadow = true;
+                  child.receiveShadow = true;
+                }
+              });
+
+              // Cache for future use (both in memory and localStorage)
+              modelCache.set(url, modelGroup.clone());
+              await storageManager.saveToStorage(url, gltf);
+            } catch (error) {
+              console.warn(`Failed to load model from ${url}, using placeholder`, error);
+              // Fall back to placeholder
+              modelGroup = this.createPlaceholder(slotType, scale);
+            }
           }
         }
       } else {
@@ -421,6 +479,47 @@ export class PCBuilderScene {
     this.rotation = { x: 0, y: 0 };
     this.models.forEach(ref => {
       ref.mesh.rotation.set(0, 0, 0);
+    });
+  }
+
+  // Play victory spin animation when build is finalized
+  async playVictorySpin(duration: number = 3000) {
+    const startTime = Date.now();
+    const startRotations = new Map<string, { x: number; y: number; z: number }>();
+
+    // Store initial rotations
+    this.models.forEach((ref, slotType) => {
+      startRotations.set(slotType, {
+        x: ref.mesh.rotation.x,
+        y: ref.mesh.rotation.y,
+        z: ref.mesh.rotation.z,
+      });
+    });
+
+    return new Promise<void>((resolve) => {
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Spin multiple rotations
+        const spins = 2;
+        const totalRotation = (spins * Math.PI * 2 * progress);
+
+        this.models.forEach((ref) => {
+          const initial = startRotations.get(ref.slotType) || { x: 0, y: 0, z: 0 };
+          ref.mesh.rotation.y = initial.y + totalRotation;
+          // Bob up and down during spin
+          ref.mesh.rotation.x = initial.x + Math.sin(progress * Math.PI) * 0.3;
+        });
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
+        }
+      };
+
+      animate();
     });
   }
 

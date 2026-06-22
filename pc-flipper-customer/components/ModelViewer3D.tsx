@@ -27,6 +27,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredComponent, setHoveredComponent] = useState<string | null>(null);
   const [hoverPosition, setHoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isFinalized, setIsFinalized] = useState(false);
   const modelUpdateRef = useRef<Map<string, string>>(new Map());
 
   // Initialize scene on mount
@@ -242,6 +243,28 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     });
   }, [build, slots]);
 
+  // Trigger victory spin when build is finalized (all components selected)
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
+    // Check if we're viewing the final summary (all components selected)
+    const allComponentsSelected = slots.every((slot) => build.slots[slot.slot_type]);
+
+    if (allComponentsSelected && !isFinalized) {
+      setIsFinalized(true);
+
+      // Play victory animation (non-blocking, user can still interact)
+      sceneRef.current.playVictorySpin(3000).catch((err) => {
+        console.debug('Victory spin interrupted:', err);
+      });
+    }
+  }, [build, slots, isFinalized]);
+
+  // Reset finalization state when build changes significantly
+  useEffect(() => {
+    setIsFinalized(false);
+  }, [build.slots]);
+
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -283,7 +306,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
 
       <div
         ref={containerRef}
-        className="w-full flex-1 rounded-xl overflow-hidden border border-[var(--color-border)] relative"
+        className="w-full flex-1 rounded-xl overflow-hidden border border-[var(--color-border)] relative touch-none cursor-grab active:cursor-grabbing"
         style={{ minHeight: '500px' }}
       />
 
@@ -304,7 +327,13 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       )}
 
       <div className="text-xs text-muted text-center py-2">
-        Hover over components for details · Click to swap
+        <span className="hidden sm:inline">Hover over components for details · Click to swap</span>
+        <span className="sm:hidden">Drag to rotate · Tap components to swap</span>
+        {isFinalized && (
+          <div className="mt-1 text-[var(--color-accent)]">
+            ✓ Your build is ready! Click Order Now to continue →
+          </div>
+        )}
       </div>
     </div>
   );
