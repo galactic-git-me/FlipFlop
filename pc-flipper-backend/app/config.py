@@ -75,6 +75,10 @@ class Settings(BaseSettings):
     frontend_url: str = "http://localhost:3000"
     admin_api_key: str = ""
 
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_publishable_key: str = ""
+
     # "dev" clears search_telemetry on every startup so figures start fresh.
     # "production" preserves history across restarts.
     app_env: str = "dev"
