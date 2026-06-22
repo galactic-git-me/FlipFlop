@@ -152,7 +152,17 @@ class SketchfabDownloader:
 
             # Navigate to Sketchfab search with CC filters
             search_url = f"{self.base_url}/search?q={search_term}&type=models&license=CC0"
-            await page.goto(search_url, wait_until="domcontentloaded", timeout=90000)
+            response = await page.goto(search_url, wait_until="domcontentloaded", timeout=90000)
+
+            # Check response status
+            if response:
+                status = response.status
+                if status == 403 or status == 429:
+                    logger.error(f"Blocked by Sketchfab (HTTP {status}) - bot detection active")
+                    return False
+                elif status >= 400:
+                    logger.warning(f"HTTP {status} for search")
+                    return False
 
             # Additional wait for results to render (faster than networkidle)
             await asyncio.sleep(random.uniform(2, 4))
@@ -161,7 +171,17 @@ class SketchfabDownloader:
             try:
                 await page.wait_for_selector('[data-test="search-results-item"]', timeout=15000)
             except:
-                logger.warning(f"No results found for {component_type}/{variant}")
+                # Debug: Check what's on the page
+                content = await page.content()
+                if "No results found" in content or "We couldn't find" in content or len(content) < 10000:
+                    logger.warning(f"No results found for {component_type}/{variant} (Sketchfab blocking?)")
+                else:
+                    logger.warning(f"Selector not found for {component_type}/{variant}, but page has content")
+                    # Try alternate selector
+                    try:
+                        await page.wait_for_selector('div[class*="Result"]', timeout=5000)
+                    except:
+                        pass
                 return False
 
             # Click first result
