@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { BuildState, PublicSlotWithVariants } from '@/lib/types';
 
 interface Props {
@@ -10,17 +11,9 @@ interface Props {
   onComponentClick: (slotType: string) => void;
 }
 
-const COMPONENT_COLORS: Record<string, number> = {
-  gpu: 0xff6b35,      // Orange
-  cpu: 0x004e89,      // Blue
-  ram: 0x1b998b,      // Teal
-  storage: 0xc1121f,  // Red
-};
-
 export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<THREE.Scene | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -28,7 +21,6 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0f0f11);
-    sceneRef.current = scene;
 
     // Camera
     const width = containerRef.current.clientWidth;
@@ -41,64 +33,75 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap;
     containerRef.current.appendChild(renderer.domElement);
 
-    // Lights - much brighter
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    // BRIGHT LIGHTS
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
     directionalLight.position.set(5, 8, 5);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
     scene.add(directionalLight);
 
     const pointLight = new THREE.PointLight(0x22c55e, 0.8);
     pointLight.position.set(-5, 3, 3);
     scene.add(pointLight);
 
-    // Platform
-    const platformGeom = new THREE.CylinderGeometry(5, 5, 0.2, 32);
-    const platformMat = new THREE.MeshStandardMaterial({
-      color: 0x18181b,
-      metalness: 0.3,
-      roughness: 0.7
-    });
-    const platform = new THREE.Mesh(platformGeom, platformMat);
-    platform.position.y = -1;
-    platform.receiveShadow = true;
-    scene.add(platform);
+    // Fallback colors for components
+    const COLORS: Record<string, number> = {
+      gpu: 0xff6b35,
+      cpu: 0x004e89,
+      ram: 0x1b998b,
+      storage: 0xc1121f,
+    };
 
-    // Create component shapes
-    const components: { mesh: THREE.Mesh; slotType: string }[] = [];
+    // Load models with fallback to cubes
+    const loader = new GLTFLoader();
+    let loadedCount = 0;
     const positions = [
-      { x: -2, y: 0, z: 0 },     // GPU
-      { x: -0.5, y: 0, z: -2 },  // CPU
-      { x: 1.5, y: 0, z: 0 },    // RAM
-      { x: 0, y: 0, z: 2 },      // Storage
+      { x: -2, y: 0, z: 0 },
+      { x: -0.5, y: 0, z: -2 },
+      { x: 1.5, y: 0, z: 0 },
+      { x: 0, y: 0, z: 2 },
     ];
 
-    Object.entries(build.slots).forEach(([slotType, variant], idx) => {
-      if (!variant || idx >= 4) return;
+    const slotEntries = Object.entries(build.slots).filter(([_, v]) => v).slice(0, 4);
+    let loadedCount_final = 0;
 
-      const color = COMPONENT_COLORS[slotType] || 0x888888;
-      const geom = new THREE.BoxGeometry(1.2, 1.2, 1.2);
-      const mat = new THREE.MeshStandardMaterial({
-        color,
-        metalness: 0.5,
-        roughness: 0.3,
-        emissive: color,
-        emissiveIntensity: 0.2,
-      });
-      const mesh = new THREE.Mesh(geom, mat);
-      mesh.position.set(positions[idx].x, positions[idx].y, positions[idx].z);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      mesh.userData.slotType = slotType;
-      scene.add(mesh);
-      components.push({ mesh, slotType });
+    slotEntries.forEach(([slotType, variant], idx) => {
+      const variantNum = ((variant.id - 1) % 3) + 1;
+      const modelUrl = `/models/${slotType}/variant-${variantNum}.gltf`;
+
+      // Try to load model, with fallback cube
+      loader.load(
+        modelUrl,
+        (gltf) => {
+          const model = gltf.scene;
+          model.scale.set(1.5, 1.5, 1.5);
+          model.position.set(positions[idx].x, positions[idx].y, positions[idx].z);
+          model.userData.slotType = slotType;
+          scene.add(model);
+          loadedCount_final++;
+          if (loadedCount_final >= slotEntries.length) setIsLoading(false);
+        },
+        undefined,
+        () => {
+          // Fallback: create colored cube
+          const geom = new THREE.BoxGeometry(1, 1, 1);
+          const mat = new THREE.MeshStandardMaterial({
+            color: COLORS[slotType] || 0x888888,
+            metalness: 0.5,
+            roughness: 0.3,
+          });
+          const cube = new THREE.Mesh(geom, mat);
+          cube.position.set(positions[idx].x, positions[idx].y, positions[idx].z);
+          cube.userData.slotType = slotType;
+          scene.add(cube);
+          loadedCount_final++;
+          if (loadedCount_final >= slotEntries.length) setIsLoading(false);
+        }
+      );
     });
 
     // Animation loop
@@ -106,16 +109,8 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     let rotation = 0;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-
-      // Rotate scene
       rotation += 0.003;
       scene.rotation.y = rotation;
-
-      // Bob components
-      components.forEach(({ mesh, slotType }, idx) => {
-        mesh.position.y = 0.2 * Math.sin(Date.now() * 0.001 + idx);
-      });
-
       renderer.render(scene, camera);
     };
     animate();
@@ -129,11 +124,17 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(components.map(c => c.mesh));
+      const intersects = raycaster.intersectObjects(scene.children, true);
       if (intersects.length > 0) {
-        const clicked = intersects[0].object as any;
-        if (clicked.userData.slotType) {
-          onComponentClick(clicked.userData.slotType);
+        for (const intersection of intersects) {
+          let obj = intersection.object as any;
+          while (obj.parent && !obj.userData.slotType) {
+            obj = obj.parent;
+          }
+          if (obj.userData.slotType) {
+            onComponentClick(obj.userData.slotType);
+            break;
+          }
         }
       }
     };
@@ -162,8 +163,14 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   return (
     <div
       ref={containerRef}
-      className="w-full rounded-lg overflow-hidden"
+      className="w-full rounded-lg overflow-hidden relative"
       style={{ minHeight: '600px' }}
-    />
+    >
+      {isLoading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <p className="text-white">Loading 3D models...</p>
+        </div>
+      )}
+    </div>
   );
 }
