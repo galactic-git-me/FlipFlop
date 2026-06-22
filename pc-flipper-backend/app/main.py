@@ -20,6 +20,7 @@ from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_b
 from app.api import listings, flips, parts, sources, chat, config, swarms
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts, reselling, ebay_listings
+from app.api.orders import router as orders_router
 from app.api.ram_watch import router as ram_watch_router
 from app.api import ebay_compliance
 from app.api import preflight
@@ -426,6 +427,7 @@ app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+app.include_router(orders_router, prefix="")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
