@@ -1,44 +1,46 @@
 // pc-flipper-customer/lib/model-manifest.ts
 
-// Maps variant IDs to Sketchfab/3D model URLs
-// Format: {slotType: {variantId: url}}
-// These will be populated with actual Sketchfab URLs in Phase 2.3
+// Maps variant IDs to 3D model URLs
+// IMPORTANT: These are placeholder URLs. To get real 3D models:
+// 1. Go to https://sketchfab.com
+// 2. Search for free CC-licensed models (e.g., "PC case", "graphics card", "CPU cooler")
+// 3. Download the glTF/GLB version
+// 4. Place in public/models/{slotType}/{filename}.gltf
+// 5. Update the URLs below
 
 export const MODEL_URLS: Record<string, Record<number, string>> = {
-  // GPU variants
+  // GPU variants - search Sketchfab for "graphics card" or specific GPU models
   gpu: {
-    // For now, using a generic GPU model from Sketchfab
-    // Real IDs will be mapped to actual variant IDs from the backend
-    1: '/models/gpu/generic-gpu.gltf', // Placeholder
-    2: '/models/gpu/generic-gpu.gltf', // Placeholder
-    3: '/models/gpu/generic-gpu.gltf', // Placeholder
+    1: '/models/gpu/variant-1.gltf',  // Placeholder - replace with real model
+    2: '/models/gpu/variant-2.gltf',  // Placeholder - replace with real model
+    3: '/models/gpu/variant-3.gltf',  // Placeholder - replace with real model
   },
 
-  // CPU variants
+  // CPU variants - search Sketchfab for "CPU" or "processor"
   cpu: {
-    1: '/models/cpu/generic-cpu.gltf', // Placeholder
-    2: '/models/cpu/generic-cpu.gltf', // Placeholder
-    3: '/models/cpu/generic-cpu.gltf', // Placeholder
+    1: '/models/cpu/variant-1.gltf',  // Placeholder - replace with real model
+    2: '/models/cpu/variant-2.gltf',  // Placeholder - replace with real model
+    3: '/models/cpu/variant-3.gltf',  // Placeholder - replace with real model
   },
 
-  // RAM variants
+  // RAM variants - search Sketchfab for "RAM" or "memory stick"
   ram: {
-    1: '/models/ram/generic-ram.gltf', // Placeholder
-    2: '/models/ram/generic-ram.gltf', // Placeholder
-    3: '/models/ram/generic-ram.gltf', // Placeholder
+    1: '/models/ram/variant-1.gltf',  // Placeholder - replace with real model
+    2: '/models/ram/variant-2.gltf',  // Placeholder - replace with real model
+    3: '/models/ram/variant-3.gltf',  // Placeholder - replace with real model
   },
 
-  // Storage variants
+  // Storage variants - search Sketchfab for "SSD" or "hard drive"
   storage: {
-    1: '/models/storage/generic-ssd.gltf', // Placeholder
-    2: '/models/storage/generic-ssd.gltf', // Placeholder
-    3: '/models/storage/generic-hdd.gltf', // Placeholder
+    1: '/models/storage/variant-1.gltf',  // Placeholder - SSD model
+    2: '/models/storage/variant-2.gltf',  // Placeholder - SSD model
+    3: '/models/storage/variant-3.gltf',  // Placeholder - HDD model
   },
 
-  // Cooling variants
+  // Cooling variants - search Sketchfab for "CPU cooler" or "heatsink"
   cooling: {
-    1: '/models/cooling/generic-cooler.gltf', // Placeholder
-    2: '/models/cooling/generic-cooler.gltf', // Placeholder
+    1: '/models/cooling/variant-1.gltf',  // Placeholder - replace with real model
+    2: '/models/cooling/variant-2.gltf',  // Placeholder - replace with real model
   },
 };
 
