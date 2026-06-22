@@ -23,6 +23,9 @@ from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.order import Order
+from app.models.build_capacity import BuildCapacity
+from app.models.build_capacity_override import BuildCapacityOverride
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -56,4 +59,7 @@ __all__ = [
     "PlaybookSlot",
     "CatalogueVariant",
     "CaseCatalogue",
+    "Order",
+    "BuildCapacity",
+    "BuildCapacityOverride",
 ]
