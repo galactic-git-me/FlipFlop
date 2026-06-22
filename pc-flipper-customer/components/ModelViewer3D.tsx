@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { BuildState, PublicSlotWithVariants } from '@/lib/types';
 
 interface Props {
@@ -11,102 +10,115 @@ interface Props {
   onComponentClick: (slotType: string) => void;
 }
 
+const COMPONENT_COLORS: Record<string, number> = {
+  gpu: 0xff6b35,      // Orange
+  cpu: 0x004e89,      // Blue
+  ram: 0x1b998b,      // Teal
+  storage: 0xc1121f,  // Red
+};
+
 export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const modelsRef = useRef<Map<string, THREE.Object3D>>(new Map());
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1a1a);
+    scene.background = new THREE.Color(0x0f0f11);
     sceneRef.current = scene;
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(75, containerRef.current.clientWidth / containerRef.current.clientHeight, 0.1, 1000);
-    camera.position.set(8, 6, 8);
+    const width = containerRef.current.clientWidth;
+    const height = containerRef.current.clientHeight;
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.set(0, 2, 6);
     camera.lookAt(0, 0, 0);
-    cameraRef.current = camera;
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     containerRef.current.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Lights - much brighter
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 10, 10);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    directionalLight.position.set(5, 8, 5);
     directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
     scene.add(directionalLight);
 
-    // Create case box as base
-    const caseGeom = new THREE.BoxGeometry(4, 5, 2.5);
-    const caseMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.2, roughness: 0.8 });
-    const caseMesh = new THREE.Mesh(caseGeom, caseMat);
-    caseMesh.position.y = 0;
-    scene.add(caseMesh);
+    const pointLight = new THREE.PointLight(0x22c55e, 0.8);
+    pointLight.position.set(-5, 3, 3);
+    scene.add(pointLight);
 
-    // Load models
-    const loader = new GLTFLoader();
-    let loadedCount = 0;
-    const totalToLoad = Object.values(build.slots).filter(v => v).length;
+    // Platform
+    const platformGeom = new THREE.CylinderGeometry(5, 5, 0.2, 32);
+    const platformMat = new THREE.MeshStandardMaterial({
+      color: 0x18181b,
+      metalness: 0.3,
+      roughness: 0.7
+    });
+    const platform = new THREE.Mesh(platformGeom, platformMat);
+    platform.position.y = -1;
+    platform.receiveShadow = true;
+    scene.add(platform);
 
-    Object.entries(build.slots).forEach(([slotType, variant]) => {
-      if (!variant) return;
+    // Create component shapes
+    const components: { mesh: THREE.Mesh; slotType: string }[] = [];
+    const positions = [
+      { x: -2, y: 0, z: 0 },     // GPU
+      { x: -0.5, y: 0, z: -2 },  // CPU
+      { x: 1.5, y: 0, z: 0 },    // RAM
+      { x: 0, y: 0, z: 2 },      // Storage
+    ];
 
-      // Map variant IDs to model numbers (1-3 per component type)
-      const variantNum = ((variant.id - 1) % 3) + 1;
-      const modelUrl = `/models/${slotType}/variant-${variantNum}.gltf`;
-      console.log(`Loading ${slotType}: ${modelUrl}`);
-      loader.load(
-        modelUrl,
-        (gltf) => {
-          const model = gltf.scene;
-          model.position.set(Math.random() * 2 - 1, 2 + Math.random(), Math.random() * 2 - 1);
-          model.scale.set(0.8, 0.8, 0.8);
-          model.userData.slotType = slotType;
-          scene.add(model);
-          modelsRef.current.set(slotType, model);
-          loadedCount++;
-          if (loadedCount === totalToLoad) setIsLoading(false);
-        },
-        undefined,
-        (error) => {
-          console.warn(`Failed to load model for ${slotType}:`, error);
-          loadedCount++;
-          if (loadedCount === totalToLoad) setIsLoading(false);
-        }
-      );
+    Object.entries(build.slots).forEach(([slotType, variant], idx) => {
+      if (!variant || idx >= 4) return;
+
+      const color = COMPONENT_COLORS[slotType] || 0x888888;
+      const geom = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+      const mat = new THREE.MeshStandardMaterial({
+        color,
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: color,
+        emissiveIntensity: 0.2,
+      });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set(positions[idx].x, positions[idx].y, positions[idx].z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData.slotType = slotType;
+      scene.add(mesh);
+      components.push({ mesh, slotType });
     });
 
-    // Animation loop with auto-rotation
+    // Animation loop
     let animationId: number;
+    let rotation = 0;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-      scene.rotation.y += 0.005;
+
+      // Rotate scene
+      rotation += 0.003;
+      scene.rotation.y = rotation;
+
+      // Bob components
+      components.forEach(({ mesh, slotType }, idx) => {
+        mesh.position.y = 0.2 * Math.sin(Date.now() * 0.001 + idx);
+      });
+
       renderer.render(scene, camera);
     };
     animate();
-
-    // Handle window resize
-    const handleResize = () => {
-      if (!containerRef.current) return;
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    window.addEventListener('resize', handleResize);
 
     // Handle clicks
     const raycaster = new THREE.Raycaster();
@@ -117,19 +129,26 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children, true);
+      const intersects = raycaster.intersectObjects(components.map(c => c.mesh));
       if (intersects.length > 0) {
-        const clicked = intersects[0].object;
-        let obj = clicked as any;
-        while (obj.parent && !obj.userData.slotType) {
-          obj = obj.parent;
-        }
-        if (obj.userData.slotType) {
-          onComponentClick(obj.userData.slotType);
+        const clicked = intersects[0].object as any;
+        if (clicked.userData.slotType) {
+          onComponentClick(clicked.userData.slotType);
         }
       }
     };
     containerRef.current.addEventListener('click', handleClick);
+
+    // Handle resize
+    const handleResize = () => {
+      if (!containerRef.current) return;
+      const w = containerRef.current.clientWidth;
+      const h = containerRef.current.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener('resize', handleResize);
 
     return () => {
       cancelAnimationFrame(animationId);
@@ -143,17 +162,8 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full rounded-lg overflow-hidden relative"
+      className="w-full rounded-lg overflow-hidden"
       style={{ minHeight: '600px' }}
-    >
-      {isLoading && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin text-4xl mb-2">⚙️</div>
-            <p className="text-white">Loading 3D models...</p>
-          </div>
-        </div>
-      )}
-    </div>
+    />
   );
 }
