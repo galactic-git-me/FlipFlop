@@ -1,0 +1,227 @@
+================================================================================
+FLIPFLOP 3D MODELS - SETUP COMPLETE
+================================================================================
+
+Location: /home/mac/CODING/FlipFlop/pc-flipper-customer
+
+Files Created:
+  1. download-models.py          - Main downloader/checker script
+  2. QUICK_START_MODELS.sh       - Quick start wrapper (optional)
+  3. MODEL_SOURCING_GUIDE.md     - Detailed sourcing instructions
+  4. MODEL_SHOPPING_LIST.md      - Quick reference checklist
+  5. public/models/              - Directory structure (created)
+
+================================================================================
+QUICK START
+================================================================================
+
+Step 1: Run the script to generate the structure
+  $ python3 download-models.py
+
+Output shows:
+  - Shopping list of what to download from Sketchfab
+  - Current status of models in public/models/
+  - Where to place each model
+
+Step 2: Download models from Sketchfab
+  - Visit: https://sketchfab.com
+  - Search for each component (GPU, CPU, RAM, Storage, Cooling)
+  - Filter: License = CC0 or CC-BY, Downloadable = Yes
+  - Download glTF or GLB format
+  - Extract and place files in public/models/{type}/variant-{N}.gltf
+
+Step 3: Verify models are loaded
+  - Run: python3 download-models.py
+  - Should show all 14 models in status report
+
+Step 4: Test in browser
+  - Run: npm run dev -- --port 3001
+  - Open: http://andromeda-ts:3001/configure/gaming-rig
+  - Test clicking components and switching between tiers
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+pc-flipper-customer/
+├── download-models.py                  (Executable - main script)
+├── QUICK_START_MODELS.sh              (Executable - wrapper)
+├── MODEL_SOURCING_GUIDE.md            (Detailed guide)
+├── MODEL_SHOPPING_LIST.md             (Checklist)
+├── MODELS_SETUP_SUMMARY.txt           (This file)
+└── public/models/                     (Model storage)
+    ├── gpu/
+    │   ├── variant-1.gltf  (RTX 4090 / High-end)
+    │   ├── variant-2.gltf  (GTX / Mid-range)
+    │   └── variant-3.gltf  (Budget GPU)
+    ├── cpu/
+    │   ├── variant-1.gltf  (Intel i9 / High-end)
+    │   ├── variant-2.gltf  (i7/Ryzen 7 / Mid-range)
+    │   └── variant-3.gltf  (Budget CPU)
+    ├── ram/
+    │   ├── variant-1.gltf  (DDR5 / High-end)
+    │   ├── variant-2.gltf  (DDR4 / Mid-range)
+    │   └── variant-3.gltf  (DDR3 / Budget)
+    ├── storage/
+    │   ├── variant-1.gltf  (NVMe / Fast)
+    │   ├── variant-2.gltf  (2.5" SSD / Mid)
+    │   └── variant-3.gltf  (3.5" HDD / Slow)
+    └── cooling/
+        ├── variant-1.gltf  (Air Cooler / High-end)
+        └── variant-2.gltf  (Liquid AIO / Modern)
+
+================================================================================
+WHAT YOU NEED
+================================================================================
+
+Total Models: 14
+- GPU: 3 variants
+- CPU: 3 variants
+- RAM: 3 variants
+- Storage: 3 variants
+- Cooling: 2 variants
+
+Estimated Download Time: 20-40 minutes
+Estimated Total Size: 50-150 MB (depending on model quality)
+
+Recommended:
+- Use GLB format when available (simpler, self-contained)
+- Keep each model under 10 MB
+- Choose models with good preview images on Sketchfab
+
+================================================================================
+RUNNING THE SCRIPT
+================================================================================
+
+Option 1: Direct Python
+  $ cd /home/mac/CODING/FlipFlop/pc-flipper-customer
+  $ python3 download-models.py
+
+Option 2: Shell Wrapper
+  $ cd /home/mac/CODING/FlipFlop/pc-flipper-customer
+  $ bash QUICK_START_MODELS.sh
+
+Both do the same thing - the shell wrapper just checks Python is installed first.
+
+================================================================================
+FEATURES OF THE SCRIPT
+================================================================================
+
+The download-models.py script:
+
+1. Creates directory structure
+   - Makes public/models/{component}/ directories
+   - Idempotent (safe to run multiple times)
+
+2. Generates shopping list
+   - Lists all 14 models needed
+   - Provides search terms for Sketchfab
+   - Shows exact placement paths
+
+3. Verifies existing models
+   - Lists which models are already placed
+   - Shows file sizes and total storage used
+   - Helps track progress
+
+4. Provides testing guide
+   - URL to open in browser
+   - Steps to verify models load correctly
+   - Browser console debugging tips
+
+================================================================================
+SKETCHFAB TIPS
+================================================================================
+
+Search Strategy:
+- Use specific terms: "RTX 4090", "DDR5", "NVMe"
+- Or generic terms: "graphics card", "memory", "hard drive"
+- Adjust if no results found
+
+Filter Options:
+1. License = CC0 or CC-BY (not required - just recommended)
+2. Downloadable = Yes (required)
+3. Sort by Popular (good quality indicator)
+
+Download Format:
+- Prefer: GLB (glTF binary - self-contained)
+- Alternative: glTF (requires textures in same directory)
+- Avoid: FBX, OBJ (not supported by configurator)
+
+File Placement:
+- Extract downloaded ZIP
+- Find .gltf or .glb file
+- Rename to variant-{N}.gltf (e.g., variant-1.gltf)
+- Move to public/models/{type}/
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Model doesn't appear in configurator:
+  1. Check file exists: ls -la public/models/gpu/variant-1.gltf
+  2. Check browser console (F12 > Console)
+  3. Look for "Failed to load model" errors
+  4. Verify file path in error matches your file location
+
+Textures appear white/blank:
+  1. Use GLB format instead of glTF (simpler)
+  2. If using glTF, ensure texture files are in same directory
+  3. Check .gltf file references texture paths correctly
+
+Download is slow:
+  1. Choose simpler models (fewer polygons)
+  2. Download GLB format (often smaller)
+  3. Try a different model from Sketchfab
+
+File doesn't download:
+  1. Check you have internet connection
+  2. Verify Sketchfab model is marked "Downloadable"
+  3. Try a different browser if download fails
+  4. Some models may require accepting license terms
+
+================================================================================
+TESTING YOUR SETUP
+================================================================================
+
+After placing models:
+
+1. Verify all 14 models are present:
+   $ python3 download-models.py
+   (Should show "Status: 14 files")
+
+2. Start dev server:
+   $ npm run dev -- --port 3001
+
+3. Open browser:
+   http://andromeda-ts:3001/configure/gaming-rig
+
+4. Test each component:
+   - Hover over GPU/CPU/RAM/Storage/Cooling areas
+   - Click on a component
+   - Modal should open showing your 3D models
+   - Click variant 1, 2, 3 - model should change
+   - Drag on 3D viewport - should rotate
+
+5. Check console (F12):
+   - No red errors = success
+   - Errors about "Failed to load" = check file path
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Run: python3 download-models.py
+2. Visit: https://sketchfab.com
+3. For each model in the shopping list:
+   - Search
+   - Filter (License: CC0/CC-BY, Downloadable: Yes)
+   - Download glTF or GLB
+   - Extract and place in public/models/{type}/variant-{N}.gltf
+4. Run: python3 download-models.py again to verify
+5. Test in browser: npm run dev -- --port 3001
+
+For detailed instructions, see:
+  - MODEL_SHOPPING_LIST.md (quick checklist)
+  - MODEL_SOURCING_GUIDE.md (detailed guide)
+
+================================================================================
