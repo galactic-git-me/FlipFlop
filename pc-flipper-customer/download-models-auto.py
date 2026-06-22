@@ -148,7 +148,7 @@ class SketchfabDownloader:
 
             # Navigate to Sketchfab search with CC filters
             search_url = f"{self.base_url}/search?q={search_term}&type=models&license=CC0"
-            await page.goto(search_url, wait_until="networkidle", timeout=30000)
+            await page.goto(search_url, wait_until="networkidle", timeout=60000)
 
             # Wait for results to load
             try:
@@ -164,7 +164,7 @@ class SketchfabDownloader:
                 return False
 
             model_url = await first_result.get_attribute("href")
-            await page.goto(urljoin(self.base_url, model_url), wait_until="networkidle", timeout=30000)
+            await page.goto(urljoin(self.base_url, model_url), wait_until="networkidle", timeout=60000)
 
             # Scroll to download section
             await page.evaluate("window.scrollBy(0, window.innerHeight)")
@@ -231,11 +231,20 @@ class SketchfabDownloader:
     async def run(self):
         """Main download loop"""
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            # Launch with stealth options to bypass Sketchfab bot detection
+            browser = await p.chromium.launch(
+                headless=True,
+                args=['--disable-blink-features=AutomationControlled']
+            )
             page = await browser.new_page()
 
-            # Set timeout
-            page.set_default_timeout(30000)
+            # Fake user agent to look like real browser
+            await page.set_extra_http_headers({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            })
+
+            # Set longer timeout for Sketchfab's heavy pages
+            page.set_default_timeout(60000)
 
             total = sum(len(models) for models in MODELS_CONFIG.values())
             completed = 0
