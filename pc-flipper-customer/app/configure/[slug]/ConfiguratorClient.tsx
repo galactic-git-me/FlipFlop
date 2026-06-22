@@ -97,7 +97,9 @@ export function ConfiguratorClient({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Left panel: 3D model viewer */}
       <div className="flex flex-col gap-6">
-        <div style={{ height: "600px" }}>
+        <div style={{ height: "600px", background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <p className="text-muted">3D Viewer Loading...</p>
+          {/* Temporarily disabled 3D viewer
           <ModelViewer3D
             build={build}
             slots={slots}
@@ -106,6 +108,7 @@ export function ConfiguratorClient({
               if (slot) setSwapTarget(slot);
             }}
           />
+          */}
         </div>
 
         {/* Mobile-only: tier picker and case picker below 3D view */}
