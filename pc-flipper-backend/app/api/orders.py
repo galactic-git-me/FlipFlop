@@ -9,6 +9,10 @@ from app.schemas.order import (
     OrderCheckoutRequest,
     OrderCheckoutResponse,
     OrderConfirmationOut,
+    AdminOrderOut,
+    AdminOrderUpdateIn,
+    BuildCapacityOut,
+    CapacityOverrideIn,
 )
 from app.services.stripe_service import create_checkout_session, verify_webhook_signature
 import random
@@ -305,3 +309,122 @@ async def get_order_confirmation(reference: str, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=404, detail="Order not found")
 
     return order
+
+
+admin_router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+
+@admin_router.get("/orders", response_model=list[AdminOrderOut])
+async def list_orders(
+    status: str = None,
+    week: str = None,
+    email: str = None,
+    limit: int = 50,
+    offset: int = 0,
+    db: AsyncSession = Depends(get_db),
+):
+    """List orders with optional filtering"""
+    query = select(Order)
+
+    if status:
+        query = query.where(Order.status == status)
+    if week:
+        query = query.where(Order.assigned_build_week == week)
+    if email:
+        query = query.where(Order.customer_email.ilike(f"%{email}%"))
+
+    query = query.order_by(Order.created_at.desc()).offset(offset).limit(limit)
+
+    result = await db.execute(query)
+    return result.scalars().all()
+
+
+@admin_router.patch("/orders/{order_id}", response_model=AdminOrderOut)
+async def update_order(
+    order_id: int,
+    update: AdminOrderUpdateIn,
+    db: AsyncSession = Depends(get_db),
+):
+    """Update order status or notes"""
+    order_result = await db.execute(
+        select(Order).where(Order.id == order_id)
+    )
+    order = order_result.scalar()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if update.status:
+        order.status = update.status
+    if update.note is not None:
+        pass
+
+    order.updated_at = datetime.utcnow()
+    await db.commit()
+
+    return order
+
+
+@admin_router.get("/capacity", response_model=BuildCapacityOut)
+async def get_capacity(db: AsyncSession = Depends(get_db)):
+    """Get global default capacity"""
+    capacity_result = await db.execute(select(BuildCapacity).limit(1))
+    capacity = capacity_result.scalar()
+
+    if not capacity:
+        return BuildCapacityOut(default_per_week=3)
+
+    return capacity
+
+
+@admin_router.patch("/capacity/default")
+async def update_capacity_default(
+    default_per_week: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Update global default capacity"""
+    capacity_result = await db.execute(select(BuildCapacity).limit(1))
+    capacity = capacity_result.scalar()
+
+    if not capacity:
+        capacity = BuildCapacity(default_per_week=default_per_week)
+        db.add(capacity)
+    else:
+        capacity.default_per_week = default_per_week
+
+    capacity.updated_at = datetime.utcnow()
+    await db.commit()
+
+    return BuildCapacityOut(default_per_week=capacity.default_per_week)
+
+
+@admin_router.put("/capacity/overrides/{week}")
+async def set_capacity_override(
+    week: str,
+    override: CapacityOverrideIn,
+    db: AsyncSession = Depends(get_db),
+):
+    """Set or remove week override (null max_builds = week closed)"""
+    override_result = await db.execute(
+        select(BuildCapacityOverride).where(BuildCapacityOverride.week == week)
+    )
+    existing = override_result.scalar()
+
+    if existing:
+        existing.max_builds = override.max_builds
+        existing.note = override.note
+    else:
+        existing = BuildCapacityOverride(
+            week=week,
+            max_builds=override.max_builds,
+            note=override.note,
+        )
+        db.add(existing)
+
+    await db.commit()
+
+    return {
+        "week": existing.week,
+        "max_builds": existing.max_builds,
+        "note": existing.note,
+    }
