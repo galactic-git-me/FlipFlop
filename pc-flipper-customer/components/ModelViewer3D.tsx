@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { BuildState, PublicSlotWithVariants } from '@/lib/types';
 import { PCBuilderScene, initScene } from '@/lib/model-helpers';
+import { getVariantModelUrl, COMPONENT_POSITIONS, COMPONENT_SCALES, getAllModelUrls } from '@/lib/model-manifest';
 
 interface Props {
   build: BuildState;
@@ -16,6 +17,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   const sceneRef = useRef<PCBuilderScene | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const modelUpdateRef = useRef<Map<string, string>>(new Map());
 
   // Initialize scene on mount
   useEffect(() => {
@@ -41,19 +43,26 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       caseGroup.userData.slotType = 'case';
       scene.scene.add(caseGroup);
 
-      // Load placeholder models for each slot
-      const componentPositions: Record<string, THREE.Vector3> = {
-        gpu: new THREE.Vector3(2, 0.5, -0.5),
-        cpu: new THREE.Vector3(0, 0.5, 0.5),
-        ram: new THREE.Vector3(-1.5, 1.2, -1),
-        storage: new THREE.Vector3(-2, -1, 0),
-        cooling: new THREE.Vector3(0, 2, 0),
-      };
+      // Preload all possible models
+      const allUrls = getAllModelUrls();
+      if (allUrls.length > 0) {
+        scene.preloadModels(allUrls).catch(err => {
+          console.warn('Model preloading partial failure:', err);
+        });
+      }
 
-      // Load models for visible slots
+      // Load initial models for each slot
       slots.forEach((slot) => {
-        const position = componentPositions[slot.slot_type] || new THREE.Vector3(0, 0, 0);
-        scene.loadModel('', slot.slot_type, position, 0.8);
+        const position = new THREE.Vector3(
+          COMPONENT_POSITIONS[slot.slot_type]?.x || 0,
+          COMPONENT_POSITIONS[slot.slot_type]?.y || 0,
+          COMPONENT_POSITIONS[slot.slot_type]?.z || 0
+        );
+        const scale = COMPONENT_SCALES[slot.slot_type] || 0.8;
+
+        // Load placeholder initially (will be updated when build state changes)
+        scene.loadModel('', slot.slot_type, position, scale);
+        modelUpdateRef.current.set(slot.slot_type, '');
       });
 
       // Start render loop
@@ -104,20 +113,35 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // For each slot, if the selected variant changed, reload the model
     slots.forEach((slot) => {
-      const current = build.slots[slot.slot_type];
-      if (current) {
-        // In Phase 2, this will load the actual model based on variant ID
-        // For now, placeholder is already positioned
-        // Optional: Add subtle animation to indicate update
-        const model = sceneRef.current!.models.get(slot.slot_type);
-        if (model) {
-          // Flash animation to indicate update
-          model.mesh.scale.set(1.05, 1.05, 1.05);
-          setTimeout(() => {
-            model.mesh.scale.set(1, 1, 1);
-          }, 200);
+      const variant = build.slots[slot.slot_type];
+      if (variant) {
+        // Get model URL for this variant
+        const newUrl = getVariantModelUrl(slot.slot_type, variant.id);
+        const previousUrl = modelUpdateRef.current.get(slot.slot_type);
+
+        // Only update if URL changed
+        if (newUrl && newUrl !== previousUrl) {
+          const scale = COMPONENT_SCALES[slot.slot_type] || 0.8;
+
+          // Update the component in the 3D scene
+          sceneRef.current!.updateComponent(slot.slot_type, newUrl, scale).then((success) => {
+            if (success) {
+              modelUpdateRef.current.set(slot.slot_type, newUrl);
+              // Optional: Add animation feedback
+              const model = sceneRef.current!.models.get(slot.slot_type);
+              if (model) {
+                model.mesh.scale.set(
+                  model.mesh.scale.x * 1.1,
+                  model.mesh.scale.y * 1.1,
+                  model.mesh.scale.z * 1.1
+                );
+                setTimeout(() => {
+                  model.mesh.scale.set(scale, scale, scale);
+                }, 200);
+              }
+            }
+          });
         }
       }
     });
@@ -139,7 +163,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
   return (
     <div className="w-full h-full flex flex-col bg-gradient-to-b from-[var(--color-bg-card)] to-[var(--color-bg)]">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
           <div className="text-center">
             <div className="w-8 h-8 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-sm text-muted">Loading 3D scene...</p>
@@ -152,7 +176,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
         style={{ minHeight: '500px' }}
       />
       <div className="text-xs text-muted text-center py-2">
-        Click components to swap them
+        Click components to swap them · Models: {slots.length} loaded
       </div>
     </div>
   );
