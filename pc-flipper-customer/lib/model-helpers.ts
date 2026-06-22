@@ -1,5 +1,10 @@
 // pc-flipper-customer/lib/model-helpers.ts
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+// Model caching to prevent duplicate downloads
+const modelCache = new Map<string, THREE.Group>();
+const gltfLoader = new GLTFLoader();
 
 export interface SceneConfig {
   canvasContainer: HTMLDivElement;
@@ -72,16 +77,64 @@ export class PCBuilderScene {
     position: THREE.Vector3,
     scale: number = 1
   ): Promise<THREE.Group> {
-    // For now, return a placeholder geometric shape
-    // In Phase 2, we'll use GLTFLoader to load actual models
-    const placeholder = this.createPlaceholder(slotType, scale);
-    placeholder.position.copy(position);
-    placeholder.userData.slotType = slotType;
+    try {
+      let modelGroup: THREE.Group;
 
-    this.scene.add(placeholder);
-    this.models.set(slotType, { mesh: placeholder, slotType });
+      if (url && url.trim().length > 0) {
+        // Try to load real model from URL
+        if (modelCache.has(url)) {
+          // Use cached model (clone it)
+          const cached = modelCache.get(url)!;
+          modelGroup = cached.clone();
+        } else {
+          // Load from URL
+          try {
+            const gltf = await new Promise<any>((resolve, reject) => {
+              gltfLoader.load(url, resolve, undefined, reject);
+            });
 
-    return placeholder;
+            modelGroup = gltf.scene as THREE.Group;
+
+            // Ensure all meshes cast/receive shadows
+            modelGroup.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+              }
+            });
+
+            // Cache for future use
+            modelCache.set(url, modelGroup.clone());
+          } catch (error) {
+            console.warn(`Failed to load model from ${url}, using placeholder`, error);
+            // Fall back to placeholder
+            modelGroup = this.createPlaceholder(slotType, scale);
+          }
+        }
+      } else {
+        // No URL provided, use placeholder
+        modelGroup = this.createPlaceholder(slotType, scale);
+      }
+
+      modelGroup.position.copy(position);
+      modelGroup.scale.set(scale, scale, scale);
+      modelGroup.userData.slotType = slotType;
+      modelGroup.userData.url = url;
+
+      this.scene.add(modelGroup);
+      this.models.set(slotType, { mesh: modelGroup, slotType });
+
+      return modelGroup;
+    } catch (error) {
+      console.error(`Error loading model for ${slotType}:`, error);
+      // Fallback to placeholder
+      const placeholder = this.createPlaceholder(slotType, scale);
+      placeholder.position.copy(position);
+      placeholder.userData.slotType = slotType;
+      this.scene.add(placeholder);
+      this.models.set(slotType, { mesh: placeholder, slotType });
+      return placeholder;
+    }
   }
 
   private createPlaceholder(slotType: string, scale: number): THREE.Group {
@@ -147,6 +200,56 @@ export class PCBuilderScene {
       this.scene.remove(ref.mesh);
       this.models.delete(slotType);
     }
+  }
+
+  // Update a component with a new model
+  async updateComponent(
+    slotType: string,
+    newUrl: string,
+    scale: number = 1
+  ): Promise<boolean> {
+    try {
+      // Remove old component
+      const oldRef = this.models.get(slotType);
+      if (oldRef) {
+        const position = oldRef.mesh.position.clone();
+        this.scene.remove(oldRef.mesh);
+
+        // Load new model at same position
+        await this.loadModel(newUrl, slotType, position, scale);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error(`Failed to update component ${slotType}:`, error);
+      return false;
+    }
+  }
+
+  // Preload models to cache them
+  async preloadModels(urls: string[]): Promise<void> {
+    const promises = urls.map((url) => {
+      if (!modelCache.has(url)) {
+        return new Promise<void>((resolve) => {
+          gltfLoader.load(
+            url,
+            (gltf) => {
+              const cloned = (gltf.scene as THREE.Group).clone();
+              modelCache.set(url, cloned);
+              resolve();
+            },
+            undefined,
+            (error) => {
+              console.warn(`Failed to preload model ${url}`, error);
+              resolve(); // Don't fail entire preload
+            }
+          );
+        });
+      }
+      return Promise.resolve();
+    });
+
+    await Promise.all(promises);
   }
 
   // Get clicked component (raycasting)
@@ -224,4 +327,24 @@ export function initScene(container: HTMLDivElement): PCBuilderScene {
   const width = container.clientWidth;
   const height = container.clientHeight;
   return new PCBuilderScene({ canvasContainer: container, width, height });
+}
+
+// Helper to get model URL for a component variant
+export function getModelUrl(slotType: string, variantId?: number): string {
+  // Phase 2: Will be populated with actual Sketchfab URLs
+  // Format: public/models/{slotType}/{variantId}.gltf
+  if (!variantId) return '';
+
+  // Return URL relative to public folder
+  // This will be updated once we have real models
+  const typeMap: Record<string, string> = {
+    gpu: 'gpu',
+    cpu: 'cpu',
+    ram: 'ram',
+    storage: 'storage',
+    cooling: 'cooling',
+  };
+
+  const folder = typeMap[slotType] || slotType;
+  return `/models/${folder}/${variantId}.gltf`;
 }
