@@ -1,87 +1,41 @@
-import { NextResponse } from "next/server";
-import type { PublicPlaybook } from "@/lib/types";
-
 export async function GET() {
-  const playbooks: PublicPlaybook[] = [
+  return Response.json([
     {
       id: 1,
-      name: "Productivity",
+      name: "Gaming Rig",
+      slug: "gaming-rig",
+      description: "High-end gaming PC build",
+      tier_names: { budget: "Budget", mid: "Mid", high: "High" },
       slots: [
         {
           id: 1,
-          slot_type: "cpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "Ryzen 5 7500F",
-            mid: "Ryzen 7 7700",
-            high: "Ryzen 9 7950X"
-          }
+          slot_type: "gpu",
+          tier: "mid",
+          selected_variant_id: 1,
+          display_name: "Graphics Card",
         },
         {
           id: 2,
-          slot_type: "gpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "RTX 4070",
-            mid: "RTX 4070 Ti",
-            high: "RTX 4090"
-          }
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: "Gaming",
-      slots: [
+          slot_type: "cpu",
+          tier: "mid",
+          selected_variant_id: 1,
+          display_name: "Processor",
+        },
         {
           id: 3,
-          slot_type: "cpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "Ryzen 5 7600X",
-            mid: "Ryzen 7 7700X",
-            high: "Ryzen 9 7950X3D"
-          }
+          slot_type: "ram",
+          tier: "mid",
+          selected_variant_id: 1,
+          display_name: "Memory",
         },
         {
           id: 4,
-          slot_type: "gpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "RTX 4070",
-            mid: "RTX 4080",
-            high: "RTX 4090"
-          }
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: "Creator",
-      slots: [
-        {
-          id: 5,
-          slot_type: "cpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "Ryzen 7 7700X",
-            mid: "Ryzen 9 7950X",
-            high: "Ryzen 9 7950X3D"
-          }
+          slot_type: "storage",
+          tier: "mid",
+          selected_variant_id: 1,
+          display_name: "Storage",
         },
-        {
-          id: 6,
-          slot_type: "gpu",
-          is_customer_visible: true,
-          tier_names: {
-            budget: "RTX 4080",
-            mid: "RTX 6000 Ada",
-            high: "RTX 6000 Ada"
-          }
-        }
-      ]
-    }
-  ];
-
-  return NextResponse.json(playbooks);
+      ],
+    },
+  ]);
 }
