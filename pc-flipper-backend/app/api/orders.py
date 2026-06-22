@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
-from sqlalchemy import func, select, and_
+from fastapi import APIRouter, Depends, HTTPException, Header, Request
+from sqlalchemy import func, select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
 from app.database import get_db
@@ -10,7 +10,7 @@ from app.schemas.order import (
     OrderCheckoutResponse,
     OrderConfirmationOut,
 )
-from app.services.stripe_service import create_checkout_session
+from app.services.stripe_service import create_checkout_session, verify_webhook_signature
 import random
 import string
 
@@ -205,3 +205,103 @@ async def create_checkout(
     await db.commit()
 
     return OrderCheckoutResponse(reference=reference, stripe_url=stripe_url)
+
+
+async def assign_build_week(db: AsyncSession, order: Order, exclude_week: str = None) -> str:
+    """Auto-assign earliest available week to order"""
+    capacity_result = await db.execute(select(BuildCapacity).limit(1))
+    build_capacity = capacity_result.scalar()
+    default_capacity = build_capacity.default_per_week if build_capacity else 3
+
+    for i in range(52):
+        current_date = date.today() + timedelta(weeks=i)
+        week_start = current_date - timedelta(days=current_date.weekday())
+        week_str = get_iso_week(week_start)
+
+        if exclude_week and week_str == exclude_week:
+            continue
+
+        business_days_until = await count_business_days_until(date.today(), week_start)
+        if business_days_until < 5:
+            continue
+
+        override_result = await db.execute(
+            select(BuildCapacityOverride).where(BuildCapacityOverride.week == week_str)
+        )
+        override = override_result.scalar()
+
+        if override and override.max_builds is None:
+            continue
+
+        capacity = override.max_builds if override else default_capacity
+
+        booked_result = await db.execute(
+            select(func.count(Order.id)).where(
+                and_(
+                    Order.assigned_build_week == week_str,
+                    Order.status.in_(["confirmed", "building", "shipped"]),
+                )
+            )
+        )
+        booked_count = booked_result.scalar() or 0
+
+        if booked_count < capacity:
+            return week_str
+
+    raise RuntimeError("No available weeks to assign")
+
+
+@router.post("/stripe/webhook")
+async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)):
+    """Handle Stripe webhook events (payment confirmation)"""
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+
+    if not sig_header:
+        raise HTTPException(status_code=400, detail="Missing stripe-signature header")
+
+    try:
+        event = verify_webhook_signature(payload, sig_header)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        order_reference = session.get("metadata", {}).get("order_reference")
+
+        if not order_reference:
+            return {"status": "ok"}
+
+        order_result = await db.execute(
+            select(Order).where(Order.reference == order_reference)
+        )
+        order = order_result.scalar()
+
+        if order:
+            order.status = "confirmed"
+            order.payment_confirmed_at = datetime.utcnow()
+            order.stripe_payment_intent_id = session.get("payment_intent", "")
+
+            try:
+                assigned_week = await assign_build_week(db, order)
+                order.assigned_build_week = assigned_week
+            except RuntimeError:
+                pass
+
+            await db.commit()
+
+    return {"status": "ok"}
+
+
+@router.get("/{reference}", response_model=OrderConfirmationOut)
+async def get_order_confirmation(reference: str, db: AsyncSession = Depends(get_db)):
+    """Fetch order by reference for confirmation page"""
+    order_result = await db.execute(
+        select(Order).where(Order.reference == reference)
+    )
+    order = order_result.scalar()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    return order
