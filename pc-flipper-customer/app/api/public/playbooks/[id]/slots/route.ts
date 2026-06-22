@@ -6,48 +6,68 @@ export async function GET(
   
   return Response.json([
     {
-      id: 1,
+      slot_id: 1,
       slot_type: "gpu",
-      display_name: "Graphics Card",
-      tier: "mid",
-      variants: [
-        { id: 1, name: "RTX 4090", tier: "high", display_price: 1500, gem_score: 100, passmark: 50000 },
-        { id: 2, name: "RTX 4080", tier: "mid", display_price: 1200, gem_score: 85, passmark: 45000 },
-        { id: 3, name: "RTX 3090 Ti", tier: "budget", display_price: 900, gem_score: 70, passmark: 40000 },
-      ],
+      tier_names: { budget: "Budget", mid: "Mid", high: "High" },
+      variants_by_tier: {
+        high: [
+          { id: 1, title: "RTX 4090", display_price: 1500, gem_score: 100 },
+        ],
+        mid: [
+          { id: 2, title: "RTX 4080", display_price: 1200, gem_score: 85 },
+        ],
+        budget: [
+          { id: 3, title: "RTX 3090 Ti", display_price: 900, gem_score: 70 },
+        ],
+      },
     },
     {
-      id: 2,
+      slot_id: 2,
       slot_type: "cpu",
-      display_name: "Processor",
-      tier: "mid",
-      variants: [
-        { id: 1, name: "Intel i9-14900K", tier: "high", display_price: 700, gem_score: 95, passmark: 60000 },
-        { id: 2, name: "AMD Ryzen 9 7950X3D", tier: "mid", display_price: 600, gem_score: 90, passmark: 58000 },
-        { id: 3, name: "Intel i7-14700K", tier: "budget", display_price: 400, gem_score: 75, passmark: 50000 },
-      ],
+      tier_names: { budget: "Budget", mid: "Mid", high: "High" },
+      variants_by_tier: {
+        high: [
+          { id: 4, title: "Intel i9-14900K", display_price: 700, gem_score: 95 },
+        ],
+        mid: [
+          { id: 5, title: "AMD Ryzen 9 7950X3D", display_price: 600, gem_score: 90 },
+        ],
+        budget: [
+          { id: 6, title: "Intel i7-14700K", display_price: 400, gem_score: 75 },
+        ],
+      },
     },
     {
-      id: 3,
+      slot_id: 3,
       slot_type: "ram",
-      display_name: "Memory",
-      tier: "mid",
-      variants: [
-        { id: 1, name: "DDR5 64GB RGB", tier: "high", display_price: 400, gem_score: 90, passmark: 0 },
-        { id: 2, name: "DDR5 32GB RGB", tier: "mid", display_price: 250, gem_score: 80, passmark: 0 },
-        { id: 3, name: "DDR5 32GB", tier: "budget", display_price: 200, gem_score: 70, passmark: 0 },
-      ],
+      tier_names: { budget: "Budget", mid: "Mid", high: "High" },
+      variants_by_tier: {
+        high: [
+          { id: 7, title: "DDR5 64GB RGB", display_price: 400, gem_score: 90 },
+        ],
+        mid: [
+          { id: 8, title: "DDR5 32GB RGB", display_price: 250, gem_score: 80 },
+        ],
+        budget: [
+          { id: 9, title: "DDR5 32GB", display_price: 200, gem_score: 70 },
+        ],
+      },
     },
     {
-      id: 4,
+      slot_id: 4,
       slot_type: "storage",
-      display_name: "Storage",
-      tier: "mid",
-      variants: [
-        { id: 1, name: "Samsung 990 Pro 4TB", tier: "high", display_price: 500, gem_score: 95, passmark: 0 },
-        { id: 2, name: "Corsair MP600 2TB", tier: "mid", display_price: 300, gem_score: 85, passmark: 0 },
-        { id: 3, name: "WD Blue 1TB", tier: "budget", display_price: 100, gem_score: 60, passmark: 0 },
-      ],
+      tier_names: { budget: "Budget", mid: "Mid", high: "High" },
+      variants_by_tier: {
+        high: [
+          { id: 10, title: "Samsung 990 Pro 4TB", display_price: 500, gem_score: 95 },
+        ],
+        mid: [
+          { id: 11, title: "Corsair MP600 2TB", display_price: 300, gem_score: 85 },
+        ],
+        budget: [
+          { id: 12, title: "WD Blue 1TB", display_price: 100, gem_score: 60 },
+        ],
+      },
     },
   ]);
 }
