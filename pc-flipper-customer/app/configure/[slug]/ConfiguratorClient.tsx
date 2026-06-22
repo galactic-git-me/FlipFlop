@@ -97,16 +97,14 @@ export function ConfiguratorClient({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Left panel: 3D model viewer */}
       <div className="flex flex-col gap-6">
-        <div style={{ height: "600px" }}>
-          <ModelViewer3D
-            build={build}
-            slots={slots}
-            onComponentClick={(slotType) => {
-              const slot = slots.find((s) => s.slot_type === slotType);
-              if (slot) setSwapTarget(slot);
-            }}
-          />
-        </div>
+        <ModelViewer3D
+          build={build}
+          slots={slots}
+          onComponentClick={(slotType) => {
+            const slot = slots.find((s) => s.slot_type === slotType);
+            if (slot) setSwapTarget(slot);
+          }}
+        />
 
         {/* Mobile-only: tier picker and case picker below 3D view */}
         <div className="lg:hidden">
