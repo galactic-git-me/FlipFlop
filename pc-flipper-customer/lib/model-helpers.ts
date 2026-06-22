@@ -24,6 +24,11 @@ export class PCBuilderScene {
   raycaster: THREE.Raycaster;
   mouse: THREE.Vector2;
   models: Map<string, ModelReference> = new Map();
+  autoRotationEnabled: boolean = true;
+  autoRotationSpeed: number = 0.003;
+  lastInteractionTime: number = Date.now();
+  interactionIdleTime: number = 3000; // Resume auto-rotate after 3s of no interaction
+  animationFrameId: number | null = null;
 
   constructor(config: SceneConfig) {
     // Scene setup
@@ -291,25 +296,61 @@ export class PCBuilderScene {
     this.renderer.render(this.scene, this.camera);
   }
 
-  // Animation loop (auto-rotate when idle)
-  autoRotate(enabled: boolean = true) {
-    if (enabled) {
-      const animate = () => {
-        this.models.forEach(ref => {
-          ref.mesh.rotation.y += 0.005;
-        });
-        this.render();
-        requestAnimationFrame(animate);
-      };
-      animate();
-    }
-  }
-
   // Cleanup
   dispose() {
+    this.stopAutoRotation();
     this.renderer.dispose();
     this.scene.clear();
     this.renderer.domElement.remove();
+  }
+
+  // Start auto-rotation animation loop
+  startAutoRotation() {
+    if (this.animationFrameId) return;
+
+    const animate = () => {
+      const now = Date.now();
+      const timeSinceInteraction = now - this.lastInteractionTime;
+
+      // Only rotate if idle for more than interactionIdleTime
+      if (timeSinceInteraction > this.interactionIdleTime && this.autoRotationEnabled) {
+        this.models.forEach(ref => {
+          ref.mesh.rotation.y += this.autoRotationSpeed;
+        });
+      }
+
+      this.animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+  }
+
+  // Stop auto-rotation animation loop
+  stopAutoRotation() {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+  }
+
+  // Record user interaction to pause auto-rotation
+  recordInteraction() {
+    this.lastInteractionTime = Date.now();
+  }
+
+  // Set the speed of auto-rotation
+  setAutoRotationSpeed(speed: number) {
+    this.autoRotationSpeed = speed;
+  }
+
+  // Get a group containing all models (for potential grouping operations)
+  getModelsCenterGroup(): THREE.Group | null {
+    if (this.models.size === 0) return null;
+    const group = new THREE.Group();
+    this.models.forEach(ref => {
+      group.add(ref.mesh);
+    });
+    return group;
   }
 
   private onWindowResize() {

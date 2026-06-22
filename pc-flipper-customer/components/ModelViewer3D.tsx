@@ -65,6 +65,9 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
         modelUpdateRef.current.set(slot.slot_type, '');
       });
 
+      // Start auto-rotation
+      scene.startAutoRotation();
+
       // Start render loop
       const animate = () => {
         scene.render();
@@ -78,6 +81,7 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
+        scene.stopAutoRotation();
         scene.dispose();
       };
     } catch (error) {
@@ -91,6 +95,8 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
     if (!containerRef.current || !sceneRef.current) return;
 
     const handleCanvasClick = (event: MouseEvent) => {
+      sceneRef.current!.recordInteraction();
+
       const clickedComponent = sceneRef.current!.getClickedComponent(
         event,
         sceneRef.current!.renderer.domElement
@@ -108,6 +114,31 @@ export function ModelViewer3D({ build, slots, onComponentClick }: Props) {
       canvas.removeEventListener('click', handleCanvasClick);
     };
   }, [onComponentClick]);
+
+  // Handle mouse movement to detect user interaction
+  useEffect(() => {
+    if (!containerRef.current || !sceneRef.current) return;
+
+    let moveTimeout: NodeJS.Timeout | null = null;
+
+    const handleMouseMove = () => {
+      sceneRef.current!.recordInteraction();
+
+      // Debounce frequent moves
+      if (moveTimeout) clearTimeout(moveTimeout);
+      moveTimeout = setTimeout(() => {
+        // User stopped moving mouse, auto-rotate will resume after idleTime
+      }, 100);
+    };
+
+    const canvas = sceneRef.current.renderer.domElement;
+    canvas.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      if (moveTimeout) clearTimeout(moveTimeout);
+    };
+  }, []);
 
   // Update 3D models when build state changes
   useEffect(() => {
