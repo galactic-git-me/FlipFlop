@@ -6,16 +6,18 @@ import { ConfiguratorClient } from "./ConfiguratorClient";
 export const revalidate = 30;
 
 interface Props {
-  params: { slug: string };
-  searchParams: { tier?: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tier?: string }>;
 }
 
 export default async function ConfiguratorPage({ params, searchParams }: Props) {
+  const resolvedParams = await params;
+  const resolvedSearch = await searchParams;
   const playbooks = await getPlaybooks();
 
   // Resolve slug → playbook
   const playbook = playbooks.find(
-    (pb) => playbookSlug(pb.name) === params.slug
+    (pb) => playbookSlug(pb.name) === resolvedParams.slug
   );
   if (!playbook) notFound();
 
@@ -25,8 +27,8 @@ export default async function ConfiguratorPage({ params, searchParams }: Props) 
     getAvailableWeeks(),
   ]);
 
-  const initialTier = (["budget", "mid", "high"].includes(searchParams.tier ?? ""))
-    ? (searchParams.tier as "budget" | "mid" | "high")
+  const initialTier = (["budget", "mid", "high"].includes(resolvedSearch.tier ?? ""))
+    ? (resolvedSearch.tier as "budget" | "mid" | "high")
     : "mid";
 
   const meta = getPlaybookMeta(playbook.name);
