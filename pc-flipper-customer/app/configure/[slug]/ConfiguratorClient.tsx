@@ -12,6 +12,7 @@ import type {
   PublicVariant,
 } from "@/lib/types";
 import { bestVariantForTier } from "@/lib/utils";
+import { ModelViewer3D } from "@/components/ModelViewer3D";
 import { SlotRow } from "@/components/SlotRow";
 import { SwapModal } from "@/components/SwapModal";
 import { CasePicker } from "@/components/CasePicker";
@@ -93,11 +94,71 @@ export function ConfiguratorClient({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
-      {/* Left panel */}
-      <div className="flex-1 min-w-0">
-        {/* Tier picker */}
-        <div className="mb-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Left panel: 3D model viewer */}
+      <div className="flex flex-col gap-6">
+        <div style={{ height: "600px" }}>
+          <ModelViewer3D
+            build={build}
+            slots={slots}
+            onComponentClick={(slotType) => {
+              const slot = slots.find((s) => s.slot_type === slotType);
+              if (slot) setSwapTarget(slot);
+            }}
+          />
+        </div>
+
+        {/* Mobile-only: tier picker and case picker below 3D view */}
+        <div className="lg:hidden">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted mb-3">
+              Starting point
+            </p>
+            <div className="flex gap-3">
+              {(["budget", "mid", "high"] as Tier[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => switchTier(t)}
+                  className="flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all"
+                  style={{
+                    border: `2px solid ${
+                      tier === t
+                        ? "var(--color-accent)"
+                        : "var(--color-border)"
+                    }`,
+                    background:
+                      tier === t
+                        ? "color-mix(in srgb, var(--color-accent) 8%, transparent)"
+                        : "var(--color-bg-card)",
+                    color:
+                      tier === t
+                        ? "var(--color-accent)"
+                        : "var(--color-text-muted)",
+                  }}
+                >
+                  {tierNames[t]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted mb-3">
+              Case
+            </p>
+            <CasePicker
+              cases={cases}
+              selected={build.case}
+              onSelect={(c) => setBuild((prev) => ({ ...prev, case: c }))}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Right panel: slot list, tier picker, case picker, and build summary (sticky on desktop) */}
+      <div className="flex flex-col gap-8">
+        {/* Desktop-only: tier picker at top */}
+        <div className="hidden lg:block">
           <p className="text-xs font-bold uppercase tracking-wider text-muted mb-3">
             Starting point
           </p>
@@ -108,10 +169,11 @@ export function ConfiguratorClient({
                 onClick={() => switchTier(t)}
                 className="flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all"
                 style={{
-                  border:
+                  border: `2px solid ${
                     tier === t
-                      ? "2px solid var(--color-accent)"
-                      : "2px solid var(--color-border)",
+                      ? "var(--color-accent)"
+                      : "var(--color-border)"
+                  }`,
                   background:
                     tier === t
                       ? "color-mix(in srgb, var(--color-accent) 8%, transparent)"
@@ -129,7 +191,7 @@ export function ConfiguratorClient({
         </div>
 
         {/* Slot list */}
-        <div className="mb-6">
+        <div>
           <p className="text-xs font-bold uppercase tracking-wider text-muted mb-3">
             Components
           </p>
@@ -145,29 +207,25 @@ export function ConfiguratorClient({
           </div>
         </div>
 
-        {/* Case picker */}
-        <div>
+        {/* Desktop-only: case picker */}
+        <div className="hidden lg:block">
           <p className="text-xs font-bold uppercase tracking-wider text-muted mb-3">
             Case
           </p>
           <CasePicker
             cases={cases}
             selected={build.case}
-            onSelect={(c: PublicCase) =>
-              setBuild((prev) => ({ ...prev, case: c }))
-            }
+            onSelect={(c) => setBuild((prev) => ({ ...prev, case: c }))}
           />
         </div>
-      </div>
 
-      {/* Right panel — sticky summary */}
-      <div className="lg:w-72 shrink-0">
-        <div className="sticky top-20">
+        {/* Sticky build summary (sticky on desktop, static on mobile) */}
+        <div className="lg:sticky lg:top-20">
           <BuildSummary
             build={build}
             slots={slots}
             weeks={weeks}
-            onWeekSelect={(w: string) =>
+            onWeekSelect={(w) =>
               setBuild((prev) => ({ ...prev, chosenWeek: w }))
             }
           />
