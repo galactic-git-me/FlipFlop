@@ -22,10 +22,9 @@ export default function SuperGemsPage() {
 
   useEffect(() => {
     const params = new URLSearchParams({
-      classification: "amazing_gem",
+      claude_verdict: "GEM",
       sort_by: "gem_score",
-      page: "1",
-      page_size: "100",
+      limit: "100",
     });
     fetch(`${API_BASE}/api/listings/?${params}`)
       .then((r) => r.json())
