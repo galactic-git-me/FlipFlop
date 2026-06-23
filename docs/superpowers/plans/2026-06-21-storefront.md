@@ -4,13 +4,15 @@
 
 **Goal:** Build `pc-flipper-customer/` — a public Next.js 14 storefront where customers browse FlipFlop playbooks, configure a made-to-order PC build, and proceed to checkout.
 
-**Architecture:** New Next.js 14 App Router project at `pc-flipper-customer/` in the same monorepo. Server Components fetch catalogue data from the existing `/api/public/*` endpoints (proxied to FlipFlop backend). Interactive configurator state (tier selection, slot swaps, case pick, week pick) lives in a single Client Component. Checkout is stubbed — wired to `/api/orders/checkout` which Subsystem 2 delivers.
+**Architecture:** New Next.js 14 App Router project at `pc-flipper-customer/` in the same monorepo. Server Components fetch catalogue data from the existing `/api/public/*` endpoints (proxied to FlipFlop backend). Interactive configurator state (tier selection, slot swaps, case pick, fast-track toggle) lives in a single Client Component. Checkout is stubbed — wired to `/api/orders/checkout` which Subsystem 2 delivers.
 
 **Tech Stack:** Next.js 14 / TypeScript / Tailwind CSS. No component library — plain Tailwind with design tokens from Google Stitch (Task 1). Fonts from Google Fonts. No auth.
 
-**Depends on:** Public catalogue API (`/api/public/playbooks`, `/api/public/playbooks/{id}/slots`, `/api/public/cases`) — already built in the Catalogue Layer.
+**Depends on:** Public catalogue API (`/api/public/playbooks`, `/api/public/playbooks/{id}/slots`, `/api/public/cases`) — already built in the Catalogue Layer. Also fetches `/api/public/checkout-config` (stub in this plan, real endpoint in Subsystem 2).
 
-**Note on checkout:** `POST /api/orders/checkout` and `GET /api/orders/slots` are built in Subsystem 2. In this plan the "Order Now" button is present in the UI but disabled with a "Launching soon" message. The order confirmation page is a stub. Remove the stub and wire live in Subsystem 2.
+**Note on checkout:** `POST /api/orders/checkout` is built in Subsystem 2. In this plan the "Order Now" button is present in the UI but disabled with a "Launching soon" message. The order confirmation page is a stub. Remove the stub and wire live in Subsystem 2.
+
+**No build week picker:** customers do not select a build week. The build scheduler (Subsystem 2) assigns dates automatically. The customer only sees a static delivery estimate ("3–5 working days" or "2–3 working days" for fast-track).
 
 ---
 
@@ -28,8 +30,7 @@
 | `pc-flipper-customer/components/SlotRow.tsx` | One component slot row in configurator |
 | `pc-flipper-customer/components/SwapModal.tsx` | Component comparison modal |
 | `pc-flipper-customer/components/CasePicker.tsx` | Case selection grid |
-| `pc-flipper-customer/components/BuildSummary.tsx` | Sticky build summary + total |
-| `pc-flipper-customer/components/WeekPicker.tsx` | Build slot week buttons (stubbed data) |
+| `pc-flipper-customer/components/BuildSummary.tsx` | Sticky build summary + total + fast-track toggle + delivery estimate |
 | `pc-flipper-customer/lib/types.ts` | All TypeScript interfaces |
 | `pc-flipper-customer/lib/api.ts` | Fetch helpers for public API + stubs |
 | `pc-flipper-customer/lib/playbook-config.ts` | Static descriptions + slug→name mapping |
@@ -258,18 +259,20 @@ export interface PublicCase {
 
 // The customer's current build state
 export interface BuildState {
-  // slot_type → chosen variant
   slots: Record<SlotType, PublicVariant | null>;
   case: PublicCase | null;
-  chosenWeek: string | null; // ISO week "2026-W27"
+  isFastTrack: boolean;
 }
 
-// Available build week from /api/orders/slots (Subsystem 2)
-export interface AvailableWeek {
-  week: string;        // "2026-W27"
-  week_start: string;  // "2026-06-29"
-  available: number;
-  capacity: number;
+// Checkout config from /api/public/checkout-config (Subsystem 2 endpoint; stubbed in Subsystem 1)
+export interface CheckoutConfig {
+  postage_gbp: number;
+  insurance_rate_pct: number;   // e.g. 1.5 = 1.5%
+  fast_track_fee_gbp: number;
+  standard_days_min: number;
+  standard_days_max: number;
+  fast_track_days_min: number;
+  fast_track_days_max: number;
 }
 ```
 
@@ -277,7 +280,7 @@ export interface AvailableWeek {
 
 ```typescript
 // pc-flipper-customer/lib/api.ts
-import type { PublicCase, PublicPlaybook, PublicSlotWithVariants, AvailableWeek } from "./types";
+import type { PublicCase, PublicPlaybook, PublicSlotWithVariants, CheckoutConfig } from "./types";
 
 // All fetches in this file run inside Server Components — relative paths don't work
 // from the server process, so we use BACKEND_URL directly to hit the backend.
@@ -301,20 +304,17 @@ export async function getCases(): Promise<PublicCase[]> {
   return get<PublicCase[]>("/api/public/cases");
 }
 
-// STUB — replaced by real endpoint in Subsystem 2
-export async function getAvailableWeeks(): Promise<AvailableWeek[]> {
-  const today = new Date();
-  // Return 3 stub weeks starting from next week
-  return Array.from({ length: 3 }, (_, i) => {
-    const d = new Date(today);
-    d.setDate(d.getDate() + 7 * (i + 1));
-    // ISO week number
-    const jan1 = new Date(d.getFullYear(), 0, 1);
-    const weekNum = Math.ceil(((d.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7);
-    const week = `${d.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
-    const week_start = d.toISOString().split("T")[0];
-    return { week, week_start, available: 3 - i, capacity: 3 };
-  });
+// STUB — replaced by real /api/public/checkout-config endpoint in Subsystem 2
+export async function getCheckoutConfig(): Promise<CheckoutConfig> {
+  return {
+    postage_gbp: 12.00,
+    insurance_rate_pct: 1.5,
+    fast_track_fee_gbp: 49.00,
+    standard_days_min: 3,
+    standard_days_max: 5,
+    fast_track_days_min: 2,
+    fast_track_days_max: 3,
+  };
 }
 ```
 
@@ -819,7 +819,7 @@ The server component resolves the slug to a playbook ID, fetches all data, and p
 ```tsx
 // pc-flipper-customer/app/configure/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import { getPlaybooks, getPlaybookSlots, getCases, getAvailableWeeks } from "@/lib/api";
+import { getPlaybooks, getPlaybookSlots, getCases, getCheckoutConfig } from "@/lib/api";
 import { getPlaybookMeta, playbookSlug } from "@/lib/playbook-config";
 import { ConfiguratorClient } from "./ConfiguratorClient";
 
@@ -839,10 +839,10 @@ export default async function ConfiguratorPage({ params, searchParams }: Props) 
   );
   if (!playbook) notFound();
 
-  const [slots, cases, weeks] = await Promise.all([
+  const [slots, cases, config] = await Promise.all([
     getPlaybookSlots(playbook.id),
     getCases(),
-    getAvailableWeeks(),
+    getCheckoutConfig(),
   ]);
 
   const initialTier = (["budget", "mid", "high"].includes(searchParams.tier ?? ""))
@@ -867,7 +867,7 @@ export default async function ConfiguratorPage({ params, searchParams }: Props) 
         playbook={playbook}
         slots={slots}
         cases={cases}
-        weeks={weeks}
+        config={config}
         initialTier={initialTier}
       />
     </div>
@@ -880,13 +880,13 @@ export default async function ConfiguratorPage({ params, searchParams }: Props) 
 ```tsx
 // pc-flipper-customer/app/configure/[slug]/ConfiguratorClient.tsx
 "use client";
-import type { PublicPlaybook, PublicSlotWithVariants, PublicCase, AvailableWeek, Tier } from "@/lib/types";
+import type { PublicPlaybook, PublicSlotWithVariants, PublicCase, CheckoutConfig, Tier } from "@/lib/types";
 
 interface Props {
   playbook: PublicPlaybook;
   slots: PublicSlotWithVariants[];
   cases: PublicCase[];
-  weeks: AvailableWeek[];
+  config: CheckoutConfig;
   initialTier: Tier;
 }
 

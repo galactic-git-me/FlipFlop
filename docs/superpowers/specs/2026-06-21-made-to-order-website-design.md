@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task.
 
-**Goal:** Build a customer-facing made-to-order PC configurator (flipflop.co.uk) that reads live from the FlipFlop catalogue, takes Stripe payments, manages build slot capacity, and tracks component deliveries via an LLM-powered email parser.
+**Goal:** Build a customer-facing made-to-order PC configurator (flipflop.co.uk) that reads live from the FlipFlop catalogue, takes Stripe payments, auto-schedules builds on an internal calendar, and tracks component deliveries via an LLM-powered email parser.
 
-**Architecture:** Three subsystems — (1) a new `pc-flipper-customer/` Next.js app (the storefront), (2) order & capacity management in the existing backend + new admin pages, (3) a delivery tracker that polls Gmail/IMAP and uses Claude to extract delivery status. All three read from the catalogue API already built.
+**Architecture:** Three subsystems — (1) a new `pc-flipper-customer/` Next.js app (the storefront), (2) order management + intelligent build scheduler in the existing backend + new admin pages, (3) a delivery tracker that polls Gmail/IMAP and uses Claude to extract delivery status. All three read from the catalogue API already built.
 
 **Tech Stack:** Next.js 14 App Router / TypeScript / Tailwind (customer site), Python / FastAPI / SQLAlchemy 2.0 async (backend additions), Stripe Checkout (payments), IMAP + Claude API (delivery tracker), PostgreSQL (existing DB).
 
@@ -12,8 +12,8 @@
 
 **Implementation order:** This spec should be executed as three separate implementation plans in sequence:
 1. **Storefront** — `pc-flipper-customer/` Next.js app (Section 2)
-2. **Orders & Capacity** — backend tables, endpoints, Stripe, admin pages (Section 3)
-3. **Delivery Tracker** — IMAP poller, LLM extraction, delivery admin page (Section 4)
+2. **Orders & Build Scheduler** — backend tables, endpoints, Stripe, admin calendar (Section 3)
+3. **Delivery Tracker** — IMAP poller, LLM extraction, scheduler integration (Section 4)
 
 Each plan depends on the previous one being deployed.
 
@@ -28,13 +28,16 @@ FlipFlop scrapes eBay for gem PC components, curates them through a catalogue la
        ↓
 pc-flipper-customer/   →   Stripe Checkout   →   Order confirmed
                                                        ↓
-                                            Auto-assign build slot
+                                            Build Scheduler
+                                            (auto-assigns build date,
+                                             optimises calendar,
+                                             re-runs on every change)
                                                        ↓
                                             IMAP email poller
                                                        ↓
-                                            Claude → delivery status
+                                            Claude → component arrival date
                                                        ↓
-                                            Risk flag if delayed
+                                            Re-run scheduler if late
 ```
 
 ---
@@ -46,7 +49,7 @@ pc-flipper-customer/   →   Stripe Checkout   →   Order confirmed
 #### `/` — Landing page
 - Hero section with FlipFlop brand and one-line value proposition
 - Playbook cards grid: one card per active playbook
-- Each card shows: playbook name, one-liner description, tier names (read from `tier_names` on slots), "from £X" (estimated budget-tier total: sum of the cheapest active variant per customer-visible slot in budget tier, plus lowest-RRP case)
+- Each card shows: playbook name, one-liner description, tier names (read from `tier_names` on slots), "from £X" (estimated budget-tier total: sum of the cheapest active variant per customer-visible slot in budget tier, plus lowest-RRP case + postage)
 - Clicking a card navigates to `/configure/[slug]`
 - Static playbook descriptions stored in a local config file (not in DB)
 
@@ -55,40 +58,46 @@ On load:
 1. Fetch `/api/public/playbooks` to resolve slug → playbook ID
 2. Fetch `/api/public/playbooks/[id]/slots` to get slots + variants grouped by tier
 3. Fetch `/api/public/cases` for case options
-4. Fetch `/api/orders/slots` (new endpoint) for available build weeks
+4. Fetch `/api/public/checkout-config` for postage, insurance rate, fast-track fee, delivery day ranges
 5. Auto-select mid tier for all customer-visible slots
 
 **Tier picker:** three buttons (budget / mid / high) using playbook-specific tier names from slot data. Selecting a tier re-selects the highest gem-score active variant for each slot in that tier.
 
 **Slot list:** one row per customer-visible slot showing: slot label, selected component name, tier badge, display price, "swap" button. Non-customer-visible slots are fulfilled automatically (not shown).
 
-**Swap modal:** opens on "swap" click. Shows all active variants for that slot across all tiers, sorted by gem score descending. Each card shows: component name, gem score, PassMark score, key spec (VRAM for GPU, capacity for RAM/storage, core count for CPU), display price, price delta vs current selection, tier badge. Current selection highlighted. Clicking a card selects it and closes modal.
+**Swap modal:** opens on "swap" click. Shows all active variants for that slot across all tiers, sorted by gem score descending. Each card shows: component name, gem score, display price, price delta vs current selection, tier badge. Clicking a card selects it and closes modal.
 
 **Case picker:** separate section below slots. Grid of available cases from `/api/public/cases`. Shows: image (if available), name, brand, form factor, RRP. One selected at a time.
 
 **Build summary panel (sticky):**
-- Line items: each selected component + case with price
-- Total (sum of display prices + case RRP)
-- Available build weeks: show next 3 weeks with slots remaining, customer picks one
-- "Order Now" button → POST to `/api/orders/checkout`, redirect to Stripe
+- Line items:
+  1. Each selected component with price
+  2. Case with price
+  3. Postage: £XX (static, from config)
+  4. Insurance: £XX (calculated as `insurance_rate_pct` % of components + case subtotal, rounded to nearest £0.50)
+  5. Fast-track (if selected): +£XX
+- **Total** line
+- **Fast-track toggle:** "Fast-track my build — 2–3 working days (+£49)" checkbox. When selected, updates total and changes delivery estimate.
+- **Delivery estimate** (below total): "Estimated delivery: 3–5 working days" (standard) or "Estimated delivery: 2–3 working days" (fast-track). This is static text from config — not a specific date.
+- **"Order Now" button** → POST to `/api/orders/checkout`, redirect to Stripe Checkout
 
 **URL:** `/configure/[slug]?tier=budget|mid|high` — tier pre-selection via query param (for marketing links).
 
-#### `/order/[id]` — Order confirmation
-- Shown after Stripe redirects back
-- Fetches order details from `/api/orders/[id]` (public, by reference ID not internal ID)
-- Shows: build summary, assigned build week, delivery address, reference number
+#### `/order/[reference]` — Order confirmation
+- Shown after Stripe redirects back (success_url)
+- Fetches order details from `/api/orders/[reference]` (public endpoint, keyed by human reference)
+- Shows: build summary, delivery address, estimated delivery range (e.g. "Expected within 3–5 working days of payment"), reference number
 - "Questions? Email us at hello@flipflop.co.uk"
 
 ### 2.2 Tech notes
 - No auth on any customer page — fully public
-- All data fetched server-side (Next.js Server Components) for SEO and speed, swap modal state managed client-side
+- All data fetched server-side (Next.js Server Components) for SEO and speed; swap modal and fast-track toggle state managed client-side
 - Stripe Checkout hosted page handles card details — no PCI scope on our server
-- `NEXT_PUBLIC_API_URL` env var pointing to the FlipFlop backend
+- `BACKEND_URL` env var for server-side fetches; Next.js rewrite proxies `/api/*` for any client-side calls
 
 ---
 
-## 3. Order & Capacity Management
+## 3. Order Management & Build Scheduler
 
 ### 3.1 New DB tables
 
@@ -102,98 +111,189 @@ build_config: JSON  # {slot_type: {variant_id, name, display_price}, case: {id, 
 customer_name: str
 customer_email: str
 delivery_address: JSON  # {line1, line2, city, postcode, country}
-total_gbp: float
+components_subtotal_gbp: float   # sum of variant display prices + case RRP
+postage_gbp: float               # snapshotted from config at order time
+insurance_gbp: float             # snapshotted (calculated) at order time
+fast_track_fee_gbp: float        # 0 if standard, config fast_track_fee_gbp if priority
+total_gbp: float                 # sum of all above
+is_fast_track: bool              # True = priority build
 stripe_session_id: str
 stripe_payment_intent_id: str (nullable)
-status: str  # pending_payment | confirmed | building | shipped | cancelled
-assigned_build_week: str (nullable)  # ISO week "2026-W27"
-estimated_arrival_date: date (nullable)  # latest component arrival across all tracked deliveries
-delivery_at_risk: bool  # True if estimated_arrival_date >= build week start
-created_at: str
-updated_at: str
+status: str                      # pending_payment | confirmed | building | paused | shipped | cancelled
+build_status: str (nullable)     # scheduled | in_progress | paused | completed
+scheduled_build_date: date (nullable)  # assigned by scheduler
+delivery_promise_min: date (nullable)  # order_confirmed_date + delivery_days_min (working days)
+delivery_promise_max: date (nullable)  # order_confirmed_date + delivery_days_max (working days)
+component_ready_date: date (nullable)  # estimated date all components will be in hand
+created_at: datetime
+updated_at: datetime
 ```
 
-#### `build_capacity`
+#### `build_settings`
+Single row — all values admin-configurable via `/api/admin/build-settings`.
+
 ```python
 id: int (PK)
-default_per_week: int  # applies to all weeks with no override
-created_at: str
-updated_at: str
-```
-Single row — seeded with `default_per_week = 3`.
-
-#### `build_capacity_overrides`
-```python
-id: int (PK)
-week: str  # ISO week "2026-W27"
-max_builds: int (nullable)  # null = week closed
-note: str (nullable)  # e.g. "holiday"
-created_at: str
+builds_per_day: int              # default 2
+standard_days_min: int           # default 3
+standard_days_max: int           # default 5
+fast_track_days_min: int         # default 2
+fast_track_days_max: int         # default 3
+fast_track_fee_gbp: float        # default 49.00
+postage_gbp: float               # default 12.00
+insurance_rate_pct: float        # default 1.5  (% of components+case subtotal)
+component_arrival_estimate_days: int  # default 1 (working days after order confirmation)
+updated_at: datetime
 ```
 
-### 3.2 New backend endpoints
+### 3.2 Build Scheduler
 
-#### `GET /api/orders/slots`
-Returns next 8 calendar weeks with availability.
-For each week:
-- capacity = override.max_builds if override exists, else default_per_week (null override = 0)
-- booked = count of confirmed/building orders with assigned_build_week = that week
-- available = capacity − booked
-- earliest_eligible = today + 5 working days (replaced by delivery tracker later)
-Returns only weeks where available > 0 AND week_start_date ≥ earliest_eligible.
+The scheduler is a pure function `run_build_scheduler()` called any time the build plan needs re-optimising:
+- New order confirmed (Stripe webhook)
+- Order cancelled
+- Order upgraded to fast-track
+- Component arrival estimate changes (delivery tracker update)
+- Admin manually triggers re-schedule
+
+#### Algorithm
+
+```
+Input: all orders with status in (confirmed, building, paused)
+Settings: builds_per_day, working days only (Mon–Fri)
+
+1. SORT orders by priority:
+   a. is_fast_track DESC (fast-track first)
+   b. delivery_promise_min ASC (tightest deadline first within same priority tier)
+
+2. BUILD the calendar slot list:
+   - Generate working days starting from tomorrow
+   - Each day has `builds_per_day` slots
+   - Skip days where component_ready_date > day (components not in yet)
+
+3. ASSIGN scheduled_build_date:
+   - Walk sorted orders; assign each to the earliest available slot
+     where day >= order.component_ready_date
+   - Store assigned date on order
+
+4. CHECK interruption (called after each new fast-track order):
+   - "Currently working on" = order with scheduled_build_date == today
+     AND build_status in (in_progress, scheduled)
+   - If that order is NOT fast-track and the new order IS fast-track:
+     a. Mark current order build_status = paused, status = paused
+     b. Re-run step 3 giving today's remaining slot to the fast-track order
+   - If current order IS fast-track: do not interrupt; re-optimise future slots only
+
+5. CALCULATE traffic light per order:
+   - build_done_date = scheduled_build_date + 1 working day (shipping day)
+   - GREEN  if build_done_date <= delivery_promise_min
+   - AMBER  if delivery_promise_min < build_done_date <= delivery_promise_max
+   - RED    if build_done_date > delivery_promise_max
+
+6. CALCULATE delay reasons (for traffic light hover tooltip):
+   For each non-green order, identify contributing delays:
+   - "Component X: estimated arrival {date} → delays build by N working day(s)"
+   - "Build queue full until {date} → delays build by N working day(s)"
+   - "Total overrun: {N} working day(s) past promised window"
+```
+
+#### "Currently working on" derivation
+- No manual "start" button needed
+- `scheduled_build_date == today` → that order is considered in progress
+- If `build_status == paused`: interrupted, show flashing on calendar
+- Scheduler never marks a build in_progress explicitly — status is derived from date + build_status field
+
+### 3.3 New backend endpoints
+
+#### `GET /api/public/checkout-config`
+Returns static values needed by the storefront to calculate totals and show delivery estimates. No auth required.
 
 ```json
-[
-  {"week": "2026-W27", "week_start": "2026-06-29", "available": 2, "capacity": 3},
-  {"week": "2026-W28", "week_start": "2026-07-06", "available": 3, "capacity": 3}
-]
+{
+  "postage_gbp": 12.00,
+  "insurance_rate_pct": 1.5,
+  "fast_track_fee_gbp": 49.00,
+  "standard_days_min": 3,
+  "standard_days_max": 5,
+  "fast_track_days_min": 2,
+  "fast_track_days_max": 3
+}
 ```
 
 #### `POST /api/orders/checkout`
-Body: `{playbook_id, build_config, customer_name, customer_email, delivery_address, chosen_week}`
+Body:
+```json
+{
+  "playbook_id": 1,
+  "build_config": {"cpu": {"variant_id": 42, "name": "...", "display_price": 125}, ...},
+  "case": {"id": 7, "name": "...", "rrp": 95},
+  "customer_name": "Jane Smith",
+  "customer_email": "jane@example.com",
+  "delivery_address": {"line1": "...", "city": "...", "postcode": "SW1A 1AA", "country": "GB"},
+  "is_fast_track": false
+}
+```
 
 Validates:
 - All variant IDs in build_config are active
-- chosen_week still has capacity
+- Case ID is active
+- is_fast_track is boolean
+
+Calculates at server (not trusted from client):
+- `components_subtotal_gbp` = sum of variant display_prices + case rrp
+- `postage_gbp`, `insurance_gbp`, `fast_track_fee_gbp` from current `build_settings`
+- `total_gbp` = sum of all
 
 Creates:
 - `orders` row with status `pending_payment`
-- Stripe Checkout session with line items matching build_config
+- Stripe Checkout session with line items:
+  1. "FlipFlop {playbook_name} Build" — components_subtotal_gbp
+  2. "Postage" — postage_gbp
+  3. "Build Insurance" — insurance_gbp
+  4. "Fast-track Build" — fast_track_fee_gbp (omitted if 0)
 - `success_url` = `/order/{reference}`, `cancel_url` = `/configure/[slug]`
 
 Returns: `{stripe_url, reference}`
 
-Slot is NOT reserved until payment confirmed — abandoned checkouts don't block capacity.
-
 #### `POST /api/stripe/webhook`
 Handles `checkout.session.completed`:
 1. Find order by stripe_session_id
-2. Set status → `confirmed`
-3. Auto-assign build week: earliest week where available > 0 AND week_start ≥ today + 5 working days (re-checks live in case chosen_week filled up)
-4. Send confirmation email (SMTP): order reference, build summary, assigned build week
+2. Set status → `confirmed`, build_status → `scheduled`
+3. Set `component_ready_date` = today + `component_arrival_estimate_days` working days
+4. Set `delivery_promise_min` / `delivery_promise_max` from settings + today
+5. Call `run_build_scheduler()` to assign `scheduled_build_date` and re-optimise all
+6. Send confirmation email (SMTP): reference, build summary, "Estimated delivery: X–Y working days"
 
 #### `GET /api/orders/[reference]` (public)
-Returns order details for confirmation page. Keyed by human reference, not internal ID.
+Returns order for confirmation page. Keyed by human reference.
 
-#### Admin endpoints (auth required, under `/api/admin/`)
-- `GET /api/admin/orders` — list all orders, filterable by status/week
-- `PATCH /api/admin/orders/[id]` — update status (building, shipped, cancelled)
-- `GET /api/admin/capacity` — current default + all overrides
-- `PATCH /api/admin/capacity/default` — update default_per_week
-- `PUT /api/admin/capacity/overrides/[week]` — set or remove week override
+#### Admin endpoints (auth required)
+- `GET /api/admin/orders` — list all orders, filterable by status / build_status / date
+- `PATCH /api/admin/orders/[id]` — update status (building → shipped, or cancel)
+- `GET /api/admin/build-settings` — return current build_settings row
+- `PATCH /api/admin/build-settings` — update any field; calls `run_build_scheduler()` after save
+- `POST /api/admin/orders/[id]/reschedule` — manually trigger scheduler for one order
+- `POST /api/admin/scheduler/run` — manually trigger full `run_build_scheduler()`
 
-### 3.3 New admin pages in `pc-flipper`
+### 3.4 Admin pages in `pc-flipper`
 
 #### Build Calendar (`/orders/calendar`)
-Week-by-week view (rolling 12 weeks):
-- Each week shows: capacity bar (booked/total), list of confirmed orders for that week, risk flags
-- Click a week to set override capacity or close it (with optional note)
-- Closed weeks shown in red, at-risk orders highlighted amber
+
+Day-by-day view (rolling 30 working days, scrollable):
+- Each day column shows up to `builds_per_day` build slots
+- Each build card shows:
+  - Customer name + reference
+  - Playbook name
+  - **Gold background** if `is_fast_track`
+  - **Traffic light dot** (green / amber / red — see scheduler algorithm)
+  - **Flashing border** if `build_status == paused` (interrupted, need to stop and switch)
+  - Hover on traffic light dot → tooltip showing delay breakdown (see algorithm step 6)
+- If today has a paused build AND a fast-track build: the fast-track is shown at top, paused shows flashing below it
+- Sidebar panel: current `build_settings` (builds_per_day, delivery ranges, postage, insurance rate, fast-track fee) with inline edit + "Save & Re-schedule" button
 
 #### Orders (`/orders`)
-Table of all orders: reference, customer name, playbook, total, status, build week, risk flag.
-Click to expand: full build config, delivery address, delivery events timeline.
-Status can be advanced (confirmed → building → shipped) from this page.
+Table: reference, customer name, playbook, total, is_fast_track badge, status, build_status, scheduled_build_date, traffic light, delivery promise range.
+Click to expand: full build config, delivery address, delivery events timeline, re-schedule button.
+Status can be advanced (building → shipped, cancel) from this view.
 
 ---
 
@@ -208,7 +308,10 @@ Hourly APScheduler job `poll_delivery_emails`:
 4. Matching emails → Claude API with prompt (see below)
 5. Stores result as `delivery_event`
 6. Attempts to link to an order by fuzzy-matching component names in email body
-7. After processing, re-evaluates `estimated_arrival_date` and `delivery_at_risk` on affected orders
+7. After processing, for each affected order:
+   - Recalculate `component_ready_date` = max(estimated_arrival across all linked delivery_events)
+   - If `component_ready_date` changed: call `run_build_scheduler()` to re-optimise all builds
+   - If any order flips to RED: emit alert (`code="BUILD_AT_RISK"`, severity="warning")
 
 **Delivery keyword list (subject pattern match):**
 `dispatched`, `shipped`, `out for delivery`, `delivered`, `your order`, `tracking`, `parcel`, `on its way`, `delivery update`, `expected delivery`
@@ -229,12 +332,7 @@ Email subject: {subject}
 Email body: {body}
 ```
 
-**Linking to orders:** for each confirmed/building order, extract component names from build_config. If ≥1 component name appears (case-insensitive, partial match) in the email body, link the event to that order. If multiple orders match, link to the most recently created. Unmatched events stored with order_id = null for manual review.
-
-**Risk flag logic:** after processing each batch, for every confirmed/building order:
-- `estimated_arrival_date` = max(estimated_arrival across all linked delivery_events)
-- `delivery_at_risk` = estimated_arrival_date ≥ build_week_start_date
-- If newly at-risk: emit alert via existing alert system (`code="BUILD_AT_RISK"`, severity="warning")
+**Linking to orders:** for each confirmed/building/paused order, extract component names from build_config. If ≥1 component name appears (case-insensitive, partial match) in the email body, link the event to that order. If multiple orders match, link to the most recently created. Unmatched events stored with order_id = null for manual review.
 
 ### 4.2 New DB tables
 
@@ -251,7 +349,7 @@ estimated_arrival: date (nullable)
 confirmed_arrival: date (nullable)
 notes: str (nullable)
 raw_email_snippet: str  # first 2000 chars, for debugging
-created_at: str
+created_at: datetime
 ```
 
 #### `delivery_email_config`
@@ -259,19 +357,19 @@ created_at: str
 id: int (PK)
 imap_host: str
 imap_user: str
-last_polled_at: str (nullable)
+last_polled_at: datetime (nullable)
 is_enabled: bool
 ```
 Single row. Password stored in env var only, never in DB.
 
-### 4.3 New admin page in `pc-flipper`
+### 4.3 Admin page in `pc-flipper`
 
 #### Deliveries (`/orders/deliveries`)
-Grouped by order (only confirmed/building orders shown):
-- Order reference, customer name, build week, risk flag banner if at risk
+Grouped by order (only confirmed/building/paused orders shown):
+- Order reference, customer name, scheduled build date, traffic light status, delivery promise range
 - Per-component row: component name, latest delivery status, estimated arrival, retailer
 - Unlinked events section at bottom for manual assignment
-- "Mark as arrived" button per component (manual override, sets confirmed_arrival = today)
+- "Mark as arrived" button per component (manual override — sets confirmed_arrival = today, triggers `run_build_scheduler()`)
 
 ---
 
@@ -282,7 +380,7 @@ Grouped by order (only confirmed/building orders shown):
 | `STRIPE_SECRET_KEY` | Stripe API key (backend) |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signature verification |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (customer site) |
-| `NEXT_PUBLIC_API_URL` | FlipFlop backend URL (customer site) |
+| `BACKEND_URL` | FlipFlop backend URL (customer site server-side fetches) |
 | `IMAP_HOST` | Email server hostname |
 | `IMAP_USER` | Email address to poll |
 | `IMAP_PASS` | Email password / app password |
@@ -297,7 +395,8 @@ Grouped by order (only confirmed/building orders shown):
 
 - Customer accounts / login (no auth on storefront)
 - Returns / refunds (handled manually)
-- Inventory reservation before payment (abandoned carts don't block slots)
-- Carrier API integrations (email LLM parsing covers this)
+- Inventory reservation before payment (abandoned checkouts don't affect schedule)
+- Carrier API integrations (static postage + email LLM tracking covers this)
 - Multiple currencies (GBP only)
 - VAT receipts (manual for now)
+- Weekend or bank holiday awareness beyond Mon–Fri working day counting
