@@ -327,8 +327,8 @@ export default function DashboardPage() {
   const handleFlip = async (listing: Listing) => {
     setFlippingId(listing.id);
     try {
-      await api.flips.create({ listing_id: listing.id });
-      router.push("/selling");
+      const flip = await api.flips.create({ listing_id: listing.id }) as { id: number };
+      router.push(`/flips/${flip.id}`);
     } catch {
       setFlippingId(null);
     }

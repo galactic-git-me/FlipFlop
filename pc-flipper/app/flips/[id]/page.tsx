@@ -335,6 +335,7 @@ interface Flip {
   notes?: string;
   created_at: string;
   sold_at?: string;
+  selected_upgrade_ids?: Record<string, number>;
 }
 
 const STAGES: { key: FlipStage; label: string }[] = [
