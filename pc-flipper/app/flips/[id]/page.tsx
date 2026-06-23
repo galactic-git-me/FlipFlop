@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -13,10 +13,289 @@ import {
   HardDrive,
   Monitor,
   Zap,
+  Search,
+  X,
+  PackagePlus,
 } from "lucide-react";
 import { api } from "@/lib/api";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
 type FlipStage = "selected" | "building" | "ready_for_sale" | "sold";
+
+// ── Playbook + Upgrade Section ─────────────────────────────────────────────
+
+interface Playbook {
+  id: number;
+  name: string;
+  emoji: string;
+  description: string;
+  target_use_case: string;
+  upgrade_strategy?: {
+    required?: { component: string; target: string; max_cost: number }[];
+    optional?: { component: string; target: string; max_cost: number }[];
+  };
+}
+
+interface Part {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  source_site: string;
+  model?: string;
+  specs?: string;
+  source_url?: string;
+}
+
+const COMPONENT_TO_CATEGORY: Record<string, string> = {
+  GPU: "gpu", RAM: "ram", SSD: "ssd", CPU: "cpu",
+  PSU: "psu", Motherboard: "motherboard", Cooling: "cooling",
+  Storage: "ssd", Memory: "ram",
+};
+
+const GOOD_SOURCES = ["eBay UK", "Gumtree", "Amazon"];
+
+function autoSelectPlaybook(playbooks: Playbook[], listing?: { cpu?: string; gpu?: string } | null): number | null {
+  if (!listing || playbooks.length === 0) return null;
+  const hasGpu = !!listing.gpu;
+  const cpu = (listing.cpu ?? "").toLowerCase();
+  const isHighEnd = /i9|ryzen 9|threadripper/.test(cpu);
+  const isMidRange = /i7|ryzen 7/.test(cpu);
+
+  for (const pb of playbooks) {
+    const uc = pb.target_use_case?.toLowerCase() ?? "";
+    if (isHighEnd && uc.includes("workstation")) return pb.id;
+    if (!hasGpu && uc.includes("gaming")) return pb.id;
+    if (hasGpu && isMidRange && uc.includes("content")) return pb.id;
+  }
+  return playbooks[0]?.id ?? null;
+}
+
+function UpgradeSection({
+  flip, listing, onFlipUpdated,
+}: {
+  flip: Flip;
+  listing?: { cpu?: string; gpu?: string; title?: string; url?: string } | null;
+  onFlipUpdated: (f: Flip) => void;
+}) {
+  const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
+  const [selectedPbId, setSelectedPbId] = useState<number | null>(null);
+  const [loadingPbs, setLoadingPbs] = useState(true);
+
+  // Part picker state
+  const [openSlot, setOpenSlot] = useState<string | null>(null);
+  const [partQuery, setPartQuery] = useState("");
+  const [allParts, setAllParts] = useState<Part[]>([]);
+  const [loadingParts, setLoadingParts] = useState(false);
+  const [savingSlot, setSavingSlot] = useState<string | null>(null);
+
+  // Fetch playbooks once
+  useEffect(() => {
+    fetch(`${API_BASE}/api/build-wizard/playbooks`)
+      .then((r) => r.json())
+      .then((data: Playbook[]) => {
+        setPlaybooks(data);
+        const autoId = autoSelectPlaybook(data, listing);
+        setSelectedPbId(autoId);
+      })
+      .catch(console.error)
+      .finally(() => setLoadingPbs(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const openPickerFor = useCallback(async (component: string) => {
+    const cat = COMPONENT_TO_CATEGORY[component] ?? component.toLowerCase();
+    setOpenSlot(component);
+    setPartQuery("");
+    setLoadingParts(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/parts/?category=${cat}&limit=200`);
+      const data = await res.json();
+      const items: Part[] = Array.isArray(data) ? data : data.items ?? [];
+      const filtered = items.filter(
+        (p) => GOOD_SOURCES.includes(p.source_site) && (p.price ?? 0) > 10
+      );
+      setAllParts(filtered);
+    } finally {
+      setLoadingParts(false);
+    }
+  }, []);
+
+  async function selectPart(component: string, part: Part) {
+    setSavingSlot(component);
+    try {
+      const updated = await api.flips.patch(flip.id, {
+        selected_upgrade_ids: {
+          ...(flip.selected_upgrade_ids ?? {}),
+          [component]: part.id,
+        },
+      });
+      onFlipUpdated(updated as Flip);
+      setOpenSlot(null);
+    } finally {
+      setSavingSlot(null);
+    }
+  }
+
+  async function clearSlot(component: string) {
+    const ids = { ...(flip.selected_upgrade_ids ?? {}) };
+    delete ids[component];
+    const updated = await api.flips.patch(flip.id, { selected_upgrade_ids: ids });
+    onFlipUpdated(updated as Flip);
+  }
+
+  const selectedPb = playbooks.find((p) => p.id === selectedPbId);
+  const upgrades = [
+    ...(selectedPb?.upgrade_strategy?.required ?? []),
+    ...(selectedPb?.upgrade_strategy?.optional ?? []),
+  ];
+
+  const filteredParts = allParts.filter((p) =>
+    partQuery.length < 2 ||
+    p.name.toLowerCase().includes(partQuery.toLowerCase()) ||
+    (p.model ?? "").toLowerCase().includes(partQuery.toLowerCase())
+  ).slice(0, 30);
+
+  if (loadingPbs) return null;
+
+  return (
+    <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-4">
+      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+        <PackagePlus className="w-3.5 h-3.5" /> Playbook &amp; Upgrades
+      </p>
+
+      {/* Playbook selector */}
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+        {playbooks.map((pb) => (
+          <button
+            key={pb.id}
+            onClick={() => setSelectedPbId(pb.id)}
+            className={`flex-shrink-0 flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-all ${
+              pb.id === selectedPbId
+                ? "border-[#00dc82] bg-[#00dc82]/10 text-[#00dc82]"
+                : "border-slate-700 text-slate-400 hover:border-slate-600"
+            }`}
+          >
+            <span className="text-base leading-none">{pb.emoji}</span>
+            <span className="text-[10px] font-bold whitespace-nowrap">{pb.name}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Upgrade slots */}
+      {upgrades.length === 0 && (
+        <p className="text-xs text-slate-600 italic">Select a playbook to see upgrade recommendations.</p>
+      )}
+
+      {upgrades.map((u) => {
+        const selectedId = (flip.selected_upgrade_ids ?? {})[u.component] as number | undefined;
+        const isOpen = openSlot === u.component;
+        const isSaving = savingSlot === u.component;
+
+        return (
+          <div key={u.component} className="flex flex-col gap-2">
+            <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-800 bg-slate-900/40">
+              {/* Slot label */}
+              <div className="w-16 flex-shrink-0">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{u.component}</p>
+                <p className="text-[10px] text-slate-600 mt-0.5">max £{u.max_cost}</p>
+              </div>
+
+              {/* Target */}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-slate-400 truncate">{u.target}</p>
+                {selectedId && (
+                  <p className="text-[10px] text-[#00dc82] mt-0.5 flex items-center gap-1">
+                    <Check className="w-2.5 h-2.5" /> Part selected
+                  </p>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {selectedId && (
+                  <button
+                    onClick={() => clearSlot(u.component)}
+                    className="p-1 text-slate-600 hover:text-red-400 transition-colors"
+                    title="Remove"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button
+                  onClick={() => isOpen ? setOpenSlot(null) : openPickerFor(u.component)}
+                  disabled={isSaving}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-md transition-colors ${
+                    selectedId
+                      ? "border border-slate-700 text-slate-400 hover:border-slate-500"
+                      : "bg-[#00dc82]/90 text-[#04120d] hover:bg-[#00dc82]"
+                  }`}
+                >
+                  {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Search className="w-3 h-3" />}
+                  {selectedId ? "Swap" : "Pick"}
+                </button>
+              </div>
+            </div>
+
+            {/* Inline part picker */}
+            {isOpen && (
+              <div className="border border-slate-700 rounded-lg bg-[#080f1a] p-3 flex flex-col gap-2">
+                <input
+                  autoFocus
+                  type="text"
+                  value={partQuery}
+                  onChange={(e) => setPartQuery(e.target.value)}
+                  placeholder={`Search ${u.component} parts…`}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-200 outline-none focus:border-[#00dc82] transition-colors placeholder-slate-600"
+                />
+                {loadingParts ? (
+                  <div className="flex items-center gap-2 text-sm text-slate-500 py-2">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading parts…
+                  </div>
+                ) : filteredParts.length === 0 ? (
+                  <p className="text-xs text-slate-600 py-2">
+                    No parts found. Try a shorter search term.
+                  </p>
+                ) : (
+                  <div className="flex flex-col gap-1 max-h-52 overflow-y-auto">
+                    {filteredParts.map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => selectPart(u.component, p)}
+                        className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-slate-800 text-left transition-colors"
+                      >
+                        <span className="text-xs font-mono text-[#00dc82] w-12 flex-shrink-0 text-right">
+                          £{p.price.toFixed(0)}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-slate-300 truncate">{p.name}</p>
+                          {p.specs && (
+                            <p className="text-[10px] text-slate-600 truncate">{p.specs}</p>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-600 flex-shrink-0">{p.source_site}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {!loadingParts && allParts.length === 0 && (
+                  <a
+                    href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(u.target)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> Search eBay for "{u.target}"
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 interface Listing {
   id: number;
@@ -429,6 +708,11 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+
+      {/* ── Playbook + Upgrade Slots ── */}
+      {flip.stage !== "sold" && (
+        <UpgradeSection flip={flip} listing={listing} onFlipUpdated={setFlip} />
+      )}
 
       {/* ── Listing generator (shown when ready_for_sale) ── */}
       {(flip.stage === "ready_for_sale" || flip.stage === "building") && (
