@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Zap, ExternalLink, ArrowLeft } from "lucide-react";
+import { Zap, ExternalLink, ArrowLeft, Repeat2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClassificationBadge } from "@/components/classification-badge";
@@ -79,6 +79,29 @@ export default function SuperGemsPage() {
 }
 
 function SuperGemCard({ listing: l }: { listing: Listing }) {
+  const router = useRouter();
+  const [flipping, setFlipping] = useState(false);
+
+  async function handleFlipIt() {
+    setFlipping(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/flips/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listing_id: l.id }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(err.detail ?? "Failed to create flip");
+        return;
+      }
+      const flip = await res.json();
+      router.push(`/flips/${flip.id}`);
+    } finally {
+      setFlipping(false);
+    }
+  }
+
   const profit =
     l.claude_expected_profit != null && l.claude_expected_profit > 0
       ? l.claude_expected_profit
@@ -162,15 +185,24 @@ function SuperGemCard({ listing: l }: { listing: Listing }) {
         <div className="flex gap-2 pt-2">
           {l.url && (
             <Button
-              variant="primary"
+              variant="outline"
               size="sm"
-              className="flex-1 h-7"
+              className="h-7"
               onClick={() => window.open(l.url, "_blank")}
             >
-              <ExternalLink className="w-3 h-3 mr-1" />
-              View
+              <ExternalLink className="w-3 h-3" />
             </Button>
           )}
+          <Button
+            variant="primary"
+            size="sm"
+            className="flex-1 h-7 bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
+            onClick={handleFlipIt}
+            disabled={flipping}
+          >
+            <Repeat2 className="w-3 h-3 mr-1" />
+            {flipping ? "Starting…" : "Flip It"}
+          </Button>
         </div>
       </CardContent>
     </Card>

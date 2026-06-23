@@ -1,292 +1,209 @@
-// pc-flipper/app/flips/page.tsx
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import { Plus, ChevronDown, RotateCcw, Loader2 } from "lucide-react";
-import { api, BuildComponent, ManualBuild, ManualBuildEvaluation } from "@/lib/api";
-import { BuildRow } from "@/components/manual-build/BuildRow";
-import { EntryModal } from "@/components/manual-build/EntryModal";
-import { EvalPanel } from "@/components/manual-build/EvalPanel";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Repeat2, Zap, ArrowRight, CheckCircle2, Wrench, Tag, TrendingUp } from "lucide-react";
+import { api } from "@/lib/api";
+import { formatCurrency } from "@/lib/utils";
 
-const DEFAULT_SLOTS = [
-  "Base PC",
-  "CPU",
-  "GPU",
-  "RAM",
-  "Storage",
-  "PSU",
-  "Case",
-  "Motherboard",
-  "Cooling",
-];
+type FlipStage = "selected" | "building" | "ready_for_sale" | "sold";
 
-export default function ManualBuildPage() {
-  // Build state
-  const [build, setBuild] = useState<ManualBuild | null>(null);
-  const [savedBuilds, setSavedBuilds] = useState<{ id: number; name: string; updated_at: string }[]>([]);
-  const [customSlots, setCustomSlots] = useState<string[]>([]);
-  const [loadingBuilds, setLoadingBuilds] = useState(true);
-  const [showLoadDropdown, setShowLoadDropdown] = useState(false);
+interface Flip {
+  id: number;
+  listing_id: number;
+  listing?: {
+    title: string;
+    price: number;
+    image_urls: string[];
+    cpu?: string;
+    gpu?: string;
+    ram_gb?: number;
+  };
+  stage: FlipStage;
+  base_cost: number;
+  upgrade_cost: number;
+  total_cost: number;
+  current_estimated_resale?: number;
+  current_estimated_profit?: number;
+  created_at: string;
+}
 
-  // Save indicator
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+const STAGE_CONFIG: Record<FlipStage, { label: string; icon: React.ReactNode; color: string }> = {
+  selected:      { label: "Selected",       icon: <Zap className="w-3.5 h-3.5" />,          color: "text-cyan-400 border-cyan-400/30 bg-cyan-400/5" },
+  building:      { label: "Building",       icon: <Wrench className="w-3.5 h-3.5" />,        color: "text-amber-400 border-amber-400/30 bg-amber-400/5" },
+  ready_for_sale:{ label: "Ready for Sale", icon: <Tag className="w-3.5 h-3.5" />,           color: "text-[#00dc82] border-[#00dc82]/30 bg-[#00dc82]/5" },
+  sold:          { label: "Sold",           icon: <CheckCircle2 className="w-3.5 h-3.5" />,  color: "text-slate-400 border-slate-400/30 bg-slate-400/5" },
+};
 
-  // Modal
-  const [activeSlot, setActiveSlot] = useState<string | null>(null);
+const ACTIVE_STAGES: FlipStage[] = ["selected", "building", "ready_for_sale"];
 
-  // Evaluation
-  const [evaluating, setEvaluating] = useState(false);
-  const [evalResult, setEvalResult] = useState<ManualBuildEvaluation | null>(null);
+export default function FlipsPage() {
+  const router = useRouter();
+  const [flips, setFlips] = useState<Flip[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<"active" | "sold">("active");
 
-  // Load saved builds list on mount
   useEffect(() => {
-    api.manualBuilds.list().then((list) => {
-      setSavedBuilds(list);
-      setLoadingBuilds(false);
-    }).catch(() => setLoadingBuilds(false));
+    api.flips
+      .list()
+      .then((raw) => setFlips(raw as Flip[]))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  // Auto-save: debounced PATCH whenever build changes
-  const autoSave = useCallback((updated: ManualBuild) => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    setSaveStatus("saving");
-    saveTimer.current = setTimeout(async () => {
-      try {
-        await api.manualBuilds.patch(updated.id, {
-          name: updated.name,
-          components: updated.components,
-        });
-        setSaveStatus("saved");
-        setTimeout(() => setSaveStatus("idle"), 1500);
-      } catch {
-        setSaveStatus("idle");
-      }
-    }, 400);
-  }, []);
-
-  async function createNewBuild() {
-    const b = await api.manualBuilds.create("Untitled Build");
-    setBuild(b);
-    setEvalResult(null);
-    setCustomSlots([]);
-    setSavedBuilds((prev) => [
-      { id: b.id, name: b.name, updated_at: b.updated_at },
-      ...prev,
-    ]);
-  }
-
-  async function loadBuild(id: number) {
-    const b = await api.manualBuilds.get(id);
-    setBuild(b);
-    setEvalResult(b.last_evaluation ?? null);
-    // Restore any custom slots from the loaded build
-    const knownSlots = new Set(DEFAULT_SLOTS);
-    const extras = b.components
-      .map((c) => c.slot)
-      .filter((s) => !knownSlots.has(s));
-    setCustomSlots([...new Set(extras)]);
-    setShowLoadDropdown(false);
-  }
-
-  function updateBuild(patch: Partial<ManualBuild>) {
-    if (!build) return;
-    const updated = { ...build, ...patch };
-    setBuild(updated);
-    autoSave(updated);
-  }
-
-  function handleNameChange(name: string) {
-    updateBuild({ name });
-  }
-
-  function handleAddComponent(slot: string) {
-    setActiveSlot(slot);
-  }
-
-  function handleComponentConfirmed(component: BuildComponent) {
-    if (!build) return;
-    const existing = build.components.filter((c) => c.slot !== component.slot);
-    const newComponents = [...existing, component];
-    updateBuild({ components: newComponents });
-    setActiveSlot(null);
-  }
-
-  function handleRemoveComponent(slot: string) {
-    if (!build) return;
-    updateBuild({ components: build.components.filter((c) => c.slot !== slot) });
-  }
-
-  function handlePriceChange(slot: string, price: number) {
-    if (!build) return;
-    updateBuild({
-      components: build.components.map((c) =>
-        c.slot === slot ? { ...c, price_paid: price } : c
-      ),
-    });
-  }
-
-  function addCustomSlot() {
-    const name = prompt("Custom slot name (e.g. Capture Card):");
-    if (name?.trim()) setCustomSlots((prev) => [...prev, name.trim()]);
-  }
-
-  async function handleEvaluate() {
-    if (!build) return;
-    setEvaluating(true);
-    try {
-      const result = await api.manualBuilds.evaluate(build.id);
-      setEvalResult(result);
-    } catch {
-      alert("Evaluation failed — check AI backend is configured in Settings.");
-    }
-    setEvaluating(false);
-  }
-
-  const allSlots = [...DEFAULT_SLOTS, ...customSlots];
-  const componentBySlot = Object.fromEntries(
-    (build?.components ?? []).map((c) => [c.slot, c])
+  const shown = flips.filter((f) =>
+    filter === "active" ? ACTIVE_STAGES.includes(f.stage) : f.stage === "sold"
   );
-  const totalCost = build?.components.reduce((s, c) => s + c.price_paid, 0) ?? 0;
 
-  // Suppress unused variable warning
-  void loadingBuilds;
+  const activeCount = flips.filter((f) => ACTIVE_STAGES.includes(f.stage)).length;
+  const totalPotentialProfit = flips
+    .filter((f) => ACTIVE_STAGES.includes(f.stage))
+    .reduce((s, f) => s + (f.current_estimated_profit ?? 0), 0);
 
   return (
-    <div className="flex flex-col h-full min-h-0 p-6 gap-4 max-w-2xl mx-auto w-full">
-      {/* ── Header ── */}
-      <div className="flex items-center gap-3">
-        <input
-          type="text"
-          value={build?.name ?? ""}
-          onChange={(e) => handleNameChange(e.target.value)}
-          placeholder="Build name…"
-          disabled={!build}
-          className="flex-1 text-lg font-semibold bg-transparent border-b border-slate-700 focus:border-[#00dc82] outline-none text-slate-100 placeholder-slate-600 pb-0.5 disabled:opacity-30"
-        />
-
-        {saveStatus === "saving" && (
-          <span className="text-[10px] text-slate-500 font-mono">saving…</span>
-        )}
-        {saveStatus === "saved" && (
-          <span className="text-[10px] text-[#00dc82] font-mono">Saved ✓</span>
-        )}
-
-        {/* Load dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setShowLoadDropdown((v) => !v)}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs border border-slate-700 rounded-md text-slate-400 hover:border-slate-500 hover:text-slate-200 transition-colors"
-          >
-            Load <ChevronDown className="w-3 h-3" />
-          </button>
-          {showLoadDropdown && (
-            <div className="absolute right-0 top-full mt-1 w-64 bg-[#0b1220] border border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
-              {savedBuilds.length === 0 ? (
-                <p className="px-3 py-2 text-xs text-slate-500">No saved builds</p>
-              ) : (
-                savedBuilds.map((b) => (
-                  <button
-                    key={b.id}
-                    onClick={() => loadBuild(b.id)}
-                    className="w-full px-3 py-2 text-left text-xs hover:bg-slate-800 transition-colors"
-                  >
-                    <span className="text-slate-200">{b.name}</span>
-                    <span className="text-slate-500 ml-2">
-                      {new Date(b.updated_at).toLocaleDateString()}
-                    </span>
-                  </button>
-                ))
-              )}
-            </div>
-          )}
+    <div className="min-h-screen bg-[#060d18] text-slate-100 px-4 py-6 md:px-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Repeat2 className="w-5 h-5 text-[#00dc82]" />
+          <h1 className="text-xl font-black">Your Flips</h1>
         </div>
-
         <button
-          onClick={createNewBuild}
-          className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-[#00dc82] text-[#04120d] rounded-md font-semibold hover:bg-[#00b86d] transition-colors"
+          onClick={() => router.push("/super-gems")}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
         >
-          <Plus className="w-3 h-3" /> New Build
+          <Zap className="w-3.5 h-3.5" />
+          Find a Flip
         </button>
       </div>
 
-      {/* ── Empty state ── */}
-      {!build && (
-        <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 opacity-50">
-          <p className="text-slate-400 text-sm">No build loaded. Create a new build or load an existing one.</p>
+      {/* Summary row */}
+      {activeCount > 0 && (
+        <div className="flex gap-4 mb-6">
+          <div className="flex-1 rounded-xl p-4 border border-white/[0.07] bg-white/[0.02]">
+            <p className="text-xs text-slate-500 mb-1">Active flips</p>
+            <p className="text-2xl font-black">{activeCount}</p>
+          </div>
+          <div className="flex-1 rounded-xl p-4 border border-white/[0.07] bg-white/[0.02]">
+            <p className="text-xs text-slate-500 mb-1">Potential profit</p>
+            <p className="text-2xl font-black text-[#00dc82]">
+              {totalPotentialProfit > 0 ? `+${formatCurrency(totalPotentialProfit)}` : "—"}
+            </p>
+          </div>
         </div>
       )}
 
-      {/* ── Component list ── */}
-      {build && (
-        <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
-          {allSlots.map((slot) => (
-            <BuildRow
-              key={slot}
-              slot={slot}
-              component={componentBySlot[slot] ?? null}
-              onAdd={handleAddComponent}
-              onPriceChange={handlePriceChange}
-              onRemove={handleRemoveComponent}
-            />
-          ))}
-
-          {/* Add custom slot */}
+      {/* Filter tabs */}
+      <div className="flex gap-1 mb-4 border-b border-white/[0.07]">
+        {(["active", "sold"] as const).map((tab) => (
           <button
-            onClick={addCustomSlot}
-            className="text-xs text-slate-600 hover:text-slate-400 text-left pl-1 pt-1 transition-colors"
+            key={tab}
+            onClick={() => setFilter(tab)}
+            className={`px-4 py-2 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
+              filter === tab
+                ? "border-[#00dc82] text-[#00dc82]"
+                : "border-transparent text-slate-500 hover:text-slate-300"
+            }`}
           >
-            + Add custom slot
+            {tab === "active" ? "Active" : "Sold"}
+            {tab === "active" && activeCount > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.5 text-[10px] rounded-full bg-[#00dc82]/20 text-[#00dc82]">
+                {activeCount}
+              </span>
+            )}
           </button>
-        </div>
-      )}
+        ))}
+      </div>
 
-      {/* ── Eval panel (shown after evaluation) ── */}
-      {evalResult && build && (
-        <EvalPanel evaluation={evalResult} totalCost={totalCost} />
-      )}
-
-      {/* ── Pinned footer ── */}
-      {build && (
-        <div className="flex items-center gap-4 border-t border-slate-800 pt-3">
-          <span className="text-sm font-mono text-slate-400">
-            Total paid:{" "}
-            <span className="text-slate-100 font-semibold">£{totalCost.toFixed(0)}</span>
-          </span>
-          <div className="flex-1" />
-          {evalResult && (
-            <button
-              onClick={handleEvaluate}
-              disabled={evaluating || build.components.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-[#00dc82]/40 text-[#00dc82] rounded-md hover:bg-[#00dc82]/10 transition-colors disabled:opacity-40"
-            >
-              <RotateCcw className="w-3 h-3" /> Re-evaluate
-            </button>
-          )}
-          {!evalResult && (
-            <button
-              onClick={handleEvaluate}
-              disabled={evaluating || build.components.length === 0}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold bg-[#00dc82] text-[#04120d] rounded-md hover:bg-[#00b86d] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {evaluating ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Evaluating…</>
-              ) : (
-                <>🤖 Evaluate Build →</>
-              )}
-            </button>
+      {/* Flip list */}
+      {loading ? (
+        <div className="flex items-center justify-center py-24 text-slate-500 text-sm">Loading…</div>
+      ) : shown.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 gap-4 text-slate-500">
+          <Repeat2 className="w-10 h-10 opacity-20" />
+          {filter === "active" ? (
+            <>
+              <p className="text-sm">No active flips yet.</p>
+              <button
+                onClick={() => router.push("/super-gems")}
+                className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
+              >
+                <Zap className="w-3.5 h-3.5" /> Find a Super Gem to Flip
+              </button>
+            </>
+          ) : (
+            <p className="text-sm">No sold flips yet.</p>
           )}
         </div>
-      )}
-
-      {/* ── Entry modal ── */}
-      {activeSlot && (
-        <EntryModal
-          slot={activeSlot}
-          onConfirm={handleComponentConfirmed}
-          onClose={() => setActiveSlot(null)}
-        />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {shown.map((f) => (
+            <FlipCard key={f.id} flip={f} onClick={() => router.push(`/flips/${f.id}`)} />
+          ))}
+        </div>
       )}
     </div>
+  );
+}
+
+function FlipCard({ flip: f, onClick }: { flip: Flip; onClick: () => void }) {
+  const stage = STAGE_CONFIG[f.stage];
+  const profit = f.current_estimated_profit ?? 0;
+  const profitColor = profit > 150 ? "text-[#00dc82]" : profit > 50 ? "text-amber-400" : "text-red-400";
+  const img = f.listing?.image_urls?.[0];
+
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.14] transition-all text-left"
+    >
+      {/* Thumbnail */}
+      <div className="w-16 h-12 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+        {img ? (
+          <img src={img} alt="" className="w-full h-full object-contain" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center opacity-20">
+            <Repeat2 className="w-5 h-5" />
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-slate-100 truncate">
+          {f.listing?.title ?? `Flip #${f.id}`}
+        </p>
+        <div className="flex items-center gap-2 mt-1 flex-wrap">
+          {f.listing?.cpu && (
+            <span className="text-[10px] text-slate-500 font-mono">{f.listing.cpu.slice(0, 20)}</span>
+          )}
+          {f.listing?.gpu ? (
+            <span className="text-[10px] text-emerald-500">✓ GPU</span>
+          ) : (
+            <span className="text-[10px] text-red-400/70">✗ No GPU</span>
+          )}
+        </div>
+      </div>
+
+      {/* Stage badge */}
+      <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-bold uppercase tracking-wider shrink-0 ${stage.color}`}>
+        {stage.icon}
+        {stage.label}
+      </div>
+
+      {/* Financials */}
+      <div className="text-right shrink-0 hidden sm:block">
+        <p className="text-xs text-slate-500">Cost in</p>
+        <p className="text-sm font-semibold">{formatCurrency(f.total_cost)}</p>
+        {profit !== 0 && (
+          <p className={`text-sm font-black ${profitColor}`}>
+            {profit > 0 ? "+" : ""}{formatCurrency(profit)}
+          </p>
+        )}
+      </div>
+
+      <ArrowRight className="w-4 h-4 text-slate-600 shrink-0" />
+    </button>
   );
 }
