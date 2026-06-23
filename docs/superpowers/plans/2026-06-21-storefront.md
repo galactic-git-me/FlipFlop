@@ -1695,9 +1695,12 @@ Start dev server: `npm run dev -- --port 3001`
 4. Click "Swap" on a slot → modal opens with variants sorted by gem score
 5. Select a variant → modal closes, slot row updates, summary updates price
 6. Scroll down to case picker → select a case, summary updates
-7. Select a build week → week highlights in picker
-8. "Order Now" button is disabled → tooltip says "Checkout launching soon"
-9. Open http://andromeda-ts:3001/order/FF-TEST → confirmation stub renders
+7. Build summary shows postage (£12.00) and insurance (calculated from component subtotal) as separate line items
+8. Tick "Fast-track my build" → fee (+£49) appears in summary, delivery estimate changes from "3–5 working days" to "2–3 working days"
+9. Untick fast-track → fee disappears, estimate reverts to standard
+10. "Order Now" button is disabled → tooltip says "Checkout launching soon"
+11. Open http://andromeda-ts:3001/order/FF-TEST → confirmation stub renders
+12. Verify no week picker is present anywhere in the configurator
 
 - [ ] **Step 4: Final commit**
 
