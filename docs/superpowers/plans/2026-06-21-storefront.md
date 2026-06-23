@@ -1423,68 +1423,21 @@ git commit -m "feat(storefront): case picker grid"
 
 ---
 
-## Task 11: Build Summary, Week Picker, and Checkout Stub
+## Task 11: Build Summary and Checkout Stub
 
 **Files:**
-- Create: `pc-flipper-customer/components/WeekPicker.tsx`
 - Modify: `pc-flipper-customer/components/BuildSummary.tsx`
 
-- [ ] **Step 1: Create `components/WeekPicker.tsx`**
+No week picker — the scheduler assigns build dates automatically. The customer sees a static delivery estimate and a fast-track upgrade option.
 
-```tsx
-// pc-flipper-customer/components/WeekPicker.tsx
-"use client";
-
-import type { AvailableWeek } from "@/lib/types";
-import { formatWeek } from "@/lib/utils";
-
-interface Props {
-  weeks: AvailableWeek[];
-  selected: string | null;
-  onSelect: (week: string) => void;
-}
-
-export function WeekPicker({ weeks, selected, onSelect }: Props) {
-  if (weeks.length === 0) {
-    return <p className="text-xs text-muted">No build slots available right now.</p>;
-  }
-
-  return (
-    <div className="flex flex-col gap-2">
-      {weeks.map((w) => {
-        const isSelected = w.week === selected;
-        return (
-          <button
-            key={w.week}
-            onClick={() => onSelect(w.week)}
-            className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-all"
-            style={{
-              border: `1px solid ${isSelected ? "var(--color-accent)" : "var(--color-border)"}`,
-              background: isSelected
-                ? "color-mix(in srgb, var(--color-accent) 8%, transparent)"
-                : "var(--color-bg)",
-              color: isSelected ? "var(--color-accent)" : "var(--color-text)",
-            }}
-          >
-            <span className="font-medium">{formatWeek(w.week_start)}</span>
-            <span className="text-xs text-muted">{w.available} slot{w.available !== 1 ? "s" : ""}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-```
-
-- [ ] **Step 2: Replace the stub `BuildSummary.tsx`**
+- [ ] **Step 1: Replace the stub `BuildSummary.tsx`**
 
 ```tsx
 // pc-flipper-customer/components/BuildSummary.tsx
 "use client";
 
-import type { BuildState, PublicSlotWithVariants, AvailableWeek } from "@/lib/types";
+import type { BuildState, PublicSlotWithVariants, CheckoutConfig } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
-import { WeekPicker } from "@/components/WeekPicker";
 
 const SLOT_LABELS: Record<string, string> = {
   cpu: "CPU", gpu: "GPU", ram: "RAM", storage: "Storage",
@@ -1494,29 +1447,34 @@ const SLOT_LABELS: Record<string, string> = {
 interface Props {
   build: BuildState;
   slots: PublicSlotWithVariants[];
-  weeks: AvailableWeek[];
-  onWeekSelect: (week: string) => void;
+  config: CheckoutConfig;
+  onFastTrackChange: (v: boolean) => void;
 }
 
-export function BuildSummary({ build, slots, weeks, onWeekSelect }: Props) {
+export function BuildSummary({ build, slots, config, onFastTrackChange }: Props) {
   const lineItems = slots
     .map((s) => ({ label: SLOT_LABELS[s.slot_type] ?? s.slot_type, variant: build.slots[s.slot_type] }))
-    .filter((item) => item.variant !== null && item.variant !== undefined);
+    .filter((item) => item.variant != null);
 
   const caseItem = build.case;
 
-  const total =
+  const componentSubtotal =
     lineItems.reduce((sum, item) => sum + (item.variant?.display_price ?? 0), 0) +
     (caseItem?.rrp_gbp ?? 0);
 
-  const canOrder = build.chosenWeek !== null && total > 0;
+  const insuranceGbp = Math.ceil((componentSubtotal * config.insurance_rate_pct) / 100 * 2) / 2; // nearest £0.50
+  const fastTrackFee = build.isFastTrack ? config.fast_track_fee_gbp : 0;
+  const total = componentSubtotal + config.postage_gbp + insuranceGbp + fastTrackFee;
+
+  const daysMin = build.isFastTrack ? config.fast_track_days_min : config.standard_days_min;
+  const daysMax = build.isFastTrack ? config.fast_track_days_max : config.standard_days_max;
 
   return (
     <div className="rounded-2xl p-5 flex flex-col gap-5"
       style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-border)" }}>
       <h3 className="font-bold text-sm uppercase tracking-wider">Your Build</h3>
 
-      {/* Line items */}
+      {/* Component + case line items */}
       <div className="flex flex-col gap-1.5 text-sm">
         {lineItems.map(({ label, variant }) => (
           <div key={label} className="flex justify-between">
@@ -1535,6 +1493,41 @@ export function BuildSummary({ build, slots, weeks, onWeekSelect }: Props) {
         )}
       </div>
 
+      {/* Postage + insurance */}
+      {componentSubtotal > 0 && (
+        <div className="flex flex-col gap-1.5 text-sm"
+          style={{ borderTop: "1px solid var(--color-border)", paddingTop: "12px" }}>
+          <div className="flex justify-between">
+            <span className="text-muted">Postage</span>
+            <span>{formatPrice(config.postage_gbp)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted">Insurance</span>
+            <span>{formatPrice(insuranceGbp)}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Fast-track toggle */}
+      <label className="flex items-start gap-3 cursor-pointer rounded-xl p-3 transition-all"
+        style={{
+          border: `2px solid ${build.isFastTrack ? "var(--color-accent)" : "var(--color-border)"}`,
+          background: build.isFastTrack ? "color-mix(in srgb, var(--color-accent) 6%, transparent)" : "transparent",
+        }}>
+        <input
+          type="checkbox"
+          checked={build.isFastTrack}
+          onChange={(e) => onFastTrackChange(e.target.checked)}
+          className="mt-0.5 accent-[var(--color-accent)]"
+        />
+        <div>
+          <p className="text-sm font-semibold">Fast-track my build</p>
+          <p className="text-xs text-muted mt-0.5">
+            {config.fast_track_days_min}–{config.fast_track_days_max} working days · +{formatPrice(config.fast_track_fee_gbp)}
+          </p>
+        </div>
+      </label>
+
       {/* Total */}
       {total > 0 && (
         <div className="flex justify-between font-bold text-base"
@@ -1544,15 +1537,12 @@ export function BuildSummary({ build, slots, weeks, onWeekSelect }: Props) {
         </div>
       )}
 
-      {/* Week picker */}
-      <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted mb-2">Build slot</p>
-        <WeekPicker
-          weeks={weeks}
-          selected={build.chosenWeek}
-          onSelect={onWeekSelect}
-        />
-      </div>
+      {/* Delivery estimate */}
+      {componentSubtotal > 0 && (
+        <p className="text-xs text-muted text-center">
+          Estimated delivery: <span className="font-semibold text-white">{daysMin}–{daysMax} working days</span>
+        </p>
+      )}
 
       {/* Checkout button — STUB until Subsystem 2 */}
       <div>
@@ -1575,7 +1565,7 @@ export function BuildSummary({ build, slots, weeks, onWeekSelect }: Props) {
 }
 ```
 
-- [ ] **Step 3: TypeScript check**
+- [ ] **Step 2: TypeScript check**
 
 ```bash
 cd /home/mac/CODING/FlipFlop/pc-flipper-customer
@@ -1584,22 +1574,23 @@ npx tsc --noEmit 2>&1 | head -10
 
 Expected: no errors.
 
-- [ ] **Step 4: Test full configurator in browser**
+- [ ] **Step 3: Test full configurator in browser**
 
 Open http://andromeda-ts:3001/configure/[any-slug]. Verify:
 - Tier picker switches all components
 - Swap modal opens, selecting a variant updates the slot
 - Case picker shows cases, selecting one highlights it
-- Build summary updates prices as selections change
-- Week picker shows 3 stub weeks, selecting one highlights it
+- Build summary shows: components, case, postage (£12), insurance (calculated), total
+- Fast-track checkbox toggles the fee and updates delivery estimate text
+- No week picker present
 - "Order Now" button is disabled with "Coming Soon" text
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 cd /home/mac/CODING/FlipFlop
-git add pc-flipper-customer/components/WeekPicker.tsx pc-flipper-customer/components/BuildSummary.tsx
-git commit -m "feat(storefront): build summary, week picker, and checkout stub"
+git add pc-flipper-customer/components/BuildSummary.tsx
+git commit -m "feat(storefront): build summary with fast-track toggle, postage, insurance"
 ```
 
 ---
