@@ -997,7 +997,7 @@ export function SlotRow({ slotType, selected, onSwap }: Props) {
 import { useState, useCallback } from "react";
 import type {
   PublicPlaybook, PublicSlotWithVariants, PublicCase,
-  AvailableWeek, Tier, SlotType, BuildState, PublicVariant
+  CheckoutConfig, Tier, SlotType, BuildState, PublicVariant
 } from "@/lib/types";
 import { bestVariantForTier } from "@/lib/utils";
 import { SlotRow } from "@/components/SlotRow";
@@ -1009,7 +1009,7 @@ interface Props {
   playbook: PublicPlaybook;
   slots: PublicSlotWithVariants[];
   cases: PublicCase[];
-  weeks: AvailableWeek[];
+  config: CheckoutConfig;
   initialTier: Tier;
 }
 
@@ -1021,11 +1021,11 @@ function buildInitialState(slots: PublicSlotWithVariants[], cases: PublicCase[],
   return {
     slots: slotState as BuildState["slots"],
     case: cases[0] ?? null,
-    chosenWeek: null,
+    isFastTrack: false,
   };
 }
 
-export function ConfiguratorClient({ slots, cases, weeks, initialTier }: Props) {
+export function ConfiguratorClient({ slots, cases, config, initialTier }: Props) {
   const [tier, setTier] = useState<Tier>(initialTier);
   const [build, setBuild] = useState<BuildState>(() => buildInitialState(slots, cases, initialTier));
   const [swapTarget, setSwapTarget] = useState<PublicSlotWithVariants | null>(null);
@@ -1107,8 +1107,8 @@ export function ConfiguratorClient({ slots, cases, weeks, initialTier }: Props) 
           <BuildSummary
             build={build}
             slots={slots}
-            weeks={weeks}
-            onWeekSelect={(w) => setBuild(prev => ({ ...prev, chosenWeek: w }))}
+            config={config}
+            onFastTrackChange={(v) => setBuild(prev => ({ ...prev, isFastTrack: v }))}
           />
         </div>
       </div>
