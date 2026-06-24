@@ -613,127 +613,112 @@ function LiveComponentCard({ row }: { row: LivePriceRow }) {
   const isGem      = row.gem_classification === "gem" || isSuperGem;
 
   return (
-    <div className={`flex flex-col rounded-xl border overflow-hidden transition-colors hover:border-opacity-60 ${
-      isSuperGem ? "border-cyan-400/35 shadow-[0_2px_20px_rgba(34,211,238,0.10)]" :
-      isGem      ? "border-emerald-400/30 shadow-[0_2px_16px_rgba(52,211,153,0.08)]" :
+    <div className={`relative rounded-xl overflow-hidden h-64 flex flex-col group border transition-colors ${
+      isSuperGem ? "border-cyan-400/30 shadow-[0_2px_20px_rgba(34,211,238,0.10)]" :
+      isGem      ? "border-emerald-400/20 shadow-[0_2px_16px_rgba(52,211,153,0.07)]" :
       "border-[#1e2d45]"
-    } bg-[#080f1c]`}>
+    }`}>
 
-      {/* Image area */}
-      <div className="relative w-full h-36 bg-[#040912] overflow-hidden">
-        {row.used_cheapest_image ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={row.used_cheapest_image}
-            alt={row.model}
-            className="w-full h-full object-contain opacity-85"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package className="w-10 h-10 text-slate-700" />
-          </div>
-        )}
-
-        {/* Gem badge */}
-        {isGem && (
-          <div className={`absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md backdrop-blur-sm border text-[9px] font-bold uppercase tracking-wider ${
-            isSuperGem
-              ? "bg-cyan-400/25 border-cyan-400/50 text-cyan-200"
-              : "bg-emerald-400/25 border-emerald-400/50 text-emerald-200"
-          }`}>
-            <Zap className={`w-2.5 h-2.5 ${isSuperGem ? "text-cyan-300" : "text-emerald-300"}`} />
-            {isSuperGem ? "Super Gem" : "Gem"}
-          </div>
-        )}
-
-        {/* Discount badge */}
-        {row.discount_pct != null && (
-          <div className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-black ${
-            isSuperGem ? "bg-cyan-400/20 text-cyan-300" :
-            isGem      ? "bg-emerald-400/15 text-emerald-300" :
-            "bg-slate-700/60 text-slate-400"
-          }`}>
-            -{row.discount_pct.toFixed(0)}%
-          </div>
-        )}
-
-        {/* Tier chip */}
-        <div className={`absolute bottom-2 left-2 px-1.5 py-0.5 rounded border text-[9px] font-mono uppercase tracking-wider ${TIER_BG[row.tier] || "bg-slate-800/60 border-slate-600/30 text-slate-400"} ${TIER_COLORS[row.tier] || "text-slate-400"}`}>
-          {row.tier}
+      {/* Full-card background image */}
+      {row.used_cheapest_image ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={row.used_cheapest_image}
+          alt={row.model}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[#070d14] flex items-center justify-center">
+          <Package className="w-10 h-10 text-slate-700 opacity-30" />
         </div>
-      </div>
+      )}
 
-      {/* Body */}
-      <div className="flex flex-col flex-1 p-3 gap-2.5">
-        <p className="text-sm font-semibold text-slate-100 leading-snug line-clamp-2">{row.model}</p>
+      {/* Gradient overlay — heavy at bottom so text is readable */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/97 via-black/60 to-black/15" />
 
-        {/* Price breakdown — this IS the gem justification */}
-        <div className="space-y-1.5">
-          {/* Used median (market average) */}
-          {row.used_median != null && (
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] text-slate-500 font-mono">Market avg ({row.used_count} listings)</span>
-              <span className="text-xs text-slate-300 font-mono">£{row.used_median.toFixed(0)}</span>
-            </div>
-          )}
+      {/* Content */}
+      <div className="relative z-10 flex flex-col h-full p-3">
 
-          {/* New price */}
-          {row.new_price != null && (
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] text-slate-500 font-mono">New ({row.new_count} listings)</span>
-              <span className="text-xs text-slate-400 font-mono">£{row.new_price.toFixed(0)}</span>
-            </div>
-          )}
-
-          {/* Best deal */}
-          {row.used_cheapest_price != null && (
-            <div className={`flex items-center justify-between rounded px-2 py-1 -mx-0.5 ${
-              isGem
-                ? isSuperGem ? "bg-cyan-400/8" : "bg-emerald-400/8"
-                : "bg-white/[0.03]"
+        {/* Top row: gem badge + tier + discount */}
+        <div className="flex items-start justify-between gap-1.5">
+          {isGem ? (
+            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${
+              isSuperGem
+                ? "bg-cyan-400/20 border-cyan-400/40 text-cyan-200"
+                : "bg-emerald-400/20 border-emerald-400/40 text-emerald-200"
             }`}>
-              <span className={`text-[10px] font-mono font-semibold ${
-                isSuperGem ? "text-cyan-400" : isGem ? "text-emerald-400" : "text-slate-400"
-              }`}>
-                Best deal
-                {row.discount_pct != null && (
-                  <span className="ml-1 opacity-80">(-{row.discount_pct.toFixed(0)}% vs avg)</span>
-                )}
-              </span>
+              <Zap className="w-2.5 h-2.5" />
+              {isSuperGem ? "Super Gem" : "Gem"}
+            </span>
+          ) : (
+            <span className={`px-1.5 py-0.5 rounded border text-[9px] font-mono uppercase tracking-wider backdrop-blur-sm bg-black/40 ${TIER_COLORS[row.tier] || "text-slate-400"} border-white/10`}>
+              {row.tier}
+            </span>
+          )}
+
+          {row.discount_pct != null && (
+            <span className={`ml-auto px-1.5 py-0.5 rounded text-[11px] font-black backdrop-blur-sm ${
+              isSuperGem ? "text-cyan-300 bg-cyan-400/15" :
+              isGem      ? "text-emerald-300 bg-emerald-400/15" :
+              "text-slate-300 bg-black/40"
+            }`}>
+              -{row.discount_pct.toFixed(0)}%
+            </span>
+          )}
+        </div>
+
+        {/* Bottom section */}
+        <div className="mt-auto space-y-2">
+
+          {/* Model name */}
+          <p className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+            {row.model}
+          </p>
+
+          {/* Price / comparison / variance row */}
+          <div className="flex items-end justify-between">
+            {/* Left: best deal price */}
+            <div>
+              <div className="text-[9px] text-white/50 uppercase font-mono">Best Deal</div>
               {row.used_cheapest_url ? (
                 <a
                   href={row.used_cheapest_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-xs font-mono font-bold inline-flex items-center gap-0.5 hover:underline ${
-                    isSuperGem ? "text-cyan-300" : isGem ? "text-emerald-300" : "text-slate-300"
+                  className={`font-bold text-base font-mono leading-none inline-flex items-center gap-0.5 hover:underline ${
+                    isSuperGem ? "text-cyan-300" : isGem ? "text-emerald-300" : "text-white"
                   }`}
                 >
-                  £{row.used_cheapest_price.toFixed(0)}
-                  <ExternalLink className="w-2.5 h-2.5" />
+                  {row.used_cheapest_price != null ? `£${row.used_cheapest_price.toFixed(0)}` : "—"}
+                  <ExternalLink className="w-2.5 h-2.5 opacity-70" />
                 </a>
               ) : (
-                <span className={`text-xs font-mono font-bold ${
-                  isSuperGem ? "text-cyan-300" : isGem ? "text-emerald-300" : "text-slate-300"
-                }`}>
-                  £{row.used_cheapest_price.toFixed(0)}
-                </span>
+                <div className="font-bold text-base font-mono leading-none text-white">
+                  {row.used_cheapest_price != null ? `£${row.used_cheapest_price.toFixed(0)}` : "—"}
+                </div>
               )}
+            </div>
+
+            {/* Right: market median */}
+            <div className="text-right">
+              <div className="text-[9px] text-white/50 uppercase font-mono">
+                Market avg{row.used_count ? ` (${row.used_count})` : ""}
+              </div>
+              <div className="font-mono text-sm text-white/70 leading-none">
+                {row.used_median != null ? `£${row.used_median.toFixed(0)}` : "—"}
+              </div>
+            </div>
+          </div>
+
+          {/* New (retail) price bar */}
+          {row.new_price != null && (
+            <div className="flex items-center justify-between text-[10px] font-mono text-white/40 border-t border-white/10 pt-1.5">
+              <span>New price ({row.new_count} listings)</span>
+              <span>£{row.new_price.toFixed(0)}</span>
             </div>
           )}
         </div>
-
-        {/* Listing title */}
-        {row.used_cheapest_title && (
-          <p className="text-[9px] text-slate-600 line-clamp-2 font-mono italic mt-auto">
-            {row.used_cheapest_title}
-          </p>
-        )}
-
-        {(!row.used_median && !row.new_price) && (
-          <p className="text-[10px] text-slate-700 font-mono mt-auto">No listings found yet</p>
-        )}
       </div>
     </div>
   );

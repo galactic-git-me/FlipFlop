@@ -25,8 +25,8 @@ log = structlog.get_logger(__name__)
 CACHE_TTL = 1800  # 30 minutes
 _LIVE_CACHE: dict[str, tuple[float, list]] = {}  # category -> (timestamp, rows)
 
-GEM_THRESHOLD       = 20.0   # % below median → gem
-SUPER_GEM_THRESHOLD = 35.0   # % below median → super gem
+GEM_THRESHOLD       = 10.0   # % below median → gem
+SUPER_GEM_THRESHOLD = 20.0   # % below median → super gem
 
 # Minimum realistic price (£) for a complete component by category
 # Prevents accessories / spare parts from appearing as cheapest listings
