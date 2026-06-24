@@ -937,6 +937,7 @@ function CatalogueTab() {
   const [loading, setLoading]       = useState(false);
   const [activeCategory, setActiveCategory] = useState<CatId>("gpu");
   const [tierFilter, setTierFilter] = useState<string>("all");
+  const [gemFilter, setGemFilter]   = useState<string>("all");
 
   // Client-side cache so tab switches don't re-trigger a 15s scrape
   const cache = useRef<Partial<Record<CatId, LivePriceRow[]>>>({});
@@ -966,12 +967,27 @@ function CatalogueTab() {
   const handleCategoryChange = (cat: CatId) => {
     setActiveCategory(cat);
     setTierFilter("all");
+    setGemFilter("all");
   };
 
   const rows = useMemo(() => {
     if (!liveRows) return [];
-    return tierFilter === "all" ? liveRows : liveRows.filter(r => r.tier === tierFilter);
-  }, [liveRows, tierFilter]);
+    let filtered = liveRows;
+
+    if (tierFilter !== "all") {
+      filtered = filtered.filter(r => r.tier === tierFilter);
+    }
+
+    if (gemFilter === "super_gem") {
+      filtered = filtered.filter(r => r.gem_classification === "super_gem");
+    } else if (gemFilter === "gem") {
+      filtered = filtered.filter(r => r.gem_classification === "gem" || r.gem_classification === "super_gem");
+    } else if (gemFilter === "rest") {
+      filtered = filtered.filter(r => !r.gem_classification);
+    }
+
+    return filtered;
+  }, [liveRows, tierFilter, gemFilter]);
 
   return (
     <div className="space-y-4">
@@ -1034,6 +1050,29 @@ function CatalogueTab() {
             }`}
           >
             {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Gem filter */}
+      <div className="flex gap-2 items-center">
+        <span className="text-xs text-slate-600 font-mono">Gem:</span>
+        {[
+          { key: "all", label: "All", color: "text-slate-400" },
+          { key: "super_gem", label: "💎 Super Gem", color: "text-cyan-400" },
+          { key: "gem", label: "✨ Gem", color: "text-emerald-400" },
+          { key: "rest", label: "The Rest", color: "text-slate-400" },
+        ].map(g => (
+          <button
+            key={g.key}
+            onClick={() => setGemFilter(g.key)}
+            className={`px-2.5 py-0.5 rounded-full text-xs font-mono transition-all ${
+              gemFilter === g.key
+                ? `bg-slate-700 text-slate-200 ${g.color}`
+                : "text-slate-600 hover:text-slate-400"
+            }`}
+          >
+            {g.label}
           </button>
         ))}
       </div>
