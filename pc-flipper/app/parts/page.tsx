@@ -611,6 +611,214 @@ function PriceCell({ price, isBest }: { price: number | null; isBest: boolean })
   );
 }
 
+// ── Paste scanner types ─────────────────────────────────────────────────────
+
+type PasteItem = {
+  name: string;
+  category: string;
+  price: number;
+  condition: string;
+  verdict: "GEM" | "GOOD" | "REJECT";
+  market_price_estimate: number;
+  confidence: number;
+  reasoning: string;
+  gem_classification: "super_gem" | "gem" | null;
+  source: string;
+};
+
+type PasteResult = {
+  parsed: number;
+  kept: number;
+  gems: number;
+  super_gems: number;
+  model_used: string;
+  items: PasteItem[];
+  error?: string;
+};
+
+function PasteScanner({ onGemsSaved }: { onGemsSaved: () => void }) {
+  const [open, setOpen]         = useState(false);
+  const [text, setText]         = useState("");
+  const [source, setSource]     = useState("eBay UK");
+  const [scanning, setScanning] = useState(false);
+  const [result, setResult]     = useState<PasteResult | null>(null);
+
+  const scan = async () => {
+    if (!text.trim()) return;
+    setScanning(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/parts/paste-scan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, source }),
+      });
+      const data = await res.json();
+      setResult(data);
+      if (data.gems > 0) onGemsSaved();
+    } catch {
+      setResult({ parsed: 0, kept: 0, gems: 0, super_gems: 0, model_used: "", items: [], error: "Request failed" });
+    } finally {
+      setScanning(false);
+    }
+  };
+
+  const gems    = result?.items.filter(i => i.verdict === "GEM")  || [];
+  const goods   = result?.items.filter(i => i.verdict === "GOOD") || [];
+  const rejects = result?.items.filter(i => i.verdict === "REJECT") || [];
+
+  return (
+    <div className="rounded-xl border border-[#1e2d45] overflow-hidden">
+      {/* Header toggle */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-[#080f1c] hover:bg-[#0c1526] transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-base">📋</span>
+          <span className="text-sm font-mono font-medium text-slate-300">Paste Scanner</span>
+          <span className="text-xs text-slate-600 font-mono">— paste eBay search results to find gems</span>
+        </div>
+        <span className="text-slate-600 text-xs font-mono">{open ? "▲ close" : "▼ open"}</span>
+      </button>
+
+      {open && (
+        <div className="p-4 border-t border-[#1e2d45] space-y-4">
+          {/* Source selector + textarea */}
+          <div className="flex gap-3 items-start">
+            <div className="flex flex-col gap-1 shrink-0">
+              <label className="text-[10px] text-slate-600 font-mono uppercase">Source</label>
+              <select
+                value={source}
+                onChange={e => setSource(e.target.value)}
+                className="text-xs font-mono bg-[#0c1526] border border-[#1e2d45] rounded-lg px-2 py-1.5 text-slate-300"
+              >
+                <option>eBay UK</option>
+                <option>Gumtree</option>
+                <option>Facebook Marketplace</option>
+                <option>BargainHardware</option>
+                <option>Preloved</option>
+                <option>Manual</option>
+              </select>
+            </div>
+            <div className="flex-1 flex flex-col gap-1">
+              <label className="text-[10px] text-slate-600 font-mono uppercase">Paste search results text</label>
+              <textarea
+                value={text}
+                onChange={e => setText(e.target.value)}
+                placeholder={"Paste raw text from eBay or any marketplace search page here…\n\nTip: select all on the search results page (Ctrl+A), copy, paste here. The AI will extract component listings automatically."}
+                rows={8}
+                className="w-full text-xs font-mono bg-[#0c1526] border border-[#1e2d45] rounded-lg px-3 py-2 text-slate-300 placeholder-slate-700 resize-y focus:outline-none focus:border-[#1e3a5a]"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={scan}
+              disabled={scanning || !text.trim()}
+              className="font-mono"
+            >
+              {scanning ? (
+                <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Scanning…</>
+              ) : (
+                "🔍 Find Gems"
+              )}
+            </Button>
+            {result && !result.error && (
+              <span className="text-xs font-mono text-slate-400">
+                Parsed <b className="text-slate-200">{result.parsed}</b> components
+                {result.gems > 0 && (
+                  <>, found <b className="text-emerald-400">{result.gems} gem{result.gems !== 1 ? "s" : ""}</b>
+                  {result.super_gems > 0 && <> (<b className="text-cyan-400">{result.super_gems} super gem{result.super_gems !== 1 ? "s" : ""}</b>)</>}
+                  </>
+                )}
+                {result.gems === 0 && result.parsed > 0 && <>, <span className="text-slate-600">no gems found</span></>}
+                <span className="text-slate-700 ml-2">via {result.model_used}</span>
+              </span>
+            )}
+            {result?.error && <span className="text-xs text-red-400 font-mono">{result.error}</span>}
+          </div>
+
+          {/* Results breakdown */}
+          {result && !result.error && result.parsed > 0 && (
+            <div className="space-y-2">
+              {/* Gems */}
+              {gems.length > 0 && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono text-emerald-500 uppercase tracking-wider px-1">
+                    💎 Gems — added to catalogue
+                  </div>
+                  {gems.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 px-3 py-2 bg-emerald-950/20 border border-emerald-800/30 rounded-lg">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-2">
+                          {item.gem_classification === "super_gem" && (
+                            <span className="text-[10px] text-cyan-400 font-bold">⚡ SUPER</span>
+                          )}
+                          <span className="text-sm font-mono text-slate-200 truncate">{item.name}</span>
+                          <span className="text-xs font-mono text-emerald-400 font-bold">£{item.price.toFixed(0)}</span>
+                          <span className="text-[10px] text-slate-600">vs £{item.market_price_estimate.toFixed(0)} market</span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-0.5 italic line-clamp-1">{item.reasoning}</p>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-600 uppercase shrink-0">{item.category}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Good deals */}
+              {goods.length > 0 && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono text-blue-500 uppercase tracking-wider px-1">
+                    ✓ Good deals — saved
+                  </div>
+                  {goods.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 px-3 py-2 bg-blue-950/10 border border-blue-800/20 rounded-lg">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-sm font-mono text-slate-300 truncate">{item.name}</span>
+                          <span className="text-xs font-mono text-blue-400">£{item.price.toFixed(0)}</span>
+                          <span className="text-[10px] text-slate-600">vs £{item.market_price_estimate.toFixed(0)} market</span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-0.5 italic line-clamp-1">{item.reasoning}</p>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-600 uppercase shrink-0">{item.category}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Rejected items — collapsed summary */}
+              {rejects.length > 0 && (
+                <details className="text-[10px] font-mono text-slate-700">
+                  <summary className="cursor-pointer hover:text-slate-600 px-1">
+                    {rejects.length} item{rejects.length !== 1 ? "s" : ""} rejected (not gems or not PC components)
+                  </summary>
+                  <div className="mt-1 pl-3 space-y-0.5">
+                    {rejects.map((item, i) => (
+                      <div key={i} className="text-slate-700">
+                        {item.name || "(unidentified)"} — {item.reasoning?.slice(0, 80)}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
+            </div>
+          )}
+
+          {result && !result.error && result.parsed === 0 && (
+            <p className="text-xs text-slate-600 font-mono">
+              No PC component listings found in the pasted text. Try pasting from an eBay search results page.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CatalogueTab() {
   const [data, setData]         = useState<CatalogueData | null>(null);
   const [loading, setLoading]   = useState(true);
@@ -663,6 +871,9 @@ function CatalogueTab() {
           {refreshing ? "Fetching prices…" : "Refresh All Prices"}
         </Button>
       </div>
+
+      {/* Paste scanner */}
+      <PasteScanner onGemsSaved={load} />
 
       {/* Category sub-tabs */}
       <div className="flex gap-1 overflow-x-auto pb-1">
