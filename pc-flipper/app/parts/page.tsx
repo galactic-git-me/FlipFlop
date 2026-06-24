@@ -601,12 +601,15 @@ const PARTS_TAB_CONFIG: Record<PartsTabCategory, {
   },
 };
 
+type GemFilter = "all" | "gem" | "super_gem";
+
 function PartsTab({ category }: { category: PartsTabCategory }) {
   const cfg = PARTS_TAB_CONFIG[category];
   const [parts, setParts]         = useState<GroupedPart[]>([]);
   const [loading, setLoading]     = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [query, setQuery]         = useState("");
+  const [gemFilter, setGemFilter] = useState<GemFilter>("all");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -635,14 +638,51 @@ function PartsTab({ category }: { category: PartsTabCategory }) {
     catch { } finally { setRefreshing(false); }
   };
 
+  const gemCounts = useMemo(() => ({
+    gem: parts.filter(p => p.gem_classification === "gem" || p.gem_classification === "super_gem").length,
+    super_gem: parts.filter(p => p.gem_classification === "super_gem").length,
+  }), [parts]);
+
   const filtered = useMemo(() => {
-    if (!query.trim()) return parts;
-    const q = query.toLowerCase();
-    return parts.filter(p => p.name.toLowerCase().includes(q));
-  }, [parts, query]);
+    let result = parts;
+    if (gemFilter === "super_gem") result = result.filter(p => p.gem_classification === "super_gem");
+    else if (gemFilter === "gem") result = result.filter(p => p.gem_classification === "gem" || p.gem_classification === "super_gem");
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      result = result.filter(p => p.name.toLowerCase().includes(q));
+    }
+    return result;
+  }, [parts, query, gemFilter]);
 
   return (
     <div className="space-y-4">
+      {/* Gem filter chips */}
+      {category === "components" && (
+        <div className="flex gap-2 flex-wrap">
+          {([
+            { value: "all",       label: "All parts" },
+            { value: "gem",       label: `💎 Gems (${gemCounts.gem})` },
+            { value: "super_gem", label: `⚡ Super Gems (${gemCounts.super_gem})` },
+          ] as { value: GemFilter; label: string }[]).map(f => (
+            <button
+              key={f.value}
+              onClick={() => setGemFilter(f.value)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                gemFilter === f.value
+                  ? f.value === "super_gem"
+                    ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/40"
+                    : f.value === "gem"
+                      ? "bg-emerald-500/15 text-emerald-300 border-emerald-400/40"
+                      : "bg-[#00dc82]/10 text-[#00dc82] border-[#00dc82]/30"
+                  : "text-slate-500 border-[#1e2d45] hover:border-slate-600 hover:text-slate-400"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="relative flex-1 max-w-sm">
@@ -695,16 +735,40 @@ function PartsTab({ category }: { category: PartsTabCategory }) {
 // ── Part card ─────────────────────────────────────────────────────────────────
 
 function PartCard({ part }: { part: GroupedPart }) {
-  const bestPrice = part.cheapest_price ?? 0;
+  const bestPrice = part.cheapest_good_price ?? part.cheapest_price ?? 0;
+  const isSuperGem = part.gem_classification === "super_gem";
+  const isGem = part.gem_classification === "gem" || isSuperGem;
 
   return (
-    <div className="flex flex-col rounded-xl glass-card hover:border-[var(--nf-border-strong)] transition-colors overflow-hidden">
+    <div className={`flex flex-col rounded-xl glass-card hover:border-[var(--nf-border-strong)] transition-colors overflow-hidden ${
+      isSuperGem ? "border-cyan-400/30 shadow-[0_2px_16px_rgba(34,211,238,0.08)]" :
+      isGem ? "border-emerald-400/20 shadow-[0_2px_16px_rgba(52,211,153,0.06)]" : ""
+    }`}>
       {/* Image */}
-      <div className="w-full h-36 bg-[#070d14] border-b border-[#1e2d45] flex items-center justify-center overflow-hidden">
+      <div className="w-full h-36 bg-[#070d14] border-b border-[#1e2d45] flex items-center justify-center overflow-hidden relative">
         {part.image_url ? (
           <img src={part.image_url} alt={part.name} className="w-full h-full object-contain opacity-80" />
         ) : (
           <Package className="w-10 h-10 text-slate-700" />
+        )}
+        {/* Gem badge overlay */}
+        {isGem && (
+          <div className={`absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md backdrop-blur-sm border text-[9px] font-bold uppercase tracking-wider ${
+            isSuperGem
+              ? "bg-cyan-400/20 border-cyan-400/40 text-cyan-200"
+              : "bg-emerald-400/20 border-emerald-400/40 text-emerald-200"
+          }`}>
+            <Zap className={`w-2.5 h-2.5 ${isSuperGem ? "text-cyan-300" : "text-emerald-300"}`} />
+            {isSuperGem ? "Super Gem" : "Gem"}
+          </div>
+        )}
+        {/* Discount score */}
+        {isGem && part.gem_score != null && (
+          <div className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-black ${
+            isSuperGem ? "bg-cyan-400/15 text-cyan-300" : "bg-emerald-400/15 text-emerald-300"
+          }`}>
+            -{part.gem_score.toFixed(0)}% vs median
+          </div>
         )}
       </div>
 
@@ -735,9 +799,9 @@ function PartCard({ part }: { part: GroupedPart }) {
               <div className="text-blue-400 font-semibold">{formatCurrency(part.price_refurb)}</div>
             </div>
           )}
-          <div className="rounded-md bg-[#00dc82]/5 border border-[#00dc82]/20 px-2 py-1">
-            <div className="text-slate-600 text-[9px] uppercase tracking-wide">Best</div>
-            <div className="text-[#00dc82] font-bold">{formatCurrency(bestPrice)}</div>
+          <div className={`rounded-md px-2 py-1 ${isGem ? (isSuperGem ? "bg-cyan-400/8 border border-cyan-400/20" : "bg-emerald-400/8 border border-emerald-400/20") : "bg-[#00dc82]/5 border border-[#00dc82]/20"}`}>
+            <div className="text-slate-600 text-[9px] uppercase tracking-wide">{part.cheapest_good_price ? "Best (trusted)" : "Best"}</div>
+            <div className={`font-bold ${isSuperGem ? "text-cyan-300" : isGem ? "text-emerald-300" : "text-[#00dc82]"}`}>{formatCurrency(bestPrice)}</div>
           </div>
         </div>
 

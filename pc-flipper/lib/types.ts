@@ -96,6 +96,9 @@ export interface GroupedPart {
   cheapest_price: number | null;
   cheapest_source: string | null;
   cheapest_url: string | null;
+  cheapest_good_price: number | null;
+  cheapest_good_source: string | null;
+  cheapest_good_url: string | null;
   price_used: number | null;
   price_refurb: number | null;
   price_new: number | null;
@@ -106,6 +109,8 @@ export interface GroupedPart {
     url: string | null;
     condition: string | null;
   }[];
+  gem_classification: "super_gem" | "gem" | null;
+  gem_score: number | null;
 }
 
 export interface Flip {
