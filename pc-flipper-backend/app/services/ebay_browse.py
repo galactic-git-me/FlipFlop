@@ -33,6 +33,18 @@ _USED_CONDITIONS = {"USED", "EXCELLENT", "VERY_GOOD", "GOOD", "ACCEPTABLE", "FOR
 # EBAY_GB = UK marketplace
 _MARKETPLACE_ID = "EBAY_GB"
 
+# Title keywords that indicate accessories/parts, not complete components
+_ACCESSORY_TOKENS = frozenset([
+    "cooling fan", "heatsink", "backplate", "bracket", "thermal pad",
+    "screw", "cable", "adapter", "connector", "waterblock", "water block",
+    "sticker", "box only", "packaging only", "manual only", "shroud",
+    "replacement fan", "spare", "cooler only", "heat sink",
+])
+
+def _is_accessory(title: str) -> bool:
+    tl = title.lower()
+    return any(tok in tl for tok in _ACCESSORY_TOKENS)
+
 # Global semaphore — Browse API has per-app rate limits
 _API_SEM = asyncio.Semaphore(5)
 
@@ -58,7 +70,7 @@ class ComponentPrices(TypedDict):
     new_min: float | None
 
 
-async def _search(token: str, query: str, condition_filter: str, limit: int = 50) -> list[EbayListing]:
+async def _search(token: str, query: str, condition_filter: str, limit: int = 50, min_price: float = 10.0) -> list[EbayListing]:
     """
     Search eBay Buy Browse API for BIN listings of a given condition.
     condition_filter examples: 'NEW|LIKE_NEW', 'USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE'
@@ -95,11 +107,14 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             price = float(price_info.get("value") or 0)
         except (ValueError, TypeError):
             continue
-        if price < 1 or price > 10_000:
+        if price < min_price or price > 10_000:
+            continue
+        title = str(item.get("title") or "")
+        if _is_accessory(title):
             continue
         image = item.get("image") or {}
         results.append({
-            "title": str(item.get("title") or ""),
+            "title": title,
             "price": price,
             "condition": str(item.get("condition") or ""),
             "url": str(item.get("itemWebUrl") or ""),
@@ -109,7 +124,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
     return results
 
 
-async def get_component_prices(model_name: str, force_refresh: bool = False) -> ComponentPrices:
+async def get_component_prices(model_name: str, force_refresh: bool = False, min_price: float = 20.0) -> ComponentPrices:
     """
     Fetch current eBay BIN prices for a component model.
 
@@ -130,8 +145,8 @@ async def get_component_prices(model_name: str, force_refresh: bool = False) -> 
 
     try:
         new_items, used_items = await asyncio.gather(
-            _search(token, model_name, new_cond,  limit=50),
-            _search(token, model_name, used_cond, limit=50),
+            _search(token, model_name, new_cond,  limit=50, min_price=min_price),
+            _search(token, model_name, used_cond, limit=50, min_price=min_price),
             return_exceptions=True,
         )
     except Exception as exc:

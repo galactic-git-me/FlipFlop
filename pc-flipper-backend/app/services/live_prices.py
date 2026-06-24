@@ -28,6 +28,18 @@ _LIVE_CACHE: dict[str, tuple[float, list]] = {}  # category -> (timestamp, rows)
 GEM_THRESHOLD       = 20.0   # % below median → gem
 SUPER_GEM_THRESHOLD = 35.0   # % below median → super gem
 
+# Minimum realistic price (£) for a complete component by category
+# Prevents accessories / spare parts from appearing as cheapest listings
+_CATEGORY_MIN_PRICE: dict[str, float] = {
+    "gpu":         40.0,
+    "cpu":         15.0,
+    "ram":         10.0,
+    "ssd":         10.0,
+    "psu":         15.0,
+    "motherboard": 20.0,
+    "cooler":      10.0,
+}
+
 
 def _classify(discount_pct: float | None) -> str | None:
     if discount_pct is None:
@@ -62,10 +74,12 @@ async def get_live_prices_for_category(category: str, force_refresh: bool = Fals
     if not models:
         return []
 
+    min_price = _CATEGORY_MIN_PRICE.get(category, 15.0)
+
     # Fetch all models in parallel (eBay Browse API handles concurrency gracefully
     # via its own rate limiter — we have a semaphore inside get_component_prices)
     async def _fetch(m: dict) -> dict:
-        prices = await get_component_prices(m["name"], force_refresh=force_refresh)
+        prices = await get_component_prices(m["name"], force_refresh=force_refresh, min_price=min_price)
 
         used_median = prices["used_median"]
         cheapest    = prices["used_cheapest"]
