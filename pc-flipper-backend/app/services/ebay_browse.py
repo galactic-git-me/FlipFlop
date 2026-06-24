@@ -39,6 +39,10 @@ _ACCESSORY_TOKENS = frozenset([
     "screw", "cable", "adapter", "connector", "waterblock", "water block",
     "sticker", "box only", "packaging only", "manual only", "shroud",
     "replacement fan", "spare", "cooler only", "heat sink",
+    "faulty", "for parts", "not working", "no display", "dead", "broken",
+    "spares or repair", "spares/repair", "read description",
+    "artefacting", "artifacting", "no gpu", "no card", "cooling house",
+    "crashes", "crashing", "intermittent", "damaged", "defective",
 ])
 
 def _is_accessory(title: str) -> bool:
