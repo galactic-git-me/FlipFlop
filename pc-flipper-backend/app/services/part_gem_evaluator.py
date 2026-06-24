@@ -70,15 +70,17 @@ class PartGemResult:
 
 
 def _build_part_prompt(d: dict) -> str:
+    price = d.get("cheapest_good_price") or 0
+    score = d.get("gem_score") or 0
     lines = [
         "COMPONENT TO EVALUATE:",
         f"  Name:        {d.get('name', '?')}",
         f"  Category:    {d.get('category', '?')}",
-        f"  Price found: £{d.get('cheapest_good_price', 0):.0f}",
+        f"  Price found: £{price:.0f}",
         f"  Source:      {d.get('cheapest_good_source', '?')}",
         "",
         "RULE-BASED PRE-SCORE:",
-        f"  Discount vs tier median: {d.get('gem_score', 0):.1f}%",
+        f"  Discount vs tier median: {score:.1f}%",
         f"  Classification:          {d.get('gem_classification', 'none')}",
         "",
         "Is this component genuinely priced below current UK eBay market value?",

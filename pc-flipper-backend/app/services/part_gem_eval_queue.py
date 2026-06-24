@@ -167,6 +167,6 @@ async def _evaluate(name: str, category: str) -> None:
         name=name,
         category=category,
         verdict=result.verdict,
-        price=f"£{cheapest_good.price:.0f}",
+        price=f"£{cheapest_good.price or 0:.0f}",
         model=result.model_used,
     )
