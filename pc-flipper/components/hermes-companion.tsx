@@ -257,10 +257,12 @@ export function HermesCompanion() {
 
     // Navigation actions — fetch data, navigate, summarise
     const labelMap: Record<string, string> = {
-      show_super_gems: "Show me the Super Gems",
-      show_gems: "Show me the Gems",
-      show_playbooks: "Show me the Playbooks",
-      show_builds: "Show me Suggested Builds",
+      show_super_gems:  "Show me the Super Gems",
+      show_gems:        "Show me the Gems",
+      show_playbooks:   "Show me the Playbooks",
+      show_builds:      "Show me Suggested Builds",
+      show_components:  "Show me the best sub-components",
+      show_cases:       "Show me available cases",
     };
     addUserMessage(labelMap[qr.action] ?? qr.label);
     setIsSending(true);
