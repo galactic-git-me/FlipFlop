@@ -144,6 +144,9 @@ async def get_live_prices_for_category(category: str, force_refresh: bool = Fals
     For each canonical model in the category, scrape eBay live for the cheapest
     used BIN listing (with URL) and get new retail RRP from Scan/Overclockers
     (LLM estimate as fallback). Results are cached 30 minutes per category.
+
+    eBay requests are sent sequentially (with short delays) to avoid bot detection.
+    Scan/OC requests run in parallel with the eBay loop.
     """
     now = time.time()
     if not force_refresh:
@@ -160,17 +163,10 @@ async def get_live_prices_for_category(category: str, force_refresh: bool = Fals
     scan_results: list[float | None] = [None] * n
     oc_results:   list[float | None] = [None] * n
 
-    # Bounded concurrency — be polite to eBay especially
-    ebay_sem = asyncio.Semaphore(5)
-    retail_sem = asyncio.Semaphore(8)
+    model_names = [m["name"] for m in models]
 
-    async def _one_ebay(i: int, search: str) -> None:
-        async with ebay_sem:
-            await asyncio.sleep(random.uniform(0.15, 0.5))
-            async with httpx.AsyncClient(
-                **apply_httpx_proxy({"follow_redirects": True, "timeout": 25})
-            ) as client:
-                ebay_results[i] = await _fetch_ebay_cheapest_listing(client, search)
+    # Launch LLM and retail scrapers in parallel while we do eBay sequentially
+    retail_sem = asyncio.Semaphore(8)
 
     async def _one_scan(i: int, search: str) -> None:
         async with retail_sem:
@@ -180,16 +176,25 @@ async def get_live_prices_for_category(category: str, force_refresh: bool = Fals
         async with retail_sem:
             oc_results[i] = await _fetch_overclockers(search)
 
-    model_names = [m["name"] for m in models]
     llm_task = asyncio.create_task(_batch_llm_rrp(model_names))
+    retail_tasks = [
+        *[asyncio.create_task(_one_scan(i, m["name"])) for i, m in enumerate(models)],
+        *[asyncio.create_task(_one_oc(i, m["name"]))  for i, m in enumerate(models)],
+    ]
 
-    await asyncio.gather(
-        *[_one_ebay(i, m["name"]) for i, m in enumerate(models)],
-        *[_one_scan(i, m["name"]) for i, m in enumerate(models)],
-        *[_one_oc(i, m["name"])  for i, m in enumerate(models)],
-        llm_task,
-        return_exceptions=True,
-    )
+    # eBay: sequential with a single persistent client — same pattern as upgrade_parts swarm
+    try:
+        async with httpx.AsyncClient(
+            **apply_httpx_proxy({"follow_redirects": True, "timeout": 25})
+        ) as client:
+            for i, m in enumerate(models):
+                await asyncio.sleep(random.uniform(0.3, 0.7))
+                ebay_results[i] = await _fetch_ebay_cheapest_listing(client, m["name"])
+    except Exception as exc:
+        log.warning("live_prices.ebay.session_error", error=str(exc))
+
+    # Wait for retail scrapers and LLM to finish
+    await asyncio.gather(*retail_tasks, llm_task, return_exceptions=True)
 
     llm_rrp: dict[str, float] = {}
     try:
