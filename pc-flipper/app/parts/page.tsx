@@ -845,67 +845,77 @@ function PasteScanner({ onGemsSaved }: { onGemsSaved: () => void }) {
 }
 
 function CatalogueTab() {
-  const [data, setData]         = useState<CatalogueData | null>(null);
-  const [loading, setLoading]   = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [liveRows, setLiveRows]     = useState<LivePriceRow[] | null>(null);
+  const [loading, setLoading]       = useState(false);
   const [activeCategory, setActiveCategory] = useState<CatId>("gpu");
   const [tierFilter, setTierFilter] = useState<string>("all");
 
-  const load = useCallback(async () => {
+  // Client-side cache so tab switches don't re-trigger a 15s scrape
+  const cache = useRef<Partial<Record<CatId, LivePriceRow[]>>>({});
+
+  const load = useCallback(async (cat: CatId, forceRefresh = false) => {
+    if (!forceRefresh && cache.current[cat]) {
+      setLiveRows(cache.current[cat]!);
+      return;
+    }
     setLoading(true);
+    setLiveRows(null);
     try {
-      const res = await fetch("/api/parts/catalogue");
-      if (res.ok) setData(await res.json());
+      const qs = forceRefresh ? `?category=${cat}&refresh=true` : `?category=${cat}`;
+      const res = await fetch(`/api/parts/live-prices${qs}`);
+      if (res.ok) {
+        const data: LivePriceRow[] = await res.json();
+        cache.current[cat] = data;
+        setLiveRows(data);
+      }
     } catch { /* ignore */ } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => { void load(activeCategory); }, [activeCategory, load]);
 
-  const refresh = async () => {
-    setRefreshing(true);
-    try {
-      await api.swarms.trigger("upgrade_parts");
-      await load();
-    } catch { /* ignore */ } finally { setRefreshing(false); }
+  const handleCategoryChange = (cat: CatId) => {
+    setActiveCategory(cat);
+    setTierFilter("all");
   };
 
   const rows = useMemo(() => {
-    if (!data) return [];
-    const all = data[activeCategory] || [];
-    return tierFilter === "all" ? all : all.filter(m => m.tier === tierFilter);
-  }, [data, activeCategory, tierFilter]);
-
-  const dataCount = rows.filter(r => r.has_data).length;
+    if (!liveRows) return [];
+    return tierFilter === "all" ? liveRows : liveRows.filter(r => r.tier === tierFilter);
+  }, [liveRows, tierFilter]);
 
   return (
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-slate-500 font-mono">
-            {loading ? "Loading…" : `${dataCount} of ${rows.length} models have live prices`}
-            {!loading && dataCount < rows.length && (
-              <span className="ml-1 text-slate-600">— refresh to fetch missing</span>
-            )}
-          </p>
-        </div>
-        <Button variant="secondary" size="sm" onClick={refresh} disabled={refreshing || loading}>
-          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
-          {refreshing ? "Fetching prices…" : "Refresh All Prices"}
+        <p className="text-xs text-slate-500 font-mono">
+          {loading
+            ? "Fetching live prices from eBay and retailers…"
+            : liveRows
+              ? `${rows.length} models · live prices fetched`
+              : "Select a category to fetch live prices"
+          }
+        </p>
+        <Button
+          variant="secondary" size="sm"
+          onClick={() => void load(activeCategory, true)}
+          disabled={loading}
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+          {loading ? "Fetching…" : "Refresh Live"}
         </Button>
       </div>
 
       {/* Paste scanner */}
-      <PasteScanner onGemsSaved={load} />
+      <PasteScanner onGemsSaved={() => {}} />
 
       {/* Category sub-tabs */}
       <div className="flex gap-1 overflow-x-auto pb-1">
         {CAT_TABS.map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveCategory(tab.id)}
+            onClick={() => handleCategoryChange(tab.id)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-medium whitespace-nowrap transition-all ${
               activeCategory === tab.id
                 ? "bg-[var(--nf-primary)]/15 text-[var(--nf-primary)] border border-[var(--nf-primary)]/30"
@@ -913,9 +923,9 @@ function CatalogueTab() {
             }`}
           >
             <span>{tab.emoji}</span> {tab.label}
-            {data && (
+            {cache.current[tab.id] && (
               <span className="ml-1 text-[10px] opacity-60">
-                ({(data[tab.id] || []).filter(m => m.has_data).length}/{(data[tab.id] || []).length})
+                ({cache.current[tab.id]!.length})
               </span>
             )}
           </button>
@@ -942,77 +952,111 @@ function CatalogueTab() {
 
       {/* Price table */}
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading catalogue…
+        <div className="flex flex-col items-center justify-center py-20 gap-3">
+          <RefreshCw className="w-5 h-5 animate-spin text-[var(--nf-primary)]" />
+          <div className="text-center">
+            <p className="text-slate-300 text-sm font-mono">Fetching live prices…</p>
+            <p className="text-slate-600 text-xs mt-1 font-mono">
+              Scraping eBay BIN listings and UK retail sites
+            </p>
+          </div>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-[#1e2d45]">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#1e2d45] bg-[#0a1628]">
-                <th className="text-left px-4 py-3 text-xs text-slate-500 font-mono font-medium w-[40%]">Model</th>
+                <th className="text-left px-4 py-3 text-xs text-slate-500 font-mono font-medium">Product</th>
                 <th className="text-center px-3 py-3 text-xs text-slate-500 font-mono font-medium">Tier</th>
-                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">eBay Used</th>
-                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">BargainHW</th>
-                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">New Retail</th>
-                <th className="text-center px-3 py-3 text-xs text-slate-500 font-mono font-medium">AI</th>
+                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">RRP</th>
+                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">eBay Price</th>
+                <th className="text-right px-4 py-3 text-xs text-slate-500 font-mono font-medium">Lowest Found</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-12 text-slate-600 font-mono text-sm">
-                    No models in this category
+                  <td colSpan={5} className="text-center py-12 text-slate-600 font-mono text-sm">
+                    {liveRows
+                      ? "No models match this filter"
+                      : "Select a category — prices will be fetched live"
+                    }
                   </td>
                 </tr>
-              ) : rows.map((m, i) => {
-                const aiGem = m.claude_verdict === "GEM";
-                const aiGood = m.claude_verdict === "GOOD";
-                const aiReject = m.claude_verdict === "REJECT";
+              ) : rows.map((row, i) => {
+                const goodDeal = row.ebay_used && row.rrp && row.ebay_used < row.rrp * 0.65;
                 return (
                   <tr
-                    key={m.model}
+                    key={row.model}
                     className={`border-b border-[#1e2d45] transition-colors ${
-                      aiGem   ? "bg-emerald-950/20 hover:bg-emerald-950/30" :
-                      aiGood  ? "bg-blue-950/10 hover:bg-blue-950/20" :
-                      i % 2 === 0 ? "bg-[#080f1c] hover:bg-[#0c1526]" : "hover:bg-[#0c1526]"
+                      goodDeal
+                        ? "bg-emerald-950/15 hover:bg-emerald-950/25"
+                        : i % 2 === 0 ? "bg-[#080f1c] hover:bg-[#0c1526]" : "hover:bg-[#0c1526]"
                     }`}
                   >
+                    {/* Product */}
                     <td className="px-4 py-2.5">
-                      <div className="flex items-center gap-2">
-                        {aiGem && <span className="text-emerald-400 text-[10px] font-bold">💎 GEM</span>}
-                        {aiGood && <span className="text-blue-400 text-[10px] font-bold">✓</span>}
-                        <span className={`font-mono text-sm ${m.has_data ? "text-slate-200" : "text-slate-600"}`}>
-                          {m.model}
-                        </span>
-                      </div>
-                      {m.claude_reasoning && (aiGem || aiGood) && (
-                        <p className="text-[10px] text-slate-500 font-mono mt-0.5 ml-0 italic line-clamp-1">
-                          {m.claude_reasoning}
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-3 py-2.5 text-center">
-                      <span className={`text-[10px] font-mono uppercase tracking-wider ${TIER_COLORS[m.tier] || "text-slate-500"}`}>
-                        {m.tier}
+                      <span className={`font-mono text-sm ${row.ebay_used ? "text-slate-200" : "text-slate-500"}`}>
+                        {row.model}
                       </span>
                     </td>
-                    <td className="px-3 py-2.5 text-right">
-                      <PriceCell price={m.ebay_used} isBest={m.best_source === "eBay UK"} />
-                    </td>
-                    <td className="px-3 py-2.5 text-right">
-                      <PriceCell price={m.bargain_hardware} isBest={m.best_source === "BargainHardware"} />
-                    </td>
-                    <td className="px-3 py-2.5 text-right">
-                      <PriceCell price={m.new_retail} isBest={m.best_source === "New Retail"} />
-                    </td>
+
+                    {/* Tier */}
                     <td className="px-3 py-2.5 text-center">
-                      {aiGem    && <span className="text-[10px] text-emerald-400 font-bold">GEM</span>}
-                      {aiGood   && <span className="text-[10px] text-blue-400">GOOD</span>}
-                      {aiReject && <span className="text-[10px] text-slate-600 line-through">REJECT</span>}
-                      {!m.claude_verdict && m.has_data && (
-                        <span className="text-[10px] text-slate-700">pending</span>
+                      <span className={`text-[10px] font-mono uppercase tracking-wider ${TIER_COLORS[row.tier] || "text-slate-500"}`}>
+                        {row.tier}
+                      </span>
+                    </td>
+
+                    {/* RRP */}
+                    <td className="px-3 py-2.5 text-right">
+                      {row.rrp ? (
+                        <div className="inline-flex items-baseline gap-1">
+                          <span className="font-mono text-sm text-slate-400">£{row.rrp.toFixed(0)}</span>
+                          {row.rrp_source && (
+                            <span className="text-[9px] text-slate-600 font-mono">{row.rrp_source}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-600 text-xs">—</span>
                       )}
+                    </td>
+
+                    {/* eBay Price */}
+                    <td className="px-3 py-2.5 text-right">
+                      {row.ebay_used ? (
+                        <div className="inline-flex flex-col items-end gap-0.5">
+                          {row.ebay_url ? (
+                            <a
+                              href={row.ebay_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-sm text-slate-300 hover:text-slate-100 hover:underline"
+                            >
+                              £{row.ebay_used.toFixed(0)}
+                            </a>
+                          ) : (
+                            <span className="font-mono text-sm text-slate-300">£{row.ebay_used.toFixed(0)}</span>
+                          )}
+                          {row.rrp && (
+                            <span className="text-[9px] text-slate-600 font-mono">
+                              {Math.round((1 - row.ebay_used / row.rrp) * 100)}% off RRP
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-600 text-xs">—</span>
+                      )}
+                    </td>
+
+                    {/* Lowest Found */}
+                    <td className="px-4 py-2.5 text-right">
+                      <LowestPriceCell
+                        price={row.lowest_price}
+                        url={row.lowest_url}
+                        title={row.lowest_title}
+                        source={row.lowest_source}
+                      />
                     </td>
                   </tr>
                 );
@@ -1023,11 +1067,11 @@ function CatalogueTab() {
       )}
 
       {/* Legend */}
-      {!loading && (
-        <div className="flex gap-4 text-[10px] text-slate-600 font-mono">
-          <span>★ = best price for that model</span>
-          <span>💎 GEM = AI-verified deal</span>
-          <span>Prices refresh every 24h via swarm</span>
+      {!loading && liveRows && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-slate-600 font-mono">
+          <span>RRP = UK new retail (Scan/Overclockers, or AI estimate)</span>
+          <span>eBay Price = cheapest live BIN used listing</span>
+          <span>Lowest Found = absolute cheapest — hover for preview, click to open</span>
         </div>
       )}
     </div>
