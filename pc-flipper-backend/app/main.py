@@ -509,7 +509,7 @@ async def _migrate_add_columns():
         ("parts", "claude_verdict",    "VARCHAR(10)"),
         ("parts", "claude_reasoning",  "TEXT"),
         ("parts", "claude_confidence", "FLOAT"),
-        ("parts", "claude_judged_at",  "DATETIME"),
+        ("parts", "claude_judged_at",  "TIMESTAMP"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:
