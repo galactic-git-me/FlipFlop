@@ -518,6 +518,15 @@ async def _migrate_add_columns():
             )
             log.debug("migration.column_ensured", table=table, column=col)
 
+        # Add 'cooler' to the partcategory enum if not already present
+        try:
+            await conn.exec_driver_sql(
+                "ALTER TYPE partcategory ADD VALUE IF NOT EXISTS 'cooler'"
+            )
+            log.debug("migration.enum_value_ensured", type="partcategory", value="cooler")
+        except Exception:
+            pass  # older PostgreSQL versions don't support IF NOT EXISTS; ignore
+
 
 # ── Search terms ──────────────────────────────────────────────────────────────
 # Sent verbatim to eBay, Gumtree, Preloved and Facebook Marketplace.
@@ -570,6 +579,7 @@ async def _sync_playbook_component_catalogues(db) -> None:
 
     Runs every startup — idempotent, safe to re-run.
     """
+    from sqlalchemy import select
     from app.models.playbook import Playbook
     from app.services.component_models import catalogue_for_use_case
 

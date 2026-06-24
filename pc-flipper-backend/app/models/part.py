@@ -13,6 +13,7 @@ class PartCategory(str, enum.Enum):
     case = "case"
     cpu = "cpu"
     motherboard = "motherboard"
+    cooler = "cooler"
     accessory = "accessory"
 
 
