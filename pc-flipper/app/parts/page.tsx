@@ -626,7 +626,6 @@ function LiveComponentCard({ row }: { row: LivePriceRow }) {
           src={row.used_cheapest_image}
           alt={row.model}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
         />
       ) : (
         <div className="absolute inset-0 bg-[#070d14] flex items-center justify-center">
