@@ -110,11 +110,11 @@ export function SuperGemsModal({
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => activeTab === "flip_opportunities" ? void load() : void loadComponents()}
-            disabled={loading || componentsLoading}
+            onClick={() => activeTab === "flip_opportunities" ? void load() : void loadCategory(activeTab as ComponentCategory)}
+            disabled={loading || !!partsLoading[activeTab as ComponentCategory]}
             className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-colors disabled:opacity-40"
           >
-            <RefreshCw className={`w-4 h-4 ${(loading || componentsLoading) ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${(loading || !!partsLoading[activeTab as ComponentCategory]) ? "animate-spin" : ""}`} />
           </button>
           <button onClick={onClose} className="p-1.5 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors">
             <X className="w-5 h-5" />
@@ -123,10 +123,10 @@ export function SuperGemsModal({
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-0 border-b border-white/[0.06] bg-[#030d1a]/70 flex-shrink-0 px-4">
+      <div className="flex gap-0 border-b border-white/[0.06] bg-[#030d1a]/70 flex-shrink-0 px-4 overflow-x-auto">
         <button
           onClick={() => setActiveTab("flip_opportunities")}
-          className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold border-b-2 whitespace-nowrap transition-all ${
             activeTab === "flip_opportunities"
               ? "border-cyan-400 text-cyan-300"
               : "border-transparent text-slate-500 hover:text-slate-300"
@@ -137,19 +137,26 @@ export function SuperGemsModal({
             <span className="px-1.5 py-0.5 rounded-full bg-cyan-400/15 text-cyan-400 text-[10px] font-bold">{listings.length}</span>
           )}
         </button>
-        <button
-          onClick={() => setActiveTab("components")}
-          className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all ${
-            activeTab === "components"
-              ? "border-emerald-400 text-emerald-300"
-              : "border-transparent text-slate-500 hover:text-slate-300"
-          }`}
-        >
-          🔧 Components
-          {!componentsLoading && componentGems.length > 0 && (
-            <span className="px-1.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 text-[10px] font-bold">{componentGems.length}</span>
-          )}
-        </button>
+        {COMPONENT_CATEGORIES.map(cat => {
+          const catParts = parts[cat.id];
+          const isLoading = !!partsLoading[cat.id];
+          return (
+            <button
+              key={cat.id}
+              onClick={() => setActiveTab(cat.id)}
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold border-b-2 whitespace-nowrap transition-all ${
+                activeTab === cat.id
+                  ? "border-emerald-400 text-emerald-300"
+                  : "border-transparent text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              {cat.emoji} {cat.label}
+              {!isLoading && catParts && catParts.length > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 text-[10px] font-bold">{catParts.length}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Scrollable gallery */}
@@ -157,8 +164,7 @@ export function SuperGemsModal({
         {activeTab === "flip_opportunities" && (
           loading ? (
             <div className="flex items-center justify-center h-64 text-slate-500 text-sm gap-2">
-              <RefreshCw className="w-4 h-4 animate-spin" />
-              Loading gems…
+              <RefreshCw className="w-4 h-4 animate-spin" /> Loading gems…
             </div>
           ) : listings.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
@@ -167,32 +173,33 @@ export function SuperGemsModal({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {listings.map((l) => (
-                <FlipCard key={l.id} listing={l} />
-              ))}
+              {listings.map((l) => <FlipCard key={l.id} listing={l} />)}
             </div>
           )
         )}
 
-        {activeTab === "components" && (
-          componentsLoading ? (
+        {activeTab !== "flip_opportunities" && (() => {
+          const cat = activeTab as ComponentCategory;
+          const catParts = parts[cat];
+          const isLoading = !!partsLoading[cat];
+          const catCfg = COMPONENT_CATEGORIES.find(c => c.id === cat);
+          if (isLoading || catParts === undefined) return (
             <div className="flex items-center justify-center h-64 text-slate-500 text-sm gap-2">
-              <RefreshCw className="w-4 h-4 animate-spin" />
-              Loading component gems…
+              <RefreshCw className="w-4 h-4 animate-spin" /> Loading…
             </div>
-          ) : componentGems.length === 0 ? (
+          );
+          if (catParts.length === 0) return (
             <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
               <Package className="w-12 h-12 opacity-20" />
-              <p className="text-sm">No component gems found yet — refresh the parts catalogue.</p>
+              <p className="text-sm">No {catCfg?.label ?? cat} gems found yet.</p>
             </div>
-          ) : (
+          );
+          return (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {componentGems.map((p) => (
-                <ComponentCard key={`${p.category}::${p.name}`} part={p} />
-              ))}
+              {catParts.map((p) => <ComponentCard key={`${p.category}::${p.name}`} part={p} />)}
             </div>
-          )
-        )}
+          );
+        })()}
       </div>
     </div>,
     document.body
