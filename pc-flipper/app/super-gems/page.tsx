@@ -29,7 +29,8 @@ export default function SuperGemsPage() {
     fetch(`${API_BASE}/api/listings/?${params}`)
       .then((r) => r.json())
       .then((data) => {
-        setListings(Array.isArray(data) ? data : data.items ?? []);
+        const all: Listing[] = Array.isArray(data) ? data : data.items ?? [];
+        setListings(all.filter(l => l.classification === "gem" || l.classification === "amazing_gem"));
       })
       .catch(console.error)
       .finally(() => setLoading(false));

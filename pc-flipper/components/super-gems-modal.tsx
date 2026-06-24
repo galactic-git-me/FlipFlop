@@ -17,7 +17,10 @@ async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   );
   const res = await fetch(`${API_BASE_URL}/listings/?${params}`);
   const data = await res.json();
-  return Array.isArray(data) ? data : (data.items ?? []);
+  const items: Listing[] = Array.isArray(data) ? data : (data.items ?? []);
+  return superOnly
+    ? items.filter(l => l.classification === "gem" || l.classification === "amazing_gem")
+    : items;
 }
 
 // ── Modal shell ───────────────────────────────────────────────────────────────

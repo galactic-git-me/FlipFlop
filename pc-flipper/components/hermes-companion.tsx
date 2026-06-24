@@ -275,7 +275,8 @@ export function HermesCompanion() {
         router.push("/super-gems");
         const res = await fetch(`${API_BASE}/api/listings/?claude_verdict=GEM&limit=6&sort_by=gem_score`);
         const data = await res.json() as Record<string, unknown>[];
-        const items = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
+        const allItems = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
+        const items = (allItems as Array<{ classification?: string }>).filter(l => l.classification === "gem" || l.classification === "amazing_gem");
         const cards: ListingCard[] = (items as Array<{
           id: number; title: string; price: number;
           claude_expected_profit?: number; estimated_profit?: number;
