@@ -12,8 +12,8 @@ import { formatCurrency } from "@/lib/utils";
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   const params = new URLSearchParams(
     superOnly
-      ? { claude_verdict: "GEM", classification: "gem", sort_by: "gem_score", sort_desc: "true", limit: "60" }
-      : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50" }
+      ? { claude_verdict: "GEM", classification: "gem", sort_by: "gem_score", sort_desc: "true", limit: "60", min_profit: "100" }
+      : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50", min_profit: "80" }
   );
   const res = await fetch(`${API_BASE_URL}/listings/?${params}`);
   const data = await res.json();
@@ -185,10 +185,17 @@ function FlipCard({ listing: l }: { listing: Listing }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
 
           {/* Top badge */}
-          <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-400/20 border border-cyan-400/40 backdrop-blur-sm">
-            <Zap className="w-2.5 h-2.5 text-cyan-300" />
-            <span className="text-[9px] font-bold text-cyan-200 uppercase tracking-wider">Super Gem</span>
-          </div>
+          {l.claude_verdict === "GEM" ? (
+            <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-400/20 border border-cyan-400/40 backdrop-blur-sm">
+              <Zap className="w-2.5 h-2.5 text-cyan-300" />
+              <span className="text-[9px] font-bold text-cyan-200 uppercase tracking-wider">Super Gem</span>
+            </div>
+          ) : (
+            <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/20 border border-emerald-400/40 backdrop-blur-sm">
+              <Zap className="w-2.5 h-2.5 text-emerald-300" />
+              <span className="text-[9px] font-bold text-emerald-200 uppercase tracking-wider">Gem</span>
+            </div>
+          )}
 
           {/* Score top-right */}
           {l.gem_score != null && (

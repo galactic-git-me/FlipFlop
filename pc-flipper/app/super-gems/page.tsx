@@ -26,6 +26,7 @@ export default function SuperGemsPage() {
       classification: "gem",
       sort_by: "gem_score",
       limit: "100",
+      min_profit: "100",
     });
     fetch(`${API_BASE}/api/listings/?${params}`)
       .then((r) => r.json())
@@ -126,10 +127,10 @@ function SuperGemCard({ listing: l }: { listing: Listing }) {
             <Zap className="w-8 h-8 text-cyan-300" />
           </div>
         )}
-        {/* Super gem glow badge */}
-        <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-400/20 border border-cyan-400/40 backdrop-blur-sm">
-          <Zap className="w-2.5 h-2.5 text-cyan-300" />
-          <span className="text-[9px] font-bold text-cyan-200 uppercase tracking-wider">Super Gem</span>
+        {/* Badge: super gem (AI-confirmed) vs regular gem */}
+        <div className={`absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md backdrop-blur-sm border ${l.claude_verdict === "GEM" ? "bg-cyan-400/20 border-cyan-400/40" : "bg-emerald-400/20 border-emerald-400/40"}`}>
+          <Zap className={`w-2.5 h-2.5 ${l.claude_verdict === "GEM" ? "text-cyan-300" : "text-emerald-300"}`} />
+          <span className={`text-[9px] font-bold uppercase tracking-wider ${l.claude_verdict === "GEM" ? "text-cyan-200" : "text-emerald-200"}`}>{l.claude_verdict === "GEM" ? "Super Gem" : "Gem"}</span>
         </div>
       </div>
 
