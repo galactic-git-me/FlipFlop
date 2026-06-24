@@ -2,13 +2,6 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 
-export interface HermesMessage {
-  role: "user" | "assistant";
-  content: string;
-  searchResults?: SearchResult[];
-  isStreaming?: boolean;
-}
-
 export interface SearchResult {
   id: number;
   title: string;
@@ -22,30 +15,60 @@ export interface SearchResult {
   ram_gb: number | null;
 }
 
+export interface QuickReply {
+  label: string;
+  action: "show_super_gems" | "show_gems" | "show_playbooks" | "show_builds" | "flip_listing" | "keep_looking" | "free_text";
+  payload?: string | number;
+}
+
+export interface ListingCard {
+  id: number;
+  title: string;
+  price: number;
+  estimated_profit: number;
+  cpu?: string;
+  gpu?: string;
+  url?: string;
+  image_url?: string;
+}
+
+export interface HermesMessage {
+  role: "user" | "assistant";
+  content: string;
+  searchResults?: SearchResult[];
+  listingCards?: ListingCard[];
+  quickReplies?: QuickReply[];
+  isStreaming?: boolean;
+}
+
 interface HermesContextValue {
   isOpen: boolean;
   setOpen: (open: boolean) => void;
+  hasGreeted: boolean;
+  setHasGreeted: (v: boolean) => void;
   messages: HermesMessage[];
+  setMessages: (msgs: HermesMessage[] | ((prev: HermesMessage[]) => HermesMessage[])) => void;
   addUserMessage: (content: string) => void;
+  addAssistantMessage: (msg: Omit<HermesMessage, "role">) => void;
+  startAssistantMessage: () => void;
   appendToken: (token: string) => void;
   appendSearchResults: (results: SearchResult[]) => void;
   finaliseAssistantMessage: () => void;
-  startAssistantMessage: () => void;
 }
 
 const HermesContext = createContext<HermesContextValue | null>(null);
 
 export function HermesProvider({ children }: { children: ReactNode }) {
   const [isOpen, setOpen] = useState(false);
-  const [messages, setMessages] = useState<HermesMessage[]>([
-    {
-      role: "assistant",
-      content: "Hey! I'm Hermes. I can search your catalogue, evaluate listings, or just chat. What do you need?",
-    },
-  ]);
+  const [hasGreeted, setHasGreeted] = useState(false);
+  const [messages, setMessages] = useState<HermesMessage[]>([]);
 
   const addUserMessage = useCallback((content: string) => {
     setMessages(prev => [...prev, { role: "user", content }]);
+  }, []);
+
+  const addAssistantMessage = useCallback((msg: Omit<HermesMessage, "role">) => {
+    setMessages(prev => [...prev, { role: "assistant", ...msg }]);
   }, []);
 
   const startAssistantMessage = useCallback(() => {
@@ -84,9 +107,10 @@ export function HermesProvider({ children }: { children: ReactNode }) {
 
   return (
     <HermesContext.Provider value={{
-      isOpen, setOpen, messages,
-      addUserMessage, startAssistantMessage,
-      appendToken, appendSearchResults, finaliseAssistantMessage,
+      isOpen, setOpen, hasGreeted, setHasGreeted,
+      messages, setMessages,
+      addUserMessage, addAssistantMessage,
+      startAssistantMessage, appendToken, appendSearchResults, finaliseAssistantMessage,
     }}>
       {children}
     </HermesContext.Provider>
