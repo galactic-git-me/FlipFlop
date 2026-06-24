@@ -19,6 +19,7 @@ const GREETING: Omit<HermesMessage, "role"> = {
     { label: "🔧 Suggested Builds",     action: "show_builds" },
     { label: "🧩 Best Sub-components",  action: "show_components" },
     { label: "🖥 Available Cases",      action: "show_cases" },
+    { label: "✨ Best Build from Catalogue", action: "show_magic_build" },
   ],
 };
 
@@ -257,12 +258,14 @@ export function HermesCompanion() {
 
     // Navigation actions — fetch data, navigate, summarise
     const labelMap: Record<string, string> = {
-      show_super_gems:  "Show me the Super Gems",
-      show_gems:        "Show me the Gems",
-      show_playbooks:   "Show me the Playbooks",
-      show_builds:      "Show me Suggested Builds",
-      show_components:  "Show me the best sub-components",
-      show_cases:       "Show me available cases",
+      show_super_gems:    "Show me the Super Gems",
+      show_gems:          "Show me the Gems",
+      show_playbooks:     "Show me the Playbooks",
+      show_builds:        "Show me Suggested Builds",
+      show_components:    "Show me the best sub-components",
+      show_cases:         "Show me available cases",
+      show_magic_build:   "Build the best PC from the catalogue",
+      build_for_playbook: `Build from: ${qr.payload ?? "playbook"}`,
     };
     addUserMessage(labelMap[qr.action] ?? qr.label);
     setIsSending(true);
@@ -431,6 +434,129 @@ export function HermesCompanion() {
             { label: "⚡ Show Super Gems", action: "show_super_gems" },
             { label: "🖥 View Cases",      action: "show_cases" },
             { label: "🔄 Back",            action: "keep_looking" },
+          ],
+        });
+      }
+
+      else if (qr.action === "show_magic_build") {
+        // Fetch all playbooks and present them as chips for the user to pick
+        const res = await fetch(`${API_BASE}/api/build-wizard/playbooks`);
+        const playbooks = await res.json() as Array<{
+          id: number; name: string; emoji: string;
+          profit_strategy?: { target_profit_gbp?: number; target_sell_price_gbp?: number };
+          search_strategy?: { price_min?: number; price_max?: number };
+        }>;
+
+        if (!playbooks.length) {
+          addAssistantMessage({
+            content: "No playbooks found — head to the Playbooks page to set them up first.",
+            quickReplies: [{ label: "📚 Go to Playbooks", action: "show_playbooks" }],
+          });
+        } else {
+          addAssistantMessage({
+            content: "Which playbook should I build from? I'll find the best base PC and cheapest upgrade components from the catalogue for it.",
+            quickReplies: playbooks.slice(0, 8).map(p => ({
+              label: `${p.emoji} ${p.name}`,
+              action: "build_for_playbook" as const,
+              payload: p.id,
+            })),
+          });
+        }
+      }
+
+      else if (qr.action === "build_for_playbook" && qr.payload) {
+        const playbookId = Number(qr.payload);
+
+        // Fetch the selected playbook's details
+        const pbRes = await fetch(`${API_BASE}/api/build-wizard/playbooks`);
+        const allPlaybooks = await pbRes.json() as Array<{
+          id: number; name: string; emoji: string;
+          upgrade_strategy?: {
+            required?: Array<{ component: string; max_cost: number; target?: string }>;
+            optional?: Array<{ component: string; max_cost: number; target?: string }>;
+          };
+          profit_strategy?: { target_profit_gbp?: number; target_sell_price_gbp?: number };
+          search_strategy?: { price_min?: number; price_max?: number };
+        }>;
+        const pb = allPlaybooks.find(p => p.id === playbookId);
+
+        if (!pb) {
+          addAssistantMessage({ content: "Couldn't find that playbook. Try picking another.", quickReplies: [{ label: "✨ Pick again", action: "show_magic_build" }] });
+          return;
+        }
+
+        const requiredSlots = pb.upgrade_strategy?.required ?? [];
+        const catMap: Record<string, string> = {
+          GPU: "gpu", RAM: "ram", SSD: "ssd", CPU: "cpu", PSU: "psu", Motherboard: "motherboard",
+        };
+        const goodSources = ["eBay UK", "Gumtree", "Amazon"];
+
+        // Fetch best part for each required slot + cheapest base listing in parallel
+        const [partResults, baseRes] = await Promise.all([
+          Promise.all(requiredSlots.map(async (slot) => {
+            const cat = catMap[slot.component] ?? slot.component.toLowerCase();
+            const r = await fetch(`${API_BASE}/api/parts/?category=${cat}&limit=200`);
+            const parts = await r.json() as Array<{ id: number; name: string; price: number; source_site: string }>;
+            const items = Array.isArray(parts) ? parts : [];
+            const good = items
+              .filter(p => goodSources.includes(p.source_site) && (p.price ?? 0) >= 5 && (p.price ?? 0) <= (slot.max_cost ?? 9999))
+              .sort((a, b) => a.price - b.price);
+            return { slot, best: good[0] ?? null, count: good.length };
+          })),
+          fetch(`${API_BASE}/api/listings/?gem_only=true&sort_by=price&limit=10`),
+        ]);
+
+        const baseData = await baseRes.json() as Record<string, unknown>[];
+        const baseItems = (Array.isArray(baseData) ? baseData : (baseData as { items?: Record<string, unknown>[] }).items ?? []) as Array<{
+          id: number; title: string; price: number; cpu?: string; gpu?: string;
+          claude_expected_profit?: number; estimated_profit?: number; url?: string; image_urls?: string[];
+        }>;
+
+        // Find cheapest base PC within playbook price range
+        const priceMin = pb.search_strategy?.price_min ?? 0;
+        const priceMax = pb.search_strategy?.price_max ?? 9999;
+        const basePC = baseItems.find(l => l.price >= priceMin && l.price <= priceMax) ?? baseItems[0] ?? null;
+
+        // Compute totals
+        const baseCost = basePC?.price ?? 0;
+        const upgradeLines = partResults
+          .filter(r => r.best)
+          .map(r => `• **${r.slot.component}** — ${r.best!.name.slice(0, 40)} · £${r.best!.price.toFixed(0)} (${r.count} options available)`);
+        const upgradeCost = partResults.reduce((sum, r) => sum + (r.best?.price ?? 0), 0);
+        const totalIn = baseCost + upgradeCost;
+        const targetSell = pb.profit_strategy?.target_sell_price_gbp ?? (totalIn + (pb.profit_strategy?.target_profit_gbp ?? 150));
+        const estProfit = targetSell - totalIn;
+
+        const intro = basePC
+          ? `Here's the best **${pb.emoji} ${pb.name}** build I can assemble from the catalogue right now:`
+          : `No matching base PC found in the current price range (£${priceMin}–£${priceMax}). Here's the upgrade component breakdown anyway:`;
+
+        const baseSection = basePC
+          ? `\n🖥 **Base PC** — ${basePC.title.slice(0, 55)} · £${baseCost.toFixed(0)}`
+          : "";
+
+        const upgradeSection = upgradeLines.length
+          ? `\n\n🔧 **Upgrades:**\n${upgradeLines.join("\n")}`
+          : "\n\n⚠️ No catalogue parts found within the playbook budget limits.";
+
+        const plSection = `\n\n💰 **Total cost in:** £${totalIn.toFixed(0)}\n📈 **Target sell:** £${targetSell.toFixed(0)}\n✅ **Estimated profit:** +£${estProfit.toFixed(0)}`;
+
+        addAssistantMessage({
+          listingCards: basePC ? [{
+            id: basePC.id,
+            title: basePC.title,
+            price: basePC.price,
+            estimated_profit: estProfit,
+            cpu: basePC.cpu,
+            gpu: basePC.gpu,
+            url: basePC.url,
+            image_url: basePC.image_urls?.[0],
+          }] : undefined,
+          content: `${intro}${baseSection}${upgradeSection}${plSection}`,
+          quickReplies: [
+            ...(basePC ? [{ label: "⚡ Flip It", action: "flip_listing" as const, payload: basePC.id }] : []),
+            { label: "✨ Try another playbook", action: "show_magic_build" as const },
+            { label: "🔄 Back", action: "keep_looking" as const },
           ],
         });
       }
