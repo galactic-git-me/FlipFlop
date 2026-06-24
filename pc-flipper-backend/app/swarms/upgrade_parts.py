@@ -43,6 +43,7 @@ from app.services.playwright_scraper import (
 from app.services.antibot_preflight import should_defer_source_scrape
 from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.models.source_search_term import SourceSearchTerm
+from app.services.component_models import CANONICAL_MODELS
 from sqlalchemy import select as sa_select
 import structlog
 
@@ -72,19 +73,25 @@ _EBAY_HEADERS = {
 }
 
 
+_CATEGORY_TO_PART_CATEGORY = {
+    "gpu":         PartCategory.gpu,
+    "cpu":         PartCategory.cpu,
+    "ram":         PartCategory.ram,
+    "ssd":         PartCategory.ssd,
+    "psu":         PartCategory.psu,
+    "motherboard": PartCategory.motherboard,
+    "cooler":      PartCategory.cooler,
+}
+
 TRACKED_PARTS = [
-    {"name": "NVIDIA GPU",                   "category": PartCategory.gpu,         "ebay_search": "NVIDIA GPU",                  "bh_search": "nvidia+gpu"},
-    {"name": "AM4 CPU",                      "category": PartCategory.cpu,         "ebay_search": "AM4 CPU",                     "bh_search": "am4+cpu"},
-    {"name": "i7 CPU",                       "category": PartCategory.cpu,         "ebay_search": "i7 CPU",                      "bh_search": "intel+i7+cpu"},
-    {"name": "i9 CPU",                       "category": PartCategory.cpu,         "ebay_search": "i9 CPU",                      "bh_search": "intel+i9+cpu"},
-    {"name": "AM4 Motherboard",              "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard",             "bh_search": "am4+motherboard"},
-    {"name": "AM4 CPU Motherboard Combo",    "category": PartCategory.motherboard, "ebay_search": "AM4 motherboard cpu combo",   "bh_search": "am4+motherboard+cpu+combo"},
-    {"name": "DDR4 RAM",                     "category": PartCategory.ram,         "ebay_search": "DDR4 RAM",                    "bh_search": "ddr4+ram"},
-    {"name": "DDR4 RAM 32GB 2x16GB",         "category": PartCategory.ram,         "ebay_search": "DDR4 RAM 32GB 2x16GB",        "bh_search": "32gb+ddr4+kit"},
-    {"name": "NVMe 1TB",                     "category": PartCategory.ssd,         "ebay_search": "NVMe 1TB",                    "bh_search": "1tb+nvme"},
-    {"name": "PSU",                          "category": PartCategory.psu,         "ebay_search": "PSU",                         "bh_search": "atx+psu"},
-    {"name": "CPU Cooler",                   "category": PartCategory.accessory,   "ebay_search": "CPU cooler",                  "bh_search": "cpu+cooler"},
-    {"name": "RGB Fans",                     "category": PartCategory.accessory,   "ebay_search": "RGB fans",                    "bh_search": "rgb+fans"},
+    {
+        "name":        m["name"],
+        "category":    _CATEGORY_TO_PART_CATEGORY.get(cat, PartCategory.accessory),
+        "ebay_search": m["name"],
+        "bh_search":   m["bh_search"],
+    }
+    for cat, models in CANONICAL_MODELS.items()
+    for m in models
 ]
 
 _VENDOR_ALIASES: dict[str, str] = {

@@ -543,21 +543,12 @@ _FLIP_SEARCH_TERMS_EXTENDED = [
     "AM4 motherboard cpu combo", "B550 motherboard", "X570 motherboard",
     "Ryzen 5 5600", "Ryzen 7 5700X", "32GB DDR4 2x16", "1TB NVMe SSD", "650W PSU",
 ]
+from app.services.component_models import CANONICAL_MODELS as _CANONICAL_MODELS
+
 _UPGRADE_SEARCH_TERMS = [
-    # AM4 platform
-    "RTX 3060 12GB used", "RTX 3070 8GB used", "AMD Ryzen 5 5600", "AMD Ryzen 7 5700X",
-    "B550 motherboard", "X570 motherboard", "32GB DDR4 2x16 3200", "1TB NVMe M.2 SSD",
-    "650W ATX PSU 80 bronze", "AM4 motherboard cpu combo",
-    "AM4 motherboard", "AM4 CPU", "i7 CPU", "i9 CPU", "DDR4 RAM", "DDR4 RAM 32GB 2x16GB",
-    "NVMe 1TB", "PSU", "NVIDIA GPU", "CPU cooler", "RGB fans",
-    # AM5 platform — CPUs
-    "Ryzen 5 7600", "Ryzen 7 7700X", "Ryzen 7 7800X3D", "Ryzen 9 7900X", "Ryzen 9 7950X",
-    "AM5 CPU", "AM5 motherboard", "B650 motherboard", "X670 motherboard", "B650E motherboard",
-    # AM5 compatible GPUs (RX 7000 series)
-    "RX 7600 GPU", "RX 7700 XT GPU", "RX 7800 XT GPU", "RX 7900 XT GPU", "RX 7900 XTX GPU",
-    "RTX 4060 GPU", "RTX 4060 Ti GPU", "RTX 4070 GPU", "RTX 4070 Super GPU",
-    # DDR5 RAM
-    "DDR5 RAM", "32GB DDR5 kit", "DDR5 6000MHz", "DDR5 5600MHz", "64GB DDR5",
+    m["name"]
+    for models in _CANONICAL_MODELS.values()
+    for m in models
 ]
 _ACCESSORY_SEARCH_TERMS = [
     "gaming keyboard",
@@ -569,6 +560,62 @@ _ACCESSORY_SEARCH_TERMS = [
     "24 inch monitor",
     "xl mouse pad",
 ]
+
+
+async def _sync_playbook_component_catalogues(db) -> None:
+    """
+    Populate component_catalogue on every active playbook from the canonical
+    component model registry. Maps each playbook's target_use_case to a set
+    of appropriate model tiers, then writes the model name lists.
+
+    Runs every startup — idempotent, safe to re-run.
+    """
+    from app.models.playbook import Playbook
+    from app.services.component_models import catalogue_for_use_case
+
+    USE_CASE_MAP = {
+        "gaming":          "mid_gaming",
+        "office":          "office",
+        "workstation":     "content_creation",
+        "budget":          "ultra_budget",
+        "ai_workstation":  "ai_workstation",
+        "htpc":            "budget_gaming",
+    }
+
+    NAME_MAP = {
+        "ultra-budget flip":    "ultra_budget",
+        "budget gamer":         "budget_gaming",
+        "gift-from-parents pc": "mid_gaming",
+        "family pc":            "office",
+        "office station flip":  "office",
+        "student build":        "office",
+        "mid-level gamer":      "mid_gaming",
+        "high-end gamer":       "high_gaming",
+        "content creator":      "content_creation",
+        "dev workstation":      "content_creation",
+        "ai workstation":       "ai_workstation",
+    }
+
+    playbooks = (
+        await db.execute(
+            select(Playbook).where(Playbook.status == "active")
+        )
+    ).scalars().all()
+
+    updated = 0
+    for pb in playbooks:
+        use_case_key = NAME_MAP.get(pb.name.lower())
+        if not use_case_key:
+            use_case_key = USE_CASE_MAP.get(str(pb.target_use_case or ""), "mid_gaming")
+
+        catalogue = catalogue_for_use_case(use_case_key)
+        if pb.component_catalogue != catalogue:
+            pb.component_catalogue = catalogue
+            updated += 1
+
+    if updated:
+        await db.commit()
+        log.info("playbook.component_catalogue.synced", updated=updated)
 
 
 async def _seed_default_data():
@@ -750,6 +797,9 @@ async def _seed_default_data():
         _pb_created = await seed_playbooks(db)
         if _pb_created:
             log.info("seeded.playbooks", created=_pb_created)
+
+        # ── Populate playbook component_catalogue from canonical model registry ─
+        await _sync_playbook_component_catalogues(db)
 
         if False:  # dead code — kept so git diff is minimal; remove next cleanup
             from app.models.playbook import Playbook
