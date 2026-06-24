@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.part import Part, PartCategory, PartCondition
 from app.schemas.part import PartOut, PartCreate
+from app.services.part_gem_scorer import score_groups, GOOD_SOURCES
 
 router = APIRouter(prefix="/parts", tags=["parts"])
 
@@ -96,6 +97,8 @@ async def get_parts_grouped(
         if not priced:
             continue
         cheapest = min(priced, key=lambda p: p.price)
+        good_priced = [p for p in priced if p.source_site in GOOD_SOURCES]
+        cheapest_good = min(good_priced, key=lambda p: p.price) if good_priced else None
         output.append({
             "name": parts[0].name,
             "category": parts[0].category,
@@ -103,6 +106,9 @@ async def get_parts_grouped(
             "cheapest_price": cheapest.price,
             "cheapest_source": cheapest.source_site,
             "cheapest_url": cheapest.source_url,
+            "cheapest_good_price": cheapest_good.price if cheapest_good else None,
+            "cheapest_good_source": cheapest_good.source_site if cheapest_good else None,
+            "cheapest_good_url": cheapest_good.source_url if cheapest_good else None,
             "price_used": next((p.price_used for p in parts if p.price_used), None),
             "price_refurb": next((p.price_refurb for p in parts if p.price_refurb), None),
             "price_new": next((p.price_new for p in parts if p.price_new), None),
@@ -119,7 +125,18 @@ async def get_parts_grouped(
                 }
                 for p in sorted(priced, key=lambda p: p.price or 999)
             ],
+            # Gem fields — populated by scorer below
+            "gem_classification": None,
+            "gem_score": None,
         })
+
+    # Apply per-category tier-aware gem scoring
+    scores = score_groups(output)
+    for g in output:
+        key = f"{g['category']}::{g['name']}"
+        if key in scores:
+            g["gem_classification"] = scores[key]["gem_classification"]
+            g["gem_score"] = scores[key]["gem_score"]
 
     output.sort(key=lambda g: (g["category"], g["cheapest_price"] or 999))
     return output
