@@ -13,10 +13,12 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const GREETING: Omit<HermesMessage, "role"> = {
   content: "Hey! 👋 I'm Hermes — your FlipFlop co-pilot. What do you want to look at?",
   quickReplies: [
-    { label: "⚡ Super Gems", action: "show_super_gems" },
-    { label: "💎 Gems",       action: "show_gems" },
-    { label: "📚 Playbooks",  action: "show_playbooks" },
-    { label: "🔧 Suggested Builds", action: "show_builds" },
+    { label: "⚡ Super Gems",           action: "show_super_gems" },
+    { label: "💎 Gems",                 action: "show_gems" },
+    { label: "📚 Playbooks",            action: "show_playbooks" },
+    { label: "🔧 Suggested Builds",     action: "show_builds" },
+    { label: "🧩 Best Sub-components",  action: "show_components" },
+    { label: "🖥 Available Cases",      action: "show_cases" },
   ],
 };
 
@@ -391,6 +393,77 @@ export function HermesCompanion() {
             { label: "⚡ Super Gems only", action: "show_super_gems" },
             { label: "📚 View Playbooks", action: "show_playbooks" },
             { label: "🔄 Keep looking", action: "keep_looking" },
+          ],
+        });
+      }
+
+      else if (qr.action === "show_components") {
+        router.push("/parts");
+        const categories = [
+          { key: "gpu", label: "GPU", minPrice: 50 },
+          { key: "ram", label: "RAM", minPrice: 15 },
+          { key: "ssd", label: "SSD", minPrice: 15 },
+          { key: "psu", label: "PSU", minPrice: 20 },
+        ];
+        const goodSources = ["eBay UK", "Gumtree", "Amazon"];
+        const results = await Promise.all(
+          categories.map(async (cat) => {
+            const res = await fetch(`${API_BASE}/api/parts/?category=${cat.key}&limit=100`);
+            const data = await res.json() as Array<{ id: number; name: string; price: number; source_site: string; source_url?: string }>;
+            const items = Array.isArray(data) ? data : [];
+            const good = items
+              .filter(p => goodSources.includes(p.source_site) && (p.price ?? 0) >= cat.minPrice)
+              .sort((a, b) => a.price - b.price);
+            return { ...cat, count: good.length, cheapest: good[0] ?? null };
+          })
+        );
+
+        const lines = results
+          .filter(r => r.cheapest)
+          .map(r => `• **${r.label}** — ${r.count} in catalogue, cheapest at £${r.cheapest!.price.toFixed(0)} (${r.cheapest!.name.slice(0, 40)}…)`)
+          .join("\n");
+
+        addAssistantMessage({
+          content: `Here's a snapshot of the best-value upgrade components available right now from eBay UK, Gumtree, and Amazon:\n\n${lines}\n\nHead to the Parts page to browse by category, filter by price, and pick specific parts to attach to a flip.`,
+          quickReplies: [
+            { label: "⚡ Show Super Gems", action: "show_super_gems" },
+            { label: "🖥 View Cases",      action: "show_cases" },
+            { label: "🔄 Back",            action: "keep_looking" },
+          ],
+        });
+      }
+
+      else if (qr.action === "show_cases") {
+        router.push("/cases");
+        const res = await fetch(`${API_BASE}/api/parts/cases?limit=200`);
+        const data = await res.json() as Array<{ id: number; name: string; price: number; source_site: string; theme?: string; image_url?: string; source_url?: string }>;
+        const items = Array.isArray(data) ? data : [];
+        const pcThemes = new Set(["Content Creator Case","Mid-level Gamer Case","Family PC Case","RGB / Gamer Bait","Airflow / Performance Style","AI Workstation Case","Student Build Case"]);
+        const pcCases = items.filter(c => c.theme && pcThemes.has(c.theme) && (c.price ?? 0) > 10);
+
+        // Group by theme
+        const byTheme: Record<string, typeof pcCases> = {};
+        for (const c of pcCases) {
+          const t = c.theme!;
+          if (!byTheme[t]) byTheme[t] = [];
+          byTheme[t].push(c);
+        }
+
+        const summary = Object.entries(byTheme)
+          .sort((a, b) => b[1].length - a[1].length)
+          .slice(0, 6)
+          .map(([theme, cases]) => {
+            const cheapest = cases.sort((a,b) => a.price - b.price)[0];
+            return `• **${theme}** — ${cases.length} available, from £${cheapest.price.toFixed(0)}`;
+          })
+          .join("\n");
+
+        addAssistantMessage({
+          content: `Found ${pcCases.length} PC cases across ${Object.keys(byTheme).length} styles:\n\n${summary}\n\nThe Cases page has full filtering by theme, source, and price. Each case can be attached to a build when you're setting up a flip.`,
+          quickReplies: [
+            { label: "🧩 Best Sub-components", action: "show_components" },
+            { label: "⚡ Show Super Gems",     action: "show_super_gems" },
+            { label: "🔄 Back",                action: "keep_looking" },
           ],
         });
       }

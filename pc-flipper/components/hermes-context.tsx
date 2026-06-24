@@ -17,7 +17,7 @@ export interface SearchResult {
 
 export interface QuickReply {
   label: string;
-  action: "show_super_gems" | "show_gems" | "show_playbooks" | "show_builds" | "flip_listing" | "keep_looking" | "free_text";
+  action: "show_super_gems" | "show_gems" | "show_playbooks" | "show_builds" | "show_components" | "show_cases" | "flip_listing" | "keep_looking" | "free_text";
   payload?: string | number;
 }
 
