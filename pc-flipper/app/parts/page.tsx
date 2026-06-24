@@ -69,7 +69,7 @@ export default function MarketplacePage() {
 
       {/* Tab content */}
       {activeTab === "opportunities" && <FlipOpportunitiesTab />}
-      {activeTab === "components"    && <PartsTab category="components" key="components" />}
+      {activeTab === "components"    && <CatalogueTab />}
       {activeTab === "cases"         && <PartsTab category="cases"      key="cases"      />}
       {activeTab === "accessories"   && <PartsTab category="accessories" key="accessories" />}
     </div>
@@ -562,6 +562,242 @@ function ListingRow({ listing: l, onFlip, flippingId }: {
     </Card>
   );
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CANONICAL COMPONENT CATALOGUE (price tracker per model)
+// ══════════════════════════════════════════════════════════════════════════════
+
+type CatalogueModel = {
+  model: string;
+  tier: "budget" | "mid" | "high" | "ultra";
+  ebay_used: number | null;
+  bargain_hardware: number | null;
+  new_retail: number | null;
+  best_price: number | null;
+  best_source: string | null;
+  claude_verdict: "GEM" | "GOOD" | "REJECT" | null;
+  claude_reasoning: string | null;
+  has_data: boolean;
+};
+
+type CatalogueData = Record<string, CatalogueModel[]>;
+
+const CAT_TABS = [
+  { id: "gpu",         label: "GPU",         emoji: "🎮" },
+  { id: "cpu",         label: "CPU",         emoji: "⚡" },
+  { id: "ram",         label: "RAM",         emoji: "💾" },
+  { id: "ssd",         label: "SSD",         emoji: "💿" },
+  { id: "psu",         label: "PSU",         emoji: "🔌" },
+  { id: "motherboard", label: "Motherboard", emoji: "🔧" },
+  { id: "cooler",      label: "Cooler",      emoji: "❄️" },
+] as const;
+
+type CatId = typeof CAT_TABS[number]["id"];
+
+const TIER_COLORS: Record<string, string> = {
+  budget: "text-slate-400",
+  mid:    "text-blue-400",
+  high:   "text-purple-400",
+  ultra:  "text-amber-400",
+};
+
+function PriceCell({ price, isBest }: { price: number | null; isBest: boolean }) {
+  if (!price) return <span className="text-slate-600 text-xs">—</span>;
+  return (
+    <span className={`font-mono text-sm font-medium ${isBest ? "text-emerald-400" : "text-slate-300"}`}>
+      £{price.toFixed(0)}
+      {isBest && <span className="ml-1 text-[10px] text-emerald-500 font-bold">★</span>}
+    </span>
+  );
+}
+
+function CatalogueTab() {
+  const [data, setData]         = useState<CatalogueData | null>(null);
+  const [loading, setLoading]   = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<CatId>("gpu");
+  const [tierFilter, setTierFilter] = useState<string>("all");
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/parts/catalogue");
+      if (res.ok) setData(await res.json());
+    } catch { /* ignore */ } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    try {
+      await api.swarms.trigger("upgrade_parts");
+      await load();
+    } catch { /* ignore */ } finally { setRefreshing(false); }
+  };
+
+  const rows = useMemo(() => {
+    if (!data) return [];
+    const all = data[activeCategory] || [];
+    return tierFilter === "all" ? all : all.filter(m => m.tier === tierFilter);
+  }, [data, activeCategory, tierFilter]);
+
+  const dataCount = rows.filter(r => r.has_data).length;
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs text-slate-500 font-mono">
+            {loading ? "Loading…" : `${dataCount} of ${rows.length} models have live prices`}
+            {!loading && dataCount < rows.length && (
+              <span className="ml-1 text-slate-600">— refresh to fetch missing</span>
+            )}
+          </p>
+        </div>
+        <Button variant="secondary" size="sm" onClick={refresh} disabled={refreshing || loading}>
+          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
+          {refreshing ? "Fetching prices…" : "Refresh All Prices"}
+        </Button>
+      </div>
+
+      {/* Category sub-tabs */}
+      <div className="flex gap-1 overflow-x-auto pb-1">
+        {CAT_TABS.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveCategory(tab.id)}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-medium whitespace-nowrap transition-all ${
+              activeCategory === tab.id
+                ? "bg-[var(--nf-primary)]/15 text-[var(--nf-primary)] border border-[var(--nf-primary)]/30"
+                : "text-slate-500 hover:text-slate-300 border border-transparent"
+            }`}
+          >
+            <span>{tab.emoji}</span> {tab.label}
+            {data && (
+              <span className="ml-1 text-[10px] opacity-60">
+                ({(data[tab.id] || []).filter(m => m.has_data).length}/{(data[tab.id] || []).length})
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Tier filter */}
+      <div className="flex gap-2 items-center">
+        <span className="text-xs text-slate-600 font-mono">Tier:</span>
+        {["all", "budget", "mid", "high", "ultra"].map(t => (
+          <button
+            key={t}
+            onClick={() => setTierFilter(t)}
+            className={`px-2.5 py-0.5 rounded-full text-xs font-mono transition-all ${
+              tierFilter === t
+                ? "bg-slate-700 text-slate-200"
+                : "text-slate-600 hover:text-slate-400"
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Price table */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
+          <RefreshCw className="w-4 h-4 animate-spin" /> Loading catalogue…
+        </div>
+      ) : (
+        <div className="overflow-x-auto rounded-xl border border-[#1e2d45]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#1e2d45] bg-[#0a1628]">
+                <th className="text-left px-4 py-3 text-xs text-slate-500 font-mono font-medium w-[40%]">Model</th>
+                <th className="text-center px-3 py-3 text-xs text-slate-500 font-mono font-medium">Tier</th>
+                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">eBay Used</th>
+                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">BargainHW</th>
+                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">New Retail</th>
+                <th className="text-center px-3 py-3 text-xs text-slate-500 font-mono font-medium">AI</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-12 text-slate-600 font-mono text-sm">
+                    No models in this category
+                  </td>
+                </tr>
+              ) : rows.map((m, i) => {
+                const aiGem = m.claude_verdict === "GEM";
+                const aiGood = m.claude_verdict === "GOOD";
+                const aiReject = m.claude_verdict === "REJECT";
+                return (
+                  <tr
+                    key={m.model}
+                    className={`border-b border-[#1e2d45] transition-colors ${
+                      aiGem   ? "bg-emerald-950/20 hover:bg-emerald-950/30" :
+                      aiGood  ? "bg-blue-950/10 hover:bg-blue-950/20" :
+                      i % 2 === 0 ? "bg-[#080f1c] hover:bg-[#0c1526]" : "hover:bg-[#0c1526]"
+                    }`}
+                  >
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center gap-2">
+                        {aiGem && <span className="text-emerald-400 text-[10px] font-bold">💎 GEM</span>}
+                        {aiGood && <span className="text-blue-400 text-[10px] font-bold">✓</span>}
+                        <span className={`font-mono text-sm ${m.has_data ? "text-slate-200" : "text-slate-600"}`}>
+                          {m.model}
+                        </span>
+                      </div>
+                      {m.claude_reasoning && (aiGem || aiGood) && (
+                        <p className="text-[10px] text-slate-500 font-mono mt-0.5 ml-0 italic line-clamp-1">
+                          {m.claude_reasoning}
+                        </p>
+                      )}
+                    </td>
+                    <td className="px-3 py-2.5 text-center">
+                      <span className={`text-[10px] font-mono uppercase tracking-wider ${TIER_COLORS[m.tier] || "text-slate-500"}`}>
+                        {m.tier}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2.5 text-right">
+                      <PriceCell price={m.ebay_used} isBest={m.best_source === "eBay UK"} />
+                    </td>
+                    <td className="px-3 py-2.5 text-right">
+                      <PriceCell price={m.bargain_hardware} isBest={m.best_source === "BargainHardware"} />
+                    </td>
+                    <td className="px-3 py-2.5 text-right">
+                      <PriceCell price={m.new_retail} isBest={m.best_source === "New Retail"} />
+                    </td>
+                    <td className="px-3 py-2.5 text-center">
+                      {aiGem    && <span className="text-[10px] text-emerald-400 font-bold">GEM</span>}
+                      {aiGood   && <span className="text-[10px] text-blue-400">GOOD</span>}
+                      {aiReject && <span className="text-[10px] text-slate-600 line-through">REJECT</span>}
+                      {!m.claude_verdict && m.has_data && (
+                        <span className="text-[10px] text-slate-700">pending</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Legend */}
+      {!loading && (
+        <div className="flex gap-4 text-[10px] text-slate-600 font-mono">
+          <span>★ = best price for that model</span>
+          <span>💎 GEM = AI-verified deal</span>
+          <span>Prices refresh every 24h via swarm</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PARTS CATALOGUE TABS (Components / PC Cases / Accessories)
