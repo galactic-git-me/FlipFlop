@@ -497,6 +497,22 @@ If no PC components are found in the text, return an empty array: []"""
     }
 
 
+@router.get("/live-prices")
+async def get_live_prices(
+    category: str = Query(...),
+    refresh: bool = Query(False),
+):
+    """
+    Return live-scraped prices for all canonical models in a category.
+
+    Scrapes eBay BIN used listings fresh (with actual listing URLs) and
+    queries Scan/Overclockers for new retail RRP. LLM fills in missing RRP.
+    Results are cached 30 minutes per category. Pass ?refresh=true to bypass.
+    """
+    from app.services.live_prices import get_live_prices_for_category
+    return await get_live_prices_for_category(category, force_refresh=refresh)
+
+
 @router.get("/{part_id}", response_model=PartOut)
 async def get_part(part_id: int, db: AsyncSession = Depends(get_db)):
     from fastapi import HTTPException

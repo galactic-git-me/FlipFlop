@@ -564,23 +564,22 @@ function ListingRow({ listing: l, onFlip, flippingId }: {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// CANONICAL COMPONENT CATALOGUE (price tracker per model)
+// CANONICAL COMPONENT CATALOGUE (live price tracker per model)
 // ══════════════════════════════════════════════════════════════════════════════
 
-type CatalogueModel = {
+type LivePriceRow = {
   model: string;
   tier: "budget" | "mid" | "high" | "ultra";
+  rrp: number | null;
+  rrp_source: string | null;
   ebay_used: number | null;
-  bargain_hardware: number | null;
-  new_retail: number | null;
-  best_price: number | null;
-  best_source: string | null;
-  claude_verdict: "GEM" | "GOOD" | "REJECT" | null;
-  claude_reasoning: string | null;
-  has_data: boolean;
+  ebay_url: string | null;
+  ebay_title: string | null;
+  lowest_price: number | null;
+  lowest_url: string | null;
+  lowest_title: string | null;
+  lowest_source: string | null;
 };
-
-type CatalogueData = Record<string, CatalogueModel[]>;
 
 const CAT_TABS = [
   { id: "gpu",         label: "GPU",         emoji: "🎮" },
@@ -601,13 +600,39 @@ const TIER_COLORS: Record<string, string> = {
   ultra:  "text-amber-400",
 };
 
-function PriceCell({ price, isBest }: { price: number | null; isBest: boolean }) {
+function LowestPriceCell({ price, url, title, source }: {
+  price: number | null;
+  url: string | null;
+  title: string | null;
+  source: string | null;
+}) {
   if (!price) return <span className="text-slate-600 text-xs">—</span>;
   return (
-    <span className={`font-mono text-sm font-medium ${isBest ? "text-emerald-400" : "text-slate-300"}`}>
-      £{price.toFixed(0)}
-      {isBest && <span className="ml-1 text-[10px] text-emerald-500 font-bold">★</span>}
-    </span>
+    <div className="relative group inline-flex items-center justify-end">
+      {url ? (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-sm font-semibold text-emerald-400 hover:text-emerald-300 hover:underline inline-flex items-center gap-0.5"
+        >
+          £{price.toFixed(0)}
+          <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+        </a>
+      ) : (
+        <span className="font-mono text-sm font-semibold text-emerald-400">£{price.toFixed(0)}</span>
+      )}
+      {title && url && (
+        <div className="absolute right-0 bottom-full mb-2 w-72 bg-[#0c1a2e] border border-[#1e3a5a] rounded-xl p-3 shadow-2xl z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none text-left">
+          <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-3">{title}</p>
+          <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.06]">
+            <span className="text-[10px] text-slate-500 font-mono">{source}</span>
+            <span className="text-xs font-mono font-bold text-emerald-400">£{price.toFixed(0)}</span>
+          </div>
+          <p className="text-[9px] text-slate-600 mt-1">Click to open listing ↗</p>
+        </div>
+      )}
+    </div>
   );
 }
 
