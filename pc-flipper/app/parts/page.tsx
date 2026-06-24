@@ -1053,119 +1053,28 @@ function CatalogueTab() {
         ))}
       </div>
 
-      {/* Price table */}
+      {/* Card grid */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
           <RefreshCw className="w-5 h-5 animate-spin text-[var(--nf-primary)]" />
           <div className="text-center">
             <p className="text-slate-300 text-sm font-mono">Fetching live prices…</p>
             <p className="text-slate-600 text-xs mt-1 font-mono">
-              Scraping eBay BIN listings and UK retail sites
+              Querying eBay Browse API for BIN listings
             </p>
           </div>
         </div>
+      ) : rows.length === 0 ? (
+        <div className="flex items-center justify-center py-12">
+          <p className="text-slate-600 font-mono text-sm">
+            {liveRows ? "No models match this filter" : "Select a category — prices will be fetched live"}
+          </p>
+        </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#1e2d45]">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#1e2d45] bg-[#0a1628]">
-                <th className="text-left px-4 py-3 text-xs text-slate-500 font-mono font-medium">Product</th>
-                <th className="text-center px-3 py-3 text-xs text-slate-500 font-mono font-medium">Tier</th>
-                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">RRP</th>
-                <th className="text-right px-3 py-3 text-xs text-slate-500 font-mono font-medium">eBay Price</th>
-                <th className="text-right px-4 py-3 text-xs text-slate-500 font-mono font-medium">Lowest Found</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-12 text-slate-600 font-mono text-sm">
-                    {liveRows
-                      ? "No models match this filter"
-                      : "Select a category — prices will be fetched live"
-                    }
-                  </td>
-                </tr>
-              ) : rows.map((row, i) => {
-                const goodDeal = row.ebay_used && row.rrp && row.ebay_used < row.rrp * 0.65;
-                return (
-                  <tr
-                    key={row.model}
-                    className={`border-b border-[#1e2d45] transition-colors ${
-                      goodDeal
-                        ? "bg-emerald-950/15 hover:bg-emerald-950/25"
-                        : i % 2 === 0 ? "bg-[#080f1c] hover:bg-[#0c1526]" : "hover:bg-[#0c1526]"
-                    }`}
-                  >
-                    {/* Product */}
-                    <td className="px-4 py-2.5">
-                      <span className={`font-mono text-sm ${row.ebay_used ? "text-slate-200" : "text-slate-500"}`}>
-                        {row.model}
-                      </span>
-                    </td>
-
-                    {/* Tier */}
-                    <td className="px-3 py-2.5 text-center">
-                      <span className={`text-[10px] font-mono uppercase tracking-wider ${TIER_COLORS[row.tier] || "text-slate-500"}`}>
-                        {row.tier}
-                      </span>
-                    </td>
-
-                    {/* RRP */}
-                    <td className="px-3 py-2.5 text-right">
-                      {row.rrp ? (
-                        <div className="inline-flex items-baseline gap-1">
-                          <span className="font-mono text-sm text-slate-400">£{row.rrp.toFixed(0)}</span>
-                          {row.rrp_source && (
-                            <span className="text-[9px] text-slate-600 font-mono">{row.rrp_source}</span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-slate-600 text-xs">—</span>
-                      )}
-                    </td>
-
-                    {/* eBay Price */}
-                    <td className="px-3 py-2.5 text-right">
-                      {row.ebay_used ? (
-                        <div className="inline-flex flex-col items-end gap-0.5">
-                          {row.ebay_url ? (
-                            <a
-                              href={row.ebay_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-mono text-sm text-slate-300 hover:text-slate-100 hover:underline"
-                            >
-                              £{row.ebay_used.toFixed(0)}
-                            </a>
-                          ) : (
-                            <span className="font-mono text-sm text-slate-300">£{row.ebay_used.toFixed(0)}</span>
-                          )}
-                          {row.rrp && (
-                            <span className="text-[9px] text-slate-600 font-mono">
-                              {Math.round((1 - row.ebay_used / row.rrp) * 100)}% off RRP
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-slate-600 text-xs">—</span>
-                      )}
-                    </td>
-
-                    {/* Lowest Found */}
-                    <td className="px-4 py-2.5 text-right">
-                      <LowestPriceCell
-                        price={row.lowest_price}
-                        url={row.lowest_url}
-                        title={row.lowest_title}
-                        source={row.lowest_source}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {rows.map(row => (
+            <LiveComponentCard key={row.model} row={row} />
+          ))}
         </div>
       )}
 
