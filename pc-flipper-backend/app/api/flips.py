@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from app.database import get_db
 from app.models.flip import Flip, FlipStage
 from app.models.listing import Listing, ListingStatus, Classification
@@ -23,7 +24,9 @@ log = structlog.get_logger(__name__)
 @router.get("/", response_model=list[FlipOut])
 @router.get("", response_model=list[FlipOut], include_in_schema=False)
 async def get_flips(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Flip).order_by(Flip.created_at.desc()))
+    result = await db.execute(
+        select(Flip).options(selectinload(Flip.listing)).order_by(Flip.created_at.desc())
+    )
     return result.scalars().all()
 
 
@@ -57,13 +60,19 @@ async def create_flip(body: FlipCreate, db: AsyncSession = Depends(get_db)):
     )
     db.add(flip)
     await db.flush()
-    await db.refresh(flip)
-    return flip
+    await db.commit()
+    result = await db.execute(
+        select(Flip).where(Flip.id == flip.id).options(selectinload(Flip.listing))
+    )
+    return result.scalar_one()
 
 
 @router.get("/{flip_id}", response_model=FlipOut)
 async def get_flip(flip_id: int, db: AsyncSession = Depends(get_db)):
-    flip = await db.get(Flip, flip_id)
+    result = await db.execute(
+        select(Flip).where(Flip.id == flip_id).options(selectinload(Flip.listing))
+    )
+    flip = result.scalar_one_or_none()
     if not flip:
         raise HTTPException(404, "Flip not found")
     return flip
