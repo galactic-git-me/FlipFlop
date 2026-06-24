@@ -12,7 +12,7 @@ import { formatCurrency } from "@/lib/utils";
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   const params = new URLSearchParams(
     superOnly
-      ? { claude_verdict: "GEM", sort_by: "gem_score", sort_desc: "true", limit: "60", whole_pc_only: "true", min_price: "50" }
+      ? { claude_verdict: "GEM", sort_by: "gem_score", sort_desc: "true", limit: "60" }
       : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50" }
   );
   const res = await fetch(`${API_BASE_URL}/listings/?${params}`);

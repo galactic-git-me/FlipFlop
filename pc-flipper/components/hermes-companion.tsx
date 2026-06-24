@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useHermes, HermesMessage, ListingCard, QuickReply } from "@/components/hermes-context";
 import { streamCompanion } from "@/lib/api";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const GREETING: Omit<HermesMessage, "role"> = {
   content: "Hey! 👋 I'm Hermes — your FlipFlop co-pilot. What do you want to look at?",
@@ -610,7 +610,7 @@ export function HermesCompanion() {
       {/* ── Chat panel ─────────────────────────────────────────────────────── */}
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 flex flex-col bg-[#12151f] border border-[#2a2d3e] rounded-2xl shadow-2xl shadow-black/70 overflow-hidden"
-          style={{ width: "min(860px, calc(100vw - 3rem))", height: "calc(100vh - 5rem)" }}>
+          style={{ width: "min(430px, calc(100vw - 3rem))", height: "calc(50vh - 2.5rem)" }}>
 
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 bg-[#1a1d2e] border-b border-[#2a2d3e] flex-shrink-0">
