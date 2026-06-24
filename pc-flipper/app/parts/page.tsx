@@ -639,14 +639,14 @@ function PartsTab({ category }: { category: PartsTabCategory }) {
   };
 
   const gemCounts = useMemo(() => ({
-    gem: parts.filter(p => p.gem_classification === "gem" || p.gem_classification === "super_gem").length,
-    super_gem: parts.filter(p => p.gem_classification === "super_gem").length,
+    gem: parts.filter(p => (p.gem_classification === "gem" || p.gem_classification === "super_gem") && p.claude_verdict !== "REJECT").length,
+    super_gem: parts.filter(p => p.gem_classification === "super_gem" && p.claude_verdict !== "REJECT").length,
   }), [parts]);
 
   const filtered = useMemo(() => {
     let result = parts;
-    if (gemFilter === "super_gem") result = result.filter(p => p.gem_classification === "super_gem");
-    else if (gemFilter === "gem") result = result.filter(p => p.gem_classification === "gem" || p.gem_classification === "super_gem");
+    if (gemFilter === "super_gem") result = result.filter(p => p.gem_classification === "super_gem" && p.claude_verdict !== "REJECT");
+    else if (gemFilter === "gem") result = result.filter(p => (p.gem_classification === "gem" || p.gem_classification === "super_gem") && p.claude_verdict !== "REJECT");
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(p => p.name.toLowerCase().includes(q));
@@ -738,11 +738,15 @@ function PartCard({ part }: { part: GroupedPart }) {
   const bestPrice = part.cheapest_good_price ?? part.cheapest_price ?? 0;
   const isSuperGem = part.gem_classification === "super_gem";
   const isGem = part.gem_classification === "gem" || isSuperGem;
+  const aiVerified = part.claude_verdict === "GEM" || part.claude_verdict === "GOOD";
+  const aiRejected = part.claude_verdict === "REJECT";
+  // Only show gem badge if rule-based AND not AI-rejected
+  const showGemBadge = isGem && !aiRejected;
 
   return (
     <div className={`flex flex-col rounded-xl glass-card hover:border-[var(--nf-border-strong)] transition-colors overflow-hidden ${
-      isSuperGem ? "border-cyan-400/30 shadow-[0_2px_16px_rgba(34,211,238,0.08)]" :
-      isGem ? "border-emerald-400/20 shadow-[0_2px_16px_rgba(52,211,153,0.06)]" : ""
+      showGemBadge && isSuperGem ? "border-cyan-400/30 shadow-[0_2px_16px_rgba(34,211,238,0.08)]" :
+      showGemBadge ? "border-emerald-400/20 shadow-[0_2px_16px_rgba(52,211,153,0.06)]" : ""
     }`}>
       {/* Image */}
       <div className="w-full h-36 bg-[#070d14] border-b border-[#1e2d45] flex items-center justify-center overflow-hidden relative">
@@ -752,7 +756,7 @@ function PartCard({ part }: { part: GroupedPart }) {
           <Package className="w-10 h-10 text-slate-700" />
         )}
         {/* Gem badge overlay */}
-        {isGem && (
+        {showGemBadge && (
           <div className={`absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md backdrop-blur-sm border text-[9px] font-bold uppercase tracking-wider ${
             isSuperGem
               ? "bg-cyan-400/20 border-cyan-400/40 text-cyan-200"
@@ -762,8 +766,20 @@ function PartCard({ part }: { part: GroupedPart }) {
             {isSuperGem ? "Super Gem" : "Gem"}
           </div>
         )}
+        {/* Pending AI badge for rule-based gems not yet evaluated */}
+        {isGem && !aiVerified && !aiRejected && (
+          <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-slate-700/60 border border-slate-500/30 text-[8px] text-slate-400 uppercase tracking-wide">
+            ⏳ AI pending
+          </div>
+        )}
+        {/* AI verified badge */}
+        {showGemBadge && aiVerified && (
+          <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-violet-500/20 border border-violet-400/40 text-[8px] text-violet-300 uppercase tracking-wide">
+            ✓ AI verified
+          </div>
+        )}
         {/* Discount score */}
-        {isGem && part.gem_score != null && (
+        {showGemBadge && part.gem_score != null && (
           <div className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-black ${
             isSuperGem ? "bg-cyan-400/15 text-cyan-300" : "bg-emerald-400/15 text-emerald-300"
           }`}>
@@ -823,6 +839,13 @@ function PartCard({ part }: { part: GroupedPart }) {
               )
             )}
           </div>
+        )}
+
+        {/* AI reasoning */}
+        {part.claude_reasoning && showGemBadge && (
+          <p className="text-[9px] text-slate-500 italic line-clamp-2 border-t border-white/[0.04] pt-1.5">
+            {part.claude_reasoning}
+          </p>
         )}
 
         {/* Footer */}

@@ -37,6 +37,7 @@ from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
 from app.services.listing_ingest_queue import start_workers, stop_workers as stop_ingest_workers
 from app.services.claude_eval_queue import start_eval_workers, stop_eval_workers
+from app.services.part_gem_eval_queue import start_part_eval_workers, stop_part_eval_workers
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -311,7 +312,8 @@ async def lifespan(app: FastAPI):
     # Run preflight asynchronously so API stays responsive while challenge tabs open.
     asyncio.create_task(run_antibot_preflight())
     start_workers(n=4)
-    start_eval_workers()  # worker count set in claude_eval_queue._NUM_WORKERS
+    start_eval_workers()       # worker count set in claude_eval_queue._NUM_WORKERS
+    start_part_eval_workers()  # AI verification for parts catalogue gems
     start_scheduler()
     asyncio.create_task(run_startup_bootstrap())
     asyncio.create_task(_queue_unevaluated_gems())  # auto-queue gems on startup
@@ -321,6 +323,7 @@ async def lifespan(app: FastAPI):
     stop_scheduler()
     await stop_ingest_workers()
     await stop_eval_workers()
+    await stop_part_eval_workers()
     await engine.dispose()
     log.info("app.shutdown")
 
@@ -502,6 +505,11 @@ async def _migrate_add_columns():
         ("listings", "claude_main_risk",          "TEXT"),
         ("listings", "claude_judged_at",          "DATETIME"),
         ("listings", "spec_fingerprint",           "VARCHAR(255)"),
+        # AI gem verification for parts catalogue
+        ("parts", "claude_verdict",    "VARCHAR(10)"),
+        ("parts", "claude_reasoning",  "TEXT"),
+        ("parts", "claude_confidence", "FLOAT"),
+        ("parts", "claude_judged_at",  "DATETIME"),
     ]
     async with engine.begin() as conn:
         for table, col, col_type in new_cols:

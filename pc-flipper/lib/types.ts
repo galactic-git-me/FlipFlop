@@ -111,6 +111,9 @@ export interface GroupedPart {
   }[];
   gem_classification: "super_gem" | "gem" | null;
   gem_score: number | null;
+  // AI verification (populated asynchronously after rule-based scoring)
+  claude_verdict: "GEM" | "GOOD" | "REJECT" | null;
+  claude_reasoning: string | null;
 }
 
 export interface Flip {

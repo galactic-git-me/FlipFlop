@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models.part import Part, PartCategory, PartCondition
 from app.schemas.part import PartOut, PartCreate
 from app.services.part_gem_scorer import score_groups, GOOD_SOURCES
+from app.services.part_gem_eval_queue import enqueue_part_for_claude
 
 router = APIRouter(prefix="/parts", tags=["parts"])
 
@@ -99,6 +100,10 @@ async def get_parts_grouped(
         cheapest = min(priced, key=lambda p: p.price)
         good_priced = [p for p in priced if p.source_site in GOOD_SOURCES]
         cheapest_good = min(good_priced, key=lambda p: p.price) if good_priced else None
+        # Merge stored AI verdict from any judged part in the group
+        claude_verdict   = next((p.claude_verdict   for p in parts if p.claude_verdict   is not None), None)
+        claude_reasoning = next((p.claude_reasoning for p in parts if p.claude_reasoning is not None), None)
+        claude_judged    = any(p.claude_judged_at is not None for p in parts)
         output.append({
             "name": parts[0].name,
             "category": parts[0].category,
@@ -125,9 +130,12 @@ async def get_parts_grouped(
                 }
                 for p in sorted(priced, key=lambda p: p.price or 999)
             ],
-            # Gem fields — populated by scorer below
+            # Gem fields — populated by scorer below; AI fields from stored verdicts
             "gem_classification": None,
             "gem_score": None,
+            "claude_verdict":   claude_verdict,
+            "claude_reasoning": claude_reasoning,
+            "_claude_judged":   claude_judged,   # internal flag for enqueue logic
         })
 
     # Apply per-category tier-aware gem scoring
@@ -137,6 +145,15 @@ async def get_parts_grouped(
         if key in scores:
             g["gem_classification"] = scores[key]["gem_classification"]
             g["gem_score"] = scores[key]["gem_score"]
+
+    # Enqueue rule-based gem candidates that haven't been AI-evaluated yet
+    for g in output:
+        if g["gem_classification"] is not None and not g["_claude_judged"]:
+            enqueue_part_for_claude(g["name"], str(g["category"]))
+
+    # Strip internal flag before serialising
+    for g in output:
+        g.pop("_claude_judged", None)
 
     output.sort(key=lambda g: (g["category"], g["cheapest_price"] or 999))
     return output
