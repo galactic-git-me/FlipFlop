@@ -159,6 +159,81 @@ async def get_parts_grouped(
     return output
 
 
+@router.get("/catalogue")
+async def get_parts_catalogue(db: AsyncSession = Depends(get_db)):
+    """
+    Return the canonical component model price matrix.
+
+    Response shape:
+    {
+      "gpu": [
+        {
+          "model": "RTX 3060 12GB",
+          "tier": "budget",
+          "ebay_used": 82.0,
+          "bargain_hardware": 99.0,
+          "new_retail": 230.0,
+          "best_price": 82.0,
+          "best_source": "eBay UK",
+          "claude_verdict": "GEM",
+          "claude_reasoning": "..."
+        },
+        ...
+      ],
+      "cpu": [...],
+      ...
+    }
+    """
+    from app.services.component_models import CANONICAL_MODELS, model_tier
+
+    all_model_names = [m["name"] for models in CANONICAL_MODELS.values() for m in models]
+
+    result = await db.execute(
+        select(Part).where(
+            Part.name.in_(all_model_names),
+            Part.is_active == True,
+        )
+    )
+    parts_by_name: dict[str, Part] = {p.name: p for p in result.scalars().all()}
+
+    catalogue: dict[str, list[dict]] = {}
+    for cat, models in CANONICAL_MODELS.items():
+        entries = []
+        for m in models:
+            p = parts_by_name.get(m["name"])
+            ebay_used      = p.price_used    if p else None
+            bh_refurb      = p.price_refurb  if p else None
+            new_retail     = p.price_new     if p else None
+            claude_verdict  = p.claude_verdict   if p else None
+            claude_reasoning = p.claude_reasoning if p else None
+
+            candidates = [x for x in [ebay_used, bh_refurb, new_retail] if x]
+            best_price = min(candidates) if candidates else None
+            if best_price == ebay_used:
+                best_source = "eBay UK"
+            elif best_price == bh_refurb:
+                best_source = "BargainHardware"
+            elif best_price == new_retail:
+                best_source = "New Retail"
+            else:
+                best_source = None
+
+            entries.append({
+                "model":            m["name"],
+                "tier":             m["tier"],
+                "ebay_used":        ebay_used,
+                "bargain_hardware": bh_refurb,
+                "new_retail":       new_retail,
+                "best_price":       best_price,
+                "best_source":      best_source,
+                "claude_verdict":   claude_verdict,
+                "claude_reasoning": claude_reasoning,
+                "has_data":         p is not None,
+            })
+        catalogue[cat] = entries
+    return catalogue
+
+
 @router.get("/{part_id}", response_model=PartOut)
 async def get_part(part_id: int, db: AsyncSession = Depends(get_db)):
     from fastapi import HTTPException

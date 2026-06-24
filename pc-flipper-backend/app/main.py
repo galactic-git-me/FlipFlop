@@ -1055,22 +1055,48 @@ async def _seed_default_data():
                 )
             db.add_all(rows)
             log.info("seeded.source_search_terms", scope="flip_opportunities", count=len(rows))
-        upgrade_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "upgrade_parts"))
-        if upgrade_terms_count == 0:
-            rows = [
+        # Sync upgrade_parts search terms to the canonical model list.
+        # Removes old broad terms (e.g. "DDR4 RAM") and ensures all canonical
+        # model names are present, one SourceSearchTerm row per model.
+        existing_upgrade_terms = {
+            str(t).strip().lower()
+            for t in (
+                await db.execute(
+                    select(SourceSearchTerm.term).where(SourceSearchTerm.scope == "upgrade_parts")
+                )
+            ).scalars().all()
+            if str(t).strip()
+        }
+        canonical_lower = {t.lower() for t in _UPGRADE_SEARCH_TERMS}
+        # Remove stale broad terms that are no longer in the canonical list
+        stale = (
+            await db.execute(
+                select(SourceSearchTerm).where(
+                    SourceSearchTerm.scope == "upgrade_parts",
+                    ~SourceSearchTerm.term.in_(_UPGRADE_SEARCH_TERMS),
+                )
+            )
+        ).scalars().all()
+        for row in stale:
+            await db.delete(row)
+        if stale:
+            log.info("upgrade_terms.removed_stale", count=len(stale))
+        # Add missing canonical model terms
+        missing = [t for t in _UPGRADE_SEARCH_TERMS if t.lower() not in existing_upgrade_terms]
+        if missing:
+            db.add_all([
                 SourceSearchTerm(
                     scope="upgrade_parts",
-                    group_name="Upgrade Components",
+                    group_name="Canonical Components",
                     term=term,
-                    source_names=["eBay", "Gumtree", "BargainHardware", "Amazon", "Temu", "AliExpress", "Alibaba"],
+                    source_names=["eBay UK", "BargainHardware", "Amazon", "Scan", "Overclockers", "Box"],
                     attributes={},
-                    notes="seeded_upgrade_terms",
+                    notes="canonical_model",
                     enabled=True,
                 )
-                for term in _UPGRADE_SEARCH_TERMS
-            ]
-            db.add_all(rows)
-            log.info("seeded.source_search_terms", scope="upgrade_parts", count=len(rows))
+                for term in missing
+            ])
+            log.info("upgrade_terms.added_canonical", count=len(missing))
         # Ensure accessory scope cannot silently disappear from DB.
         existing_accessory_terms = {
             str(t).strip().lower()
