@@ -55,5 +55,11 @@ class Part(Base):
     last_price_update: Mapped[datetime | None] = mapped_column(DateTime)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+    # AI gem verification (populated asynchronously after rule-based scoring)
+    claude_verdict:    Mapped[str | None]      = mapped_column(String(10))   # GEM | GOOD | REJECT
+    claude_reasoning:  Mapped[str | None]      = mapped_column(Text)
+    claude_confidence: Mapped[float | None]    = mapped_column(Float)
+    claude_judged_at:  Mapped[datetime | None] = mapped_column(DateTime)
+
     def __repr__(self):
         return f"<Part {self.id} {self.name!r} {self.condition} £{self.price}>"
