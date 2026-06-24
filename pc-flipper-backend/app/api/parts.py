@@ -106,7 +106,7 @@ async def get_parts_grouped(
         claude_judged    = any(p.claude_judged_at is not None for p in parts)
         output.append({
             "name": parts[0].name,
-            "category": parts[0].category,
+            "category": parts[0].category.value,
             "image_url": next((p.image_url for p in parts if p.image_url), None),
             "cheapest_price": cheapest.price,
             "cheapest_source": cheapest.source_site,

@@ -31,8 +31,44 @@ CATEGORY_BOUNDS: dict[str, tuple[float, float]] = {
     "motherboard": (15,   600),
     "case":        (15,   400),
     "cooler":      (5,    200),
-    "accessory":   (5,    200),
 }
+
+# Categories excluded from gem scoring — too heterogeneous to score meaningfully.
+SKIP_CATEGORIES: frozenset[str] = frozenset({"accessory"})
+
+# Name-based blocklist per category (case-insensitive substring match).
+# Catches scraper misclassifications — e.g., USB drives in RAM, brackets in CPU.
+NAME_BLOCKLIST: dict[str, list[str]] = {
+    "ram": [
+        "usb", "flash drive", "memory stick", "pen drive", "pendrive",
+        "thumb drive", "sd card", "micro sd", "compact flash",
+    ],
+    "cpu": [
+        "bracket", "backplate", "retention", "box only", "box-only",
+        "empty box", "oem box", "retail box", "cooler only", "heatsink only",
+        "fan only", "thermal paste",
+    ],
+    "gpu": [
+        "laptop", "notebook", "mobile gpu", " mxm ", "bundle",
+    ],
+    "motherboard": [
+        "bracket", "backplate", "i/o shield", "io shield",
+        "retention bracket", "heatsink only", "vrm heatsink",
+    ],
+    "ssd": [
+        "ide ", " ide", "2.5\" ide", "pata",
+    ],
+    "psu": [
+        "box only", "box-only", "empty box", "cable only", "cables only",
+    ],
+}
+
+
+def _is_junk_name(name: str, category: str) -> bool:
+    """Return True if the item name contains a blocklisted substring for its category."""
+    blocklist = NAME_BLOCKLIST.get(category, [])
+    name_lower = name.lower()
+    return any(kw in name_lower for kw in blocklist)
 
 GEM_THRESHOLD       = 20.0   # % below tier median → gem
 SUPER_GEM_THRESHOLD = 35.0   # % below tier median → super gem
@@ -57,14 +93,19 @@ def score_groups(groups: list[dict]) -> dict[str, dict]:
     by_category: dict[str, list[tuple[str, float]]] = defaultdict(list)
     for g in groups:
         cat = g.get("category", "")
+        if cat in SKIP_CATEGORIES:
+            continue
         price = g.get("cheapest_good_price")
         if price is None:
             continue
-        lo, hi = CATEGORY_BOUNDS.get(str(cat), (0, 9_999_999))
+        lo, hi = CATEGORY_BOUNDS.get(cat, (0, 9_999_999))
         if not (lo <= price <= hi):
             continue
-        key = f"{cat}::{g['name']}"
-        by_category[str(cat)].append((key, price))
+        name = g.get("name", "")
+        if _is_junk_name(name, cat):
+            continue
+        key = f"{cat}::{name}"
+        by_category[cat].append((key, price))
 
     results: dict[str, dict] = {}
 

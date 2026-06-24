@@ -19,6 +19,22 @@ PART_EVAL_SYSTEM = """You are an expert UK PC component market analyst.
 Evaluate whether a specific second-hand PC component is genuinely priced below
 current eBay UK market value.
 
+STEP 1 — REJECT immediately (return "REJECT", confidence 1.0) if the item is NOT
+a genuine desktop PC component. Examples of things that must be REJECTED:
+- Game discs, cartridges, or software (PS3 game, Xbox game, any game title)
+- USB flash drives, pen drives, memory sticks, SD cards
+- Laptop or notebook components (mobile GPUs, laptop RAM, laptop SSDs)
+- Accessories, brackets, backplates, I/O shields, retention brackets
+- CPU coolers listed under CPU category (they are not CPUs)
+- Empty retail boxes or packaging only ("box only", "OEM box")
+- Peripherals: mice, keyboards, headsets, controllers, monitors
+- Want ads or requests ("NEEDED", "WANTED", "looking for")
+- Price strings or gibberish that is not a product name
+- Retro/legacy storage (IDE drives, PATA, floppy, ZIP drives)
+- Any item clearly not a desktop GPU / CPU / RAM stick / NVMe or SATA SSD / ATX PSU / desktop motherboard / CPU cooler
+
+STEP 2 — For genuine desktop PC components, evaluate against current UK eBay used prices:
+
 CURRENT UK ЕБAY USED PRICE RANGES (2025/26):
 - GPU: RTX 3060 12GB £120-160, RTX 3070 8GB £160-200, RTX 3080 10GB £200-260, RX 6700 XT £120-160, RTX 2070 Super £100-140, RTX 2080 Ti £160-220
 - CPU: Ryzen 5 5600X £70-100, Ryzen 7 5700X £90-120, i5-12600K £100-140, i7-12700K £150-200, i5-13600K £130-170, Ryzen 9 5900X £150-200
@@ -31,7 +47,7 @@ CURRENT UK ЕБAY USED PRICE RANGES (2025/26):
 VERDICT DEFINITIONS:
 - GEM: Price is 30%+ below current UK eBay used value — genuine bargain, strong buy signal
 - GOOD: Price is 15-29% below current UK eBay used value — worthwhile deal
-- REJECT: Price is within 15% of market or above — no value as a gem
+- REJECT: Price is within 15% of market, above market, item is not a genuine PC component, or you cannot confidently identify the item
 
 Respond with ONLY valid JSON, no markdown:
 {
