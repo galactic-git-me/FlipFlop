@@ -12,15 +12,12 @@ import { formatCurrency } from "@/lib/utils";
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   const params = new URLSearchParams(
     superOnly
-      ? { claude_verdict: "GEM", sort_by: "gem_score", sort_desc: "true", limit: "60" }
+      ? { claude_verdict: "GEM", classification: "gem", sort_by: "gem_score", sort_desc: "true", limit: "60" }
       : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50" }
   );
   const res = await fetch(`${API_BASE_URL}/listings/?${params}`);
   const data = await res.json();
-  const items: Listing[] = Array.isArray(data) ? data : (data.items ?? []);
-  return superOnly
-    ? items.filter(l => l.classification === "gem" || l.classification === "amazing_gem")
-    : items;
+  return Array.isArray(data) ? data : (data.items ?? []);
 }
 
 // ── Modal shell ───────────────────────────────────────────────────────────────

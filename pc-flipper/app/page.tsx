@@ -137,7 +137,7 @@ export default function DashboardPage() {
       const past24hISO = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
       const past7dISO  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
 
-      const totalCalls = 11;
+      const totalCalls = 12;
       let doneCalls = 0;
       const step = async <T,>(p: Promise<T>, timeoutMs: number): Promise<T> => {
         try {
@@ -187,6 +187,11 @@ export default function DashboardPage() {
         step(api.playbooks.list("active").catch(() => [] as Playbook[]), 12000),
         step(api.demand.summary().catch(() => null), 12000),
         step(api.demand.auctionIntel(15).catch(() => [] as AuctionIntelItem[]), 12000),
+        // Real super-gem count: must be AI-confirmed AND rule-based gem classification
+        step(fetch("/api/listings/?claude_verdict=GEM&classification=gem&limit=100")
+          .then(r => r.json())
+          .then((d: unknown) => { const arr = Array.isArray(d) ? d : (d as { items?: unknown[] }).items ?? []; return arr.length; })
+          .catch(() => 0), 8000),
       ]);
 
       const getValue = <T,>(idx: number, fallback: T): T => {
@@ -205,9 +210,10 @@ export default function DashboardPage() {
       const pbs = getValue<Playbook[]>(8, []);
       const demand = getValue<DemandSummary | null>(9, null);
       const auctions = getValue<AuctionIntelItem[]>(10, []);
+      const realSuperGemsCount = getValue<number>(11, s.super_gems_count);
 
       setListings(l);
-      setStats(s);
+      setStats({ ...s, super_gems_count: realSuperGemsCount });
       setSwarms(sw);
       setFlips(fl);
       setSearchConfig(cfg);

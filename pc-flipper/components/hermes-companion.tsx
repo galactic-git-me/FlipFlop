@@ -273,10 +273,9 @@ export function HermesCompanion() {
     try {
       if (qr.action === "show_super_gems") {
         router.push("/super-gems");
-        const res = await fetch(`${API_BASE}/api/listings/?claude_verdict=GEM&limit=6&sort_by=gem_score`);
+        const res = await fetch(`${API_BASE}/api/listings/?claude_verdict=GEM&classification=gem&limit=6&sort_by=gem_score`);
         const data = await res.json() as Record<string, unknown>[];
-        const allItems = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
-        const items = (allItems as Array<{ classification?: string }>).filter(l => l.classification === "gem" || l.classification === "amazing_gem");
+        const items = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
         const cards: ListingCard[] = (items as Array<{
           id: number; title: string; price: number;
           claude_expected_profit?: number; estimated_profit?: number;

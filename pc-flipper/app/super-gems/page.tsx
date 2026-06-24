@@ -23,14 +23,14 @@ export default function SuperGemsPage() {
   useEffect(() => {
     const params = new URLSearchParams({
       claude_verdict: "GEM",
+      classification: "gem",
       sort_by: "gem_score",
       limit: "100",
     });
     fetch(`${API_BASE}/api/listings/?${params}`)
       .then((r) => r.json())
       .then((data) => {
-        const all: Listing[] = Array.isArray(data) ? data : data.items ?? [];
-        setListings(all.filter(l => l.classification === "gem" || l.classification === "amazing_gem"));
+        setListings(Array.isArray(data) ? data : data.items ?? []);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
