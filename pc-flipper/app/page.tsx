@@ -137,7 +137,7 @@ export default function DashboardPage() {
       const past24hISO = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
       const past7dISO  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
 
-      const totalCalls = 12;
+      const totalCalls = 13;
       let doneCalls = 0;
       const step = async <T,>(p: Promise<T>, timeoutMs: number): Promise<T> => {
         try {
@@ -192,6 +192,16 @@ export default function DashboardPage() {
           .then(r => r.json())
           .then((d: unknown) => { const arr = Array.isArray(d) ? d : (d as { items?: unknown[] }).items ?? []; return arr.length; })
           .catch(() => 0), 8000),
+        // Component gems: count from grouped parts endpoint
+        step(fetch("/api/parts/grouped")
+          .then(r => r.json())
+          .then((d: unknown) => {
+            const arr = Array.isArray(d) ? d as { gem_classification: string | null; claude_verdict: string | null }[] : [];
+            const gems = arr.filter(p => p.gem_classification !== null && p.claude_verdict !== "REJECT").length;
+            const superGems = arr.filter(p => (p.gem_classification === "super_gem" || p.claude_verdict === "GEM") && p.claude_verdict !== "REJECT").length;
+            return { gems, superGems };
+          })
+          .catch(() => ({ gems: 0, superGems: 0 })), 8000),
       ]);
 
       const getValue = <T,>(idx: number, fallback: T): T => {
@@ -211,9 +221,14 @@ export default function DashboardPage() {
       const demand = getValue<DemandSummary | null>(9, null);
       const auctions = getValue<AuctionIntelItem[]>(10, []);
       const realSuperGemsCount = getValue<number>(11, s.super_gems_count);
+      const componentGems = getValue<{ gems: number; superGems: number }>(12, { gems: 0, superGems: 0 });
 
       setListings(l);
-      setStats({ ...s, super_gems_count: realSuperGemsCount });
+      setStats({
+        ...s,
+        gems_count: s.gems_count + componentGems.gems,
+        super_gems_count: realSuperGemsCount + componentGems.superGems,
+      });
       setSwarms(sw);
       setFlips(fl);
       setSearchConfig(cfg);

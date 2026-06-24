@@ -3,10 +3,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { X, Zap, ExternalLink, TrendingUp, Cpu, HardDrive, MemoryStick, RefreshCw } from "lucide-react";
-import { Listing } from "@/lib/types";
+import { X, Zap, ExternalLink, TrendingUp, Cpu, HardDrive, MemoryStick, RefreshCw, Package } from "lucide-react";
+import { Listing, GroupedPart } from "@/lib/types";
 import { api, API_BASE_URL } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
+
+type ModalTab = "flip_opportunities" | "components";
 
 // ── Fetch gems ────────────────────────────────────────────────────────────────
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
@@ -20,6 +22,18 @@ async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   return Array.isArray(data) ? data : (data.items ?? []);
 }
 
+async function fetchComponentGems(): Promise<GroupedPart[]> {
+  const res = await fetch(`${API_BASE_URL}/parts/grouped`);
+  const data: GroupedPart[] = await res.json();
+  return (Array.isArray(data) ? data : [])
+    .filter(p => p.gem_classification !== null && p.claude_verdict !== "REJECT")
+    .sort((a, b) => {
+      if (a.gem_classification === "super_gem" && b.gem_classification !== "super_gem") return -1;
+      if (b.gem_classification === "super_gem" && a.gem_classification !== "super_gem") return 1;
+      return (b.gem_score ?? 0) - (a.gem_score ?? 0);
+    });
+}
+
 // ── Modal shell ───────────────────────────────────────────────────────────────
 export function SuperGemsModal({
   open,
@@ -31,8 +45,11 @@ export function SuperGemsModal({
   superOnly?: boolean;
 }) {
   const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<ModalTab>("flip_opportunities");
   const [listings, setListings] = useState<Listing[]>([]);
+  const [componentGems, setComponentGems] = useState<GroupedPart[]>([]);
   const [loading, setLoading] = useState(false);
+  const [componentsLoading, setComponentsLoading] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -47,9 +64,25 @@ export function SuperGemsModal({
     }
   }, [superOnly]);
 
+  const loadComponents = useCallback(async () => {
+    if (componentGems.length > 0) return;
+    setComponentsLoading(true);
+    try {
+      setComponentGems(await fetchComponentGems());
+    } catch {
+      setComponentGems([]);
+    } finally {
+      setComponentsLoading(false);
+    }
+  }, [componentGems.length]);
+
   useEffect(() => {
     if (open) void load();
   }, [open, load]);
+
+  useEffect(() => {
+    if (open && activeTab === "components") void loadComponents();
+  }, [open, activeTab, loadComponents]);
 
   // Close on Escape
   useEffect(() => {
@@ -71,49 +104,163 @@ export function SuperGemsModal({
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-cyan-300 animate-pulse" />
           <h2 className="text-lg font-black text-cyan-100 tracking-wide">{superOnly ? "Super Gems" : "All Gems"}</h2>
-          {!loading && listings.length > 0 && (
-            <span className="text-xs text-slate-500 ml-1">{listings.length} found</span>
-          )}
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => void load()}
-            disabled={loading}
+            onClick={() => activeTab === "flip_opportunities" ? void load() : void loadComponents()}
+            disabled={loading || componentsLoading}
             className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-colors disabled:opacity-40"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${(loading || componentsLoading) ? "animate-spin" : ""}`} />
           </button>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors"
-          >
+          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
       </div>
 
+      {/* Tab bar */}
+      <div className="flex gap-0 border-b border-white/[0.06] bg-[#030d1a]/70 flex-shrink-0 px-4">
+        <button
+          onClick={() => setActiveTab("flip_opportunities")}
+          className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all ${
+            activeTab === "flip_opportunities"
+              ? "border-cyan-400 text-cyan-300"
+              : "border-transparent text-slate-500 hover:text-slate-300"
+          }`}
+        >
+          💎 Flip Opportunities
+          {!loading && listings.length > 0 && (
+            <span className="px-1.5 py-0.5 rounded-full bg-cyan-400/15 text-cyan-400 text-[10px] font-bold">{listings.length}</span>
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab("components")}
+          className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all ${
+            activeTab === "components"
+              ? "border-emerald-400 text-emerald-300"
+              : "border-transparent text-slate-500 hover:text-slate-300"
+          }`}
+        >
+          🔧 Components
+          {!componentsLoading && componentGems.length > 0 && (
+            <span className="px-1.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 text-[10px] font-bold">{componentGems.length}</span>
+          )}
+        </button>
+      </div>
+
       {/* Scrollable gallery */}
       <div className="flex-1 overflow-y-auto px-6 py-6">
-        {loading ? (
-          <div className="flex items-center justify-center h-64 text-slate-500 text-sm gap-2">
-            <RefreshCw className="w-4 h-4 animate-spin" />
-            Loading super gems…
-          </div>
-        ) : listings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
-            <Zap className="w-12 h-12 opacity-20" />
-            <p className="text-sm">No {superOnly ? "super gems" : "gems"} found yet — run a scan first.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {listings.map((l) => (
-              <FlipCard key={l.id} listing={l} />
-            ))}
-          </div>
+        {activeTab === "flip_opportunities" && (
+          loading ? (
+            <div className="flex items-center justify-center h-64 text-slate-500 text-sm gap-2">
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              Loading gems…
+            </div>
+          ) : listings.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
+              <Zap className="w-12 h-12 opacity-20" />
+              <p className="text-sm">No {superOnly ? "super gems" : "gems"} found yet — run a scan first.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {listings.map((l) => (
+                <FlipCard key={l.id} listing={l} />
+              ))}
+            </div>
+          )
+        )}
+
+        {activeTab === "components" && (
+          componentsLoading ? (
+            <div className="flex items-center justify-center h-64 text-slate-500 text-sm gap-2">
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              Loading component gems…
+            </div>
+          ) : componentGems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 gap-3 text-slate-600">
+              <Package className="w-12 h-12 opacity-20" />
+              <p className="text-sm">No component gems found yet — refresh the parts catalogue.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {componentGems.map((p) => (
+                <ComponentCard key={`${p.category}::${p.name}`} part={p} />
+              ))}
+            </div>
+          )
         )}
       </div>
     </div>,
     document.body
+  );
+}
+
+// ── Component gem card (modal) ────────────────────────────────────────────────
+function ComponentCard({ part: p }: { part: GroupedPart }) {
+  const isSuperGem = p.gem_classification === "super_gem";
+  const aiVerified = p.claude_verdict === "GEM" || p.claude_verdict === "GOOD";
+  const bestPrice = p.cheapest_good_price ?? p.cheapest_price ?? 0;
+  const sourceUrl = p.cheapest_good_url ?? p.cheapest_url ?? undefined;
+
+  return (
+    <div
+      className={`rounded-xl overflow-hidden border flex flex-col ${
+        isSuperGem
+          ? "border-cyan-400/30 bg-[#030f1c] shadow-[0_4px_20px_rgba(34,211,238,0.12)]"
+          : "border-emerald-400/25 bg-[#031209] shadow-[0_4px_16px_rgba(52,211,153,0.08)]"
+      }`}
+      style={{ height: "220px" }}
+    >
+      {/* Image / icon */}
+      <div className="h-20 flex-shrink-0 bg-[#050e1a] flex items-center justify-center relative overflow-hidden">
+        {p.image_url ? (
+          <img src={p.image_url} alt={p.name} className="w-full h-full object-contain opacity-80" />
+        ) : (
+          <Package className="w-8 h-8 text-slate-700" />
+        )}
+        <div className={`absolute top-1.5 left-1.5 flex items-center gap-0.5 px-1.5 py-0.5 rounded backdrop-blur-sm border text-[8px] font-bold uppercase tracking-wide ${
+          isSuperGem ? "bg-cyan-400/20 border-cyan-400/40 text-cyan-200" : "bg-emerald-400/20 border-emerald-400/40 text-emerald-200"
+        }`}>
+          <Zap className={`w-2 h-2 ${isSuperGem ? "text-cyan-300" : "text-emerald-300"}`} />
+          {isSuperGem ? "Super" : "Gem"}
+        </div>
+        {p.gem_score != null && (
+          <div className={`absolute top-1.5 right-1.5 px-1 py-0.5 rounded text-[8px] font-black ${
+            isSuperGem ? "text-cyan-300" : "text-emerald-300"
+          }`}>
+            -{p.gem_score.toFixed(0)}%
+          </div>
+        )}
+      </div>
+
+      {/* Details */}
+      <div className="flex-1 p-2.5 flex flex-col gap-1.5 min-h-0">
+        <p className="text-[10px] font-semibold text-slate-100 line-clamp-2 leading-tight">{p.name}</p>
+        <p className="text-[9px] text-slate-600 uppercase tracking-wide">{p.category}</p>
+
+        {aiVerified && (
+          <span className="inline-flex items-center gap-0.5 text-[8px] text-violet-400">✓ AI verified</span>
+        )}
+
+        <div className="mt-auto flex items-center justify-between">
+          <span className={`text-sm font-black ${isSuperGem ? "text-cyan-300" : "text-emerald-300"}`}>
+            {formatCurrency(bestPrice)}
+          </span>
+          {sourceUrl && (
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              className="flex items-center gap-0.5 px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[9px] text-slate-400 hover:text-white transition-colors"
+            >
+              <ExternalLink className="w-2.5 h-2.5" /> View
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
