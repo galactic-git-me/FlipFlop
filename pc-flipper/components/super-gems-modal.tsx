@@ -8,9 +8,20 @@ import { Listing, GroupedPart } from "@/lib/types";
 import { api, API_BASE_URL } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
-type ModalTab = "flip_opportunities" | "components";
+const COMPONENT_CATEGORIES = [
+  { id: "gpu",         label: "GPU",         emoji: "🎮" },
+  { id: "cpu",         label: "CPU",         emoji: "⚡" },
+  { id: "ram",         label: "RAM",         emoji: "💾" },
+  { id: "ssd",         label: "SSD",         emoji: "💿" },
+  { id: "psu",         label: "PSU",         emoji: "🔌" },
+  { id: "motherboard", label: "Motherboard", emoji: "🔧" },
+  { id: "cooler",      label: "Cooler",      emoji: "❄️"  },
+] as const;
 
-// ── Fetch gems ────────────────────────────────────────────────────────────────
+type ComponentCategory = typeof COMPONENT_CATEGORIES[number]["id"];
+type ModalTab = "flip_opportunities" | ComponentCategory;
+
+// ── Fetch helpers ─────────────────────────────────────────────────────────────
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   const params = new URLSearchParams(
     superOnly
@@ -22,8 +33,8 @@ async function fetchGems(superOnly: boolean): Promise<Listing[]> {
   return Array.isArray(data) ? data : (data.items ?? []);
 }
 
-async function fetchComponentGems(): Promise<GroupedPart[]> {
-  const res = await fetch(`${API_BASE_URL}/parts/grouped`);
+async function fetchCategoryGems(category: ComponentCategory): Promise<GroupedPart[]> {
+  const res = await fetch(`${API_BASE_URL}/parts/grouped?category=${category}`);
   const data: GroupedPart[] = await res.json();
   return (Array.isArray(data) ? data : [])
     .filter(p => p.gem_classification !== null && p.claude_verdict !== "REJECT")
@@ -47,42 +58,34 @@ export function SuperGemsModal({
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<ModalTab>("flip_opportunities");
   const [listings, setListings] = useState<Listing[]>([]);
-  const [componentGems, setComponentGems] = useState<GroupedPart[]>([]);
   const [loading, setLoading] = useState(false);
-  const [componentsLoading, setComponentsLoading] = useState(false);
+  const [parts, setParts] = useState<Partial<Record<ComponentCategory, GroupedPart[]>>>({});
+  const [partsLoading, setPartsLoading] = useState<Partial<Record<ComponentCategory, boolean>>>({});
 
   useEffect(() => { setMounted(true); }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
-    try {
-      setListings(await fetchGems(superOnly));
-    } catch {
-      setListings([]);
-    } finally {
-      setLoading(false);
-    }
+    try { setListings(await fetchGems(superOnly)); }
+    catch { setListings([]); }
+    finally { setLoading(false); }
   }, [superOnly]);
 
-  const loadComponents = useCallback(async () => {
-    if (componentGems.length > 0) return;
-    setComponentsLoading(true);
-    try {
-      setComponentGems(await fetchComponentGems());
-    } catch {
-      setComponentGems([]);
-    } finally {
-      setComponentsLoading(false);
-    }
-  }, [componentGems.length]);
+  const loadCategory = useCallback(async (cat: ComponentCategory) => {
+    if (parts[cat] !== undefined) return;
+    setPartsLoading(p => ({ ...p, [cat]: true }));
+    try { setParts(p => ({ ...p, [cat]: [] })); // mark as started
+          const gems = await fetchCategoryGems(cat);
+          setParts(p => ({ ...p, [cat]: gems }));
+    } catch { setParts(p => ({ ...p, [cat]: [] })); }
+    finally { setPartsLoading(p => ({ ...p, [cat]: false })); }
+  }, [parts]);
+
+  useEffect(() => { if (open) void load(); }, [open, load]);
 
   useEffect(() => {
-    if (open) void load();
-  }, [open, load]);
-
-  useEffect(() => {
-    if (open && activeTab === "components") void loadComponents();
-  }, [open, activeTab, loadComponents]);
+    if (open && activeTab !== "flip_opportunities") void loadCategory(activeTab as ComponentCategory);
+  }, [open, activeTab, loadCategory]);
 
   // Close on Escape
   useEffect(() => {
