@@ -103,13 +103,13 @@ async def evaluate_part(part_data: dict) -> PartGemResult | None:
             import anthropic
             client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
             resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
+                model="claude-opus-4-8",
                 max_tokens=256,
                 system=PART_EVAL_SYSTEM,
                 messages=messages,
             )
             raw = resp.content[0].text if resp.content else None
-            model_used = "claude-haiku-4-5"
+            model_used = "claude-opus-4-8"
         except Exception as exc:
             log.warning("part_gem_evaluator.anthropic_failed", error=str(exc))
 

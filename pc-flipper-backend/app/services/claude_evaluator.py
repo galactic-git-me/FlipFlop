@@ -151,19 +151,19 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     raw: str | None = None
     model_used = "none"
 
-    # 1 — Anthropic Claude Haiku (primary — fast, reliable, structured JSON)
+    # 1 — Anthropic Claude Opus 4.8 (primary — best reasoning for complex PC flipping analysis)
     if not raw and _s.anthropic_api_key:
         try:
             import anthropic
             client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
             resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
+                model="claude-opus-4-8",
                 max_tokens=512,
                 system=EVAL_SYSTEM,
                 messages=messages,
             )
             raw = resp.content[0].text if resp.content else None
-            model_used = "claude-haiku-4-5"
+            model_used = "claude-opus-4-8"
         except Exception as exc:
             log.warning("claude_evaluator.anthropic_failed", error=str(exc))
 
