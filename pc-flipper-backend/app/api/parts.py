@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Literal
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -8,8 +9,12 @@ from app.schemas.part import PartOut, PartCreate
 from app.schemas.component import ComponentPriceData
 from app.services.part_gem_scorer import score_groups, GOOD_SOURCES
 from app.services.part_gem_eval_queue import enqueue_part_for_claude
+from app.services.component_models import CANONICAL_MODELS
 
 router = APIRouter(prefix="/parts", tags=["parts"])
+
+# Valid component categories for live pricing
+_VALID_CATEGORIES = list(CANONICAL_MODELS.keys())
 
 
 @router.get("/", response_model=list[PartOut])
@@ -500,16 +505,23 @@ If no PC components are found in the text, return an empty array: []"""
 
 @router.get("/live-prices", response_model=list[ComponentPriceData])
 async def get_live_prices(
-    category: str = Query(...),
+    category: Literal["gpu", "cpu", "ram", "ssd", "psu", "motherboard", "cooler"] = Query(..., description="Component category"),
     refresh: bool = Query(False),
     include_all_sources: bool = Query(True),
 ):
-    """
-    Return live-scraped prices for all canonical models in a category.
+    """Get live component prices with all-source listings.
 
-    Includes eBay benchmarks (new and used) plus listings from all sources.
-    Results are cached 30 minutes per category. Pass ?refresh=true to bypass.
-    Pass ?include_all_sources=false to exclude non-eBay listings.
+    Returns eBay benchmark prices and listings from all sources (Vinted, Gumtree, Amazon, Temu, AliExpress).
+    Gem classification is based on eBay NEW/USED prices only.
+
+    - **category**: Component category (gpu, cpu, ram, ssd, psu, motherboard, cooler)
+    - **include_all_sources**: Include listings from all sources; if False, only return eBay benchmarks
+
+    Returns list of ComponentPriceData with fields:
+    - model, tier, new_price, new_count, used_median, used_count
+    - used_cheapest_price/url/title/image (eBay cheapest used listing)
+    - discount_pct, gem_classification (based on eBay benchmarks only)
+    - all_sources: list of listings from all sources
     """
     from app.services.live_prices import get_live_prices_for_category
     return await get_live_prices_for_category(category, force_refresh=refresh, include_all_sources=include_all_sources)

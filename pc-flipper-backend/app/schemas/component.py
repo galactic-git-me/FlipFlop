@@ -1,6 +1,6 @@
 """Component catalogue schemas."""
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Literal
 
 
 class ComponentSourceListing(BaseModel):
@@ -30,7 +30,7 @@ class ComponentPriceData(BaseModel):
 
     # Gem classification
     discount_pct: float
-    gem_classification: str  # "super_gem", "gem", or None
+    gem_classification: Literal["super_gem", "gem", "standard"]
 
     # All-source listings
     all_sources: list[ComponentSourceListing] = []
