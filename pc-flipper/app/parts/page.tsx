@@ -120,6 +120,9 @@ function FlipOpportunitiesTab() {
   const [flippingId, setFlippingId]       = useState<number | null>(null);
   const [showManualSubmit, setShowManualSubmit] = useState(false);
   const [viewMode, setViewMode]           = useState<"list" | "grid">("list");
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [chatMessages, setChatMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
 
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -189,6 +192,43 @@ function FlipOpportunitiesTab() {
   const hasAdvancedFilters = minProfit || maxPrice || sourceFilter !== "all" || sellerTypeFilter !== "all";
   const totalPages = Math.ceil(total / pageSize);
 
+  const handleAnalyzeListings = async () => {
+    if (listings.length === 0) return;
+
+    setAnalysisLoading(true);
+    try {
+      const listingData = listings.map(l => ({
+        title: l.title,
+        price: l.price,
+        source: l.source_name,
+        estimated_profit: l.estimated_profit,
+        gem_score: l.gem_score,
+        classification: l.classification,
+        condition: l.condition,
+      }));
+
+      const response = await fetch("/api/listings/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listings: listingData }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setChatMessages([
+          { role: "assistant", content: data.analysis },
+        ]);
+      }
+    } catch (error) {
+      console.error("Analysis failed:", error);
+      setChatMessages([
+        { role: "assistant", content: "Sorry, I couldn't analyze the listings. Please try again." },
+      ]);
+    } finally {
+      setAnalysisLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <ManualSubmitModal
@@ -196,6 +236,18 @@ function FlipOpportunitiesTab() {
         onClose={() => setShowManualSubmit(false)}
         onSuccess={() => { setShowManualSubmit(false); load(); }}
       />
+
+      {/* AI Analysis Modal */}
+      {showAnalysisModal && (
+        <AIAnalysisModal
+          open={showAnalysisModal}
+          onClose={() => setShowAnalysisModal(false)}
+          listings={listings}
+          onAnalyze={handleAnalyzeListings}
+          chatMessages={chatMessages}
+          loading={analysisLoading}
+        />
+      )}
 
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -235,6 +287,17 @@ function FlipOpportunitiesTab() {
           <Button variant="secondary" size="sm" onClick={trigger} disabled={triggering}>
             <RefreshCw className={`w-3.5 h-3.5 ${triggering ? "animate-spin" : ""}`} />
             {triggering ? "Scanning…" : "Scan Sources"}
+          </Button>
+          <Button
+            variant="ghost" size="sm"
+            onClick={() => {
+              setChatMessages([]);
+              setShowAnalysisModal(true);
+            }}
+            disabled={listings.length === 0}
+            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10"
+          >
+            <Zap className="w-3.5 h-3.5" /> Analyze
           </Button>
         </div>
       </div>
