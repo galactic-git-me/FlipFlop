@@ -58,6 +58,14 @@ async def get_listings(
     conditions = []
     if status:
         conditions.append(Listing.status == status)
+
+    # Always exclude defective/incomplete items — "For parts or not working" should never appear
+    defect_patterns = [
+        "For Parts", "For Spares", "For Repair", "Not Working", "Parts Only",
+        "Spares Only", "Broken", "Faulty", "Dead", "Damaged"
+    ]
+    for pattern in defect_patterns:
+        conditions.append(~Listing.title.ilike(f"%{pattern}%"))
     if classification:
         conditions.append(Listing.classification == classification)
     if claude_verdict and claude_verdict.upper() in _CLAUDE_VERDICTS:
