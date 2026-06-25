@@ -46,6 +46,9 @@ _ACCESSORY_TOKENS = frozenset([
     "for parts or not working", "for spares or repair", "read description",
     "artefacting", "artifacting", "no gpu", "no card",
     "crashes", "crashing", "intermittent", "damaged", "defective",
+    # RAM: exclude laptop/server types — keep only desktop UDIMM
+    "sdimm", "sodimm", "laptop", "notebook", "mobile", "rdimm", "lrdimm",
+    "registered dimm", "for server", "workstation memory",
 ])
 
 def _is_accessory(title: str) -> bool:
