@@ -213,10 +213,28 @@ async def _search_temu(
     min_price: float,
     max_price: float,
 ) -> list[ComponentListing]:
-    """Search Temu for component listings."""
-    # Placeholder: would use upgrade_parts._fetch_temu infrastructure
-    log.debug("component_search.temu_placeholder", term=component_name)
-    return []
+    """Search Temu for component listings using Apify."""
+    try:
+        from app.scrapers.temu_scraper import scrape_temu_components
+
+        result = await scrape_temu_components()
+        listings = result.get("listings", [])
+
+        return [
+            ComponentListing(
+                title=listing.get("title", ""),
+                price=float(listing.get("price_gbp", 0)),
+                source="temu",
+                url=listing.get("source_url", ""),
+                image_url=None,
+                condition="new",
+            )
+            for listing in listings
+            if min_price <= float(listing.get("price_gbp", 0)) <= max_price
+        ]
+    except Exception as exc:
+        log.warning("component_search.temu_error", error=str(exc))
+        return []
 
 
 async def _search_aliexpress(
@@ -225,6 +243,6 @@ async def _search_aliexpress(
     max_price: float,
 ) -> list[ComponentListing]:
     """Search AliExpress for component listings."""
-    # Placeholder: would use upgrade_parts._fetch_aliexpress infrastructure
-    log.debug("component_search.aliexpress_placeholder", term=component_name)
+    # AliExpress not implemented - would require separate Playwright scraper
+    # For now, return empty to avoid timeout
     return []
