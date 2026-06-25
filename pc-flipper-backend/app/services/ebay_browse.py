@@ -27,8 +27,8 @@ log = structlog.get_logger(__name__)
 # Conditions treated as "new" for the RRP column
 _NEW_CONDITIONS = {"NEW", "LIKE_NEW", "MANUFACTURER_REFURBISHED"}
 
-# Conditions treated as "used" for the used-price column
-_USED_CONDITIONS = {"USED", "EXCELLENT", "VERY_GOOD", "GOOD", "ACCEPTABLE", "FOR_PARTS_OR_NOT_WORKING"}
+# Conditions treated as "used" for the used-price column (excluding broken/parts items)
+_USED_CONDITIONS = {"USED", "EXCELLENT", "VERY_GOOD", "GOOD", "ACCEPTABLE"}
 
 # EBAY_GB = UK marketplace
 _MARKETPLACE_ID = "EBAY_GB"
@@ -40,7 +40,7 @@ _ACCESSORY_TOKENS = frozenset([
     "sticker", "box only", "packaging only", "manual only", "shroud",
     "replacement fan", "spare", "cooler only", "heat sink",
     "faulty", "for parts", "not working", "no display", "dead", "broken",
-    "spares or repair", "spares/repair", "parts/repair", "parts or repair", "read description",
+    "spares or repair", "spares/repair", "parts/repair", "parts or repair", "parts not working", "read description",
     "artefacting", "artifacting", "no gpu", "no card", "cooling house",
     "crashes", "crashing", "intermittent", "damaged", "defective",
 ])
