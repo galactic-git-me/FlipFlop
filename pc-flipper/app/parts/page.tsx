@@ -1275,23 +1275,25 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
       .map(row => ({
         model: row.model,
         tier: row.tier,
-        ebayBenchmark: row.used_median || row.new_price || 0,
+        new_price: row.new_price || 0,
+        used_median: row.used_median || 0,
         source: "ebay",
         price: row.used_cheapest_price || 0,
         title: row.used_cheapest_title || "",
         url: row.used_cheapest_url || "",
         image_url: row.used_cheapest_image,
         condition: "used",
-        priceDiff: (row.used_cheapest_price || 0) - (row.used_median || row.new_price || 0),
-        priceDiffPct: ((row.used_cheapest_price || 0) - (row.used_median || row.new_price || 0)) / (row.used_median || row.new_price || 1) * 100,
+        priceDiffVsNew: (row.used_cheapest_price || 0) - (row.new_price || 0),
+        priceDiffPctVsNew: ((row.used_cheapest_price || 0) - (row.new_price || 0)) / (row.new_price || 1) * 100,
+        priceDiffVsUsed: (row.used_cheapest_price || 0) - (row.used_median || 0),
+        priceDiffPctVsUsed: ((row.used_cheapest_price || 0) - (row.used_median || 0)) / (row.used_median || 1) * 100,
+        gem_classification: row.gem_classification,
       }))
-      .sort((a, b) => a.priceDiff - b.priceDiff)
       .sort((a, b) => {
         const gemOrder = { super_gem: 0, gem: 1, standard: 2 };
-        const aGem = rows.find(r => r.model === a.model)?.gem_classification || "standard";
-        const bGem = rows.find(r => r.model === b.model)?.gem_classification || "standard";
-        return (gemOrder[aGem as keyof typeof gemOrder] || 2) - (gemOrder[bGem as keyof typeof gemOrder] || 2);
-      });
+        return (gemOrder[a.gem_classification as keyof typeof gemOrder] || 2) - (gemOrder[b.gem_classification as keyof typeof gemOrder] || 2);
+      })
+      .sort((a, b) => a.priceDiffVsUsed - b.priceDiffVsUsed);
   }
 
   if (allSources.length === 0) return null;
@@ -1316,7 +1318,8 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Component</th>
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Source</th>
               <th className="px-4 py-2 text-right text-slate-400 font-semibold">Price</th>
-              <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay</th>
+              <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay NEW</th>
+              <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay USED</th>
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Condition</th>
             </tr>
           </thead>
@@ -1332,10 +1335,15 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
                 <td className="px-4 py-2 text-right text-slate-300 group-hover:text-[#00dc82] font-semibold">
                   {formatCurrency(item.price)}
                 </td>
-                <td className={`px-4 py-2 text-right font-semibold ${
-                  item.priceDiff < 0 ? "text-emerald-400" : item.priceDiff > 0 ? "text-red-400" : "text-slate-400"
+                <td className={`px-4 py-2 text-right font-semibold text-[10px] ${
+                  item.priceDiffVsNew < 0 ? "text-emerald-400" : item.priceDiffVsNew > 0 ? "text-red-400" : "text-slate-400"
                 }`}>
-                  {item.priceDiff > 0 ? "+" : ""}{formatCurrency(item.priceDiff)} ({item.priceDiffPct > 0 ? "+" : ""}{item.priceDiffPct.toFixed(1)}%)
+                  {item.priceDiffVsNew > 0 ? "+" : ""}{formatCurrency(item.priceDiffVsNew)}<br />({item.priceDiffPctVsNew > 0 ? "+" : ""}{item.priceDiffPctVsNew.toFixed(0)}%)
+                </td>
+                <td className={`px-4 py-2 text-right font-semibold text-[10px] ${
+                  item.priceDiffVsUsed < 0 ? "text-emerald-400" : item.priceDiffVsUsed > 0 ? "text-red-400" : "text-slate-400"
+                }`}>
+                  {item.priceDiffVsUsed > 0 ? "+" : ""}{formatCurrency(item.priceDiffVsUsed)}<br />({item.priceDiffPctVsUsed > 0 ? "+" : ""}{item.priceDiffPctVsUsed.toFixed(0)}%)
                 </td>
                 <td className="px-4 py-2 text-slate-500 capitalize">{item.condition || "—"}</td>
               </tr>
