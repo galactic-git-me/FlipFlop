@@ -12,6 +12,8 @@ import structlog
 
 log = structlog.get_logger(__name__)
 
+_GUMTREE_PAGE_COUNT = 1
+
 
 @dataclass
 class ComponentListing:
@@ -49,7 +51,7 @@ async def search_component_all_sources(
         if isinstance(result, list):
             results.extend(result)
         elif isinstance(result, Exception):
-            log.debug("component_search.source_error", error=str(result))
+            log.warning("component_search.source_error", error=str(result))
 
     return sorted(results, key=lambda x: x.price)
 
@@ -77,10 +79,10 @@ async def _search_vinted(
                 condition="used",
             )
             for row in rows
-            if float(row.get("price", 0)) > 0
+            if min_price <= float(row.get("price", 0)) <= max_price
         ]
     except Exception as exc:
-        log.debug("component_search.vinted_error", error=str(exc))
+        log.warning("component_search.vinted_error", error=str(exc))
         return []
 
 
@@ -92,7 +94,7 @@ async def _search_gumtree(
     """Search Gumtree for component listings."""
     try:
         from app.services.playwright_scraper import scrape_gumtree_playwright
-        rows = await scrape_gumtree_playwright([component_name], 1, int(max_price))
+        rows = await scrape_gumtree_playwright([component_name], _GUMTREE_PAGE_COUNT, int(max_price))
         return [
             ComponentListing(
                 title=row.get("title", ""),
@@ -105,7 +107,7 @@ async def _search_gumtree(
             if min_price <= float(row.get("price", 0)) <= max_price
         ]
     except Exception as exc:
-        log.debug("component_search.gumtree_error", error=str(exc))
+        log.warning("component_search.gumtree_error", error=str(exc))
         return []
 
 
