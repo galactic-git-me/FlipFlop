@@ -35,13 +35,15 @@ _MARKETPLACE_ID = "EBAY_GB"
 
 # Title keywords that indicate accessories/parts, not complete components
 _ACCESSORY_TOKENS = frozenset([
-    "cooling fan", "heatsink", "backplate", "bracket", "thermal pad",
+    # Accessories/fans/parts
+    "cooling fan", "cooler fan", "graphics card cooler", "heatsink", "backplate", "bracket", "thermal pad",
     "screw", "cable", "adapter", "connector", "waterblock", "water block",
     "sticker", "box only", "packaging only", "manual only", "shroud",
     "replacement fan", "spare", "cooler only", "heat sink",
+    # Defective/damaged
     "faulty", "for parts", "not working", "no display", "dead", "broken",
-    "spares or repair", "spares/repair", "parts/repair", "parts or repair", "parts not working", "read description",
-    "artefacting", "artifacting", "no gpu", "no card", "cooling house",
+    "spares or repair", "spares/repair", "parts/repair", "parts or repair", "parts not working", "parts only",
+    "read description", "artefacting", "artifacting", "no gpu", "no card",
     "crashes", "crashing", "intermittent", "damaged", "defective",
 ])
 
