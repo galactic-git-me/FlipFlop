@@ -242,7 +242,30 @@ async def _search_aliexpress(
     min_price: float,
     max_price: float,
 ) -> list[ComponentListing]:
-    """Search AliExpress for component listings."""
-    # AliExpress not implemented - would require separate Playwright scraper
-    # For now, return empty to avoid timeout
-    return []
+    """Search AliExpress for component listings using Playwright."""
+    try:
+        from app.scrapers.aliexpress_scraper import fetch_aliexpress_listings
+
+        # Convert component name to search terms
+        search_terms = _get_vinted_search_terms(component_name)
+
+        rows = await fetch_aliexpress_listings(
+            search_terms=search_terms,
+            min_price=min_price,
+            max_price=max_price,
+        )
+        return [
+            ComponentListing(
+                title=row.get("title", ""),
+                price=float(row.get("price", 0)),
+                source="aliexpress",
+                url=row.get("url", ""),
+                image_url=row.get("image_urls", [None])[0] if row.get("image_urls") else None,
+                condition=row.get("condition", "new"),
+            )
+            for row in rows
+            if min_price <= float(row.get("price", 0)) <= max_price
+        ]
+    except Exception as exc:
+        log.warning("component_search.aliexpress_error", error=str(exc))
+        return []
