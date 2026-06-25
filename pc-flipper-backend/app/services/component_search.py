@@ -179,10 +179,33 @@ async def _search_amazon(
     min_price: float,
     max_price: float,
 ) -> list[ComponentListing]:
-    """Search Amazon for component listings."""
-    # Placeholder: would use upgrade_parts._fetch_amazon infrastructure
-    log.debug("component_search.amazon_placeholder", term=component_name)
-    return []
+    """Search Amazon for component listings using Playwright."""
+    try:
+        from app.scrapers.amazon_scraper import fetch_amazon_listings
+
+        # Convert component name to search terms
+        search_terms = _get_vinted_search_terms(component_name)
+
+        rows = await fetch_amazon_listings(
+            search_terms=search_terms,
+            min_price=min_price,
+            max_price=max_price,
+        )
+        return [
+            ComponentListing(
+                title=row.get("title", ""),
+                price=float(row.get("price", 0)),
+                source="amazon",
+                url=row.get("url", ""),
+                image_url=row.get("image_urls", [None])[0] if row.get("image_urls") else None,
+                condition=row.get("condition", "new"),
+            )
+            for row in rows
+            if min_price <= float(row.get("price", 0)) <= max_price
+        ]
+    except Exception as exc:
+        log.warning("component_search.amazon_error", error=str(exc))
+        return []
 
 
 async def _search_temu(
