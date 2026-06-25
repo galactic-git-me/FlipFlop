@@ -15,6 +15,84 @@ log = structlog.get_logger(__name__)
 _GUMTREE_PAGE_COUNT = 1
 
 
+def _get_vinted_search_terms(component_name: str) -> list[str]:
+    """Convert component model names to Vinted search terms that actually find listings."""
+    name_lower = component_name.lower()
+    terms = []
+
+    # GPU/Graphics cards
+    if any(x in name_lower for x in ["rtx", "gtx", "radeon", "gpu", "graphics card"]):
+        if "3060" in name_lower:
+            terms.extend(["RTX 3060", "3060 12GB", "graphics card"])
+        elif "3070" in name_lower:
+            terms.extend(["RTX 3070", "3070 8GB"])
+        elif "3080" in name_lower:
+            terms.extend(["RTX 3080", "3080 10GB"])
+        else:
+            terms.extend(["graphics card", "GPU", "RTX", "GTX"])
+
+    # CPU/Processors
+    elif any(x in name_lower for x in ["core i", "ryzen", "cpu"]):
+        if "i5" in name_lower or "ryzen 5" in name_lower:
+            terms.extend(["CPU", "Intel Core i5", "AMD Ryzen 5"])
+        elif "i7" in name_lower or "ryzen 7" in name_lower:
+            terms.extend(["CPU", "Intel Core i7", "AMD Ryzen 7"])
+        else:
+            terms.extend(["CPU", "processor"])
+
+    # RAM
+    elif any(x in name_lower for x in ["ddr4", "ddr5", "ram"]):
+        if "16gb" in name_lower:
+            terms.extend(["16GB RAM", "DDR4 RAM", "DDR5 RAM"])
+        elif "32gb" in name_lower:
+            terms.extend(["32GB RAM", "DDR4 RAM", "DDR5 RAM"])
+        elif "64gb" in name_lower:
+            terms.extend(["64GB RAM", "DDR4 kit", "DDR5 kit"])
+        elif "8gb" in name_lower:
+            terms.extend(["8GB RAM", "DDR4 RAM", "DDR5 RAM"])
+        else:
+            terms.extend(["RAM", "DDR4 RAM", "DDR5 RAM"])
+
+    # SSDs/Storage
+    elif any(x in name_lower for x in ["ssd", "nvme", "m.2"]):
+        if "nvme" in name_lower or "m.2" in name_lower:
+            terms.extend(["NVMe SSD", "M.2 SSD"])
+        if "500gb" in name_lower:
+            terms.extend(["500GB SSD"])
+        elif "1tb" in name_lower or "2tb" in name_lower:
+            terms.extend(["SSD 1TB", "SSD 2TB"])
+        else:
+            terms.extend(["SSD", "NVMe SSD"])
+
+    # PSU/Power supplies
+    elif any(x in name_lower for x in ["psu", "power supply", "650w", "750w", "850w"]):
+        for wattage in ["650w", "750w", "850w", "1000w", "1200w"]:
+            if wattage in name_lower:
+                terms.append(f"power supply {wattage}")
+        if not terms:
+            terms.extend(["power supply", "PSU"])
+
+    # Motherboards
+    elif any(x in name_lower for x in ["motherboard", "mobo", "atx", "am4", "am5", "lga"]):
+        terms.extend(["motherboard", "mobo"])
+        if "am4" in name_lower:
+            terms.append("AM4 motherboard")
+        elif "am5" in name_lower:
+            terms.append("AM5 motherboard")
+        elif "lga" in name_lower:
+            terms.append("Intel motherboard")
+
+    # CPU Coolers
+    elif any(x in name_lower for x in ["cooler", "heatsink", "aio"]):
+        terms.extend(["CPU cooler", "cooler"])
+
+    # Fallback: use generic terms
+    if not terms:
+        terms = [component_name, "PC component"]
+
+    return terms[:3]  # Return top 3 most relevant terms
+
+
 @dataclass
 class ComponentListing:
     """A component listing from any source."""
@@ -61,11 +139,16 @@ async def _search_vinted(
     min_price: float,
     max_price: float,
 ) -> list[ComponentListing]:
-    """Search Vinted for component listings."""
+    """Search Vinted for component listings using flexible search terms."""
     try:
         from app.scrapers.vinted_scraper import fetch_vinted_listings
+
+        # Convert specific model names to general Vinted search terms
+        # (e.g., "16GB DDR4 3200MHz Kit" → ["DDR4 RAM", "16GB RAM"])
+        search_terms = _get_vinted_search_terms(component_name)
+
         rows = await fetch_vinted_listings(
-            search_terms=[component_name],
+            search_terms=search_terms,
             min_price=int(min_price),
             max_price=int(max_price),
         )
@@ -91,10 +174,14 @@ async def _search_gumtree(
     min_price: float,
     max_price: float,
 ) -> list[ComponentListing]:
-    """Search Gumtree for component listings."""
+    """Search Gumtree for component listings using flexible search terms."""
     try:
         from app.services.playwright_scraper import scrape_gumtree_playwright
-        rows = await scrape_gumtree_playwright([component_name], _GUMTREE_PAGE_COUNT, int(max_price))
+
+        # Use the same search term conversion as Vinted
+        search_terms = _get_vinted_search_terms(component_name)
+
+        rows = await scrape_gumtree_playwright(search_terms, _GUMTREE_PAGE_COUNT, int(max_price))
         return [
             ComponentListing(
                 title=row.get("title", ""),
