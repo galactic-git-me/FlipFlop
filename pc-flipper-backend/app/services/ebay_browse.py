@@ -122,20 +122,14 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
 
         # Verify condition is acceptable (eBay sometimes returns unwanted conditions)
         condition = str(item.get("condition") or "").upper()
-
-        # Debug: log condition for 257439960876
         item_url = str(item.get("itemWebUrl") or "")
-        if "257439960876" in item_url:
-            log.info("ebay_browse.item_condition_check", item_id="257439960876", condition_value=condition, title=title)
 
-        if any(x in condition for x in ["FOR_PARTS", "NOT_WORKING", "PARTS_OR_NOT"]):
-            log.warning("ebay_browse.filtered_defective_condition", condition=condition, title=title)
-            continue
-
-        # Sanity check: block known "for parts" items
-        item_url = str(item.get("itemWebUrl") or "")
-        if "257439960876" in item_url:
-            log.warning("ebay_browse.blocking_known_defect", item_id="257439960876", title=title)
+        # Filter out "for parts or not working" in any format
+        defect_conditions = [
+            "FOR_PARTS", "NOT_WORKING", "PARTS_OR_NOT", "PARTS OR NOT",
+            "FOR_SPARES", "SPARES_OR_REPAIR", "PARTS_NOT_WORKING"
+        ]
+        if any(x in condition for x in defect_conditions):
             continue
 
         image = item.get("image") or {}
