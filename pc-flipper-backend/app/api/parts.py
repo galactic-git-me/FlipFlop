@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.part import Part, PartCategory, PartCondition
 from app.schemas.part import PartOut, PartCreate
+from app.schemas.component import ComponentPriceData
 from app.services.part_gem_scorer import score_groups, GOOD_SOURCES
 from app.services.part_gem_eval_queue import enqueue_part_for_claude
 
@@ -497,20 +498,21 @@ If no PC components are found in the text, return an empty array: []"""
     }
 
 
-@router.get("/live-prices")
+@router.get("/live-prices", response_model=list[ComponentPriceData])
 async def get_live_prices(
     category: str = Query(...),
     refresh: bool = Query(False),
+    include_all_sources: bool = Query(True),
 ):
     """
     Return live-scraped prices for all canonical models in a category.
 
-    Scrapes eBay BIN used listings fresh (with actual listing URLs) and
-    queries Scan/Overclockers for new retail RRP. LLM fills in missing RRP.
+    Includes eBay benchmarks (new and used) plus listings from all sources.
     Results are cached 30 minutes per category. Pass ?refresh=true to bypass.
+    Pass ?include_all_sources=false to exclude non-eBay listings.
     """
     from app.services.live_prices import get_live_prices_for_category
-    return await get_live_prices_for_category(category, force_refresh=refresh)
+    return await get_live_prices_for_category(category, force_refresh=refresh, include_all_sources=include_all_sources)
 
 
 @router.get("/{part_id}", response_model=PartOut)
