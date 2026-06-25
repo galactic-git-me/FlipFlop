@@ -637,6 +637,7 @@ type ComponentSourceListing = {
   url: string;
   image_url?: string | null;
   condition?: string | null;
+  estimated_delivery_days?: number | null;
 };
 
 type LivePriceRow = {
@@ -1314,6 +1315,7 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
         priceDiffVsUsed: (row.used_cheapest_price || 0) - (row.used_median || 0),
         priceDiffPctVsUsed: ((row.used_cheapest_price || 0) - (row.used_median || 0)) / (row.used_median || 1) * 100,
         gem_classification: row.gem_classification,
+        estimated_delivery_days: 3,  // eBay UK typically 2-3 business days
       }))
       .sort((a, b) => {
         const gemOrder = { super_gem: 0, gem: 1, standard: 2 };
@@ -1364,7 +1366,7 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Price Comparison</th>
               <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay NEW</th>
               <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay USED</th>
-              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Condition</th>
+              <th className="px-4 py-2 text-center text-slate-400 font-semibold">Delivery</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#1e2d45]">
@@ -1418,7 +1420,10 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
                 }`}>
                   {item.priceDiffVsUsed > 0 ? "+" : ""}{formatCurrency(item.priceDiffVsUsed)}<br />({item.priceDiffPctVsUsed > 0 ? "+" : ""}{item.priceDiffPctVsUsed.toFixed(0)}%)
                 </td>
-                <td className="px-4 py-2 text-slate-500 capitalize">{item.condition || "—"}</td>
+                <td className="px-4 py-2 text-center">
+                  <div className="text-slate-300 font-semibold">{item.estimated_delivery_days || "?"}</div>
+                  <div className="text-[10px] text-slate-600">days</div>
+                </td>
               </tr>
             );
             })}
