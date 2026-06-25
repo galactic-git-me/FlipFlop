@@ -530,3 +530,52 @@ async def queue_unjudged_for_claude(
         "total_candidates": len(listings),
         "queue_size": queue_size(),
     }
+
+
+@router.post("/analyze")
+async def analyze_listings(
+    data: dict,
+):
+    """
+    Analyze marketplace listings with Claude to find top 5 deals.
+    Returns AI analysis with reasoning and top picks.
+    """
+    from anthropic import Anthropic
+
+    listings = data.get("listings", [])
+    if not listings:
+        raise HTTPException(status_code=400, detail="No listings provided")
+
+    # Format listings for Claude
+    listings_text = "\n".join(
+        f"{i+1}. {l['title']} - £{l['price']} ({l['source']}, {l.get('classification', 'unknown')})"
+        for i, l in enumerate(listings[:30])  # Limit to 30 for context
+    )
+
+    client = Anthropic()
+    message = client.messages.create(
+        model="claude-opus-4-8",
+        max_tokens=1024,
+        messages=[
+            {
+                "role": "user",
+                "content": f"""Analyze these marketplace listings and identify the TOP 5 BEST DEALS.
+
+LISTINGS:
+{listings_text}
+
+For each top deal, explain:
+1. Title and price
+2. Why it's a good deal (profit margin, rarity, demand)
+3. Estimated resale value
+4. Risk factors
+
+Format your response as a clear ranking with reasoning.""",
+            }
+        ],
+    )
+
+    return {
+        "analysis": message.content[0].text,
+        "listings_analyzed": len(listings),
+    }

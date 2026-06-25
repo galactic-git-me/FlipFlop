@@ -1486,3 +1486,78 @@ function PartCard({ part }: { part: GroupedPart }) {
     </div>
   );
 }
+
+function AIAnalysisModal({
+  open,
+  onClose,
+  listings,
+  onAnalyze,
+  chatMessages,
+  loading,
+}: {
+  open: boolean;
+  onClose: () => void;
+  listings: Listing[];
+  onAnalyze: () => void;
+  chatMessages: Array<{ role: "user" | "assistant"; content: string }>;
+  loading: boolean;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0d1320] border border-[#1e2d45] rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b border-[#1e2d45]">
+          <h2 className="text-lg font-semibold text-slate-200">AI Marketplace Analysis</h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-300">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {chatMessages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <Zap className="w-12 h-12 text-slate-700 mb-3" />
+              <p className="text-slate-400 text-sm">Ready to analyze {listings.length} listings</p>
+              <p className="text-slate-600 text-xs mt-2">Click the button below to find the top 5 deals</p>
+            </div>
+          ) : (
+            chatMessages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-sm px-4 py-3 rounded-lg ${
+                  msg.role === "user"
+                    ? "bg-[#00dc82]/20 text-[#00dc82] border border-[#00dc82]/30"
+                    : "bg-[#1e2d45] text-slate-300 border border-[#2d3d55]"
+                }`}>
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                </div>
+              </div>
+            ))
+          )}
+          {loading && (
+            <div className="flex justify-start">
+              <div className="bg-[#1e2d45] border border-[#2d3d55] rounded-lg px-3 py-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-slate-500 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-slate-500 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-slate-500 rounded-full animate-pulse" />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-[#1e2d45] p-4">
+          <Button
+            variant="primary"
+            onClick={onAnalyze}
+            disabled={loading || listings.length === 0 || chatMessages.length > 0}
+            className="w-full"
+          >
+            {loading ? "Analyzing..." : `Analyze ${listings.length} Listings`}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
