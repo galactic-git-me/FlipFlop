@@ -540,26 +540,32 @@ async def analyze_listings(
     Analyze marketplace listings with Claude to find top 5 deals.
     Returns AI analysis with reasoning and top picks.
     """
-    from anthropic import Anthropic
+    import anthropic
+    from app.config import get_settings
 
     listings = data.get("listings", [])
     if not listings:
         raise HTTPException(status_code=400, detail="No listings provided")
 
+    settings = get_settings()
+    if not settings.anthropic_api_key:
+        raise HTTPException(status_code=500, detail="Anthropic API key not configured")
+
     # Format listings for Claude
     listings_text = "\n".join(
-        f"{i+1}. {l['title']} - £{l['price']} ({l['source']}, {l.get('classification', 'unknown')})"
+        f"{i+1}. {l['title']} - £{l.get('price', 'N/A')} ({l.get('source', 'Unknown')}, {l.get('classification', 'unknown')})"
         for i, l in enumerate(listings[:30])  # Limit to 30 for context
     )
 
-    client = Anthropic()
-    message = client.messages.create(
-        model="claude-opus-4-8",
-        max_tokens=1024,
-        messages=[
-            {
-                "role": "user",
-                "content": f"""Analyze these marketplace listings and identify the TOP 5 BEST DEALS.
+    try:
+        client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+        message = client.messages.create(
+            model="claude-opus-4-8",
+            max_tokens=1024,
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"""Analyze these marketplace listings and identify the TOP 5 BEST DEALS.
 
 LISTINGS:
 {listings_text}
@@ -571,11 +577,13 @@ For each top deal, explain:
 4. Risk factors
 
 Format your response as a clear ranking with reasoning.""",
-            }
-        ],
-    )
+                }
+            ],
+        )
 
-    return {
-        "analysis": message.content[0].text,
-        "listings_analyzed": len(listings),
-    }
+        return {
+            "analysis": message.content[0].text,
+            "listings_analyzed": len(listings),
+        }
+    except anthropic.AuthenticationError:
+        raise HTTPException(status_code=500, detail="Anthropic API authentication failed")
