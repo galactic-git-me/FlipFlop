@@ -120,13 +120,22 @@ CANONICAL_MODELS: dict[str, list[ComponentModel]] = {
         {"name": "4TB SATA SSD",          "bh_search": "4tb+sata+ssd",        "tier": "high"},
     ],
     "psu": [
+        # Bronze Budget
         {"name": "550W 80+ Bronze ATX PSU",   "bh_search": "550w+80plus+bronze+atx",   "tier": "budget"},
+        {"name": "600W 80+ Bronze ATX PSU",   "bh_search": "600w+80plus+bronze+atx",   "tier": "budget"},
         {"name": "650W 80+ Bronze ATX PSU",   "bh_search": "650w+80plus+bronze+atx",   "tier": "budget"},
+        # Gold Budget/Mid
         {"name": "650W 80+ Gold ATX PSU",     "bh_search": "650w+80plus+gold+atx",     "tier": "mid"},
+        {"name": "700W 80+ Gold ATX PSU",     "bh_search": "700w+80plus+gold+atx",     "tier": "mid"},
+        # Gold Mid/High
         {"name": "750W 80+ Gold ATX PSU",     "bh_search": "750w+80plus+gold+atx",     "tier": "mid"},
         {"name": "850W 80+ Gold ATX PSU",     "bh_search": "850w+80plus+gold+atx",     "tier": "high"},
         {"name": "1000W 80+ Gold ATX PSU",    "bh_search": "1000w+80plus+gold+atx",    "tier": "high"},
+        {"name": "1200W 80+ Gold ATX PSU",    "bh_search": "1200w+80plus+gold+atx",    "tier": "high"},
+        # Platinum
+        {"name": "750W 80+ Platinum ATX PSU", "bh_search": "750w+80plus+platinum+atx", "tier": "high"},
         {"name": "850W 80+ Platinum ATX PSU", "bh_search": "850w+80plus+platinum+atx", "tier": "ultra"},
+        {"name": "1000W 80+ Platinum ATX PSU","bh_search": "1000w+80plus+platinum+atx","tier": "ultra"},
     ],
     "motherboard": [
         # LGA1700 (12th/13th gen Intel)
