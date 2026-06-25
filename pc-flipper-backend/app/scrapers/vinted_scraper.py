@@ -1,286 +1,30 @@
 """
-Vinted Scraper — Direct API (no Apify required)
+Vinted Scraper - Extract component deals using Apify API
 
-Vinted's website calls an internal REST API for all search results.
-We replicate the same flow: hit the homepage to pick up session cookies,
-then call /api/v2/catalog/items.  No login or API key needed.
-
-Coverage:
-  - Flip Opportunities: gaming PCs, desktops, setups
-  - Components: GPUs, CPUs, RAM, SSDs, motherboards, PSUs, cases
-  - Accessories: keyboards, mice, headsets
+Target: Vinted marketplace for GPUs, CPUs, RAM, SSDs, motherboards, PSUs, cases
+Strategy: Use Apify marketplace scraper for reliable data extraction
+Requires: APIFY_API_TOKEN environment variable
 """
 
 import asyncio
-import re
 import structlog
-import httpx
+import os
 from typing import Optional
+import httpx
 
 log = structlog.get_logger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-VINTED_BASE    = "https://www.vinted.co.uk"
-VINTED_API     = f"{VINTED_BASE}/api/v2/catalog/items"
-PER_PAGE       = 96     # Vinted max per page
-MAX_PAGES      = 10     # absolute page cap per term
-REQUEST_DELAY  = 1.0    # seconds between page requests
+class VintedScraperConfig:
+    """Configuration for Vinted scraper using Apify."""
 
-# Highest item ID seen on the previous run, per search term.
-# Vinted IDs are monotonically increasing, so we can stop paginating
-# the moment we hit an ID we've already seen — equivalent to "only new since last run".
-_last_seen_ids: dict[str, int] = {}
+    apify_api_token = os.getenv("APIFY_API_TOKEN", "")
+    apify_actor_id = "drobnikj/ecommerce-scraper"
+    apify_api_url = "https://api.apify.com/v2/acts"
+    timeout_seconds = 60
+    max_results_per_run = 100
 
-VINTED_SEARCH_TERMS = [
-    # Whole systems (flip opportunities)
-    "gaming PC",
-    "gaming computer",
-    "desktop PC",
-    "workstation PC",
-    "gaming setup",
-    # GPUs
-    "graphics card",
-    "GPU",
-    "RTX",
-    "GTX",
-    "Radeon RX",
-    # CPUs
-    "Intel Core i5",
-    "Intel Core i7",
-    "Intel Core i9",
-    "AMD Ryzen 5",
-    "AMD Ryzen 7",
-    "AMD Ryzen 9",
-    # RAM — split by type, short terms work better on Vinted
-    "DDR4 RAM",
-    "DDR5 RAM",
-    "16GB RAM",
-    "32GB RAM",
-    # Storage
-    "NVMe SSD",
-    "M.2 SSD",
-    "SSD 1TB",
-    "SSD 2TB",
-    # Motherboards
-    "motherboard ATX",
-    "motherboard AM4",
-    "motherboard AM5",
-    "motherboard LGA1700",
-    # PSUs
-    "power supply 650W",
-    "power supply 750W",
-    "power supply 850W",
-    # Cases
-    "PC case ATX",
-    "PC case tower",
-    # Accessories
-    "gaming keyboard",
-    "gaming mouse",
-    "gaming headset",
-]
-
-_HEADERS = {
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-GB,en;q=0.9",
-    "Cache-Control": "no-cache",
-    "Origin": VINTED_BASE,
-    "Referer": VINTED_BASE + "/",
-    "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-}
-
-
-# ── Session bootstrap ─────────────────────────────────────────────────────────
-
-async def _get_session_client() -> httpx.AsyncClient:
-    """Return an httpx client with Vinted session cookies pre-loaded."""
-    client = httpx.AsyncClient(
-        headers=_HEADERS,
-        follow_redirects=True,
-        timeout=30.0,
-    )
-    try:
-        # First visit sets _vinted_fr_session and CSRF cookies
-        resp = await client.get(VINTED_BASE)
-        resp.raise_for_status()
-        log.debug("vinted.session_init", cookies=list(client.cookies.keys()))
-    except Exception as exc:
-        log.warning("vinted.session_init_failed", error=str(exc))
-    return client
-
-
-# ── Item parser ───────────────────────────────────────────────────────────────
-
-_CONDITION_MAP = {
-    1: "new",          # New with tags
-    2: "new",          # New without tags
-    3: "used",         # Very good
-    4: "used",         # Good
-    5: "used",         # Satisfactory
-    6: "for_parts",    # Not working / for parts
-}
-
-# At least one of these must appear in the title for the listing to be kept.
-# "pc" alone is too broad (matches "pc game", "pirate yakuza ... Edition PC" etc.)
-# so it is only counted when flanked by spaces or a digit (e.g. "gaming pc ", "pc build").
-_TECH_KEYWORDS = frozenset([
-    # GPUs
-    "rtx", "gtx", "radeon", "geforce", "graphics card", "gpu",
-    "rx 580", "rx 590", "rx 6600", "rx 6700", "rx 6800", "rx 6900",
-    "rx 7600", "rx 7700", "rx 7800", "rx 7900",
-    # CPUs
-    "ryzen", "intel core", "core i3", "core i5", "core i7", "core i9",
-    "xeon", "threadripper", "celeron", "pentium",
-    # Memory / Storage
-    "ddr4", "ddr5", "dimm", "nvme", "m.2 ssd", "ssd ", "nvme ssd",
-    "16gb ram", "32gb ram", "8gb ram", "64gb ram",
-    # Motherboards / PSUs / Cases
-    "motherboard", "mobo", "power supply", "psu", "atx case", "pc case",
-    # Explicit PC terms (specific enough)
-    "gaming pc", "gaming computer", "desktop pc", "workstation pc",
-    "pc tower", "pc build", "gaming tower", "gaming rig", "gaming setup",
-    "mini pc", "nuc pc", "htpc",
-    # Known brands with their PC context baked in
-    "optiplex", "thinkcentre", "elitedesk", "prodesk", "thinkstation",
-    "alienware", "chillblast", "cyberpower pc", "scan 3xs",
-])
-
-import re as _re
-_PC_STANDALONE = _re.compile(r"\bpc\b", _re.IGNORECASE)
-
-
-def _is_tech_listing(title: str) -> bool:
-    tl = title.lower()
-    if any(kw in tl for kw in _TECH_KEYWORDS):
-        return True
-    # Allow bare "pc" only when it sits next to a non-game qualifier
-    # Reject: "Edition PC", "PC Game", "PC CD ROM", "PC DVD"
-    if _PC_STANDALONE.search(tl):
-        if _re.search(r"\b(game|cd.?rom|dvd|edition|version|steelbook|simulator|simulator)\b", tl):
-            return False
-        return True
-    return False
-
-
-def _parse_item(item: dict, term: str) -> Optional[dict]:
-    try:
-        item_id   = str(item.get("id") or "")
-        title     = str(item.get("title") or "").strip()
-        if not title or not item_id:
-            return None
-        if not _is_tech_listing(title):
-            return None
-
-        price_obj = item.get("price") or item.get("priceNumeric") or {}
-        if isinstance(price_obj, dict):
-            price_str = price_obj.get("amount") or price_obj.get("value") or "0"
-        else:
-            price_str = str(price_obj)
-        price = float(re.sub(r"[^\d.]", "", str(price_str)) or 0)
-        if price <= 0:
-            return None
-
-        url = item.get("url") or f"{VINTED_BASE}/items/{item_id}"
-        if not url.startswith("http"):
-            url = VINTED_BASE + url
-
-        image_url = ""
-        photos = item.get("photos") or []
-        if photos:
-            img = photos[0] if isinstance(photos[0], str) else (photos[0].get("full_size_url") or photos[0].get("url") or "")
-            image_url = img
-        if not image_url:
-            image_url = item.get("photo", {}).get("full_size_url") or item.get("photo", {}).get("url") or ""
-
-        cond_id   = item.get("status_id") or item.get("item_condition_id") or 3
-        condition = _CONDITION_MAP.get(int(cond_id), "used")
-
-        seller = (item.get("user") or {})
-        seller_name = seller.get("login") or seller.get("name") or None
-
-        return {
-            "external_id":    f"vinted_{item_id}",
-            "title":          title,
-            "price":          price,
-            "url":            url,
-            "location":       "UK",
-            "condition":      condition,
-            "description":    str(item.get("description") or ""),
-            "image_urls":     [image_url] if image_url else [],
-            "source_name":    "Vinted",
-            "listing_type":   "buy_it_now",
-            "seller_name":    seller_name,
-            "found_via_term": term,
-        }
-    except Exception as exc:
-        log.debug("vinted.parse_error", error=str(exc))
-        return None
-
-
-# ── Search ────────────────────────────────────────────────────────────────────
-
-async def _search_term(
-    client: httpx.AsyncClient,
-    term: str,
-    min_price: float,
-    max_price: float,
-) -> list[dict]:
-    results: list[dict] = []
-    for page in range(1, MAX_PAGES + 1):
-        params: dict = {
-            "search_text":  term,
-            "per_page":     PER_PAGE,
-            "page":         page,
-            "order":        "newest_first",
-        }
-        if min_price > 0:
-            params["price_from"] = min_price
-        if max_price > 0:
-            params["price_to"]   = max_price
-        try:
-            await asyncio.sleep(REQUEST_DELAY)
-            resp = await client.get(VINTED_API, params=params)
-            if resp.status_code == 401:
-                log.warning("vinted.auth_error", term=term, page=page)
-                break
-            if resp.status_code != 200:
-                log.debug("vinted.bad_status", term=term, page=page, status=resp.status_code)
-                break
-            data  = resp.json()
-            items = data.get("items") or []
-            if not items:
-                break
-            # Vinted IDs are monotonically increasing (newest = highest ID).
-            # Stop as soon as we see an ID we processed in a previous run.
-            prev_max = _last_seen_ids.get(term, 0)
-            hit_seen = False
-            max_id_this_page = 0
-            for item in items:
-                item_id = int(item.get("id") or 0)
-                if item_id > max_id_this_page:
-                    max_id_this_page = item_id
-                if prev_max and item_id <= prev_max:
-                    hit_seen = True
-                    continue
-                parsed = _parse_item(item, term)
-                if parsed:
-                    results.append(parsed)
-            if max_id_this_page > _last_seen_ids.get(term, 0):
-                _last_seen_ids[term] = max_id_this_page
-            if hit_seen or len(items) < PER_PAGE:
-                break
-        except Exception as exc:
-            log.warning("vinted.request_error", term=term, page=page, error=str(exc))
-            break
-    log.debug("vinted.term_done", term=term, found=len(results))
-    return results
-
-
-# ── Public entry points ───────────────────────────────────────────────────────
 
 async def fetch_vinted_listings(
     search_terms: list[str] | None = None,
@@ -288,36 +32,218 @@ async def fetch_vinted_listings(
     max_price: float = 2500,
 ) -> list[dict]:
     """
-    Fetch active Vinted UK listings and return dicts compatible with
-    the RawListing constructor in scraper.py.
-    """
-    terms = search_terms or VINTED_SEARCH_TERMS
-    seen_ids: set[str] = set()
-    all_results: list[dict] = []
+    Fetch Vinted listings using Apify API.
 
-    client = await _get_session_client()
-    try:
+    Returns list of dicts with: title, price, url, condition, image_urls, seller_name
+    """
+    if not VintedScraperConfig.apify_api_token:
+        log.warning("vinted.apify_token_missing")
+        return []
+
+    terms = search_terms or [
+        "graphics card", "GPU", "DDR4 RAM", "DDR5 RAM",
+        "NVMe SSD", "motherboard", "power supply", "PC case",
+    ]
+
+    all_results = []
+    seen_urls = set()
+
+    async with httpx.AsyncClient(timeout=VintedScraperConfig.timeout_seconds) as client:
         for term in terms:
             try:
-                items = await _search_term(client, term, min_price, max_price)
+                items = await _run_apify_vinted_search(client, term, min_price, max_price)
                 for item in items:
-                    if item["external_id"] not in seen_ids:
-                        seen_ids.add(item["external_id"])
+                    url = item.get("url", "")
+                    if url and url not in seen_urls:
+                        seen_urls.add(url)
                         all_results.append(item)
             except Exception as exc:
                 log.warning("vinted.term_error", term=term, error=str(exc))
-    finally:
-        await client.aclose()
+            await asyncio.sleep(0.5)
 
     log.info("vinted.done", fetched=len(all_results), terms=len(terms))
     return all_results
 
 
+async def _run_apify_vinted_search(
+    client: httpx.AsyncClient,
+    term: str,
+    min_price: float,
+    max_price: float,
+) -> list[dict]:
+    """Run Apify scraper for a single search term on Vinted."""
+
+    run_url = f"{VintedScraperConfig.apify_api_url}/{VintedScraperConfig.apify_actor_id}/runs"
+
+    input_data = {
+        "startUrls": [
+            {
+                "url": f"https://www.vinted.co.uk/catalog?search_text={term}&order=newest_first"
+            }
+        ],
+        "maxItems": VintedScraperConfig.max_results_per_run,
+        "maxRequests": 5,
+        "proxySettings": {"useApifyProxy": True},
+    }
+
+    try:
+        # Start Apify run
+        response = await client.post(
+            run_url,
+            headers={"Authorization": f"Bearer {VintedScraperConfig.apify_api_token}"},
+            json=input_data,
+        )
+
+        if response.status_code != 201:
+            log.warning("vinted.apify_run_failed", term=term, status=response.status_code)
+            return []
+
+        run_data = response.json()
+        run_id = run_data.get("data", {}).get("id")
+        if not run_id:
+            return []
+
+        # Poll for completion
+        items = await _get_apify_results(client, run_id, term, min_price, max_price)
+        log.debug("vinted.term_done", term=term, found=len(items))
+        return items
+
+    except Exception as exc:
+        log.warning("vinted.apify_error", term=term, error=str(exc))
+        return []
+
+
+async def _get_apify_results(
+    client: httpx.AsyncClient,
+    run_id: str,
+    term: str,
+    min_price: float,
+    max_price: float,
+) -> list[dict]:
+    """Poll Apify for results and parse them."""
+
+    status_url = f"{VintedScraperConfig.apify_api_url}/{VintedScraperConfig.apify_actor_id}/runs/{run_id}"
+    dataset_url = f"https://api.apify.com/v2/datasets"
+
+    items = []
+    max_attempts = 30
+
+    for attempt in range(max_attempts):
+        try:
+            # Check run status
+            response = await client.get(
+                status_url,
+                headers={"Authorization": f"Bearer {VintedScraperConfig.apify_api_token}"},
+            )
+
+            if response.status_code != 200:
+                await asyncio.sleep(1)
+                continue
+
+            run_data = response.json().get("data", {})
+            status = run_data.get("status")
+
+            if status == "SUCCEEDED":
+                # Get results from dataset
+                dataset_id = run_data.get("defaultDatasetId")
+                if dataset_id:
+                    items = await _fetch_dataset_items(
+                        client, dataset_id, term, min_price, max_price
+                    )
+                break
+            elif status in ("FAILED", "ABORTED"):
+                log.warning("vinted.apify_run_failed", run_id=run_id, status=status)
+                break
+
+            await asyncio.sleep(2)
+
+        except Exception as exc:
+            log.warning("vinted.apify_poll_error", run_id=run_id, error=str(exc))
+            await asyncio.sleep(2)
+
+    return items
+
+
+async def _fetch_dataset_items(
+    client: httpx.AsyncClient,
+    dataset_id: str,
+    term: str,
+    min_price: float,
+    max_price: float,
+) -> list[dict]:
+    """Fetch items from Apify dataset and parse them."""
+
+    dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items"
+    items = []
+
+    try:
+        response = await client.get(
+            dataset_url,
+            headers={"Authorization": f"Bearer {VintedScraperConfig.apify_api_token}"},
+        )
+
+        if response.status_code != 200:
+            return []
+
+        data = response.json()
+        raw_items = data if isinstance(data, list) else data.get("items", [])
+
+        for item in raw_items:
+            parsed = _parse_vinted_item(item, term, min_price, max_price)
+            if parsed:
+                items.append(parsed)
+
+    except Exception as exc:
+        log.warning("vinted.dataset_fetch_error", dataset_id=dataset_id, error=str(exc))
+
+    return items
+
+
+def _parse_vinted_item(
+    item: dict,
+    term: str,
+    min_price: float,
+    max_price: float,
+) -> Optional[dict]:
+    """Parse Apify result into our listing format."""
+
+    title = item.get("title", "") or item.get("name", "")
+    price_str = item.get("price", "") or ""
+    url = item.get("url", "")
+
+    if not title or not url:
+        return None
+
+    # Parse price (handle £ symbol and commas)
+    try:
+        price_val = float(price_str.replace("£", "").replace(",", "").strip())
+    except (ValueError, AttributeError):
+        return None
+
+    if not (min_price <= price_val <= max_price):
+        return None
+
+    return {
+        "external_id": url,
+        "title": title,
+        "price": price_val,
+        "url": url,
+        "condition": item.get("condition", "used"),
+        "image_urls": [item.get("image", "")] if item.get("image") else [],
+        "seller_name": item.get("seller", {}).get("name", "Vinted User") if isinstance(item.get("seller"), dict) else "Vinted User",
+        "found_via_term": term,
+    }
+
+
 async def scrape_vinted_tech() -> dict:
     """
-    Called by the components aggregator — returns {"listings": [...]} where
-    each entry has price_gbp, title, condition, category and source_url.
+    Called by the components aggregator.
+    Returns {"listings": [...]} where each entry has price_gbp, title, condition, category, source_url.
     """
+    if not VintedScraperConfig.apify_api_token:
+        log.warning("vinted.apify_not_configured")
+        return {"listings": [], "stats": {"error": "APIFY_API_TOKEN not configured"}}
+
     items = await fetch_vinted_listings(
         search_terms=[
             "graphics card", "GPU", "RTX", "GTX",
@@ -331,15 +257,31 @@ async def scrape_vinted_tech() -> dict:
         min_price=5,
         max_price=1500,
     )
+
     listings = [
         {
-            "title":      i["title"],
-            "price_gbp":  i["price"],
-            "condition":  i["condition"],
+            "title": i["title"],
+            "price_gbp": i["price"],
+            "condition": i.get("condition", "used"),
             "source_url": i["url"],
-            "seller":     i.get("seller_name") or "Vinted User",
-            "category":   i.get("found_via_term", ""),
+            "seller": i.get("seller_name", "Vinted User"),
+            "category": i.get("found_via_term", ""),
         }
         for i in items
     ]
-    return {"listings": listings}
+
+    return {
+        "listings": listings,
+        "stats": {
+            "total": len(listings),
+            "terms": len([
+                "graphics card", "GPU", "RTX", "GTX",
+                "Intel Core i5", "Intel Core i7", "AMD Ryzen 5", "AMD Ryzen 7",
+                "DDR4 RAM", "DDR5 RAM", "16GB RAM", "32GB RAM",
+                "NVMe SSD", "M.2 SSD",
+                "motherboard ATX", "motherboard AM4", "motherboard AM5",
+                "power supply 650W", "power supply 750W",
+                "PC case ATX",
+            ]),
+        },
+    }
