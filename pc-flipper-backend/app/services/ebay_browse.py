@@ -118,11 +118,17 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         title = str(item.get("title") or "")
         if _is_accessory(title):
             continue
+
+        # Verify condition is acceptable (eBay sometimes returns unwanted conditions)
+        condition = str(item.get("condition") or "").upper()
+        if condition == "FOR_PARTS_OR_NOT_WORKING":
+            continue
+
         image = item.get("image") or {}
         results.append({
             "title": title,
             "price": price,
-            "condition": str(item.get("condition") or ""),
+            "condition": condition,
             "url": str(item.get("itemWebUrl") or ""),
             "image_url": image.get("imageUrl"),
         })
