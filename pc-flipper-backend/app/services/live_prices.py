@@ -44,6 +44,8 @@ _CATEGORY_MIN_PRICE: dict[str, float] = {
     "cooler":      10.0,
 }
 
+_COMPONENT_SEARCH_MAX_PRICE = 10000.0
+
 
 def _classify(discount_pct: float | None) -> str | None:
     if discount_pct is None:
@@ -86,11 +88,15 @@ async def get_live_prices_for_category(
         model_name = model["name"]
 
         # 1. Get eBay benchmarks (NEW and USED prices)
-        ebay_data = await get_component_prices(
-            model_name,
-            force_refresh=force_refresh,
-            min_price=_CATEGORY_MIN_PRICE.get(category, 15.0),
-        )
+        try:
+            ebay_data = await get_component_prices(
+                model_name,
+                force_refresh=force_refresh,
+                min_price=_CATEGORY_MIN_PRICE.get(category, 15.0),
+            )
+        except Exception as exc:
+            log.debug("live_prices.ebay_fetch_error", model=model_name, error=str(exc))
+            return None
 
         if not ebay_data.get("used_prices"):
             return None
@@ -107,14 +113,14 @@ async def get_live_prices_for_category(
                 all_source_listings = await search_component_all_sources(
                     model_name,
                     min_price=_CATEGORY_MIN_PRICE.get(category, 15.0),
-                    max_price=10000.0,
+                    max_price=_COMPONENT_SEARCH_MAX_PRICE,
                 )
             except Exception as exc:
                 log.debug("live_prices.multi_source_error", model=model_name, error=str(exc))
 
         # 3. Calculate gem classification based on eBay benchmarks
         discount_pct = None
-        if used_median and used_cheapest and used_cheapest.get("price"):
+        if used_median and used_median > 0 and used_cheapest and used_cheapest.get("price"):
             cheapest_price = used_cheapest["price"]
             if cheapest_price < used_median:
                 discount_pct = round((used_median - cheapest_price) / used_median * 100, 1)
