@@ -1255,7 +1255,8 @@ function CatalogueTab() {
 // ── Component sources summary table ──────────────────────────────────────────
 
 function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
-  const allSources = rows.flatMap(row =>
+  // Combine multi-source listings with eBay benchmarks as fallback
+  let allSources = rows.flatMap(row =>
     row.all_sources.map(source => ({
       model: row.model,
       tier: row.tier,
@@ -1264,7 +1265,34 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
       priceDiff: (source.price - (row.used_median || row.new_price || 0)),
       priceDiffPct: ((source.price - (row.used_median || row.new_price || 0)) / (row.used_median || row.new_price || 1) * 100),
     }))
-  ).sort((a, b) => a.priceDiff - b.priceDiff); // Sort by price diff ascending (cheapest first)
+  ).sort((a, b) => a.priceDiff - b.priceDiff);
+
+  // If no multi-source data, show eBay benchmarks as summary table
+  const showingEbayOnly = allSources.length === 0;
+  if (showingEbayOnly) {
+    allSources = rows
+      .filter(r => r.used_cheapest_price !== null)
+      .map(row => ({
+        model: row.model,
+        tier: row.tier,
+        ebayBenchmark: row.used_median || row.new_price || 0,
+        source: "ebay",
+        price: row.used_cheapest_price || 0,
+        title: row.used_cheapest_title || "",
+        url: row.used_cheapest_url || "",
+        image_url: row.used_cheapest_image,
+        condition: "used",
+        priceDiff: (row.used_cheapest_price || 0) - (row.used_median || row.new_price || 0),
+        priceDiffPct: ((row.used_cheapest_price || 0) - (row.used_median || row.new_price || 0)) / (row.used_median || row.new_price || 1) * 100,
+      }))
+      .sort((a, b) => a.priceDiff - b.priceDiff)
+      .sort((a, b) => {
+        const gemOrder = { super_gem: 0, gem: 1, standard: 2 };
+        const aGem = rows.find(r => r.model === a.model)?.gem_classification || "standard";
+        const bGem = rows.find(r => r.model === b.model)?.gem_classification || "standard";
+        return (gemOrder[aGem as keyof typeof gemOrder] || 2) - (gemOrder[bGem as keyof typeof gemOrder] || 2);
+      });
+  }
 
   if (allSources.length === 0) return null;
 
@@ -1273,9 +1301,13 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
       <div className="px-4 py-3 border-b border-[#1e2d45] bg-[#070d14]">
         <h3 className="text-sm font-mono font-semibold text-slate-200 flex items-center gap-2">
           <Search className="w-4 h-4 text-slate-500" />
-          Multi-Source Listings ({allSources.length})
+          {showingEbayOnly ? "eBay Benchmarks" : "Multi-Source Listings"} ({allSources.length})
         </h3>
-        <p className="text-xs text-slate-600 mt-1 font-mono">Ranked by price difference to eBay benchmark (ascending)</p>
+        <p className="text-xs text-slate-600 mt-1 font-mono">
+          {showingEbayOnly
+            ? "Cheapest eBay listings ranked by gem value"
+            : "Ranked by price difference to eBay benchmark (ascending)"}
+        </p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs font-mono">
