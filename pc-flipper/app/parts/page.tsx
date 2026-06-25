@@ -1420,7 +1420,8 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
                 </td>
                 <td className="px-4 py-2 text-slate-500 capitalize">{item.condition || "—"}</td>
               </tr>
-            ))}
+            );
+            })}
           </tbody>
         </table>
       </div>
