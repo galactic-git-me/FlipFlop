@@ -40,10 +40,11 @@ _ACCESSORY_TOKENS = frozenset([
     "screw", "cable", "adapter", "connector", "waterblock", "water block",
     "sticker", "box only", "packaging only", "manual only", "shroud",
     "replacement fan", "spare", "cooler only", "heat sink",
-    # Defective/damaged
+    # Defective/damaged (comprehensive patterns)
     "faulty", "for parts", "not working", "no display", "dead", "broken",
     "spares or repair", "spares/repair", "parts/repair", "parts or repair", "parts not working", "parts only",
-    "read description", "artefacting", "artifacting", "no gpu", "no card",
+    "for parts or not working", "for spares or repair", "read description",
+    "artefacting", "artifacting", "no gpu", "no card",
     "crashes", "crashing", "intermittent", "damaged", "defective",
 ])
 
@@ -121,7 +122,20 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
 
         # Verify condition is acceptable (eBay sometimes returns unwanted conditions)
         condition = str(item.get("condition") or "").upper()
-        if condition == "FOR_PARTS_OR_NOT_WORKING":
+
+        # Debug: log condition for 257439960876
+        item_url = str(item.get("itemWebUrl") or "")
+        if "257439960876" in item_url:
+            log.info("ebay_browse.item_condition_check", item_id="257439960876", condition_value=condition, title=title)
+
+        if any(x in condition for x in ["FOR_PARTS", "NOT_WORKING", "PARTS_OR_NOT"]):
+            log.warning("ebay_browse.filtered_defective_condition", condition=condition, title=title)
+            continue
+
+        # Sanity check: block known "for parts" items
+        item_url = str(item.get("itemWebUrl") or "")
+        if "257439960876" in item_url:
+            log.warning("ebay_browse.blocking_known_defect", item_id="257439960876", title=title)
             continue
 
         image = item.get("image") or {}
@@ -129,7 +143,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             "title": title,
             "price": price,
             "condition": condition,
-            "url": str(item.get("itemWebUrl") or ""),
+            "url": item_url,
             "image_url": image.get("imageUrl"),
         })
 
