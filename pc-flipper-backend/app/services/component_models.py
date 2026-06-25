@@ -80,13 +80,26 @@ CANONICAL_MODELS: dict[str, list[ComponentModel]] = {
         {"name": "AMD Ryzen 9 7950X",     "bh_search": "ryzen+9+7950x",     "tier": "ultra"},
     ],
     "ram": [
+        # DDR4 Budget
+        {"name": "8GB DDR4 3200MHz Kit",   "bh_search": "8gb+ddr4+3200+kit",   "tier": "budget"},
         {"name": "16GB DDR4 3200MHz Kit",  "bh_search": "16gb+ddr4+3200+kit",  "tier": "budget"},
+        {"name": "16GB DDR4 3600MHz Kit",  "bh_search": "16gb+ddr4+3600+kit",  "tier": "budget"},
+        # DDR4 Mid
         {"name": "32GB DDR4 3200MHz Kit",  "bh_search": "32gb+ddr4+3200+kit",  "tier": "mid"},
+        {"name": "32GB DDR4 3600MHz Kit",  "bh_search": "32gb+ddr4+3600+kit",  "tier": "mid"},
+        # DDR4 High
         {"name": "64GB DDR4 3200MHz Kit",  "bh_search": "64gb+ddr4+3200+kit",  "tier": "high"},
+        {"name": "64GB DDR4 3600MHz Kit",  "bh_search": "64gb+ddr4+3600+kit",  "tier": "high"},
+        # DDR5 Budget
+        {"name": "8GB DDR5 5600MHz Kit",   "bh_search": "8gb+ddr5+5600+kit",   "tier": "budget"},
         {"name": "16GB DDR5 5600MHz Kit",  "bh_search": "16gb+ddr5+5600+kit",  "tier": "budget"},
+        {"name": "16GB DDR5 6000MHz Kit",  "bh_search": "16gb+ddr5+6000+kit",  "tier": "budget"},
+        # DDR5 Mid
         {"name": "32GB DDR5 5600MHz Kit",  "bh_search": "32gb+ddr5+5600+kit",  "tier": "mid"},
+        {"name": "32GB DDR5 6000MHz Kit",  "bh_search": "32gb+ddr5+6000+kit",  "tier": "mid"},
+        # DDR5 High
         {"name": "64GB DDR5 5600MHz Kit",  "bh_search": "64gb+ddr5+5600+kit",  "tier": "high"},
-        {"name": "128GB DDR4 ECC Kit",     "bh_search": "128gb+ddr4+ecc+kit",  "tier": "ultra"},
+        {"name": "64GB DDR5 6000MHz Kit",  "bh_search": "64gb+ddr5+6000+kit",  "tier": "high"},
     ],
     "ssd": [
         {"name": "500GB NVMe M.2 SSD",    "bh_search": "500gb+nvme+m2+ssd",   "tier": "budget"},
