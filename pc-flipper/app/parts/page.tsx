@@ -1560,7 +1560,7 @@ function AIAnalysisModal({
 }: {
   open: boolean;
   onClose: () => void;
-  listings: Listing[];
+  listings: Array<{ title: string; price?: number | null }>;
   onAnalyze: () => void;
   chatMessages: Array<{ role: "user" | "assistant"; content: string }>;
   loading: boolean;
