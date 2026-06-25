@@ -537,10 +537,11 @@ async def analyze_listings(
     data: dict,
 ):
     """
-    Analyze marketplace listings with Claude to find top 5 deals.
-    Returns AI analysis with reasoning and top picks.
+    Analyze marketplace listings with LLM to find top 5 deals.
+    Uses OpenRouter (Google Gemma 4 31B free model) like gem evaluator.
     """
-    import anthropic
+    import httpx
+    import asyncio
     from app.config import get_settings
 
     listings = data.get("listings", [])
@@ -548,24 +549,16 @@ async def analyze_listings(
         raise HTTPException(status_code=400, detail="No listings provided")
 
     settings = get_settings()
-    if not settings.anthropic_api_key:
-        raise HTTPException(status_code=500, detail="Anthropic API key not configured")
+    if not settings.openrouter_api_key:
+        raise HTTPException(status_code=500, detail="OpenRouter API key not configured")
 
-    # Format listings for Claude
+    # Format listings for LLM
     listings_text = "\n".join(
         f"{i+1}. {l['title']} - £{l.get('price', 'N/A')} ({l.get('source', 'Unknown')}, {l.get('classification', 'unknown')})"
         for i, l in enumerate(listings[:30])  # Limit to 30 for context
     )
 
-    try:
-        client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-        message = client.messages.create(
-            model="claude-opus-4-8",
-            max_tokens=1024,
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"""Analyze these marketplace listings and identify the TOP 5 BEST DEALS.
+    prompt = f"""Analyze these marketplace listings and identify the TOP 5 BEST DEALS.
 
 LISTINGS:
 {listings_text}
@@ -576,14 +569,37 @@ For each top deal, explain:
 3. Estimated resale value
 4. Risk factors
 
-Format your response as a clear ranking with reasoning.""",
-                }
-            ],
-        )
+Format your response as a clear ranking with reasoning."""
+
+    try:
+        async with httpx.AsyncClient(timeout=60) as client:
+            resp = await client.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {settings.openrouter_api_key}",
+                    "HTTP-Referer": "http://localhost:3000",
+                    "X-Title": "PC Flipper Listing Analyzer",
+                },
+                json={
+                    "model": settings.openrouter_primary_model or "google/gemma-4-31b-it:free",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 1024,
+                },
+            )
+
+        if resp.status_code != 200:
+            raise HTTPException(status_code=500, detail=f"OpenRouter API error: {resp.text}")
+
+        result = resp.json()
+        analysis_text = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+        if not analysis_text:
+            raise HTTPException(status_code=500, detail="No analysis returned from LLM")
 
         return {
-            "analysis": message.content[0].text,
+            "analysis": analysis_text,
             "listings_analyzed": len(listings),
         }
-    except anthropic.AuthenticationError:
-        raise HTTPException(status_code=500, detail="Anthropic API authentication failed")
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"API request failed: {str(e)}")
