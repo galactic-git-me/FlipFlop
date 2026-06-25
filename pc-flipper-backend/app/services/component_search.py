@@ -16,81 +16,57 @@ _GUMTREE_PAGE_COUNT = 1
 
 
 def _get_vinted_search_terms(component_name: str) -> list[str]:
-    """Convert component model names to Vinted search terms that actually find listings."""
+    """Convert component model names to simple marketplace search terms."""
     name_lower = component_name.lower()
-    terms = []
 
-    # GPU/Graphics cards
-    if any(x in name_lower for x in ["rtx", "gtx", "radeon", "gpu", "graphics card"]):
-        if "3060" in name_lower:
-            terms.extend(["RTX 3060", "3060 12GB", "graphics card"])
-        elif "3070" in name_lower:
-            terms.extend(["RTX 3070", "3070 8GB"])
-        elif "3080" in name_lower:
-            terms.extend(["RTX 3080", "3080 10GB"])
-        else:
-            terms.extend(["graphics card", "GPU", "RTX", "GTX"])
-
-    # CPU/Processors
-    elif any(x in name_lower for x in ["core i", "ryzen", "cpu"]):
-        if "i5" in name_lower or "ryzen 5" in name_lower:
-            terms.extend(["CPU", "Intel Core i5", "AMD Ryzen 5"])
-        elif "i7" in name_lower or "ryzen 7" in name_lower:
-            terms.extend(["CPU", "Intel Core i7", "AMD Ryzen 7"])
-        else:
-            terms.extend(["CPU", "processor"])
-
-    # RAM
-    elif any(x in name_lower for x in ["ddr4", "ddr5", "ram"]):
-        if "16gb" in name_lower:
-            terms.extend(["16GB RAM", "DDR4 RAM", "DDR5 RAM"])
-        elif "32gb" in name_lower:
-            terms.extend(["32GB RAM", "DDR4 RAM", "DDR5 RAM"])
-        elif "64gb" in name_lower:
-            terms.extend(["64GB RAM", "DDR4 kit", "DDR5 kit"])
-        elif "8gb" in name_lower:
-            terms.extend(["8GB RAM", "DDR4 RAM", "DDR5 RAM"])
-        else:
-            terms.extend(["RAM", "DDR4 RAM", "DDR5 RAM"])
-
-    # SSDs/Storage
-    elif any(x in name_lower for x in ["ssd", "nvme", "m.2"]):
-        if "nvme" in name_lower or "m.2" in name_lower:
-            terms.extend(["NVMe SSD", "M.2 SSD"])
-        if "500gb" in name_lower:
-            terms.extend(["500GB SSD"])
-        elif "1tb" in name_lower or "2tb" in name_lower:
-            terms.extend(["SSD 1TB", "SSD 2TB"])
-        else:
-            terms.extend(["SSD", "NVMe SSD"])
-
-    # PSU/Power supplies
-    elif any(x in name_lower for x in ["psu", "power supply", "650w", "750w", "850w"]):
-        for wattage in ["650w", "750w", "850w", "1000w", "1200w"]:
-            if wattage in name_lower:
-                terms.append(f"power supply {wattage}")
-        if not terms:
-            terms.extend(["power supply", "PSU"])
-
-    # Motherboards
-    elif any(x in name_lower for x in ["motherboard", "mobo", "atx", "am4", "am5", "lga"]):
-        terms.extend(["motherboard", "mobo"])
+    # CPU: Extract socket type (AM4, AM5, LGA1700) and return generic term
+    if "cpu" in name_lower or "processor" in name_lower:
         if "am4" in name_lower:
-            terms.append("AM4 motherboard")
+            return ["AM4 CPU"]
         elif "am5" in name_lower:
-            terms.append("AM5 motherboard")
+            return ["AM5 CPU"]
         elif "lga" in name_lower:
-            terms.append("Intel motherboard")
+            return ["Intel CPU"]
+        return ["CPU"]
 
-    # CPU Coolers
-    elif any(x in name_lower for x in ["cooler", "heatsink", "aio"]):
-        terms.extend(["CPU cooler", "cooler"])
+    # Motherboard: Extract socket and return generic term
+    if "motherboard" in name_lower or "mobo" in name_lower:
+        if "am4" in name_lower:
+            return ["AM4 motherboard"]
+        elif "am5" in name_lower:
+            return ["AM5 motherboard"]
+        elif "lga" in name_lower:
+            return ["Intel motherboard"]
+        return ["motherboard"]
 
-    # Fallback: use generic terms
-    if not terms:
-        terms = [component_name, "PC component"]
+    # RAM: Extract generation and return generic term
+    if "ram" in name_lower or "ddr" in name_lower:
+        if "ddr5" in name_lower:
+            return ["DDR5 RAM"]
+        elif "ddr4" in name_lower:
+            return ["DDR4 RAM"]
+        return ["RAM"]
 
-    return terms[:3]  # Return top 3 most relevant terms
+    # SSD/NVMe: Generic storage terms
+    if "ssd" in name_lower or "nvme" in name_lower or "m.2" in name_lower:
+        if "nvme" in name_lower or "m.2" in name_lower:
+            return ["NVME drive"]
+        return ["SSD"]
+
+    # GPU: Generic graphics card terms
+    if "gpu" in name_lower or "graphics" in name_lower or "rtx" in name_lower or "gtx" in name_lower:
+        return ["graphics card"]
+
+    # PSU: Generic power supply terms
+    if "psu" in name_lower or "power supply" in name_lower:
+        return ["power supply"]
+
+    # Cooler: Generic cooler terms
+    if "cooler" in name_lower or "heatsink" in name_lower or "aio" in name_lower:
+        return ["CPU cooler"]
+
+    # Fallback: Use component name as-is
+    return [component_name]
 
 
 @dataclass
