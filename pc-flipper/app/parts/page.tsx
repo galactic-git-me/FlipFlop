@@ -1361,25 +1361,52 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
           <thead>
             <tr className="border-b border-[#1e2d45] bg-[#080f1a]">
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Component</th>
-              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Source</th>
-              <th className="px-4 py-2 text-right text-slate-400 font-semibold">Price</th>
+              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Price Comparison</th>
               <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay NEW</th>
               <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay USED</th>
               <th className="px-4 py-2 text-left text-slate-400 font-semibold">Condition</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#1e2d45]">
-            {tableRows.map((item, idx) => (
+            {tableRows.map((item, idx) => {
+              // Get all sources for this component
+              const componentSources = allSources.filter(s => s.model === item.model).sort((a, b) => a.price - b.price);
+              const maxPrice = Math.max(...componentSources.map(s => s.price), 1);
+
+              return (
               <tr
                 key={`${item.model}-${item.source}-${idx}`}
                 className="hover:bg-[#0a1625] transition-colors cursor-pointer group"
                 onClick={() => window.open(item.url, "_blank")}
-                title={`Click to buy from ${item.source.toUpperCase()} (cheapest)`}
               >
                 <td className="px-4 py-2 text-slate-300 group-hover:text-[#00dc82] max-w-xs truncate">{item.model}</td>
-                <td className="px-4 py-2 text-slate-500 capitalize group-hover:text-slate-400">{item.source}</td>
-                <td className="px-4 py-2 text-right text-slate-300 group-hover:text-[#00dc82] font-semibold">
-                  {formatCurrency(item.price)}
+                <td className="px-4 py-2">
+                  <div className="space-y-1">
+                    {componentSources.map((src, i) => (
+                      <div key={`${item.model}-${src.source}-${i}`} className="flex items-center gap-2">
+                        <div className="w-12 text-left">
+                          <span className={`text-[9px] font-semibold capitalize ${
+                            src.source === item.source ? "text-emerald-400" : "text-slate-500"
+                          }`}>
+                            {src.source === item.source ? `✓ ${src.source}` : src.source}
+                          </span>
+                        </div>
+                        <div className="relative flex-1 h-5 bg-[#080f1a] rounded border border-[#1e2d45]">
+                          <div
+                            className={`h-full rounded flex items-center px-1 transition-all ${
+                              src.source === item.source
+                                ? "bg-emerald-500/40 border-emerald-500/50"
+                                : "bg-slate-600/30 border-slate-600/40"
+                            }`}
+                            style={{ width: `${(src.price / maxPrice) * 100}%` }}
+                          />
+                          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[9px] text-slate-300 font-semibold pointer-events-none whitespace-nowrap">
+                            {formatCurrency(src.price)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </td>
                 <td className={`px-4 py-2 text-right font-semibold text-[10px] ${
                   item.priceDiffVsNew < 0 ? "text-emerald-400" : item.priceDiffVsNew > 0 ? "text-red-400" : "text-slate-400"
