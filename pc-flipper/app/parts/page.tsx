@@ -1000,6 +1000,9 @@ function CatalogueTab() {
   const [activeCategory, setActiveCategory] = useState<CatId>("gpu");
   const [tierFilter, setTierFilter] = useState<string>("all");
   const [gemFilter, setGemFilter]   = useState<string>("all");
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [chatMessages, setChatMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
 
   // Client-side cache so tab switches don't re-trigger a 15s scrape
   const cache = useRef<Partial<Record<CatId, LivePriceRow[]>>>({});
@@ -1051,8 +1054,55 @@ function CatalogueTab() {
     return filtered;
   }, [liveRows, tierFilter, gemFilter]);
 
+  const handleAnalyzeComponents = async () => {
+    if (rows.length === 0) return;
+
+    setAnalysisLoading(true);
+    try {
+      const componentData = rows.map(r => ({
+        title: r.model,
+        price: r.used_median || r.new_price,
+        source: "eBay",
+        tier: r.tier,
+        discount: r.discount_pct,
+        classification: r.gem_classification,
+      }));
+
+      const response = await fetch("/api/listings/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listings: componentData }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setChatMessages([
+          { role: "assistant", content: data.analysis },
+        ]);
+      }
+    } catch (error) {
+      console.error("Analysis failed:", error);
+      setChatMessages([
+        { role: "assistant", content: "Sorry, I couldn't analyze the components. Please try again." },
+      ]);
+    } finally {
+      setAnalysisLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
+      {showAnalysisModal && (
+        <AIAnalysisModal
+          open={showAnalysisModal}
+          onClose={() => setShowAnalysisModal(false)}
+          listings={rows.map(r => ({ title: r.model, price: r.used_median || r.new_price }))}
+          onAnalyze={handleAnalyzeComponents}
+          chatMessages={chatMessages}
+          loading={analysisLoading}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <p className="text-xs text-slate-500 font-mono">
@@ -1063,14 +1113,27 @@ function CatalogueTab() {
               : "Select a category to fetch live prices"
           }
         </p>
-        <Button
-          variant="secondary" size="sm"
-          onClick={() => void load(activeCategory, true)}
-          disabled={loading}
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-          {loading ? "Fetching…" : "Refresh Live"}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="secondary" size="sm"
+            onClick={() => void load(activeCategory, true)}
+            disabled={loading}
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+            {loading ? "Fetching…" : "Refresh Live"}
+          </Button>
+          <Button
+            variant="ghost" size="sm"
+            onClick={() => {
+              setChatMessages([]);
+              setShowAnalysisModal(true);
+            }}
+            disabled={rows.length === 0 || loading}
+            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10"
+          >
+            <Zap className="w-3.5 h-3.5" /> Analyze
+          </Button>
+        </div>
       </div>
 
       {/* Paste scanner */}
