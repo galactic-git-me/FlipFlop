@@ -181,7 +181,7 @@ async def _search_gumtree(
         # Use the same search term conversion as Vinted
         search_terms = _get_vinted_search_terms(component_name)
 
-        rows = await scrape_gumtree_playwright(search_terms, _GUMTREE_PAGE_COUNT, int(max_price))
+        rows = await scrape_gumtree_playwright(search_terms, int(min_price), int(max_price))
         return [
             ComponentListing(
                 title=row.get("title", ""),
