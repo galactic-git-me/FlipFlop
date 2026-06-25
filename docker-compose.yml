@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   db:
     image: postgres:16-alpine
@@ -50,19 +52,16 @@ services:
       SYNC_DATABASE_URL: postgresql://flipper:flipper@db:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
       FRONTEND_URL: http://localhost:4310
-      # Attach Playwright to Chrome running on host machine.
-      # Windows/macOS Docker Desktop: host.docker.internal resolves automatically.
-      # Linux Docker: we map it with extra_hosts below.
       BROWSER_CDP_URL: http://host.docker.internal:9222
       SHOW_SCRAPER_BROWSER: "1"
       FB_HEADLESS: "0"
       APP_ENV: staging
-      ANTHROPIC_API_KEY: ANTHROPIC_API_KEY_REDACTED
-      OPENROUTER_API_KEY: OPENROUTER_API_KEY_REDACTED
-      OPENROUTER_PRIMARY_MODEL: meta-llama/llama-3.1-8b-instruct
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENROUTER_PRIMARY_MODEL: ${OPENROUTER_PRIMARY_MODEL:-google/gemma-4-31b-it:free}
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       OLLAMA_MODEL: gemma4:e4b
-      APIFY_API_TOKEN: APIFY_API_TOKEN_REDACTED
+      APIFY_API_TOKEN: ${APIFY_API_TOKEN}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
