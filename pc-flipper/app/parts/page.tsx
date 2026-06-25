@@ -630,6 +630,15 @@ function ListingRow({ listing: l, onFlip, flippingId }: {
 // CANONICAL COMPONENT CATALOGUE (live price tracker per model)
 // ══════════════════════════════════════════════════════════════════════════════
 
+type ComponentSourceListing = {
+  source: string;
+  price: number;
+  title: string;
+  url: string;
+  image_url?: string | null;
+  condition?: string | null;
+};
+
 type LivePriceRow = {
   model: string;
   tier: "budget" | "mid" | "high" | "ultra";
@@ -643,6 +652,7 @@ type LivePriceRow = {
   used_cheapest_image: string | null;
   discount_pct: number | null;
   gem_classification: "super_gem" | "gem" | null;
+  all_sources: ComponentSourceListing[];
 };
 
 const CAT_TABS = [
@@ -1202,6 +1212,9 @@ function CatalogueTab() {
         ))}
       </div>
 
+      {/* Summary table: all sources ranked by price */}
+      {!loading && rows.length > 0 && <ComponentSourcesTable rows={rows} />}
+
       {/* Card grid */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -1239,6 +1252,73 @@ function CatalogueTab() {
   );
 }
 
+// ── Component sources summary table ──────────────────────────────────────────
+
+function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
+  const allSources = rows.flatMap(row =>
+    row.all_sources.map(source => ({
+      model: row.model,
+      tier: row.tier,
+      ebayBenchmark: row.used_median || row.new_price || 0,
+      ...source,
+      priceDiff: (source.price - (row.used_median || row.new_price || 0)),
+      priceDiffPct: ((source.price - (row.used_median || row.new_price || 0)) / (row.used_median || row.new_price || 1) * 100),
+    }))
+  ).sort((a, b) => a.priceDiff - b.priceDiff); // Sort by price diff ascending (cheapest first)
+
+  if (allSources.length === 0) return null;
+
+  return (
+    <div className="border border-[#1e2d45] rounded-lg overflow-hidden bg-[#0d1520]">
+      <div className="px-4 py-3 border-b border-[#1e2d45] bg-[#070d14]">
+        <h3 className="text-sm font-mono font-semibold text-slate-200 flex items-center gap-2">
+          <Search className="w-4 h-4 text-slate-500" />
+          Multi-Source Listings ({allSources.length})
+        </h3>
+        <p className="text-xs text-slate-600 mt-1 font-mono">Ranked by price difference to eBay benchmark (ascending)</p>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs font-mono">
+          <thead>
+            <tr className="border-b border-[#1e2d45] bg-[#080f1a]">
+              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Component</th>
+              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Source</th>
+              <th className="px-4 py-2 text-right text-slate-400 font-semibold">Price</th>
+              <th className="px-4 py-2 text-right text-slate-400 font-semibold">vs eBay</th>
+              <th className="px-4 py-2 text-left text-slate-400 font-semibold">Condition</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#1e2d45]">
+            {allSources.slice(0, 20).map((item, idx) => (
+              <tr
+                key={`${item.model}-${item.source}-${idx}`}
+                className="hover:bg-[#0a1625] transition-colors cursor-pointer group"
+                onClick={() => window.open(item.url, "_blank")}
+              >
+                <td className="px-4 py-2 text-slate-300 group-hover:text-[#00dc82] max-w-xs truncate">{item.model}</td>
+                <td className="px-4 py-2 text-slate-500 capitalize group-hover:text-slate-400">{item.source}</td>
+                <td className="px-4 py-2 text-right text-slate-300 group-hover:text-[#00dc82] font-semibold">
+                  {formatCurrency(item.price)}
+                </td>
+                <td className={`px-4 py-2 text-right font-semibold ${
+                  item.priceDiff < 0 ? "text-emerald-400" : item.priceDiff > 0 ? "text-red-400" : "text-slate-400"
+                }`}>
+                  {item.priceDiff > 0 ? "+" : ""}{formatCurrency(item.priceDiff)} ({item.priceDiffPct > 0 ? "+" : ""}{item.priceDiffPct.toFixed(1)}%)
+                </td>
+                <td className="px-4 py-2 text-slate-500 capitalize">{item.condition || "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {allSources.length > 20 && (
+        <div className="px-4 py-2 bg-[#080f1a] border-t border-[#1e2d45] text-xs text-slate-600 text-center font-mono">
+          Showing 20 of {allSources.length} listings
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PARTS CATALOGUE TABS (Components / PC Cases / Accessories)
