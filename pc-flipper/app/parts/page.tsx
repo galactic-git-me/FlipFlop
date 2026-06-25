@@ -1256,16 +1256,42 @@ function CatalogueTab() {
 
 function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
   // Combine multi-source listings with eBay benchmarks as fallback
-  let allSources = rows.flatMap(row =>
+  type ListingItem = {
+    model: string;
+    tier: string;
+    source: string;
+    price: number;
+    title: string;
+    url: string;
+    image_url?: string | null;
+    condition?: string | null;
+    new_price?: number;
+    used_median?: number;
+    priceDiffVsNew?: number;
+    priceDiffPctVsNew?: number;
+    priceDiffVsUsed?: number;
+    priceDiffPctVsUsed?: number;
+    gem_classification?: string | null;
+  };
+
+  let allSources: ListingItem[] = rows.flatMap(row =>
     row.all_sources.map(source => ({
       model: row.model,
       tier: row.tier,
-      ebayBenchmark: row.used_median || row.new_price || 0,
-      ...source,
-      priceDiff: (source.price - (row.used_median || row.new_price || 0)),
-      priceDiffPct: ((source.price - (row.used_median || row.new_price || 0)) / (row.used_median || row.new_price || 1) * 100),
+      source: source.source,
+      price: source.price,
+      title: source.title,
+      url: source.url,
+      image_url: source.image_url,
+      condition: source.condition,
+      new_price: row.new_price || 0,
+      used_median: row.used_median || 0,
+      priceDiffVsNew: source.price - (row.new_price || 0),
+      priceDiffPctVsNew: ((source.price - (row.new_price || 0)) / (row.new_price || 1)) * 100,
+      priceDiffVsUsed: source.price - (row.used_median || 0),
+      priceDiffPctVsUsed: ((source.price - (row.used_median || 0)) / (row.used_median || 1)) * 100,
     }))
-  ).sort((a, b) => a.priceDiff - b.priceDiff);
+  ).sort((a, b) => (a.priceDiffVsUsed || 0) - (b.priceDiffVsUsed || 0));
 
   // If no multi-source data, show eBay benchmarks as summary table
   const showingEbayOnly = allSources.length === 0;
@@ -1275,14 +1301,14 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
       .map(row => ({
         model: row.model,
         tier: row.tier,
-        new_price: row.new_price || 0,
-        used_median: row.used_median || 0,
         source: "ebay",
         price: row.used_cheapest_price || 0,
         title: row.used_cheapest_title || "",
         url: row.used_cheapest_url || "",
         image_url: row.used_cheapest_image,
         condition: "used",
+        new_price: row.new_price || 0,
+        used_median: row.used_median || 0,
         priceDiffVsNew: (row.used_cheapest_price || 0) - (row.new_price || 0),
         priceDiffPctVsNew: ((row.used_cheapest_price || 0) - (row.new_price || 0)) / (row.new_price || 1) * 100,
         priceDiffVsUsed: (row.used_cheapest_price || 0) - (row.used_median || 0),
@@ -1291,9 +1317,11 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
       }))
       .sort((a, b) => {
         const gemOrder = { super_gem: 0, gem: 1, standard: 2 };
-        return (gemOrder[a.gem_classification as keyof typeof gemOrder] || 2) - (gemOrder[b.gem_classification as keyof typeof gemOrder] || 2);
+        const aGem = (a.gem_classification as keyof typeof gemOrder) || "standard";
+        const bGem = (b.gem_classification as keyof typeof gemOrder) || "standard";
+        return (gemOrder[aGem] || 2) - (gemOrder[bGem] || 2);
       })
-      .sort((a, b) => a.priceDiffVsUsed - b.priceDiffVsUsed);
+      .sort((a, b) => (a.priceDiffVsUsed || 0) - (b.priceDiffVsUsed || 0));
   }
 
   if (allSources.length === 0) return null;
