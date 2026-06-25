@@ -29,8 +29,8 @@ class ComponentPriceData(BaseModel):
     used_cheapest_image: Optional[str] = None
 
     # Gem classification
-    discount_pct: Optional[float] = None
-    gem_classification: Optional[str] = None  # "super_gem", "gem", or None
+    discount_pct: float
+    gem_classification: str  # "super_gem", "gem", or None
 
     # All-source listings
     all_sources: list[ComponentSourceListing] = []
