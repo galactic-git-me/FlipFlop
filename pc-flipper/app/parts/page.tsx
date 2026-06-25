@@ -1326,17 +1326,34 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
 
   if (allSources.length === 0) return null;
 
+  // Group by component model and find cheapest source for each
+  const cheapestByModel = new Map<string, ListingItem>();
+  allSources.forEach(item => {
+    const existing = cheapestByModel.get(item.model);
+    if (!existing || item.price < existing.price) {
+      cheapestByModel.set(item.model, item);
+    }
+  });
+
+  const tableRows = Array.from(cheapestByModel.values())
+    .sort((a, b) => {
+      // Sort by gem value first, then by price
+      const gemOrder = { super_gem: 0, gem: 1, standard: 2 };
+      const aGem = (a.gem_classification as keyof typeof gemOrder) || "standard";
+      const bGem = (b.gem_classification as keyof typeof gemOrder) || "standard";
+      const gemDiff = (gemOrder[aGem] || 2) - (gemOrder[bGem] || 2);
+      return gemDiff !== 0 ? gemDiff : a.price - b.price;
+    });
+
   return (
     <div className="border border-[#1e2d45] rounded-lg overflow-hidden bg-[#0d1520]">
       <div className="px-4 py-3 border-b border-[#1e2d45] bg-[#070d14]">
         <h3 className="text-sm font-mono font-semibold text-slate-200 flex items-center gap-2">
           <Search className="w-4 h-4 text-slate-500" />
-          {showingEbayOnly ? "eBay Benchmarks" : "Multi-Source Listings"} ({allSources.length})
+          {showingEbayOnly ? "eBay Benchmarks" : "Best Prices Across Sources"} ({tableRows.length})
         </h3>
         <p className="text-xs text-slate-600 mt-1 font-mono">
-          {showingEbayOnly
-            ? "Cheapest eBay listings ranked by gem value"
-            : "Ranked by price difference to eBay benchmark (ascending)"}
+          Cheapest source per component (click row to buy from cheapest seller)
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -1352,11 +1369,12 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#1e2d45]">
-            {allSources.slice(0, 20).map((item, idx) => (
+            {tableRows.map((item, idx) => (
               <tr
                 key={`${item.model}-${item.source}-${idx}`}
                 className="hover:bg-[#0a1625] transition-colors cursor-pointer group"
                 onClick={() => window.open(item.url, "_blank")}
+                title={`Click to buy from ${item.source.toUpperCase()} (cheapest)`}
               >
                 <td className="px-4 py-2 text-slate-300 group-hover:text-[#00dc82] max-w-xs truncate">{item.model}</td>
                 <td className="px-4 py-2 text-slate-500 capitalize group-hover:text-slate-400">{item.source}</td>
@@ -1379,9 +1397,9 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
           </tbody>
         </table>
       </div>
-      {allSources.length > 20 && (
+      {allSources.length > tableRows.length && (
         <div className="px-4 py-2 bg-[#080f1a] border-t border-[#1e2d45] text-xs text-slate-600 text-center font-mono">
-          Showing 20 of {allSources.length} listings
+          Showing cheapest of {allSources.length} total listings from {new Set(allSources.map(s => s.source)).size} sources
         </div>
       )}
     </div>
