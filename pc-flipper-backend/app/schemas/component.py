@@ -11,6 +11,7 @@ class ComponentSourceListing(BaseModel):
     url: str
     image_url: Optional[str] = None
     condition: Optional[str] = None
+    estimated_delivery_days: Optional[int] = None  # Days to delivery
 
 
 class ComponentPriceData(BaseModel):

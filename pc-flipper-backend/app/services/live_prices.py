@@ -146,7 +146,7 @@ async def get_live_prices_for_category(
             "used_cheapest_image": used_cheapest.get("image_url") if used_cheapest else None,
             "discount_pct": discount_pct,
             "gem_classification": gem_classification,
-            # NEW: All-source listings
+            # NEW: All-source listings with delivery info
             "all_sources": [
                 {
                     "source": l.source,
@@ -155,6 +155,7 @@ async def get_live_prices_for_category(
                     "url": l.url,
                     "image_url": l.image_url,
                     "condition": l.condition,
+                    "estimated_delivery_days": l.estimated_delivery_days,
                 }
                 for l in all_source_listings
             ] if include_all_sources else [],

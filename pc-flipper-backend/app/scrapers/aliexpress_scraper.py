@@ -91,6 +91,7 @@ async def _search_aliexpress_term(
                         const priceEl = item.querySelector('[data-testid="price-main"]') ||
                                        item.querySelector('[class*="Price"]');
                         const imgEl = item.querySelector('img[alt]');
+                        const deliveryEl = item.querySelector('[class*="delivery"], [class*="Delivery"]');
 
                         if (!titleEl || !linkEl) return;
 
@@ -112,7 +113,14 @@ async def _search_aliexpress_term(
 
                         if (price <= 0) return;
 
-                        out.push({title, price, href, img: imgEl ? imgEl.src : ''});
+                        let deliveryDays = null;
+                        if (deliveryEl) {
+                            const deliveryText = deliveryEl.textContent;
+                            const match = deliveryText.match(/(\d+)/);
+                            if (match) deliveryDays = parseInt(match[1]);
+                        }
+
+                        out.push({title, price, href, img: imgEl ? imgEl.src : '', deliveryDays});
                     } catch (e) {}
                 });
                 return out.slice(0, 20);
@@ -145,6 +153,7 @@ async def _search_aliexpress_term(
                         "image_urls": [str(item.get("img", ""))] if item.get("img") else [],
                         "seller_name": "AliExpress",
                         "found_via_term": term,
+                        "estimated_delivery_days": item.get("deliveryDays"),
                     })
                 except (ValueError, TypeError):
                     continue

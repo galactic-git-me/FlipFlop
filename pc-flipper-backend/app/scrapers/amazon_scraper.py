@@ -88,6 +88,7 @@ async def _search_amazon_term(
                         const priceW  = item.querySelector('.a-price-whole');
                         const priceF  = item.querySelector('.a-price-fraction');
                         const imgEl   = item.querySelector('img.s-image');
+                        const deliveryEl = item.querySelector('[aria-label*="delivery"], [class*="delivery"]');
 
                         if (!titleEl || !linkEl) return;
 
@@ -111,7 +112,14 @@ async def _search_amazon_term(
 
                         if (price <= 0) return;
 
-                        out.push({title, price, href, img: imgEl ? imgEl.src : ''});
+                        let deliveryDays = null;
+                        if (deliveryEl) {
+                            const deliveryText = deliveryEl.textContent;
+                            const match = deliveryText.match(/(\d+)/);
+                            if (match) deliveryDays = parseInt(match[1]);
+                        }
+
+                        out.push({title, price, href, img: imgEl ? imgEl.src : '', deliveryDays});
                     } catch (e) {}
                 });
                 return out.slice(0, 20);
@@ -144,6 +152,7 @@ async def _search_amazon_term(
                         "image_urls": [str(item.get("img", ""))] if item.get("img") else [],
                         "seller_name": "Amazon UK",
                         "found_via_term": term,
+                        "estimated_delivery_days": item.get("deliveryDays"),
                     })
                 except (ValueError, TypeError):
                     continue
