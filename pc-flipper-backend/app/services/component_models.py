@@ -102,13 +102,22 @@ CANONICAL_MODELS: dict[str, list[ComponentModel]] = {
         {"name": "64GB DDR5 6000MHz Kit",  "bh_search": "64gb+ddr5+6000+kit",  "tier": "high"},
     ],
     "ssd": [
+        # NVMe Budget
         {"name": "500GB NVMe M.2 SSD",    "bh_search": "500gb+nvme+m2+ssd",   "tier": "budget"},
         {"name": "1TB NVMe M.2 SSD",      "bh_search": "1tb+nvme+m2+ssd",     "tier": "budget"},
+        # NVMe Mid
         {"name": "2TB NVMe M.2 SSD",      "bh_search": "2tb+nvme+m2+ssd",     "tier": "mid"},
+        {"name": "2TB NVMe Gen4 SSD",     "bh_search": "2tb+nvme+gen4+ssd",   "tier": "mid"},
+        # NVMe High
         {"name": "4TB NVMe M.2 SSD",      "bh_search": "4tb+nvme+m2+ssd",     "tier": "high"},
+        {"name": "4TB NVMe Gen4 SSD",     "bh_search": "4tb+nvme+gen4+ssd",   "tier": "high"},
+        # SATA Budget
         {"name": "500GB SATA SSD",        "bh_search": "500gb+sata+ssd",      "tier": "budget"},
         {"name": "1TB SATA SSD",          "bh_search": "1tb+sata+ssd",        "tier": "budget"},
+        # SATA Mid
         {"name": "2TB SATA SSD",          "bh_search": "2tb+sata+ssd",        "tier": "mid"},
+        # SATA High
+        {"name": "4TB SATA SSD",          "bh_search": "4tb+sata+ssd",        "tier": "high"},
     ],
     "psu": [
         {"name": "550W 80+ Bronze ATX PSU",   "bh_search": "550w+80plus+bronze+atx",   "tier": "budget"},
