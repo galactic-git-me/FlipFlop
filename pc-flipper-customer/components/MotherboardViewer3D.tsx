@@ -111,7 +111,7 @@ export function MotherboardViewer3D({
     let animationId: number;
     const hotspotMeshes: THREE.Mesh[] = [];
 
-    // Add test cube
+    // Add test cube (hidden - only for debugging)
     const testGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
     const testMaterial = new THREE.MeshStandardMaterial({
       color: 0xff6b35,
@@ -119,9 +119,9 @@ export function MotherboardViewer3D({
       roughness: 0.8,
     });
     const testCube = new THREE.Mesh(testGeometry, testMaterial);
-    testCube.position.set(0, 0, 0);
-    scene.add(testCube);
-    console.log('MotherboardViewer3D: Test cube added');
+    testCube.position.set(5, 5, 5);  // Move far away so it's not visible
+    // scene.add(testCube);  // Don't add it for now
+    console.log('MotherboardViewer3D: Test cube created but hidden');
 
     // Animation loop
     let rotation = 0;
@@ -152,11 +152,19 @@ export function MotherboardViewer3D({
         (gltf) => {
           console.log('MotherboardViewer3D: SUCCESS - Model loaded', gltf);
           const motherboard = gltf.scene;
+          console.log('Motherboard object:', {
+            position: motherboard.position,
+            rotation: motherboard.rotation,
+            scale: motherboard.scale,
+            children: motherboard.children.length,
+          });
+
           motherboard.scale.set(1.5, 1.5, 1.5);
           motherboard.position.set(0, 0, 0);
           motherboard.rotation.x = 0;
           motherboard.rotation.z = 0;
           scene.add(motherboard);
+          console.log('MotherboardViewer3D: Motherboard added to scene at', motherboard.position);
 
         const hotspots: SlotHotspot[] = [
           {
@@ -191,15 +199,18 @@ export function MotherboardViewer3D({
             hotspot.size.y,
             hotspot.size.z
           );
+          // Make hotspots slightly visible for debugging (semi-transparent green)
           const material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00,
             transparent: true,
-            opacity: 0,
+            opacity: 0.1,  // Very subtle, can see if they exist
           });
           const mesh = new THREE.Mesh(geometry, material);
           mesh.position.copy(hotspot.position);
           mesh.userData.slotType = hotspot.slotType;
           scene.add(mesh);
           hotspotMeshes.push(mesh);
+          console.log('MotherboardViewer3D: Hotspot added:', hotspot.slotType, 'at', hotspot.position);
         });
 
         setIsLoading(false);

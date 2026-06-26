@@ -1026,33 +1026,10 @@ function CatalogueTab() {
     setLoading(true);
     setLiveRows(null);
     try {
-      const res = await fetch(`/api/parts/grouped?category=${cat}`);
+      const qs = forceRefresh ? `?category=${cat}&refresh=true` : `?category=${cat}`;
+      const res = await fetch(`/api/parts/live-prices${qs}`);
       if (res.ok) {
-        const parts = await res.json();
-        // Transform grouped parts to LivePriceRow format
-        const data: LivePriceRow[] = parts.map((p: any) => ({
-          model: p.name,
-          tier: "mid" as const, // Default tier; could enhance by parsing name
-          new_price: p.price_new,
-          new_count: 0,
-          used_median: p.price_used,
-          used_count: 0,
-          used_cheapest_price: p.price_used,
-          used_cheapest_url: p.cheapest_url,
-          used_cheapest_title: p.name,
-          used_cheapest_image: p.image_url,
-          discount_pct: null,
-          gem_classification: p.gem_classification as any,
-          all_sources: (p.all_sources || []).map((s: any) => ({
-            source: s.source,
-            price: s.price,
-            title: p.name,
-            url: s.url,
-            image_url: p.image_url,
-            condition: s.condition,
-            estimated_delivery_days: undefined,
-          })),
-        }));
+        const data: LivePriceRow[] = await res.json();
         cache.current[cat] = data;
         setLiveRows(data);
       }
