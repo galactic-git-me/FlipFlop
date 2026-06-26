@@ -69,6 +69,7 @@ class EbayListing(TypedDict):
     condition: str
     url: str
     image_url: str | None
+    estimated_delivery_days: int
 
 
 class ComponentPrices(TypedDict):
@@ -142,6 +143,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             "condition": condition,
             "url": item_url,
             "image_url": image.get("imageUrl"),
+            "estimated_delivery_days": 3,  # Static assumption: eBay UK ~3 days
         })
 
     return results
@@ -166,20 +168,18 @@ async def get_component_prices(model_name: str, force_refresh: bool = False, min
     new_cond  = "NEW|LIKE_NEW|MANUFACTURER_REFURBISHED"
     used_cond = "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE"
 
+    # Sequential API calls (not concurrent) to avoid rate limiting
     try:
-        new_items, used_items = await asyncio.gather(
-            _search(token, model_name, new_cond,  limit=50, min_price=min_price),
-            _search(token, model_name, used_cond, limit=50, min_price=min_price),
-            return_exceptions=True,
-        )
-    except Exception as exc:
-        log.warning("ebay_browse.gather_error", model=model_name, error=str(exc))
-        return _empty()
+        new_items = await _search(token, model_name, new_cond,  limit=50, min_price=min_price)
+        if isinstance(new_items, Exception):
+            new_items = []
 
-    if isinstance(new_items, Exception):
-        new_items = []
-    if isinstance(used_items, Exception):
-        used_items = []
+        used_items = await _search(token, model_name, used_cond, limit=50, min_price=min_price)
+        if isinstance(used_items, Exception):
+            used_items = []
+    except Exception as exc:
+        log.warning("ebay_browse.search_error", model=model_name, error=str(exc))
+        return _empty()
 
     new_prices  = sorted(i["price"] for i in new_items)
     used_prices = sorted(i["price"] for i in used_items)
