@@ -137,7 +137,7 @@ async def _search_vinted(
                 url=row.get("url", ""),
                 image_url=row.get("image_urls", [None])[0] if row.get("image_urls") else None,
                 condition="used",
-                estimated_delivery_days=row.get("estimated_delivery_days") or 3,  # Vinted typically 3-5 days
+                estimated_delivery_days=row.get("estimated_delivery_days"),
             )
             for row in rows
             if min_price <= float(row.get("price", 0)) <= max_price
@@ -167,7 +167,7 @@ async def _search_gumtree(
                 source="gumtree",
                 url=row.get("url", ""),
                 image_url=row.get("image_url"),
-                estimated_delivery_days=row.get("estimated_delivery_days") or 5,  # Gumtree typically local pickup or 5-7 days
+                estimated_delivery_days=row.get("estimated_delivery_days"),
             )
             for row in rows
             if min_price <= float(row.get("price", 0)) <= max_price
@@ -232,7 +232,7 @@ async def _search_temu(
                 url=listing.get("source_url", ""),
                 image_url=None,
                 condition="new",
-                estimated_delivery_days=listing.get("estimated_delivery_days") or 14,  # Temu typically 14-21 days
+                estimated_delivery_days=listing.get("estimated_delivery_days"),
             )
             for listing in listings
             if min_price <= float(listing.get("price_gbp", 0)) <= max_price
@@ -267,7 +267,7 @@ async def _search_aliexpress(
                 url=row.get("url", ""),
                 image_url=row.get("image_urls", [None])[0] if row.get("image_urls") else None,
                 condition=row.get("condition", "new"),
-                estimated_delivery_days=row.get("estimated_delivery_days") or 20,  # AliExpress typically 15-30 days
+                estimated_delivery_days=row.get("estimated_delivery_days"),
             )
             for row in rows
             if min_price <= float(row.get("price", 0)) <= max_price
