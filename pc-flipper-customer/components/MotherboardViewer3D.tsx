@@ -59,6 +59,9 @@ export function MotherboardViewer3D({
     pointLight.position.set(-2, 1, 2);
     scene.add(pointLight);
 
+    let animationId: number;
+    const hotspotMeshes: THREE.Mesh[] = [];
+
     // Load motherboard model
     const loader = new GLTFLoader();
     loader.load(
@@ -99,7 +102,6 @@ export function MotherboardViewer3D({
           },
         ];
 
-        const hotspotMeshes: THREE.Mesh[] = [];
         hotspots.forEach((hotspot) => {
           const geometry = new THREE.BoxGeometry(
             hotspot.size.x,
@@ -145,7 +147,6 @@ export function MotherboardViewer3D({
         containerRef.current?.addEventListener('click', handleClick);
 
         // Animation loop - gentle rotation
-        let animationId: number;
         let rotation = 0;
         const animate = () => {
           animationId = requestAnimationFrame(animate);
@@ -154,14 +155,6 @@ export function MotherboardViewer3D({
           renderer.render(scene, camera);
         };
         animate();
-
-        // Cleanup
-        return () => {
-          cancelAnimationFrame(animationId);
-          containerRef.current?.removeEventListener('click', handleClick);
-          renderer.dispose();
-          containerRef.current?.removeChild(renderer.domElement);
-        };
       },
       undefined,
       (error) => {
@@ -181,8 +174,15 @@ export function MotherboardViewer3D({
     };
     window.addEventListener('resize', handleResize);
 
+    // Cleanup
     return () => {
+      cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
+      containerRef.current?.removeEventListener('click', () => {});
+      renderer.dispose();
+      if (containerRef.current && renderer.domElement.parentElement === containerRef.current) {
+        containerRef.current.removeChild(renderer.domElement);
+      }
     };
   }, [onComponentClick]);
 
@@ -193,8 +193,8 @@ export function MotherboardViewer3D({
       style={{ minHeight: '600px' }}
     >
       {isLoading && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-          <p className="text-white">Loading motherboard...</p>
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <p className="text-white">Loading 3D motherboard...</p>
         </div>
       )}
     </div>
