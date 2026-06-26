@@ -98,10 +98,7 @@ async def get_live_prices_for_category(
             log.debug("live_prices.ebay_fetch_error", model=model_name, error=str(exc))
             return None
 
-        # Allow models with either used OR new price data, not just used
-        has_used = bool(ebay_data.get("used_prices"))
-        has_new = bool(ebay_data.get("new_prices"))
-        if not (has_used or has_new):
+        if not ebay_data.get("used_prices"):
             return None
 
         new_price = ebay_data.get("new_min")
