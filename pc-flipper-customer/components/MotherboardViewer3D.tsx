@@ -42,11 +42,39 @@ export function MotherboardViewer3D({
     camera.position.set(0, 1.5, 2);
     camera.lookAt(0, 0, 0);
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
+    // Renderer with error handling
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch (err) {
+      console.error('MotherboardViewer3D: WebGL not supported', err);
+      setIsLoading(false);
+      return;
+    }
+
+    console.log('MotherboardViewer3D: Renderer created, container size:', width, 'x', height);
+
+    // Ensure container has size
+    if (width === 0 || height === 0) {
+      console.warn('MotherboardViewer3D: Container has zero size!', width, height);
+      // Use fallback size
+      renderer.setSize(800, 600);
+    } else {
+      renderer.setSize(width, height);
+    }
+
     renderer.shadowMap.enabled = true;
+    renderer.domElement.style.display = 'block';
+
+    // Verify canvas was created
+    if (!renderer.domElement) {
+      console.error('MotherboardViewer3D: Renderer has no domElement');
+      setIsLoading(false);
+      return;
+    }
+
     containerRef.current.appendChild(renderer.domElement);
+    console.log('MotherboardViewer3D: Canvas appended to DOM, actual size:', renderer.domElement.width, 'x', renderer.domElement.height);
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -64,22 +92,38 @@ export function MotherboardViewer3D({
     let animationId: number;
     const hotspotMeshes: THREE.Mesh[] = [];
 
+    // Add a test cube to verify rendering works
+    const testGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+    const testMaterial = new THREE.MeshStandardMaterial({
+      color: 0xff6b35,
+      metalness: 0.2,
+      roughness: 0.8,
+    });
+    const testCube = new THREE.Mesh(testGeometry, testMaterial);
+    testCube.position.set(0, 0, 0);
+    scene.add(testCube);
+    console.log('MotherboardViewer3D: Added test cube at position', testCube.position);
+
     // Start animation loop immediately
     let rotation = 0;
+    let frameCount = 0;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-      rotation += 0.0005;
+      rotation += 0.001;
+      testCube.rotation.x = rotation;
+      testCube.rotation.y = rotation * 0.7;
+
       renderer.render(scene, camera);
+
+      frameCount++;
+      if (frameCount === 1) {
+        console.log('MotherboardViewer3D: First frame rendered');
+      }
+      if (frameCount % 60 === 0) {
+        console.log('MotherboardViewer3D: Rendering frames...', frameCount);
+      }
     };
     animate();
-
-    // Add a test cube to verify rendering works
-    const testGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const testMaterial = new THREE.MeshStandardMaterial({ color: 0xff6b35 });
-    const testCube = new THREE.Mesh(testGeometry, testMaterial);
-    testCube.position.z = 0;
-    scene.add(testCube);
-    console.log('MotherboardViewer3D: Added test cube');
 
     // Load motherboard model
     const loader = new GLTFLoader();
@@ -203,8 +247,13 @@ export function MotherboardViewer3D({
   return (
     <div
       ref={containerRef}
-      className="w-full rounded-lg overflow-hidden relative"
-      style={{ minHeight: '600px' }}
+      className="w-full rounded-lg overflow-hidden relative bg-black"
+      style={{
+        minHeight: '600px',
+        height: '100%',
+        display: 'block',
+        position: 'relative',
+      }}
     >
       {isLoading && (
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
