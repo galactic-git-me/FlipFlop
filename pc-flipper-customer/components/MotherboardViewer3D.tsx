@@ -29,6 +29,8 @@ export function MotherboardViewer3D({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    console.log('MotherboardViewer3D: Initializing scene');
+
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0f0f11);
@@ -62,16 +64,36 @@ export function MotherboardViewer3D({
     let animationId: number;
     const hotspotMeshes: THREE.Mesh[] = [];
 
+    // Start animation loop immediately
+    let rotation = 0;
+    const animate = () => {
+      animationId = requestAnimationFrame(animate);
+      rotation += 0.0005;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Add a test cube to verify rendering works
+    const testGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const testMaterial = new THREE.MeshStandardMaterial({ color: 0xff6b35 });
+    const testCube = new THREE.Mesh(testGeometry, testMaterial);
+    testCube.position.z = 0;
+    scene.add(testCube);
+    console.log('MotherboardViewer3D: Added test cube');
+
     // Load motherboard model
     const loader = new GLTFLoader();
+    console.log('MotherboardViewer3D: Starting model load from /models/motherboard/scene.gltf');
     loader.load(
       '/models/motherboard/scene.gltf',
       (gltf) => {
+        console.log('MotherboardViewer3D: Model loaded successfully', gltf);
         const motherboard = gltf.scene;
         motherboard.scale.set(2, 2, 2);
         motherboard.position.set(0, 0, 0);
         motherboard.rotation.x = Math.PI * 0.05;
         scene.add(motherboard);
+        console.log('MotherboardViewer3D: Motherboard added to scene');
 
         // Create invisible hotspots for each component slot
         // Positions based on typical AM5 motherboard layout
@@ -145,20 +167,12 @@ export function MotherboardViewer3D({
         };
 
         containerRef.current?.addEventListener('click', handleClick);
-
-        // Animation loop - gentle rotation
-        let rotation = 0;
-        const animate = () => {
-          animationId = requestAnimationFrame(animate);
-          rotation += 0.0005;
-          motherboard.rotation.y = rotation;
-          renderer.render(scene, camera);
-        };
-        animate();
       },
-      undefined,
+      (progress) => {
+        console.log('MotherboardViewer3D: Model loading progress', progress);
+      },
       (error) => {
-        console.error('Error loading motherboard model:', error);
+        console.error('MotherboardViewer3D: Error loading model:', error);
         setIsLoading(false);
       }
     );
