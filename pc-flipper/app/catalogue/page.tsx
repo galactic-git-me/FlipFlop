@@ -17,7 +17,7 @@ const CATEGORIES: { id: CatId; label: string; icon: React.ReactNode }[] = [
   { id: "cpu",         label: "Processor",     icon: <Cpu className="w-4 h-4" /> },
   { id: "ram",         label: "RAM",           icon: <MemoryStick className="w-4 h-4" /> },
   { id: "motherboard", label: "Motherboard",   icon: <CircuitBoard className="w-4 h-4" /> },
-  { id: "cooling",     label: "Cooling",       icon: <Wind className="w-4 h-4" /> },
+  { id: "cooler",      label: "Cooling",       icon: <Wind className="w-4 h-4" /> },
   { id: "ssd",         label: "Storage",       icon: <HardDrive className="w-4 h-4" /> },
   { id: "psu",         label: "Power Supply",  icon: <Zap className="w-4 h-4" /> },
 ];
