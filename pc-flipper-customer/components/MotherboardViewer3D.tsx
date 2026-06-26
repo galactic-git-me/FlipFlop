@@ -139,15 +139,19 @@ export function MotherboardViewer3D({
 
     // Load model
     const loader = new GLTFLoader();
-    loader.load(
-      '/models/motherboard/scene.gltf',
-      (gltf) => {
-        console.log('MotherboardViewer3D: Model loaded');
-        const motherboard = gltf.scene;
-        motherboard.scale.set(2, 2, 2);
-        motherboard.position.set(0, 0, 0);
-        motherboard.rotation.x = Math.PI * 0.05;
-        scene.add(motherboard);
+    console.log('MotherboardViewer3D: Creating GLTFLoader');
+
+    try {
+      console.log('MotherboardViewer3D: Calling loader.load() for /models/motherboard/scene.gltf');
+      loader.load(
+        '/models/motherboard/scene.gltf',
+        (gltf) => {
+          console.log('MotherboardViewer3D: SUCCESS - Model loaded', gltf);
+          const motherboard = gltf.scene;
+          motherboard.scale.set(2, 2, 2);
+          motherboard.position.set(0, 0, 0);
+          motherboard.rotation.x = Math.PI * 0.05;
+          scene.add(motherboard);
 
         const hotspots: SlotHotspot[] = [
           {
@@ -214,12 +218,25 @@ export function MotherboardViewer3D({
         };
         containerRef.current?.addEventListener('click', handleClick);
       },
-      undefined,
+      (progress) => {
+        console.log('MotherboardViewer3D: Load progress', {
+          loaded: progress.loaded,
+          total: progress.total,
+          percent: Math.round((progress.loaded / progress.total) * 100),
+        });
+      },
       (error) => {
-        console.error('MotherboardViewer3D: Load error', error);
+        console.error('MotherboardViewer3D: ERROR - Load failed', error);
+        console.error('Error detail:', {
+          message: error?.message,
+          stack: error?.stack,
+        });
         setIsLoading(false);
       }
-    );
+      );
+    } catch (err) {
+      console.error('MotherboardViewer3D: Exception in loader.load', err);
+    }
 
     // Resize handler
     const handleResize = () => {
