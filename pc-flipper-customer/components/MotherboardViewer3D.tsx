@@ -141,10 +141,14 @@ export function MotherboardViewer3D({
     const loader = new GLTFLoader();
     console.log('MotherboardViewer3D: Creating GLTFLoader');
 
+    // Set the base path for texture loading
+    loader.setPath('/models/motherboard/');
+    console.log('MotherboardViewer3D: GLTFLoader base path set to /models/motherboard/');
+
     try {
-      console.log('MotherboardViewer3D: Calling loader.load() for /models/motherboard/scene.gltf');
+      console.log('MotherboardViewer3D: Calling loader.load() for scene.gltf');
       loader.load(
-        '/models/motherboard/scene.gltf',
+        'scene.gltf',
         (gltf) => {
           console.log('MotherboardViewer3D: SUCCESS - Model loaded', gltf);
           const motherboard = gltf.scene;
@@ -225,7 +229,7 @@ export function MotherboardViewer3D({
           percent: Math.round((progress.loaded / progress.total) * 100),
         });
       },
-      (error) => {
+      (error: any) => {
         console.error('MotherboardViewer3D: ERROR - Load failed', error);
         console.error('Error detail:', {
           message: error?.message,
