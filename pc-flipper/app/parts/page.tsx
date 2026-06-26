@@ -1296,6 +1296,7 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
     priceDiffVsUsed: number;
     priceDiffPctVsUsed: number;
     gem_classification?: string | null;
+    estimated_delivery_days?: number;
   };
 
   let allSources: ListingItem[] = rows.flatMap(row =>
