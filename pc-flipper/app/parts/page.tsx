@@ -1289,12 +1289,12 @@ function ComponentSourcesTable({ rows }: { rows: LivePriceRow[] }) {
     url: string;
     image_url?: string | null;
     condition?: string | null;
-    new_price?: number;
-    used_median?: number;
-    priceDiffVsNew?: number;
-    priceDiffPctVsNew?: number;
-    priceDiffVsUsed?: number;
-    priceDiffPctVsUsed?: number;
+    new_price: number;
+    used_median: number;
+    priceDiffVsNew: number;
+    priceDiffPctVsNew: number;
+    priceDiffVsUsed: number;
+    priceDiffPctVsUsed: number;
     gem_classification?: string | null;
   };
 
