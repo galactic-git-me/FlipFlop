@@ -166,7 +166,8 @@ export function MotherboardViewer3D({
           scene.add(motherboard);
           console.log('MotherboardViewer3D: Motherboard added to scene at', motherboard.position);
 
-        const hotspots: SlotHotspot[] = [
+          // Define hotspots LARGER and at actual component locations
+          const hotspots: SlotHotspot[] = [
           {
             name: 'CPU',
             slotType: 'cpu',
@@ -193,25 +194,28 @@ export function MotherboardViewer3D({
           },
         ];
 
-        hotspots.forEach((hotspot) => {
-          const geometry = new THREE.BoxGeometry(
-            hotspot.size.x,
-            hotspot.size.y,
-            hotspot.size.z
-          );
-          // Make hotspots slightly visible for debugging (semi-transparent green)
-          const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00,
-            transparent: true,
-            opacity: 0.1,  // Very subtle, can see if they exist
+          // Make hotspots MUCH LARGER and add as children of motherboard
+          hotspots.forEach((hotspot) => {
+            // Make hotspots bigger and easier to hit
+            const geometry = new THREE.BoxGeometry(
+              hotspot.size.x * 3,  // 3x larger
+              hotspot.size.y * 3,
+              hotspot.size.z * 3
+            );
+            const material = new THREE.MeshBasicMaterial({
+              color: 0x00ff00,
+              transparent: true,
+              opacity: 0.15,
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.copy(hotspot.position);
+            mesh.userData.slotType = hotspot.slotType;
+
+            // ADD AS CHILD OF MOTHERBOARD so it moves with it!
+            motherboard.add(mesh);
+            hotspotMeshes.push(mesh);
+            console.log('MotherboardViewer3D: Hotspot added as child:', hotspot.slotType);
           });
-          const mesh = new THREE.Mesh(geometry, material);
-          mesh.position.copy(hotspot.position);
-          mesh.userData.slotType = hotspot.slotType;
-          scene.add(mesh);
-          hotspotMeshes.push(mesh);
-          console.log('MotherboardViewer3D: Hotspot added:', hotspot.slotType, 'at', hotspot.position);
-        });
 
         setIsLoading(false);
 
