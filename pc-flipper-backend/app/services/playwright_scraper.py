@@ -436,12 +436,13 @@ async def scrape_gumtree_playwright(
                 # Fail fast on slow/blocked sessions so one source doesn't stall startup cycles.
                 await page.goto(url, wait_until="domcontentloaded", timeout=14000)
 
-                # Accept cookie banner if present
+                # Accept cookie banner if present (increased timeout for slow page loads)
                 try:
                     await page.click(
                         "button:has-text('Accept'), button:has-text('I Accept'), "
-                        "[data-testid='cookie-accept'], #gdpr-banner-accept",
-                        timeout=3000,
+                        "[data-testid='cookie-accept'], #gdpr-banner-accept, "
+                        "button[class*='accept'], button[class*='Accept']",
+                        timeout=8000,
                     )
                     await asyncio.sleep(0.5)
                 except Exception as exc:
