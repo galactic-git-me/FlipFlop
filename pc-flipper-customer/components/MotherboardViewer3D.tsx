@@ -66,14 +66,14 @@ export function MotherboardViewer3D({
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0f0f11);
 
-    // Camera
+    // Camera - positioned to look down at motherboard from front
     const camera = new THREE.PerspectiveCamera(
-      75,
+      60,
       containerSize.width / containerSize.height,
       0.1,
       1000
     );
-    camera.position.set(0, 1.5, 2);
+    camera.position.set(0, 0, 3);
     camera.lookAt(0, 0, 0);
 
     // Renderer
@@ -152,9 +152,10 @@ export function MotherboardViewer3D({
         (gltf) => {
           console.log('MotherboardViewer3D: SUCCESS - Model loaded', gltf);
           const motherboard = gltf.scene;
-          motherboard.scale.set(2, 2, 2);
+          motherboard.scale.set(1.5, 1.5, 1.5);
           motherboard.position.set(0, 0, 0);
-          motherboard.rotation.x = Math.PI * 0.05;
+          motherboard.rotation.x = 0;
+          motherboard.rotation.z = 0;
           scene.add(motherboard);
 
         const hotspots: SlotHotspot[] = [
@@ -213,8 +214,10 @@ export function MotherboardViewer3D({
           mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
           raycaster.setFromCamera(mouse, camera);
           const intersects = raycaster.intersectObjects(hotspotMeshes);
+          console.log('MotherboardViewer3D: Click detected, intersects:', intersects.length);
           if (intersects.length > 0) {
             const obj = intersects[0].object as any;
+            console.log('MotherboardViewer3D: Clicked on:', obj.userData.slotType);
             if (obj.userData.slotType) {
               onComponentClick(obj.userData.slotType);
             }
