@@ -101,10 +101,13 @@ async def get_parts_grouped(
     for key, parts in groups.items():
         # Find cheapest overall price across all sources
         priced = [p for p in parts if p.price is not None]
+        # If no main price, check if any price_* field exists
+        if not priced:
+            priced = [p for p in parts if any([p.price_used, p.price_refurb, p.price_new])]
         if not priced:
             continue
-        cheapest = min(priced, key=lambda p: p.price)
-        good_priced = [p for p in priced if p.source_site in GOOD_SOURCES]
+        cheapest = min(priced, key=lambda p: p.price or float('inf')) if priced else None
+        good_priced = [p for p in priced if p.source_site in GOOD_SOURCES and p.price is not None]
         cheapest_good = min(good_priced, key=lambda p: p.price) if good_priced else None
         # Merge stored AI verdict from any judged part in the group
         claude_verdict   = next((p.claude_verdict   for p in parts if p.claude_verdict   is not None), None)
