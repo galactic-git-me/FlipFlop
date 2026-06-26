@@ -12,7 +12,7 @@ import type {
   PublicVariant,
 } from "@/lib/types";
 import { bestVariantForTier } from "@/lib/utils";
-import { ModelViewer3D } from "@/components/ModelViewer3D";
+import { MotherboardViewer3D } from "@/components/MotherboardViewer3D";
 import { SlotRow } from "@/components/SlotRow";
 import { SwapModal } from "@/components/SwapModal";
 import { CasePicker } from "@/components/CasePicker";
@@ -95,9 +95,9 @@ export function ConfiguratorClient({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* Left panel: 3D model viewer */}
+      {/* Left panel: Motherboard 3D viewer */}
       <div className="flex flex-col gap-6">
-        <ModelViewer3D
+        <MotherboardViewer3D
           build={build}
           slots={slots}
           onComponentClick={(slotType) => {
