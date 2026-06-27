@@ -306,6 +306,22 @@ export const api = {
       request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
     generateImages: (id: number) =>
       request<{ images: string[] }>(`/flips/${id}/generate-images`, { method: "POST" }),
+    profitBreakdown: (id: number) =>
+      request<{
+        flip_id: number;
+        sale_price: number;
+        selling_fee: number;
+        net_proceeds: number;
+        total_landed_cost: number;
+        profit: number;
+        profit_margin_pct: number;
+        allocations: Array<{
+          inventory_item_id: number;
+          quantity: number;
+          cost_per_unit: number;
+          total_cost: number;
+        }>;
+      }>(`/inventory-allocations/flips/${id}/profit-breakdown`),
   },
 
   parts: {
