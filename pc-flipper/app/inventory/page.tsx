@@ -21,6 +21,20 @@ interface InventoryItem {
   created_at: string;
 }
 
+interface Flip {
+  id: number;
+  name?: string;
+}
+
+interface InventoryAllocation {
+  id: number;
+  inventory_item_id: number;
+  flip_id: number;
+  quantity_allocated: number;
+  cost_per_unit_at_allocation: number;
+  notes: string | null;
+}
+
 interface FormData {
   component_name: string;
   component_type: string;
@@ -47,6 +61,9 @@ export default function InventoryPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [stats, setStats] = useState({ total_cost: 0, total_quantity: 0, total_items: 0 });
+  const [flips, setFlips] = useState<Flip[]>([]);
+  const [selectedFlipId, setSelectedFlipId] = useState<number | null>(null);
+  const [allocations, setAllocations] = useState<InventoryAllocation[]>([]);
 
   const [form, setForm] = useState<FormData>({
     component_name: "",
@@ -61,14 +78,20 @@ export default function InventoryPage() {
   const loadInventory = useCallback(async () => {
     setLoading(true);
     try {
-      const [itemsData, statsData] = await Promise.all([
+      const [itemsData, statsData, flipsData, allocationsData] = await Promise.all([
         fetch("/api/inventory/").then(r => r.json()),
         fetch("/api/inventory/summary/stats").then(r => r.json()),
+        fetch("/api/flips/").then(r => r.json()),
+        fetch("/api/inventory-allocations/").then(r => r.json()),
       ]);
       setItems(itemsData);
       setStats(statsData);
+      setFlips(flipsData);
+      setAllocations(allocationsData);
     } catch {
       setItems([]);
+      setFlips([]);
+      setAllocations([]);
     } finally {
       setLoading(false);
     }
@@ -132,7 +155,14 @@ export default function InventoryPage() {
       notes: item.notes || "",
     });
     setEditingId(item.id);
+    setSelectedFlipId(null);
     setShowForm(true);
+  };
+
+  const getFlipForItem = (itemId: number): Flip | null => {
+    const allocation = allocations.find(a => a.inventory_item_id === itemId);
+    if (!allocation) return null;
+    return flips.find(f => f.id === allocation.flip_id) || null;
   };
 
   return (
@@ -273,6 +303,20 @@ export default function InventoryPage() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Assign to Build</label>
+              <select
+                value={selectedFlipId || ""}
+                onChange={e => setSelectedFlipId(e.target.value ? parseInt(e.target.value) : null)}
+                className="w-full px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded text-slate-300 text-sm focus:border-[#00dc82] outline-none"
+              >
+                <option value="">Unassigned</option>
+                {flips.map(flip => (
+                  <option key={flip.id} value={flip.id}>Flip #{flip.id}</option>
+                ))}
+              </select>
+            </div>
+
             <div className="flex gap-2 justify-end">
               <button
                 type="button"
@@ -314,39 +358,50 @@ export default function InventoryPage() {
                 <th className="text-right px-4 py-3 text-slate-400 font-medium">Total</th>
                 <th className="text-left px-4 py-3 text-slate-400 font-medium">Source</th>
                 <th className="text-left px-4 py-3 text-slate-400 font-medium">Date</th>
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">Assigned To</th>
                 <th className="text-center px-4 py-3 text-slate-400 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
-                <tr key={item.id} className="border-b border-[#1e2d45] hover:bg-[#0a1119]">
-                  <td className="px-4 py-3 text-slate-200">{item.component_name}</td>
-                  <td className="px-4 py-3 text-slate-400">{item.component_type}</td>
-                  <td className="px-4 py-3 text-center text-slate-300">{item.quantity}</td>
-                  <td className="px-4 py-3 text-right text-amber-400">{formatCurrency(item.actual_cost)}</td>
-                  <td className="px-4 py-3 text-right text-amber-400 font-semibold">{formatCurrency(item.actual_cost * item.quantity)}</td>
-                  <td className="px-4 py-3 text-slate-400">{item.source || "—"}</td>
-                  <td className="px-4 py-3 text-slate-400">{formatRelativeTime(new Date(item.purchase_date))}</td>
-                  <td className="px-4 py-3 text-center">
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="text-slate-500 hover:text-[#00dc82] p-1"
-                        title="Edit"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        className="text-slate-500 hover:text-red-400 p-1"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {items.map(item => {
+                const assignedFlip = getFlipForItem(item.id);
+                return (
+                  <tr key={item.id} className="border-b border-[#1e2d45] hover:bg-[#0a1119]">
+                    <td className="px-4 py-3 text-slate-200">{item.component_name}</td>
+                    <td className="px-4 py-3 text-slate-400">{item.component_type}</td>
+                    <td className="px-4 py-3 text-center text-slate-300">{item.quantity}</td>
+                    <td className="px-4 py-3 text-right text-amber-400">{formatCurrency(item.actual_cost)}</td>
+                    <td className="px-4 py-3 text-right text-amber-400 font-semibold">{formatCurrency(item.actual_cost * item.quantity)}</td>
+                    <td className="px-4 py-3 text-slate-400">{item.source || "—"}</td>
+                    <td className="px-4 py-3 text-slate-400">{formatRelativeTime(new Date(item.purchase_date))}</td>
+                    <td className="px-4 py-3 text-slate-400">
+                      {assignedFlip ? (
+                        <span className="text-[#00dc82]">Flip #{assignedFlip.id}</span>
+                      ) : (
+                        <span className="text-slate-600">Unassigned</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="text-slate-500 hover:text-[#00dc82] p-1"
+                          title="Edit"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="text-slate-500 hover:text-red-400 p-1"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
