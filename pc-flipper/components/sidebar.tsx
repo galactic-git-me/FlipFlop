@@ -20,6 +20,7 @@ import {
   TrendingUp,
   MemoryStick,
   Rss,
+  Package,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const PRIMARY_NAV = [
   { href: "/flips", icon: Boxes, label: "Manual Build" },
   { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
   { href: "/catalogue", icon: Store, label: "Catalogue" },
+  { href: "/inventory", icon: Package, label: "Inventory" },
   { href: "/selling", icon: ReceiptText, label: "Reselling" },
   { href: "/intel", icon: BarChart3, label: "Analytics" },
   { href: "/benchmarks", icon: Gauge, label: "Benchmarks" },
