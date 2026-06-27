@@ -1,5 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
@@ -9,6 +10,26 @@ from app.models.flip import Flip
 from app.schemas.inventory_allocation import InventoryAllocationIn, InventoryAllocationPartialIn, InventoryAllocationOut
 
 router = APIRouter(prefix="/inventory-allocations", tags=["inventory-allocations"])
+
+
+class AllocationDetail(BaseModel):
+    """Detail of a single allocation in the profit breakdown."""
+    inventory_item_id: int
+    quantity: int
+    cost_per_unit: float
+    total_cost: float
+
+
+class ProfitBreakdownOut(BaseModel):
+    """Response schema for profit breakdown endpoint."""
+    flip_id: int
+    sale_price: float
+    selling_fee: float
+    net_proceeds: float
+    total_landed_cost: float
+    profit: float
+    profit_margin_pct: float
+    allocations: list[AllocationDetail]
 
 
 @router.post("/", response_model=InventoryAllocationOut, status_code=201)
@@ -160,3 +181,69 @@ async def delete_allocation(
 
     await db.delete(db_allocation)
     await db.commit()
+
+
+@router.get("/flips/{flip_id}/profit-breakdown", response_model=ProfitBreakdownOut)
+async def get_profit_breakdown(
+    flip_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get profit breakdown for a flip, including all allocations and calculations.
+
+    Returns:
+    - sale_price and selling_fee from the flip
+    - net_proceeds = sale_price - selling_fee
+    - total_landed_cost = sum of all allocation costs
+    - profit = net_proceeds - total_landed_cost
+    - profit_margin_pct = (profit / sale_price * 100) if sale_price > 0 else 0
+    - List of all allocations for this flip with their individual costs
+    """
+    # Get the flip
+    result = await db.execute(select(Flip).where(Flip.id == flip_id))
+    flip = result.scalar_one_or_none()
+    if not flip:
+        raise HTTPException(404, f"Flip {flip_id} not found")
+
+    # Get all allocations for this flip
+    result = await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.flip_id == flip_id)
+    )
+    allocations = result.scalars().all()
+
+    # Calculate total landed cost
+    total_landed_cost = sum(a.total_allocated_cost for a in allocations)
+
+    # Get sale price and selling fee
+    sale_price = flip.actual_sale_price or 0.0
+    selling_fee = flip.actual_selling_fee or 0.0
+
+    # Calculate net proceeds
+    net_proceeds = sale_price - selling_fee
+
+    # Calculate profit
+    profit = net_proceeds - total_landed_cost
+
+    # Calculate profit margin percentage
+    profit_margin_pct = (profit / sale_price * 100) if sale_price > 0 else 0.0
+
+    # Build allocation details
+    allocation_details = [
+        AllocationDetail(
+            inventory_item_id=a.inventory_item_id,
+            quantity=a.quantity_allocated,
+            cost_per_unit=a.cost_per_unit_at_allocation,
+            total_cost=a.total_allocated_cost,
+        )
+        for a in allocations
+    ]
+
+    return ProfitBreakdownOut(
+        flip_id=flip_id,
+        sale_price=sale_price,
+        selling_fee=selling_fee,
+        net_proceeds=net_proceeds,
+        total_landed_cost=total_landed_cost,
+        profit=profit,
+        profit_margin_pct=profit_margin_pct,
+        allocations=allocation_details,
+    )
