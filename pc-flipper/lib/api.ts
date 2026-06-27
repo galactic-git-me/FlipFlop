@@ -729,6 +729,32 @@ export const api = {
     updateSlot: (id: number, data: Record<string, unknown>) =>
       request<unknown>(`/catalogue/slots/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   },
+
+  inventoryAllocations: {
+    list: (flipId?: number) =>
+      request<unknown[]>(
+        `/inventory-allocations${flipId ? `?flip_id=${flipId}` : ""}`
+      ),
+    create: (data: Record<string, unknown>) =>
+      request<unknown>(
+        "/inventory-allocations",
+        { method: "POST", body: JSON.stringify(data) }
+      ),
+    get: (id: number) =>
+      request<unknown>(`/inventory-allocations/${id}`),
+    update: (id: number, data: Record<string, unknown>) =>
+      request<unknown>(
+        `/inventory-allocations/${id}`,
+        { method: "PATCH", body: JSON.stringify(data) }
+      ),
+    delete: (id: number) =>
+      request<void>(`/inventory-allocations/${id}`, { method: "DELETE" }),
+  },
+
+  flipProfitBreakdown: {
+    get: (flipId: number) =>
+      request<unknown>(`/flips/${flipId}/profit-breakdown`),
+  },
 };
 
 // ── Hermes Companion ──────────────────────────────────────────────────────────
