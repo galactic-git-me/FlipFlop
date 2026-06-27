@@ -54,7 +54,7 @@ async def create_allocation(
         notes=allocation.notes,
     )
     db.add(new_allocation)
-    await db.flush()
+    await db.commit()
     await db.refresh(new_allocation)
     return new_allocation
 
@@ -115,7 +115,7 @@ async def update_allocation(
     if allocation_update.flip_id is not None:
         db_allocation.flip_id = allocation_update.flip_id
     if allocation_update.quantity_allocated is not None:
-        # Revalidate quantity if changed
+        # Revalidate quantity if changed - use current inventory_item_id (may have been updated above)
         inventory_item = await db.execute(
             select(InventoryItem).where(InventoryItem.id == db_allocation.inventory_item_id)
         )
@@ -142,7 +142,7 @@ async def update_allocation(
 
     db_allocation.updated_at = datetime.utcnow()
 
-    await db.flush()
+    await db.commit()
     await db.refresh(db_allocation)
     return db_allocation
 
