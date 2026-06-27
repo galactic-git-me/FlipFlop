@@ -1,12 +1,55 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func
 from app.database import get_db
 from app.models.inventory import InventoryItem
-from app.schemas.inventory import InventoryItemIn, InventoryItemPartialIn, InventoryItemOut
+from app.models.inventory_allocation import InventoryAllocation
+from app.schemas.inventory import InventoryItemIn, InventoryItemPartialIn, InventoryItemOut, AllocationInfo
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
+
+
+async def _build_item_with_allocations(item: InventoryItem, db: AsyncSession) -> dict:
+    """Build inventory item response with allocation info."""
+    # Query allocations for this item
+    result = await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.inventory_item_id == item.id)
+    )
+    allocations_records = result.scalars().all()
+
+    # Build allocation info list and calculate total allocated
+    allocations = [
+        AllocationInfo(
+            allocation_id=a.id,
+            flip_id=a.flip_id,
+            quantity_allocated=a.quantity_allocated
+        )
+        for a in allocations_records
+    ]
+
+    total_allocated = sum(a.quantity_allocated for a in allocations_records)
+    quantity_unallocated = item.quantity - total_allocated
+
+    # Convert item to dict and add allocation data
+    item_dict = {
+        "id": item.id,
+        "component_name": item.component_name,
+        "component_type": item.component_type,
+        "quantity": item.quantity,
+        "quantity_unallocated": quantity_unallocated,
+        "base_price": item.base_price,
+        "shipping_cost": item.shipping_cost,
+        "discount_amount": item.discount_amount,
+        "actual_cost": item.actual_cost,
+        "purchase_date": item.purchase_date,
+        "source": item.source,
+        "notes": item.notes,
+        "created_at": item.created_at,
+        "allocations": allocations,
+    }
+
+    return item_dict
 
 
 @router.get("/", response_model=list[InventoryItemOut])
@@ -14,12 +57,20 @@ async def list_inventory(
     component_type: str | None = Query(None),
     db: AsyncSession = Depends(get_db),
 ):
-    """List all inventory items, optionally filtered by component type."""
+    """List all inventory items with allocation info, optionally filtered by component type."""
     q = select(InventoryItem).order_by(desc(InventoryItem.created_at))
     if component_type:
         q = q.where(InventoryItem.component_type == component_type)
     result = await db.execute(q)
-    return result.scalars().all()
+    items = result.scalars().all()
+
+    # Build response with allocation info for each item
+    response = []
+    for item in items:
+        item_with_allocations = await _build_item_with_allocations(item, db)
+        response.append(item_with_allocations)
+
+    return response
 
 
 @router.post("/", response_model=InventoryItemOut, status_code=201)
@@ -42,7 +93,7 @@ async def create_inventory_item(
     db.add(new_item)
     await db.flush()
     await db.refresh(new_item)
-    return new_item
+    return await _build_item_with_allocations(new_item, db)
 
 
 @router.get("/{item_id}", response_model=InventoryItemOut)
@@ -50,13 +101,13 @@ async def get_inventory_item(
     item_id: int,
     db: AsyncSession = Depends(get_db),
 ):
-    """Get a single inventory item."""
+    """Get a single inventory item with allocation info."""
     result = await db.execute(select(InventoryItem).where(InventoryItem.id == item_id))
     item = result.scalar_one_or_none()
     if not item:
         from fastapi import HTTPException
         raise HTTPException(404, "Item not found")
-    return item
+    return await _build_item_with_allocations(item, db)
 
 
 @router.patch("/{item_id}", response_model=InventoryItemOut)
@@ -96,7 +147,7 @@ async def update_inventory_item(
 
     await db.flush()
     await db.refresh(db_item)
-    return db_item
+    return await _build_item_with_allocations(db_item, db)
 
 
 @router.delete("/{item_id}", status_code=204)

@@ -2,6 +2,13 @@ from datetime import datetime
 from pydantic import BaseModel, field_validator, model_validator
 
 
+class AllocationInfo(BaseModel):
+    """Info about a single allocation of an inventory item."""
+    allocation_id: int
+    flip_id: int
+    quantity_allocated: int
+
+
 class InventoryItemIn(BaseModel):
     component_name: str
     component_type: str
@@ -63,6 +70,7 @@ class InventoryItemOut(BaseModel):
     component_name: str
     component_type: str
     quantity: int
+    quantity_unallocated: int | None = None
     base_price: float
     shipping_cost: float
     discount_amount: float
@@ -71,6 +79,7 @@ class InventoryItemOut(BaseModel):
     source: str | None
     notes: str | None
     created_at: datetime
+    allocations: list[AllocationInfo] = []
 
     class Config:
         from_attributes = True
