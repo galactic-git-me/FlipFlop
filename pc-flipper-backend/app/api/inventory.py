@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from app.database import get_db
 from app.models.inventory import InventoryItem
-from app.schemas.inventory import InventoryItemIn, InventoryItemOut
+from app.schemas.inventory import InventoryItemIn, InventoryItemPartialIn, InventoryItemOut
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
 
@@ -62,25 +62,36 @@ async def get_inventory_item(
 @router.patch("/{item_id}", response_model=InventoryItemOut)
 async def update_inventory_item(
     item_id: int,
-    item: InventoryItemIn,
+    item: InventoryItemPartialIn,
     db: AsyncSession = Depends(get_db),
 ):
-    """Update an inventory item."""
+    """Update an inventory item. Only provided fields are updated."""
     result = await db.execute(select(InventoryItem).where(InventoryItem.id == item_id))
     db_item = result.scalar_one_or_none()
     if not db_item:
         from fastapi import HTTPException
         raise HTTPException(404, "Item not found")
 
-    db_item.component_name = item.component_name
-    db_item.component_type = item.component_type
-    db_item.quantity = item.quantity
-    db_item.base_price = item.base_price
-    db_item.shipping_cost = item.shipping_cost
-    db_item.discount_amount = item.discount_amount
-    db_item.purchase_date = item.purchase_date or db_item.purchase_date
-    db_item.source = item.source
-    db_item.notes = item.notes
+    # Only update fields that are explicitly provided (not None)
+    if item.component_name is not None:
+        db_item.component_name = item.component_name
+    if item.component_type is not None:
+        db_item.component_type = item.component_type
+    if item.quantity is not None:
+        db_item.quantity = item.quantity
+    if item.base_price is not None:
+        db_item.base_price = item.base_price
+    if item.shipping_cost is not None:
+        db_item.shipping_cost = item.shipping_cost
+    if item.discount_amount is not None:
+        db_item.discount_amount = item.discount_amount
+    if item.purchase_date is not None:
+        db_item.purchase_date = item.purchase_date
+    if item.source is not None:
+        db_item.source = item.source
+    if item.notes is not None:
+        db_item.notes = item.notes
+
     db_item.updated_at = datetime.utcnow()
 
     await db.flush()
