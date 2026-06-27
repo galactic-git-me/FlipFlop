@@ -8,8 +8,8 @@ class InventoryAllocation(Base):
     __tablename__ = "inventory_allocations"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    inventory_item_id: Mapped[int] = mapped_column(Integer, ForeignKey("inventory.id"), index=True)
-    flip_id: Mapped[int] = mapped_column(Integer, ForeignKey("flips.id"), index=True)
+    inventory_item_id: Mapped[int] = mapped_column(Integer, ForeignKey("inventory.id", ondelete="CASCADE"), index=True)
+    flip_id: Mapped[int] = mapped_column(Integer, ForeignKey("flips.id", ondelete="CASCADE"), index=True)
 
     quantity_allocated: Mapped[int] = mapped_column(Integer)
     cost_per_unit_at_allocation: Mapped[float] = mapped_column(Float)

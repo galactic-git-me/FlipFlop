@@ -23,8 +23,8 @@ def upgrade():
         sa.Column("notes", sa.Text(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(["inventory_item_id"], ["inventory.id"]),
-        sa.ForeignKeyConstraint(["flip_id"], ["flips.id"]),
+        sa.ForeignKeyConstraint(["inventory_item_id"], ["inventory.id"], name="fk_inventory_allocations_inventory_item_id", ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["flip_id"], ["flips.id"], name="fk_inventory_allocations_flip_id", ondelete="CASCADE"),
         sa.Index("idx_inventory_allocations_inventory_item_id", "inventory_item_id"),
         sa.Index("idx_inventory_allocations_flip_id", "flip_id"),
     )
