@@ -32,7 +32,9 @@ async def create_inventory_item(
         component_name=item.component_name,
         component_type=item.component_type,
         quantity=item.quantity,
-        actual_cost=item.actual_cost,
+        base_price=item.base_price,
+        shipping_cost=item.shipping_cost,
+        discount_amount=item.discount_amount,
         purchase_date=item.purchase_date or datetime.utcnow(),
         source=item.source,
         notes=item.notes,
@@ -69,16 +71,18 @@ async def update_inventory_item(
     if not db_item:
         from fastapi import HTTPException
         raise HTTPException(404, "Item not found")
-    
+
     db_item.component_name = item.component_name
     db_item.component_type = item.component_type
     db_item.quantity = item.quantity
-    db_item.actual_cost = item.actual_cost
+    db_item.base_price = item.base_price
+    db_item.shipping_cost = item.shipping_cost
+    db_item.discount_amount = item.discount_amount
     db_item.purchase_date = item.purchase_date or db_item.purchase_date
     db_item.source = item.source
     db_item.notes = item.notes
     db_item.updated_at = datetime.utcnow()
-    
+
     await db.flush()
     await db.refresh(db_item)
     return db_item

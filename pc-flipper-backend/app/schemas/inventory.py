@@ -1,15 +1,26 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class InventoryItemIn(BaseModel):
     component_name: str
     component_type: str
     quantity: int = 1
-    actual_cost: float
+    base_price: float | None = None
+    shipping_cost: float = 0.0
+    discount_amount: float = 0.0
+    actual_cost: float | None = None  # For backward compatibility
     purchase_date: datetime | None = None
     source: str | None = None
     notes: str | None = None
+
+    @field_validator('base_price', mode='before')
+    @classmethod
+    def resolve_base_price(cls, v, info):
+        """If base_price is not provided but actual_cost is, use actual_cost as base_price."""
+        if v is None and 'actual_cost' in info.data and info.data['actual_cost'] is not None:
+            return info.data['actual_cost']
+        return v
 
 
 class InventoryItemOut(BaseModel):
@@ -17,6 +28,9 @@ class InventoryItemOut(BaseModel):
     component_name: str
     component_type: str
     quantity: int
+    base_price: float
+    shipping_cost: float
+    discount_amount: float
     actual_cost: float
     purchase_date: datetime
     source: str | None
