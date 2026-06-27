@@ -1,6 +1,7 @@
 from app.models.listing import Listing, ListingStatus
 from app.models.flip import Flip, FlipStage
 from app.models.part import Part, PartCategory
+from app.models.inventory import InventoryItem
 from app.models.source import DataSource
 from app.models.search_config import SearchConfig
 from app.models.price_history import PriceHistory
@@ -32,6 +33,7 @@ __all__ = [
     "Listing", "ListingStatus",
     "Flip", "FlipStage",
     "Part", "PartCategory",
+    "InventoryItem",
     "DataSource",
     "SearchConfig",
     "PriceHistory",
