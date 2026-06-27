@@ -26,6 +26,7 @@ from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
 from app.models.order import Order
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
+from app.models.inventory_allocation import InventoryAllocation
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -62,4 +63,5 @@ __all__ = [
     "Order",
     "BuildCapacity",
     "BuildCapacityOverride",
+    "InventoryAllocation",
 ]
