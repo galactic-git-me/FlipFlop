@@ -14,13 +14,16 @@ class InventoryItemIn(BaseModel):
     source: str | None = None
     notes: str | None = None
 
-    @field_validator('base_price', mode='before')
+    @model_validator(mode='before')
     @classmethod
-    def resolve_base_price(cls, v, info):
+    def resolve_base_price_from_actual_cost(cls, data):
         """If base_price is not provided but actual_cost is, use actual_cost as base_price."""
-        if v is None and 'actual_cost' in info.data and info.data['actual_cost'] is not None:
-            return info.data['actual_cost']
-        return v
+        if isinstance(data, dict):
+            base_price = data.get('base_price')
+            actual_cost = data.get('actual_cost')
+            if base_price is None and actual_cost is not None:
+                data['base_price'] = actual_cost
+        return data
 
     @model_validator(mode='after')
     def validate_base_price_not_null(self):
@@ -43,13 +46,16 @@ class InventoryItemPartialIn(BaseModel):
     source: str | None = None
     notes: str | None = None
 
-    @field_validator('base_price', mode='before')
+    @model_validator(mode='before')
     @classmethod
-    def resolve_base_price(cls, v, info):
+    def resolve_base_price_from_actual_cost(cls, data):
         """If base_price is not provided but actual_cost is, use actual_cost as base_price."""
-        if v is None and 'actual_cost' in info.data and info.data['actual_cost'] is not None:
-            return info.data['actual_cost']
-        return v
+        if isinstance(data, dict):
+            base_price = data.get('base_price')
+            actual_cost = data.get('actual_cost')
+            if base_price is None and actual_cost is not None:
+                data['base_price'] = actual_cost
+        return data
 
 
 class InventoryItemOut(BaseModel):
