@@ -165,6 +165,41 @@ export default function InventoryPage() {
     return flips.find(f => f.id === allocation.flip_id) || null;
   };
 
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      const response = await fetch("/api/inventory/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(`Error: ${result.detail || "Failed to import"}`);
+        return;
+      }
+
+      alert(`✅ Imported ${result.created} items${result.errors?.length ? `\n⚠️ ${result.errors.length} errors:\n${result.errors.join("\n")}` : ""}`);
+      await loadInventory();
+
+      // Reset file input
+      e.target.value = "";
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        alert("Invalid JSON format. Please check your file.");
+      } else {
+        alert("Error uploading file: " + String(err));
+      }
+    }
+  };
+
   return (
     <div className="p-6 space-y-5">
       {/* Header */}
@@ -177,12 +212,28 @@ export default function InventoryPage() {
             Track components you own and actual costs paid
           </p>
         </div>
-        <Button
-          onClick={() => { setShowForm(!showForm); setEditingId(null); }}
-          className="gap-2"
-        >
-          <Plus className="w-4 h-4" /> Add Item
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => { setShowForm(!showForm); setEditingId(null); }}
+            className="gap-2"
+          >
+            <Plus className="w-4 h-4" /> Add Item
+          </Button>
+          <Button
+            onClick={() => document.getElementById("bulk-upload")?.click()}
+            variant="outline"
+            className="gap-2"
+          >
+            <RefreshCw className="w-4 h-4" /> Bulk Upload
+          </Button>
+          <input
+            id="bulk-upload"
+            type="file"
+            accept=".json"
+            style={{ display: "none" }}
+            onChange={handleBulkUpload}
+          />
+        </div>
       </div>
 
       {/* Stats */}

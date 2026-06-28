@@ -166,22 +166,121 @@ async def delete_inventory_item(
     await db.commit()
 
 
+@router.post("/bulk")
+async def bulk_import_inventory(
+    data: dict,
+    db: AsyncSession = Depends(get_db),
+):
+    """Bulk import inventory items from JSON file.
+
+    Expected format:
+    {
+        "items": [
+            {
+                "component_name": "RTX 4070",
+                "component_type": "gpu",
+                "quantity": 1,
+                "base_price": 450.00,
+                "shipping_cost": 10.00,
+                "discount_amount": 0,
+                "purchase_date": "2026-06-20",
+                "source": "eBay",
+                "notes": "Optional notes"
+            }
+        ]
+    }
+    """
+    from fastapi import HTTPException
+
+    if "items" not in data or not isinstance(data["items"], list):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid format: expected {\"items\": [...]}"
+        )
+
+    items_data = data["items"]
+    if not items_data:
+        raise HTTPException(status_code=400, detail="No items provided")
+
+    created_items = []
+    errors = []
+
+    for idx, item_data in enumerate(items_data):
+        try:
+            # Validate required fields
+            required = ["component_name", "component_type", "quantity", "base_price", "purchase_date"]
+            missing = [f for f in required if f not in item_data]
+            if missing:
+                errors.append(f"Item {idx}: Missing fields: {', '.join(missing)}")
+                continue
+
+            # Parse date
+            purchase_date_str = item_data.get("purchase_date")
+            if isinstance(purchase_date_str, str):
+                try:
+                    purchase_date = datetime.fromisoformat(purchase_date_str)
+                except ValueError:
+                    errors.append(f"Item {idx}: Invalid date format '{purchase_date_str}', use YYYY-MM-DD")
+                    continue
+            else:
+                purchase_date = datetime.utcnow()
+
+            # Create item
+            new_item = InventoryItem(
+                component_name=str(item_data["component_name"]),
+                component_type=str(item_data["component_type"]),
+                quantity=int(item_data["quantity"]),
+                base_price=float(item_data["base_price"]),
+                shipping_cost=float(item_data.get("shipping_cost", 0.0)),
+                discount_amount=float(item_data.get("discount_amount", 0.0)),
+                purchase_date=purchase_date,
+                source=item_data.get("source"),
+                notes=item_data.get("notes"),
+            )
+            db.add(new_item)
+            created_items.append(new_item.component_name)
+
+        except (ValueError, TypeError) as e:
+            errors.append(f"Item {idx}: Invalid data - {str(e)}")
+            continue
+
+    if not created_items:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Failed to create any items. Errors: {'; '.join(errors)}"
+        )
+
+    try:
+        await db.commit()
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Database error: {str(e)}"
+        )
+
+    return {
+        "created": len(created_items),
+        "items": created_items,
+        "errors": errors if errors else None,
+    }
+
+
 @router.get("/summary/stats")
 async def inventory_stats(db: AsyncSession = Depends(get_db)):
     """Get inventory statistics."""
     result = await db.execute(select(InventoryItem))
     items = result.scalars().all()
-    
+
     total_cost = sum(item.actual_cost * item.quantity for item in items)
     total_qty = sum(item.quantity for item in items)
     by_type = {}
-    
+
     for item in items:
         if item.component_type not in by_type:
             by_type[item.component_type] = {"qty": 0, "cost": 0}
         by_type[item.component_type]["qty"] += item.quantity
         by_type[item.component_type]["cost"] += item.actual_cost * item.quantity
-    
+
     return {
         "total_items": len(items),
         "total_quantity": total_qty,
