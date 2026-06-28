@@ -64,6 +64,7 @@ export default function InventoryPage() {
   const [flips, setFlips] = useState<Flip[]>([]);
   const [selectedFlipId, setSelectedFlipId] = useState<number | null>(null);
   const [allocations, setAllocations] = useState<InventoryAllocation[]>([]);
+  const [showBulkModal, setShowBulkModal] = useState(false);
 
   const [form, setForm] = useState<FormData>({
     component_name: "",
@@ -200,6 +201,45 @@ export default function InventoryPage() {
     }
   };
 
+  const copySchemaToClipboard = () => {
+    const schema = `JSON Format for Bulk Inventory Upload:
+
+{
+  "items": [
+    {
+      "component_name": "string (required) - Name of component, e.g. 'RTX 4070 12GB'",
+      "component_type": "string (required) - Type: gpu, cpu, ram, motherboard, cooler, ssd, or psu",
+      "quantity": "integer (required) - Number of units",
+      "base_price": "number (required) - Price per unit before shipping/discount",
+      "shipping_cost": "number (optional) - Shipping cost per unit, default: 0",
+      "discount_amount": "number (optional) - Discount per unit, default: 0",
+      "purchase_date": "string (required) - Date in YYYY-MM-DD format",
+      "source": "string (optional) - Where purchased (eBay, Amazon, Newegg, etc.)",
+      "notes": "string (optional) - Any notes (negotiated price, auction, etc.)"
+    }
+  ]
+}
+
+Example:
+{
+  "items": [
+    {
+      "component_name": "NVIDIA RTX 4070 12GB",
+      "component_type": "gpu",
+      "quantity": 1,
+      "base_price": 450.00,
+      "shipping_cost": 15.00,
+      "discount_amount": 0,
+      "purchase_date": "2026-06-15",
+      "source": "eBay",
+      "notes": "Excellent condition"
+    }
+  ]
+}`;
+    navigator.clipboard.writeText(schema);
+    alert("✅ Schema copied to clipboard!");
+  };
+
   return (
     <div className="p-6 space-y-5">
       {/* Header */}
@@ -220,7 +260,7 @@ export default function InventoryPage() {
             <Plus className="w-4 h-4" /> Add Item
           </Button>
           <Button
-            onClick={() => document.getElementById("bulk-upload")?.click()}
+            onClick={() => setShowBulkModal(true)}
             variant="outline"
             className="gap-2"
           >
@@ -455,6 +495,76 @@ export default function InventoryPage() {
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Bulk Upload Modal */}
+      {showBulkModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#0a1119] border border-[#1e2d45] rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-slate-200">Bulk Upload - JSON Schema Reference</h2>
+              <button
+                onClick={() => setShowBulkModal(false)}
+                className="text-slate-600 hover:text-slate-400"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-[#0d1320] border border-[#1e2d45] rounded p-4">
+                <h3 className="text-sm font-semibold text-slate-300 mb-3">Required & Optional Fields</h3>
+                <div className="space-y-2 text-xs text-slate-400 font-mono">
+                  <div><span className="text-amber-400">component_name</span> (required) - Component name, e.g. "RTX 4070 12GB"</div>
+                  <div><span className="text-amber-400">component_type</span> (required) - gpu | cpu | ram | motherboard | cooler | ssd | psu</div>
+                  <div><span className="text-amber-400">quantity</span> (required) - Number of units (integer)</div>
+                  <div><span className="text-amber-400">base_price</span> (required) - Price per unit (number)</div>
+                  <div><span className="text-green-400">shipping_cost</span> (optional) - Shipping per unit, default: 0</div>
+                  <div><span className="text-green-400">discount_amount</span> (optional) - Discount per unit, default: 0</div>
+                  <div><span className="text-amber-400">purchase_date</span> (required) - YYYY-MM-DD format</div>
+                  <div><span className="text-green-400">source</span> (optional) - eBay, Amazon, Newegg, etc.</div>
+                  <div><span className="text-green-400">notes</span> (optional) - Negotiated price, auction, etc.</div>
+                </div>
+              </div>
+
+              <div className="bg-[#0d1320] border border-[#1e2d45] rounded p-4">
+                <h3 className="text-sm font-semibold text-slate-300 mb-2">Example JSON</h3>
+                <pre className="text-xs text-slate-400 overflow-x-auto bg-black/40 p-3 rounded">
+{`{
+  "items": [
+    {
+      "component_name": "RTX 4070",
+      "component_type": "gpu",
+      "quantity": 1,
+      "base_price": 450.00,
+      "shipping_cost": 15.00,
+      "discount_amount": 0,
+      "purchase_date": "2026-06-15",
+      "source": "eBay",
+      "notes": "Excellent condition"
+    }
+  ]
+}`}
+                </pre>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={copySchemaToClipboard}
+                  className="flex-1 px-4 py-2 bg-[#00dc82]/20 text-[#00dc82] border border-[#00dc82]/30 rounded hover:bg-[#00dc82]/30 text-sm font-medium flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" /> Copy Schema to Clipboard
+                </button>
+                <button
+                  onClick={() => document.getElementById("bulk-upload")?.click()}
+                  className="flex-1 px-4 py-2 bg-blue-600/20 text-blue-400 border border-blue-600/30 rounded hover:bg-blue-600/30 text-sm font-medium"
+                >
+                  Select JSON File
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
