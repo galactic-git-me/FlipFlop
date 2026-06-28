@@ -1,45 +1,44 @@
-from datetime import datetime, date
-from typing import Optional
-from sqlalchemy import String, Integer, Float, Boolean, DateTime, JSON, ForeignKey, Date, Numeric, Index, text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum, JSON
+from sqlalchemy.orm import relationship
+from datetime import datetime
 from app.database import Base
+import enum
+
+
+class OrderStatus(enum.Enum):
+    AWAITING_SOURCING = "awaiting_sourcing"
+    PARTS_ORDERED = "parts_ordered"
+    BUILDING = "building"
+    QA = "qa"
+    READY_TO_SHIP = "ready_to_ship"
+    SHIPPED = "shipped"
+    COMPLETED = "completed"
 
 
 class Order(Base):
     __tablename__ = "orders"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    reference: Mapped[str] = mapped_column(
-        String(20),
-        unique=True,
-        nullable=False,
-        index=True,
-    )
-    playbook_id: Mapped[int] = mapped_column(Integer, ForeignKey("playbooks.id"))
-    playbook_name: Mapped[str] = mapped_column(String(255))
-    build_config: Mapped[dict] = mapped_column(JSON)
-    customer_name: Mapped[str] = mapped_column(String(255))
-    customer_email: Mapped[str] = mapped_column(String(255))
-    delivery_address: Mapped[dict] = mapped_column(JSON)
-    subtotal_gbp: Mapped[float] = mapped_column(Numeric(10, 2))
-    tax_gbp: Mapped[float] = mapped_column(Numeric(10, 2))
-    total_gbp: Mapped[float] = mapped_column(Numeric(10, 2))
-    stripe_session_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    stripe_payment_intent_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    status: Mapped[str] = mapped_column(
-        String(50),
-        default="pending_payment",
-        nullable=False,
-    )
-    assigned_build_week: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
-    estimated_arrival_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    delivery_at_risk: Mapped[bool] = mapped_column(Boolean, default=False)
-    payment_confirmed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    id = Column(Integer, primary_key=True)
+    order_id = Column(String, unique=True, index=True, nullable=False)
+    customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
 
-    __table_args__ = (
-        Index("idx_orders_status", "status"),
-        Index("idx_orders_week", "assigned_build_week"),
-        Index("idx_orders_email", "customer_email"),
-    )
+    specs = Column(JSON, nullable=False)
+
+    customer_price = Column(Float, nullable=False)
+    component_costs = Column(Float, nullable=False)
+    labor_hours = Column(Float, default=3.0)
+    labor_rate = Column(Float, default=25.0)
+    overhead_amount = Column(Float, nullable=False)
+    profit = Column(Float, nullable=True)
+
+    promised_delivery_date = Column(DateTime, nullable=False)
+    actual_delivery_date = Column(DateTime, nullable=True)
+
+    status = Column(Enum(OrderStatus), default=OrderStatus.AWAITING_SOURCING)
+    notes = Column(String, nullable=True)
+    rating = Column(Integer, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    customer = relationship("Customer", back_populates="orders")
