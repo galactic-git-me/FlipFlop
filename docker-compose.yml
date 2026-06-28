@@ -33,7 +33,7 @@ services:
 
   backend:
     build:
-      context: ./pc-flipper-backend
+      context: ./flipflop-api
       dockerfile: Dockerfile
     container_name: flipflop-backend
     restart: unless-stopped

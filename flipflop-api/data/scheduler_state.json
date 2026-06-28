@@ -1,0 +1,50 @@
+{
+  "ram_watcher": {
+    "last_success_at": "2026-06-28T10:59:32.051282+00:00"
+  },
+  "price_refresh": {
+    "last_success_at": "2026-06-28T00:54:32.979712+00:00"
+  },
+  "flip_opportunities": {
+    "last_success_at": "2026-06-28T09:09:17.647402+00:00"
+  },
+  "external_demand": {
+    "last_success_at": "2026-06-28T10:44:46.574253+00:00"
+  },
+  "playbook_evolution": {
+    "last_success_at": "2026-06-28T10:44:32.227339+00:00"
+  },
+  "accessories": {
+    "last_success_at": "2026-06-28T09:09:18.838325+00:00"
+  },
+  "compliant_market_ingestion": {
+    "last_success_at": "2026-06-28T10:44:32.044935+00:00"
+  },
+  "retrain_checkpoint_watchdog": {
+    "last_success_at": "2026-06-28T10:44:32.070553+00:00"
+  },
+  "outcome_capture": {
+    "last_success_at": "2026-06-28T10:44:32.071884+00:00"
+  },
+  "autonomous": {
+    "last_success_at": "2026-06-28T09:16:45.353599+00:00"
+  },
+  "benchmark_refresh_daily": {
+    "last_success_at": "2026-06-28T02:44:38.087631+00:00"
+  },
+  "benchmark_refresh_weekly": {
+    "last_success_at": "2026-06-28T03:44:39.960743+00:00"
+  },
+  "upgrade_parts": {
+    "last_success_at": "2026-06-28T08:39:20.651774+00:00"
+  },
+  "cases": {
+    "last_success_at": "2026-06-28T08:31:26.683489+00:00"
+  },
+  "catalogue_pipeline": {
+    "last_success_at": "2026-06-28T10:44:32.100252+00:00"
+  },
+  "catalogue_digest": {
+    "last_success_at": "2026-06-28T08:00:00.006799+00:00"
+  }
+}
