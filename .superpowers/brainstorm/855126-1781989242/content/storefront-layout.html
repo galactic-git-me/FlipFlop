@@ -1,0 +1,103 @@
+<h2>FlipFlop Storefront: Hybrid Business Model</h2>
+<p class="subtitle">How should we present both made-to-order and ready-to-ship builds?</p>
+
+<div class="cards">
+  <div class="card" data-choice="hero-tabs" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">Option A: Tab Navigation</div>
+        <div class="mockup-body" style="padding: 20px;">
+          <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee;">
+            <button class="mock-button" style="background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer;">🛠️ Build Yours</button>
+            <button class="mock-button" style="background: #f0f0f0; border: none; padding: 10px 20px; cursor: pointer;">📦 Ready to Ship</button>
+          </div>
+          <div style="color: #666; font-size: 14px;">
+            <p><strong>Configure your perfect PC with 3D preview</strong></p>
+            <p>Budget: <input class="mock-input" style="width: 100px;" placeholder="£1000-2000"></p>
+            <p>Use Case: <select class="mock-input" style="width: 150px;"><option>Gaming</option><option>Workstation</option></select></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Tab Navigation</h3>
+      <p>Clear separation: "Build Yours" tab for made-to-order, "Ready to Ship" for inventory builds.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Clear separation of workflows</li><li>Familiar pattern</li><li>Easy to scan</li></ul></div>
+        <div class="cons"><h4>Cons</h4><li>Users must click to switch</li><li>Feels like two separate experiences</li></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="hero-split" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">Option B: Split Hero Section</div>
+        <div class="mockup-body" style="padding: 20px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="border: 2px solid #007bff; padding: 15px; border-radius: 8px;">
+              <h4 style="color: #007bff;">🛠️ Build Your PC</h4>
+              <p style="font-size: 12px; color: #666;">Configure specs, see 3D preview, get instant quote</p>
+              <button class="mock-button" style="background: #007bff; color: white; width: 100%; border: none; padding: 8px; cursor: pointer; border-radius: 4px;">Start Building</button>
+            </div>
+            <div style="border: 2px solid #28a745; padding: 15px; border-radius: 8px;">
+              <h4 style="color: #28a745;">📦 Ready to Ship</h4>
+              <p style="font-size: 12px; color: #666;">Buy a build we've already optimized</p>
+              <button class="mock-button" style="background: #28a745; color: white; width: 100%; border: none; padding: 8px; cursor: pointer; border-radius: 4px;">Browse Builds</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Split Hero Section</h3>
+      <p>Two prominent CTAs side-by-side on homepage. Equal visual weight to both options.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Both options equally prominent</li><li>Immediate choice</li><li>Shows we offer both</li><li>Good for A/B testing</li></ul></div>
+        <div class="cons"><h4>Cons</h4><li>Splits traffic</li><li>Less focused experience</li></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="staggered" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">Option C: Made-to-Order Priority</div>
+        <div class="mockup-body" style="padding: 20px;">
+          <div style="background: #f0f8ff; padding: 30px; margin-bottom: 20px; border-radius: 8px;">
+            <h3 style="color: #007bff; margin: 0;">🛠️ Build Your Perfect PC</h3>
+            <p style="color: #666; margin: 10px 0 0 0;">Configured to your specs. 3D preview. Fast shipping.</p>
+            <button class="mock-button" style="background: #007bff; color: white; border: none; padding: 12px 24px; cursor: pointer; border-radius: 4px; margin-top: 10px;">Start Configurator</button>
+          </div>
+          <div style="border-top: 2px solid #eee; padding-top: 20px;">
+            <h4>✨ Or Browse Pre-Built Options</h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px;">
+              <div style="border: 1px solid #ddd; padding: 10px; border-radius: 4px; text-align: center; font-size: 12px;">
+                <div style="color: #999;">RTX 4070 Gaming</div>
+                <div style="font-weight: bold; margin-top: 5px;">£1,499</div>
+              </div>
+              <div style="border: 1px solid #ddd; padding: 10px; border-radius: 4px; text-align: center; font-size: 12px;">
+                <div style="color: #999;">Workstation Pro</div>
+                <div style="font-weight: bold; margin-top: 5px;">£2,299</div>
+              </div>
+              <div style="border: 1px solid #ddd; padding: 10px; border-radius: 4px; text-align: center; font-size: 12px;">
+                <div style="color: #999;">Budget Gaming</div>
+                <div style="font-weight: bold; margin-top: 5px;">£799</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Made-to-Order Priority</h3>
+      <p>Large hero for custom builds, ready-to-ship as secondary option below. Guides users toward configurator first.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Emphasizes custom/personalized</li><li>Better margins on made-to-order</li><li>Defaults to premium experience</li></ul></div>
+        <div class="cons"><h4>Cons</h4><li>Ready-to-ship feels secondary</li><li>Users who want quick buy might get frustrated</li></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top: 30px; font-size: 12px; color: #999;">Which layout best represents your hybrid business? Click to select.</p>
