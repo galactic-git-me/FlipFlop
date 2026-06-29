@@ -1,0 +1,76 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: flipflop-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: flipflop
+      POSTGRES_USER: flipper
+      POSTGRES_PASSWORD: flipper_secure_password_123
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - flipflop-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: flipflop-cache
+    restart: unless-stopped
+    ports:
+      - "16379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - flipflop-network
+
+  api:
+    build:
+      context: ./flipflop-api
+      dockerfile: Dockerfile
+    container_name: flipflop-backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "18000:8000"
+    env_file:
+      - .env.local
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://flipper:flipper_secure_password_123@postgres:5432/flipflop
+      REDIS_URL: redis://redis:6379/0
+      API_URL: http://localhost:18000
+      HOST: 0.0.0.0
+      PORT: 8000
+    networks:
+      - flipflop-network
+
+  storefront:
+    build:
+      context: ./flipflop-storefront
+      dockerfile: Dockerfile
+    container_name: flipflop-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "13000:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:18000
+    networks:
+      - flipflop-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  flipflop-network:
+    driver: bridge
