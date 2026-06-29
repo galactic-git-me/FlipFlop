@@ -89,6 +89,16 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 168  # 1 week
 
+    # OAuth2 - Google
+    google_client_id: str = ""
+    google_client_secret: str = ""
+    google_redirect_uri: str = "http://localhost:3000/auth/callback"
+
+    # OAuth2 - GitHub
+    github_client_id: str = ""
+    github_client_secret: str = ""
+    github_redirect_uri: str = "http://localhost:3000/auth/callback"
+
     # "dev" clears search_telemetry on every startup so figures start fresh.
     # "production" preserves history across restarts.
     app_env: str = "dev"

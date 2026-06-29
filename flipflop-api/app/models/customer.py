@@ -15,6 +15,13 @@ class Customer(Base):
     phone = Column(String(20), nullable=True)
     last_login = Column(DateTime, nullable=True)
 
+    # OAuth fields
+    google_id = Column(String(255), unique=True, nullable=True, index=True)
+    google_email = Column(String(255), nullable=True)
+    github_id = Column(Integer, unique=True, nullable=True, index=True)
+    github_username = Column(String(255), nullable=True)
+    oauth_provider = Column(String(50), nullable=True)  # 'google', 'github', or null for email
+
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
