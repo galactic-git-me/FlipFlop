@@ -1,18 +1,57 @@
 @import "tailwindcss";
 
+/* Claude Design System - Admin Dashboard */
 :root {
-  --nf-bg: #0b0d12;
-  --nf-surface: rgba(16, 18, 24, 0.72);
-  --nf-surface-solid: #11141b;
-  --nf-panel: rgba(20, 20, 24, 0.75);
-  --nf-border: rgba(164, 230, 255, 0.18);
-  --nf-border-strong: rgba(164, 230, 255, 0.4);
-  --nf-primary: #a4e6ff;
-  --nf-primary-strong: #6ad6ff;
-  --nf-success: #48ff9a;
-  --nf-text: #e8edf0;
-  --nf-text-muted: #8d9da6;
-  --nf-outline: #5a6870;
+  /* Primary Colors - Deep Luxury (matching storefront) */
+  --color-surface: #0f1419;
+  --color-surface-alt: #1a1f2b;
+  --color-surface-raised: #242a39;
+
+  /* Text Colors */
+  --color-text: #e8eaf0;
+  --color-text-secondary: #a0a8c0;
+  --color-text-tertiary: #7a8299;
+
+  /* Accent Colors - Premium Gold */
+  --color-accent: #d4af37;
+  --color-accent-hover: #e8c547;
+  --color-accent-dark: #c99f2e;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* Borders & Dividers */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.04);
+
+  /* Typography */
+  --font-serif: 'Georgia', 'Garamond', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Monaco', 'Courier New', monospace;
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Backward compatibility with old theme */
+  --nf-bg: var(--color-surface);
+  --nf-surface: var(--color-surface-alt);
+  --nf-surface-solid: var(--color-surface-raised);
+  --nf-panel: var(--color-surface-alt);
+  --nf-border: var(--color-border);
+  --nf-border-strong: rgba(212, 175, 55, 0.3);
+  --nf-primary: var(--color-accent);
+  --nf-primary-strong: var(--color-accent-hover);
+  --nf-success: var(--color-success);
+  --nf-text: var(--color-text);
+  --nf-text-muted: var(--color-text-secondary);
+  --nf-outline: var(--color-text-tertiary);
 }
 
 @theme inline {
