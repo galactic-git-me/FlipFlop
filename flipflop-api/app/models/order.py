@@ -42,6 +42,21 @@ class Order(Base):
     theme_id = Column(Integer, ForeignKey('desktop_themes.id'), nullable=True)
     playbook_id = Column(Integer, ForeignKey('playbooks.id'), nullable=True)
 
+    # Admin workflow timing fields
+    sourcing_started_at = Column(DateTime, nullable=True)
+    sourcing_approved_at = Column(DateTime, nullable=True)
+    building_started_at = Column(DateTime, nullable=True)
+    building_completed_at = Column(DateTime, nullable=True)
+    qa_started_at = Column(DateTime, nullable=True)
+    qa_passed_at = Column(DateTime, nullable=True)
+    shipped_at = Column(DateTime, nullable=True)
+    delivered_at = Column(DateTime, nullable=True)
+
+    # Shipping tracking
+    tracking_number = Column(String(100), nullable=True)
+    carrier = Column(String(50), nullable=True)  # 'royal_mail', 'ups', 'dhl', 'fedex'
+    estimated_delivery = Column(DateTime, nullable=True)
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -51,3 +66,5 @@ class Order(Base):
     theme = relationship("DesktopTheme", back_populates="orders")
     playbook = relationship("Playbook", back_populates="orders")
     welcome_guide = relationship("WelcomeGuide", back_populates="order", uselist=False)
+    checklists = relationship("OrderChecklist", cascade="all, delete-orphan")
+    photos = relationship("OrderPhoto", cascade="all, delete-orphan")

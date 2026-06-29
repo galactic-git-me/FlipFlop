@@ -70,6 +70,8 @@ __all__ = [
 
 from .customer import Customer
 from .order import Order, OrderStatus
+from .order_checklist import OrderChecklist
+from .order_photo import OrderPhoto
 from .playbook import Playbook, PlaybookStatus
 from .component_catalogue import Component, VendorPrice
 from .os_component import OSComponent
@@ -80,6 +82,8 @@ from .demand import DemandEvent
 __all__ = [
     "Customer",
     "Order", "OrderStatus",
+    "OrderChecklist",
+    "OrderPhoto",
     "Playbook", "PlaybookStatus",
     "Component", "VendorPrice",
     "OSComponent",
