@@ -30,3 +30,6 @@ aiofiles
 tenacity
 structlog
 rich
+
+# Payment Processing
+stripe
