@@ -28,6 +28,11 @@ apscheduler==3.10.4
 # Caching / Queue
 redis==5.2.1
 
+# Auth
+passlib[bcrypt]>=1.7.4
+python-jose[cryptography]>=3.3.0
+email-validator>=2.0.0
+
 # Utils
 pydantic[email]>=2.10.3
 pydantic-settings>=2.6.1

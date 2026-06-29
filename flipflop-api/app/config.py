@@ -84,6 +84,11 @@ class Settings(BaseSettings):
     smtp_pass: str = ""
     smtp_from: str = "noreply@flipflop.co.uk"
 
+    # Auth
+    secret_key: str = "dev-secret-key-change-in-production"  # MUST be set via environment in production
+    jwt_algorithm: str = "HS256"
+    jwt_expiration_hours: int = 168  # 1 week
+
     # "dev" clears search_telemetry on every startup so figures start fresh.
     # "production" preserves history across restarts.
     app_env: str = "dev"

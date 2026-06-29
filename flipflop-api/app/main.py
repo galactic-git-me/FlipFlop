@@ -32,6 +32,7 @@ from app.api.companion import router as companion_router
 from app.api.price_benchmarks import router as price_benchmarks_router
 from app.api.catalogue import router as catalogue_router
 from app.api.public_catalogue import router as public_catalogue_router
+from app.routes.auth import router as auth_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -453,6 +454,7 @@ app.include_router(ram_watch_router, prefix="/api")
 app.include_router(price_benchmarks_router, prefix="/api")
 app.include_router(catalogue_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 
 
 _startup_time: datetime = datetime.now(timezone.utc)
