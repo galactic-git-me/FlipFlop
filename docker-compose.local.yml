@@ -63,9 +63,29 @@ services:
       - "13000:3000"
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://localhost:18000
+      NEXT_PUBLIC_API_URL: http://andromeda-ts:18000
     networks:
       - flipflop-network
+    extra_hosts:
+      - "andromeda-ts:host-gateway"
+
+  admin:
+    build:
+      context: ./flipflop-admin
+      dockerfile: Dockerfile
+    container_name: flipflop-admin
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "13001:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://andromeda-ts:18000
+    networks:
+      - flipflop-network
+    extra_hosts:
+      - "andromeda-ts:host-gateway"
 
 volumes:
   postgres_data:
