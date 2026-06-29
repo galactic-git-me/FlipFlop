@@ -78,6 +78,7 @@ from .os_component import OSComponent
 from .desktop_theme import DesktopTheme
 from .welcome_guide import WelcomeGuide
 from .demand import DemandEvent
+from .gem import GemBuild, GemRiskLevel
 
 __all__ = [
     "Customer",
@@ -89,5 +90,6 @@ __all__ = [
     "OSComponent",
     "DesktopTheme",
     "WelcomeGuide",
-    "DemandEvent"
+    "DemandEvent",
+    "GemBuild", "GemRiskLevel"
 ]

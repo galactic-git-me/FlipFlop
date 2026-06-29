@@ -39,6 +39,7 @@ from app.routes.payments import router as payments_router
 from app.routes.webhooks import router as webhooks_router
 from app.routes.guides import router as guides_router
 from app.routes.admin import router as admin_router
+from app.routes.gems import router as gems_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -467,6 +468,7 @@ app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")
 app.include_router(guides_router)
 app.include_router(admin_router)
+app.include_router(gems_router)
 
 
 _startup_time: datetime = datetime.now(timezone.utc)
