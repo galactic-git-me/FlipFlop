@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, Enum
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
 import enum
@@ -31,3 +32,6 @@ class Playbook(Base):
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    orders = relationship("Order", back_populates="playbook")

@@ -72,6 +72,9 @@ from .customer import Customer
 from .order import Order, OrderStatus
 from .playbook import Playbook, PlaybookStatus
 from .component_catalogue import Component, VendorPrice
+from .os_component import OSComponent
+from .desktop_theme import DesktopTheme
+from .welcome_guide import WelcomeGuide
 from .demand import DemandEvent
 
 __all__ = [
@@ -79,5 +82,8 @@ __all__ = [
     "Order", "OrderStatus",
     "Playbook", "PlaybookStatus",
     "Component", "VendorPrice",
+    "OSComponent",
+    "DesktopTheme",
+    "WelcomeGuide",
     "DemandEvent"
 ]

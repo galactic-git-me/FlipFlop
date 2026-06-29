@@ -38,7 +38,16 @@ class Order(Base):
     notes = Column(String, nullable=True)
     rating = Column(Integer, nullable=True)
 
+    # Phase 2 fields: Theme and OS component associations
+    theme_id = Column(Integer, ForeignKey('desktop_themes.id'), nullable=True)
+    playbook_id = Column(Integer, ForeignKey('playbooks.id'), nullable=True)
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Relationships
     customer = relationship("Customer", back_populates="orders")
+    os_component = relationship("OSComponent", back_populates="assigned_order", uselist=False)
+    theme = relationship("DesktopTheme", back_populates="orders")
+    playbook = relationship("Playbook", back_populates="orders")
+    welcome_guide = relationship("WelcomeGuide", back_populates="order", uselist=False)
