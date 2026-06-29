@@ -1,85 +1,141 @@
 version: '3.9'
 
 services:
-  db:
+  # PostgreSQL Database
+  postgres:
     image: postgres:16-alpine
-    container_name: flipflop-db
+    container_name: flipflop-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: pcflipper
-      POSTGRES_USER: flipper
-      POSTGRES_PASSWORD: flipper
+      POSTGRES_DB: flipflop
+      POSTGRES_USER: ${DB_USER:-flipper}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-flipper}
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - flipflop_postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U flipper -d pcflipper"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U flipper -d flipflop"]
+      interval: 10s
       timeout: 5s
-      retries: 20
+      retries: 5
+      start_period: 40s
+    networks:
+      - flipflop-network
 
+  # Redis Cache
   redis:
     image: redis:7-alpine
     container_name: flipflop-redis
     restart: unless-stopped
     ports:
-      - "6380:6379"
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - flipflop-network
 
-  backend:
+  # FastAPI Backend
+  api:
     build:
       context: ./flipflop-api
       dockerfile: Dockerfile
-    container_name: flipflop-backend
+    container_name: flipflop-api
     restart: unless-stopped
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     ports:
-      - "4311:8000"
+      - "8000:8000"
     env_file:
-      - path: ./.env.local
-        required: false
+      - .env.local
     environment:
-      DATABASE_URL: postgresql+asyncpg://flipper:flipper@db:5432/pcflipper
-      SYNC_DATABASE_URL: postgresql://flipper:flipper@db:5432/pcflipper
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-flipper}:${DB_PASSWORD:-flipper}@postgres:5432/flipflop
       REDIS_URL: redis://redis:6379/0
-      FRONTEND_URL: http://localhost:4310
-      BROWSER_CDP_URL: http://host.docker.internal:9222
-      SHOW_SCRAPER_BROWSER: "1"
-      FB_HEADLESS: "0"
-      APP_ENV: staging
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      OPENROUTER_PRIMARY_MODEL: ${OPENROUTER_PRIMARY_MODEL:-google/gemma-4-31b-it:free}
-      OLLAMA_BASE_URL: http://host.docker.internal:11434
-      OLLAMA_MODEL: gemma4:e4b
-      APIFY_API_TOKEN: ${APIFY_API_TOKEN}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
+      API_URL: ${API_URL:-http://localhost:8000}
+      HOST: 0.0.0.0
+      PORT: 8000
+      WORKERS: ${WORKERS:-4}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - flipflop-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  frontend:
+  # Next.js Storefront
+  storefront:
     build:
-      context: ./pc-flipper
+      context: ./flipflop-storefront
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: /api
-    container_name: flipflop-frontend
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
+    container_name: flipflop-storefront
     restart: unless-stopped
     depends_on:
-      - backend
+      - api
     ports:
-      - "4310:3000"
+      - "3000:3000"
     environment:
-      NODE_ENV: production
-      BACKEND_URL: http://backend:8000
+      NODE_ENV: ${ENVIRONMENT:-development}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - flipflop-network
+
+  # Next.js Admin Dashboard
+  admin:
+    build:
+      context: ./flipflop-admin
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
+    container_name: flipflop-admin
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: ${ENVIRONMENT:-development}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - flipflop-network
 
 volumes:
-  flipflop_postgres_data:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  flipflop-network:
+    driver: bridge
