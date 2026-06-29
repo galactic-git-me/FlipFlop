@@ -1,24 +1,117 @@
+version: '3.9'
+
 services:
-  frontend:
-    build:
-      context: ./pc-flipper
-      dockerfile: Dockerfile
-      target: deps
-    command: sh -c "npm run dev -- -p 3000 -H 0.0.0.0"
+  postgres:
+    image: postgres:16-alpine
+    container_name: flipflop-db-dev
+    restart: unless-stopped
     environment:
-      NODE_ENV: development
-      BACKEND_URL: http://backend:8000
-      NEXT_PUBLIC_API_URL: /api
-      # Forces Next.js to use polling instead of inotify — required on Linux
-      # containers where inotify events from volume mounts are unreliable.
-      WATCHPACK_POLLING: "true"
-      CHOKIDAR_USEPOLLING: "true"
+      POSTGRES_DB: flipflop
+      POSTGRES_USER: flipper
+      POSTGRES_PASSWORD: flipper_secure_password_123
+    ports:
+      - "15432:5432"
     volumes:
-      - ./pc-flipper:/app
+      - postgres_data_dev:/var/lib/postgresql/data
+    networks:
+      - flipflop-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flipper -d flipflop"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: flipflop-cache-dev
+    restart: unless-stopped
+    ports:
+      - "16379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data_dev:/data
+    networks:
+      - flipflop-network
+
+  api:
+    build:
+      context: ./flipflop-api
+      dockerfile: Dockerfile.dev
+    container_name: flipflop-backend-dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "18000:8000"
+    volumes:
+      - ./flipflop-api:/app
+      - /app/.venv
+      - /app/__pycache__
+    env_file:
+      - .env.local
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://flipper:flipper_secure_password_123@postgres:5432/flipflop
+      REDIS_URL: redis://redis:6379/0
+      API_URL: http://andromeda-ts:18000
+      HOST: 0.0.0.0
+      PORT: 8000
+    networks:
+      - flipflop-network
+    extra_hosts:
+      - "andromeda-ts:host-gateway"
+
+  storefront:
+    build:
+      context: ./flipflop-storefront
+      dockerfile: Dockerfile.dev
+    container_name: flipflop-web-dev
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "13000:3000"
+    volumes:
+      - ./flipflop-storefront:/app
       - /app/node_modules
       - /app/.next
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://andromeda-ts:18000
+    networks:
+      - flipflop-network
+    extra_hosts:
+      - "andromeda-ts:host-gateway"
 
-  backend:
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-graceful-shutdown 5
+  admin:
+    build:
+      context: ./flipflop-admin
+      dockerfile: Dockerfile.dev
+    container_name: flipflop-admin-dev
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "13001:3000"
     volumes:
-      - ./pc-flipper-backend:/app
+      - ./flipflop-admin:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://andromeda-ts:18000
+    networks:
+      - flipflop-network
+    extra_hosts:
+      - "andromeda-ts:host-gateway"
+
+volumes:
+  postgres_data_dev:
+  redis_data_dev:
+
+networks:
+  flipflop-network:
+    driver: bridge
