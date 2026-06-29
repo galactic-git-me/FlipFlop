@@ -34,6 +34,7 @@ from app.api.catalogue import router as catalogue_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.routes.auth import router as auth_router
 from app.routes.oauth import router as oauth_router
+from app.routes.quotes import router as quotes_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -457,6 +458,7 @@ app.include_router(catalogue_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
 app.include_router(oauth_router, prefix="/api")
+app.include_router(quotes_router, prefix="/api")
 
 
 _startup_time: datetime = datetime.now(timezone.utc)
