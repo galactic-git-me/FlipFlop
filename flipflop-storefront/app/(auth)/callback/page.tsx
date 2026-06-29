@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { useAuth } from '@/lib/auth';
 
-export default function OAuthCallbackPage() {
+export const dynamic = 'force-dynamic';
+
+function OAuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -18,62 +20,57 @@ export default function OAuthCallbackPage() {
       const state = searchParams.get('state'); // 'google' or 'github'
 
       if (!code) {
-        setError('Missing authorization code');
-        return;
-      }
-
-      if (!state) {
-        setError('Missing OAuth provider information');
+        setError('No authorization code received');
         return;
       }
 
       try {
-        setMessage(`Authenticating with ${state === 'google' ? 'Google' : 'GitHub'}...`);
-
         let result;
+
         if (state === 'google') {
           result = await apiClient.oauth.exchangeGoogleCode(code);
         } else if (state === 'github') {
           result = await apiClient.oauth.exchangeGitHubCode(code);
         } else {
-          setError('Unknown OAuth provider');
+          setError('Invalid OAuth provider');
           return;
         }
 
-        if (result?.access_token) {
-          setMessage('Login successful. Redirecting...');
-          login(result.access_token);
+        if (result && result.token) {
+          login(result.token);
+          router.push('/');
         } else {
-          setError('Failed to obtain access token');
+          setError('Authentication failed: no token returned');
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Authentication failed');
+        setError(`Authentication failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
       }
     };
 
     handleCallback();
-  }, [searchParams, login]);
+  }, [searchParams, router, login]);
+
+  if (error) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h1>Authentication Error</h1>
+        <p>{error}</p>
+        <a href="/login">Back to login</a>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4">
-      <div className="w-full max-w-md text-center">
-        {error ? (
-          <div className="space-y-4">
-            <div className="text-red-600 font-semibold text-lg">Authentication Failed</div>
-            <div className="text-red-500">{error}</div>
-            <a href="/login" className="inline-block mt-4 px-4 py-2 bg-black text-white rounded font-semibold hover:bg-gray-800">
-              Back to Login
-            </a>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="text-gray-600 text-lg">{message}</div>
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
-            </div>
-          </div>
-        )}
-      </div>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>{message}</h1>
     </div>
+  );
+}
+
+export default function OAuthCallbackPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>}>
+      <OAuthCallbackContent />
+    </Suspense>
   );
 }
