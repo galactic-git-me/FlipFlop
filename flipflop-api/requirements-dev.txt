@@ -31,6 +31,14 @@ tenacity
 structlog
 rich
 alembic
+Pillow
+cryptography
+ollama
+passlib
+playwright
+python-jose
+redis
+reportlab
 
 # Payment Processing
 stripe
