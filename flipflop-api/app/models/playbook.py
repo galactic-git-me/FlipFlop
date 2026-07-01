@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -31,6 +31,9 @@ class Playbook(Base):
     used_market_price = Column(Float, nullable=True)
 
     status = Column(Enum(PlaybookStatus), default=PlaybookStatus.ACTIVE)
+
+    # Commerce & CXP: every ACTIVE playbook must reference exactly one Packaging Playbook (BR-1)
+    packaging_playbook_id = Column(Integer, ForeignKey("packaging_playbooks.id"), nullable=True)
 
     activated_at = Column(DateTime, nullable=True)
 

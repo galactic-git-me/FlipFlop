@@ -80,6 +80,38 @@ from .welcome_guide import WelcomeGuide
 from .demand import DemandEvent
 from .gem import GemBuild, GemRiskLevel
 
+# Commerce & CXP platform (docs/prd/flipflop-commerce-and-cxp-platform-prd.md)
+from .build import Build, BuildType, BuildStatus
+from .product import (
+    Product, ProductType, ProductStatus, SoldChannel,
+    ProductListing, ListingChannel, ProductListingStatus, WithdrawalReason,
+    ChannelEvent, ChannelEventType,
+)
+from .configurator import ConfiguratorCatalogueVisibility, CompatibilityRule, CompatibilityRuleType
+from .profit_calculation import ProfitCalculation
+from .made_to_order import MadeToOrderQueue, QueuePriority
+from .lifecycle_event import LifecycleEvent, LifecycleEventType, LifecycleEventStatus
+from .bi_recommendation import BiRecommendation, BiCategory, BiRecommendationStatus
+
+# Customer Experience Platform (docs/prd/customer-experience-platform-prd.md)
+from .packaging_playbook import (
+    PackagingPlaybook, PackagingPlaybookStatus, PackagingPlaybookVersion,
+    PackagingPlaybookComponent, PackagingComponentCategory,
+)
+from .procurement import (
+    ProcurementSupplier, ProcurementProduct, ProcurementProductSupplier,
+    ProcurementPurchase, ProcurementReservation, ProcurementReservationStatus,
+)
+from .cx_document import (
+    CXDocumentTemplate, CXDocumentTemplateStatus, CXDocument,
+    CXDocumentType, CXDocumentStatus, CXDocumentGeneratedBy,
+)
+from .usb_manifest import USBTemplate, USBManifest, USBManifestStatus
+from .capture_3d import Capture3DAsset, Capture3DStatus
+from .photo_requirement import PhotoRequirement, PhotoType
+from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequirement
+from .cx_cost_record import CXCostRecord
+
 __all__ = [
     "Customer",
     "Order", "OrderStatus",
@@ -91,5 +123,26 @@ __all__ = [
     "DesktopTheme",
     "WelcomeGuide",
     "DemandEvent",
-    "GemBuild", "GemRiskLevel"
+    "GemBuild", "GemRiskLevel",
+    # Commerce & CXP
+    "Build", "BuildType", "BuildStatus",
+    "Product", "ProductType", "ProductStatus", "SoldChannel",
+    "ProductListing", "ListingChannel", "ProductListingStatus", "WithdrawalReason",
+    "ChannelEvent", "ChannelEventType",
+    "ConfiguratorCatalogueVisibility", "CompatibilityRule", "CompatibilityRuleType",
+    "ProfitCalculation",
+    "MadeToOrderQueue", "QueuePriority",
+    "LifecycleEvent", "LifecycleEventType", "LifecycleEventStatus",
+    "BiRecommendation", "BiCategory", "BiRecommendationStatus",
+    "PackagingPlaybook", "PackagingPlaybookStatus", "PackagingPlaybookVersion",
+    "PackagingPlaybookComponent", "PackagingComponentCategory",
+    "ProcurementSupplier", "ProcurementProduct", "ProcurementProductSupplier",
+    "ProcurementPurchase", "ProcurementReservation", "ProcurementReservationStatus",
+    "CXDocumentTemplate", "CXDocumentTemplateStatus", "CXDocument",
+    "CXDocumentType", "CXDocumentStatus", "CXDocumentGeneratedBy",
+    "USBTemplate", "USBManifest", "USBManifestStatus",
+    "Capture3DAsset", "Capture3DStatus",
+    "PhotoRequirement", "PhotoType",
+    "QualityGateCheck", "QualityGateResult", "EvidenceRequirement",
+    "CXCostRecord",
 ]

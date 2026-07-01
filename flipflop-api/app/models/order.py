@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum, JSON
+from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum, JSON, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -10,6 +10,8 @@ class OrderStatus(enum.Enum):
     PARTS_ORDERED = "parts_ordered"
     BUILDING = "building"
     QA = "qa"
+    READY_TO_PACKAGE = "ready_to_package"
+    PACKAGING_IN_PROGRESS = "packaging_in_progress"
     READY_TO_SHIP = "ready_to_ship"
     SHIPPED = "shipped"
     COMPLETED = "completed"
@@ -56,6 +58,11 @@ class Order(Base):
     tracking_number = Column(String(100), nullable=True)
     carrier = Column(String(50), nullable=True)  # 'royal_mail', 'ups', 'dhl', 'fedex'
     estimated_delivery = Column(DateTime, nullable=True)
+
+    # Commerce & CXP platform fields (docs/prd/flipflop-commerce-and-cxp-platform-prd.md)
+    fast_track_selected = Column(Boolean, default=False, nullable=False)
+    fast_track_fee = Column(Float, default=0.0, nullable=False)
+    packaging_playbook_id = Column(Integer, ForeignKey("packaging_playbooks.id"), nullable=True)  # snapshot, BR-2
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
