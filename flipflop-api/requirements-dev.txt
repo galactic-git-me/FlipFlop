@@ -23,13 +23,14 @@ openai
 apscheduler
 
 # Utils
-pydantic
+pydantic[email]
 pydantic-settings
 python-multipart
 aiofiles
 tenacity
 structlog
 rich
+alembic
 
 # Payment Processing
 stripe
