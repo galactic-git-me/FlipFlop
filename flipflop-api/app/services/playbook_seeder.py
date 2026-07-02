@@ -12,7 +12,7 @@ from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.playbook import Playbook
+from app.models.playbook import Playbook, PlaybookStatus
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Live benchmark fallbacks — calibrated June 2026 UK eBay sold prices.
@@ -1052,6 +1052,8 @@ async def seed_playbooks(db: AsyncSession) -> int:
         if existing is None:
             pb_data = {k: v for k, v in data.items() if k not in ("pricing_model", "profit_model")}
             pb_data.update(economics)
+            if isinstance(pb_data.get("status"), str):
+                pb_data["status"] = PlaybookStatus(pb_data["status"])
             pb = Playbook(**pb_data, activated_at=dt.utcnow())
             db.add(pb)
             created += 1
