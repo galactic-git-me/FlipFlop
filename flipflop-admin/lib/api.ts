@@ -780,6 +780,31 @@ export const api = {
     get: (flipId: number) =>
       request<unknown>(`/flips/${flipId}/profit-breakdown`),
   },
+
+  adminPerformance: {
+    summary: (days = 90) =>
+      request<{
+        window_days: number;
+        sold_count: number;
+        active_count: number;
+        total_revenue: number;
+        total_profit: number;
+        avg_margin_pct: number;
+        avg_days_to_sell: number;
+        sell_through_rate: number | null;
+      }>(`/admin/performance/summary?days=${days}`),
+    sellerStandards: () =>
+      request<{ available: boolean; note: string | null; metrics: unknown }>(
+        "/admin/performance/seller-standards"
+      ),
+    keywordResearch: (query: string) =>
+      request<{
+        query: string;
+        sample_titles: string[];
+        frequent_tokens: [string, number][];
+        note: string;
+      }>(`/admin/performance/keyword-research?query=${encodeURIComponent(query)}`),
+  },
 };
 
 // ── Hermes Companion ──────────────────────────────────────────────────────────

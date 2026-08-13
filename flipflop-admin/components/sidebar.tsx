@@ -21,6 +21,7 @@ import {
   MemoryStick,
   Rss,
   Package,
+  LineChart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +36,7 @@ const PRIMARY_NAV = [
   { href: "/inventory", icon: Package, label: "Inventory" },
   { href: "/selling", icon: ReceiptText, label: "Reselling" },
   { href: "/intel", icon: BarChart3, label: "Analytics" },
+  { href: "/performance", icon: LineChart, label: "Performance" },
   { href: "/benchmarks", icon: Gauge, label: "Benchmarks" },
   { href: "/ram-watch", icon: MemoryStick, label: "RAM Watch" },
   { href: "/community", icon: Rss, label: "Community" },

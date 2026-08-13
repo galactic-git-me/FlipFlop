@@ -24,6 +24,7 @@ from app.api.orders import router as orders_router, admin_router as orders_admin
 from app.api.ram_watch import router as ram_watch_router
 from app.api import ebay_compliance
 from app.api import preflight
+from app.api import performance as performance_api
 from app.api.build_wizard import router as build_wizard_router
 from app.api.manual_builds import router as manual_builds_router
 from app.api.facebook import router as facebook_router
@@ -454,6 +455,7 @@ app.include_router(reselling.router, prefix="/api")
 app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
+app.include_router(performance_api.router, prefix="/api")
 app.include_router(manual_builds_router, prefix="/api")
 app.include_router(benchmarks_router, prefix="/api")
 app.include_router(companion_router, prefix="/api")
