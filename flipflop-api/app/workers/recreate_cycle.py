@@ -16,11 +16,12 @@ Two jobs, both registered on the APScheduler instance in app/workers/scheduler.p
     enforced by construction: each flip's own randomized per-cycle timer is
     independent, so cycles naturally spread out rather than batching.
 
-Both degrade gracefully without a stored seller OAuth token (see
-Settings.ebay_seller_access_token) — the internal state (recreate_cycle_count,
-next_recreate_at, listing_price step-down, etc.) still advances correctly so
-the rest of the app stays consistent; only the live eBay API call is skipped,
-clearly logged, until a seller-authorization flow exists to supply the token.
+Both use app.services.ebay_oauth.get_valid_access_token(db), which transparently
+refreshes the seller's OAuth token or returns None if "Connect eBay" (Settings >
+Seller Policies) has never been completed. Either way, the internal state
+(recreate_cycle_count, next_recreate_at, listing_price step-down, etc.) still
+advances correctly so the rest of the app stays consistent; only the live eBay
+API call is skipped and clearly logged when no token is available.
 """
 from __future__ import annotations
 
@@ -113,8 +114,10 @@ async def run_recreate_cycle_job() -> dict:
 
 async def _publish_flip(flip, db) -> bool:
     """Row 3 firing job: publish a deferred listing. Returns True if actually posted to eBay."""
+    from app.services import ebay_oauth
+
     settings = get_settings()
-    token = (settings.ebay_seller_access_token or "").strip()
+    token = await ebay_oauth.get_valid_access_token(db)
     if not token:
         log.info("recreate_cycle.publish_skipped_no_token", flip_id=flip.id)
         return False
@@ -180,12 +183,11 @@ async def _recreate_flip(flip, db) -> None:
         # Swap main image: rotate so a different image leads.
         flip.generated_images_urls = images[1:] + images[:1]
 
-    # End + republish on eBay if a seller token is configured; otherwise this
-    # cycle's state (price/title/schedule) still advances so the app stays
-    # internally consistent, and gets applied on the next successful publish.
-    settings = get_settings()
-    if (settings.ebay_seller_access_token or "").strip():
-        await _publish_flip(flip, db)
+    # End + republish on eBay if a seller token is available (auto-refreshed
+    # via ebay_oauth.get_valid_access_token); otherwise this cycle's state
+    # (price/title/schedule) still advances so the app stays internally
+    # consistent, and gets applied on the next successful publish.
+    await _publish_flip(flip, db)
 
     last_hour = flip.next_recreate_at.hour if flip.next_recreate_at else None
     flip.last_recreate_at = datetime.utcnow()

@@ -57,6 +57,11 @@ class Flip(Base):
     generated_images_urls: Mapped[list | None] = mapped_column(JSON)
     image_generation_status: Mapped[str | None] = mapped_column(String(50))  # pending, processing, complete, error
 
+    # Row 41: boot-up/benchmark video — soft-required (default proposed,
+    # confirm once: checklist item with an override, not a hard block).
+    generated_video_url: Mapped[str | None] = mapped_column(String(500))
+    video_ebay_status: Mapped[str | None] = mapped_column(String(50))  # None, uploaded_local, pushed_to_ebay, error
+
     notes: Mapped[str | None] = mapped_column(Text)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

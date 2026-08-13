@@ -118,8 +118,22 @@ async def generate_listing_content(
     theme_line = f"\nCase theme: {case_theme} (sci-fi themed build)" if case_theme else ""
     spec_summary = f"CPU: {cpu or 'Unknown'}, RAM: {ram_gb or '?'}GB {ram_type or ''}, Storage: {storage_gb or 'None'} {storage_type or ''}, GPU: {gpu or 'None'}, Location: {location or 'UK'}{theme_line}"
 
+    # Row 24: source real buyer search terms (active-listing titles, as a
+    # directional signal — see performance_dashboard.search_title_keywords
+    # for the eBay-autosuggest-API caveat) rather than guessing keywords.
+    keyword_line = ""
+    try:
+        from app.services.performance_dashboard import search_title_keywords
+        query = " ".join(p for p in [cpu, gpu] if p) or "gaming pc"
+        keywords = await search_title_keywords(query)
+        top_tokens = [tok for tok, _ in keywords.get("frequent_tokens", [])[:8]]
+        if top_tokens:
+            keyword_line = f"\nReal buyer search terms seen in comparable active listings (row 24 — weave these in where they match this build's actual specs, don't force ones that don't apply): {', '.join(top_tokens)}"
+    except Exception:
+        pass  # Keyword sourcing is a nice-to-have; never block listing generation on it.
+
     prompt = f"""Generate eBay listing content for this PC:
-{spec_summary}
+{spec_summary}{keyword_line}
 
 Title rules (Algorithm Playbook row 4 — title keyword match is Cassini's
 strongest ranking signal, so follow this exactly):

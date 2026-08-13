@@ -17,8 +17,8 @@ async def get_summary(days: int = Query(90, ge=1, le=365), db: AsyncSession = De
 
 
 @router.get("/seller-standards")
-async def get_seller_standards():
-    return await performance_dashboard.get_seller_performance_metrics()
+async def get_seller_standards(db: AsyncSession = Depends(get_db)):
+    return await performance_dashboard.get_seller_performance_metrics(db)
 
 
 @router.get("/keyword-research")

@@ -148,6 +148,46 @@ def test_pricing_suggestions_endpoint(client, listing_id):
     assert "suggested_ad_rate_pct" in body["promoted_listings"]
 
 
+def test_upload_video_saves_locally_and_returns_url(client, listing_id):
+    # The background eBay-push step uses the real (non-test) DB session by
+    # design (see _push_video_to_ebay_background) since background-task work
+    # isn't part of the FastAPI dependency-override chain — short-circuit it
+    # here so this test only exercises the local-save path.
+    from unittest.mock import AsyncMock, patch
+
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    with patch("app.api.flips._push_video_to_ebay_background", new=AsyncMock(return_value=None)):
+        resp = client.post(
+            f"/api/flips/{flip_id}/upload-video",
+            files={"file": ("clip.mp4", b"x" * 1000, "video/mp4")},
+        )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["video_url"].startswith("/uploads/videos/flip-")
+    assert body["video_ebay_status"] == "uploaded_local"
+
+    refreshed = client.get(f"/api/flips/{flip_id}").json()
+    assert refreshed["generated_video_url"] == body["video_url"]
+
+
+def test_upload_video_rejects_wrong_type(client, listing_id):
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    resp = client.post(
+        f"/api/flips/{flip_id}/upload-video",
+        files={"file": ("clip.txt", b"not a video", "text/plain")},
+    )
+    assert resp.status_code == 415
+
+
+def test_upload_video_rejects_empty_file(client, listing_id):
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    resp = client.post(
+        f"/api/flips/{flip_id}/upload-video",
+        files={"file": ("clip.mp4", b"", "video/mp4")},
+    )
+    assert resp.status_code == 422
+
+
 def test_watcher_offer_plan_not_due_before_listing(client, listing_id):
     flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
     resp = client.get(f"/api/flips/{flip_id}/watcher-offer-plan")

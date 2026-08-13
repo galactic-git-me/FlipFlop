@@ -39,6 +39,12 @@ class Settings(BaseSettings):
     # exists yet — set this manually (and refresh it periodically) until one
     # is built. Background jobs that need it degrade gracefully when it's blank.
     ebay_seller_access_token: str = ""
+    # eBay's OAuth quirk: the "redirect_uri" param in the authorize URL is
+    # actually the RuName (a string identifier) you register for your app in
+    # the eBay Developer Portal, not a literal callback URL — the portal maps
+    # it to your real callback URL (ebay_oauth_callback_url below) server-side.
+    ebay_ru_name: str = ""
+    ebay_oauth_callback_url: str = "http://localhost:8000/api/ebay/oauth/callback"
     ebay_reselling_enabled: bool = True
     ebay_message_poll_interval_seconds: int = 300
     ebay_sales_poll_interval_seconds: int = 1800

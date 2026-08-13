@@ -29,6 +29,8 @@ from app.services.price_refresh import run_price_refresh
 from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.markdown_event import run_markdown_event_scan_job
+from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
+from app.workers.message_poll import run_message_poll_job
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -56,6 +58,9 @@ _job_history: dict[str, deque[dict]] = {
     "deferred_publish": deque(maxlen=50),
     "recreate_cycle": deque(maxlen=50),
     "markdown_event_scan": deque(maxlen=50),
+    "offer_poll": deque(maxlen=50),
+    "send_to_watchers": deque(maxlen=50),
+    "message_poll": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -442,6 +447,39 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(hours=4),
+    )
+
+    # Playbook rows 8, 21, 45, 47 — offer/message polling. Every job here
+    # no-ops (logged, cheap) until "Connect eBay" is completed in Settings.
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=30),
+        id="offer_poll",
+        name="Best-Offer Poll",
+        kwargs={"job_id": "offer_poll", "fn": run_offer_poll_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=12),
+        id="send_to_watchers",
+        name="Send Offers to Watchers",
+        kwargs={"job_id": "send_to_watchers", "fn": run_send_to_watchers_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=30),
+        id="message_poll",
+        name="Buyer Message Response-Time Alert",
+        kwargs={"job_id": "message_poll", "fn": run_message_poll_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
     )
 
     scheduler.start()

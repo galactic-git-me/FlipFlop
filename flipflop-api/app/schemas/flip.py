@@ -57,6 +57,8 @@ class FlipOut(BaseModel):
     generated_description: Optional[str] = None
     generated_images_urls: Optional[list] = None
     image_generation_status: Optional[str] = None
+    generated_video_url: Optional[str] = None
+    video_ebay_status: Optional[str] = None
     notes: Optional[str]
     created_at: datetime
     sold_at: Optional[datetime]

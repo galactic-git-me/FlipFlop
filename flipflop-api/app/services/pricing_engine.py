@@ -192,7 +192,9 @@ async def recalculate_pricing(flip, db) -> dict:
     """
     from app.services.demand_check import build_query
     from app.services.ebay_browse import get_component_prices
+    from app.services.cpu_tier import extract_cpu_tier
     from app.models.listing import Listing
+    from app.models.pricing_bias import PricingBias
 
     listing = await db.get(Listing, flip.listing_id)
     query = build_query(listing.cpu if listing else None, listing.gpu if listing else None)
@@ -206,6 +208,15 @@ async def recalculate_pricing(flip, db) -> dict:
 
     floor = compute_price_floor(flip.total_cost)
     anchor = compute_bin_anchor(sold_target, ceiling, flip.offers_enabled)
+
+    # Row 49: apply any upward bias a fast/near-asking sale of a similar
+    # (same cpu_tier) build left behind — the other half of the fix for the
+    # "sold-comp pricing ratchets down" risk (see pricing_engine module docstring).
+    cpu_tier = extract_cpu_tier(listing.cpu if listing else None)
+    if anchor is not None and cpu_tier:
+        bias_row = await db.get(PricingBias, cpu_tier)
+        if bias_row and bias_row.anchor_bias_pct:
+            anchor = round(anchor * (1 + bias_row.anchor_bias_pct), 2)
 
     flip.active_range_ceiling = ceiling
     flip.sold_comp_target = sold_target

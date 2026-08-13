@@ -36,4 +36,17 @@ class AppSettings(Base):
     local_pickup_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     listing_type_default: Mapped[str] = mapped_column(String(20), default="FixedPrice")
 
+    # ── eBay seller OAuth (3-legged) — unblocks every live eBay write
+    # (posting, end/republish, Business Policies push, Promoted Listings).
+    # access token is short-lived (~2h) and cached here; refresh_token is
+    # long-lived (~18mo) and is what actually re-derives a valid access
+    # token without the user re-consenting. Both blank until "Connect eBay"
+    # is completed once in Settings.
+    ebay_seller_refresh_token: Mapped[str] = mapped_column(Text, default="")
+    ebay_seller_refresh_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_access_token: Mapped[str] = mapped_column(Text, default="")
+    ebay_seller_access_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_connected_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_scopes: Mapped[str] = mapped_column(Text, default="")
+
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

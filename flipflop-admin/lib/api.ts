@@ -306,6 +306,13 @@ export const api = {
       request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
     generateImages: (id: number) =>
       request<{ images: string[] }>(`/flips/${id}/generate-images`, { method: "POST" }),
+    uploadVideo: async (id: number, file: File) => {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch(`${API_BASE_URL}/flips/${id}/upload-video`, { method: "POST", body: form });
+      if (!res.ok) throw new Error(`Video upload failed: ${res.status}`);
+      return res.json() as Promise<{ video_url: string; video_ebay_status: string }>;
+    },
     demandCheck: (id: number) =>
       request<{
         query: string;
@@ -784,6 +791,18 @@ export const api = {
   flipProfitBreakdown: {
     get: (flipId: number) =>
       request<unknown>(`/flips/${flipId}/profit-breakdown`),
+  },
+
+  ebayOAuth: {
+    authorizeUrl: () => request<{ url: string }>("/ebay/oauth/authorize-url"),
+    status: () =>
+      request<{
+        connected: boolean;
+        connected_at: string | null;
+        scopes: string[];
+        refresh_token_expires_at: string | null;
+      }>("/ebay/oauth/status"),
+    disconnect: () => request<{ connected: boolean }>("/ebay/oauth/disconnect", { method: "POST" }),
   },
 
   adminPerformance: {

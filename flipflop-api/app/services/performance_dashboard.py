@@ -59,25 +59,23 @@ async def get_revenue_margin_summary(db: AsyncSession, days: int = 90) -> dict:
     }
 
 
-async def get_seller_performance_metrics() -> dict:
+async def get_seller_performance_metrics(db: AsyncSession) -> dict:
     """
     Row 16: eBay's 5 documented seller-performance metrics (defect rate,
     late-shipment rate, tracking uploaded/scanned on time, cases closed
     without seller resolution, return rate) — pulled from the Account API's
-    seller standards endpoint. Degrades gracefully without a stored seller
-    OAuth token, same pattern as demand_check.py, rather than failing the
-    whole dashboard.
+    seller standards endpoint. Degrades gracefully without a connected
+    seller OAuth token, same pattern as demand_check.py, rather than failing
+    the whole dashboard.
     """
-    from app.config import get_settings
+    from app.services import ebay_oauth
 
-    settings = get_settings()
-    token = (settings.ebay_seller_access_token or "").strip()
+    token = await ebay_oauth.get_valid_access_token(db)
     if not token:
         return {
             "available": False,
-            "note": "Seller-performance metrics require a stored eBay seller OAuth token "
-                    "(Settings.ebay_seller_access_token is blank) — no consent flow exists "
-                    "yet to populate it.",
+            "note": "Seller-performance metrics require a connected eBay seller account — "
+                    "click \"Connect eBay\" in Settings > Seller Policies.",
             "metrics": None,
         }
 

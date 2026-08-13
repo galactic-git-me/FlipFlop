@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2 } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2, Link2, Unlink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, SourceSearchTerm } from "@/lib/api";
@@ -90,6 +90,39 @@ export default function SettingsPage() {
   const [newTerm, setNewTerm] = useState("");
   const [newTermSources, setNewTermSources] = useState<string[]>([]);
 
+  const [ebayStatus, setEbayStatus] = useState<{
+    connected: boolean;
+    connected_at: string | null;
+    scopes: string[];
+    refresh_token_expires_at: string | null;
+  } | null>(null);
+  const [connectingEbay, setConnectingEbay] = useState(false);
+
+  async function loadEbayStatus() {
+    try {
+      setEbayStatus(await api.ebayOAuth.status());
+    } catch {
+      setEbayStatus(null);
+    }
+  }
+
+  async function connectEbay() {
+    setConnectingEbay(true);
+    try {
+      const { url } = await api.ebayOAuth.authorizeUrl();
+      window.location.href = url;
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Could not start eBay connection.");
+    } finally {
+      setConnectingEbay(false);
+    }
+  }
+
+  async function disconnectEbay() {
+    await api.ebayOAuth.disconnect();
+    await loadEbayStatus();
+  }
+
   async function withTimeout<T>(p: Promise<T>, ms = 8000): Promise<T> {
     return await Promise.race([
       p,
@@ -127,6 +160,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const t = setTimeout(() => {
       void loadAll();
+      void loadEbayStatus();
     }, 0);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -238,7 +272,45 @@ export default function SettingsPage() {
       )}
 
       {tab === "seller-policies" && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          <Card>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Link2 className="w-4 h-4" /> eBay Connection</CardTitle></CardHeader>
+            <CardContent className="pt-0 space-y-3">
+              <p className="text-xs text-slate-500">
+                Every live eBay write this app makes — posting/ending/republishing listings,
+                pushing these Seller Policies, creating Promoted Listings campaigns — needs a
+                one-time eBay seller consent. Without it, everything below still runs
+                internally (pricing, scheduling, rules) but doesn&apos;t reach eBay itself.
+              </p>
+              {ebayStatus?.connected ? (
+                <div className="flex items-center justify-between p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
+                  <div>
+                    <p className="text-sm text-emerald-400 font-semibold">Connected</p>
+                    <p className="text-xs text-slate-500">
+                      Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "—"}
+                      {ebayStatus.refresh_token_expires_at && (
+                        <> · re-consent needed by {new Date(ebayStatus.refresh_token_expires_at).toLocaleDateString()}</>
+                      )}
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={disconnectEbay}>
+                    <Unlink className="w-3.5 h-3.5" /> Disconnect
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="primary" size="sm" onClick={connectEbay} disabled={connectingEbay}>
+                  <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirecting…" : "Connect eBay"}
+                </Button>
+              )}
+              <p className="text-[11px] text-slate-600">
+                Requires <code>ebay_app_id</code> and a registered redirect URL (RuName) in the
+                eBay Developer Portal to be configured first — this is a one-time external setup
+                step, not something this app can do for you.
+              </p>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <Card>
             <CardHeader><CardTitle>Handling &amp; Returns</CardTitle></CardHeader>
             <CardContent className="space-y-3 pt-0">
@@ -301,6 +373,7 @@ export default function SettingsPage() {
               </p>
             </CardContent>
           </Card>
+          </div>
         </div>
       )}
 

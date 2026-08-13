@@ -10,8 +10,10 @@ if sys.platform == "win32":
 
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.database import engine, Base
@@ -25,6 +27,7 @@ from app.api.ram_watch import router as ram_watch_router
 from app.api import ebay_compliance
 from app.api import preflight
 from app.api import performance as performance_api
+from app.api import ebay_oauth as ebay_oauth_api
 from app.api.build_wizard import router as build_wizard_router
 from app.api.manual_builds import router as manual_builds_router
 from app.api.facebook import router as facebook_router
@@ -427,6 +430,10 @@ async def private_network_access(request, call_next):
     response.headers["Access-Control-Allow-Private-Network"] = "true"
     return response
 
+_uploads_dir = Path(__file__).resolve().parents[1] / "data" / "uploads"
+_uploads_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
+
 app.include_router(listings.router, prefix="/api")
 app.include_router(flips.router, prefix="/api")
 app.include_router(parts.router, prefix="/api")
@@ -456,6 +463,7 @@ app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
 app.include_router(preflight.router, prefix="/api")
 app.include_router(performance_api.router, prefix="/api")
+app.include_router(ebay_oauth_api.router, prefix="/api")
 app.include_router(manual_builds_router, prefix="/api")
 app.include_router(benchmarks_router, prefix="/api")
 app.include_router(companion_router, prefix="/api")

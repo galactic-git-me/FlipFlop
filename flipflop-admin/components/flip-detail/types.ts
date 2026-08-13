@@ -40,6 +40,8 @@ export interface Flip {
   generated_description?: string | null;
   generated_images_urls?: string[] | null;
   image_generation_status?: string | null;
+  generated_video_url?: string | null;
+  video_ebay_status?: string | null;
   notes?: string;
   created_at: string;
   sold_at?: string;
