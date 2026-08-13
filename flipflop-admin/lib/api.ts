@@ -306,6 +306,31 @@ export const api = {
       request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
     generateImages: (id: number) =>
       request<{ images: string[] }>(`/flips/${id}/generate-images`, { method: "POST" }),
+    demandCheck: (id: number) =>
+      request<{
+        query: string;
+        active_count: number | null;
+        sold_count_90d: number | null;
+        sold_data_available: boolean;
+        ratio_ok: boolean | null;
+        note: string | null;
+      }>(`/flips/${id}/demand-check`, { method: "POST" }),
+    recalculatePricing: (id: number) =>
+      request<{
+        listing_price: number | null;
+        sold_comp_target: number | null;
+        active_range_ceiling: number | null;
+        price_floor: number | null;
+      }>(`/flips/${id}/recalculate-pricing`, { method: "POST" }),
+    counterOffer: (id: number, buyer_offer: number) =>
+      request<{ action: string; counter_price: number | null; reason: string }>(
+        `/flips/${id}/counter-offer`,
+        { method: "POST", body: JSON.stringify({ buyer_offer }) }
+      ),
+    watcherOfferPlan: (id: number) =>
+      request<{ should_send: boolean; discount_pct: number; offer_price: number | null; reason: string }>(
+        `/flips/${id}/watcher-offer-plan`
+      ),
     profitBreakdown: (id: number) =>
       request<{
         flip_id: number;
