@@ -487,6 +487,23 @@ async def counter_offer_endpoint(flip_id: int, body: BuyerOfferBody, db: AsyncSe
     return {"action": result.action, "counter_price": result.counter_price, "reason": result.reason}
 
 
+@router.get("/{flip_id}/pricing-suggestions")
+async def pricing_suggestions_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Rows 35/40: shipping-inclusive price + Promoted Listings ad-rate suggestion."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+
+    base_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    shipping = pricing_engine.shipping_inclusive_price(base_price, has_gpu=bool(listing.gpu) if listing else False)
+    ad_rate = pricing_engine.suggest_promoted_ad_rate(
+        estimated_profit=flip.current_estimated_profit or 0.0,
+        total_cost=flip.total_cost,
+    )
+    return {"shipping": shipping, "promoted_listings": ad_rate}
+
+
 @router.get("/{flip_id}/watcher-offer-plan")
 async def watcher_offer_plan_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
     """Row 45: whether a watcher offer is due right now, and what it should be."""

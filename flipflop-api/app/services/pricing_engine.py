@@ -119,6 +119,69 @@ def bias_from_fast_sale(days_to_sell: int, sale_price: float, listing_price: Opt
     )
 
 
+DEFAULT_PC_WEIGHT_KG = 10.0
+GPU_WEIGHT_KG = 2.0
+
+# UK courier tiers for a large/heavy parcel (default proposed, confirm once).
+_SHIPPING_TIERS = [(10.0, 15.0), (15.0, 20.0), (20.0, 28.0), (float("inf"), 35.0)]
+
+
+def estimate_build_weight_kg(has_gpu: bool) -> float:
+    """Row 35: rough build weight for the shipping-inclusive price calculator."""
+    return DEFAULT_PC_WEIGHT_KG + (GPU_WEIGHT_KG if has_gpu else 0.0)
+
+
+def estimate_shipping_cost(weight_kg: float) -> float:
+    """Row 35: tiered UK courier estimate for a build's weight, to bake into a flat listed price."""
+    for max_weight, cost in _SHIPPING_TIERS:
+        if weight_kg <= max_weight:
+            return cost
+    return _SHIPPING_TIERS[-1][1]
+
+
+def shipping_inclusive_price(base_price: float, has_gpu: bool) -> dict:
+    """Row 35: flat listed price with shipping baked in, rather than exposed at checkout."""
+    weight = estimate_build_weight_kg(has_gpu)
+    shipping = estimate_shipping_cost(weight)
+    return {
+        "estimated_weight_kg": weight,
+        "estimated_shipping_cost": shipping,
+        "shipping_inclusive_price": round(base_price + shipping, 2),
+    }
+
+
+DEFAULT_AD_RATE_PCT = 0.05
+MAX_AD_SPEND_SHARE_OF_PROFIT = 0.15
+MIN_MARGIN_PCT_TO_PROMOTE = 0.10
+
+
+def suggest_promoted_ad_rate(estimated_profit: float, total_cost: float) -> dict:
+    """
+    Row 40: suggest a Promoted Listings ad rate that keeps spend inside an
+    acceptable margin band, rather than picking a rate by feel. Default
+    proposed, confirm once: 5% starting rate (mid-point between eBay's
+    typical 2-8% range and T4's empirically-tested 7%), capped so ad spend
+    never exceeds 15% of estimated profit; flags builds too thin to promote.
+    """
+    margin_pct = (estimated_profit / total_cost) if total_cost else 0.0
+    if margin_pct < MIN_MARGIN_PCT_TO_PROMOTE:
+        return {
+            "suggested_ad_rate_pct": 0.0,
+            "too_thin_to_promote": True,
+            "max_ad_spend": 0.0,
+            "reason": f"Margin {margin_pct * 100:.1f}% is below the {MIN_MARGIN_PCT_TO_PROMOTE * 100:.0f}% threshold to promote profitably.",
+        }
+
+    max_ad_spend = round(estimated_profit * MAX_AD_SPEND_SHARE_OF_PROFIT, 2)
+    return {
+        "suggested_ad_rate_pct": DEFAULT_AD_RATE_PCT,
+        "too_thin_to_promote": False,
+        "max_ad_spend": max_ad_spend,
+        "reason": f"Default {DEFAULT_AD_RATE_PCT * 100:.0f}% starting rate, capped at £{max_ad_spend:.2f} "
+                  f"({MAX_AD_SPEND_SHARE_OF_PROFIT * 100:.0f}% of estimated profit).",
+    }
+
+
 async def recalculate_pricing(flip, db) -> dict:
     """
     Orchestrates a fresh pricing recalculation for a Flip: pulls current active

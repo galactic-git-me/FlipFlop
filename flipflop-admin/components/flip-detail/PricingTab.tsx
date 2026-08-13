@@ -25,9 +25,22 @@ interface ProfitBreakdown {
   }>;
 }
 
+interface PricingSuggestions {
+  shipping: { estimated_weight_kg: number; estimated_shipping_cost: number; shipping_inclusive_price: number };
+  promoted_listings: { suggested_ad_rate_pct: number; too_thin_to_promote: boolean; max_ad_spend: number; reason: string };
+}
+
 export function PricingTab({ flip, onFlipUpdated }: TabProps) {
   const [minOffer, setMinOffer] = useState(flip.min_offer_price?.toString() ?? "");
   const [offersEnabled, setOffersEnabled] = useState(flip.offers_enabled);
+  const [suggestions, setSuggestions] = useState<PricingSuggestions | null>(null);
+
+  useEffect(() => {
+    api.flips
+      .pricingSuggestions(flip.id)
+      .then(setSuggestions)
+      .catch(() => setSuggestions(null));
+  }, [flip.id, flip.listing_price, flip.current_estimated_profit]);
   const [savingOffer, setSavingOffer] = useState(false);
   const [checkingDemand, setCheckingDemand] = useState(false);
   const [recalculating, setRecalculating] = useState(false);
@@ -151,10 +164,19 @@ export function PricingTab({ flip, onFlipUpdated }: TabProps) {
             </>
           )}
         </div>
-        <p className="text-[11px] text-slate-600">
-          Row 35: shipping cost is baked into these numbers as a flat, listed price — never
-          shown as calculated shipping at checkout.
-        </p>
+        {suggestions ? (
+          <p className="text-[11px] text-slate-600">
+            Row 35: est. weight {suggestions.shipping.estimated_weight_kg}kg → shipping{" "}
+            {money(suggestions.shipping.estimated_shipping_cost)} baked into a flat listed price of{" "}
+            <span className="text-slate-400 font-mono">{money(suggestions.shipping.shipping_inclusive_price)}</span>{" "}
+            — never shown as calculated shipping at checkout.
+          </p>
+        ) : (
+          <p className="text-[11px] text-slate-600">
+            Row 35: shipping cost is baked into these numbers as a flat, listed price — never
+            shown as calculated shipping at checkout.
+          </p>
+        )}
       </div>
 
       {breakdown && breakdown.allocations.length > 0 && (
@@ -322,12 +344,20 @@ export function PricingTab({ flip, onFlipUpdated }: TabProps) {
       {/* Promoted Listings */}
       <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-2">
         <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Promoted Listings (row 40)</p>
-        <p className="text-sm text-slate-300">
-          Suggested ad rate: <span className="font-mono text-slate-200">5%</span> (default, confirm once — capped so
-          ad spend never exceeds 15% of estimated profit margin).
-        </p>
-        {flip.current_estimated_profit != null && flip.current_estimated_profit < (flip.total_cost * 0.1) && (
-          <p className="text-xs text-amber-400">Margin too thin to promote profitably — not suggested for this build.</p>
+        {suggestions ? (
+          suggestions.promoted_listings.too_thin_to_promote ? (
+            <p className="text-xs text-amber-400">{suggestions.promoted_listings.reason}</p>
+          ) : (
+            <p className="text-sm text-slate-300">
+              Suggested ad rate:{" "}
+              <span className="font-mono text-slate-200">
+                {(suggestions.promoted_listings.suggested_ad_rate_pct * 100).toFixed(0)}%
+              </span>{" "}
+              — {suggestions.promoted_listings.reason}
+            </p>
+          )
+        ) : (
+          <p className="text-xs text-slate-600 italic">Loading suggestion…</p>
         )}
       </div>
     </div>

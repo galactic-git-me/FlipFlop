@@ -121,12 +121,21 @@ async def generate_listing_content(
     prompt = f"""Generate eBay listing content for this PC:
 {spec_summary}
 
+Title rules (Algorithm Playbook row 4 — title keyword match is Cassini's
+strongest ranking signal, so follow this exactly):
+- Structure: Item type + Brand/Model or key specs (CPU, GPU, RAM, storage) + Condition.
+- Front-load the item and key specs FIRST; put anything else (case theme, extras) LAST.
+- Use as much of the ~80-character budget as the real specs justify — don't pad, but don't
+  leave it mostly empty either.
+- No keyword-stuffing, no subjective filler ("Amazing", "Bargain", "L@@K", "Must See") —
+  Cassini doesn't reward it and it wastes characters that could carry another real spec.
+
 Respond with EXACTLY this JSON format (no extra text):
 {{
   "titles": [
-    "Title option 1 (max 80 chars, keyword-rich)",
-    "Title option 2 (max 80 chars, different angle)",
-    "Title option 3 (max 80 chars, budget/value focus)"
+    "Title option 1 (spec-first structure above, max 80 chars)",
+    "Title option 2 (different real angle — e.g. lead with GPU instead of CPU — same rules)",
+    "Title option 3 (different real angle — e.g. lead with use-case, still spec-first, same rules)"
   ],
   "description": "Full eBay description with specs, condition, use cases, and call to action"
 }}"""
@@ -304,13 +313,14 @@ async def _claude_chat(messages: list[dict]) -> str | None:
 
 
 def _template_titles(cpu, ram_gb, storage_gb, gpu, case_theme) -> list[str]:
+    # Row 4: item + key specs first, filler (theme, condition words) last.
     storage = f"{storage_gb}GB SSD" if storage_gb else "No Storage"
     gpu_str = gpu or "No GPU"
-    theme_prefix = f"{case_theme} Themed " if case_theme else ""
+    theme_suffix = f" {case_theme} Theme" if case_theme else ""
     return [
-        f"{theme_prefix}Gaming PC {cpu} {ram_gb}GB DDR4 {storage} Desktop Computer",
-        f"{theme_prefix}Desktop PC {cpu} {ram_gb}GB RAM {gpu_str} Fast & Ready",
-        f"Custom {theme_prefix}PC Tower {cpu} {ram_gb}GB {storage} Windows 11",
+        f"Gaming PC {cpu} {gpu_str} {ram_gb}GB {storage} Desktop Computer{theme_suffix}",
+        f"Desktop PC {cpu} {ram_gb}GB RAM {gpu_str}{theme_suffix} Windows 11",
+        f"Custom PC Tower {cpu} {gpu_str} {ram_gb}GB {storage}{theme_suffix}",
     ]
 
 

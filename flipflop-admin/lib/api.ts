@@ -327,6 +327,11 @@ export const api = {
         `/flips/${id}/counter-offer`,
         { method: "POST", body: JSON.stringify({ buyer_offer }) }
       ),
+    pricingSuggestions: (id: number) =>
+      request<{
+        shipping: { estimated_weight_kg: number; estimated_shipping_cost: number; shipping_inclusive_price: number };
+        promoted_listings: { suggested_ad_rate_pct: number; too_thin_to_promote: boolean; max_ad_spend: number; reason: string };
+      }>(`/flips/${id}/pricing-suggestions`),
     watcherOfferPlan: (id: number) =>
       request<{ should_send: boolean; discount_pct: number; offer_price: number | null; reason: string }>(
         `/flips/${id}/watcher-offer-plan`

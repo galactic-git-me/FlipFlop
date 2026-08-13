@@ -7,6 +7,10 @@ from app.services.pricing_engine import (
     compute_next_drop_price,
     is_drop_due,
     bias_from_fast_sale,
+    estimate_build_weight_kg,
+    estimate_shipping_cost,
+    shipping_inclusive_price,
+    suggest_promoted_ad_rate,
 )
 
 
@@ -72,3 +76,30 @@ def test_slow_sale_no_bias():
     signal = bias_from_fast_sale(days_to_sell=20, sale_price=700.0, listing_price=1000.0)
     assert signal.was_fast_or_near_asking is False
     assert signal.suggested_anchor_bias_pct == 0.0
+
+
+def test_build_weight_heavier_with_gpu():
+    assert estimate_build_weight_kg(has_gpu=True) > estimate_build_weight_kg(has_gpu=False)
+
+
+def test_shipping_cost_increases_with_weight():
+    assert estimate_shipping_cost(8.0) < estimate_shipping_cost(18.0) < estimate_shipping_cost(25.0)
+
+
+def test_shipping_inclusive_price_bakes_in_cost():
+    result = shipping_inclusive_price(base_price=900.0, has_gpu=True)
+    assert result["shipping_inclusive_price"] == 900.0 + result["estimated_shipping_cost"]
+    assert result["estimated_weight_kg"] == 12.0  # 10 base + 2 GPU
+
+
+def test_ad_rate_suggested_for_healthy_margin():
+    result = suggest_promoted_ad_rate(estimated_profit=200.0, total_cost=800.0)  # 25% margin
+    assert result["too_thin_to_promote"] is False
+    assert result["suggested_ad_rate_pct"] == 0.05
+    assert result["max_ad_spend"] == 30.0  # 15% of 200
+
+
+def test_ad_rate_flags_thin_margin():
+    result = suggest_promoted_ad_rate(estimated_profit=20.0, total_cost=800.0)  # 2.5% margin
+    assert result["too_thin_to_promote"] is True
+    assert result["suggested_ad_rate_pct"] == 0.0

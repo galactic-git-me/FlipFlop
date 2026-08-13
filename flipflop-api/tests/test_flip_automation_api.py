@@ -139,6 +139,15 @@ def test_recalculate_pricing_endpoint_sets_floor(client, listing_id):
     assert body["price_floor"] == round(800.0 * 1.10, 2)
 
 
+def test_pricing_suggestions_endpoint(client, listing_id):
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    resp = client.get(f"/api/flips/{flip_id}/pricing-suggestions")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["shipping"]["shipping_inclusive_price"] > 0
+    assert "suggested_ad_rate_pct" in body["promoted_listings"]
+
+
 def test_watcher_offer_plan_not_due_before_listing(client, listing_id):
     flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
     resp = client.get(f"/api/flips/{flip_id}/watcher-offer-plan")
