@@ -1,0 +1,52 @@
+version: '3.9'
+
+# Lightweight, always-on stack for the Gem Radar extension + admin dashboard.
+# Deliberately does NOT use app.main:app / Postgres (see docker-compose.dev.yml
+# for that full stack) — the extension talks to the standalone SQLite-backed
+# gem_radar_standalone:app on port 18000, which is what's actually been in use.
+# Bind-mounting ./flipflop-api means gem_radar_standalone.db lives on the host
+# at the same path it always has; nothing to migrate.
+
+services:
+  gem-radar-api:
+    build:
+      context: ./flipflop-api
+      dockerfile: Dockerfile.dev
+    container_name: flipflop-gemradar-api
+    restart: unless-stopped
+    command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "18000:8000"
+    volumes:
+      - ./flipflop-api:/app
+      - /app/__pycache__
+    env_file:
+      - ./flipflop-api/.env.local
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////app/gem_radar_standalone.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  admin:
+    build:
+      context: ./flipflop-admin
+      dockerfile: Dockerfile.dev
+    container_name: flipflop-admin-gemradar
+    restart: unless-stopped
+    depends_on:
+      gem-radar-api:
+        condition: service_healthy
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./flipflop-admin:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NODE_ENV: development
+      # Browser-side (NEXT_PUBLIC_*) — must be host-reachable, not container DNS.
+      NEXT_PUBLIC_API_URL: http://localhost:18000

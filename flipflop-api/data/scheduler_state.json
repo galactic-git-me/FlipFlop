@@ -1,50 +1,59 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-07-06T02:49:46.226315+00:00"
+    "last_success_at": "2026-08-13T19:49:30.172479+00:00"
   },
   "price_refresh": {
-    "last_success_at": "2026-07-06T00:12:23.182421+00:00"
+    "last_success_at": "2026-08-13T14:54:31.974335+00:00"
   },
   "flip_opportunities": {
-    "last_success_at": "2026-07-06T03:09:48.962085+00:00"
+    "last_success_at": "2026-07-23T14:57:29.735084+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-07-06T02:05:06.516287+00:00"
+    "last_success_at": "2026-08-13T19:49:57.911434+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-07-06T02:04:47.292570+00:00"
+    "last_success_at": "2026-08-13T19:49:30.584877+00:00"
   },
   "accessories": {
-    "last_success_at": "2026-07-06T02:05:28.108361+00:00"
+    "last_success_at": "2026-07-23T14:55:52.961761+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-07-06T02:04:46.219210+00:00"
+    "last_success_at": "2026-08-13T19:49:29.801985+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-07-06T02:04:46.283769+00:00"
+    "last_success_at": "2026-08-13T19:49:30.178198+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-07-06T02:04:46.441028+00:00"
+    "last_success_at": "2026-08-13T19:49:30.183227+00:00"
   },
   "autonomous": {
-    "last_success_at": "2026-07-06T03:10:07.477449+00:00"
+    "last_success_at": "2026-08-13T19:02:51.205483+00:00"
   },
   "benchmark_refresh_daily": {
-    "last_success_at": "2026-07-06T02:04:51.654528+00:00"
+    "last_success_at": "2026-08-13T16:49:35.955360+00:00"
   },
   "benchmark_refresh_weekly": {
-    "last_success_at": "2026-07-02T03:04:54.592584+00:00"
+    "last_success_at": "2026-08-13T17:49:36.436128+00:00"
   },
   "upgrade_parts": {
-    "last_success_at": "2026-07-06T02:20:21.931387+00:00"
+    "last_success_at": "2026-07-23T13:13:00.643774+00:00"
   },
   "cases": {
-    "last_success_at": "2026-07-06T02:05:28.343411+00:00"
+    "last_success_at": "2026-07-23T12:59:42.710669+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-07-06T02:04:47.332712+00:00"
+    "last_success_at": "2026-08-13T19:49:30.665804+00:00"
   },
   "catalogue_digest": {
-    "last_success_at": "2026-07-05T08:00:00.006547+00:00"
+    "last_success_at": "2026-08-13T07:00:00.005805+00:00"
+  },
+  "ai_build_generator": {
+    "last_success_at": "2026-08-13T19:03:50.747077+00:00"
+  },
+  "email_monitor": {
+    "last_success_at": "2026-08-13T19:55:30.571989+00:00"
+  },
+  "ebay_sales_tracker": {
+    "last_success_at": "2026-08-13T19:51:29.804375+00:00"
   }
 }

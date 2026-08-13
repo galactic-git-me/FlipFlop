@@ -1,3 +1,5 @@
+import { getAdminToken } from "@/lib/admin-token";
+
 // ── Build Wizard types ────────────────────────────────────────────────────────
 
 export interface WizardPlaybook {
@@ -110,6 +112,14 @@ export interface BuildComponent {
   part_id?: number;
   listing_url?: string;
   image_url?: string;
+  purchased?: boolean;
+}
+
+export type ManualBuildStatus = "in_progress" | "built" | "listed" | "sold";
+
+export interface BuildPhoto {
+  url: string;
+  kind: "photo" | "spec_card" | "registration_plate";
 }
 
 export interface ManualBuild {
@@ -118,8 +128,125 @@ export interface ManualBuild {
   components: BuildComponent[];
   total_cost: number | null;
   last_evaluation: ManualBuildEvaluation | null;
+  status: ManualBuildStatus;
+  generated_title: string | null;
+  generated_description: string | null;
+  generated_aspects: Record<string, string[]> | null;
+  ebay_listing_id: string | null;
+  ebay_listing_url: string | null;
+  photos: BuildPhoto[];
+  hero_photo_url: string | null;
+  storefront_product_id: number | null;
+  // eBay Listing Configuration (optional until migration runs)
+  ebay_condition?: string | null;
+  ebay_price?: number | null;
+  allow_offers?: boolean;
+  auto_reject_below_price?: number | null;
+  auction_start_price?: number | null;
+  return_days?: number;
+  shipping_method?: string;
+  shipping_cost?: number;
+  handling_time_days?: number;
+  ships_to_countries?: string[];
+  domestic_only?: boolean;
+  fulfillment_policy_id?: string | null;
+  package_weight_kg?: number | null;
+  package_length_cm?: number | null;
+  package_width_cm?: number | null;
+  package_height_cm?: number | null;
+  // Real post-sale order/shipment data (see /manual-builds/{id}/sync-ebay-order
+  // and /manual-builds/{id}/book-shipment) — null until the build actually sells.
+  ebay_order_id?: string | null;
+  buyer_name?: string | null;
+  buyer_address_json?: BuyerAddress | null;
+  sale_price_actual?: number | null;
+  parcel2go_order_id?: string | null;
+  parcel2go_service_slug?: string | null;
+  tracking_number?: string | null;
+  shipping_label_url?: string | null;
+  shipment_booked_at?: string | null;
+  // Computed per-channel "is this actually purchasable right now" status —
+  // only populated by the single-build GET, null on list/summary views.
+  ebay_live?: boolean | null;
+  storefront_live?: boolean | null;
   created_at: string;
   updated_at: string;
+}
+
+// Cheapest real tracked-delivery quote for a build's saved package
+// dimensions, via Parcel2Go (see /manual-builds/{id}/courier-quote).
+export interface CourierQuote {
+  courier_name: string;
+  service_name: string;
+  price_gbp: number;
+  tracked: boolean;
+  estimated_days: number | null;
+  service_slug: string | null;
+}
+
+// The buyer's real delivery address, synced from the actual eBay order
+// once a build sells — never available before then (see sync-ebay-order).
+export interface BuyerAddress {
+  contact_name: string;
+  address_line1: string | null;
+  address_line2: string | null;
+  city: string | null;
+  state_or_province: string | null;
+  postal_code: string | null;
+  country_code: string;
+  phone: string | null;
+}
+
+export interface SyncEbayOrderResult {
+  ebay_order_id: string;
+  buyer_name: string;
+  buyer_address: BuyerAddress;
+  sale_price_actual: number;
+}
+
+export interface BookShipmentResult {
+  success: boolean;
+  tracking_number: string | null;
+  shipping_label_url: string | null;
+  parcel2go_order_id: string | null;
+  ebay_marked_shipped: boolean;
+  warning?: string | null;
+  error?: string | null;
+}
+
+// A real shipping-destination option, fetched live from the seller's own
+// eBay account (see /manual-builds/ebay-fulfillment-policies) — not a
+// hardcoded list. Each policy is configured once in eBay's Seller Hub with
+// its own shipping services, rates, and destination countries/regions.
+export interface FulfillmentPolicy {
+  policy_id: string;
+  name: string;
+  marketplace_id: string;
+  ship_to_regions: string[];
+  handling_time_days: number | null;
+}
+
+// Whole-DB "most up to date view of the market" — same categories as the
+// Current Scan Run panel, scoped to every currently-active listing instead
+// of just the latest run (see /gem-radar/market-snapshot).
+export interface MarketSnapshot {
+  ingestedCount: number;
+  superGemCount: number;
+  gemCount: number;
+  avgSuperGemScore: number;
+  avgGemScore: number;
+  binPricesCount: number;
+  soldPricesCount: number;
+}
+
+// Real scan cadence derived from actual observation activity — see
+// /gem-radar/scan-schedule-status's docstring for why this is a best-effort
+// estimate rather than a guaranteed backend-scheduled job.
+export interface ScanScheduleStatus {
+  last_scan_at: string | null;
+  scan_interval_minutes: number;
+  next_scan_at: string | null;
+  estimate_only: boolean;
 }
 
 export interface ManualBuildSummary {
@@ -127,6 +254,7 @@ export interface ManualBuildSummary {
   name: string;
   total_cost: number | null;
   component_count: number;
+  status: ManualBuildStatus;
   updated_at: string;
 }
 
@@ -233,7 +361,12 @@ export interface SourceSearchTerm {
   created_at: string;
 }
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+// NEXT_PUBLIC_API_URL (when set) is the bare backend origin, used elsewhere for
+// direct SSE/websocket connections that can't go through the Next.js rewrite
+// proxy — so it never includes "/api". Append it here rather than changing the
+// env var itself, since other call sites depend on the bare-origin form.
+const backendOrigin = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+export const API_BASE_URL = backendOrigin ? `${backendOrigin}/api` : "/api";
 
 export function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
@@ -243,13 +376,25 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Add trailing slash to path only (not end of query string) — backend handles both
   // NOTE: the old regex /([^/])(\?|$)/ was corrupting query params like status=active → status=active/
   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
+  const token = getAdminToken();
   const res = await fetch(url, {
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...init?.headers,
+    },
     signal: AbortSignal.timeout(10_000),
     redirect: "follow",
     ...init,
   });
-  if (!res.ok) throw new Error(`API ${path} → ${res.status}`);
+  if (!res.ok) {
+    const detail = await res
+      .clone()
+      .json()
+      .then((body) => body?.detail)
+      .catch(() => undefined);
+    throw new Error(detail ? String(detail) : `API ${path} → ${res.status}`);
+  }
   if (res.status === 204) return undefined as T;
   return res.json();
 }
@@ -262,9 +407,24 @@ function qs(params?: Record<string, string | undefined>): string {
 
 export const api = {
   listings: {
+    // DEPRECATED: Use gemRadar.scoredListings instead
     list: (params?: Record<string, string>) => request<unknown[]>(`/listings/${qs(params)}`),
     stats: () => request<{ total_listings: number; gems_count: number; avg_profit: number }>("/listings/stats"),
     get: (id: number) => request<unknown>(`/listings/${id}`),
+  },
+
+  gemRadar: {
+    scoredListings: () => request<unknown[]>("/gem-radar/scored-listings"),
+    listings: () => request<unknown[]>("/gem-radar/listings"),
+    gemOfDay: () => request<unknown>("/gem-radar/gem-of-day"),
+    gemOfWeek: () => request<unknown>("/gem-radar/gem-of-week"),
+    // Whole-DB market snapshot (all currently-active listings, not just the
+    // latest scan run) — same shape as the Current Scan Run panel's stats.
+    marketSnapshot: () => request<MarketSnapshot>("/gem-radar/market-snapshot"),
+    // Real scan cadence derived from actual observation activity, since
+    // there's no backend-scheduled "next scan" job (scanning happens
+    // client-side in the browser extension) — see the endpoint's docstring.
+    scanScheduleStatus: () => request<ScanScheduleStatus>("/gem-radar/scan-schedule-status"),
   },
 
   flips: {
@@ -394,6 +554,94 @@ export const api = {
       request<ManualBuildEvaluation>(`/manual-builds/${id}/evaluate`, {
         method: "POST",
       }),
+    markBuilt: (id: number) =>
+      request<ManualBuild>(`/manual-builds/${id}/mark-built`, { method: "POST" }),
+    generateListing: (id: number) =>
+      request<{ titles: string[]; description: string; aspects: Record<string, string[]> }>(
+        `/manual-builds/${id}/generate-listing`,
+        { method: "POST" },
+      ),
+    generateSpecifics: (id: number) =>
+      request<{ titles: string[]; description: string; aspects: Record<string, string[]> }>(
+        `/manual-builds/${id}/generate-specifics`,
+        { method: "POST" },
+      ),
+    updateAspects: (id: number, aspects: Record<string, string[]>) =>
+      request<ManualBuild>(`/manual-builds/${id}/aspects`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aspects }),
+      }),
+    // Derived from ManualBuild (via Pick) rather than hand-duplicated --
+    // the duplicate had silently drifted out of sync with ManualBuild's real
+    // nullability (ebay_condition/ebay_price/auto_reject_below_price/
+    // auction_start_price/package_*_cm are all `T | null` on ManualBuild,
+    // but were declared non-nullable here), which is what caused build/[id]/
+    // page.tsx's updateEbayConfig(build as Partial<ManualBuild>) call to fail
+    // type-checking.
+    updateEbayConfig: (id: number, config: Partial<Pick<ManualBuild,
+      | "ebay_condition" | "ebay_price" | "allow_offers" | "auto_reject_below_price"
+      | "auction_start_price" | "return_days" | "shipping_method" | "shipping_cost"
+      | "handling_time_days" | "ships_to_countries" | "domestic_only"
+      | "fulfillment_policy_id" | "package_weight_kg" | "package_length_cm"
+      | "package_width_cm" | "package_height_cm"
+    >>) =>
+      request<ManualBuild>(`/manual-builds/${id}/ebay-config`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config),
+      }),
+    getFulfillmentPolicies: () =>
+      request<FulfillmentPolicy[]>("/manual-builds/ebay-fulfillment-policies"),
+    // Omitting deliveryCountry lets the backend default to the real synced
+    // buyer address's country (see sync-ebay-order) instead of forcing GBR.
+    getCourierQuote: (id: number, deliveryCountry?: string) =>
+      request<CourierQuote>(
+        `/manual-builds/${id}/courier-quote${deliveryCountry ? `?delivery_country=${deliveryCountry}` : ""}`,
+        { method: "POST" },
+      ),
+    // Fetches the build's real eBay order — buyer name, actual delivery
+    // address, actual sale price — only possible once it's actually sold.
+    syncEbayOrder: (id: number) =>
+      request<SyncEbayOrderResult>(`/manual-builds/${id}/sync-ebay-order`, { method: "POST" }),
+    // Books and pays for a real Parcel2Go shipment, then pushes tracking to
+    // eBay. Spends real money — only call from an explicit user confirmation.
+    bookShipment: (id: number, data: { service_slug: string; price_gbp: number }) =>
+      request<BookShipmentResult>(`/manual-builds/${id}/book-shipment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    postToEbay: (id: number, data: { price: number; condition: string }) =>
+      request<{ success: boolean; listing_id?: string; url?: string; error?: string }>(
+        `/manual-builds/${id}/post-to-ebay`,
+        { method: "POST", body: JSON.stringify(data) },
+      ),
+    uploadPhotos: async (id: number, files: File[]): Promise<ManualBuild> => {
+      const formData = new FormData();
+      for (const f of files) formData.append("files", f);
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos`, { method: "POST", body: formData });
+      if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
+      return res.json();
+    },
+    uploadBrandedAsset: async (id: number, kind: "spec_card" | "registration_plate", blob: Blob): Promise<ManualBuild> => {
+      const formData = new FormData();
+      formData.append("file", blob, `${kind}.png`);
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`, { method: "POST", body: formData });
+      if (!res.ok) throw new Error(`API upload branded asset → ${res.status}`);
+      return res.json();
+    },
+    removePhoto: (id: number, url: string) =>
+      request<ManualBuild>(`/manual-builds/${id}/photos`, { method: "DELETE", body: JSON.stringify({ url }) }),
+    reorderPhotos: (id: number, urls: string[]) =>
+      request<ManualBuild>(`/manual-builds/${id}/photos/order`, { method: "PUT", body: JSON.stringify({ urls }) }),
+    setHeroPhoto: (id: number, url: string) =>
+      request<ManualBuild>(`/manual-builds/${id}/photos/hero`, { method: "POST", body: JSON.stringify({ url }) }),
+    listOnStorefront: (id: number, price: number) =>
+      request<{ product_id: number; build_id: number; storefront_url?: string }>(
+        `/manual-builds/${id}/list-on-storefront`,
+        { method: "POST", body: JSON.stringify({ price }) },
+      ),
   },
 
   sources: {
@@ -491,6 +739,23 @@ export const api = {
   alerts: {
     list: (limit = 100, includeAcked = false) => request<unknown[]>(`/alerts?limit=${limit}&include_acked=${includeAcked ? "true" : "false"}`),
     ack: (id: number) => request<{ ok: boolean }>(`/alerts/${id}/ack`, { method: "POST" }),
+  },
+
+  favourites: {
+    list: () => request<{ items: import("./types").Favourite[]; groups: string[] }>("/favourites"),
+    search: (q: string) => request<import("./types").FavouriteMatrixRow>(`/favourites/search?q=${encodeURIComponent(q)}`),
+    matrix: () => request<Record<number, import("./types").FavouriteMatrixRow>>("/favourites/matrix"),
+    create: (term?: string | null, category?: string | null, cpk?: string | null) =>
+      request<import("./types").Favourite>("/favourites", {
+        method: "POST",
+        body: JSON.stringify({ term: term ?? null, category: category ?? null, cpk: cpk ?? null }),
+      }),
+    update: (id: number, category: string) =>
+      request<import("./types").Favourite>(`/favourites/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ category }),
+      }),
+    remove: (id: number) => request<void>(`/favourites/${id}`, { method: "DELETE" }),
   },
 
   manual: {
@@ -655,7 +920,11 @@ export const api = {
       }>>(`/benchmarks/refresh-runs?limit=${limit}`),
     triggerRefresh: async (run_type = "manual") => {
       const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const resp = await fetch(`${base}/api/benchmarks/refresh?run_type=${run_type}`, { method: "POST" });
+      const token = getAdminToken();
+      const resp = await fetch(`${base}/api/benchmarks/refresh?run_type=${run_type}`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
       return resp.json();
     },
   },

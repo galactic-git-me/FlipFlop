@@ -208,27 +208,27 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
                 if attempt == 3:
                     break
 
-    # 3 — Ollama local (last resort — free but slow)
-    if not raw and _s.ollama_base_url:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=180) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
-        except Exception as exc:
-            log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
+    # 3 — Ollama local (last resort — disabled by default since it rarely runs)
+    # if not raw and _s.ollama_base_url:
+    #     try:
+    #         import httpx
+    #         async with httpx.AsyncClient(timeout=180) as client:
+    #             resp = await client.post(
+    #                 f"{_s.ollama_base_url}/api/chat",
+    #                 json={
+    #                     "model": _s.ollama_model,
+    #                     "messages": [
+    #                         {"role": "system", "content": EVAL_SYSTEM},
+    #                         {"role": "user", "content": prompt},
+    #                     ],
+    #                     "stream": False,
+    #                 },
+    #             )
+    #             resp.raise_for_status()
+    #             raw = resp.json().get("message", {}).get("content")
+    #             model_used = f"ollama/{_s.ollama_model}"
+    #     except Exception as exc:
+    #         log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
 
     if not raw:
         return None

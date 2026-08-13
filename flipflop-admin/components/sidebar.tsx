@@ -3,52 +3,24 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
-  LayoutDashboard,
   Search,
-  Cpu,
-  Boxes,
-  BookOpen,
-  Store,
-  ReceiptText,
-  BarChart3,
-  BarChart2,
-  Brain,
-  Settings,
-  Gauge,
-  TrendingUp,
-  MemoryStick,
-  Rss,
+  Zap,
+  Settings2,
+  Plus,
   Package,
   LineChart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { GemWidget } from "./gem-widget";
 
 const PRIMARY_NAV = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/sources", icon: Search, label: "Sourcing" },
-  { href: "/demand", icon: TrendingUp, label: "Demand" },
-  { href: "/chat", icon: Cpu, label: "Build Wizard" },
-  { href: "/flips", icon: Boxes, label: "Manual Build" },
-  { href: "/playbooks", icon: BookOpen, label: "Playbooks" },
-  { href: "/catalogue", icon: Store, label: "Catalogue" },
-  { href: "/inventory", icon: Package, label: "Inventory" },
-  { href: "/selling", icon: ReceiptText, label: "Reselling" },
-  { href: "/intel", icon: BarChart3, label: "Analytics" },
-  { href: "/performance", icon: LineChart, label: "Performance" },
-  { href: "/benchmarks", icon: Gauge, label: "Benchmarks" },
-  { href: "/ram-watch", icon: MemoryStick, label: "RAM Watch" },
-  { href: "/community", icon: Rss, label: "Community" },
-  { href: "/logs", icon: Brain, label: "AI Insights" },
-  { href: "/settings", icon: Settings, label: "Settings" },
-];
-
-const CATALOGUE_NAV = [
-  { href: "/catalogue", label: "Review Queue" },
-  { href: "/catalogue/variants", label: "Component Variants" },
-  { href: "/catalogue/cases", label: "Cases" },
-  { href: "/catalogue/slots", label: "Slot Config" },
+  { href: "/sourcing", icon: Search, label: "Sourcing" },
+  { href: "/add-build", icon: Plus, label: "Add Build" },
+  { href: "/builds", icon: Package, label: "Your Builds" },
+  { href: "/configurator-config", icon: Settings2, label: "Configurator" },
+  { href: "/pc-builder", icon: Zap, label: "PC Builder" },
 ];
 
 // ─── Twinkling stars canvas ───────────────────────────────────────────────────
@@ -119,14 +91,6 @@ function StarsCanvas() {
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [pendingCount, setPendingCount] = useState(0);
-
-  useEffect(() => {
-    fetch("/api/catalogue/review-queue")
-      .then(r => r.json())
-      .then((data: unknown[]) => setPendingCount(data.length))
-      .catch(() => {});
-  }, []);
 
   return (
     <aside className="node-sidebar" style={{ overflow: "hidden" }}>
@@ -135,7 +99,7 @@ export function Sidebar() {
       {/* All content sits above the canvas */}
       <div className="relative z-10 flex flex-col gap-4 h-full">
         <div className="node-brand-wrap">
-          <Image src="/pics/logo.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
+          <Image src="/pics/flipflop-glow-transparent.png" alt="FlipFlop" width={1254} height={1254} className="h-[240px] w-auto object-contain" />
         </div>
 
         <nav className="node-nav">
@@ -154,28 +118,9 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Catalogue section */}
-        <div className="px-2">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1 px-2" style={{ color: "rgba(201,211,217,0.5)" }}>
-            Catalogue
-          </p>
-          {CATALOGUE_NAV.map(item => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn("node-nav-item-fancy", active && "node-nav-item-fancy-active")}
-              >
-                <span>{item.label}</span>
-                {item.href === "/catalogue" && pendingCount > 0 && (
-                  <span className="ml-auto text-xs bg-amber-400 text-black rounded-full px-1.5 py-0.5 font-bold leading-none">
-                    {pendingCount}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
+        {/* Gems widget - stays at bottom */}
+        <div className="mt-auto">
+          <GemWidget />
         </div>
 
       </div>

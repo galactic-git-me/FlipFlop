@@ -3,17 +3,35 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap, Eye } from "lucide-react";
+import { Tag, Copy, RefreshCw, CheckCircle, Sparkles, DollarSign, Image as ImageIcon, ExternalLink, PackageCheck, Zap, Eye, Save, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FlippabilityScore } from "@/components/flippability-score";
 import { EmptyState } from "@/components/empty-state";
+import { ShippingCalculator } from "@/components/shipping-calculator";
 import { Flip } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
 const PLATFORM_FEES: Record<string, number> = { ebay: 0.127, facebook: 0, gumtree: 0.02 };
 const PLATFORMS = ["ebay", "facebook", "gumtree"] as const;
+
+interface DraftListing {
+  flipId: number;
+  platform: "ebay" | "facebook" | "gumtree";
+  titles: string[];
+  selectedTitleIdx: number;
+  description: string;
+  images: string[];
+  listingPrice: number;
+  shippingCost: number;
+  condition: string;
+  category: string;
+  keywords: string[];
+  isHtml: boolean;
+  htmlContent?: string;
+  lastSaved: string;
+}
 
 export default function SellingPage() {
   const router = useRouter();
@@ -33,16 +51,137 @@ export default function SellingPage() {
   const [showSoldModal, setShowSoldModal] = useState(false);
   const [postingToEbay, setPostingToEbay] = useState(false);
   const [ebayPosted, setEbayPosted] = useState(false);
+  const [drafts, setDrafts] = useState<Map<number, DraftListing>>(new Map());
+  const [listingPrice, setListingPrice] = useState("");
+  const [shippingCost, setShippingCost] = useState("15");
+  const [condition, setCondition] = useState("refurbished");
+  const [category, setCategory] = useState("computing");
+  const [keywords, setKeywords] = useState("");
+  const [useHtml, setUseHtml] = useState(true);
+  const [showPreview, setShowPreview] = useState(true);
+  const [selling, setSelling] = useState(false);
+  const [shippingEstimate, setShippingEstimate] = useState<any>(null);
 
   useEffect(() => {
     api.flips.list().then(data => {
-      const activeFlips = (data as Flip[]).filter(f => f.stage !== "sold");
-      setFlips(activeFlips);
-      if (activeFlips.length > 0 && !selected) {
-        setSelected(activeFlips[0]);
+      const readyFlips = (data as Flip[]).filter(f => f.stage === "ready_for_sale");
+      setFlips(readyFlips);
+      if (readyFlips.length > 0 && !selected) {
+        setSelected(readyFlips[0]);
       }
     }).catch(() => setFlips([])).finally(() => setLoading(false));
   }, [selected]);
+
+  const loadDraft = (flipId: number) => {
+    const draft = drafts.get(flipId);
+    if (draft) {
+      setPlatform(draft.platform);
+      setTitles(draft.titles);
+      setSelectedTitleIdx(draft.selectedTitleIdx);
+      setDescription(draft.description);
+      setImages(draft.images);
+      setListingPrice(String(draft.listingPrice));
+      setShippingCost(String(draft.shippingCost));
+      setCondition(draft.condition);
+      setCategory(draft.category);
+      setKeywords(draft.keywords.join(", "));
+      setUseHtml(draft.isHtml);
+    }
+  };
+
+  const saveDraft = (flipId: number) => {
+    if (!selected) return;
+    const draft: DraftListing = {
+      flipId,
+      platform,
+      titles,
+      selectedTitleIdx,
+      description,
+      images,
+      listingPrice: parseFloat(listingPrice) || 0,
+      shippingCost: parseFloat(shippingCost) || 0,
+      condition,
+      category,
+      keywords: keywords.split(",").map(k => k.trim()).filter(Boolean),
+      isHtml: useHtml,
+      lastSaved: new Date().toISOString(),
+    };
+    setDrafts(prev => new Map(prev).set(flipId, draft));
+  };
+
+  const generateHtmlListing = (title: string, desc: string): string => {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+    .header h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
+    .branding { font-size: 12px; opacity: 0.9; margin-top: 10px; }
+    .content { padding: 30px; }
+    .price-box { background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    .price-label { font-size: 12px; color: #666; text-transform: uppercase; }
+    .price { font-size: 32px; font-weight: 700; color: #667eea; }
+    .specs { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    .specs h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #333; }
+    .spec-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-size: 13px; }
+    .spec-item:last-child { border-bottom: none; }
+    .spec-label { color: #666; }
+    .spec-value { font-weight: 600; color: #333; }
+    .description { line-height: 1.6; color: #333; font-size: 14px; white-space: pre-wrap; word-wrap: break-word; }
+    .highlight { background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; border-radius: 4px; margin: 20px 0; }
+    .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #e0e0e0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>${title}</h1>
+      <div class="branding">✓ Professionally Tested & Verified</div>
+    </div>
+    <div class="content">
+      <div class="price-box">
+        <div class="price-label">Investment Price</div>
+        <div class="price">£${listingPrice}</div>
+        <div style="font-size: 12px; color: #666; margin-top: 5px;">+ £${shippingCost} UK Shipping</div>
+      </div>
+      <div class="specs">
+        <h3>📋 Condition & Details</h3>
+        <div class="spec-item">
+          <span class="spec-label">Condition</span>
+          <span class="spec-value">${condition.charAt(0).toUpperCase() + condition.slice(1)}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Category</span>
+          <span class="spec-value">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+        </div>
+      </div>
+      <div class="description">
+        <h3 style="margin-bottom: 15px; color: #333;">📝 Description</h3>
+        ${desc}
+      </div>
+      ${keywords.trim() ? `<div class="highlight">
+        <strong>Search Keywords:</strong> ${keywords}
+      </div>` : ""}
+      <div class="highlight" style="background: #e8f4f8; border-left-color: #667eea;">
+        <strong>✓ Quality Assurance:</strong> All components tested and verified. Full seller support included.
+      </div>
+    </div>
+    <div class="footer">
+      Professionally Refurbished Computing • Trusted Seller<br>
+      <small style="opacity: 0.7;">Listed on eBay with Full Protection</small>
+    </div>
+  </div>
+</body>
+</html>
+    `.trim();
+  };
 
   const generateContent = async () => {
     if (!selected) return;
@@ -72,6 +211,36 @@ export default function SellingPage() {
       setImages([]);
     } finally {
       setGeneratingImages(false);
+    }
+  };
+
+  const sellListing = async () => {
+    if (!selected || !listingPrice || titles.length === 0) return;
+    setSelling(true);
+    try {
+      const actualPrice = parseFloat(listingPrice);
+      const finalPrice = actualPrice * (1 - PLATFORM_FEES[platform]);
+
+      await api.flips.markSold(selected.id, {
+        actual_sale_price: actualPrice,
+        sale_platform: platform,
+      });
+
+      saveDraft(selected.id);
+      setFlips(prev => prev.filter(f => f.id !== selected.id));
+      setDrafts(prev => {
+        const newDrafts = new Map(prev);
+        newDrafts.delete(selected.id);
+        return newDrafts;
+      });
+      setSelected(flips.find(f => f.id !== selected.id) ?? null);
+      setTitles([]);
+      setDescription("");
+      setImages([]);
+      setListingPrice("");
+      setKeywords("");
+    } finally {
+      setSelling(false);
     }
   };
 
@@ -132,16 +301,16 @@ export default function SellingPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
-          <Tag className="w-5 h-5 text-[var(--nf-primary)]" /> Sold_Builds
+          <Tag className="w-5 h-5 text-[var(--nf-primary)]" /> Selling
         </h1>
-        <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">AI-generated listings · product image generation · profit tracking</p>
+        <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">AI-powered listings · eBay optimization · draft workflow · one-click publishing</p>
       </div>
 
       {flips.length === 0 ? (
         <EmptyState
           icon={Tag}
-          title="No active flips ready to list"
-          description='Complete Stage 3 of the Flip Wizard to move a flip here for listing.'
+          title="No completed builds ready to sell"
+          description='Complete your builds in Stage 3 to move them here for listing.'
           action={{ label: "Go to Flips", onClick: () => window.location.href = "/flips" }}
         />
       ) : (
@@ -151,6 +320,7 @@ export default function SellingPage() {
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Select Flip to List</h3>
             {flips.map(flip => {
               const isActive = selected?.id === flip.id;
+              const hasDraft = drafts.has(flip.id);
               return (
                 <Card
                   key={flip.id}
@@ -158,9 +328,16 @@ export default function SellingPage() {
                   className={isActive ? "border-[#00dc82]/40" : ""}
                   onClick={() => {
                     setSelected(flip);
-                    setTitles([]);
-                    setDescription("");
-                    setImages([]);
+                    const draft = drafts.get(flip.id);
+                    if (draft) {
+                      loadDraft(flip.id);
+                    } else {
+                      setTitles([]);
+                      setDescription("");
+                      setImages([]);
+                      setListingPrice("");
+                      setKeywords("");
+                    }
                   }}
                 >
                   <CardContent className="pt-3">
@@ -173,6 +350,11 @@ export default function SellingPage() {
                         <p className="text-[10px] text-slate-500 mt-0.5">
                           Cost: {formatCurrency(flip.total_cost)} · Stage: {flip.stage.replace("_", " ")}
                         </p>
+                        {hasDraft && (
+                          <p className="text-[10px] text-yellow-400 mt-1.5 flex items-center gap-1">
+                            <span>●</span> Draft saved
+                          </p>
+                        )}
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="text-xs font-bold text-[#00dc82]">
@@ -195,6 +377,22 @@ export default function SellingPage() {
           {/* Content generation */}
           {selected && (
             <div className="xl:col-span-2 space-y-5">
+              {/* Shipping Calculator */}
+              {selected && (
+                <ShippingCalculator
+                  caseModel={
+                    (selected as any).listing?.notes?.match(/Case:\s*([^\n,]+)/)?.[1] ||
+                    (selected as any).listing?.title?.match(/([\w\s]+\s+Case)/i)?.[1] ||
+                    "Unknown Case"
+                  }
+                  onEstimate={(cost, dimensions) => {
+                    setShippingCost(String(cost));
+                    setShippingEstimate(dimensions);
+                  }}
+                  disabled={generatingContent || generatingImages}
+                />
+              )}
+
               {/* Pricing */}
               <Card>
                 <CardHeader>
@@ -408,30 +606,186 @@ export default function SellingPage() {
                 </CardContent>
               </Card>
 
-              {/* Preview Card */}
+              {/* eBay Listing Details */}
               {selected && titles.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
-                      <Eye className="w-3.5 h-3.5 text-cyan-400" /> eBay Listing Preview
+                      <Tag className="w-3.5 h-3.5 text-orange-400" /> eBay Listing Details
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 pt-0 text-xs">
-                    <div className="p-3 bg-[#0a1119] rounded-lg border border-[#1e2d45] space-y-2">
-                      <h3 className="font-bold text-sm text-slate-200 line-clamp-2">{titles[selectedTitleIdx]}</h3>
-                      <div className="flex gap-2 flex-wrap">
-                        <span className="px-2 py-1 bg-[#00dc82]/10 text-[#00dc82] rounded text-[9px] font-semibold">Gaming PC</span>
-                        <span className="px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded text-[9px] font-semibold">New</span>
+                  <CardContent className="space-y-4 pt-0">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-slate-500 mb-1.5 block uppercase tracking-wider font-semibold">Listing Price (£)</label>
+                        <input
+                          type="number"
+                          value={listingPrice}
+                          onChange={e => setListingPrice(e.target.value)}
+                          placeholder={String(suggestedPrice)}
+                          className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50"
+                        />
                       </div>
-                      <div className="space-y-1 text-slate-400">
-                        <div><span className="text-slate-600">Price:</span> <span className="font-bold text-[#00dc82]">{formatCurrency(suggestedPrice)}</span></div>
-                        <div><span className="text-slate-600">Shipping:</span> £15 (estimated)</div>
+                      <div>
+                        <label className="text-xs text-slate-500 mb-1.5 block uppercase tracking-wider font-semibold">Shipping Cost (£)</label>
+                        <input
+                          type="number"
+                          value={shippingCost}
+                          onChange={e => setShippingCost(e.target.value)}
+                          placeholder="15"
+                          className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50"
+                        />
                       </div>
-                      <div className="pt-2 border-t border-white/5 text-slate-500 line-clamp-3">
-                        {description.split('\n')[0]}...
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-slate-500 mb-1.5 block uppercase tracking-wider font-semibold">Condition</label>
+                        <select
+                          value={condition}
+                          onChange={e => setCondition(e.target.value)}
+                          className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50"
+                        >
+                          <option value="new">New</option>
+                          <option value="refurbished">Refurbished</option>
+                          <option value="used">Used</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-slate-500 mb-1.5 block uppercase tracking-wider font-semibold">Category</label>
+                        <select
+                          value={category}
+                          onChange={e => setCategory(e.target.value)}
+                          className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50"
+                        >
+                          <option value="computing">Computing</option>
+                          <option value="gaming">Gaming PC</option>
+                          <option value="workstation">Workstation</option>
+                          <option value="office">Office PC</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs text-slate-500 mb-1.5 block uppercase tracking-wider font-semibold">Search Keywords (comma-separated)</label>
+                      <input
+                        type="text"
+                        value={keywords}
+                        onChange={e => setKeywords(e.target.value)}
+                        placeholder="gaming, PC, RTX, 16GB RAM, SSD..."
+                        className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50"
+                      />
+                    </div>
+
+                    {shippingEstimate && (
+                      <div className="space-y-2 pt-3 border-t border-white/5">
+                        <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2">
+                          📦 Shipping Estimate Details
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                            <div className="text-slate-600">Box Dimensions</div>
+                            <div className="text-slate-300 font-mono">
+                              {shippingEstimate.box_width_cm}×{shippingEstimate.box_depth_cm}×{shippingEstimate.box_height_cm}cm
+                            </div>
+                          </div>
+                          <div className="p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                            <div className="text-slate-600">Total Weight</div>
+                            <div className="text-slate-300 font-mono">{shippingEstimate.total_weight_kg}kg</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-2 pt-2 border-t border-white/5">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="useHtml"
+                          checked={useHtml}
+                          onChange={e => setUseHtml(e.target.checked)}
+                          className="w-4 h-4 rounded cursor-pointer"
+                        />
+                        <label htmlFor="useHtml" className="text-xs text-slate-400 cursor-pointer">
+                          Use branded HTML template (recommended for eBay)
+                        </label>
                       </div>
                     </div>
                   </CardContent>
+                </Card>
+              )}
+
+              {/* Draft & Sell Controls */}
+              {selected && titles.length > 0 && (
+                <Card className="bg-gradient-to-r from-[#00dc82]/5 to-transparent border-[#00dc82]/20">
+                  <CardContent className="pt-6 space-y-3">
+                    <div className="text-xs text-slate-400">
+                      <p>Status: <span className="text-[#00dc82] font-semibold">{drafts.has(selected.id) ? "Draft Saved" : "Unsaved Draft"}</span></p>
+                      <p className="mt-1">All changes are kept as draft until you click SELL to publish.</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="secondary" size="sm" onClick={() => saveDraft(selected.id)} className="flex-1">
+                        <Save className="w-3.5 h-3.5" /> Save Draft
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={sellListing}
+                        disabled={selling || !listingPrice}
+                        className="flex-1 justify-center"
+                      >
+                        {selling ? (
+                          <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Publishing…</>
+                        ) : (
+                          <><Send className="w-3.5 h-3.5" /> SELL This Build</>
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Preview Card */}
+              {selected && titles.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="flex items-center gap-2 text-sm">
+                        <Eye className="w-3.5 h-3.5 text-cyan-400" /> {useHtml ? "HTML Template" : "eBay Listing"} Preview
+                      </CardTitle>
+                      <Button variant="secondary" size="sm" onClick={() => setShowPreview(!showPreview)}>
+                        {showPreview ? "Hide" : "View"}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  {showPreview && useHtml && (
+                    <CardContent className="pt-0">
+                      <iframe
+                        srcDoc={generateHtmlListing(titles[selectedTitleIdx], description)}
+                        className="w-full h-96 rounded border border-[#1e2d45]"
+                      />
+                    </CardContent>
+                  )}
+                  {showPreview && !useHtml && (
+                    <CardContent className="space-y-3 pt-0 text-xs">
+                      <div className="p-3 bg-[#0a1119] rounded-lg border border-[#1e2d45] space-y-2">
+                        <h3 className="font-bold text-sm text-slate-200 line-clamp-2">{titles[selectedTitleIdx]}</h3>
+                        <div className="flex gap-2 flex-wrap">
+                          <span className="px-2 py-1 bg-[#00dc82]/10 text-[#00dc82] rounded text-[9px] font-semibold">
+                            {condition.charAt(0).toUpperCase() + condition.slice(1)}
+                          </span>
+                          <span className="px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded text-[9px] font-semibold">{category}</span>
+                        </div>
+                        <div className="space-y-1 text-slate-400">
+                          <div><span className="text-slate-600">Price:</span> <span className="font-bold text-[#00dc82]">£{listingPrice || suggestedPrice}</span></div>
+                          <div><span className="text-slate-600">Shipping:</span> £{shippingCost}</div>
+                        </div>
+                        <div className="pt-2 border-t border-white/5 text-slate-500 line-clamp-3">
+                          {description.split('\n')[0]}...
+                        </div>
+                      </div>
+                    </CardContent>
+                  )}
                 </Card>
               )}
             </div>

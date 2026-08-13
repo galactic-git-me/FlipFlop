@@ -23,14 +23,76 @@ type ModalTab = "flip_opportunities" | ComponentCategory;
 
 // ── Fetch helpers ─────────────────────────────────────────────────────────────
 async function fetchGems(superOnly: boolean): Promise<Listing[]> {
-  const params = new URLSearchParams(
-    superOnly
-      ? { claude_verdict: "GEM", classification: "gem", sort_by: "gem_score", sort_desc: "true", limit: "60", min_profit: "100" }
-      : { gem_only: "true", sort_by: "gem_score", sort_desc: "true", limit: "100", whole_pc_only: "true", min_price: "50", min_profit: "80" }
-  );
-  const res = await fetch(`${API_BASE_URL}/listings/?${params}`);
+  // Fetch from gem-radar scored listings (all marketplaces)
+  const res = await fetch(`${API_BASE_URL}/gem-radar/scored-listings`);
   const data = await res.json();
-  return Array.isArray(data) ? data : (data.items ?? []);
+  const allListings = Array.isArray(data) ? data : [];
+
+  // Filter and sort by deal_score
+  const filtered = allListings
+    .filter((l: any) => {
+      if (superOnly) {
+        return l.classification === 'SUPER_GEM';
+      } else {
+        return ['GEM', 'SUPER_GEM'].includes(l.classification);
+      }
+    })
+    .sort((a: any, b: any) => (b.deal_score || 0) - (a.deal_score || 0))
+    .slice(0, superOnly ? 60 : 100)
+    .map((l: any): Listing => ({
+      id: l.listing_id || l.id,
+      external_id: String(l.listing_id || l.external_id || l.id),
+      source_name: l.source || l.source_name,
+      title: l.title,
+      price: l.delivered_price || l.price || 0,
+      url: l.url || `https://www.ebay.co.uk/itm/${l.listing_id}/`,
+      image_urls: l.image_url ? [l.image_url] : [],
+      location: l.location || null,
+      condition: l.condition || null,
+      cpu: l.category === 'cpu' ? l.title : null,
+      ram_gb: l.ram_gb || null,
+      ram_type: l.ram_type || null,
+      storage_gb: l.storage_gb || null,
+      storage_type: l.storage_type || null,
+      gpu: l.category === 'gpu' ? l.title : null,
+      has_psu: l.has_psu || false,
+      gem_score: l.deal_score || 0,
+      classification: l.classification === 'SUPER_GEM' ? 'amazing_gem' : 'gem',
+      gem_signals: l.gem_signals || [],
+      estimated_resale: l.market_used_price || l.market_new_price || 0,
+      estimated_upgrade_cost: l.estimated_upgrade_cost || null,
+      resale_low: l.resale_low || null,
+      resale_high: l.resale_high || null,
+      resale_comp_count: l.resale_comp_count || null,
+      estimated_profit: (l.market_used_price || l.market_new_price || 0) - (l.delivered_price || l.price || 0),
+      listing_type: l.listing_type || null,
+      listing_ends_at: l.listing_ends_at || null,
+      expected_buy_price: l.expected_buy_price || null,
+      seller_name: l.seller || l.seller_name || null,
+      seller_feedback_count: l.seller_feedback_count || null,
+      seller_feedback_pct: l.seller_feedback_pct || null,
+      seller_type: l.seller_type || null,
+      seller_has_shop: l.seller_has_shop || false,
+      listed_at: l.listing_observed_at || l.listed_at || null,
+      status: l.status || 'active',
+      first_seen_at: l.listing_observed_at || l.first_seen_at || new Date().toISOString(),
+      last_seen_at: l.listing_observed_at || l.last_seen_at || new Date().toISOString(),
+      watch_count: l.watch_count || null,
+      bid_count: l.bid_count || null,
+      claude_verdict: l.classification === 'SUPER_GEM' ? 'GEM' : 'GOOD',
+      claude_flipability_score: l.claude_flipability_score || null,
+      claude_expected_profit: l.claude_expected_profit || null,
+      claude_roi: l.claude_roi || null,
+      claude_confidence: l.confidence || l.claude_confidence || null,
+      claude_capital_efficiency: l.claude_capital_efficiency || null,
+      claude_resale_demand: l.claude_resale_demand || null,
+      claude_upgrade_complexity: l.claude_upgrade_complexity || null,
+      claude_reasoning: l.reasoning_summary || l.claude_reasoning || null,
+      claude_main_risk: l.claude_main_risk || null,
+      claude_judged_at: l.claude_judged_at || null,
+    }));
+
+  return filtered;
 }
 
 async function fetchCategoryGems(category: ComponentCategory): Promise<GroupedPart[]> {
@@ -454,8 +516,26 @@ function FlipCard({ listing: l }: { listing: Listing }) {
               </p>
             )}
 
+            {/* Demand Signals */}
+            {(l.watch_count != null || l.bid_count != null) && (
+              <div className="border-t border-white/8 pt-2 space-y-0.5">
+                {l.watch_count != null && (
+                  <div className="flex items-baseline justify-between text-[10px]">
+                    <span className="text-slate-600">Watches</span>
+                    <span className="text-slate-300 font-semibold">{l.watch_count}</span>
+                  </div>
+                )}
+                {l.bid_count != null && (
+                  <div className="flex items-baseline justify-between text-[10px]">
+                    <span className="text-slate-600">Bids</span>
+                    <span className="text-slate-300 font-semibold">{l.bid_count}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Pricing */}
-            <div className="mt-auto border-t border-white/8 pt-2 space-y-0.5">
+            <div className="border-t border-white/8 pt-2 space-y-0.5">
               <div className="flex items-baseline justify-between text-[10px]">
                 <span className="text-slate-600">Buy</span>
                 <span className="text-slate-300 font-semibold">{formatCurrency(l.price)}</span>

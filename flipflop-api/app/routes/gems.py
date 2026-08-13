@@ -24,10 +24,11 @@ from app.schemas.gem import (
     GemBuildActionOut,
 )
 from app.models.gem import GemBuild
+from app.routes.admin_auth import get_current_admin
 
 log = structlog.get_logger(__name__)
 
-router = APIRouter(prefix="/api/gems", tags=["gems"])
+router = APIRouter(prefix="/api/gems", tags=["gems"], dependencies=[Depends(get_current_admin)])
 
 
 @router.post("/recommendations")

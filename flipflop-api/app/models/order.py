@@ -33,7 +33,14 @@ class Order(Base):
     overhead_amount = Column(Float, nullable=False)
     profit = Column(Float, nullable=True)
 
-    promised_delivery_date = Column(DateTime, nullable=False)
+    # Stripe PaymentIntent id — the real idempotency/lookup key for payment
+    # confirmation, replacing the old approach of grepping it out of `notes`.
+    stripe_payment_intent_id = Column(String, nullable=True, index=True)
+
+    # Nullable: real delivery estimation isn't computed yet at order-creation
+    # time (payments.py / webhooks.py both used to pass None here, which
+    # violated the old NOT NULL constraint).
+    promised_delivery_date = Column(DateTime, nullable=True)
     actual_delivery_date = Column(DateTime, nullable=True)
 
     status = Column(Enum(OrderStatus), default=OrderStatus.AWAITING_SOURCING)

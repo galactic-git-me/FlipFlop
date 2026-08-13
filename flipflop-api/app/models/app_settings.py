@@ -49,4 +49,37 @@ class AppSettings(Base):
     ebay_seller_connected_at: Mapped[datetime | None] = mapped_column(DateTime)
     ebay_seller_scopes: Mapped[str] = mapped_column(Text, default="")
 
+    # The extension's scheduler.defaultIntervalMinutes (chrome.storage.local
+    # only — the backend otherwise has zero visibility into it). Synced
+    # best-effort by the extension's setConfig() on every save (see
+    # FlipFlopXtension/src/lib/storage.ts) via PUT /api/gem-radar/scan-interval.
+    # Used to derive the "2 consecutive scan cycles missed -> inactive"
+    # listing threshold — see gem_radar/observations.get_active_listing_ids.
+    # Default matches the extension's own SchedulerConfigSchema default.
+    gem_radar_scan_interval_minutes: Mapped[int] = mapped_column(Integer, default=180)
+    # How many consecutive scan cycles a listing can go unseen before it's
+    # treated as inactive — configurable in the extension's Retention
+    # settings (retention.consecutiveMissesBeforeInactive), synced the same
+    # way as gem_radar_scan_interval_minutes above.
+    gem_radar_consecutive_misses_before_inactive: Mapped[int] = mapped_column(Integer, default=2)
+    # Retention config (extension's retention.scrapeArtifactsHours /
+    # preserveWatchedListingEvidence), synced the same way — see
+    # app/main.py's _gem_radar_retention_loop, which previously ignored
+    # these entirely and hardcoded 24h / no watched-evidence preservation.
+    gem_radar_scrape_artifacts_hours: Mapped[int] = mapped_column(Integer, default=24)
+    gem_radar_preserve_watched_evidence: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # CPK-based deal classification (see app/gem_radar/deal_classification.py).
+    # Market price for a CPK is only trusted once 2+ listings have
+    # contributed to it (app/gem_radar/cpk_market.py) — a listing's %
+    # offset is computed against whichever of lower/median/upper the user
+    # picks here. All four thresholds are % offset from that market price
+    # (negative = listing priced below market = a better deal); a listing
+    # worse than deal_average_deal_threshold_pct falls through to POOR_DEAL.
+    deal_market_price_source: Mapped[str] = mapped_column(String(10), default="median")  # lower|median|upper
+    deal_super_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-20.0)
+    deal_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-15.0)
+    deal_ok_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=-5.0)
+    deal_average_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=10.0)
+
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

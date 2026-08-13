@@ -23,6 +23,7 @@ from app.services.search_telemetry import record_term_result
 from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.services.spec_parser import parse_specs
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
+from app.services.playwright_scraper import chromium_available
 
 settings = get_settings()
 ua = UserAgent()
@@ -1110,6 +1111,26 @@ def _is_mini_pc(title: str) -> bool:
 def _parse_price(text: str) -> float:
     m = re.search(r"[\d,]+\.?\d*", text.replace(",", ""))
     return float(m.group(0)) if m else 0.0
+
+
+def _parse_marketplace_price(text: str) -> float:
+    """Temu/AliExpress card text (title + price + promo copy all concatenated
+    by BeautifulSoup's get_text join) is unsafe for _parse_price: titles are
+    full of digits (model numbers, capacities — "RTX3060", "12G", "8GB") that
+    get_text() joins BEFORE the real price, so a plain "first digit run"
+    search grabs the spec number instead of the price. These sites also
+    render each price character in its own DOM node, so the joined text has
+    stray spaces inside the number itself (e.g. "87 . 39"). Anchoring the
+    match to the currency symbol and stripping internal whitespace fixes
+    both problems at once."""
+    m = re.search(r"[£￡]\s*([\d,]+(?:\s*\.\s*\d+)?)", text)
+    if not m:
+        return 0.0
+    digits = re.sub(r"\s+", "", m.group(1)).replace(",", "")
+    try:
+        return float(digits)
+    except ValueError:
+        return 0.0
 
 
 def _extract_ebay_id(url: str) -> str:
@@ -2377,7 +2398,7 @@ async def _scrape_temu_http(
                     scope_text = scope.get_text(" ", strip=True)
                     if not allow_temu_aliexpress_listing(scope_text):
                         continue
-                    price = _parse_price(scope.get_text(" ", strip=True))
+                    price = _parse_marketplace_price(scope.get_text(" ", strip=True))
                     if price <= 0 or price < float(min_price) or price > float(max_price):
                         continue
                     external_id = f"temu_{abs(hash(href))}"
@@ -2426,7 +2447,7 @@ async def _scrape_aliexpress_http(
                     if not title or len(title) < 6:
                         continue
                     scope = a.find_parent(["li", "div", "article"]) or a
-                    price = _parse_price(scope.get_text(" ", strip=True))
+                    price = _parse_marketplace_price(scope.get_text(" ", strip=True))
                     if price <= 0 or price < float(min_price) or price > float(max_price):
                         continue
                     external_id = f"aliexpress_{abs(hash(href))}"
@@ -2475,7 +2496,7 @@ async def _scrape_alibaba_http(
                     if not title or len(title) < 6:
                         continue
                     scope = a.find_parent(["li", "div", "article"]) or a
-                    price = _parse_price(scope.get_text(" ", strip=True))
+                    price = _parse_marketplace_price(scope.get_text(" ", strip=True))
                     if price <= 0 or price < float(min_price) or price > float(max_price):
                         continue
                     external_id = f"alibaba_{abs(hash(href))}"

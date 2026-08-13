@@ -60,6 +60,14 @@ class Playbook(Base):
     packaging_playbook_id = Column(Integer, ForeignKey("packaging_playbooks.id"), nullable=True)
 
     activated_at = Column(DateTime, nullable=True)
+    deprecated_at = Column(DateTime, nullable=True)
+
+    # Performance analytics surfaced by PlaybookOut (app/schemas/playbook.py) —
+    # populated by outcome-capture/order-reconciliation once builds ship;
+    # default to zero/null rather than omitting so API responses never break.
+    flip_count = Column(Integer, default=0, nullable=False)
+    avg_profit_gbp = Column(Float, nullable=True)
+    conversion_rate = Column(Float, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -72,10 +80,25 @@ class PlaybookProposal(Base):
     __tablename__ = "playbook_proposals"
 
     id = Column(Integer, primary_key=True)
-    playbook_id = Column(Integer, index=True, nullable=False)
+    # nullable — a CREATE proposal has no playbook yet; UPDATE/RETIRE require
+    # one (enforced in the route, not the schema, per app/api/playbooks.py).
+    playbook_id = Column(Integer, ForeignKey("playbooks.id"), index=True, nullable=True)
     action = Column(String, nullable=False)
     status = Column(String, default="pending", nullable=False)
     payload = Column(JSON, nullable=True)
 
+    # Proposal content and resolution — see ProposalCreate/ProposalOut in
+    # app/schemas/playbook.py, which every route in app/api/playbooks.py and
+    # app/services/playbook_evolution.py already assumes exists.
+    proposed_data = Column(JSON, nullable=True)
+    reason = Column(Text, nullable=True)
+    demand_signals = Column(JSON, nullable=True)
+    rejection_reason = Column(Text, nullable=True)
+    proposed_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    resolved_at = Column(DateTime, nullable=True)
+    resolved_by = Column(String, nullable=True)
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    playbook = relationship("Playbook")

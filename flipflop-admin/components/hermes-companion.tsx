@@ -273,22 +273,25 @@ export function HermesCompanion() {
     try {
       if (qr.action === "show_super_gems") {
         router.push("/super-gems");
-        const res = await fetch(`${API_BASE}/api/listings/?claude_verdict=GEM&classification=gem&limit=6&sort_by=gem_score`);
+        // Fetch gem-radar scored listings (all marketplaces)
+        const res = await fetch(`${API_BASE}/api/gem-radar/scored-listings`);
         const data = await res.json() as Record<string, unknown>[];
-        const items = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
-        const cards: ListingCard[] = (items as Array<{
-          id: number; title: string; price: number;
-          claude_expected_profit?: number; estimated_profit?: number;
-          cpu?: string; gpu?: string; url?: string; image_urls?: string[];
-        }>).slice(0, 4).map(l => ({
-          id: l.id,
+        const items = Array.isArray(data) ? data : [];
+        // Filter for SUPER_GEM only and sort by deal_score
+        const superGems = (items as Array<any>)
+          .filter((s: any) => s.classification === 'SUPER_GEM')
+          .sort((a: any, b: any) => (b.deal_score || 0) - (a.deal_score || 0))
+          .slice(0, 6);
+
+        const cards: ListingCard[] = superGems.map((l: any) => ({
+          id: l.listing_id || l.id,
           title: l.title,
-          price: l.price,
-          estimated_profit: l.claude_expected_profit ?? l.estimated_profit ?? 0,
-          cpu: l.cpu,
-          gpu: l.gpu,
-          url: l.url,
-          image_url: l.image_urls?.[0],
+          price: l.delivered_price || l.price,
+          estimated_profit: (l.market_used_price || 0) - (l.delivered_price || l.price),
+          cpu: l.category === 'cpu' ? l.title : undefined,
+          gpu: l.category === 'gpu' ? l.title : undefined,
+          url: l.url || `https://www.ebay.co.uk/itm/${l.listing_id}/`,
+          image_url: l.image_url,
         }));
 
         if (cards.length === 0) {
@@ -314,22 +317,25 @@ export function HermesCompanion() {
 
       else if (qr.action === "show_gems") {
         router.push("/");
-        const res = await fetch(`${API_BASE}/api/listings/?gem_only=true&limit=8&sort_by=gem_score`);
+        // Fetch gem-radar scored listings (all marketplaces)
+        const res = await fetch(`${API_BASE}/api/gem-radar/scored-listings`);
         const data = await res.json() as Record<string, unknown>[];
-        const items = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
-        const cards: ListingCard[] = (items as Array<{
-          id: number; title: string; price: number;
-          claude_expected_profit?: number; estimated_profit?: number;
-          cpu?: string; gpu?: string; url?: string; image_urls?: string[];
-        }>).slice(0, 4).map(l => ({
-          id: l.id,
+        const items = Array.isArray(data) ? data : [];
+        // Filter for GEM or SUPER_GEM and sort by deal_score
+        const gems = (items as Array<any>)
+          .filter((s: any) => ['GEM', 'SUPER_GEM'].includes(s.classification))
+          .sort((a: any, b: any) => (b.deal_score || 0) - (a.deal_score || 0))
+          .slice(0, 8);
+
+        const cards: ListingCard[] = gems.slice(0, 4).map((l: any) => ({
+          id: l.listing_id || l.id,
           title: l.title,
-          price: l.price,
-          estimated_profit: l.claude_expected_profit ?? l.estimated_profit ?? 0,
-          cpu: l.cpu,
-          gpu: l.gpu,
-          url: l.url,
-          image_url: l.image_urls?.[0],
+          price: l.delivered_price || l.price,
+          estimated_profit: (l.market_used_price || l.market_new_price || 0) - (l.delivered_price || l.price || 0),
+          cpu: l.category === 'cpu' ? l.title : undefined,
+          gpu: l.category === 'gpu' ? l.title : undefined,
+          url: l.url || `https://www.ebay.co.uk/itm/${l.listing_id}/`,
+          image_url: l.image_url,
         }));
 
         if (cards.length === 0) {
@@ -373,22 +379,24 @@ export function HermesCompanion() {
 
       else if (qr.action === "show_builds") {
         router.push("/opportunities");
-        const res = await fetch(`${API_BASE}/api/listings/?gem_only=true&limit=4&sort_by=gem_score`);
+        // Fetch gem-radar scored listings
+        const res = await fetch(`${API_BASE}/api/gem-radar/scored-listings`);
         const data = await res.json() as Record<string, unknown>[];
-        const items = Array.isArray(data) ? data : (data as { items?: Record<string, unknown>[] }).items ?? [];
-        const cards: ListingCard[] = (items as Array<{
-          id: number; title: string; price: number;
-          claude_expected_profit?: number; estimated_profit?: number;
-          cpu?: string; gpu?: string; url?: string; image_urls?: string[];
-        }>).slice(0, 4).map(l => ({
-          id: l.id,
+        const items = Array.isArray(data) ? data : [];
+        const builds = (items as Array<any>)
+          .filter((s: any) => ['GEM', 'SUPER_GEM'].includes(s.classification))
+          .sort((a: any, b: any) => (b.deal_score || 0) - (a.deal_score || 0))
+          .slice(0, 4);
+
+        const cards: ListingCard[] = builds.map((l: any) => ({
+          id: l.listing_id || l.id,
           title: l.title,
-          price: l.price,
-          estimated_profit: l.claude_expected_profit ?? l.estimated_profit ?? 0,
-          cpu: l.cpu,
-          gpu: l.gpu,
-          url: l.url,
-          image_url: l.image_urls?.[0],
+          price: l.delivered_price || l.price,
+          estimated_profit: (l.market_used_price || l.market_new_price || 0) - (l.delivered_price || l.price || 0),
+          cpu: l.category === 'cpu' ? l.title : undefined,
+          gpu: l.category === 'gpu' ? l.title : undefined,
+          url: l.url || `https://www.ebay.co.uk/itm/${l.listing_id}/`,
+          image_url: l.image_url,
         }));
 
         addAssistantMessage({
@@ -503,14 +511,26 @@ export function HermesCompanion() {
               .sort((a, b) => a.price - b.price);
             return { slot, best: good[0] ?? null, count: good.length };
           })),
-          fetch(`${API_BASE}/api/listings/?gem_only=true&sort_by=price&limit=10`),
+          fetch(`${API_BASE}/api/gem-radar/scored-listings`),
         ]);
 
         const baseData = await baseRes.json() as Record<string, unknown>[];
-        const baseItems = (Array.isArray(baseData) ? baseData : (baseData as { items?: Record<string, unknown>[] }).items ?? []) as Array<{
-          id: number; title: string; price: number; cpu?: string; gpu?: string;
-          claude_expected_profit?: number; estimated_profit?: number; url?: string; image_urls?: string[];
-        }>;
+        const allListings = (Array.isArray(baseData) ? baseData : []) as Array<any>;
+        // Filter for gems and sort by price (cheapest first)
+        const baseItems = allListings
+          .filter((s: any) => ['GEM', 'SUPER_GEM'].includes(s.classification))
+          .sort((a: any, b: any) => (a.delivered_price || a.price || 0) - (b.delivered_price || b.price || 0))
+          .slice(0, 10)
+          .map((l: any) => ({
+            id: l.listing_id || l.id,
+            title: l.title,
+            price: l.delivered_price || l.price,
+            cpu: l.category === 'cpu' ? l.title : undefined,
+            gpu: l.category === 'gpu' ? l.title : undefined,
+            estimated_profit: (l.market_used_price || l.market_new_price || 0) - (l.delivered_price || l.price || 0),
+            url: l.url || `https://www.ebay.co.uk/itm/${l.listing_id}/`,
+            image_url: l.image_url,
+          }));
 
         // Find cheapest base PC within playbook price range
         const priceMin = pb.search_strategy?.price_min ?? 0;
@@ -550,7 +570,7 @@ export function HermesCompanion() {
             cpu: basePC.cpu,
             gpu: basePC.gpu,
             url: basePC.url,
-            image_url: basePC.image_urls?.[0],
+            image_url: basePC.image_url,
           }] : undefined,
           content: `${intro}${baseSection}${upgradeSection}${plSection}`,
           quickReplies: [

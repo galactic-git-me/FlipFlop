@@ -1737,19 +1737,6 @@ def _load_fb_cookies() -> list | None:
     except Exception as exc:
         log.warning("fb_cookies.load_error", error=str(exc))
         return None
-    defer, reason = should_defer_source_scrape("Gumtree")
-    if defer:
-        for term in search_terms[:6]:
-            record_term_result(term=term, found=0, new=0, error=reason, source_name="Gumtree")
-        log.info("gumtree.playwright.deferred", reason=reason)
-        return []
-
-    defer, reason = should_defer_source_scrape("Facebook Marketplace")
-    if defer:
-        for term in search_terms[:6]:
-            record_term_result(term=term, found=0, new=0, error=reason, source_name="Facebook Marketplace")
-        log.info("facebook.playwright.deferred", reason=reason)
-        return []
 
 
 # ── BargainHardware ──────────────────────────────────────────────────────────

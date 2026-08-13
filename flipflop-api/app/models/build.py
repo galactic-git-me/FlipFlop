@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, JSON, Enum
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, JSON, Enum, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -8,6 +8,7 @@ import enum
 class BuildType(enum.Enum):
     FLIP = "flip"
     MADE_TO_ORDER = "made_to_order"
+    PREBUILT = "prebuilt"
 
 
 class BuildStatus(enum.Enum):
@@ -31,10 +32,13 @@ class Build(Base):
     build_type = Column(Enum(BuildType), nullable=False)
     flip_id = Column(Integer, ForeignKey("flips.id"), nullable=True)
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=True)
+    pcbuild_id = Column(Integer, ForeignKey("pc_builds.id"), nullable=True)
+    manual_build_id = Column(Integer, ForeignKey("manual_builds.id"), nullable=True)
     playbook_id = Column(Integer, ForeignKey("playbooks.id"), nullable=True)
 
     spec_json = Column(JSON, nullable=True)
     status = Column(Enum(BuildStatus), default=BuildStatus.PLANNING, nullable=False)
+    needs_attention = Column(Boolean, default=False, nullable=False, index=True)
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

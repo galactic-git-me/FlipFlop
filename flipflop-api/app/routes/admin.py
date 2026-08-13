@@ -13,8 +13,9 @@ from app.models.order import Order, OrderStatus
 from app.models.order_checklist import OrderChecklist
 from app.models.order_photo import OrderPhoto
 from app.models.customer import Customer
+from app.routes.admin_auth import get_current_admin
 
-router = APIRouter(prefix="/api/admin", tags=["admin"])
+router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
 
 # ─── Schemas ────────────────────────────────────────────────────────────────

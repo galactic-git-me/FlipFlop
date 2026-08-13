@@ -30,22 +30,44 @@ _GPU_TDP = {
     "rx 7600": 165,
 }
 
-_SOCKET_HINTS = {
-    "i7-8": "lga1151",
-    "i7-9": "lga1151",
-    "i7-10": "lga1200",
-    "i7-11": "lga1200",
-    "i7-12": "lga1700",
-    "i7-13": "lga1700",
-    "i7-14": "lga1700",
-    "ryzen 5 3": "am4",
-    "ryzen 5 5": "am4",
-    "ryzen 7 5": "am4",
-    "ryzen 7 7": "am5",
-    "ryzen 7 9": "am5",
-    "ryzen 9 7": "am5",
-    "ryzen 9 9": "am5",
+
+# Structured CPU-platform reference table — deliberately broader than the old
+# _SOCKET_HINTS map (which only covered i7/Ryzen 5/7/9 mid-to-high SKUs from a
+# handful of recent generations). Keyed by lowercase substring found in a
+# listing title; matched longest-first so e.g. "ryzen 7 5800x3d" doesn't
+# accidentally match a shorter "ryzen 7 5" prefix meant for a different chip.
+# Socket alone (not full chipset/BIOS-revision granularity) — matches what the
+# rest of this module can actually validate from free-text listing titles.
+_CPU_PLATFORMS: dict[str, str] = {
+    # Intel Core (current + recent)
+    "i9-14": "lga1700", "i7-14": "lga1700", "i5-14": "lga1700", "i3-14": "lga1700",
+    "i9-13": "lga1700", "i7-13": "lga1700", "i5-13": "lga1700", "i3-13": "lga1700",
+    "i9-12": "lga1700", "i7-12": "lga1700", "i5-12": "lga1700", "i3-12": "lga1700",
+    "core ultra 9 2": "lga1851", "core ultra 7 2": "lga1851", "core ultra 5 2": "lga1851",
+    "i9-11": "lga1200", "i7-11": "lga1200", "i5-11": "lga1200", "i3-11": "lga1200",
+    "i9-10": "lga1200", "i7-10": "lga1200", "i5-10": "lga1200", "i3-10": "lga1200",
+    "i9-9": "lga1151", "i7-9": "lga1151", "i5-9": "lga1151", "i3-9": "lga1151",
+    "i7-8": "lga1151", "i5-8": "lga1151", "i3-8": "lga1151",
+    "i7-7": "lga1151", "i5-7": "lga1151", "i3-7": "lga1151",
+    "i7-6": "lga1151", "i5-6": "lga1151", "i3-6": "lga1151",
+    # AMD Ryzen (current + recent)
+    "ryzen 9 9": "am5", "ryzen 7 9": "am5", "ryzen 5 9": "am5",
+    "ryzen 9 7": "am5", "ryzen 7 7": "am5", "ryzen 5 7": "am5",
+    "ryzen 9 5": "am4", "ryzen 7 5": "am4", "ryzen 5 5": "am4", "ryzen 3 5": "am4",
+    "ryzen 9 3": "am4", "ryzen 7 3": "am4", "ryzen 5 3": "am4", "ryzen 3 3": "am4",
+    "ryzen 7 2": "am4", "ryzen 5 2": "am4", "ryzen 3 2": "am4",
+    "ryzen 7 1": "am4", "ryzen 5 1": "am4", "ryzen 3 1": "am4",
+    "threadripper 7": "str5", "threadripper pro 7": "swrx8",
 }
+
+# Sorted longest-key-first so "ryzen 7 5800x3d"-style specific matches never
+# lose to a shorter generic prefix also present in the table.
+_CPU_PLATFORM_KEYS = sorted(_CPU_PLATFORMS.keys(), key=len, reverse=True)
+
+# Kept as a public alias — app/services/configurator_compatibility.py and
+# anything else importing the old name should migrate to _CPU_PLATFORMS, but
+# this avoids a silent behavioural gap if anything still imports it directly.
+_SOCKET_HINTS = _CPU_PLATFORMS
 
 
 def _norm(s: str) -> str:
@@ -82,6 +104,8 @@ def _extract_ram_type(text: str) -> str | None:
 
 def _infer_cpu_socket(text: str) -> str | None:
     t = _norm(text)
+    if "lga1851" in t:
+        return "lga1851"
     if "lga1700" in t:
         return "lga1700"
     if "lga1200" in t:
@@ -93,10 +117,26 @@ def _infer_cpu_socket(text: str) -> str | None:
     if "am4" in t:
         return "am4"
 
-    for hint, socket in _SOCKET_HINTS.items():
+    for hint in _CPU_PLATFORM_KEYS:
         if hint in t:
-            return socket
+            return _CPU_PLATFORMS[hint]
     return None
+
+
+def _extract_ram_capacity_gb(text: str) -> int | None:
+    """Best-effort RAM capacity from a listing title, e.g. '32GB DDR5' → 32.
+    Rejects implausible values (a stray '128GB SSD' elsewhere in the same
+    title shouldn't be read as RAM capacity) by capping to realistic DIMM
+    totals and requiring the number to sit right next to 'gb'."""
+    t = _norm(text)
+    matches = re.findall(r"(\d{1,3})\s*gb\b", t)
+    for m in matches:
+        gb = int(m)
+        if gb in (4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192):
+            return gb
+    return None
+
+
 
 
 def evaluate_build_compatibility(base_spec: str, upgrades: list[dict], constraints: list[str]) -> CompatibilityResult:

@@ -1,10 +1,11 @@
 import structlog
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.schemas.auth import SignupRequest, LoginRequest, TokenResponse, CustomerResponse
 from app.services.auth_service import signup, login, get_customer_by_token
+from app.services.social_proof import record_login_event
 
 log = structlog.get_logger(__name__)
 
@@ -69,9 +70,17 @@ async def signup_endpoint(
     return TokenResponse(access_token=access_token, token_type="bearer")
 
 
+def _client_ip(http_request: Request) -> str | None:
+    forwarded = http_request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return http_request.client.host if http_request.client else None
+
+
 @router.post("/login", response_model=TokenResponse)
 async def login_endpoint(
-    request: LoginRequest,
+    login_request: LoginRequest,
+    http_request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> TokenResponse:
     """
@@ -87,8 +96,8 @@ async def login_endpoint(
     """
     customer, access_token = await login(
         db=db,
-        email=request.email,
-        password=request.password,
+        email=login_request.email,
+        password=login_request.password,
     )
 
     if not customer:
@@ -96,6 +105,15 @@ async def login_endpoint(
             status_code=401,
             detail="Invalid email or password"
         )
+
+    try:
+        await record_login_event(
+            db,
+            customer_name=customer.name,
+            ip=_client_ip(http_request),
+        )
+    except Exception as e:
+        log.warning("social_proof.login_event_failed", error=str(e), customer_id=customer.id)
 
     return TokenResponse(access_token=access_token, token_type="bearer")
 

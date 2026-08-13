@@ -27,6 +27,15 @@ class SettingsUpdate(BaseModel):
     free_shipping_enabled: bool | None = None
     local_pickup_enabled: bool | None = None
     listing_type_default: str | None = None
+    gem_radar_scan_interval_minutes: int | None = None
+    gem_radar_consecutive_misses_before_inactive: int | None = None
+    gem_radar_scrape_artifacts_hours: int | None = None
+    gem_radar_preserve_watched_evidence: bool | None = None
+    deal_market_price_source: str | None = None
+    deal_super_gem_threshold_pct: float | None = None
+    deal_gem_threshold_pct: float | None = None
+    deal_ok_deal_threshold_pct: float | None = None
+    deal_average_deal_threshold_pct: float | None = None
 
 
 @router.get("/")
@@ -88,4 +97,13 @@ def _to_dict(s: AppSettings) -> dict:
         "free_shipping_enabled": s.free_shipping_enabled,
         "local_pickup_enabled": s.local_pickup_enabled,
         "listing_type_default": s.listing_type_default,
+        "gem_radar_scan_interval_minutes": s.gem_radar_scan_interval_minutes,
+        "gem_radar_consecutive_misses_before_inactive": s.gem_radar_consecutive_misses_before_inactive,
+        "gem_radar_scrape_artifacts_hours": s.gem_radar_scrape_artifacts_hours,
+        "gem_radar_preserve_watched_evidence": s.gem_radar_preserve_watched_evidence,
+        "deal_market_price_source": s.deal_market_price_source,
+        "deal_super_gem_threshold_pct": s.deal_super_gem_threshold_pct,
+        "deal_gem_threshold_pct": s.deal_gem_threshold_pct,
+        "deal_ok_deal_threshold_pct": s.deal_ok_deal_threshold_pct,
+        "deal_average_deal_threshold_pct": s.deal_average_deal_threshold_pct,
     }

@@ -1,0 +1,5423 @@
+[
+  {
+    "id": 43351,
+    "listing_id": "295877777461",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 44137,
+    "listing_id": "307067861048",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 44156,
+    "listing_id": "327282784550",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 44361,
+    "listing_id": "9165005316",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.77,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 46070,
+    "listing_id": "405773106771",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 47008,
+    "listing_id": "287471614360",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 18.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 47663,
+    "listing_id": "277642490519",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 48041,
+    "listing_id": "278208898393",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 49232,
+    "listing_id": "356840536224",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49233,
+    "listing_id": "376041305494",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49234,
+    "listing_id": "376043971881",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49235,
+    "listing_id": "365430750726",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49236,
+    "listing_id": "365430736899",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49237,
+    "listing_id": "365439043046",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49238,
+    "listing_id": "374380736463",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49239,
+    "listing_id": "374380777459",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49240,
+    "listing_id": "376041307414",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49241,
+    "listing_id": "356637029991",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49242,
+    "listing_id": "356619568860",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49243,
+    "listing_id": "364065044244",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49244,
+    "listing_id": "365445661380",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49245,
+    "listing_id": "365572455872",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49246,
+    "listing_id": "364065052830",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49247,
+    "listing_id": "356939915484",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49248,
+    "listing_id": "376031049020",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49249,
+    "listing_id": "364064961802",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49250,
+    "listing_id": "374380767734",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49251,
+    "listing_id": "365430736502",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49252,
+    "listing_id": "356618969237",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49253,
+    "listing_id": "354421674243",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49254,
+    "listing_id": "376031085320",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49255,
+    "listing_id": "376030505512",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49256,
+    "listing_id": "365572459208",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49257,
+    "listing_id": "376211441687",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49258,
+    "listing_id": "356844560135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49259,
+    "listing_id": "356619566392",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49260,
+    "listing_id": "356619514754",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49261,
+    "listing_id": "354421511388",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49262,
+    "listing_id": "356619513493",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49263,
+    "listing_id": "376030806977",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49264,
+    "listing_id": "365430747777",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49266,
+    "listing_id": "365430752197",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49267,
+    "listing_id": "356618965159",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49268,
+    "listing_id": "356618964546",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49269,
+    "listing_id": "365430371709",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49270,
+    "listing_id": "376049312888",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49271,
+    "listing_id": "356633853678",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49272,
+    "listing_id": "365445743293",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49273,
+    "listing_id": "376049313413",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49274,
+    "listing_id": "376041300849",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49275,
+    "listing_id": "356844555635",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49276,
+    "listing_id": "365572480089",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49277,
+    "listing_id": "356844677321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49278,
+    "listing_id": "365441243366",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49279,
+    "listing_id": "365570249463",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49280,
+    "listing_id": "376208647777",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49282,
+    "listing_id": "366336961814",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 49283,
+    "listing_id": "146373938005",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 49287,
+    "listing_id": "365430668942",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49288,
+    "listing_id": "376040993427",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49289,
+    "listing_id": "376041300023",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49290,
+    "listing_id": "365430715936",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49291,
+    "listing_id": "356633859065",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49292,
+    "listing_id": "365438653792",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49293,
+    "listing_id": "365430678054",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49294,
+    "listing_id": "376043631751",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49295,
+    "listing_id": "365440867448",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49296,
+    "listing_id": "376041298700",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49297,
+    "listing_id": "365440895135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49298,
+    "listing_id": "365441103437",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49299,
+    "listing_id": "356633391710",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49300,
+    "listing_id": "356642531395",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49301,
+    "listing_id": "356633402314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49302,
+    "listing_id": "356619423730",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49303,
+    "listing_id": "356636601168",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49304,
+    "listing_id": "376049097195",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49305,
+    "listing_id": "365445528141",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49306,
+    "listing_id": "376031006901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49307,
+    "listing_id": "376049141491",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49308,
+    "listing_id": "365439049321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49309,
+    "listing_id": "356619574702",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49310,
+    "listing_id": "356633401220",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49311,
+    "listing_id": "374380719471",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49312,
+    "listing_id": "376208740661",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49313,
+    "listing_id": "376267221852",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49314,
+    "listing_id": "365445485839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49315,
+    "listing_id": "356844056624",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49316,
+    "listing_id": "374380778058",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49317,
+    "listing_id": "376267253501",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49318,
+    "listing_id": "354421551321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49319,
+    "listing_id": "354421516798",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49320,
+    "listing_id": "356939917371",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49321,
+    "listing_id": "365430374649",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49322,
+    "listing_id": "356618957997",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49323,
+    "listing_id": "376208750357",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49324,
+    "listing_id": "364064938010",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49325,
+    "listing_id": "365439053602",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49326,
+    "listing_id": "364064958616",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49327,
+    "listing_id": "356633390957",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49328,
+    "listing_id": "356619419225",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49329,
+    "listing_id": "374380766444",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49330,
+    "listing_id": "365440927744",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49331,
+    "listing_id": "376211330773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49332,
+    "listing_id": "376031080844",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49333,
+    "listing_id": "364064958909",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49334,
+    "listing_id": "365617246901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49336,
+    "listing_id": "356840849257",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49337,
+    "listing_id": "376208738170",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49338,
+    "listing_id": "365572190834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49339,
+    "listing_id": "376211414018",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49340,
+    "listing_id": "356844305574",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49341,
+    "listing_id": "365430547773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49342,
+    "listing_id": "365570451325",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49343,
+    "listing_id": "374380740839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49344,
+    "listing_id": "365572133219",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49345,
+    "listing_id": "374886431915",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49346,
+    "listing_id": "365570253328",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49347,
+    "listing_id": "365617268573",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49348,
+    "listing_id": "356840486482",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49349,
+    "listing_id": "376208659081",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49350,
+    "listing_id": "376210956404",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49351,
+    "listing_id": "354421519316",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49352,
+    "listing_id": "376208745423",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49353,
+    "listing_id": "356844303334",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49354,
+    "listing_id": "356840549039",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49355,
+    "listing_id": "376211194871",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49356,
+    "listing_id": "356618987691",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49357,
+    "listing_id": "365572142929",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49358,
+    "listing_id": "365570451995",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49359,
+    "listing_id": "374380763601",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49360,
+    "listing_id": "365570253656",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49361,
+    "listing_id": "365430750200",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49362,
+    "listing_id": "364064980589",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49363,
+    "listing_id": "356844305808",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49364,
+    "listing_id": "365570251943",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49365,
+    "listing_id": "354984504344",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49366,
+    "listing_id": "356844624584",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49367,
+    "listing_id": "364064953794",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49368,
+    "listing_id": "354421564247",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49369,
+    "listing_id": "364064975171",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49370,
+    "listing_id": "376043978314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49371,
+    "listing_id": "356844059759",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49372,
+    "listing_id": "376267257834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49373,
+    "listing_id": "376044013888",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49374,
+    "listing_id": "374380723041",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49375,
+    "listing_id": "356840549718",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49376,
+    "listing_id": "356619542531",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 49424,
+    "listing_id": "195941093850",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 20.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 51052,
+    "listing_id": "MEM-GSK-05022",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 51058,
+    "listing_id": "MEM-GSK-04194",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 51134,
+    "listing_id": "MEM-CRU-06423",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 51139,
+    "listing_id": "MEM-GSK-01363",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 52911,
+    "listing_id": "365430724577",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52912,
+    "listing_id": "356619514480",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52913,
+    "listing_id": "356619579806",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52914,
+    "listing_id": "356619518472",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52915,
+    "listing_id": "365441243366",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52916,
+    "listing_id": "356844559666",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52917,
+    "listing_id": "356844560135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52918,
+    "listing_id": "365430752197",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52919,
+    "listing_id": "376031078324",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52920,
+    "listing_id": "365572450237",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52921,
+    "listing_id": "376208647777",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52924,
+    "listing_id": "365430668942",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52925,
+    "listing_id": "365430676924",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52926,
+    "listing_id": "365570203017",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52927,
+    "listing_id": "376041298700",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52928,
+    "listing_id": "365570198240",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52929,
+    "listing_id": "376041300023",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52930,
+    "listing_id": "365440867448",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52931,
+    "listing_id": "365430678054",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52932,
+    "listing_id": "376040993427",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52933,
+    "listing_id": "356619423730",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52934,
+    "listing_id": "376040992576",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52935,
+    "listing_id": "365440895135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52936,
+    "listing_id": "356633391710",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52937,
+    "listing_id": "356633859065",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52938,
+    "listing_id": "356642531395",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52939,
+    "listing_id": "365570188008",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52940,
+    "listing_id": "376043631751",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52941,
+    "listing_id": "365438653792",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52942,
+    "listing_id": "356633401220",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52943,
+    "listing_id": "365445485839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52944,
+    "listing_id": "365441103437",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52945,
+    "listing_id": "356636601168",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52946,
+    "listing_id": "365445528141",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52947,
+    "listing_id": "356633402314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52948,
+    "listing_id": "376031006901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52949,
+    "listing_id": "376049141491",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52950,
+    "listing_id": "356619574702",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52951,
+    "listing_id": "365439049321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52952,
+    "listing_id": "376267253501",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52953,
+    "listing_id": "376208740661",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52954,
+    "listing_id": "376267221852",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52955,
+    "listing_id": "356844056624",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52956,
+    "listing_id": "374380778058",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52957,
+    "listing_id": "365430374649",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52958,
+    "listing_id": "354421516798",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52959,
+    "listing_id": "356618957997",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52960,
+    "listing_id": "354421551321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52961,
+    "listing_id": "356939917371",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52962,
+    "listing_id": "365439053602",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52963,
+    "listing_id": "356633390957",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52964,
+    "listing_id": "356619419225",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52965,
+    "listing_id": "365572190834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52966,
+    "listing_id": "376208750357",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52967,
+    "listing_id": "356840849257",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52968,
+    "listing_id": "374380766444",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52969,
+    "listing_id": "376211330773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52970,
+    "listing_id": "356844305574",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52971,
+    "listing_id": "365617246901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52972,
+    "listing_id": "376208738170",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52973,
+    "listing_id": "365440927744",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52975,
+    "listing_id": "365572133219",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52976,
+    "listing_id": "365570111341",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52977,
+    "listing_id": "365570451325",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52978,
+    "listing_id": "365430547773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52979,
+    "listing_id": "365572142929",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52980,
+    "listing_id": "376208659081",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52981,
+    "listing_id": "376211414018",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52982,
+    "listing_id": "376210956404",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52983,
+    "listing_id": "356840486482",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52984,
+    "listing_id": "365570253328",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52985,
+    "listing_id": "365617268573",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52986,
+    "listing_id": "374886431915",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52987,
+    "listing_id": "376031080844",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52988,
+    "listing_id": "376211194871",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52989,
+    "listing_id": "356618987691",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52990,
+    "listing_id": "365570451995",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52991,
+    "listing_id": "365570253656",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52992,
+    "listing_id": "365430750200",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52993,
+    "listing_id": "374380763601",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52994,
+    "listing_id": "364064980589",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52995,
+    "listing_id": "376044013888",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52996,
+    "listing_id": "356844303334",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52997,
+    "listing_id": "374380740839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52998,
+    "listing_id": "354984504344",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 52999,
+    "listing_id": "356844305808",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53000,
+    "listing_id": "376043978314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53001,
+    "listing_id": "356844059759",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53002,
+    "listing_id": "376044016267",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53003,
+    "listing_id": "376211414333",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53004,
+    "listing_id": "356840549039",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53005,
+    "listing_id": "376267257834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53006,
+    "listing_id": "354421564247",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53007,
+    "listing_id": "356844624584",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53008,
+    "listing_id": "356840549718",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53009,
+    "listing_id": "356619542531",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53011,
+    "listing_id": "376208652249",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53012,
+    "listing_id": "356843898349",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53013,
+    "listing_id": "376208745423",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53014,
+    "listing_id": "356840553526",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 53074,
+    "listing_id": "MEM-GSK-04196",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 54507,
+    "listing_id": "287411544688",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 54590,
+    "listing_id": "307085637557",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55611,
+    "listing_id": "365570200689",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55612,
+    "listing_id": "365438641912",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 2.65,
+      "classification": "POOR_DEAL",
+      "confidence_score": 58.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55615,
+    "listing_id": "376040993427",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55616,
+    "listing_id": "365430679476",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55618,
+    "listing_id": "356633402127",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55619,
+    "listing_id": "356633868468",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55620,
+    "listing_id": "365430676924",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55621,
+    "listing_id": "356633391710",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55622,
+    "listing_id": "365440867448",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55623,
+    "listing_id": "365441213068",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55624,
+    "listing_id": "356619423730",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55625,
+    "listing_id": "376041298700",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55626,
+    "listing_id": "365439049321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55627,
+    "listing_id": "356633402314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55628,
+    "listing_id": "356844056624",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55629,
+    "listing_id": "365570188008",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55630,
+    "listing_id": "365570198240",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55631,
+    "listing_id": "356633859065",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55632,
+    "listing_id": "356636601168",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55633,
+    "listing_id": "365440895135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55634,
+    "listing_id": "356633401220",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55635,
+    "listing_id": "376043631751",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55636,
+    "listing_id": "365570203017",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55637,
+    "listing_id": "356642531395",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55638,
+    "listing_id": "365441103437",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55639,
+    "listing_id": "376040992576",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55640,
+    "listing_id": "365438653792",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55641,
+    "listing_id": "365445485839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55642,
+    "listing_id": "365570193787",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55643,
+    "listing_id": "376049141491",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55644,
+    "listing_id": "376031006901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55645,
+    "listing_id": "365445528141",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55646,
+    "listing_id": "365430374649",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55647,
+    "listing_id": "376267253501",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55648,
+    "listing_id": "356618957997",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55649,
+    "listing_id": "356939917371",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55650,
+    "listing_id": "374380778058",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55651,
+    "listing_id": "354421516798",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55652,
+    "listing_id": "365439053602",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55653,
+    "listing_id": "365572190834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55654,
+    "listing_id": "356633390957",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55655,
+    "listing_id": "356844305574",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55656,
+    "listing_id": "356619419225",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55657,
+    "listing_id": "376031080844",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55658,
+    "listing_id": "365570451325",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55659,
+    "listing_id": "365440927744",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55660,
+    "listing_id": "365617246901",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55662,
+    "listing_id": "376208659081",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55663,
+    "listing_id": "365430547773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55664,
+    "listing_id": "365570111341",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55665,
+    "listing_id": "374380766444",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55666,
+    "listing_id": "365430750200",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55667,
+    "listing_id": "374886431915",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55668,
+    "listing_id": "376211414018",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55669,
+    "listing_id": "356840486482",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55670,
+    "listing_id": "365617268573",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55671,
+    "listing_id": "356844059759",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55672,
+    "listing_id": "364064975171",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55673,
+    "listing_id": "376208738170",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55674,
+    "listing_id": "376211194871",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55675,
+    "listing_id": "365570253328",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55676,
+    "listing_id": "365570451995",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55677,
+    "listing_id": "356618987691",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55678,
+    "listing_id": "376208745423",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55679,
+    "listing_id": "376208750357",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55680,
+    "listing_id": "356840849257",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55681,
+    "listing_id": "376030686424",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55682,
+    "listing_id": "365570308017",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55683,
+    "listing_id": "376210956404",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55684,
+    "listing_id": "374380740839",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55685,
+    "listing_id": "365572142929",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55686,
+    "listing_id": "365570253656",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55687,
+    "listing_id": "376211330773",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55688,
+    "listing_id": "364064980589",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55689,
+    "listing_id": "356844303334",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55690,
+    "listing_id": "365430255697",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55691,
+    "listing_id": "376211414333",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55692,
+    "listing_id": "354984504344",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55693,
+    "listing_id": "356840549039",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55694,
+    "listing_id": "356844305808",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55695,
+    "listing_id": "376267257834",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55696,
+    "listing_id": "356619542531",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55698,
+    "listing_id": "356619556692",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55699,
+    "listing_id": "376043978314",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55700,
+    "listing_id": "376044016267",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55701,
+    "listing_id": "356619558635",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55702,
+    "listing_id": "356843898349",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55703,
+    "listing_id": "354421564247",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55704,
+    "listing_id": "356619223601",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55707,
+    "listing_id": "365430749600",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55708,
+    "listing_id": "376208652249",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55709,
+    "listing_id": "354421551321",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55710,
+    "listing_id": "356840549718",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55711,
+    "listing_id": "354421542259",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55712,
+    "listing_id": "376030677619",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55713,
+    "listing_id": "374380763601",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55714,
+    "listing_id": "376030681989",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55715,
+    "listing_id": "376031063976",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55716,
+    "listing_id": "356619224064",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55717,
+    "listing_id": "365572122625",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55718,
+    "listing_id": "364425255926",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55719,
+    "listing_id": "356840546927",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55720,
+    "listing_id": "356840553526",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55721,
+    "listing_id": "365430748437",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55722,
+    "listing_id": "374380747249",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55723,
+    "listing_id": "376041305494",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55724,
+    "listing_id": "376044013888",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55725,
+    "listing_id": "365430447915",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55726,
+    "listing_id": "354421686106",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55727,
+    "listing_id": "376208647114",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55728,
+    "listing_id": "356619574702",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55729,
+    "listing_id": "376044015941",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55730,
+    "listing_id": "365570251943",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55731,
+    "listing_id": "364064962424",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55732,
+    "listing_id": "374380765529",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55733,
+    "listing_id": "356619557572",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55734,
+    "listing_id": "376208594722",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55735,
+    "listing_id": "356840536224",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55736,
+    "listing_id": "376041307414",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55737,
+    "listing_id": "365430725272",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55738,
+    "listing_id": "374380763088",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55739,
+    "listing_id": "376031049020",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55740,
+    "listing_id": "365430750726",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55741,
+    "listing_id": "365439043046",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55742,
+    "listing_id": "376044014320",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55743,
+    "listing_id": "356637029991",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55744,
+    "listing_id": "356844655972",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55745,
+    "listing_id": "356619549265",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55746,
+    "listing_id": "364064962962",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55747,
+    "listing_id": "376043971881",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55748,
+    "listing_id": "365430736899",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55749,
+    "listing_id": "376031085320",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55750,
+    "listing_id": "356619098710",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55751,
+    "listing_id": "364065044244",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55752,
+    "listing_id": "364065052830",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55753,
+    "listing_id": "374380765918",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55754,
+    "listing_id": "365430747777",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55755,
+    "listing_id": "356619568860",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55756,
+    "listing_id": "365430736502",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55757,
+    "listing_id": "354421674243",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55758,
+    "listing_id": "376208740661",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55759,
+    "listing_id": "356618969237",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55760,
+    "listing_id": "374380777459",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55761,
+    "listing_id": "365572455872",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55762,
+    "listing_id": "365572459208",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55763,
+    "listing_id": "365430752197",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55764,
+    "listing_id": "356619514754",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55765,
+    "listing_id": "376030505512",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55766,
+    "listing_id": "376030806977",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55767,
+    "listing_id": "365445661380",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55768,
+    "listing_id": "356633853678",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55770,
+    "listing_id": "356939915484",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55771,
+    "listing_id": "356844560135",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55772,
+    "listing_id": "365430386229",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55773,
+    "listing_id": "356619566392",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 55774,
+    "listing_id": "356618964546",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 56455,
+    "listing_id": "800431979678",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 56508,
+    "listing_id": "206452118930",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 9.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 58030,
+    "listing_id": "287411544688",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 5.04,
+      "classification": "AVERAGE_DEAL",
+      "confidence_score": 3.2,
+      "confidence_band": "low",
+      "decision": "WATCH"
+    }
+  },
+  {
+    "id": 58236,
+    "listing_id": "398181243611",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 9.3,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 58716,
+    "listing_id": "236036299989",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.98,
+      "classification": "POOR_DEAL",
+      "confidence_score": 19.4,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  },
+  {
+    "id": 58784,
+    "listing_id": "278169348665",
+    "old": {
+      "market_new_price": null,
+      "market_used_price": null,
+      "deal_score": 4.21,
+      "classification": "POOR_DEAL",
+      "confidence_score": 0.0,
+      "confidence_band": "low",
+      "decision": "IGNORE"
+    }
+  }
+]

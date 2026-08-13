@@ -1,39 +1,31 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import event
-from sqlalchemy.pool import NullPool
 from app.config import get_settings
 import os
 
 settings = get_settings()
 
-# Override with SQLite if DATABASE_URL env var is set explicitly, or use config default
+# Postgres only — no SQLite fallback. SQLite's single-writer lock made this
+# app's concurrent scan-scoring workload (many overlapping /scans requests,
+# each opening several DB sessions at once) serialize hard and stall; this
+# app is designed around Postgres's real concurrent-write support and must
+# never silently downgrade to SQLite again.
 _database_url = os.getenv("DATABASE_URL", settings.database_url)
-_is_sqlite = _database_url.startswith("sqlite")
-
-if _is_sqlite:
-    # NullPool: each session gets its own connection, preventing pool exhaustion
-    # when long-running scans hold connections while API reads are waiting.
-    # WAL mode (set in the connect listener) allows concurrent reads alongside writes.
-    engine = create_async_engine(
-        _database_url,
-        echo=False,
-        connect_args={"timeout": 30},
-        poolclass=NullPool,
+if not _database_url.startswith("postgresql"):
+    raise RuntimeError(
+        f"DATABASE_URL must be a postgresql+asyncpg:// connection string, got: {_database_url!r}. "
+        "This app requires Postgres for concurrent-write support — SQLite is not supported."
     )
 
-    @event.listens_for(engine.sync_engine, "connect")
-    def _set_sqlite_pragma(conn, _):
-        conn.execute("PRAGMA journal_mode=WAL")
-        conn.execute("PRAGMA busy_timeout=30000")
-        conn.execute("PRAGMA synchronous=NORMAL")
-else:
-    engine = create_async_engine(
-        _database_url,
-        echo=False,
-        pool_size=10,
-        max_overflow=20,
-    )
+engine = create_async_engine(
+    _database_url,
+    echo=False,
+    pool_size=30,  # Increased to handle concurrent workers + dashboard
+    max_overflow=15,  # Allow up to 45 total connections before failing
+    pool_pre_ping=True,  # Test connection before reuse
+    pool_recycle=300,  # Reduced from 3600s — recycle dead connections faster (5 min)
+    pool_timeout=10,  # Wait max 10s for available connection before failing
+)
 
 AsyncSessionLocal = async_sessionmaker(
     engine,
@@ -56,3 +48,20 @@ async def get_db():
             raise
         finally:
             await session.close()
+
+
+async def init_db():
+    """Initialize database tables on startup."""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+def get_db_pool_stats() -> dict:
+    """Get current connection pool statistics."""
+    pool = engine.pool
+    return {
+        "pool_size": pool.size(),
+        "checked_out": pool.checkedout(),
+        "overflow": pool.overflow(),
+        "total_connections": pool.size() + pool.overflow(),
+    }

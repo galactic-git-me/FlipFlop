@@ -17,17 +17,17 @@ This will:
 ## Services
 
 ### Storefront (Customer App)
-- **URL:** http://localhost:13000
+- **URL:** http://localhost:4313
 - **Hot Reload:** ✅ Enabled (next dev)
 - **Auto-restarts on:** .tsx, .ts, .css file changes
 
 ### Admin Dashboard
-- **URL:** http://localhost:13001
+- **URL:** http://localhost:4312
 - **Hot Reload:** ✅ Enabled (next dev)
 - **Auto-restarts on:** .tsx, .ts, .css file changes
 
 ### API (Backend)
-- **URL:** http://localhost:18000
+- **URL:** http://localhost:4311
 - **Hot Reload:** ✅ Enabled (uvicorn --reload)
 - **Auto-restarts on:** .py file changes
 
@@ -201,9 +201,9 @@ docker compose -f docker-compose.dev.yml exec storefront npm list
 The development environment uses `andromeda-ts` as the hostname (mapped to localhost via `extra_hosts`). This allows services to communicate internally using this hostname.
 
 If you need to access services from your host machine, use `localhost` instead:
-- Storefront: http://localhost:13000
-- Admin: http://localhost:13001
-- API: http://localhost:18000
+- Storefront: http://localhost:4313
+- Admin: http://localhost:4312
+- API: http://localhost:4311
 
 ## Switching Between Dev and Production
 
@@ -275,7 +275,7 @@ FlipFlop/
 ## Next Steps
 
 1. **Start dev environment:** `./start-dev.sh`
-2. **Open storefront:** http://localhost:13000
+2. **Open storefront:** http://localhost:4313
 3. **Make a code change** in `flipflop-storefront/app/page.tsx`
 4. **Watch it auto-reload** in your browser!
 

@@ -199,62 +199,88 @@ async def _fetch_median_sold(
     query: str,
     floor: float,
     ceil: float,
+    retry_count: int = 2,
 ) -> float | None:
-    """Scrape eBay UK completed/sold listings and return the median price."""
-    params = {
-        "_nkw":        query,
-        "LH_Sold":     "1",
-        "LH_Complete": "1",
-        "_sop":        "12",
-        "LH_PrefLoc":  "1",
-        "_ipg":        "60",
-    }
-    headers = {
-        "User-Agent":       _ua.random,
-        "Accept-Language":  "en-GB,en;q=0.9",
-        "Accept":           "text/html,application/xhtml+xml",
-    }
-    try:
-        resp = await client.get(
-            "https://www.ebay.co.uk/sch/i.html",
-            params=params,
-            headers=headers,
-            timeout=20,
-        )
-        if resp.status_code != 200 or len(resp.text) < 1000:
-            return None
+    """Scrape eBay UK completed/sold listings and return the median price.
 
-        soup = BeautifulSoup(resp.text, "lxml")
-        prices: list[float] = []
+    Retries up to retry_count times on transient errors (rate limits, timeouts).
+    """
+    for attempt in range(retry_count + 1):
+        try:
+            params = {
+                "_nkw":        query,
+                "LH_Sold":     "1",
+                "LH_Complete": "1",
+                "_sop":        "12",
+                "LH_PrefLoc":  "1",
+                "_ipg":        "60",
+            }
+            headers = {
+                "User-Agent":       _ua.random,
+                "Accept-Language":  "en-GB,en;q=0.9",
+                "Accept":           "text/html,application/xhtml+xml",
+            }
 
-        for item in soup.select(".s-item:not(.s-item--placeholder)"):
-            bid_el = item.select_one(".s-item__bids, .x-bid-count, [class*='bid--']")
-            if bid_el and re.search(r"\d+\s*bid", bid_el.get_text(), re.I):
-                continue
-            price_el = (
-                item.select_one(".s-item__price .POSITIVE")
-                or item.select_one(".s-item__price")
+            resp = await client.get(
+                "https://www.ebay.co.uk/sch/i.html",
+                params=params,
+                headers=headers,
+                timeout=20,
             )
-            if not price_el:
-                continue
-            text = price_el.get_text(strip=True)
-            if re.search(r"\bto\b|–|—", text, re.I):
-                continue
-            m = re.search(r"[\d,]+\.?\d*", text.replace(",", ""))
-            if not m:
-                continue
-            p = float(m.group(0))
-            if floor <= p <= ceil:
-                prices.append(p)
 
-        if len(prices) < 3:
+            if resp.status_code == 429:  # Rate limited — retry with backoff
+                if attempt < retry_count:
+                    await asyncio.sleep(2 ** attempt)
+                    continue
+                return None
+
+            if resp.status_code != 200 or len(resp.text) < 1000:
+                return None
+
+            soup = BeautifulSoup(resp.text, "lxml")
+            prices: list[float] = []
+
+            for item in soup.select(".s-item:not(.s-item--placeholder)"):
+                bid_el = item.select_one(".s-item__bids, .x-bid-count, [class*='bid--']")
+                if bid_el and re.search(r"\d+\s*bid", bid_el.get_text(), re.I):
+                    continue
+
+                # Try multiple price selectors (eBay changes HTML frequently)
+                price_el = (
+                    item.select_one(".s-item__price .POSITIVE")
+                    or item.select_one(".s-item__price")
+                    or item.select_one("[class*='price']")
+                )
+                if not price_el:
+                    continue
+
+                text = price_el.get_text(strip=True)
+                if re.search(r"\bto\b|–|—", text, re.I):
+                    continue
+                m = re.search(r"[\d,]+\.?\d*", text.replace(",", ""))
+                if not m:
+                    continue
+                p = float(m.group(0))
+                if floor <= p <= ceil:
+                    prices.append(p)
+
+            if len(prices) < 3:
+                return None
+
+            return round(median(prices), 2)
+
+        except (asyncio.TimeoutError, ConnectionError) as exc:
+            # Transient — retry with backoff
+            if attempt < retry_count:
+                await asyncio.sleep(2 ** attempt)
+                continue
+            log.warning("price_refresh.fetch_failed_retries_exhausted", query=query, error=str(exc))
+            return None
+        except Exception as exc:
+            log.warning("price_refresh.fetch_failed", query=query, error=str(exc))
             return None
 
-        return round(median(prices), 2)
-
-    except Exception as exc:
-        log.warning("price_refresh.fetch_failed", query=query, error=str(exc))
-        return None
+    return None
 
 
 async def _run_batch(
@@ -262,9 +288,29 @@ async def _run_batch(
     queries: list[tuple[str, str, float, float]],
     results: dict,
     failed: list[str],
-    pace_seconds: float = 1.5,
+    pace_seconds: float = 0.2,
 ) -> None:
+    """Fetch all queries in parallel with minimal pacing to avoid eBay rate limits."""
+    tasks = []
     for key, query, floor, ceil in queries:
+        tasks.append(_fetch_and_store(client, key, query, floor, ceil, results, failed, pace_seconds))
+
+    await asyncio.gather(*tasks, return_exceptions=True)
+
+
+async def _fetch_and_store(
+    client: httpx.AsyncClient,
+    key: str,
+    query: str,
+    floor: float,
+    ceil: float,
+    results: dict,
+    failed: list[str],
+    pace_seconds: float,
+) -> None:
+    """Fetch one price and store result; handle pacing and errors."""
+    try:
+        await asyncio.sleep(pace_seconds)
         price = await _fetch_median_sold(client, query, floor, ceil)
         if price is not None:
             results[key] = price
@@ -272,7 +318,9 @@ async def _run_batch(
         else:
             failed.append(key)
             log.warning("price_refresh.no_comps", key=key, query=query)
-        await asyncio.sleep(pace_seconds)
+    except Exception as exc:
+        failed.append(key)
+        log.warning("price_refresh.fetch_error", key=key, query=query, error=str(exc))
 
 
 async def run_price_refresh() -> dict:
@@ -293,10 +341,13 @@ async def run_price_refresh() -> dict:
             pass
 
     async with httpx.AsyncClient(follow_redirects=True) as client:
-        await _run_batch(client, BUDGET_COMPONENT_QUERIES, updated, failed)
-        await _run_batch(client, GPU_RESALE_QUERIES, updated, failed)
-        await _run_batch(client, CPU_SYSTEM_QUERIES, updated, failed)
-        await _run_batch(client, ACCESSORY_QUERIES, updated, failed)
+        await asyncio.gather(
+            _run_batch(client, BUDGET_COMPONENT_QUERIES, updated, failed),
+            _run_batch(client, GPU_RESALE_QUERIES, updated, failed),
+            _run_batch(client, CPU_SYSTEM_QUERIES, updated, failed),
+            _run_batch(client, ACCESSORY_QUERIES, updated, failed),
+            return_exceptions=True,
+        )
 
     if updated:
         merged = {**existing, **updated}

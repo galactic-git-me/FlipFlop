@@ -51,6 +51,9 @@ export interface Listing {
   status: ListingStatus;
   first_seen_at: string;
   last_seen_at: string;
+  // Demand signals (eBay: watch count, bid count)
+  watch_count: number | null;
+  bid_count: number | null;
   // Claude LLM evaluation (populated asynchronously after initial save)
   claude_verdict:            string | null;
   claude_flipability_score:  number | null;
@@ -310,6 +313,37 @@ export interface PlaybookProposal {
   proposed_at: string;
   resolved_at: string | null;
   resolved_by: string | null;
+}
+
+// ── Favourites ─────────────────────────────────────────────────────────────────
+
+export interface Favourite {
+  id: number;
+  term: string | null;
+  cpk: string | null;
+  category: string | null;
+  created_at: string;
+  last_matched_at: string | null;
+}
+
+export interface FavouriteVendorCell {
+  lowest_price: number;
+  listing_id: string;
+  url: string;
+  classification: string;
+}
+
+export interface FavouriteProductOption {
+  cpk: string;
+  lowest_price: number;
+  title: string;
+}
+
+export interface FavouriteMatrixRow {
+  query: string;
+  category: string | null;
+  vendors: Record<string, FavouriteVendorCell>;
+  products: FavouriteProductOption[];
 }
 
 // ── Demand types ──────────────────────────────────────────────────────────────

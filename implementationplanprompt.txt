@@ -1,0 +1,128 @@
+Using the FlipFlop Algorithm Playbook artifact at
+https://claude.ai/code/artifacts/fa529446-25a2-4cc4-be2e-5d2b23009c32
+as the single source of truth for requirements — fetch it fresh, don't rely
+on memory of an earlier conversation — build a full implementation plan to
+automate every row in the "Automation roadmap (ordered by profit impact)"
+table. That table is already restricted to rows that can genuinely be
+automated (tagged App Automation, eBay Config, or Both), and each row
+already carries a 1-10 profit-impact score and a theme grouping — use that
+score to sequence the plan, highest-impact first, rather than re-deriving
+priority from scratch. The separate "Manual-only practices" table on the
+same page is explicitly out of scope: those rows are judgment, skill, or
+physical-world work with nothing to automate — don't include them in this
+plan. The two rows footnoted as meta/disputed commentary (about cadence
+hacks) are also out of scope for the same reason.
+
+The goal is full automation: once this is built, none of these 37 items
+should require the business owner to think about them day-to-day. Where a
+row still has a genuinely open decision (a default value, threshold, or
+tolerance) rather than a fully specified mechanic, don't leave it open in
+the plan — propose a sensible default based on everything already discussed
+in the doc, flag it clearly as "default proposed, confirm once," and design
+the feature so that after that one confirmation it runs unattended. The aim
+is zero ongoing manual involvement, not zero decisions ever.
+
+Also pull in everything already written in the "Build candidates for the
+app/site" section (it already groups several rows into single features —
+use that grouping as a starting point, don't re-derive it) and the "Scope
+note: beyond eBay" section (this describes a future multi-platform phase
+that is NOT being built now, but the design of everything in this plan
+should avoid decisions that would force a rebuild when that phase starts —
+flag anywhere that applies).
+
+Step 0 — inventory what already exists, before planning anything new:
+Look at the actual FlipFlop codebase for the current build details page
+implementation and list every field/section/component that's already there
+(e.g. parts list, cost basis, the minimum-offer field, the profit estimate,
+existing photo upload, description text, category/condition fields, and
+anything else present) — not just the new automation items named in the
+playbook. These existing components predate the tab structure below and
+still need a home in it. Don't let the plan only cover new build items and
+leave the current page's existing fields unplaced.
+
+Process the automation roadmap in profit-impact order, highest first. For
+each row (and each existing component found in step 0):
+1. Restate what it does in 1-2 sentences, using the row's "Why it moves your
+   sales" text and any "FlipFlop spec" annotation already in that row as the
+   actual requirement — the detail has already been scoped through prior
+   discussion, don't re-derive it from scratch.
+2. Decide and state explicitly where it belongs:
+   - On the build details page, and which tab (see tab structure below)
+   - A global eBay account/store-level setting (configured once, not per-build)
+   - A background/scheduled service — e.g. the end-and-recreate cycle, the
+     price-decay timer, the deferred-listing scheduler firing at a chosen
+     time — call these out separately from page UI, since they need a job
+     runner/scheduler, not a form
+   - A separate integration/service — e.g. anything pulling live eBay data
+     (sold/active counts, autocomplete suggestions, Promoted Listings) — note
+     the external API/auth dependency
+   - A browser extension — if anything can only be done by automating eBay's
+     own Seller Hub UI rather than through eBay's API (some actions, like
+     end-and-relist, may not have full API coverage — check rather than
+     assume), say so explicitly rather than silently planning it as a
+     straightforward API call
+   - The admin tool — a store-wide utility area separate from the per-build
+     tabs, for anything that isn't scoped to one build. Two rows are known to
+     belong here: the row about tracking real revenue/margin/sell-through
+     numbers, and the row about sourcing title keywords from eBay's own
+     autocomplete and sold-listing titles — both are cross-build utilities,
+     not something that lives on a single build's page. Row numbers may have
+     shifted since this prompt was written, so match by content/description,
+     not by number. Use the same reasoning to place any other row that turns
+     out to be store-wide rather than per-build.
+3. Note dependencies on other rows/features (e.g. the auto-counter-offer
+   engine depends on the minimum-offer field; the price-decay engine depends
+   on the demand-check integration). Use the roadmap's theme column as a
+   signal for which rows likely combine into one coherent feature rather
+   than shipping as disconnected micro-features — e.g. the rows themed
+   "Pricing & Revenue Engine" probably belong together as one pricing
+   system, not eleven separate ones. Don't force a merge where rows are
+   genuinely independent, but don't ship 37 disconnected features where a
+   handful of coherent systems would do the same job better.
+4. Where a genuine open decision remains (see above), propose the default
+   and flag it for one-time confirmation rather than leaving it unresolved.
+
+Then restructure the build details page into tabs: Listing Content, Photos,
+Item Specifics, Pricing, Dispatch & Delivery, Live Listing Management
+(including the deferred listing date/time picker), and Other. Sort every
+per-build item from above — both new playbook features and existing
+components found in step 0 — into the correct tab; sort every store-wide
+item into the admin tool instead of a tab. If something genuinely spans
+tabs, say so rather than forcing it into one. For each build-details tab,
+suggest a suitable icon from a common icon library (e.g. Lucide, since
+that's practical for a real build) that fits its purpose.
+
+Before finalizing, cross-check the plan against the playbook's automation
+roadmap table: confirm every one of the 37 rows is represented somewhere in
+the plan (tab, admin tool, background service, browser extension, or
+integration), and confirm every existing component found in step 0 has a
+home. List anything you couldn't place, with a note explaining why.
+
+If at any point you're missing information needed to place or scope
+something correctly, ask rather than guessing — this only needs to happen
+once, so it's worth getting right.
+
+Deliverable: a single structured plan — a short section up top for anything
+that is NOT page UI (background services, scheduled jobs, external
+integrations), then admin-tool items, then tab-by-tab for everything that
+belongs on the build details page, each item listed with its scope,
+placement, dependencies, and any proposed default from steps 1-4. This is a
+scoping/architecture plan, not code yet.
+
+Once the plan is agreed and implementation is actually carried out (in a
+later session, not as part of producing this plan): every function/automation
+built from this plan must be tested to confirm it actually works before the
+work is considered done. The end state to aim for is all 37 rows in the
+automation roadmap reading as fully automated — don't consider the work
+finished while any of them are silently left half-built. After that testing
+pass, add two new columns to the Algorithm Playbook's automation roadmap
+table:
+- "Status" — whether that row is now fully automated or not (e.g.
+  "Automated" / "Not yet automated" / "Partially automated" with a short
+  note).
+- "Location" — where it actually ended up living, using the same categories
+  used during planning: build details page (name the tab), admin tool,
+  browser extension, background/scheduled service, external integration, or
+  eBay native setting.
+Together these turn the playbook from a static wishlist into a live record
+of what's built, where it lives, and what's still outstanding.

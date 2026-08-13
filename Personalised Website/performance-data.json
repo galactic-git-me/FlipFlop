@@ -1,0 +1,120 @@
+{
+  "meta": {
+    "buildName": "Prometheus",
+    "pageTitle": "Performance",
+    "brandTagline": "Beautiful machines, built to be admired",
+    "verifiedDate": "2026-07-29",
+    "modelLine": "Ryzen 7 7800X3D · RTX 3070 Build",
+    "modelSub": "Tested clean — background apps and services closed for accurate results"
+  },
+  "hero": {
+    "novabenchOverall": 4068,
+    "percentile": 92,
+    "percentileHeadline": "Faster than 92 out of every 100 systems Novabench has ever benchmarked",
+    "percentileSub": "Measured against Novabench's full global results database — not a marketing estimate."
+  },
+  "toolsUsed": ["Novabench", "Cinebench 2026", "Unigine Valley", "CrystalDiskInfo"],
+  "benchmarks": [
+    { "tag": "Cinebench 2026 · CPU Multi", "value": "3098", "unit": "pts", "ctx": "8 cores / 16 threads, full load", "tier": "excellent", "accent": "blue" },
+    { "tag": "Cinebench 2026 · CPU Single", "value": "514", "unit": "pts", "ctx": "Per-core gaming & app responsiveness", "tier": "excellent", "accent": "blue" },
+    { "tag": "Cinebench 2026 · GPU (Redshift)", "value": "37,341", "unit": "pts", "ctx": "Beats AMD Radeon Pro W6800", "tier": "great", "accent": "orange" },
+    { "tag": "Unigine Valley · Extreme HD", "value": "163.4", "unit": "fps", "ctx": "1920×1080, 8×AA — score 6835", "tier": "excellent", "accent": "orange" },
+    { "tag": "Novabench · Memory", "value": "546", "unit": "", "ctx": "43.4 GB/s single-thread transfer", "tier": "great", "accent": "" },
+    { "tag": "Novabench · Storage", "value": "546", "unit": "", "ctx": "6.7 GB/s sequential read", "tier": "excellent", "accent": "" },
+    { "tag": "RAM Speed", "value": "6000", "unit": "MT/s", "ctx": "EXPO enabled, running at full rated speed", "tier": "excellent", "accent": "" }
+  ],
+  "cpuDistribution": {
+    "title": "AMD Ryzen 7 7800X3D · CPU score distribution",
+    "sub": "Where this build's Novabench CPU score (1959) falls among every 7800X3D result ever submitted",
+    "thisScoreLabel": "This build · 1959",
+    "thisScoreX": 502,
+    "axisMax": "2500",
+    "bars": [
+      { "x": 50,  "h": 7,   "y": 153 },
+      { "x": 170, "h": 2,   "y": 158 },
+      { "x": 290, "h": 19,  "y": 141 },
+      { "x": 410, "h": 112, "y": 48  },
+      { "x": 530, "h": 89,  "y": 71  }
+    ],
+    "markerCircleY": 49
+  },
+  "cpuRankChart": {
+    "title": "CPU · vs. common gaming chips",
+    "rows": [
+      { "label": "Ryzen 9 9950X3D",     "index": 110 },
+      { "label": "Ryzen 7 9800X3D",     "index": 108 },
+      { "label": "Ryzen 9 7950X3D",     "index": 101 },
+      { "label": "Core i9-14900K",      "index": 101 },
+      { "label": "7800X3D (this build)","index": 100, "isThisBuild": true },
+      { "label": "Ryzen 9 7900X",       "index": 95 },
+      { "label": "Core i7-14700K",      "index": 95 },
+      { "label": "Core i7-13700K",      "index": 93 },
+      { "label": "Ryzen 7 5800X3D",     "index": 93 },
+      { "label": "Core i5-14600K",      "index": 92 },
+      { "label": "Ryzen 7 7700X",       "index": 90 },
+      { "label": "Core i5-13600K",      "index": 90 },
+      { "label": "Ryzen 5 7600",        "index": 84 },
+      { "label": "Core i5-12400F",      "index": 66 },
+      { "label": "Ryzen 5 5600",        "index": 60 }
+    ]
+  },
+  "gpuRankChart": {
+    "title": "GPU · vs. common cards",
+    "rows": [
+      { "label": "RX 6800 XT",           "index": 128 },
+      { "label": "RTX 3080",             "index": 127 },
+      { "label": "RTX 4070",             "index": 122 },
+      { "label": "RX 6800",              "index": 118 },
+      { "label": "RTX 3070 Ti",          "index": 108 },
+      { "label": "RTX 3070 (this build)","index": 100, "isThisBuild": true },
+      { "label": "RX 6700 XT",           "index": 92 },
+      { "label": "RTX 4060",             "index": 90 },
+      { "label": "RTX 3060 Ti",          "index": 87 },
+      { "label": "RTX 2070 Super",       "index": 78 },
+      { "label": "RTX 3060",             "index": 74 },
+      { "label": "RX 6650 XT",           "index": 70 },
+      { "label": "RX 6600",              "index": 60 },
+      { "label": "RTX 2060",             "index": 55 },
+      { "label": "GTX 1660 Super",       "index": 48 }
+    ]
+  },
+  "rankChartFootnote": "Typical relative gaming performance, indexed to this build = 100. Based on published third-party reviews, not measured on this unit.",
+  "games": [
+    { "name": "Valorant",                 "cover": "assets/covers/valorant.jpg",                "fps": 587, "stars": 5 },
+    { "name": "Fortnite",                 "cover": "assets/covers/fortnite.jpg",                "fps": 368, "stars": 5 },
+    { "name": "Call of Duty: Warzone",    "cover": "assets/covers/call-of-duty-warzone.jpg",    "fps": 198, "stars": 5 },
+    { "name": "Baldur's Gate 3",          "cover": "assets/covers/baldurs-gate-3.jpg",          "fps": 145, "stars": 4.5 },
+    { "name": "Elden Ring",               "cover": "assets/covers/elden-ring.jpg",              "fps": 132, "stars": 4.5 },
+    { "name": "Red Dead Redemption 2",    "cover": "assets/covers/red-dead-redemption-2.jpg",   "fps": 126, "stars": 4.5 },
+    { "name": "Cyberpunk 2077",           "cover": "assets/covers/cyberpunk-2077.jpg",          "fps": 113, "stars": 4.5 }
+  ],
+  "gamesFootnote": "1920×1080 · High settings · Ray tracing off · Estimated from hardware-matched benchmark data (Tom's Hardware, TechPowerUp, NotebookCheck) — actual FPS varies by game version and drivers.",
+  "everyday": [
+    { "name": "4K video editing (Premiere Pro, DaVinci Resolve)", "note": "8 cores + fast NVMe scratch disk keep 4K timelines smooth", "tier": "excellent" },
+    { "name": "Photo editing (Lightroom, Photoshop)", "note": "Class-leading single-core speed accelerates filters & exports", "tier": "excellent" },
+    { "name": "3D rendering & CAD (Blender, Redshift, SolidWorks)", "note": "37,341 Redshift pts of real GPU render headroom", "tier": "great" },
+    { "name": "Streaming while gaming (OBS + game, 1080p60)", "note": "Spare CPU/GPU headroom for simultaneous encode", "tier": "great" },
+    { "name": "Heavy multitasking — 30+ tabs, Discord, Office, Slack", "note": "32GB DDR5-6000 keeps everything responsive at once", "tier": "excellent" },
+    { "name": "Everyday web, email & office work", "note": "This machine is built for far more than browsing and email", "tier": "excellent", "tierLabel": "Overkill" }
+  ],
+  "specs": [
+    { "icon": "cpu",     "label": "Processor",   "value": "AMD Ryzen 7 7800X3D — 8C / 16T, up to 4.6 GHz" },
+    { "icon": "gpu",     "label": "Graphics",    "value": "NVIDIA GeForce RTX 3070, 8GB GDDR6" },
+    { "icon": "ram",     "label": "Memory",      "value": "32GB DDR5-6000, CL36, Dual Channel" },
+    { "icon": "storage", "label": "Storage",     "value": "1TB NVMe SSD (Crucial P3), PCIe 4.0 ×4" },
+    { "icon": "board",   "label": "Motherboard", "value": "ASUS PRIME X870-P, BIOS 1686" },
+    { "icon": "os",      "label": "OS",          "value": "Windows 11 Home (10.0.26200)" }
+  ],
+  "health": {
+    "status": "Good",
+    "powerOnHours": "9,493 hrs",
+    "dataWritten": "195 TB",
+    "tempLoad": "50°C",
+    "driveModel": "CT1000P310SSD2"
+  },
+  "footerNote": "Scores captured with background apps, browsers and dev services closed for a clean, repeatable run. Independently reproducible with the same free tools: Novabench, Cinebench 2026, Unigine Valley, CrystalDiskInfo.",
+  "brand": {
+    "name": "FlipFlop",
+    "url": "theflipflop.shop"
+  }
+}

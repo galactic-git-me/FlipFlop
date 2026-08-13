@@ -9,7 +9,7 @@ from sqlalchemy.orm import selectinload
 from app.database import get_db
 from app.models.flip import Flip, FlipStage
 from app.models.listing import Listing, ListingStatus, Classification
-from app.models.part import Part
+from app.models.part import Part, PartCondition
 from app.models.flip_intelligence import FlipIntelligence
 from app.models.pricing_bias import PricingBias
 from app.schemas.flip import FlipOut, FlipCreate, FlipUpdate
@@ -20,6 +20,7 @@ from app.services import demand_check as demand_check_service
 from app.services import pricing_engine
 from app.services import offer_engine
 from app.services.cpu_tier import extract_cpu_tier
+from app.services.flip_sale_processor import process_flip_sale
 from app.config import get_settings
 import structlog
 
@@ -181,51 +182,30 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     flip = await db.get(Flip, flip_id)
     if not flip:
         raise HTTPException(404, "Flip not found")
+    if flip.stage == FlipStage.sold:
+        raise HTTPException(409, f"Flip #{flip_id} is already marked sold.")
 
-    listing = await db.get(Listing, flip.listing_id)
-    sold_at = datetime.utcnow()
-
-    flip.stage = FlipStage.sold
-    flip.sold_at = sold_at
-    flip.actual_sale_price = body.actual_sale_price
-    flip.sale_platform = body.sale_platform
-    flip.actual_profit = body.actual_sale_price - flip.total_cost - (body.actual_sale_price * flip.platform_fee_pct)
-    if listing:
-        listing.status = ListingStatus.sold
-        listing.sold_at = sold_at
-        listing.classification = Classification.already_flipped
-
-    # Write intelligence record
-    days = (sold_at - flip.created_at).days if flip.created_at else 0
-    roi = (flip.actual_profit / flip.total_cost * 100) if flip.total_cost else 0
-    cpu_tier = extract_cpu_tier(listing.cpu if listing else None)
-
-    case_theme = await _derive_case_theme(flip, db)
-    intel = FlipIntelligence(
-        flip_id=flip.id,
-        source_site=listing.source_name if listing else "unknown",
-        buy_price=listing.price if listing else flip.base_cost,
-        gem_score_at_buy=listing.gem_score if listing else 0,
-        cpu_tier=cpu_tier,
-        had_gpu=bool(listing.gpu) if listing else False,
-        had_storage=bool(listing.storage_gb) if listing else False,
-        ram_gb=listing.ram_gb if listing else None,
-        case_theme=case_theme,
-        upgrade_cost=flip.upgrade_cost,
-        total_cost=flip.total_cost,
-        sell_price=body.actual_sale_price,
-        sell_platform=body.sale_platform,
-        days_to_sell=days,
-        profit=flip.actual_profit,
-        roi_pct=roi,
+    # process_flip_sale centralizes the sold-write + FlipIntelligence record +
+    # flip_resale_detected alert so every detector (this endpoint, the eBay
+    # sales tracker poller, the sold-email monitor) reports a sale the same,
+    # idempotent way — see app/services/flip_sale_processor.py.
+    updated = await process_flip_sale(
+        db,
+        flip,
+        sale_price=body.actual_sale_price,
+        sale_platform=body.sale_platform,
+        source="manual",
     )
-    db.add(intel)
-    await db.flush()
+    if updated is None:
+        raise HTTPException(409, f"Flip #{flip_id} is already marked sold.")
 
     # Row 49: a fast/near-asking sale is an underpriced signal — bias the
     # *next* similar build's (same cpu_tier) initial pricing anchor up,
     # rather than resetting to the same starting point every cycle.
     try:
+        listing = await db.get(Listing, flip.listing_id)
+        cpu_tier = extract_cpu_tier(listing.cpu if listing else None)
+        days = (flip.sold_at - flip.created_at).days if flip.created_at and flip.sold_at else 0
         signal = pricing_engine.bias_from_fast_sale(
             days_to_sell=days, sale_price=body.actual_sale_price, listing_price=flip.listing_price,
         )
@@ -240,19 +220,7 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     except Exception as exc:
         log.warning("flips.pricing_bias.update_failed", flip_id=flip.id, error=str(exc))
 
-    try:
-        await emit_alert(
-            code="flip_resale_detected",
-            source="flips",
-            severity="info",
-            message=(
-                f"Resale detected: Flip #{flip.id} sold on {flip.sale_platform or 'unknown'} "
-                f"with profit £{float(flip.actual_profit or 0.0):.2f}."
-            ),
-        )
-    except Exception as exc:
-        log.warning("flips.alert.emit_failed", code="flip_resale_detected", error=str(exc))
-
+    roi = (flip.actual_profit / flip.total_cost * 100) if flip.total_cost else 0
     return {
         "status": "sold",
         "actual_profit": flip.actual_profit,
@@ -277,12 +245,16 @@ async def get_purchase_plan(flip_id: int, db: AsyncSession = Depends(get_db)):
 
     # Base PC is always first
     if listing:
+        # Listings don't carry separate new/used market comps — only a resale
+        # estimate for the built-up flip — so no market_price here.
         items.append({
             "category": "base_pc",
             "label": "Base PC",
             "name": listing.title,
             "specs": f"{listing.cpu or ''} · {listing.ram_gb or '?'}GB {listing.ram_type or ''} · {listing.gpu or 'No GPU'}".strip(" ·"),
             "price": listing.price,
+            "market_price": None,
+            "variance": None,
             "url": listing.url,
             "source": listing.source_name,
             "part_id": None,
@@ -295,12 +267,25 @@ async def get_purchase_plan(flip_id: int, db: AsyncSession = Depends(get_db)):
             if not part:
                 continue
             price = part.price_used or part.price or 0.0
+
+            # Market price = the comp for whichever condition this part actually is,
+            # since a used part should be judged against used comps, not new RRP.
+            if part.condition == PartCondition.new:
+                market_price = part.price_new
+            elif part.condition == PartCondition.refurb:
+                market_price = part.price_refurb
+            else:
+                market_price = part.price_used
+            variance = (price - market_price) if market_price is not None else None
+
             items.append({
                 "category": category,
                 "label": category.replace("_", " ").title(),
                 "name": part.name,
                 "specs": part.specs or "",
                 "price": price,
+                "market_price": market_price,
+                "variance": variance,
                 "url": part.source_url or "",
                 "source": part.source_site or "",
                 "part_id": part.id,
@@ -309,7 +294,15 @@ async def get_purchase_plan(flip_id: int, db: AsyncSession = Depends(get_db)):
             continue
 
     total = sum(i["price"] for i in items)
-    return {"flip_id": flip_id, "items": items, "total": total}
+    total_market = sum(i["market_price"] for i in items if i["market_price"] is not None)
+    total_variance = sum(i["variance"] for i in items if i["variance"] is not None)
+    return {
+        "flip_id": flip_id,
+        "items": items,
+        "total": total,
+        "total_market": total_market,
+        "total_variance": total_variance,
+    }
 
 
 @router.post("/{flip_id}/compatibility-check")
@@ -678,33 +671,3 @@ async def _recalculate_costs(flip: Flip, db: AsyncSession):
         flip.current_estimated_profit = listing.estimated_resale - flip.total_cost - fees
 
 
-async def _derive_case_theme(flip: Flip, db: AsyncSession) -> str | None:
-    """
-    Resolve case theme from selected upgrades, if a case part is selected.
-    Supports both keyed JSON (e.g. {"case": 123}) and arbitrary value maps.
-    """
-    selected = dict(flip.selected_upgrade_ids or {})
-    if not selected:
-        return None
-
-    candidate_ids: list[int] = []
-    if "case" in selected:
-        try:
-            candidate_ids.append(int(selected["case"]))
-        except Exception as exc:
-            log.warning("flips.case_id.invalid", value=selected.get("case"), error=str(exc))
-    for _, v in selected.items():
-        try:
-            iv = int(v)
-            if iv not in candidate_ids:
-                candidate_ids.append(iv)
-        except Exception:
-            continue
-
-    for part_id in candidate_ids:
-        part = await db.get(Part, part_id)
-        if not part:
-            continue
-        if str(part.category.value) == "case":
-            return (part.theme or part.name or "").strip() or None
-    return None

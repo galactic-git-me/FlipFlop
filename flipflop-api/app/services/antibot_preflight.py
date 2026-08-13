@@ -1,6 +1,7 @@
 from app.services.browser_pool import managed_playwright
 import asyncio
 import os
+import sys
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -17,25 +18,19 @@ _LAST_MESSAGE = "Not run yet"
 _LAST_RUN_AT: str | None = None
 
 CHALLENGE_URLS = [
-    "https://www.facebook.com/marketplace/",
     "https://www.temu.com/",
-    "https://www.alibaba.com/",
-    "https://www.aliexpress.com/",
-    "https://www.gumtree.com/",
-    "https://www.bargainhardware.co.uk/",
 ]
 _GATED_SOURCES = {
-    "Facebook Marketplace",
     "Temu",
-    "AliExpress",
-    "Alibaba",
-    "Gumtree",
 }
 
 
 def _interactive_mode() -> bool:
     enabled = os.getenv("SHOW_SCRAPER_BROWSER", "0").lower() in {"1", "true", "yes"}
-    has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
+    # DISPLAY/WAYLAND_DISPLAY are X11/Wayland-only — a native Windows desktop
+    # session has neither set but still has a real GUI to pop a browser
+    # window into, so treat win32 as always having a display.
+    has_display = sys.platform == "win32" or bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
     has_cdp = bool((os.getenv("BROWSER_CDP_URL", "") or "").strip())
     return enabled and (has_display or has_cdp)
 
@@ -71,7 +66,7 @@ def preflight_status() -> dict:
     return {
         "enabled": os.getenv("ANTI_BOT_PREFLIGHT_ON_STARTUP", "1").lower() in {"1", "true", "yes"},
         "show_scraper_browser": os.getenv("SHOW_SCRAPER_BROWSER", "0"),
-        "has_display": bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY")),
+        "has_display": sys.platform == "win32" or bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY")),
         "interactive_mode": _interactive_mode(),
         "chromium_available": _chromium_available(),
         "running": _RUNNING,

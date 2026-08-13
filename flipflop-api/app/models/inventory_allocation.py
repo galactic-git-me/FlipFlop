@@ -1,15 +1,19 @@
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, ForeignKey, Text
+from sqlalchemy import String, Integer, Float, DateTime, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 
 class InventoryAllocation(Base):
     __tablename__ = "inventory_allocations"
+    __table_args__ = (
+        CheckConstraint("(flip_id IS NOT NULL AND build_id IS NULL) OR (flip_id IS NULL AND build_id IS NOT NULL)", name="ck_exactly_one_target"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     inventory_item_id: Mapped[int] = mapped_column(Integer, ForeignKey("inventory.id", ondelete="CASCADE"), index=True)
-    flip_id: Mapped[int] = mapped_column(Integer, ForeignKey("flips.id", ondelete="CASCADE"), index=True)
+    flip_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("flips.id", ondelete="CASCADE"), index=True, nullable=True)
+    build_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("builds.id", ondelete="CASCADE"), index=True, nullable=True)
 
     quantity_allocated: Mapped[int] = mapped_column(Integer)
     cost_per_unit_at_allocation: Mapped[float] = mapped_column(Float)
@@ -22,6 +26,7 @@ class InventoryAllocation(Base):
     # Relationships
     inventory_item = relationship("InventoryItem", foreign_keys=[inventory_item_id])
     flip = relationship("Flip", foreign_keys=[flip_id])
+    build = relationship("Build", foreign_keys=[build_id])
 
     @property
     def total_allocated_cost(self) -> float:
@@ -29,4 +34,5 @@ class InventoryAllocation(Base):
         return self.cost_per_unit_at_allocation * self.quantity_allocated
 
     def __repr__(self):
-        return f"<InventoryAllocation flip={self.flip_id} inventory={self.inventory_item_id} qty={self.quantity_allocated} £{self.total_allocated_cost}>"
+        target = f"flip={self.flip_id}" if self.flip_id else f"build={self.build_id}"
+        return f"<InventoryAllocation {target} inventory={self.inventory_item_id} qty={self.quantity_allocated} £{self.total_allocated_cost}>"

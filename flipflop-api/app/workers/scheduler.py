@@ -12,10 +12,11 @@ from functools import partial
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app.config import get_settings
-from app.swarms.flip_opportunities import run_flip_opportunities_swarm
-from app.swarms.upgrade_parts import run_upgrade_parts_swarm
-from app.swarms.cases import run_cases_swarm
-from app.swarms.accessories import run_accessories_swarm
+# Disabled: Backend swarms replaced by FlipFlopXtension
+# from app.swarms.flip_opportunities import run_flip_opportunities_swarm
+# from app.swarms.upgrade_parts import run_upgrade_parts_swarm
+# from app.swarms.cases import run_cases_swarm
+# from app.swarms.accessories import run_accessories_swarm
 from app.services.external_demand import ingest_external_demand_signals
 from app.services.playbook_evolution import run_playbook_evolution
 from app.services.autonomous_loop import run_autonomous_cycle
@@ -31,6 +32,10 @@ from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cy
 from app.workers.markdown_event import run_markdown_event_scan_job
 from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
 from app.workers.message_poll import run_message_poll_job
+from app.services.ai_build_generator import generate_ai_builds
+from app.services.email_monitor import EmailMonitor
+from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
+from app.database import get_db
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -38,10 +43,11 @@ settings = get_settings()
 
 _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
-    "flip_opportunities": deque(maxlen=50),
-    "upgrade_parts": deque(maxlen=50),
-    "cases": deque(maxlen=50),
-    "accessories": deque(maxlen=50),
+    # Backend scrapers disabled — replaced by FlipFlopXtension
+    # "flip_opportunities": deque(maxlen=50),
+    # "upgrade_parts": deque(maxlen=50),
+    # "cases": deque(maxlen=50),
+    # "accessories": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous": deque(maxlen=50),
@@ -61,6 +67,9 @@ _job_history: dict[str, deque[dict]] = {
     "offer_poll": deque(maxlen=50),
     "send_to_watchers": deque(maxlen=50),
     "message_poll": deque(maxlen=50),
+    "ai_build_generator": deque(maxlen=50),
+    "email_monitor": deque(maxlen=50),
+    "ebay_sales_tracker": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -198,6 +207,31 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         _running_jobs.discard(job_id)
 
 
+async def run_email_monitor() -> dict:
+    """Wrapper for email monitor job — handles database session creation."""
+    if not settings.email_monitor_enabled:
+        return {"ok": False, "reason": "email_monitor_disabled"}
+
+    try:
+        async for db in get_db():
+            monitor = EmailMonitor()
+            await monitor.run(db)
+        return {"ok": True}
+    except Exception as e:
+        log.error("email_monitor.run_failed", error=str(e))
+        raise
+
+
+async def run_ebay_sales_tracker() -> dict:
+    """Wrapper for the eBay sales poll job — checks every eBay-listed flip
+    against eBay's order API and marks it sold when a paid order appears."""
+    if not settings.ebay_reselling_enabled:
+        return {"ok": False, "reason": "ebay_reselling_disabled"}
+
+    tracker = get_ebay_sales_tracker()
+    return await tracker.poll_sales()
+
+
 def get_scheduler() -> AsyncIOScheduler:
     global _scheduler
     if _scheduler is None:
@@ -209,12 +243,11 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
-    flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
-    # Force a startup seed pass for long-interval catalogues so their term cycles
-    # become active immediately after backend boot.
-    upgrade_start = now
-    cases_start = now
-    accessories_start = now
+    # DISABLED: Backend scraper swarms replaced by FlipFlopXtension
+    # flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
+    # upgrade_start = now
+    # cases_start = now
+    # accessories_start = now
     # Keep startup deterministic: external_demand + playbook_evolution are handled
     # by run_startup_bootstrap(). Delay their scheduled cron jobs (and other hourly
     # analysis jobs) to avoid duplicate/overlapping execution at app boot.
@@ -226,49 +259,54 @@ def start_scheduler():
     retrain_watchdog_start = now + timedelta(hours=1)
     compliant_ingestion_start = now + timedelta(hours=1)
 
-    scheduler.add_job(
-        _run_job_with_history,
-        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
-        id="flip_opportunities",
-        name="Flip Opportunities Swarm",
-        kwargs={"job_id": "flip_opportunities", "fn": partial(run_flip_opportunities_swarm, "main")},
-        replace_existing=True,
-        max_instances=1,
-        next_run_time=flip_next,
-    )
+    # DISABLED: Scraping is handled entirely by FlipFlopXtension (browser extension).
+    # Backend swarms are legacy code — data sourcing was moved to the extension.
+    # Keeping these disabled to avoid duplicate scraping.
+    # Uncomment below if you want to re-enable backend-side scraping.
 
-    scheduler.add_job(
-        _run_job_with_history,
-        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
-        id="upgrade_parts",
-        name="Upgrade Parts Swarm",
-        kwargs={"job_id": "upgrade_parts", "fn": partial(run_upgrade_parts_swarm, "main")},
-        replace_existing=True,
-        max_instances=1,
-        next_run_time=upgrade_start,
-    )
-
-    scheduler.add_job(
-        _run_job_with_history,
-        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
-        id="cases",
-        name="Cases Catalogue Swarm",
-        kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
-        replace_existing=True,
-        max_instances=1,
-        next_run_time=cases_start,
-    )
-
-    scheduler.add_job(
-        _run_job_with_history,
-        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
-        id="accessories",
-        name="Accessories Swarm",
-        kwargs={"job_id": "accessories", "fn": partial(run_accessories_swarm, "main")},
-        replace_existing=True,
-        max_instances=1,
-        next_run_time=accessories_start,
-    )
+    # scheduler.add_job(
+    #     _run_job_with_history,
+    #     trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
+    #     id="flip_opportunities",
+    #     name="Flip Opportunities Swarm",
+    #     kwargs={"job_id": "flip_opportunities", "fn": partial(run_flip_opportunities_swarm, "main")},
+    #     replace_existing=True,
+    #     max_instances=1,
+    #     next_run_time=flip_next,
+    # )
+    #
+    # scheduler.add_job(
+    #     _run_job_with_history,
+    #     trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
+    #     id="upgrade_parts",
+    #     name="Upgrade Parts Swarm",
+    #     kwargs={"job_id": "upgrade_parts", "fn": partial(run_upgrade_parts_swarm, "main")},
+    #     replace_existing=True,
+    #     max_instances=1,
+    #     next_run_time=upgrade_start,
+    # )
+    #
+    # scheduler.add_job(
+    #     _run_job_with_history,
+    #     trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
+    #     id="cases",
+    #     name="Cases Catalogue Swarm",
+    #     kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
+    #     replace_existing=True,
+    #     max_instances=1,
+    #     next_run_time=cases_start,
+    # )
+    #
+    # scheduler.add_job(
+    #     _run_job_with_history,
+    #     trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
+    #     id="accessories",
+    #     name="Accessories Swarm",
+    #     kwargs={"job_id": "accessories", "fn": partial(run_accessories_swarm, "main")},
+    #     replace_existing=True,
+    #     max_instances=1,
+    #     next_run_time=accessories_start,
+    # )
 
     scheduler.add_job(
         _run_job_with_history,
@@ -481,6 +519,44 @@ def start_scheduler():
         max_instances=1,
         next_run_time=now,
     )
+    scheduler.add_job(
+        _run_job_with_history,
+        # Tied to the same configured refresh period as the sourcing swarms
+        # (settings.flip_scan_interval_minutes) rather than a fixed interval,
+        # so tightening/loosening that one setting also speeds up/slows down
+        # how often new AI builds get generated.
+        trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
+        id="ai_build_generator",
+        name="AI-Generated Builds (Gem/Super Gem combos, eBay-validated)",
+        kwargs={"job_id": "ai_build_generator", "fn": generate_ai_builds},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
+    )
+
+    if settings.email_monitor_enabled:
+        scheduler.add_job(
+            _run_job_with_history,
+            trigger=IntervalTrigger(seconds=settings.email_monitor_interval_seconds),
+            id="email_monitor",
+            name="Email Monitor (receipts + sales)",
+            kwargs={"job_id": "email_monitor", "fn": run_email_monitor},
+            replace_existing=True,
+            max_instances=1,
+            next_run_time=now + timedelta(minutes=1),
+        )
+
+    if settings.ebay_reselling_enabled:
+        scheduler.add_job(
+            _run_job_with_history,
+            trigger=IntervalTrigger(seconds=settings.ebay_sales_poll_interval_seconds),
+            id="ebay_sales_tracker",
+            name="eBay Sales Tracker (order API poll)",
+            kwargs={"job_id": "ebay_sales_tracker", "fn": run_ebay_sales_tracker},
+            replace_existing=True,
+            max_instances=1,
+            next_run_time=now + timedelta(minutes=2),
+        )
 
     scheduler.start()
     log.info("scheduler.started", jobs=len(scheduler.get_jobs()))
@@ -488,27 +564,26 @@ def start_scheduler():
 
 async def run_startup_bootstrap() -> dict:
     """
-    One-shot startup bootstrap:
-      1) Run flip opportunities scraper (main data source)
-      2) Skip other swarms on startup to avoid SQLite locking
-      3) Pull external demand (lightweight)
-      4) Run playbook evolution
+    One-shot startup bootstrap (data sourcing disabled — handled by FlipFlopXtension):
+      1) Skip flip opportunities scraper (backend swarms disabled, extension handles sourcing)
+      2) Pull external demand (lightweight)
+      3) Run playbook evolution
     Swarms run sequentially to avoid database locks.
     """
     log.info("startup_bootstrap.start")
 
-    # Run only flip_opportunities on startup to get initial data
-    # Other swarms will run on their scheduled intervals
-    flip_opp = None
-    try:
-        flip_opp = await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "startup"))
-        log.info("startup_bootstrap.flip_opportunities_done", status=flip_opp.get("ok"), listings=flip_opp.get("listings_found", 0))
-    except Exception as e:
-        log.error("startup_bootstrap.flip_opportunities_failed", error=str(e))
-        flip_opp = {"ok": False, "error": str(e)}
+    # DISABLED: Flip opportunities scraper replaced by FlipFlopXtension
+    # flip_opp = None
+    # try:
+    #     flip_opp = await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "startup"))
+    #     log.info("startup_bootstrap.flip_opportunities_done", status=flip_opp.get("ok"), listings=flip_opp.get("listings_found", 0))
+    # except Exception as e:
+    #     log.error("startup_bootstrap.flip_opportunities_failed", error=str(e))
+    #     flip_opp = {"ok": False, "error": str(e)}
 
     # Wait before next job to ensure database is unlocked
-    await asyncio.sleep(2)
+    # await asyncio.sleep(2)
+    flip_opp = None
 
     demand = None
     try:
@@ -547,14 +622,9 @@ def stop_scheduler():
 
 async def trigger_swarm(swarm_id: str) -> dict:
     """Manually trigger a swarm by ID."""
-    if swarm_id == "flip_opportunities":
-        return await _run_job_with_history("flip_opportunities", partial(run_flip_opportunities_swarm, "main"))
-    if swarm_id == "upgrade_parts":
-        return await _run_job_with_history("upgrade_parts", partial(run_upgrade_parts_swarm, "main"))
-    if swarm_id == "cases":
-        return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
-    if swarm_id == "accessories":
-        return await _run_job_with_history("accessories", partial(run_accessories_swarm, "main"))
+    # Backend scrapers disabled — replaced by FlipFlopXtension
+    if swarm_id in ("flip_opportunities", "upgrade_parts", "cases", "accessories"):
+        return {"ok": False, "reason": "Backend scrapers disabled — data sourcing handled by FlipFlopXtension"}
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":
@@ -579,6 +649,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("catalogue_pipeline", run_catalogue_pipeline_job)
     if swarm_id == "catalogue_digest":
         return await _run_job_with_history("catalogue_digest", run_catalogue_digest_job)
+    if swarm_id == "ai_build_generator":
+        return await _run_job_with_history("ai_build_generator", generate_ai_builds)
     raise ValueError(f"Unknown swarm: {swarm_id!r}")
 
 

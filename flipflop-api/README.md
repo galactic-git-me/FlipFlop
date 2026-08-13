@@ -12,8 +12,8 @@ cp .env.example .env
 docker-compose up -d
 ```
 
-API available at `http://localhost:8000`  
-Docs at `http://localhost:8000/docs`
+API available at `http://localhost:4311`  
+Docs at `http://localhost:4311/docs`
 
 ### Option B — Local Python
 
@@ -24,7 +24,7 @@ python -m venv .venv
 .venv\Scripts\activate      # Windows
 source .venv/bin/activate   # Mac/Linux
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+python run_dev.py           # defaults to port 4311 — matches Docker and every consumer's config
 ```
 
 ## AI Setup
@@ -52,7 +52,7 @@ Hermes uses a fallback chain:
 | POST | `/api/chat` | Chat with Hermes |
 | POST | `/api/swarms/{id}/trigger` | Manually trigger a swarm |
 
-Full interactive docs: `http://localhost:8000/docs`
+Full interactive docs: `http://localhost:4311/docs`
 
 ## Swarms
 

@@ -10,7 +10,7 @@ import asyncio
 import random
 import structlog
 from typing import Optional
-from app.services.playwright_scraper import managed_playwright, _make_pw_context
+from app.services.playwright_scraper import managed_playwright, _launch_browser
 
 log = structlog.get_logger(__name__)
 
@@ -62,8 +62,12 @@ async def _search_amazon_term(
 
     async with managed_playwright() as p:
         try:
-            browser, context = await _make_pw_context(p)
-        except Exception as exc:
+            # Bounded: an unresponsive Chromium spawn (resource contention,
+            # AV interference) would otherwise hang this await indefinitely,
+            # which — before per-listing scoring timeouts existed — could
+            # stall an entire scan batch.
+            browser, context = await asyncio.wait_for(_launch_browser(p), timeout=20.0)
+        except (Exception, asyncio.TimeoutError) as exc:
             log.warning("amazon.browser_error", term=term, error=str(exc))
             return []
 
@@ -78,7 +82,7 @@ async def _search_amazon_term(
             await asyncio.sleep(random.uniform(1.5, 2.5))
 
             # JS evaluation to extract results from client-side rendered content
-            raw = await page.evaluate("""() => {
+            raw = await page.evaluate(r"""() => {
                 const out = [];
                 const seen = new Set();
                 document.querySelectorAll('[data-component-type="s-search-result"]').forEach(item => {

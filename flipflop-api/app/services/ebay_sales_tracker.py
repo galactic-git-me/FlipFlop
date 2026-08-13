@@ -1,37 +1,23 @@
 """
-eBay Sales Tracking Service - Monitor sold listings and update flip records.
+eBay Sales Tracking Service - polls eBay's Fulfillment (order) API for each
+Flip that's currently listed on eBay and marks it sold the moment a paid
+order shows up, via app.services.flip_sale_processor.process_flip_sale
+(same idempotent "mark sold + write intelligence + fire flip_resale_detected
+alert" path used by the manual POST /flips/{id}/sold endpoint).
 
-Polls eBay's Sales API periodically to:
-1. Fetch completed/sold listings
-2. Match to FlipFlop flip records
-3. Update actual sale prices & profits
-4. Trigger notifications
+Runs on a schedule via app.workers.scheduler (settings.ebay_sales_poll_interval_seconds).
 """
 
 from __future__ import annotations
 
-import asyncio
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Optional
 import structlog
 
-from sqlalchemy import select, update
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 log = structlog.get_logger(__name__)
-
-
-@dataclass
-class SaleRecord:
-    """A sold eBay listing matched to a flip."""
-    flip_id: int
-    ebay_listing_id: str
-    buyer_id: str
-    sale_price: float
-    sold_at: datetime
-    platform_fee: float
-    actual_profit: float
 
 
 class eBaySalesTracker:
@@ -40,49 +26,27 @@ class eBaySalesTracker:
     """
 
     def __init__(self):
-        self.poll_interval_seconds = 300  # Check every 5 minutes
-        self.max_lookback_hours = 24  # Only look at sales from last 24 hours
-        self._is_running = False
-
-    async def start_polling(self) -> None:
-        """Start background polling for sales."""
-        if self._is_running:
-            log.warning("ebay_sales_tracker.already_running")
-            return
-
-        self._is_running = True
-        log.info("ebay_sales_tracker.started", poll_interval=self.poll_interval_seconds)
-
-        try:
-            while self._is_running:
-                try:
-                    await self.poll_sales()
-                except Exception as e:
-                    log.error("ebay_sales_tracker.poll_error", error=str(e))
-
-                await asyncio.sleep(self.poll_interval_seconds)
-        finally:
-            self._is_running = False
-            log.info("ebay_sales_tracker.stopped")
-
-    async def stop_polling(self) -> None:
-        """Stop background polling."""
-        self._is_running = False
+        self.lookback_days = 90  # how far back to search eBay orders per listing
 
     async def poll_sales(self) -> dict:
         """
-        Poll eBay for recently sold listings and update flip records.
+        Check every eBay-listed, not-yet-sold Flip against eBay's order API
+        and mark it sold if a paid order is found.
 
         Returns:
             Dict with:
-            - found: number of sold listings found
-            - matched: number matched to flips
-            - updated: number of flips updated
-            - sales: list of SaleRecord objects
+            - found: number of eBay-listed flips checked
+            - matched: number with a paid eBay order found
+            - updated: number of flips newly marked sold
+            - sales: list of {flip_id, ebay_listing_id, ebay_order_id, sale_price, actual_profit}
         """
         from app.database import AsyncSessionLocal
         from app.models.flip import Flip, FlipStage
+        from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError
+        from app.services.flip_sale_processor import process_flip_sale
+        from app.config import get_settings
 
+        settings = get_settings()
         result = {
             "found": 0,
             "matched": 0,
@@ -92,35 +56,52 @@ class eBaySalesTracker:
         }
 
         try:
-            # Fetch sold listings from eBay
-            sold_listings = await self._fetch_sold_listings()
-            result["found"] = len(sold_listings)
-
-            if not sold_listings:
-                log.debug("ebay_sales_tracker.no_sales_found")
-                return result
-
-            # Match to flips and update
             async with AsyncSessionLocal() as db:
-                for listing in sold_listings:
-                    flip = await self._match_to_flip(db, listing["listing_id"])
+                query = await db.execute(
+                    select(Flip).where(
+                        Flip.stage == FlipStage.ready_for_sale,
+                        Flip.ebay_listing_id.isnot(None),
+                    )
+                )
+                active_flips = query.scalars().all()
+                result["found"] = len(active_flips)
 
-                    if flip:
-                        result["matched"] += 1
-                        sale_record = await self._update_flip_with_sale(db, flip, listing)
+                for flip in active_flips:
+                    try:
+                        order = await find_order_for_listing(
+                            flip.ebay_listing_id,
+                            environment=settings.ebay_listing_environment,
+                            lookback_days=self.lookback_days,
+                        )
+                    except EbayOrderSyncError as e:
+                        log.warning(
+                            "ebay_sales_tracker.order_lookup_failed",
+                            flip_id=flip.id,
+                            ebay_listing_id=flip.ebay_listing_id,
+                            error=str(e),
+                        )
+                        continue
 
-                        if sale_record:
-                            result["updated"] += 1
-                            result["sales"].append(sale_record)
+                    if order is None:
+                        continue
 
-                            # Log the sale
-                            log.info(
-                                "ebay_sales_tracker.sale_detected",
-                                flip_id=flip.id,
-                                ebay_listing_id=listing["listing_id"],
-                                sale_price=listing["sale_price"],
-                                actual_profit=sale_record.actual_profit,
-                            )
+                    result["matched"] += 1
+                    updated_flip = await process_flip_sale(
+                        db,
+                        flip,
+                        sale_price=order.sale_price,
+                        sale_platform="ebay",
+                        source="ebay_order_api",
+                    )
+                    if updated_flip:
+                        result["updated"] += 1
+                        result["sales"].append({
+                            "flip_id": flip.id,
+                            "ebay_listing_id": flip.ebay_listing_id,
+                            "ebay_order_id": order.order_id,
+                            "sale_price": order.sale_price,
+                            "actual_profit": updated_flip.actual_profit,
+                        })
 
                 await db.commit()
 
@@ -135,107 +116,6 @@ class eBaySalesTracker:
             log.error("ebay_sales_tracker.poll_failed", error=str(e))
 
         return result
-
-    async def _fetch_sold_listings(self) -> list[dict]:
-        """
-        Fetch recently sold listings from eBay API.
-
-        Returns list of dicts with:
-        - listing_id: eBay listing ID
-        - sale_price: final sale price
-        - sold_at: timestamp
-        - buyer_id: eBay buyer ID
-        - fees_paid: platform fees paid
-        """
-        # TODO: Implement eBay GetOrders API call
-        # For now, return empty list (would be populated by real API)
-        # This would call eBay's Trading API or REST API
-
-        # Example implementation structure:
-        # 1. Get eBay auth token from .env
-        # 2. Call GetOrders API with timestamp filter (last 24 hours)
-        # 3. Parse response and return sold listings
-
-        log.debug(
-            "ebay_sales_tracker.fetch_sold_listings",
-            lookback_hours=self.max_lookback_hours,
-        )
-
-        # Placeholder - would be replaced with real API call
-        return []
-
-    async def _match_to_flip(self, db: AsyncSession, ebay_listing_id: str):
-        """
-        Match an eBay listing ID to a flip record.
-
-        Returns the Flip if found, None otherwise.
-        """
-        from app.models.flip import Flip
-
-        result = await db.execute(
-            select(Flip).where(Flip.ebay_listing_id == ebay_listing_id)
-        )
-        flip = result.scalar_one_or_none()
-
-        if not flip:
-            log.debug(
-                "ebay_sales_tracker.flip_not_found",
-                ebay_listing_id=ebay_listing_id,
-            )
-
-        return flip
-
-    async def _update_flip_with_sale(
-        self, db: AsyncSession, flip, sale_listing: dict
-    ) -> Optional[SaleRecord]:
-        """
-        Update a flip record with actual sale data.
-
-        Returns SaleRecord if successful, None otherwise.
-        """
-        from app.models.flip import Flip, FlipStage
-
-        try:
-            sale_price = float(sale_listing["sale_price"])
-            platform_fee = float(sale_listing.get("fees_paid", 0))
-            actual_profit = sale_price - flip.total_cost - platform_fee
-
-            # Update flip with sale data
-            flip.actual_sale_price = sale_price
-            flip.actual_profit = actual_profit
-            flip.sale_platform = "ebay"
-            flip.sold_at = sale_listing.get("sold_at", datetime.utcnow())
-            flip.stage = FlipStage.sold
-            flip.actual_selling_fee = platform_fee
-
-            await db.flush()
-            await db.refresh(flip)
-
-            sale_record = SaleRecord(
-                flip_id=flip.id,
-                ebay_listing_id=flip.ebay_listing_id,
-                buyer_id=sale_listing.get("buyer_id", "unknown"),
-                sale_price=sale_price,
-                sold_at=flip.sold_at,
-                platform_fee=platform_fee,
-                actual_profit=actual_profit,
-            )
-
-            log.info(
-                "ebay_sales_tracker.flip_updated",
-                flip_id=flip.id,
-                actual_profit=actual_profit,
-            )
-
-            return sale_record
-
-        except Exception as e:
-            log.error(
-                "ebay_sales_tracker.update_failed",
-                flip_id=flip.id,
-                error=str(e),
-            )
-            return None
 
     async def get_active_sales(self, db: AsyncSession, limit: int = 50) -> list[dict]:
         """
@@ -406,13 +286,3 @@ def get_tracker() -> eBaySalesTracker:
     if _tracker is None:
         _tracker = eBaySalesTracker()
     return _tracker
-
-
-def start_sales_polling() -> None:
-    """Start background sales polling."""
-    tracker = get_tracker()
-    # Schedule as background task in app startup
-    import asyncio
-
-    asyncio.create_task(tracker.start_polling())
-    log.info("ebay_sales_tracker.polling_scheduled")

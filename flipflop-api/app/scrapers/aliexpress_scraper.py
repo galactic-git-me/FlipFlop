@@ -78,7 +78,7 @@ async def _search_aliexpress_term(
             await asyncio.sleep(random.uniform(1.5, 2.5))
 
             # JS evaluation to extract results from client-side rendered content
-            raw = await page.evaluate("""() => {
+            raw = await page.evaluate(r"""() => {
                 const out = [];
                 const seen = new Set();
                 document.querySelectorAll('[data-testid="organic-list-offer"]').forEach(item => {

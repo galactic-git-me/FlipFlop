@@ -1,141 +1,28 @@
-version: '3.9'
-
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:16-alpine
-    container_name: flipflop-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: flipflop
-      POSTGRES_USER: ${DB_USER:-flipper}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-flipper}
+  # Ollama - GPU-accelerated LLM service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: flipflop-ollama
     ports:
-      - "5432:5432"
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_KEEP_ALIVE=-1
+      - CUDA_VISIBLE_DEVICES=0
+      - OLLAMA_NUM_PARALLEL=4
+      - OLLAMA_MAX_LOADED_MODELS=1
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ollama_data:/root/.ollama
+    restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U flipper -d flipflop"]
+      test: ["CMD", "ollama", "list"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 40s
-    networks:
-      - flipflop-network
-
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: flipflop-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 40s
-    networks:
-      - flipflop-network
-
-  # FastAPI Backend
-  api:
-    build:
-      context: ./flipflop-api
-      dockerfile: Dockerfile
-    container_name: flipflop-api
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env.local
-    environment:
-      ENVIRONMENT: ${ENVIRONMENT:-development}
-      DATABASE_URL: postgresql+asyncpg://${DB_USER:-flipper}:${DB_PASSWORD:-flipper}@postgres:5432/flipflop
-      REDIS_URL: redis://redis:6379/0
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
-      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
-      API_URL: ${API_URL:-http://localhost:8000}
-      HOST: 0.0.0.0
-      PORT: 8000
-      WORKERS: ${WORKERS:-4}
-      LOG_LEVEL: ${LOG_LEVEL:-info}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - flipflop-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  # Next.js Storefront
-  storefront:
-    build:
-      context: ./flipflop-storefront
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
-    container_name: flipflop-storefront
-    restart: unless-stopped
-    depends_on:
-      - api
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: ${ENVIRONMENT:-development}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
       start_period: 60s
-    networks:
-      - flipflop-network
-
-  # Next.js Admin Dashboard
-  admin:
-    build:
-      context: ./flipflop-admin
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
-    container_name: flipflop-admin
-    restart: unless-stopped
-    depends_on:
-      - api
-    ports:
-      - "3001:3001"
-    environment:
-      NODE_ENV: ${ENVIRONMENT:-development}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    networks:
-      - flipflop-network
+    entrypoint: /bin/sh
+    command: -c "ollama serve & sleep 10 && ollama pull qwen2:7b && wait"
 
 volumes:
-  postgres_data:
+  ollama_data:
     driver: local
-  redis_data:
-    driver: local
-
-networks:
-  flipflop-network:
-    driver: bridge

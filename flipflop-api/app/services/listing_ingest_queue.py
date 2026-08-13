@@ -28,8 +28,8 @@ log = structlog.get_logger(__name__)
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-DEFAULT_WORKERS   = 4
-MAX_QUEUE_SIZE    = 5_000   # back-pressure: scrapers get warned if exceeded
+DEFAULT_WORKERS   = 16         # 4x workers to prevent queue buildup
+MAX_QUEUE_SIZE    = 25_000    # 5x larger queue for burst scraping
 
 # ─── Queue item ───────────────────────────────────────────────────────────────
 

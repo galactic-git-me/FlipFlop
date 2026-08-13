@@ -335,6 +335,30 @@ export default function SchedulePage() {
     }
   };
 
+  /* run all enabled jobs */
+  const runAllJobs = async () => {
+    const enabledJobs = jobs.filter(j => j.enabled);
+    if (enabledJobs.length === 0) {
+      setAutoCycleMessage({ type: "error", text: "No jobs enabled to run." });
+      setTimeout(() => setAutoCycleMessage(null), 3000);
+      return;
+    }
+
+    setTriggeringAutoCycle(true);
+    try {
+      for (const job of enabledJobs) {
+        await runNow(job.id);
+      }
+      setAutoCycleMessage({ type: "success", text: `Triggered ${enabledJobs.length} jobs successfully.` });
+      setTimeout(() => setAutoCycleMessage(null), 2500);
+    } catch {
+      setAutoCycleMessage({ type: "error", text: "Failed to run all jobs. Check logs." });
+      setTimeout(() => setAutoCycleMessage(null), 3000);
+    } finally {
+      setTriggeringAutoCycle(false);
+    }
+  };
+
   /* expand / fetch run history */
   const toggleExpand = async (id: string) => {
     if (expanded === id) { setExpanded(null); return; }

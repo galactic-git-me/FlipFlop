@@ -25,13 +25,39 @@ class ParsedSpecs:
 
 
 CPU_PATTERNS = [
+    # Intel Core Ultra (the newest naming scheme, replacing "Core iX" for
+    # Meteor Lake/Arrow Lake — "Core Ultra 5 245KF", "Core Ultra 9 285K")
+    # must be checked before the legacy "Core iX" pattern below, since a
+    # listing can contain both "Core" and "Ultra" and the older pattern's
+    # `core\s+` group would otherwise still be present without matching the
+    # actual model number.
+    r"(intel\s+)?core\s+ultra\s+[3579]\s+\d{3}[a-z]*",
     # Intel Core
     r"(intel\s+)?(core\s+)?(i[3579][-\s]?\d{4,5}[a-z]*)",
     r"(intel\s+)?(pentium|celeron)\s+[a-z]?\d{4}",
-    r"(intel\s+)?(xeon\s+[a-z]?\d[-\s]?\w+)",
-    # AMD Ryzen
-    r"(amd\s+)?(ryzen\s+[3579]\s+\d{4}[a-z]*)",
-    r"(amd\s+)?(athlon|fx)\s+\d+",
+    # Xeon — the pattern used to require the model code directly after
+    # "xeon", but sampled titles often insert "Core" in between ("Xeon Core
+    # W3680"); `(?:core\s+)?` makes that optional without weakening the
+    # match for the far more common "Xeon E5-2680" / "Xeon W-2295" phrasing.
+    r"(intel\s+)?(xeon\s+(?:core\s+)?[a-z]?\d[-\s]?\w+)",
+    # AMD Ryzen. Suffix was `[a-z]*` (letters only), which truncated the X3D
+    # (3D V-Cache) variant down to just "X" — "7800X3D" and "7800X" are
+    # different, differently-priced products, but the regex silently
+    # treated them as the same model. Try the literal "x3d" suffix first,
+    # falling back to a plain letter-run for every other suffix (X, G, GE,
+    # etc.) — same coverage as before for everything that isn't X3D.
+    # `(?:pro\s+)?` accounts for the Ryzen PRO line ("Ryzen 7 Pro 4750G"),
+    # which otherwise breaks the tight tier-number -> model-number adjacency
+    # this pattern relies on.
+    r"(amd\s+)?(ryzen\s+[3579]\s+(?:pro\s+)?\d{4}(?:x3d|[a-z]+)?)",
+    # AMD Threadripper (HEDT line — "Threadripper 2970WX", "Threadripper
+    # PRO 5995WX") has no single-digit tier number like Ryzen, so it needs
+    # its own pattern rather than an extension of the one above.
+    r"(amd\s+)?threadripper\s*(?:pro\s*)?\d{4}[a-z]*",
+    # FX-series historically used a hyphen ("FX-8350"), which the previous
+    # `\s+` (whitespace-only) requirement never matched — same bug class as
+    # the AM4/AM3+ CPU-model hyphen gaps found elsewhere in this pipeline.
+    r"(amd\s+)?(athlon|fx)[-\s]+\d+",
 ]
 
 GPU_PATTERNS = [
@@ -43,6 +69,11 @@ GPU_PATTERNS = [
     r"(radeon\s+[a-z]+\s*\d+(?:\s*xt)?)",
     r"(quadro\s+[a-z]?\d+)",
     r"(arc\s+[ab]\d{3}(?:\s*\d+gb)?)",                                # Intel Arc A380, B580
+    # Older/entry-level NVIDIA GeForce GT-series (no X) — GT 710, GT 1030.
+    # Safe from colliding with the GTX pattern above (tried first anyway):
+    # "gt" here must be followed directly by whitespace/digits, which can
+    # never happen in "GTX 3060" since the literal "x" sits in between.
+    r"(\bgt\s*\d{3,4}(?:\s*\d+gb)?)",
 ]
 
 RAM_PATTERN = r"(\d+)\s*gb\s*(ddr[345]?(?:-?\d+)?|lpddr\d?)?\s*(ram|memory|dimm|ecc)?"

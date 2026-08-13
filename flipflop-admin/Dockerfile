@@ -1,26 +1,19 @@
-FROM node:20-alpine AS deps
+FROM node:20-alpine
+
 WORKDIR /app
-COPY package*.json ./
+
+ENV NODE_ENV=development
+ENV BACKEND_URL=http://backend:4311
+ENV NEXT_PUBLIC_API_URL=http://localhost:4311
+
+COPY package.json package-lock.json ./
 RUN npm ci
 
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ARG NEXT_PUBLIC_API_URL=/api
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ARG BACKEND_URL=http://backend:8000
-ENV BACKEND_URL=$BACKEND_URL
-RUN npm run build
-
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
-COPY --from=deps /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start", "--", "-p", "3000", "-H", "0.0.0.0"]
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=30s \
+    CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
+
+CMD ["npm", "run", "dev"]

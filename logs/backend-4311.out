@@ -1,0 +1,204 @@
+C:\Users\mclar\CODING\FlipFlop\flipflop-api\app\routes\gems.py:84: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+  risk_level: Optional[str] = Query(None, regex="^(low|medium|high)$"),
+INFO:     Started server process [49028]
+INFO:     Waiting for application startup.
+2026-08-02 01:08:10 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
+2026-08-02 01:08:10 [info     ] app.startup                    app_env=dev event_loop_type=ProactorEventLoop
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=resale_low table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=resale_high table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=resale_comp_count table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=listing_type table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=listing_ends_at table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=expected_buy_price table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=seller_name table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=seller_feedback_count table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=seller_feedback_pct table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=seller_type table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=seller_has_shop table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=listed_at table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=deprecated_at table=playbooks
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=flip_count table=playbooks
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=avg_profit_gbp table=playbooks
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=conversion_rate table=playbooks
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=proposed_data table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=reason table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=demand_signals table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=rejection_reason table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=proposed_at table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=resolved_at table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=resolved_by table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=image_url table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=image_url table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=search_run_id table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=search_query table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=source table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=canonical_model_id table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=gem_radar_scan_interval_minutes table=app_settings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=gem_radar_consecutive_misses_before_inactive table=app_settings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=gem_radar_scrape_artifacts_hours table=app_settings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=gem_radar_preserve_watched_evidence table=app_settings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=playbook_match table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=demand_fit table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=dedupe_fingerprint table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=upsell_strategy table=playbooks
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_verdict table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_flipability_score table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_expected_profit table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_roi table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_confidence table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_capital_efficiency table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_resale_demand table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_upgrade_complexity table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_reasoning table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_main_risk table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_judged_at table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=spec_fingerprint table=listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_verdict table=parts
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_reasoning table=parts
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_confidence table=parts
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=claude_judged_at table=parts
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=condition table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=search_run_id table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=category table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=source table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=release_year table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=epid table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=epid table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=url table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=status table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=generated_title table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=generated_description table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=ebay_listing_id table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=ebay_listing_url table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=photos table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=hero_photo_url table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=storefront_product_id table=manual_builds
+2026-08-02 01:08:10 [debug    ] migration.column_ensured       column=manual_build_id table=builds
+2026-08-02 01:08:10 [debug    ] migration.constraint_relaxed   column=playbook_id table=playbook_proposals
+2026-08-02 01:08:10 [debug    ] migration.index_ensured        column=epid table=gem_radar_scored_listings
+2026-08-02 01:08:10 [debug    ] migration.index_ensured        column=epid table=gem_radar_listing_observations
+2026-08-02 01:08:10 [debug    ] migration.enum_value_ensured   type=partcategory value=cooler
+2026-08-02 01:08:10 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-08-02 01:08:10 [info     ] listing_ingest_queue.started   max_queue=5000 workers=4
+2026-08-02 01:08:10 [info     ] claude_eval_queue.started      workers=6
+2026-08-02 01:08:10 [info     ] part_gem_eval_queue.started    workers=2
+2026-08-02 01:08:10 [info     ] scheduler.started              jobs=15
+2026-08-02 01:08:10 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor running
+2026-08-02 01:08:10 [debug    ] listing_ingest_queue.worker_ready worker=0
+2026-08-02 01:08:10 [debug    ] listing_ingest_queue.worker_ready worker=1
+2026-08-02 01:08:10 [debug    ] listing_ingest_queue.worker_ready worker=2
+2026-08-02 01:08:10 [debug    ] listing_ingest_queue.worker_ready worker=3
+2026-08-02 01:08:10 [debug    ] claude_eval_queue.worker_ready worker=0
+2026-08-02 01:08:10 [debug    ] part_gem_eval_queue.worker_ready worker=0
+2026-08-02 01:08:10 [info     ] queue_processor.started        interval_seconds=5
+INFO:     Application startup complete.
+2026-08-02 01:08:10 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-08-02 01:08:10 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-08-02 01:08:10 [info     ] ram_watcher.done               checked=0 deals=0
+INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53282 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55540 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+Recovered 8 stuck 'processing' submissions: [1, 5, 2, 7, 15, 9, 13, 12]
+2026-08-02 01:08:11 [warning  ] queue_processor.recovered_stuck_submissions count=8
+2026-08-02 01:08:11 [info     ] queue_processor.stats          completed=20 failed=0 pending=856 processing=0
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=90 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=1
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=93 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=2
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=48 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=5
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=40 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=7
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=78 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=9
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=78 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=12
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=20 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=13
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=6 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=15
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=88 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain submission_id=17
+2026-08-02 01:08:11 [info     ] queue_processor.processing_submission n_listings=40 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster submission_id=18
+INFO:     127.0.0.1:53282 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55540 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-02 01:08:11 [info     ] diag.scan.dedup_done           deduped=6 deduplicated_count=0 elapsed_s=0.1 excluded_auction_count=0
+2026-08-02 01:08:11 [info     ] diag.scan.batch_price_index_skipped elapsed_s=0.1
+2026-08-02 01:08:11 [info     ] diag.scan.cheap_scoring_done   elapsed_s=0.3 n=6
+2026-08-02 01:08:11 [info     ] diag.scan.vision_candidates    elapsed_s=0.3 n=0
+2026-08-02 01:08:11 [info     ] diag.scan.deep_research_start  elapsed_s=0.3 n=1
+2026-08-02 01:08:11 [info     ] diag.scan.dedup_done           deduped=20 deduplicated_count=0 elapsed_s=0.5 excluded_auction_count=0
+2026-08-02 01:08:11 [info     ] diag.scan.batch_price_index_skipped elapsed_s=0.5
+2026-08-02 01:08:11 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:12 [info     ] diag.scan.cheap_scoring_done   elapsed_s=0.8 n=20
+2026-08-02 01:08:12 [info     ] diag.scan.vision_candidates    elapsed_s=0.8 n=1
+2026-08-02 01:08:12 [info     ] diag.scan.dedup_done           deduped=40 deduplicated_count=0 elapsed_s=1.3 excluded_auction_count=0
+2026-08-02 01:08:12 [info     ] diag.scan.batch_price_index_skipped elapsed_s=1.3
+2026-08-02 01:08:12 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:12 [info     ] diag.scan.dedup_done           deduped=22 deduplicated_count=18 elapsed_s=1.4 excluded_auction_count=0
+2026-08-02 01:08:12 [info     ] diag.scan.batch_price_index_skipped elapsed_s=1.4
+2026-08-02 01:08:12 [info     ] diag.score_one.progress        batch_elapsed_s=0.2 deep_research=False done=25 service_s=0.0 total=40 wait_s=0.1
+2026-08-02 01:08:12 [info     ] diag.scan.cheap_scoring_done   elapsed_s=1.4 n=40
+2026-08-02 01:08:12 [info     ] diag.scan.vision_candidates    elapsed_s=1.4 n=0
+2026-08-02 01:08:12 [info     ] diag.scan.deep_research_start  elapsed_s=1.4 n=9
+2026-08-02 01:08:13 [info     ] diag.scan.cheap_scoring_done   elapsed_s=2.4 n=22
+2026-08-02 01:08:13 [info     ] diag.scan.vision_candidates    elapsed_s=2.4 n=0
+2026-08-02 01:08:13 [info     ] diag.scan.deep_research_start  elapsed_s=2.4 n=2
+2026-08-02 01:08:14 [info     ] diag.scan.dedup_done           deduped=48 deduplicated_count=0 elapsed_s=3.2 excluded_auction_count=0
+2026-08-02 01:08:14 [info     ] diag.scan.batch_price_index_skipped elapsed_s=3.2
+2026-08-02 01:08:14 [info     ] diag.score_one.progress        batch_elapsed_s=0.1 deep_research=False done=25 service_s=0.0 total=48 wait_s=0.0
+2026-08-02 01:08:14 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:14 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:14 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:14 [info     ] diag.scan.cheap_scoring_done   elapsed_s=3.3 n=48
+2026-08-02 01:08:14 [info     ] diag.scan.vision_candidates    elapsed_s=3.3 n=0
+2026-08-02 01:08:14 [info     ] diag.scan.deep_research_start  elapsed_s=3.3 n=8
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [debug    ] claude_eval_queue.worker_ready worker=1
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:15 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [info     ] diag.scan.dedup_done           deduped=78 deduplicated_count=0 elapsed_s=4.8 excluded_auction_count=0
+2026-08-02 01:08:16 [info     ] diag.scan.batch_price_index_skipped elapsed_s=4.8
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [info     ] diag.scan.dedup_done           deduped=78 deduplicated_count=0 elapsed_s=4.8 excluded_auction_count=0
+2026-08-02 01:08:16 [info     ] diag.scan.batch_price_index_skipped elapsed_s=4.8
+2026-08-02 01:08:16 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.1 deep_research=False done=25 service_s=0.0 total=78 wait_s=0.1
+2026-08-02 01:08:16 [info     ] diag.scan.dedup_done           deduped=88 deduplicated_count=0 elapsed_s=4.9 excluded_auction_count=0
+2026-08-02 01:08:16 [info     ] diag.scan.batch_price_index_skipped elapsed_s=4.9
+2026-08-02 01:08:16 [info     ] diag.scan.dedup_done           deduped=90 deduplicated_count=0 elapsed_s=4.9 excluded_auction_count=0
+2026-08-02 01:08:16 [info     ] diag.scan.batch_price_index_skipped elapsed_s=4.9
+2026-08-02 01:08:16 [info     ] diag.scan.dedup_done           deduped=93 deduplicated_count=0 elapsed_s=4.9 excluded_auction_count=0
+2026-08-02 01:08:16 [info     ] diag.scan.batch_price_index_skipped elapsed_s=4.9
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.1 deep_research=False done=50 service_s=0.0 total=78 wait_s=0.1
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.2 deep_research=False done=75 service_s=0.0 total=78 wait_s=0.2
+2026-08-02 01:08:16 [info     ] diag.scan.cheap_scoring_done   elapsed_s=5.0 n=78
+2026-08-02 01:08:16 [info     ] diag.scan.vision_candidates    elapsed_s=5.0 n=1
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.3 deep_research=False done=25 service_s=0.0 total=78 wait_s=0.3
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.4 deep_research=False done=50 service_s=0.0 total=78 wait_s=0.4
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.4 deep_research=False done=75 service_s=0.0 total=78 wait_s=0.4
+2026-08-02 01:08:16 [info     ] diag.scan.cheap_scoring_done   elapsed_s=5.2 n=78
+2026-08-02 01:08:16 [info     ] diag.scan.vision_candidates    elapsed_s=5.2 n=4
+2026-08-02 01:08:16 [info     ] diag.score_one.progress        batch_elapsed_s=0.6 deep_research=False done=25 service_s=0.0 total=88 wait_s=0.5
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.0 deep_research=False done=50 service_s=0.2 total=88 wait_s=0.8
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.0 deep_research=False done=75 service_s=0.0 total=88 wait_s=1.0
+2026-08-02 01:08:17 [info     ] diag.scan.cheap_scoring_done   elapsed_s=5.9 n=88
+2026-08-02 01:08:17 [info     ] diag.scan.vision_candidates    elapsed_s=5.9 n=2
+2026-08-02 01:08:17 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.2 deep_research=False done=25 service_s=0.0 total=90 wait_s=1.2
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.2 deep_research=False done=50 service_s=0.0 total=90 wait_s=1.2
+2026-08-02 01:08:17 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.3 deep_research=False done=75 service_s=0.0 total=90 wait_s=1.3
+2026-08-02 01:08:17 [info     ] diag.scan.cheap_scoring_done   elapsed_s=6.4 n=90
+2026-08-02 01:08:17 [info     ] diag.scan.vision_candidates    elapsed_s=6.4 n=5
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.7 deep_research=False done=25 service_s=0.0 total=93 wait_s=1.7
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.7 deep_research=False done=50 service_s=0.0 total=93 wait_s=1.7
+2026-08-02 01:08:17 [info     ] diag.score_one.progress        batch_elapsed_s=1.8 deep_research=False done=75 service_s=0.0 total=93 wait_s=1.8
+2026-08-02 01:08:17 [info     ] diag.scan.cheap_scoring_done   elapsed_s=6.7 n=93
+2026-08-02 01:08:17 [info     ] diag.scan.vision_candidates    elapsed_s=6.7 n=0
+2026-08-02 01:08:17 [info     ] diag.scan.deep_research_start  elapsed_s=6.7 n=1
+2026-08-02 01:08:18 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:18 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0
+2026-08-02 01:08:18 [warning  ] gem_radar.claude_screening.openrouter_rate_limited attempt=0

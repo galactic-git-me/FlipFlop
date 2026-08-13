@@ -106,7 +106,7 @@ async def get_live_prices_for_category(
         used_median = ebay_data.get("used_median")
         used_cheapest = ebay_data.get("used_cheapest")
 
-        # 2. Search all sources for this component (with 60s timeout)
+        # 2. Search all sources for this component (with 15s timeout — fail fast)
         all_source_listings = []
         if include_all_sources:
             try:
@@ -116,7 +116,7 @@ async def get_live_prices_for_category(
                         min_price=_CATEGORY_MIN_PRICE.get(category, 15.0),
                         max_price=_COMPONENT_SEARCH_MAX_PRICE,
                     ),
-                    timeout=60.0,
+                    timeout=15.0,
                 )
             except asyncio.TimeoutError:
                 log.warning("live_prices.multi_source_timeout", model=model_name)

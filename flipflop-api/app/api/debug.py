@@ -16,6 +16,8 @@ These endpoints are read-only and never modify the database.
 
 from fastapi import APIRouter, Query
 from app.services.resale_scraper import get_resale_audit, SoldComp, ResaleAudit
+from app.database import AsyncSessionLocal
+from app.services.submission_queue_service import SubmissionQueueService
 
 router = APIRouter(prefix="/debug", tags=["debug"])
 
@@ -89,3 +91,18 @@ async def debug_resale(
         "sanity_verdict":      audit.sanity_verdict or None,
         "sanity_explanation":  audit.sanity_explanation or None,
     }
+
+
+@router.post("/queue-recovery")
+async def recover_stuck_submissions():
+    """
+    Manually recover submissions stuck in 'processing' state.
+    Resets them to 'pending' so the queue processor can retry them.
+    """
+    async with AsyncSessionLocal() as db:
+        count = await SubmissionQueueService.recover_stuck_processing(db)
+        return {
+            "status": "ok",
+            "recovered": count,
+            "message": f"Recovered {count} stuck submissions back to pending state"
+        }

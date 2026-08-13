@@ -368,11 +368,19 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
     name: string;
     specs: string;
     price: number;
+    market_price: number | null;
+    variance: number | null;
     url: string;
     source: string;
     part_id: number | null;
   };
-  type PurchasePlan = { flip_id: number; items: PurchaseItem[]; total: number };
+  type PurchasePlan = {
+    flip_id: number;
+    items: PurchaseItem[];
+    total: number;
+    total_market: number;
+    total_variance: number;
+  };
   const [purchasePlan, setPurchasePlan] = useState<PurchasePlan | null>(null);
   const [purchased, setPurchased] = useState<Set<string>>(new Set());
   const [loadingPlan, setLoadingPlan] = useState(false);
@@ -818,6 +826,25 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
                         <span className="text-xs font-mono text-slate-400">
                           £{item.price.toFixed(0)}
                         </span>
+                        {item.market_price !== null && (
+                          <span className="text-[11px] font-mono text-slate-600">
+                            market £{item.market_price.toFixed(0)}
+                          </span>
+                        )}
+                        {item.variance !== null && (
+                          <span
+                            className={`text-[11px] font-mono font-semibold ${
+                              item.variance > 0
+                                ? "text-rose-400"
+                                : item.variance < 0
+                                  ? "text-emerald-400"
+                                  : "text-slate-500"
+                            }`}
+                          >
+                            {item.variance > 0 ? "+" : ""}
+                            £{item.variance.toFixed(0)}
+                          </span>
+                        )}
                       </div>
                       <p className={`text-sm font-medium mt-0.5 ${done ? "text-slate-500 line-through" : "text-slate-200"}`}>
                         {item.name}
@@ -841,11 +868,34 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
                 );
               })}
 
-              <div className="flex justify-between items-center pt-2 border-t border-slate-800">
-                <span className="text-xs text-slate-500">Total spend</span>
-                <span className="text-sm font-mono font-bold text-slate-200">
-                  £{purchasePlan.total.toFixed(0)}
-                </span>
+              <div className="flex flex-col gap-1 pt-2 border-t border-slate-800">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-500">Total spend</span>
+                  <span className="text-sm font-mono font-bold text-slate-200">
+                    £{purchasePlan.total.toFixed(0)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-500">Total market</span>
+                  <span className="text-sm font-mono font-bold text-slate-400">
+                    £{purchasePlan.total_market.toFixed(0)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-500">Total variance</span>
+                  <span
+                    className={`text-sm font-mono font-bold ${
+                      purchasePlan.total_variance > 0
+                        ? "text-rose-400"
+                        : purchasePlan.total_variance < 0
+                          ? "text-emerald-400"
+                          : "text-slate-200"
+                    }`}
+                  >
+                    {purchasePlan.total_variance > 0 ? "+" : ""}
+                    £{purchasePlan.total_variance.toFixed(0)}
+                  </span>
+                </div>
               </div>
             </div>
           )}

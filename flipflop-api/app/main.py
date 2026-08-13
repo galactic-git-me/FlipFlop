@@ -3,6 +3,20 @@ import asyncio
 import os
 import sys
 
+# Windows' console defaults to cp1252, which crashes on emoji/unicode in log
+# output (e.g. AI-generated listing descriptions). Force UTF-8 before any
+# logging happens.
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+# Load .env files FIRST, before any config imports
+from pathlib import Path
+from dotenv import load_dotenv
+_app_dir = Path(__file__).parent.parent
+load_dotenv(_app_dir / ".env")
+load_dotenv(_app_dir / ".env.local")
+
 # Playwright requires ProactorEventLoop on Windows to launch browser subprocesses.
 # Must be set before any asyncio usage.
 if sys.platform == "win32":
@@ -21,8 +35,10 @@ from app import models as _models  # noqa: F401  Ensures all ORM models are regi
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
-from app.api import alerts, reselling, ebay_listings
+from app.api import alerts, reselling, ebay_listings, favourites
 from app.api.orders import router as orders_router, admin_router as orders_admin_router
+from app.api.drafts import router as drafts_router
+from app.api.build_comparison import router as build_comparison_router
 from app.api.ram_watch import router as ram_watch_router
 from app.api import ebay_compliance
 from app.api import preflight
@@ -30,12 +46,24 @@ from app.api import performance as performance_api
 from app.api import ebay_oauth as ebay_oauth_api
 from app.api.build_wizard import router as build_wizard_router
 from app.api.manual_builds import router as manual_builds_router
+from app.api.pc_builder import router as pc_builder_router
+from app.api.build_stage_items import router as build_stage_items_router
 from app.api.facebook import router as facebook_router
 from app.api.benchmarks import router as benchmarks_router
 from app.api.companion import router as companion_router
 from app.api.price_benchmarks import router as price_benchmarks_router
 from app.api.catalogue import router as catalogue_router
+from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
+from app.api.public_configurator import router as public_configurator_router
+from app.api.public_products import router as public_products_router
+from app.api.public_showcase import router as public_showcase_router
+from app.api.public_reviews import router as public_reviews_router
+from app.api.public_social_proof import router as public_social_proof_router
+from app.api.assets_admin import router as assets_admin_router
+from app.api.gem_radar import router as gem_radar_router
+from app.api.margin_verification import router as margin_verification_router
+from app.api.builds_pricing import router as builds_pricing_router
 from app.routes.auth import router as auth_router
 from app.routes.oauth import router as oauth_router
 from app.routes.quotes import router as quotes_router
@@ -44,6 +72,8 @@ from app.routes.webhooks import router as webhooks_router
 from app.routes.guides import router as guides_router
 from app.routes.admin import router as admin_router
 from app.routes.gems import router as gems_router
+from app.routes.admin_auth import router as admin_auth_router
+from app.api.motherboard_specs import router as motherboard_specs_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -281,8 +311,13 @@ def _install_sigchld_reaper() -> None:
     and does not rely on the parent calling waitpid(), so this is safe.
     """
     import signal as _signal
-    _signal.signal(_signal.SIGCHLD, _signal.SIG_IGN)
-    log.info("browser_pool.sigchld_reaper_installed")
+    import platform
+    # SIGCHLD only exists on Unix-like systems, not Windows
+    if platform.system() != "Windows" and hasattr(_signal, 'SIGCHLD'):
+        _signal.signal(_signal.SIGCHLD, _signal.SIG_IGN)
+        log.info("browser_pool.sigchld_reaper_installed")
+    else:
+        log.info("browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)")
 
 
 async def _reap_zombie_children() -> None:
@@ -306,6 +341,69 @@ async def _reap_zombie_children() -> None:
         await asyncio.sleep(5)
 
 
+async def _gem_radar_retention_loop() -> None:
+    """Deletes Gem Radar scrape artifacts older than the retention window
+    every hour (PRD §34, default 24h — configurable via the extension's
+    Retention settings, synced to app_settings.gem_radar_scrape_artifacts_hours;
+    previously this was hardcoded to 24h regardless of that setting), and
+    prunes the price-history/observation ledger past its own longer
+    retention window (90 days — that's a DB row, not a scrapes/ filesystem
+    artifact, so the scrape-artifacts setting doesn't apply to it; it needs
+    to survive long enough for relisting detection's quiet-period comparison
+    to be useful). Purchased listings are always preserved in both cases.
+
+    Note: "Never delete evidence for watched listings" has no effect yet —
+    there is no watchlist/saved-listing concept in the DB to preserve
+    against (PRD §23's WatchSignals is price-drop/relisting detection, not a
+    user-curated watchlist), so preserve_watched_listing_ids is always empty
+    regardless of that toggle.
+    """
+    import traceback
+    from sqlalchemy import select
+    from app.gem_radar.evidence import cleanup_old_artifacts
+    from app.gem_radar.observations import cleanup_old_observations, cleanup_old_scored_listings
+    from app.models.app_settings import AppSettings
+    from app.models.inventory import InventoryItem
+    from app.database import AsyncSessionLocal
+
+    while True:
+        try:
+            async with AsyncSessionLocal() as session:
+                result = await session.execute(
+                    select(InventoryItem.listing_id).where(InventoryItem.listing_id.is_not(None))
+                )
+                purchased_ids = {row[0] for row in result.all()}
+                await cleanup_old_observations(session, retention_days=90, preserve_listing_ids=purchased_ids)
+                # gem_radar_scored_listings was never pruned at all before this —
+                # it would otherwise grow forever even though the observation
+                # ledger it's derived from was already capped at the same window.
+                await cleanup_old_scored_listings(session, retention_days=90, preserve_listing_ids=purchased_ids)
+
+                settings_result = await session.execute(
+                    select(AppSettings.gem_radar_scrape_artifacts_hours).where(AppSettings.name == "default")
+                )
+                scrape_artifacts_hours = settings_result.scalar_one_or_none() or 24
+
+            cleanup_old_artifacts(
+                retention_hours=scrape_artifacts_hours,
+                preserve_purchased_listing_ids=purchased_ids,
+                preserve_watched_listing_ids=set(),
+            )
+        except Exception as exc:
+            log.warning("gem_radar.retention_loop_error", error=str(exc), traceback=traceback.format_exc())
+        await asyncio.sleep(3600)
+
+
+async def _submission_queue_processor():
+    """Background worker that processes gem-radar submission queue.
+
+    process_submission_queue() now runs its own persistent worker pool plus
+    a stale-submission reaper internally (see app/workers/queue_processor.py)
+    so no separate reaper task needs to be started here."""
+    from app.workers.queue_processor import process_submission_queue
+    await process_submission_queue(process_interval_seconds=5)
+
+
 async def lifespan(app: FastAPI):
     _install_sigchld_reaper()      # prevent headless_shell zombie accumulation
     install_log_capture()          # must be first — before any structlog usage
@@ -314,28 +412,48 @@ async def lifespan(app: FastAPI):
     log.info("app.startup", event_loop_type=type(loop).__name__, app_env=settings.app_env)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    await _migrate_add_columns()
-    if settings.app_env == "dev":
-        await _wipe_dev_data()
-    await _seed_default_data()
+    # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
+    # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
+    # await _migrate_add_columns()
+    # Dev-mode auto-wipe disabled — this is a persistent local install, not an
+    # ephemeral container; extension-submitted listings must survive restarts.
+    # if settings.app_env == "dev":
+    #     await _wipe_dev_data()
+    # await _seed_default_data()
     await _load_db_settings_into_config()
-    if not chromium_available():
-        log.warning("runtime.preflight.chromium_missing", impact="playwright-backed vendors will return errors/zero until Chromium is installed")
-    # Run preflight asynchronously so API stays responsive while challenge tabs open.
-    asyncio.create_task(run_antibot_preflight())
-    start_workers(n=4)
-    start_eval_workers()       # worker count set in claude_eval_queue._NUM_WORKERS
-    start_part_eval_workers()  # AI verification for parts catalogue gems
+    start_workers()  # Uses DEFAULT_WORKERS (16) for 4x throughput
+    start_eval_workers()
+    start_part_eval_workers()
     start_scheduler()
-    asyncio.create_task(run_startup_bootstrap())
-    asyncio.create_task(_queue_unevaluated_gems())  # auto-queue gems on startup
+    # Pops a visible login browser for gated sources (Temu) when
+    # SHOW_SCRAPER_BROWSER/ANTI_BOT_PREFLIGHT_ON_STARTUP are enabled — no-ops
+    # internally otherwise, so this is always safe to fire. Previously
+    # imported but never actually invoked, so ANTI_BOT_PREFLIGHT_ON_STARTUP
+    # had no effect regardless of its value.
+    asyncio.create_task(run_antibot_preflight())
+    # asyncio.create_task(run_startup_bootstrap())  # DISABLED: was hammering eBay API on startup, triggering circuit breaker
+    # asyncio.create_task(_queue_unevaluated_gems())  # DISABLED: also hitting eBay API hard at startup
     reaper = asyncio.create_task(_reap_zombie_children())
+    gem_radar_retention = asyncio.create_task(_gem_radar_retention_loop())
+    queue_processor = asyncio.create_task(_submission_queue_processor())
+    from app.gem_radar.margin_verifier import start_verification_worker
+    verification_worker = asyncio.create_task(start_verification_worker())
+    # Initialize Redis cache for sold comps (7-day TTL)
+    from app.services.sold_comps_cache import get_sold_comps_cache
+    await get_sold_comps_cache()
+    log.info("app.ready", note="full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running")
     yield
+    # Cleanup Redis cache connection
+    cache = await get_sold_comps_cache()
+    await cache.disconnect()
     reaper.cancel()
-    stop_scheduler()
-    await stop_ingest_workers()
-    await stop_eval_workers()
-    await stop_part_eval_workers()
+    gem_radar_retention.cancel()
+    queue_processor.cancel()
+    verification_worker.cancel()
+    try:
+        stop_scheduler()
+    except Exception:
+        pass
     await engine.dispose()
     log.info("app.shutdown")
 
@@ -380,7 +498,6 @@ async def _load_db_settings_into_config():
     from app.database import AsyncSessionLocal
     from app.models.app_settings import AppSettings
     from app.models.source_search_term import SourceSearchTerm
-    from app.models.source_search_term import SourceSearchTerm
     from sqlalchemy import select
     try:
         async with AsyncSessionLocal() as db:
@@ -413,6 +530,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Locally-stored build photos / branded cards (spec card, registration plate).
+# No object storage (S3 etc.) is wired up anywhere in this codebase yet, so
+# uploads live under data/uploads and are served directly by this process.
+_uploads_dir = _app_dir / "data" / "uploads"
+_uploads_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -424,11 +548,37 @@ app.add_middleware(
 
 # Chrome Private Network Access: allow pages on localhost:XXXX to fetch
 # from localhost:YYYY without being blocked by the PNA preflight check.
-@app.middleware("http")
-async def private_network_access(request, call_next):
-    response = await call_next(request)
-    response.headers["Access-Control-Allow-Private-Network"] = "true"
-    return response
+#
+# Deliberately a raw ASGI middleware, NOT @app.middleware("http") (which is
+# Starlette's BaseHTTPMiddleware under the hood). BaseHTTPMiddleware bridges
+# the request through an in-memory stream, and if the client disconnects
+# mid-request (e.g. the Gem Radar extension's own submit timeout firing
+# while /api/gem-radar/scans is still doing real per-listing eBay research),
+# it cancels the downstream route handler's task — killing long-running
+# work like submit_scan's scoring loop before it ever reaches its DB commit,
+# even though the handler would have finished successfully given more time.
+# A plain ASGI middleware only touches the outgoing messages and never
+# wraps the handler in a cancellable call_next(), so a client disconnect no
+# longer aborts work that's already in flight.
+class PrivateNetworkAccessMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        async def send_wrapper(message):
+            if message["type"] == "http.response.start":
+                headers = message.setdefault("headers", [])
+                headers.append((b"access-control-allow-private-network", b"true"))
+            await send(message)
+
+        await self.app(scope, receive, send_wrapper)
+
+
+app.add_middleware(PrivateNetworkAccessMiddleware)
 
 _uploads_dir = Path(__file__).resolve().parents[1] / "data" / "uploads"
 _uploads_dir.mkdir(parents=True, exist_ok=True)
@@ -450,6 +600,8 @@ app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
 app.include_router(orders_router, prefix="")
 app.include_router(orders_admin_router, prefix="")
+app.include_router(drafts_router, prefix="")
+app.include_router(build_comparison_router, prefix="")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
@@ -458,6 +610,7 @@ app.include_router(source_search_terms.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
+app.include_router(favourites.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")
 app.include_router(ebay_listings.router, prefix="/api")
 app.include_router(ebay_compliance.router, prefix="/api")
@@ -470,9 +623,26 @@ app.include_router(companion_router, prefix="/api")
 app.include_router(ram_watch_router, prefix="/api")
 app.include_router(price_benchmarks_router, prefix="/api")
 app.include_router(catalogue_router, prefix="/api")
+app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
+app.include_router(public_configurator_router, prefix="/api")
+app.include_router(public_products_router, prefix="/api")
+app.include_router(public_showcase_router, prefix="/api")
+app.include_router(public_reviews_router, prefix="/api")
+app.include_router(public_social_proof_router, prefix="/api")
+app.include_router(assets_admin_router, prefix="/api")
+app.include_router(gem_radar_router, prefix="/api")
+app.include_router(margin_verification_router, prefix="")
+# pc_builder_router's own APIRouter already declares prefix="/api/pc-builder"
+# (unlike every other router above, which is bare and gets /api added here) —
+# adding another prefix="/api" would double it to /api/api/pc-builder/*.
+app.include_router(pc_builder_router, prefix="")
+app.include_router(build_stage_items_router, prefix="")
+app.include_router(builds_pricing_router, prefix="")
 app.include_router(auth_router, prefix="/api")
 app.include_router(oauth_router, prefix="/api")
+app.include_router(admin_auth_router, prefix="/api")
+app.include_router(motherboard_specs_router, prefix="/api")
 app.include_router(quotes_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")
@@ -514,6 +684,41 @@ async def _migrate_add_columns():
         ("listings", "seller_type",           "VARCHAR(20)"),
         ("listings", "seller_has_shop",       "BOOLEAN DEFAULT 0"),
         ("listings", "listed_at",             "DATETIME"),
+        # Playbook performance analytics (PlaybookOut requires these; the
+        # model originally omitted them entirely, breaking GET /api/playbooks
+        # for every row with a Pydantic "Field required" 500).
+        ("playbooks", "deprecated_at",     "TIMESTAMP"),
+        ("playbooks", "flip_count",        "INTEGER DEFAULT 0"),
+        ("playbooks", "avg_profit_gbp",    "FLOAT"),
+        ("playbooks", "conversion_rate",   "FLOAT"),
+        # Playbook proposal workflow — playbooks.py/playbook_evolution.py
+        # already assumed this full shape; the model only had `payload`.
+        ("playbook_proposals", "proposed_data",    "JSON"),
+        ("playbook_proposals", "reason",           "TEXT"),
+        ("playbook_proposals", "demand_signals",   "JSON"),
+        ("playbook_proposals", "rejection_reason", "TEXT"),
+        ("playbook_proposals", "proposed_at",      "TIMESTAMP DEFAULT (NOW() AT TIME ZONE 'utc')"),
+        ("playbook_proposals", "resolved_at",      "TIMESTAMP"),
+        ("playbook_proposals", "resolved_by",      "VARCHAR(100)"),
+        # Thumbnail images — scraped by the extension all along (imageUrl on
+        # ExtractedListing) but never persisted or surfaced anywhere.
+        ("gem_radar_scored_listings", "image_url", "VARCHAR(1000)"),
+        ("gem_radar_listing_observations", "image_url", "VARCHAR(1000)"),
+        # Which scan run most recently re-confirmed this listing is still
+        # around — touched on every sighting (see observations.touch_observation),
+        # not just ones that pass the 7-day dedup window.
+        ("gem_radar_listing_observations", "search_run_id", "VARCHAR(255)"),
+        # The search term that found this sighting — grouping key for
+        # "active" listings whose category couldn't be resolved (see the
+        # model's own comment for why the None-category bucket needs this).
+        ("gem_radar_listing_observations", "search_query", "VARCHAR(500)"),
+        # Marketplace inferred from listing URL — see marketplace.py.
+        ("gem_radar_listing_observations", "source", "VARCHAR(20)"),
+        ("gem_radar_scored_listings", "canonical_model_id", "VARCHAR(255)"),
+        ("app_settings", "gem_radar_scan_interval_minutes", "INTEGER DEFAULT 180"),
+        ("app_settings", "gem_radar_consecutive_misses_before_inactive", "INTEGER DEFAULT 2"),
+        ("app_settings", "gem_radar_scrape_artifacts_hours", "INTEGER DEFAULT 24"),
+        ("app_settings", "gem_radar_preserve_watched_evidence", "BOOLEAN DEFAULT TRUE"),
         # Playbook + demand fit (added with playbook system)
         ("listings", "playbook_match",        "VARCHAR(200)"),
         ("listings", "demand_fit",            "VARCHAR(20)"),
@@ -538,13 +743,89 @@ async def _migrate_add_columns():
         ("parts", "claude_reasoning",  "TEXT"),
         ("parts", "claude_confidence", "FLOAT"),
         ("parts", "claude_judged_at",  "TIMESTAMP"),
+        # Condition (new/used/refurbished) for gem-radar listings — was
+        # extracted by the extension all along but never persisted.
+        ("gem_radar_scored_listings", "condition", "VARCHAR(30)"),
+        # Which extension scan run discovered each listing — received in
+        # every /scans request but previously discarded after evidence
+        # capture, so there was no way to group gem/super-gem counts by run.
+        ("gem_radar_scored_listings", "search_run_id", "VARCHAR(255)"),
+        # Real resolved product category (from identity.resolve_identity),
+        # so Gem of Day/Week can filter by actual identified category
+        # instead of naive title-keyword matching that let accessories
+        # (protector cases, mounting brackets) through as "core components".
+        ("gem_radar_scored_listings", "category", "VARCHAR(255)"),
+        # Marketplace the listing came from (ebay, vinted, ...) — the
+        # extension is eBay-only today; hardcoded at ingestion until a
+        # second marketplace scraper exists.
+        ("gem_radar_scored_listings", "source", "VARCHAR(20) DEFAULT 'ebay'"),
+        # Release year of the identified product, from Claude's deep-research
+        # screening pass — only populated for listings that received it.
+        ("gem_radar_scored_listings", "release_year", "INTEGER"),
+        # eBay catalog product ID (Browse API itemSummaries[].epid) — a real
+        # cross-listing identity key, see pipeline.build_batch_price_index.
+        ("gem_radar_scored_listings", "epid", "VARCHAR(50)"),
+        ("gem_radar_listing_observations", "epid", "VARCHAR(50)"),
+        # Real scraped listing URL — was never stored; every "view" link in
+        # the app was a hardcoded eBay-shaped guess. See the model comment.
+        ("gem_radar_scored_listings", "url", "VARCHAR(1000)"),
+        # Manual build → sell lifecycle (purchased components → built → listed)
+        ("manual_builds", "status",                "VARCHAR(20) DEFAULT 'in_progress'"),
+        ("manual_builds", "generated_title",        "VARCHAR(80)"),
+        ("manual_builds", "generated_description",  "TEXT"),
+        ("manual_builds", "ebay_listing_id",         "VARCHAR(60)"),
+        ("manual_builds", "ebay_listing_url",        "VARCHAR(300)"),
+        ("manual_builds", "photos",                  "JSON DEFAULT '[]'"),
+        ("manual_builds", "hero_photo_url",           "VARCHAR(500)"),
+        ("manual_builds", "storefront_product_id",    "INTEGER"),
+        ("manual_builds", "fulfillment_policy_id",    "VARCHAR(60)"),
+        ("manual_builds", "package_weight_kg",        "FLOAT"),
+        ("manual_builds", "package_length_cm",        "FLOAT"),
+        ("manual_builds", "package_width_cm",         "FLOAT"),
+        ("manual_builds", "package_height_cm",        "FLOAT"),
+        ("builds", "manual_build_id", "INTEGER REFERENCES manual_builds(id)"),
+        # Deep-link target for a toast/notification (e.g. a favourite's
+        # gem-match alert linking straight to the listing).
+        ("alert_events", "link_url", "VARCHAR(500)"),
     ]
     async with engine.begin() as conn:
-        for table, col, col_type in new_cols:
+        log.info("migration.start", total_columns=len(new_cols))
+        for i, (table, col, col_type) in enumerate(new_cols):
+            log.info("migration.column", index=i, table=table, column=col)
+            try:
+                await conn.exec_driver_sql(
+                    f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"
+                )
+                log.debug("migration.column_ensured", table=table, column=col)
+            except Exception as exc:
+                # Log and continue - the column might already exist or operation might fail
+                # but we don't want to block startup completely
+                log.warning("migration.column_skipped", index=i, table=table, column=col, error=str(exc)[:100])
+
+        # playbook_proposals.playbook_id was originally NOT NULL, but a
+        # CREATE-action proposal has no playbook yet (see app/api/playbooks.py
+        # create_proposal — only UPDATE/RETIRE require it). Relax it to match
+        # the model's nullable=True.
+        try:
             await conn.exec_driver_sql(
-                f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"
+                "ALTER TABLE playbook_proposals ALTER COLUMN playbook_id DROP NOT NULL"
             )
-            log.debug("migration.column_ensured", table=table, column=col)
+            log.debug("migration.constraint_relaxed", table="playbook_proposals", column="playbook_id")
+        except Exception as exc:
+            log.warning("migration.constraint_relax_failed", table="playbook_proposals", error=str(exc))
+
+        # epid columns are added via ALTER above (so they exist on already-
+        # deployed DBs), but ALTER-added columns don't inherit the model's
+        # index=True the way a fresh CREATE TABLE would — create the indexes
+        # explicitly since build_batch_price_index filters on these directly.
+        for table in ("gem_radar_scored_listings", "gem_radar_listing_observations"):
+            try:
+                await conn.exec_driver_sql(
+                    f"CREATE INDEX IF NOT EXISTS ix_{table}_epid ON {table} (epid)"
+                )
+                log.debug("migration.index_ensured", table=table, column="epid")
+            except Exception as exc:
+                log.warning("migration.index_create_failed", table=table, column="epid", error=str(exc))
 
         # Add 'cooler' to the partcategory enum if not already present
         try:
@@ -1057,25 +1338,26 @@ async def _seed_default_data():
                 _pb.upsell_strategy = _upsell
                 log.info("migrated.playbook.upsell_strategy", name=_pb_name)
 
-        # ── Seed source-linked search terms (dynamic settings UX) ─────────────
-        case_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "cases"))
-        if case_terms_count == 0:
-            rows: list[SourceSearchTerm] = []
-            for group_name, terms in _CASE_TAXONOMY.items():
-                for term in terms:
-                    rows.append(
-                        SourceSearchTerm(
-                            scope="cases",
-                            group_name=group_name,
-                            term=term,
-                            source_names=_CASE_DEFAULT_SOURCES,
-                            attributes=_infer_case_attributes(term, group_name),
-                            notes="seeded_case_taxonomy",
-                            enabled=True,
-                        )
-                    )
-            db.add_all(rows)
-            log.info("seeded.source_search_terms", scope="cases", count=len(rows))
+        # ── DISABLED: Search term seeding replaced by FlipFlopXtension ────────
+        # Backend scrapers are disabled. Search terms are now managed entirely by the extension.
+        # case_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "cases"))
+        # if case_terms_count == 0:
+        #     rows: list[SourceSearchTerm] = []
+        #     for group_name, terms in _CASE_TAXONOMY.items():
+        #         for term in terms:
+        #             rows.append(
+        #                 SourceSearchTerm(
+        #                     scope="cases",
+        #                     group_name=group_name,
+        #                     term=term,
+        #                     source_names=_CASE_DEFAULT_SOURCES,
+        #                     attributes=_infer_case_attributes(term, group_name),
+        #                     notes="seeded_case_taxonomy",
+        #                     enabled=True,
+        #                 )
+        #             )
+        #     db.add_all(rows)
+        #     log.info("seeded.source_search_terms", scope="cases", count=len(rows))
         flip_terms_count = await db.scalar(select(func.count()).select_from(SourceSearchTerm).where(SourceSearchTerm.scope == "flip_opportunities"))
         if flip_terms_count == 0:
             rows: list[SourceSearchTerm] = []
@@ -1106,12 +1388,16 @@ async def _seed_default_data():
             if str(t).strip()
         }
         canonical_lower = {t.lower() for t in _UPGRADE_SEARCH_TERMS}
-        # Remove stale broad terms that are no longer in the canonical list
+        # Remove stale broad terms that are no longer in the canonical list.
+        # Compared case-insensitively (via canonical_lower) so that a term
+        # differing only in case from a canonical model name isn't wrongly
+        # deleted as stale and then never re-added by the missing-terms check
+        # below (which also compares case-insensitively).
         stale = (
             await db.execute(
                 select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "upgrade_parts",
-                    ~SourceSearchTerm.term.in_(_UPGRADE_SEARCH_TERMS),
+                    ~func.lower(SourceSearchTerm.term).in_(canonical_lower),
                 )
             )
         ).scalars().all()

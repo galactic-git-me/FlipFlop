@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+.venv_gemradar/
 *.egg-info/
 
 # Database
@@ -11,6 +12,8 @@ venv/
 *.sqlite3
 
 # Secrets & session files
+.env
+.env.local
 fb_cookies.json
 
 # Logs
@@ -20,8 +23,13 @@ fb_cookies.json
 .DS_Store
 Thumbs.db
 
-# Playwright browser profiles - grow to GBs of Chrome telemetry
+# Playwright browser profiles - grow to GBs of Chrome telemetry, and store live
+# session cookies (eBay/AliExpress/Temu/Vinted) - must never be tracked
 .fb-profile/
+.chrome-cdp-profile/
 BrowserMetrics/
 DeferredBrowserMetrics/
 /data/uploads/
+
+# Gem Radar scrape artifacts (PDFs, SCREENED.json) - 24h retention, not source
+scrapes/

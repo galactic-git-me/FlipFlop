@@ -11,6 +11,8 @@ from app.models.order import Order, OrderStatus
 from app.models.customer import Customer
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
+from app.services.social_proof import record_order_event
+from app.services.alerts import emit_alert
 
 log = structlog.get_logger(__name__)
 
@@ -91,6 +93,15 @@ async def _handle_payment_intent_succeeded(
     customer_id = int(intent["metadata"].get("customer_id", 0))
     amount = intent["amount"] / 100  # Convert pence to GBP
 
+    # Pre-built showcase Product purchases (app/api/public_showcase.py) use
+    # a completely different confirm path — the frontend's own
+    # checkout-confirm call is the primary handler and normally beats this
+    # webhook there. This only runs as a fallback for the rare case that
+    # call never fired (tab closed mid-payment).
+    if intent["metadata"].get("purchase_type") == "product":
+        await _handle_product_payment_succeeded(intent, db)
+        return
+
     log.info(
         "webhook.payment_intent.succeeded",
         intent_id=intent_id,
@@ -99,12 +110,10 @@ async def _handle_payment_intent_succeeded(
     )
 
     try:
-        # Check if order already exists for this payment intent
+        # Check if order already exists for this payment intent — the real
+        # column, not the old notes-contains/order_id-suffix guess.
         result = await db.execute(
-            select(Order).where(
-                Order.notes.contains(f"Intent: {intent_id}")
-                | Order.order_id.contains(intent_id[-12:])
-            )
+            select(Order).where(Order.stripe_payment_intent_id == intent_id)
         )
         existing_order = result.scalar_one_or_none()
 
@@ -130,7 +139,11 @@ async def _handle_payment_intent_succeeded(
             )
             return
 
-        # Create order
+        # Fallback order creation for the rare case the frontend's own
+        # /payments/confirm call never fired (tab closed mid-flow, etc).
+        # Specs are empty here since the build_config lives client-side and
+        # this webhook only receives what Stripe echoes back — the /confirm
+        # path (routes/payments.py) is what populates real specs.
         order = Order(
             order_id=f"ORD-{intent_id[-12:]}",
             customer_id=customer_id,
@@ -140,6 +153,7 @@ async def _handle_payment_intent_succeeded(
             component_costs=0.0,
             overhead_amount=0.0,
             promised_delivery_date=None,
+            stripe_payment_intent_id=intent_id,
             notes=f"Payment processed via Stripe webhook. Intent: {intent_id}",
         )
 
@@ -155,6 +169,16 @@ async def _handle_payment_intent_succeeded(
             customer_id=customer_id,
             intent_id=intent_id,
         )
+
+        try:
+            await record_order_event(
+                db,
+                customer_name=customer.name,
+                address=customer.address,
+                product_name="a custom PC build",
+            )
+        except Exception as e:
+            log.warning("social_proof.order_event_failed", error=str(e), order_id=order_id)
 
         # Send confirmation email
         try:
@@ -185,6 +209,108 @@ async def _handle_payment_intent_succeeded(
             intent_id=intent_id,
             customer_id=customer_id,
         )
+
+
+async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> None:
+    """Fallback path for a pre-built showcase Product purchase — mirrors
+    app/api/public_showcase.py's confirm_checkout endpoint, which is the
+    primary handler and normally reaches the database first. Idempotent via
+    the same stripe_payment_intent_id-exists check as the configurator flow."""
+    from app.models.product import Product, ProductStatus, SoldChannel
+    from app.models.manual_build import ManualBuild
+    from app.models.build import Build
+    from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
+    from app.config import get_settings
+
+    intent_id = intent["id"]
+    amount = intent["amount"] / 100
+    product_id = int(intent["metadata"].get("product_id", 0))
+    customer_id = int(intent["metadata"].get("customer_id", 0))
+
+    existing = await db.execute(select(Order).where(Order.stripe_payment_intent_id == intent_id))
+    if existing.scalar_one_or_none():
+        log.info("webhook.product_payment.order_already_exists", intent_id=intent_id, product_id=product_id)
+        return
+
+    product_result = await db.execute(select(Product).where(Product.id == product_id))
+    product = product_result.scalar_one_or_none()
+    if not product:
+        log.error("webhook.product_payment.product_not_found", product_id=product_id, intent_id=intent_id)
+        return
+    if product.status == ProductStatus.SOLD:
+        log.info("webhook.product_payment.already_sold", product_id=product_id, intent_id=intent_id)
+        return
+
+    customer_result = await db.execute(select(Customer).where(Customer.id == customer_id))
+    customer = customer_result.scalar_one_or_none()
+    if not customer:
+        log.error("webhook.product_payment.customer_not_found", customer_id=customer_id, intent_id=intent_id)
+        return
+
+    order = Order(
+        order_id=f"ORD-PROD-{intent_id[-12:]}",
+        customer_id=customer_id,
+        status=OrderStatus.READY_TO_PACKAGE,
+        specs={"product_id": product.id, "build_title": product.title},
+        customer_price=amount,
+        component_costs=0.0,
+        overhead_amount=0.0,
+        stripe_payment_intent_id=intent_id,
+        notes=f"Pre-built showcase purchase (via webhook fallback). Product #{product.id}. Intent: {intent_id}",
+    )
+    db.add(order)
+    await db.flush()
+
+    product.status = ProductStatus.SOLD
+    product.sold_via_channel = SoldChannel.STOREFRONT
+    product.sold_order_id = order.id
+    product.reserved_until = None
+    product.updated_at = datetime.utcnow()
+    await db.flush()
+
+    # Same alert code the admin dashboard's confetti listens for
+    # (top-command-bar.tsx), so a direct storefront sale celebrates too —
+    # this only fires when the webhook is the one that actually lands the
+    # sale (the primary /checkout-confirm path emits its own, since the
+    # early "already_sold" return above prevents this running twice).
+    try:
+        await emit_alert(
+            code="flip_resale_detected",
+            source="storefront_webhook",
+            severity="info",
+            message=f"Sale detected: {product.title or 'Pre-built PC'} sold on storefront for £{amount:.2f}.",
+        )
+    except Exception as e:
+        log.warning("webhook.product_payment.alert_emit_failed", error=str(e), product_id=product.id)
+
+    if product.build_id:
+        build_result = await db.execute(select(Build).where(Build.id == product.build_id))
+        orchestration_build = build_result.scalar_one_or_none()
+        if orchestration_build and orchestration_build.manual_build_id:
+            manual_result = await db.execute(
+                select(ManualBuild).where(ManualBuild.id == orchestration_build.manual_build_id)
+            )
+            manual_build = manual_result.scalar_one_or_none()
+            if manual_build and manual_build.ebay_sku:
+                settings = get_settings()
+                await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
+                manual_build.status = "sold"
+                manual_build.updated_at = datetime.utcnow()
+                await db.flush()
+
+    await db.commit()
+    log.info("webhook.product_payment.order_created", order_id=order.id, product_id=product.id, intent_id=intent_id)
+
+    try:
+        await send_order_confirmation_email(
+            customer_email=customer.email,
+            customer_name=customer.name,
+            order_reference=order.order_id,
+            build_summary=f"{product.title or 'Pre-built PC'} — £{amount:.2f}",
+            assigned_week="Ready to ship",
+        )
+    except Exception as e:
+        log.warning("webhook.product_payment.email_failed", error=str(e), order_id=order.id)
 
 
 async def _handle_payment_intent_failed(

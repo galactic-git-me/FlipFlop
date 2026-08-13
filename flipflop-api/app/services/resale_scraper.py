@@ -55,6 +55,17 @@ _RESALE_EBAY_BLOCK_LOGGED: bool = False
 _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
 _RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
 
+# Rate limiting: only allow 2 concurrent eBay requests to avoid overwhelming rate limits
+# Prevents all workers from hammering eBay simultaneously
+_ebay_semaphore: asyncio.Semaphore | None = None
+
+def _get_ebay_semaphore() -> asyncio.Semaphore:
+    """Get or create the eBay rate limit semaphore (max 2 concurrent requests)."""
+    global _ebay_semaphore
+    if _ebay_semaphore is None:
+        _ebay_semaphore = asyncio.Semaphore(2)
+    return _ebay_semaphore
+
 
 
 def _info_throttled(event: str, window_seconds: float = 30.0, **kwargs) -> None:
@@ -234,52 +245,55 @@ async def _fetch_sold_prices(query: str) -> list[float]:
     Scrape eBay UK completed/sold listings for fixed-price comps.
     Two passes: Desktop PCs category (179) first, then all categories.
     Uses the same approach as get_expected_auction_price().
+
+    Rate limited to max 2 concurrent requests to avoid eBay throttling.
     """
-    prices: list[float] = []
+    async with _get_ebay_semaphore():
+        prices: list[float] = []
 
-    for sacat in ("179", "0"):
-        params = {
-            "_nkw": query,
-            "LH_Sold": "1",
-            "LH_Complete": "1",
-            "LH_BIN": "1",         # Fixed-price (BIN) only — exclude auction starting bids
-            "_sacat": sacat,
-            "_sop": "12",          # Most recent first
-            "LH_PrefLoc": "1",     # UK sellers preferred
-            "_ipg": "60",
-        }
-        headers = {
-            "User-Agent": ua.random,
-            "Accept-Language": "en-GB,en;q=0.9",
-            "Accept": "text/html,application/xhtml+xml",
-        }
-        try:
-            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=headers,
-                )
-            if resp.status_code != 200 or len(resp.text) < 2000:
-                log.debug("resale_scraper.ebay_sold_bad_response",
-                          query=query, sacat=sacat, status=resp.status_code)
-                continue
+        for sacat in ("179", "0"):
+            params = {
+                "_nkw": query,
+                "LH_Sold": "1",
+                "LH_Complete": "1",
+                "LH_BIN": "1",         # Fixed-price (BIN) only — exclude auction starting bids
+                "_sacat": sacat,
+                "_sop": "12",          # Most recent first
+                "LH_PrefLoc": "1",     # UK sellers preferred
+                "_ipg": "60",
+            }
+            headers = {
+                "User-Agent": ua.random,
+                "Accept-Language": "en-GB,en;q=0.9",
+                "Accept": "text/html,application/xhtml+xml",
+            }
+            try:
+                async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
+                    resp = await client.get(
+                        "https://www.ebay.co.uk/sch/i.html",
+                        params=params,
+                        headers=headers,
+                    )
+                if resp.status_code != 200 or len(resp.text) < 2000:
+                    log.debug("resale_scraper.ebay_sold_bad_response",
+                              query=query, sacat=sacat, status=resp.status_code)
+                    continue
 
-            soup = BeautifulSoup(resp.text, "lxml")
-            batch = _extract_prices(soup)
-            prices.extend(batch)
-            log.debug("resale_scraper.ebay_sold_pass",
-                      query=query, sacat=sacat, found=len(batch))
+                soup = BeautifulSoup(resp.text, "lxml")
+                batch = _extract_prices(soup)
+                prices.extend(batch)
+                log.debug("resale_scraper.ebay_sold_pass",
+                          query=query, sacat=sacat, found=len(batch))
 
-        except Exception as exc:
-            log.debug("resale_scraper.ebay_sold_error", query=query, error=str(exc))
+            except Exception as exc:
+                log.debug("resale_scraper.ebay_sold_error", query=query, error=str(exc))
 
-        if len(prices) >= 5:
-            break
+            if len(prices) >= 5:
+                break
 
-        await asyncio.sleep(0.3)
+            await asyncio.sleep(0.3)
 
-    return prices
+        return prices
 
 
 async def _fetch_active_prices(query: str) -> list[float]:
@@ -287,50 +301,53 @@ async def _fetch_active_prices(query: str) -> list[float]:
     Scrape current live BIN listings for the same spec — what sellers are
     asking RIGHT NOW.  Used as Tier 2 when sold comps are unavailable.
     Results are discounted by 0.92 at the call site so we price below competition.
+
+    Rate limited to max 2 concurrent requests to avoid eBay throttling.
     """
-    prices: list[float] = []
+    async with _get_ebay_semaphore():
+        prices: list[float] = []
 
-    for sacat in ("179", "0"):
-        params = {
-            "_nkw": query,
-            "LH_BIN": "1",
-            "_sacat": sacat,
-            "_sop": "12",
-            "LH_PrefLoc": "1",
-            "_ipg": "60",
-        }
-        headers = {
-            "User-Agent": ua.random,
-            "Accept-Language": "en-GB,en;q=0.9",
-            "Accept": "text/html,application/xhtml+xml",
-        }
-        try:
-            async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://www.ebay.co.uk/sch/i.html",
-                    params=params,
-                    headers=headers,
-                )
-            if resp.status_code != 200 or len(resp.text) < 2000:
-                log.debug("resale_scraper.ebay_active_bad_response",
-                          query=query, sacat=sacat, status=resp.status_code)
-                continue
+        for sacat in ("179", "0"):
+            params = {
+                "_nkw": query,
+                "LH_BIN": "1",
+                "_sacat": sacat,
+                "_sop": "12",
+                "LH_PrefLoc": "1",
+                "_ipg": "60",
+            }
+            headers = {
+                "User-Agent": ua.random,
+                "Accept-Language": "en-GB,en;q=0.9",
+                "Accept": "text/html,application/xhtml+xml",
+            }
+            try:
+                async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
+                    resp = await client.get(
+                        "https://www.ebay.co.uk/sch/i.html",
+                        params=params,
+                        headers=headers,
+                    )
+                if resp.status_code != 200 or len(resp.text) < 2000:
+                    log.debug("resale_scraper.ebay_active_bad_response",
+                              query=query, sacat=sacat, status=resp.status_code)
+                    continue
 
-            soup = BeautifulSoup(resp.text, "lxml")
-            batch = _extract_prices(soup)
-            prices.extend(batch)
-            log.debug("resale_scraper.ebay_active_pass",
-                      query=query, sacat=sacat, found=len(batch))
+                soup = BeautifulSoup(resp.text, "lxml")
+                batch = _extract_prices(soup)
+                prices.extend(batch)
+                log.debug("resale_scraper.ebay_active_pass",
+                          query=query, sacat=sacat, found=len(batch))
 
-        except Exception as exc:
-            log.debug("resale_scraper.ebay_active_error", query=query, error=str(exc))
+            except Exception as exc:
+                log.debug("resale_scraper.ebay_active_error", query=query, error=str(exc))
 
-        if len(prices) >= 5:
-            break
+            if len(prices) >= 5:
+                break
 
-        await asyncio.sleep(0.3)
+            await asyncio.sleep(0.3)
 
-    return prices
+        return prices
 
 
 async def get_resale_range(

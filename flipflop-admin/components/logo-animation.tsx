@@ -24,7 +24,7 @@ export default function LogoAnimation({ className }: LogoAnimationProps) {
       style={{ aspectRatio: "1442 / 567" }}
     >
       <Image
-        src="/pics/logo.png"
+        src="/pics/logo_simple_no_bg.png"
         alt="FlipFlop"
         fill
         className="object-contain"

@@ -43,16 +43,99 @@ export default function SuperGemsPage() {
   const [partsLoading, setPartsLoading] = useState<Partial<Record<ComponentCategory, boolean>>>({});
 
   useEffect(() => {
-    const params = new URLSearchParams({
-      claude_verdict: "GEM",
-      classification: "gem",
-      sort_by: "gem_score",
-      limit: "100",
-      min_profit: "100",
-    });
-    fetch(`/api/listings/?${params}`)
-      .then((r) => r.json())
-      .then((data) => setListings(Array.isArray(data) ? data : data.items ?? []))
+    // Use only gem-radar scored listings (includes all marketplaces: eBay, Vinted, Overclockers, Temu, Amazon)
+    fetch(`/api/gem-radar/scored-listings`).then((r) => r.json()).catch(() => []).then((scored) => {
+      const scoredArray = Array.isArray(scored) ? scored : [];
+
+      // All data comes from gem-radar scored listings
+      const combined = scoredArray.map((s: any) => ({ ...s, _source: 'scored' }));
+
+      // Sort by deal_score/gem_score descending, dedup by listing_id
+      const seen = new Set<number>();
+      const unique = combined.filter((item: any) => {
+        const id = item.listing_id || item.id;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+
+      const gems = unique
+        .sort((a: any, b: any) => {
+          const scoreA = a.deal_score ?? a.gem_score ?? 0;
+          const scoreB = b.deal_score ?? b.gem_score ?? 0;
+          return scoreB - scoreA;
+        })
+        .slice(0, 100)
+          .map((s: any) => {
+            // Handle both gem-radar scored listings and raw listings API
+            const isScored = s._source === 'scored';
+            const classificationMap: Record<string, any> = {
+              'SUPER_GEM': 'amazing_gem',
+              'GEM': 'gem',
+              'OK_DEAL': 'no_profit',
+            };
+
+            // Price handling: gem-radar uses delivered_price, listings use price
+            const actualPrice = s.actual_price || s.delivered_price || s.price || 0;
+            // Resale: gem-radar uses market_used_price, listings uses estimated_resale
+            const resalePrice = s.market_used_price || s.market_new_price || s.estimated_resale || 0;
+            const profit = s.deal_score || s.estimated_profit || (resalePrice - actualPrice) || 0;
+
+            return {
+              id: s.listing_id || s.id,
+              external_id: String(s.listing_id || s.external_id || s.id),
+              source_name: s.source || s.source_name,
+              title: s.title,
+              price: actualPrice,
+              url: s.url || '',
+              image_urls: s.image_url ? [s.image_url] : (s.image_urls || []),
+              location: s.location || null,
+              condition: s.condition,
+              cpu: s.cpu || null,
+              ram_gb: s.ram_gb || null,
+              ram_type: s.ram_type || null,
+              storage_gb: s.storage_gb || null,
+              storage_type: s.storage_type || null,
+              gpu: s.gpu || null,
+              has_psu: s.has_psu || false,
+              gem_score: s.deal_score || s.gem_score || 0,
+              classification: classificationMap[s.classification] || (isScored ? 'no_profit' : 'maybe'),
+              gem_signals: s.gem_signals || [],
+              estimated_upgrade_cost: s.estimated_upgrade_cost || null,
+              estimated_resale: resalePrice,
+              resale_low: s.resale_low || null,
+              resale_high: s.resale_high || null,
+              resale_comp_count: s.resale_comp_count || null,
+              estimated_profit: profit,
+              listing_type: s.listing_type || null,
+              listing_ends_at: s.listing_ends_at || null,
+              expected_buy_price: s.expected_buy_price || null,
+              seller_name: s.seller || s.seller_name || null,
+              seller_feedback_count: s.seller_feedback_count || null,
+              seller_feedback_pct: s.seller_feedback_pct || null,
+              seller_type: s.seller_type || null,
+              seller_has_shop: s.seller_has_shop || false,
+              listed_at: s.listing_observed_at || s.listed_at || null,
+              status: s.status || ('active' as const),
+              first_seen_at: s.listing_observed_at || s.first_seen_at || new Date().toISOString(),
+              last_seen_at: s.listing_observed_at || s.last_seen_at || new Date().toISOString(),
+              watch_count: s.watch_count ?? null,
+              bid_count: s.bid_count ?? null,
+              claude_verdict: isScored && s.classification === 'SUPER_GEM' ? 'GEM' : s.claude_verdict || null,
+              claude_flipability_score: s.claude_flipability_score || null,
+              claude_expected_profit: s.claude_expected_profit || null,
+              claude_roi: s.claude_roi || null,
+              claude_confidence: s.confidence || s.claude_confidence || null,
+              claude_capital_efficiency: s.claude_capital_efficiency || null,
+              claude_resale_demand: s.claude_resale_demand || null,
+              claude_upgrade_complexity: s.claude_upgrade_complexity || null,
+              claude_reasoning: s.decision || s.claude_reasoning || null,
+              claude_main_risk: s.claude_main_risk || null,
+              claude_judged_at: s.claude_judged_at || null,
+            };
+          });
+        setListings(gems);
+      })
       .catch(() => setListings([]))
       .finally(() => setListingsLoading(false));
   }, []);

@@ -445,6 +445,8 @@ function ListingGridCard({
               ? <span className="bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 rounded px-1.5 py-0.5 text-emerald-300">{l.gpu.slice(0, 15)}</span>
               : <span className="bg-red-500/15 backdrop-blur-sm border border-red-400/20 rounded px-1.5 py-0.5 text-red-300/70">No GPU</span>}
             {l.ram_gb && <span className="bg-black/60 backdrop-blur-sm border border-white/10 rounded px-1.5 py-0.5 text-white/60">{l.ram_gb}GB</span>}
+            {l.watch_count != null && <span className="bg-cyan-500/15 backdrop-blur-sm border border-cyan-400/30 rounded px-1.5 py-0.5 text-cyan-300">👁️ {l.watch_count}</span>}
+            {l.bid_count != null && <span className="bg-yellow-500/15 backdrop-blur-sm border border-yellow-400/30 rounded px-1.5 py-0.5 text-yellow-300">🔨 {l.bid_count}</span>}
           </div>
 
           {/* Pricing */}

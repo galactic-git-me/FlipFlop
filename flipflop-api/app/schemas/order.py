@@ -75,6 +75,34 @@ class AdminOrderOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class MyOrderSlotOut(BaseModel):
+    slot_id: int
+    slot_type: str
+    variant_id: int
+    title: str
+    price: float
+
+
+class MyOrderOut(BaseModel):
+    """Real Order fields only — deliberately not modeled on AdminOrderOut,
+    which references reference/playbook_name/customer_name/etc. that don't
+    exist on the actual Order model (app/models/order.py)."""
+
+    id: int
+    order_id: str
+    status: str
+    customer_price: float
+    component_costs: float
+    slots: list[MyOrderSlotOut] = Field(default_factory=list)
+    case_name: Optional[str] = None
+    case_price: float = 0.0
+    chosen_week: Optional[str] = None
+    promised_delivery_date: Optional[datetime] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=False)
+
+
 class AdminOrderUpdateIn(BaseModel):
     status: Optional[str] = Field(None, pattern=r'^(pending_payment|confirmed|building|shipped|cancelled)$')
     note: Optional[str] = Field(None, max_length=500)

@@ -320,7 +320,7 @@ If no PC components are found in the text, return an empty array: []"""
             )
             raw_response = resp.content[0].text if resp.content else None
             model_used = "claude-haiku-4-5"
-        except Exception as exc:
+        except Exception:
             pass
 
     if not raw_response and _s.openrouter_api_key:

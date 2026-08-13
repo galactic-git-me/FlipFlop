@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.catalogue import CaseCatalogue, CatalogueVariant, PlaybookSlot
+from app.models.configurator import ConfiguratorCatalogueVisibility
 from app.models.listing import Listing
 from app.models.playbook import Playbook
 
@@ -89,6 +90,33 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
         all_rows = variants_result.all()
     else:
         all_rows = []
+
+    # Visibility gate (Commerce PRD Ch.6.5): once curation rows exist for a
+    # GIVEN SLOT, only that slot's variants explicitly marked publicly visible
+    # are shown. Scoped per-slot, not per-playbook — a playbook can have some
+    # slot types curated and others still in pre-curation fallback (show all
+    # active variants) simultaneously. This must stay per-slot: an earlier
+    # version gated on "any vis_rows exist across slot_ids" playbook-wide,
+    # which meant curating ONE slot type (e.g. adding motherboard visibility
+    # rows) silently hid every OTHER slot type in the same playbook that had
+    # no visibility rows of its own yet — a real regression caught 2026-08-12
+    # (see PC_BUILDER_DISCOVERY_AND_IMPLEMENTATION_PLAN.md).
+    if slot_ids:
+        vis_result = await db.execute(
+            select(ConfiguratorCatalogueVisibility).where(
+                ConfiguratorCatalogueVisibility.playbook_slot_id.in_(slot_ids)
+            )
+        )
+        vis_rows = vis_result.scalars().all()
+        if vis_rows:
+            curated_slot_ids = {r.playbook_slot_id for r in vis_rows}
+            visible_variant_ids = {
+                r.catalogue_variant_id for r in vis_rows if r.is_publicly_visible
+            }
+            all_rows = [
+                (v, l) for v, l in all_rows
+                if v.slot_id not in curated_slot_ids or v.id in visible_variant_ids
+            ]
 
     # Group by slot_id in Python, guarding against unexpected tier values
     variants_by_slot: dict[int, dict[str, list]] = defaultdict(

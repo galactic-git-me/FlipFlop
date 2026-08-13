@@ -1,0 +1,497 @@
+<title>FlipFlop Build Lifecycle — Repository Audit</title>
+<style>
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: local("JetBrains Mono"), local("JetBrainsMono-Regular");
+  }
+
+  :root {
+    --bg: #060d18;
+    --bg-raised: #0b1424;
+    --panel: rgba(255,255,255,0.03);
+    --panel-border: rgba(255,255,255,0.08);
+    --text: #e6edf3;
+    --text-dim: #93a1b0;
+    --text-faint: #5b6b7c;
+    --cyan: #00b8ff;
+    --green: #00dc82;
+    --purple: #a855f7;
+    --ok: #00dc82;
+    --ok-bg: rgba(0,220,130,0.10);
+    --ok-border: rgba(0,220,130,0.28);
+    --partial: #f5a524;
+    --partial-bg: rgba(245,165,36,0.10);
+    --partial-border: rgba(245,165,36,0.30);
+    --missing: #fb5a5a;
+    --missing-bg: rgba(251,90,90,0.10);
+    --missing-border: rgba(251,90,90,0.30);
+    --diff: #4fc3f7;
+    --diff-bg: rgba(79,195,247,0.10);
+    --diff-border: rgba(79,195,247,0.30);
+    --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f4f6f9;
+    --bg-raised: #ffffff;
+    --panel: rgba(6,13,24,0.03);
+    --panel-border: rgba(6,13,24,0.09);
+    --text: #131d2b;
+    --text-dim: #4b5b6c;
+    --text-faint: #8091a3;
+    --ok-bg: rgba(0,150,90,0.08);
+    --ok: #027a4c;
+    --ok-border: rgba(0,150,90,0.30);
+    --partial-bg: rgba(180,110,0,0.09);
+    --partial: #8a5900;
+    --partial-border: rgba(180,110,0,0.32);
+    --missing-bg: rgba(200,40,40,0.08);
+    --missing: #b1231f;
+    --missing-border: rgba(200,40,40,0.30);
+    --diff-bg: rgba(10,120,180,0.08);
+    --diff: #0a6a96;
+    --diff-border: rgba(10,120,180,0.30);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f4f6f9;
+      --bg-raised: #ffffff;
+      --panel: rgba(6,13,24,0.03);
+      --panel-border: rgba(6,13,24,0.09);
+      --text: #131d2b;
+      --text-dim: #4b5b6c;
+      --text-faint: #8091a3;
+      --ok-bg: rgba(0,150,90,0.08);
+      --ok: #027a4c;
+      --ok-border: rgba(0,150,90,0.30);
+      --partial-bg: rgba(180,110,0,0.09);
+      --partial: #8a5900;
+      --partial-border: rgba(180,110,0,0.32);
+      --missing-bg: rgba(200,40,40,0.08);
+      --missing: #b1231f;
+      --missing-border: rgba(200,40,40,0.30);
+      --diff-bg: rgba(10,120,180,0.08);
+      --diff: #0a6a96;
+      --diff-border: rgba(10,120,180,0.30);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .masthead { margin-bottom: 2.5rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+    margin-bottom: 0.9rem;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  h1 {
+    font-family: var(--mono);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 1.1rem + 2.4vw, 2.6rem);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 0.5rem;
+    background: linear-gradient(100deg, var(--cyan) 0%, var(--green) 48%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .subhead { color: var(--text-dim); font-size: 1.02rem; max-width: 62ch; }
+  .subhead code { font-family: var(--mono); font-size: 0.88em; color: var(--text); }
+
+  /* ── Panels / callouts ──────────────────────────────── */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 1.3rem 1.5rem;
+  }
+  .callout {
+    margin: 2rem 0;
+    padding: 1.4rem 1.6rem;
+    border-radius: 12px;
+    background: linear-gradient(160deg, rgba(168,85,247,0.08), rgba(0,184,255,0.05));
+    border: 1px solid rgba(168,85,247,0.25);
+  }
+  .callout h2 {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin: 0 0 0.7rem;
+  }
+  .callout p { color: var(--text); margin: 0 0 0.8rem; max-width: 74ch; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout .lineage {
+    font-family: var(--mono);
+    font-size: 0.86rem;
+    color: var(--text-dim);
+    background: var(--bg-raised);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    margin: 0.9rem 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ── Legend / filter chips ──────────────────────────── */
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.6rem 0 2.2rem; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.02em;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+  }
+  .chip:hover { transform: translateY(-1px); }
+  .chip.active { opacity: 1; }
+  .chip:not(.active):not(.chip-all) { opacity: 0.42; }
+  .chip-ok { color: var(--ok); border-color: var(--ok-border); background: var(--ok-bg); }
+  .chip-partial { color: var(--partial); border-color: var(--partial-border); background: var(--partial-bg); }
+  .chip-missing { color: var(--missing); border-color: var(--missing-border); background: var(--missing-bg); }
+  .chip-diff { color: var(--diff); border-color: var(--diff-border); background: var(--diff-bg); }
+  .chip-all { color: var(--text-dim); border-color: var(--panel-border); }
+
+  /* ── Section groups ─────────────────────────────────── */
+  .group { margin-bottom: 2.4rem; }
+  .group-title {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 2.2rem minmax(0,1.4fr) 8rem minmax(0,2fr);
+    gap: 1rem;
+    align-items: start;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .row:last-child { border-bottom: none; }
+  .row.hidden { display: none; }
+  .row-num { font-family: var(--mono); color: var(--text-faint); font-size: 0.82rem; padding-top: 0.15rem; }
+  .row-main { min-width: 0; }
+  .row-title { font-weight: 600; font-size: 0.94rem; margin-bottom: 0.2rem; }
+  .row-files { font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); line-height: 1.6; }
+  .row-files code {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    padding: 0.05em 0.4em;
+    color: var(--text-dim);
+  }
+  .status {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.55rem;
+    border-radius: 5px;
+    border: 1px solid;
+    white-space: nowrap;
+    text-align: center;
+    height: fit-content;
+  }
+  .status-ok { color: var(--ok); border-color: var(--ok-border); background: var(--ok-bg); }
+  .status-partial { color: var(--partial); border-color: var(--partial-border); background: var(--partial-bg); }
+  .status-missing { color: var(--missing); border-color: var(--missing-border); background: var(--missing-bg); }
+  .status-diff { color: var(--diff); border-color: var(--diff-border); background: var(--diff-bg); }
+  .row-note { color: var(--text-dim); font-size: 0.86rem; }
+
+  @media (max-width: 760px) {
+    .row { grid-template-columns: 1fr; gap: 0.35rem; }
+    .row-num { display: none; }
+    .status { justify-self: start; }
+  }
+
+  /* ── Data model table ───────────────────────────────── */
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.86rem; }
+  th {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--panel-border); vertical-align: top; }
+  td:first-child { font-family: var(--mono); color: var(--text); white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Recommended order ──────────────────────────────── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-n {
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--cyan);
+    font-size: 0.95rem;
+  }
+  .step-title { font-weight: 600; margin-bottom: 0.15rem; }
+  .step-body { color: var(--text-dim); font-size: 0.88rem; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--panel-border);
+    color: var(--text-faint);
+    font-size: 0.82rem;
+    font-family: var(--mono);
+  }
+
+  h2.section-h {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    margin: 3rem 0 0.4rem;
+  }
+  .section-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.3rem; max-width: 70ch; }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="eyebrow"><span class="dot"></span> Repository audit · no code changed</div>
+    <h1>Build-to-Sale Lifecycle — What Already Exists</h1>
+    <p class="subhead">Mapping your <code>PREBUILT</code> / <code>MADE_TO_ORDER</code> lifecycle spec against the actual FlipFlop codebase (<code>flipflop-api</code>, <code>flipflop-admin</code>, <code>FlipFlop.shop</code>). Three parallel research passes, no architecture touched yet.</p>
+  </div>
+
+  <div class="callout">
+    <h2>The one decision this whole plan hinges on</h2>
+    <p>Your spec assumes a single lineage: <strong>Component → Build → Product → Order.</strong> The codebase actually has <strong>four separate "build" concepts</strong> that never fully connect:</p>
+    <div class="lineage">Flip         — purchased listing, resold. Has its own stage machine + eBay fields. Self-contained.
+PCBuild      — configurator JSON build. Feeds the orchestration bridge below.
+ManualBuild  — today's new feature. An island: no inventory link, no Build-bridge link, no Order link.
+Build        — orchestration bridge. build_type: FLIP | MADE_TO_ORDER | PREBUILT.
+               FKs: flip_id, pcbuild_id, order_id  ·  NO manual_build_id.
+Order        — customer checkout. FKs to playbook_id / theme_id — NOT to Build at all.</div>
+    <p>So even the parts that are individually well-built (Order lifecycle, Stripe checkout, inventory allocation) don't hang off the same spine. Before touching states, procurement, or artifacts, this needs a call: extend the <code>Build</code> bridge to cover <code>ManualBuild</code> and wire <code>Order → Build</code> (lowest-risk, follows the precedent <code>PCBuild</code> already set) — or something else. Everything below assumes that decision is still open.</p>
+  </div>
+
+  <div class="legend" id="legend">
+    <button class="chip chip-all active" data-filter="all">All 34</button>
+    <button class="chip chip-ok active" data-filter="ok">● Already Implemented</button>
+    <button class="chip chip-partial active" data-filter="partial">● Partially Implemented</button>
+    <button class="chip chip-diff active" data-filter="diff">● Implemented Differently</button>
+    <button class="chip chip-missing active" data-filter="missing">● Missing</button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <h2 class="section-h">Spec sections 2–18</h2>
+  <p class="section-sub">In your document's own order. File paths are relative to the FlipFlop repo root.</p>
+
+  <div class="group" id="rows"></div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <h2 class="section-h">Section 19 — the named data model</h2>
+  <p class="section-sub">Your requested entity list, mapped to what exists today (or its nearest cousin).</p>
+
+  <div class="table-scroll">
+    <table id="entity-table"></table>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <h2 class="section-h">Sections 20–23 — automation safety, security, dashboard, tests</h2>
+  <p class="section-sub">Not fully audited this pass — flagging status honestly rather than guessing.</p>
+
+  <div class="group" id="rows-tail"></div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <h2 class="section-h">Recommended next steps</h2>
+  <p class="section-sub">Adapted from your own section 24, reordered around what's actually missing vs. what just needs connecting.</p>
+
+  <div class="panel steps" id="steps"></div>
+
+  <footer>flipflop-api · flipflop-admin · FlipFlop.shop — audited via 3 read-only research passes, zero files modified</footer>
+</div>
+
+<script>
+  const rows = [
+    [2,  "Core build lifecycle / state engine", "partial", "flipflop-api/app/models/flip.py · order.py · build.py",
+      "Flip has FlipStage (selected→building→ready_for_sale→sold). Order has its own 8-state OrderStatus. Build bridge has a status field too. No shared engine, and no generic transition-audit table anywhere (confirmed zero AuditLog/WorkflowEvent matches) — so nothing today records who/when/automatic-or-manual per transition."],
+    [3,  "Build types (PREBUILT / MADE_TO_ORDER / PERSONAL)", "ok", "flipflop-api/app/models/build.py",
+      "Build.build_type already has FLIP | MADE_TO_ORDER | PREBUILT — almost exactly your enum (no literal PERSONAL, extra FLIP)."],
+    [4,  "Build Designer + profitability simulator", "partial", "app/add-build/page.tsx · pc_builder.py · flips.py purchase-plan · manual_builds.py evaluate",
+      "Scattered across three features. ManualBuild's evaluate() gives AI resale low/mid/high but no fee/tax/labour breakdown. Flip has compatibilityCheck + purchasePlan. Nothing does live listing-swap-and-reprice in one screen."],
+    [5,  "Ready for Purchase → Procurement Plan", "partial", "flipflop-api/app/api/flips.py (purchase-plan) · inventory_allocations.py",
+      "Flip's GET /flips/{id}/purchase-plan computes the plan on demand — it's not a persisted, per-item-tracked ProcurementPlan/ProcurementPlanItem model as spec'd. No 'mark purchased / add tracking' actions on it."],
+    [6,  "Automated purchase-email scanner", "partial", "flipflop-api/app/services/email_monitor.py",
+      "Real IMAP scanning + regex receipt parsing already runs, writing into InventoryItem — but only eBay + Vinted today (spec wants Amazon, OCUK, Temu, AliExpress too), and no confidence-scored review queue for ambiguous matches."],
+    [7,  "Delivery tracking / component fulfilment states", "partial", "flipflop-api/app/models/inventory.py (purchase_status, reconciliation_status)",
+      "Has status fields but not your exact PLANNED→…→REFUNDED enum, and no dispatch/out-for-delivery granularity for inbound component shipments."],
+    [8,  "Physical Build Workspace", "partial", "flipflop-api/app/models/build_stage_item.py · api/build_stage_items.py",
+      "Genuine, reusable checklist CRUD (software / 3d / pictures / performance / registration-plate sections, each with completed/notes/file_url) — but no serial-number capture or per-part installed/failed/replaced tracking."],
+    [9,  "Photography workflow (real edit, not fake generation)", "diff", "flipflop-api/app/services/image_processor.py · ai_service.py generate_product_images",
+      "generateImages fabricates AI stock photos from a text prompt — it doesn't touch real uploaded photos at all. image_processor.py does real Pillow editing but only resize/compress/watermark; no background swap, no glare fix, no orange-blue glow."],
+    [10, "3D model pipeline", "partial", "flipflop-api/app/models/component_3d_asset.py (configurator) · capture_3d.py (per-build twin)",
+      "Configurator GLB registry is solid end-to-end. The per-build 'capture your actual assembled PC' twin is modeled and even read by the storefront, but nothing anywhere creates one — no upload/capture endpoint exists."],
+    [11, "BIOS / Windows / driver setup checklist", "partial", "build_stage_items.py (software section) · services/guide_service.py",
+      "A generic 4-item checklist exists, plus a genuinely detailed static PDF (BIOS/XMP/driver steps) generated for customers — but no structured, trackable field-by-field checklist (BIOS version, EXPO on/off, etc.)."],
+    [12, "Benchmark & QA workflow", "missing", "flipflop-api/app/api/benchmarks.py · price_benchmarks.py",
+      "Naming trap: both existing 'benchmark' routers are market/reference price lookups (cached CPU/GPU scores, eBay sold-price data) for pricing components — not a Cinebench/3DMark/MemTest results tracker. That doesn't exist at all; only unchecked checklist strings mention it."],
+    [13, "Branded artifacts (spec card, performance card, registration plate)", "missing", "flipflop-api/app/models/product.py · cx_document.py",
+      "No generator exists for either card design you showed. Product.benchmark_report_document_id and capture_3d_asset_id are real columns but nothing ever writes to them — confirmed unpopulated placeholders."],
+    [14, "Commercialisation (same Build ID on eBay + website, no double-sell)", "partial", "flipflop-api/app/models/product.py · flips.py generate-listing/generate-images",
+      "Per-channel pieces exist (Flip↔eBay, Product↔storefront) but nothing ever instantiates a Product row in the first place — confirmed zero Product(...) construction anywhere in the codebase. The unifying 'one Build ID, two channels, prevent double-sale' logic has no code to sit on yet."],
+    [15, "Sale detection", "diff", "flipflop-api/app/routes/webhooks.py (Stripe) · services/email_monitor.py (Vinted/eBay)",
+      "Two real, working, but entirely separate pipelines: Stripe webhook → Order (checkout sales), email-parsed 'sold' receipts → Product (marketplace resale). Not unified, and arguably shouldn't be — they're different sale types."],
+    [16, "Customer '/my-builds' + '/my-orders'", "ok", "FlipFlop.shop/app/my-builds/*",
+      "Already implemented, consolidated as one /my-builds dashboard (orders + saved drafts together) rather than two separate tabs. Functionally covers the ask; naming differs from spec."],
+    [17, "AI support assistant (RAG over manuals)", "partial", "flipflop-api/app/api/companion.py · services/companion_service.py · flipflop-admin/components/hermes-companion.tsx",
+      "A working streaming chat + tool-calling pipeline exists (Ollama-backed) — but it's admin-only, scoped to gem-flipping listing search, not customer-facing and not RAG'd over manuals/specs/orders at all. Confirmed absent from FlipFlop.shop entirely."],
+    [18, "Dispatch & delivery checklist", "partial", "flipflop-api/app/models/order.py",
+      "Order already carries tracking_number / carrier / estimated_delivery / shipped_at / delivered_at — solid foundation — but no dedicated Shipment/tracking-event model, no carrier webhook, and no customer-facing tracking page found."],
+  ];
+
+  const entityRows = [
+    ["Component", "parts table + BuildComponent JSON", "ok-ish", "Split across two places, not one entity."],
+    ["InventoryItem", "models/inventory.py", "ok", "Already implemented, receipt-scanner writes into it directly."],
+    ["MarketplaceListing", "models/listing.py (\"Listing\")", "ok", "Exists under a different name — scraped gem-radar listings."],
+    ["ListingSnapshot", "—", "missing", "No generic frozen-snapshot-at-selection-time exists for ManualBuild/PCBuild components."],
+    ["Build", "Flip + PCBuild + ManualBuild + Build bridge", "diff", "Four competing lineages — see callout above. This is the crux."],
+    ["BuildRevision", "—", "missing", "No versioning/revision history found for any build type's component list."],
+    ["BuildComponent", "ManualBuild.components JSON", "partial", "Exists but has no inventory_item_id link and no revision history."],
+    ["ProcurementPlan / Item", "flips.py purchase-plan (computed)", "partial", "Computed on read, not a persisted/mutable per-item model."],
+    ["Purchase", "InventoryItem fields (purchase_date, source, actual_cost)", "diff", "Folded into InventoryItem rather than its own entity."],
+    ["Shipment", "Order flat columns (tracking_number, carrier)", "partial", "No separate model — just columns on Order, no per-leg history."],
+    ["EmailIngestionEvent", "—", "missing", "email_monitor.py doesn't appear to persist an audit row per email it processed."],
+    ["BuildChecklist", "models/build_stage_item.py", "ok", "Already implemented and genuinely reusable."],
+    ["BuildMedia", "BuildStageItem.file_url", "partial", "One attachment field per checklist item — not a real gallery/media model."],
+    ["ThreeDAsset", "Component3DAsset + Capture3DAsset", "partial", "Configurator half solid; per-build capture half is an unpopulated stub."],
+    ["SystemSetupRecord", "—", "missing", "Only generic checklist strings + a static PDF — no structured field capture."],
+    ["BenchmarkRun", "—", "missing", "Confirmed nothing stores tool/score/temps/pass-fail anywhere."],
+    ["BuildArtifact", "models/cx_document.py (CXDocument)", "partial", "Generic document-template scaffold exists; unused for spec-card/plate/perf-card."],
+    ["Product", "models/product.py", "ok", "Implemented, but never actually instantiated by any code path yet."],
+    ["SalesListing", "Flip.ebay_listing_id/url fields", "diff", "Flip-only, not a shared entity Product can also reference."],
+    ["CustomerOrder", "models/order.py", "ok", "Mature: pricing, timeline, shipping, Stripe idempotency key, all present."],
+    ["CustomerBuildAccess", "customer_id FK + get_current_user row-filtering", "ok", "Works today, just informal — no explicit join-table, but ownership is enforced."],
+    ["SupportKnowledgeBase", "—", "missing", "Hermes has no manuals/spec/KB source to retrieve from."],
+    ["WorkflowEvent / AuditLog", "—", "missing", "Confirmed zero matches anywhere in the codebase. Entirely new."],
+  ];
+
+  const tailRows = [
+    [20, "Automation safety (idempotency, provider interfaces, mock adapters)", "partial", "services/payment_service.py", "Stripe idempotency via unique payment_intent_id is a good precedent. Not applied as a general principle elsewhere — not fully audited beyond payments."],
+    [21, "Security & privacy (roles, row-level access, audit, secret redaction)", "partial", "api/auth.py · api/orders.py", "Row-level customer access is real and enforced. Audit logging is missing (see above). Product-key redaction in customer-facing HTML not verified this pass."],
+    [22, "Admin pipeline dashboard (Kanban across all stages)", "missing", "—", "Nothing surfaced resembling this across all three research passes — flagging as not found rather than guessing; would need a dedicated look at flipflop-admin's existing admin pages."],
+    [23, "Tests & acceptance criteria", "missing", "—", "Not audited this pass — test coverage for any of the above wasn't part of these research questions."],
+  ];
+
+  function statusMeta(s) {
+    return {
+      ok:      { cls: "status-ok",      label: "Implemented" },
+      partial: { cls: "status-partial", label: "Partial" },
+      missing: { cls: "status-missing", label: "Missing" },
+      diff:    { cls: "status-diff",    label: "Different" },
+      "ok-ish":{ cls: "status-ok",      label: "Implemented" },
+    }[s];
+  }
+
+  function renderRows(container, data, withNum) {
+    container.innerHTML = data.map(r => {
+      const [n, title, status, files, note] = r;
+      const meta = statusMeta(status);
+      return `<div class="row" data-status="${status.replace('-ish','')}">
+        ${withNum ? `<div class="row-num">${n}</div>` : ""}
+        <div class="row-main">
+          <div class="row-title">${title}</div>
+          <div class="row-files">${files.split(' · ').map(f => `<code>${f}</code>`).join(' ')}</div>
+        </div>
+        <div class="status ${meta.cls}">${meta.label}</div>
+        <div class="row-note">${note}</div>
+      </div>`;
+    }).join("");
+  }
+
+  renderRows(document.getElementById("rows"), rows, true);
+  renderRows(document.getElementById("rows-tail"), tailRows, true);
+
+  document.getElementById("entity-table").innerHTML = `
+    <thead><tr><th>Entity</th><th>Nearest existing thing</th><th>Status</th><th>Note</th></tr></thead>
+    <tbody>${entityRows.map(([e,f,s,n]) => {
+      const meta = statusMeta(s);
+      return `<tr><td>${e}</td><td class="row-files">${f}</td><td><span class="status ${meta.cls}">${meta.label}</span></td><td class="row-note">${n}</td></tr>`;
+    }).join("")}</tbody>
+  `;
+
+  const steps = [
+    ["Resolve the Build-lineage decision", "Extend the Build bridge table with manual_build_id (mirroring the existing pcbuild_id precedent) and wire Order → Build. Everything downstream depends on this being settled first."],
+    ["Add the missing generic tables", "AuditLog/WorkflowEvent, BenchmarkRun, ListingSnapshot, BuildRevision, Shipment — none of these need architectural debate, they're just genuinely absent and small to add."],
+    ["Wire real photo editing", "Replace/supplement generateImages' AI-fabrication approach with real background/glow/glare processing on actually-uploaded photos, per your explicit 'truthful, never misleading' requirement."],
+    ["Build the branded-artifact generator", "Registration plate + spec card + performance card, bound to verified BuildComponent/BenchmarkRun data — not AI guesses. This is genuinely new code, no existing template to extend."],
+    ["Close the Product-creation gap", "Write the actual Build → Product instantiation path (currently confirmed to not exist anywhere) so 'commercialisation' has something to publish in the first place."],
+    ["Extend, don't replace, what already works", "Order lifecycle, Stripe checkout, customer auth/row-level access, /my-builds, the email receipt scanner, and the build-stage checklist are all solid — reuse them as-is."],
+  ];
+  document.getElementById("steps").innerHTML = steps.map(([t,b],i) => `
+    <div class="step">
+      <div class="step-n">${String(i+1).padStart(2,'0')}</div>
+      <div>
+        <div class="step-title">${t}</div>
+        <div class="step-body">${b}</div>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("legend").addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+    const all = document.getElementById("legend").querySelectorAll(".chip");
+    if (filter === "all") {
+      all.forEach(c => c.classList.add("active"));
+    } else {
+      document.querySelector(".chip-all").classList.remove("active");
+      btn.classList.toggle("active");
+      const anyOthersActive = [...all].some(c => c.dataset.filter !== "all" && c.classList.contains("active"));
+      if (!anyOthersActive) document.querySelector(".chip-all").classList.add("active");
+    }
+    const activeFilters = [...all].filter(c => c.classList.contains("active")).map(c => c.dataset.filter);
+    const showAll = activeFilters.includes("all") || activeFilters.length === 0;
+    document.querySelectorAll(".row").forEach(row => {
+      const status = row.dataset.status;
+      row.classList.toggle("hidden", !showAll && !activeFilters.includes(status));
+    });
+  });
+</script>

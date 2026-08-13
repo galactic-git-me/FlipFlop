@@ -5,18 +5,43 @@ from functools import lru_cache
 class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://flipper:flipper@127.0.0.1:5432/pcflipper"
     sync_database_url: str = "postgresql://flipper:flipper@127.0.0.1:5432/pcflipper"
-    redis_url: str = ""  # empty = Redis disabled
+    redis_url: str = "redis://localhost:6379/0"  # Used for sold_comps_cache (fast in-memory)
 
     anthropic_api_key: str = ""
     openrouter_api_key: str = ""
     openrouter_primary_model: str = "google/gemma-4-31b-it:free"
-    ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "gemma3:4b"
+    ollama_base_url: str = ""  # Disabled by default (set to enable, e.g. http://localhost:11434 — the default local Ollama port)
+    ollama_model: str = "gemma4:e4b"
+    scrapingbee_api_key: str = ""  # For eBay sold comps scraping
 
     ebay_app_id: str = ""
     ebay_client_secret: str = ""
     # "production" | "sandbox"
     ebay_environment: str = "production"
+    # Separate sandbox credentials for testing the listing/publish flow without
+    # touching production (which is used for sourcing real listings).
+    ebay_sandbox_app_id: str = ""
+    ebay_sandbox_client_secret: str = ""
+    ebay_sandbox_oauth_user_token: str = ""
+    # Long-lived (~18 month) refresh token — used to silently mint fresh
+    # 2-hour access tokens without repeating the browser sign-in flow.
+    ebay_sandbox_refresh_token: str = ""
+    # Sandbox Business Policy IDs (Payment/Return/Fulfillment) — required by
+    # the Inventory API's createOffer call. Created once via the Account API.
+    ebay_sandbox_payment_policy_id: str = ""
+    ebay_sandbox_return_policy_id: str = ""
+    ebay_sandbox_fulfillment_policy_id: str = ""
+
+    # Which environment the listing/publish flow actually posts to —
+    # "sandbox" (default, no real fees) or "production" (live, real listing).
+    # Everything below this line mirrors the sandbox_* fields above but for
+    # production, so credentials/token/policies switch together with this.
+    ebay_listing_environment: str = "sandbox"
+    ebay_production_oauth_user_token: str = ""
+    ebay_production_refresh_token: str = ""
+    ebay_production_payment_policy_id: str = ""
+    ebay_production_return_policy_id: str = ""
+    ebay_production_fulfillment_policy_id: str = ""
     # Use official eBay API as primary path; scraper is fallback.
     ebay_use_api: bool = True
     ebay_proxy_url: str = ""
@@ -57,6 +82,32 @@ class Settings(BaseSettings):
     stability_api_key: str = ""
     image_gen_provider: str = "pollinations"
 
+    # Parcel2Go courier quotes (app/services/parcel2go_courier.py) — used by
+    # the build sell page to quote real tracked-delivery cost from a build's
+    # package weight/dimensions, so the asking price can bake in accurate
+    # shipping instead of a hand-guessed flat rate. OAuth2 client_credentials
+    # grant; create credentials at parcel2go.com/myaccount/api (sandbox) or
+    # the production account equivalent.
+    parcel2go_client_id: str = ""
+    parcel2go_client_secret: str = ""
+    # "sandbox" (default, no real charges) | "production"
+    parcel2go_environment: str = "sandbox"
+    # Seller's own collection address — used as every booking's
+    # CollectionAddress (where the courier picks up from) and as the
+    # Parcel2Go order's CustomerDetails. Constant across all shipments,
+    # unlike the buyer's DeliveryAddress which comes from the real eBay
+    # order and differs every time.
+    seller_forename: str = ""
+    seller_surname: str = ""
+    seller_email: str = ""
+    seller_phone: str = ""
+    seller_address_property: str = ""
+    seller_address_street: str = ""
+    seller_address_town: str = ""
+    seller_address_county: str = ""
+    seller_address_postcode: str = ""
+    seller_address_country_iso: str = "GBR"
+
     scrape_delay_min: float = 2.0
     scrape_delay_max: float = 5.0
     max_concurrent_scrapers: int = 8
@@ -70,6 +121,7 @@ class Settings(BaseSettings):
     compliant_ingestion_interval_hours: int = 6
 
     max_concurrent_flips: int = 1
+    max_concurrent_search_terms: int = 2  # Limit concurrent gem_radar searches to ease RAM pressure (95% full)
     auto_buy_autonomous: bool = False
     auto_buy_daily_limit: int = 3
 
@@ -96,6 +148,14 @@ class Settings(BaseSettings):
     smtp_user: str = ""
     smtp_pass: str = ""
     smtp_from: str = "noreply@flipflop.co.uk"
+
+    # Email monitor (IMAP)
+    imap_host: str = ""
+    imap_user: str = ""
+    imap_pass: str = ""
+    imap_folder: str = "INBOX"
+    email_monitor_enabled: bool = False
+    email_monitor_interval_seconds: int = 300  # 5 minutes
 
     # Auth
     secret_key: str = "dev-secret-key-change-in-production"  # MUST be set via environment in production

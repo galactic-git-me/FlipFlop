@@ -1,11 +1,12 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Bell, Radio, Search, UserCircle2 } from "lucide-react";
+import { Bell, Heart, Radio, Search, UserCircle2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import type { PlaybookProposal } from "@/lib/types";
+import { FavouritesModal } from "./FavouritesModal";
 
 const PLACEHOLDERS: Record<string, string> = {
   "/": "QUERY MARKET DATA...",
@@ -23,11 +24,13 @@ const PLACEHOLDERS: Record<string, string> = {
 
 export function TopCommandBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const placeholder = PLACEHOLDERS[pathname] ?? "QUERY MARKET DATA...";
   const [notifOpen, setNotifOpen] = useState(false);
+  const [favouritesOpen, setFavouritesOpen] = useState(false);
   const [pendingProposals, setPendingProposals] = useState<PlaybookProposal[]>([]);
-  const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; created_at?: string | null }>>([]);
-  const [toasts, setToasts] = useState<Array<{ id: string; text: string }>>([]);
+  const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>>([]);
+  const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const seenProposalIdsRef = useRef<Set<number>>(new Set());
   const seenAlertIdsRef = useRef<Set<number>>(new Set());
@@ -57,7 +60,7 @@ export function TopCommandBar() {
         ]);
         if (!mounted) return;
         setPendingProposals(rows);
-        const alertRows = (alertRowsRaw as Array<{ id: number; code: string; message: string; created_at?: string | null }>)
+        const alertRows = (alertRowsRaw as Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>)
           .slice(0, 25);
         setAlerts(alertRows);
 
@@ -90,6 +93,11 @@ export function TopCommandBar() {
             const alertToasts = newAlerts.slice(0, 3).map((a) => ({
               id: `alert-${a.id}`,
               text: a.message,
+              linkUrl: a.link_url ?? null,
+              // Favourite gem matches must be manually dismissed (clicking
+              // navigates to the listing) rather than auto-expiring like
+              // other alert toasts.
+              persistent: a.code === "favourite_gem_match",
             }));
             setToasts((prev) => [...alertToasts, ...prev].slice(0, 8));
             seenAlertIdsRef.current = new Set([...seenAlertIdsRef.current, ...newAlerts.map((a) => a.id)]);
@@ -99,6 +107,7 @@ export function TopCommandBar() {
               }
             }
             for (const t of alertToasts) {
+              if (t.persistent) continue;
               setTimeout(() => {
                 setToasts((prev) => prev.filter((x) => x.id !== t.id));
               }, 7000);
@@ -117,7 +126,7 @@ export function TopCommandBar() {
     };
   }, []);
 
-  const [notifTab, setNotifTab] = useState<"all" | "errors" | "flips" | "proposals" | "system">("all");
+  const [notifTab, setNotifTab] = useState<"all" | "errors" | "flips" | "proposals" | "favourites" | "system">("all");
   const [clearing, setClearing] = useState(false);
 
   const clearAll = async () => {
@@ -145,7 +154,9 @@ export function TopCommandBar() {
         const code = (a.code ?? "").toLowerCase();
         const msg  = (a.message ?? "").toLowerCase();
         const tab =
-          code.includes("fail") || code.includes("error") || msg.includes("failed") || msg.includes("error")
+          code === "favourite_gem_match"
+            ? ("favourites" as const)
+            : code.includes("fail") || code.includes("error") || msg.includes("failed") || msg.includes("error")
             ? ("errors" as const)
             : code.includes("flip") || code.includes("resale") || code.includes("sale") || code.includes("sold")
             ? ("flips" as const)
@@ -154,10 +165,11 @@ export function TopCommandBar() {
           key: `alert-${a.id}`,
           kind: "alert" as const,
           tab,
-          title: tab === "errors" ? "Error" : tab === "flips" ? "Flip Alert" : "System",
+          title: tab === "errors" ? "Error" : tab === "flips" ? "Flip Alert" : tab === "favourites" ? "Favourite Match" : "System",
           name: a.message,
           reason: a.code,
           createdAt: a.created_at,
+          linkUrl: a.link_url ?? null,
         };
       }),
     ],
@@ -165,11 +177,12 @@ export function TopCommandBar() {
   );
 
   const tabCounts = useMemo(() => ({
-    all:       allNotifs.length,
-    errors:    allNotifs.filter(n => n.tab === "errors").length,
-    flips:     allNotifs.filter(n => n.tab === "flips").length,
-    proposals: allNotifs.filter(n => n.tab === "proposals").length,
-    system:    allNotifs.filter(n => n.tab === "system").length,
+    all:        allNotifs.length,
+    errors:     allNotifs.filter(n => n.tab === "errors").length,
+    flips:      allNotifs.filter(n => n.tab === "flips").length,
+    proposals:  allNotifs.filter(n => n.tab === "proposals").length,
+    favourites: allNotifs.filter(n => n.tab === "favourites").length,
+    system:     allNotifs.filter(n => n.tab === "system").length,
   }), [allNotifs]);
 
   const notifList = useMemo(
@@ -190,10 +203,17 @@ export function TopCommandBar() {
       <div className="node-topbar-right">
         <div className="node-live-chip">
           <span className="node-live-dot" />
-          <Image src="/pics/logo.png" alt="FlipFlop" width={120} height={60} className="h-[60px] w-auto object-contain" />
+          <Image src="/pics/logo_simple_no_bg.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
         </div>
         <div className="node-top-icons relative">
           <Radio className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => setFavouritesOpen(true)}
+            aria-label="Favourites"
+          >
+            <Heart className="h-4 w-4 hover:text-rose-400 transition-colors" />
+          </button>
           <button
             type="button"
             onClick={() => setNotifOpen((v) => !v)}
@@ -207,7 +227,18 @@ export function TopCommandBar() {
               </span>
             )}
           </button>
-          <UserCircle2 className="h-5 w-5" />
+          <button
+            type="button"
+            onClick={async () => {
+              await fetch("/api/session/logout", { method: "POST" });
+              router.push("/login");
+              router.refresh();
+            }}
+            aria-label="Sign out"
+            title="Sign out"
+          >
+            <UserCircle2 className="h-5 w-5 hover:text-red-400 transition-colors" />
+          </button>
 
           {notifOpen && (
             <div className="absolute right-0 top-7 w-[400px] rounded-xl border border-white/10 bg-[#0b111d]/98 backdrop-blur-md shadow-2xl z-50 flex flex-col" style={{ maxHeight: "480px" }}>
@@ -226,7 +257,7 @@ export function TopCommandBar() {
 
               {/* Tabs */}
               <div className="flex gap-0 border-b border-white/8 shrink-0">
-                {(["all", "errors", "flips", "proposals", "system"] as const).map(tab => (
+                {(["all", "errors", "flips", "proposals", "favourites", "system"] as const).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setNotifTab(tab)}
@@ -239,8 +270,9 @@ export function TopCommandBar() {
                     {tab}
                     {tabCounts[tab] > 0 && (
                       <span className={`ml-1 px-1 rounded-full text-[9px] font-bold ${
-                        tab === "errors" ? "bg-red-500/20 text-red-400" :
-                        tab === "flips"  ? "bg-[#00dc82]/20 text-[#00dc82]" :
+                        tab === "errors"     ? "bg-red-500/20 text-red-400" :
+                        tab === "flips"      ? "bg-[#00dc82]/20 text-[#00dc82]" :
+                        tab === "favourites" ? "bg-rose-500/20 text-rose-400" :
                         "bg-slate-700 text-slate-400"
                       }`}>
                         {tabCounts[tab]}
@@ -260,17 +292,24 @@ export function TopCommandBar() {
                 ) : (
                   notifList.map((n) => {
                     const borderColor =
-                      n.tab === "errors"    ? "border-red-500/30 bg-red-500/5" :
-                      n.tab === "flips"     ? "border-[#00dc82]/25 bg-[#00dc82]/5" :
-                      n.tab === "proposals" ? "border-cyan-500/25 bg-cyan-500/5" :
+                      n.tab === "errors"     ? "border-red-500/30 bg-red-500/5" :
+                      n.tab === "flips"      ? "border-[#00dc82]/25 bg-[#00dc82]/5" :
+                      n.tab === "proposals"  ? "border-cyan-500/25 bg-cyan-500/5" :
+                      n.tab === "favourites" ? "border-rose-500/25 bg-rose-500/5" :
                                               "border-white/8 bg-white/3";
                     const titleColor =
-                      n.tab === "errors"    ? "text-red-400" :
-                      n.tab === "flips"     ? "text-[#00dc82]" :
-                      n.tab === "proposals" ? "text-cyan-400" :
+                      n.tab === "errors"     ? "text-red-400" :
+                      n.tab === "flips"      ? "text-[#00dc82]" :
+                      n.tab === "proposals"  ? "text-cyan-400" :
+                      n.tab === "favourites" ? "text-rose-400" :
                                               "text-slate-400";
+                    const linkUrl = "linkUrl" in n ? n.linkUrl : null;
                     return (
-                      <div key={n.key} className={`rounded-lg border p-2.5 ${borderColor}`}>
+                      <div
+                        key={n.key}
+                        onClick={linkUrl ? () => { setNotifOpen(false); router.push(linkUrl); } : undefined}
+                        className={`rounded-lg border p-2.5 ${borderColor} ${linkUrl ? "cursor-pointer hover:brightness-110" : ""}`}
+                      >
                         <div className={`text-[10px] uppercase tracking-wide font-semibold ${titleColor}`}>{n.title}</div>
                         <div className="text-xs text-slate-100 mt-0.5 leading-snug">{n.name}</div>
                         {n.reason && <div className="text-[10px] text-slate-500 mt-1 font-mono line-clamp-1">{n.reason}</div>}
@@ -287,11 +326,24 @@ export function TopCommandBar() {
     {/* Toast notifications */}
     <div className="fixed top-16 right-5 z-[70] space-y-2 pointer-events-none">
       {toasts.map((t) => (
-        <div key={t.id} className="pointer-events-auto rounded-lg border border-[#00dc82]/30 bg-[#062218]/95 text-[#baf6d8] px-3 py-2 text-sm shadow-xl">
+        <div
+          key={t.id}
+          onClick={() => {
+            setToasts((prev) => prev.filter((x) => x.id !== t.id));
+            if (t.linkUrl) router.push(t.linkUrl);
+          }}
+          className={`pointer-events-auto rounded-lg border px-3 py-2 text-sm shadow-xl transition ${
+            t.persistent
+              ? "border-rose-400/40 bg-[#22081a]/95 text-rose-100 cursor-pointer hover:brightness-110"
+              : "border-[#00dc82]/30 bg-[#062218]/95 text-[#baf6d8]"
+          } ${t.linkUrl && !t.persistent ? "cursor-pointer hover:brightness-110" : ""}`}
+        >
           {t.text}
+          {t.persistent && <div className="text-[10px] text-rose-300/70 mt-1">Click to view listing & dismiss</div>}
         </div>
       ))}
     </div>
+    <FavouritesModal open={favouritesOpen} onClose={() => setFavouritesOpen(false)} />
     {confettiPieces.length > 0 && (
       <div className="pointer-events-none fixed inset-0 z-[80] overflow-hidden" aria-hidden="true">
         {confettiPieces.map((p) => (

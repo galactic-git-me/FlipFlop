@@ -1,0 +1,128 @@
+<!--
+  FLIPFLOP EBAY LISTING TEMPLATE
+  ===============================
+  This file is a TEMPLATE, not the final listing. It contains {{tokens}} that
+  get replaced by render-ebay.js using data from ebay-listing-data.json.
+
+  DO NOT paste this file into eBay as-is — it still has {{tokens}} in it.
+  Run `node render-ebay.js` to produce the final static HTML (no tokens, no
+  script tags), then paste THAT into eBay's listing description box.
+
+  Why not just fetch the JSON in the browser like the performance card does?
+  eBay strips <script> tags from listing descriptions, so nothing that needs
+  JS to run will survive being pasted in. The JSON -> HTML step has to happen
+  BEFORE the HTML reaches eBay, not inside it.
+
+  Everything is inline-styled (no <style> block, no external CSS) because
+  eBay's various listing tools (Seller Hub editor, API, mobile app) strip
+  <style> blocks and external stylesheets inconsistently. Inline survives all
+  of them, same as an HTML email.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#050608;padding:24px 0;font-family:Arial,Helvetica,sans-serif;">
+<tr><td align="center">
+<table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="width:680px;max-width:100%;background:#0b0d12;border-radius:18px;overflow:hidden;border:1px solid #232a35;">
+
+  <!-- ===== MASTHEAD ===== -->
+  <tr><td style="background:linear-gradient(120deg,#2a1608 0%,#0b0d12 55%,#0a1420 100%);padding:32px 32px 24px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td valign="top">
+        <img src="{{logo}}" width="150" alt="FlipFlop" style="display:block;border:0;max-width:150px;">
+      </td>
+      <td valign="top" align="right">
+        <span style="display:inline-block;background:#0f2417;border:1px solid #2f6b47;color:#4ade80;font-size:11px;font-weight:bold;letter-spacing:1px;padding:6px 12px;border-radius:20px;text-transform:uppercase;">&#9679;&nbsp; Bench-Verified Build</span>
+      </td>
+    </tr></table>
+
+    <div style="margin-top:22px;font-size:12px;letter-spacing:3px;color:#ff9d54;font-weight:bold;text-transform:uppercase;">FlipFlop Build Registry &nbsp;/&nbsp; {{buildId}}</div>
+    <div style="margin-top:6px;font-size:44px;line-height:1.05;font-weight:900;letter-spacing:1px;color:#ffb066;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">{{buildName}}</div>
+
+    <div style="margin-top:18px;font-size:20px;line-height:1.4;color:#eef2f7;font-weight:bold;max-width:520px;">
+      {{headline}}
+    </div>
+    <div style="margin-top:10px;font-size:14.5px;line-height:1.65;color:#93a0b3;max-width:560px;">
+      {{story}}
+    </div>
+  </td></tr>
+
+  <!-- ===== HERO IMAGE ===== -->
+  <tr><td style="padding:0;">
+    <a href="{{heroVideo}}" style="text-decoration:none;">
+      <img src="{{heroImage}}" width="680" alt="{{buildName}} build" style="display:block;width:100%;max-width:680px;border:0;">
+    </a>
+    <div style="background:#11141b;padding:8px 16px;font-size:11px;color:#5c6779;text-align:center;border-top:1px solid #232a35;">
+      &#9654;&nbsp; Tap the photo to watch {{buildName}} running
+    </div>
+  </td></tr>
+
+  <!-- ===== HEADLINE STAT ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(90deg,#1a1206 0%,#0c1420 100%);border:1px solid #2b2f3a;border-radius:14px;">
+      <tr>
+        <td width="130" align="center" style="padding:20px 10px;">
+          <div style="font-size:46px;font-weight:900;color:#ffb066;line-height:1;">{{novabenchOverall}}</div>
+          <div style="font-size:10px;letter-spacing:1px;color:#93a0b3;text-transform:uppercase;margin-top:6px;">Novabench<br>Overall Score</div>
+        </td>
+        <td style="padding:20px 20px 20px 4px;border-left:1px solid #232a35;">
+          <div style="font-size:15px;font-weight:bold;color:#eef2f7;">Faster than {{percentile}} out of every 100 systems Novabench has ever benchmarked.</div>
+          <div style="font-size:12px;color:#93a0b3;margin-top:6px;">Benchmarked with {{toolBadges}} &mdash; full report linked below.</div>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- ===== THE STORY ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <div style="font-size:12px;letter-spacing:2px;color:#5c6779;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #232a35;padding-bottom:8px;">What it feels like</div>
+    <div style="margin-top:14px;font-size:14.5px;line-height:1.7;color:#c3cad4;">
+      {{feelStory}}
+    </div>
+  </td></tr>
+
+  <!-- ===== GAMING PERFORMANCE ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <div style="font-size:12px;letter-spacing:2px;color:#5c6779;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #232a35;padding-bottom:8px;">Gaming performance &middot; estimated, 1080p High</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;"><tr>
+      {{gameCards}}
+    </tr></table>
+    <div style="font-size:11px;color:#5c6779;margin-top:2px;">{{gamesFootnote}}</div>
+  </td></tr>
+
+  <!-- ===== SPEC CARD IMAGE ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <div style="font-size:12px;letter-spacing:2px;color:#5c6779;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #232a35;padding-bottom:8px;">What's inside</div>
+    <img src="{{specCard}}" width="616" alt="{{buildName}} full specification" style="display:block;width:100%;max-width:616px;border-radius:10px;border:1px solid #232a35;margin-top:14px;">
+  </td></tr>
+
+  <!-- ===== BEYOND GAMING ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <div style="font-size:12px;letter-spacing:2px;color:#5c6779;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #232a35;padding-bottom:8px;">Beyond gaming</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;font-size:13.5px;color:#c3cad4;line-height:1.9;">
+      {{everydayRows}}
+    </table>
+  </td></tr>
+
+  <!-- ===== TRUST / VERIFICATION ===== -->
+  <tr><td style="padding:26px 32px 6px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0f1610;border:1px solid #2f6b47;border-radius:12px;">
+      <tr><td style="padding:16px 18px;">
+        <div style="font-size:13px;color:#4ade80;font-weight:bold;">&#9679;&nbsp; Drive health: {{driveHealth}}</div>
+        <div style="font-size:12px;color:#93a0b3;margin-top:6px;line-height:1.6;">
+          Every FlipFlop build ships with a full, independently reproducible benchmark report &mdash; not just our word for it.
+          <a href="{{performanceReportUrl}}" style="color:#ffb066;text-decoration:underline;">View the full interactive performance report &rarr;</a>
+        </div>
+      </tr></td>
+    </table>
+  </td></tr>
+
+  <!-- ===== CLOSING ===== -->
+  <tr><td style="padding:30px 32px 34px 32px;text-align:center;">
+    <div style="font-size:22px;font-weight:900;color:#eef2f7;letter-spacing:1px;text-transform:uppercase;">{{closingHeadline}}</div>
+    <div style="font-size:13px;color:#93a0b3;margin-top:10px;">{{closingSub}}</div>
+    <div style="margin-top:20px;">
+      <span style="display:inline-block;background:linear-gradient(90deg,#ff7a1a,#2f7bff);color:#050608;font-weight:bold;font-size:13px;padding:12px 28px;border-radius:8px;letter-spacing:0.5px;">{{brandUrl}}</span>
+    </div>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>

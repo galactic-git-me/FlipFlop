@@ -21,8 +21,9 @@ from app.schemas.catalogue import (
     RejectBody,
 )
 from app.services.catalogue_service import approve_variant, reject_variant
+from app.routes.admin_auth import get_current_admin
 
-router = APIRouter(prefix="/catalogue", tags=["catalogue"])
+router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
 
 
 @router.get("/review-queue")

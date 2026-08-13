@@ -1,14 +1,13 @@
 """
-eBay Listing Poster — Create and post new listings to eBay via REST API.
+eBay Listing Poster — Create and post new listings to eBay via Inventory API.
 
-Supports:
-  - Creating new fixed-price listings
-  - Bulk item uploads
-  - Category auto-detection
-  - Pricing with platform fees applied
+Uses the official Inventory API workflow:
+  1. Create inventory item (sku-based)
+  2. Create offer (links item to marketplace)
+  3. Publish offer (activates listing and returns listing_id)
 
 Authentication:
-  Uses OAuth 2.0 token from eBay API. Token refresh handled by oauth_handler.
+  Uses OAuth 2.0 token from eBay API (Application Token with sell.inventory scope).
 
 Requires:
   - EBAY_APP_ID, EBAY_CLIENT_SECRET in environment
@@ -19,6 +18,8 @@ import httpx
 import structlog
 from typing import Optional
 from datetime import datetime
+import uuid
+import base64
 
 log = structlog.get_logger(__name__)
 
@@ -29,26 +30,88 @@ EBAY_API_BASE = {
 
 
 class EbayListingPoster:
-    """Posts listings to eBay via REST API."""
+    """Posts listings to eBay via Inventory API (official workflow)."""
 
-    def __init__(self, environment: str = "sandbox", access_token: Optional[str] = None):
+    def __init__(
+        self,
+        environment: str = "sandbox",
+        access_token: Optional[str] = None,
+        app_id: Optional[str] = None,
+        client_secret: Optional[str] = None,
+    ):
         self.environment = environment
         self.access_token = access_token
+        self.app_id = app_id
+        self.client_secret = client_secret
         self.base_url = EBAY_API_BASE[environment]
+        self.headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-EBAY-API-SITEID": "EBAY_GB",
+        }
+
+    async def get_application_token(self) -> str:
+        """Get an Application Token using client credentials (server-to-server auth)."""
+        if not self.app_id or not self.client_secret:
+            raise ValueError("App ID and Client Secret required for Application Token")
+
+        # Base64 encode credentials for Basic Auth
+        credentials = f"{self.app_id}:{self.client_secret}"
+        encoded = base64.b64encode(credentials.encode()).decode()
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            token_resp = await client.post(
+                f"{self.base_url}/identity/v1/oauth2/token",
+                headers={
+                    "Authorization": f"Basic {encoded}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                data={"grant_type": "client_credentials"},
+            )
+
+            if token_resp.status_code != 200:
+                try:
+                    error_json = token_resp.json()
+                    error_msg = error_json.get("error_description", token_resp.text)
+                except:
+                    error_msg = token_resp.text
+
+                log.error(
+                    "ebay.token_generation_failed",
+                    status=token_resp.status_code,
+                    error=error_msg,
+                    app_id=self.app_id,
+                )
+                raise ValueError(f"Failed to get Application Token: {error_msg}")
+
+            token_data = token_resp.json()
+            return token_data.get("access_token")
 
     async def create_listing(
         self,
         title: str,
         description: str,
         price: float,
-        category_id: str = "15687",  # Gaming/Computer category fallback
-        condition: str = "Used",
+        image_urls: list[str],
+        category_id: str = "179",  # PC Desktops & All-in-Ones
+        condition: str = "USED",
         quantity: int = 1,
         location: str = "UK",
         shipping_cost: float = 15.0,
+        merchant_location_key: str = "UK_WAREHOUSE",
+        payment_policy_id: Optional[str] = None,
+        return_policy_id: Optional[str] = None,
+        fulfillment_policy_id: Optional[str] = None,
+        aspects: Optional[dict[str, list[str]]] = None,
     ) -> dict:
         """
-        Create a new fixed-price listing on eBay.
+        Create a new fixed-price listing on eBay using Inventory API.
+
+        Follows official workflow:
+          1. Create inventory item
+          2. Create offer
+          3. Publish offer
 
         Returns: {
             "listing_id": "...",
@@ -57,81 +120,267 @@ class EbayListingPoster:
             "status": "ACTIVE",
         }
         """
-        if not self.access_token:
-            raise ValueError("eBay access token required — OAuth authentication needed")
+        if not image_urls:
+            return {
+                "success": False,
+                "error": "At least one image URL is required for an eBay listing",
+            }
 
-        payload = {
-            "listingType": "FixedPrice",
-            "title": title[:80],  # eBay max 80 chars
-            "description": description[:4000],  # eBay max 4000 chars
-            "price": str(price),
-            "categoryId": category_id,
-            "condition": condition,
-            "quantity": quantity,
-            "currencyId": "GBP",
-            "country": "GB",
-            "location": location,
-            "shippingDetails": {
-                "flatShippingCost": str(shipping_cost),
-                "shippingType": "Flat",
-            },
-            "paymentMethods": ["CreditCard", "PayPal"],
-            "returnPolicy": {
-                "returnsAccepted": True,
-                "refundOption": "MoneyBack",
-                "returnsWithin": "30",
-                "restockingFeePercentage": 0,
-            },
-        }
-
-        headers = {
-            "Authorization": f"Bearer {self.access_token}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
+        sku = f"FLP-{uuid.uuid4().hex[:12].upper()}"
 
         try:
+            # Use the provided user token directly
+            if not self.access_token:
+                raise ValueError("eBay user OAuth token required")
+
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "Content-Type": "application/json",
+                "Content-Language": "en-GB",
+                "Accept": "application/json",
+                "X-EBAY-API-SITEID": "EBAY_GB",
+            }
+
             async with httpx.AsyncClient(timeout=30.0) as client:
-                resp = await client.post(
-                    f"{self.base_url}/sell/inventory/v1/item",
-                    json=payload,
+                # Step 1: Create or verify merchant location (required for all listings)
+                log.info("ebay.ensuring_merchant_location")
+                location_key = merchant_location_key
+
+                # Try to create location (safe — POST returns 409 if it already exists)
+                location_create_resp = await client.post(
+                    f"{self.base_url}/sell/inventory/v1/location/{location_key}",
+                    json={
+                        "merchantLocationStatus": "ENABLED",
+                        "name": f"FlipFlop {location} Warehouse",
+                        "locationTypes": ["WAREHOUSE"],
+                        "location": {
+                            "address": {
+                                "addressLine1": "1 Example Street",
+                                "city": "London",
+                                "stateOrProvince": "London",
+                                "postalCode": "SW1A 1AA",
+                                "country": "GB",
+                            }
+                        },
+                    },
                     headers=headers,
                 )
 
-                if resp.status_code == 201:
-                    data = resp.json()
-                    item_id = data.get("itemId")
-                    sku = data.get("sku", f"FLP-{item_id}")
-
-                    # Build eBay listing URL
-                    domain = "ebay.co.uk" if self.environment == "production" else "ebay.co.uk"
-                    listing_url = f"https://{domain}/itm/{item_id}"
-
-                    log.info(
-                        "ebay.listing_created",
-                        item_id=item_id,
-                        title=title[:50],
-                        price=price,
-                    )
-
-                    return {
-                        "success": True,
-                        "listing_id": item_id,
-                        "sku": sku,
-                        "url": listing_url,
-                        "status": "ACTIVE",
-                    }
-                else:
-                    error_msg = resp.text
+                location_already_exists = "already exists" in location_create_resp.text
+                if location_create_resp.status_code not in [200, 201, 204, 409] and not location_already_exists:
                     log.error(
-                        "ebay.listing_failed",
-                        status=resp.status_code,
-                        error=error_msg[:200],
+                        "ebay.location_creation_failed",
+                        status=location_create_resp.status_code,
+                        body=location_create_resp.text,
                     )
                     return {
                         "success": False,
-                        "error": f"eBay API error {resp.status_code}: {error_msg[:100]}",
+                        "error": f"Failed to create merchant location: {location_create_resp.status_code}: {location_create_resp.text}",
                     }
+
+                # Step 2: Create inventory item
+                log.info("ebay.creating_inventory_item", sku=sku, title=title[:50])
+
+                # Normalize condition to eBay's actual ConditionEnum values.
+                # Plain "USED" is NOT valid — eBay requires a specific grade.
+                _VALID_CONDITIONS = {
+                    "NEW",
+                    "LIKE_NEW",
+                    "NEW_OTHER",
+                    "NEW_WITH_DEFECTS",
+                    "MANUFACTURER_REFURBISHED",
+                    "CERTIFIED_REFURBISHED",
+                    "EXCELLENT_REFURBISHED",
+                    "VERY_GOOD_REFURBISHED",
+                    "GOOD_REFURBISHED",
+                    "SELLER_REFURBISHED",
+                    "USED_EXCELLENT",
+                    "USED_VERY_GOOD",
+                    "USED_GOOD",
+                    "USED_ACCEPTABLE",
+                    "FOR_PARTS_OR_NOT_WORKING",
+                }
+                condition_normalized = condition.upper()
+                if condition_normalized not in _VALID_CONDITIONS:
+                    condition_normalized = "USED_EXCELLENT"
+
+                item_aspects = dict(aspects) if aspects else {}
+                item_aspects.setdefault("Brand", ["FlipFlop"])
+                item_aspects.setdefault("Type", ["Desktop"])
+
+                inventory_item = {
+                    "product": {
+                        "title": title[:80],
+                        "description": description[:4000],
+                        "imageUrls": image_urls,
+                        "aspects": item_aspects,
+                    },
+                    "condition": condition_normalized,
+                    "availability": {
+                        "shipToLocationAvailability": {
+                            "quantity": quantity,
+                        }
+                    },
+                }
+
+                log.info(
+                    "ebay.sending_inventory_request",
+                    url=f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}",
+                    payload=inventory_item,
+                )
+                inventory_resp = await client.put(
+                    f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}",
+                    json=inventory_item,
+                    headers=headers,
+                )
+                log.info(
+                    "ebay.inventory_response",
+                    status=inventory_resp.status_code,
+                    body=inventory_resp.text,
+                )
+
+                if inventory_resp.status_code not in [200, 201, 204]:
+                    error_msg = inventory_resp.text
+                    try:
+                        error_json = inventory_resp.json()
+                        errors = error_json.get("errors", [])
+                        error_details = []
+                        for err in errors:
+                            # Try different error message fields
+                            msg = (
+                                err.get("longMessage")
+                                or err.get("message")
+                                or err.get("errorDescription")
+                                or str(err)
+                            )
+                            error_details.append(msg)
+                        if error_details:
+                            error_msg = " | ".join(error_details)
+                    except Exception as parse_err:
+                        log.warning("ebay.error_parse_failed", error=str(parse_err))
+
+                    log.error(
+                        "ebay.inventory_item_failed",
+                        status=inventory_resp.status_code,
+                        error=error_msg,
+                        sku=sku,
+                        request_payload=inventory_item,
+                        full_response=inventory_resp.text,
+                    )
+                    return {
+                        "success": False,
+                        "error": f"Failed to create inventory item: {inventory_resp.status_code}: {error_msg}",
+                        "details": {
+                            "status": inventory_resp.status_code,
+                            "response": error_msg,
+                            "sku": sku,
+                        },
+                    }
+
+                log.info("ebay.inventory_item_created", sku=sku)
+
+                # Step 2: Create offer
+                log.info("ebay.creating_offer", sku=sku)
+
+                offer = {
+                    "sku": sku,
+                    "marketplaceId": "EBAY_GB",  # UK marketplace
+                    "format": "FIXED_PRICE",
+                    "categoryId": category_id,
+                    "merchantLocationKey": merchant_location_key,
+                    "pricingSummary": {
+                        "price": {
+                            "currency": "GBP",
+                            "value": str(price),
+                        }
+                    },
+                    "listingPolicies": {
+                        "paymentPolicyId": payment_policy_id or "default",
+                        "returnPolicyId": return_policy_id or "default",
+                        "fulfillmentPolicyId": fulfillment_policy_id or "default",
+                    },
+                }
+
+                offer_resp = await client.post(
+                    f"{self.base_url}/sell/inventory/v1/offer",
+                    json=offer,
+                    headers=headers,
+                )
+
+                if offer_resp.status_code not in [200, 201]:
+                    error_msg = offer_resp.text
+                    log.error(
+                        "ebay.offer_creation_failed",
+                        status=offer_resp.status_code,
+                        error=error_msg,
+                        sku=sku,
+                    )
+                    return {
+                        "success": False,
+                        "error": f"Failed to create offer: {offer_resp.status_code}: {error_msg}",
+                    }
+
+                offer_data = offer_resp.json()
+                offer_id = offer_data.get("offerId")
+
+                if not offer_id:
+                    log.error("ebay.offer_no_id", response=offer_data)
+                    return {
+                        "success": False,
+                        "error": "No offerId returned from offer creation",
+                    }
+
+                log.info("ebay.offer_created", offer_id=offer_id, sku=sku)
+
+                # Step 3: Publish offer (this creates the actual listing)
+                log.info("ebay.publishing_offer", offer_id=offer_id)
+
+                publish_resp = await client.post(
+                    f"{self.base_url}/sell/inventory/v1/offer/{offer_id}/publish",
+                    headers=headers,
+                )
+
+                if publish_resp.status_code not in [200, 201]:
+                    error_msg = publish_resp.text
+                    log.error(
+                        "ebay.publish_failed",
+                        status=publish_resp.status_code,
+                        error=error_msg,
+                        offer_id=offer_id,
+                    )
+                    return {
+                        "success": False,
+                        "error": f"Failed to publish listing: {publish_resp.status_code}: {error_msg}",
+                    }
+
+                publish_data = publish_resp.json()
+                listing_id = publish_data.get("listingId")
+
+                if not listing_id:
+                    log.error("ebay.publish_no_listing_id", response=publish_data)
+                    return {
+                        "success": False,
+                        "error": "No listingId returned from publish",
+                    }
+
+                domain = "www.ebay.co.uk" if self.environment == "production" else "sandbox.ebay.com"
+                listing_url = f"https://{domain}/itm/{listing_id}"
+
+                log.info(
+                    "ebay.listing_created",
+                    listing_id=listing_id,
+                    sku=sku,
+                    title=title[:50],
+                    price=price,
+                )
+
+                return {
+                    "success": True,
+                    "listing_id": listing_id,
+                    "sku": sku,
+                    "url": listing_url,
+                    "status": "ACTIVE",
+                }
 
         except Exception as exc:
             log.error("ebay.listing_exception", error=str(exc))
@@ -145,22 +394,52 @@ async def post_flip_to_ebay(
     title: str,
     description: str,
     price: float,
+    image_urls: list[str],
     access_token: str,
     environment: str = "sandbox",
+    app_id: Optional[str] = None,
+    client_secret: Optional[str] = None,
+    condition: str = "USED_EXCELLENT",
+    payment_policy_id: Optional[str] = None,
+    return_policy_id: Optional[str] = None,
+    fulfillment_policy_id: Optional[str] = None,
+    aspects: Optional[dict[str, list[str]]] = None,
 ) -> dict:
     """
     Convenience function to post a flip's listing to eBay.
 
+    Uses Application Token (server-to-server) auth if app_id and client_secret are provided.
+    Falls back to user token if not provided.
+
     Usage in API endpoint:
-        result = await post_flip_to_ebay(title, desc, price, user_token)
+        result = await post_flip_to_ebay(
+            title=title,
+            description=description,
+            price=price,
+            image_urls=["https://example.com/image1.jpg"],
+            access_token=user_token,
+            app_id=settings.ebay_app_id,
+            client_secret=settings.ebay_client_secret
+        )
         if result["success"]:
             flip.ebay_listing_id = result["listing_id"]
             flip.ebay_listing_url = result["url"]
     """
-    poster = EbayListingPoster(environment=environment, access_token=access_token)
+    poster = EbayListingPoster(
+        environment=environment,
+        access_token=access_token,
+        app_id=app_id,
+        client_secret=client_secret,
+    )
     return await poster.create_listing(
         title=title,
         description=description,
         price=price,
+        image_urls=image_urls,
         shipping_cost=15.0,
+        condition=condition,
+        payment_policy_id=payment_policy_id,
+        return_policy_id=return_policy_id,
+        fulfillment_policy_id=fulfillment_policy_id,
+        aspects=aspects,
     )

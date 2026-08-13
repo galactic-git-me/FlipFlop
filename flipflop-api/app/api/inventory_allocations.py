@@ -2,11 +2,12 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, and_, or_
 from app.database import get_db
 from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.flip import Flip
+from app.models.build import Build
 from app.schemas.inventory_allocation import InventoryAllocationIn, InventoryAllocationPartialIn, InventoryAllocationOut
 
 router = APIRouter(prefix="/inventory-allocations", tags=["inventory-allocations"])
@@ -37,21 +38,26 @@ async def create_allocation(
     allocation: InventoryAllocationIn,
     db: AsyncSession = Depends(get_db),
 ):
-    """Create a new inventory allocation."""
+    """Create a new inventory allocation (for either a flip or a build)."""
     # Verify inventory_item_id exists
     result = await db.execute(select(InventoryItem).where(InventoryItem.id == allocation.inventory_item_id))
     inventory_item = result.scalar_one_or_none()
     if not inventory_item:
         raise HTTPException(404, f"Inventory item {allocation.inventory_item_id} not found")
 
-    # Verify flip_id exists
-    result = await db.execute(select(Flip).where(Flip.id == allocation.flip_id))
-    flip = result.scalar_one_or_none()
-    if not flip:
-        raise HTTPException(404, f"Flip {allocation.flip_id} not found")
+    # Verify flip_id OR build_id exists (exactly one must be set)
+    if allocation.flip_id:
+        result = await db.execute(select(Flip).where(Flip.id == allocation.flip_id))
+        if not result.scalar_one_or_none():
+            raise HTTPException(404, f"Flip {allocation.flip_id} not found")
+    elif allocation.build_id:
+        result = await db.execute(select(Build).where(Build.id == allocation.build_id))
+        if not result.scalar_one_or_none():
+            raise HTTPException(404, f"Build {allocation.build_id} not found")
+    else:
+        raise HTTPException(400, "Either flip_id or build_id must be provided")
 
     # Verify quantity_allocated doesn't exceed unallocated inventory
-    # First, get total allocated for this inventory item
     result = await db.execute(
         select(InventoryAllocation)
         .where(InventoryAllocation.inventory_item_id == allocation.inventory_item_id)
@@ -70,6 +76,7 @@ async def create_allocation(
     new_allocation = InventoryAllocation(
         inventory_item_id=allocation.inventory_item_id,
         flip_id=allocation.flip_id,
+        build_id=allocation.build_id,
         quantity_allocated=allocation.quantity_allocated,
         cost_per_unit_at_allocation=inventory_item.actual_cost,
         notes=allocation.notes,
@@ -83,12 +90,15 @@ async def create_allocation(
 @router.get("/", response_model=list[InventoryAllocationOut])
 async def list_allocations(
     flip_id: int | None = Query(None),
+    build_id: int | None = Query(None),
     db: AsyncSession = Depends(get_db),
 ):
-    """List all allocations, optionally filtered by flip_id."""
+    """List all allocations, optionally filtered by flip_id or build_id."""
     q = select(InventoryAllocation)
     if flip_id is not None:
         q = q.where(InventoryAllocation.flip_id == flip_id)
+    elif build_id is not None:
+        q = q.where(InventoryAllocation.build_id == build_id)
     result = await db.execute(q)
     return result.scalars().all()
 
@@ -130,11 +140,21 @@ async def update_allocation(
         if not result.scalar_one_or_none():
             raise HTTPException(404, f"Flip {allocation_update.flip_id} not found")
 
+    # Validate build_id if provided
+    if allocation_update.build_id is not None:
+        result = await db.execute(select(Build).where(Build.id == allocation_update.build_id))
+        if not result.scalar_one_or_none():
+            raise HTTPException(404, f"Build {allocation_update.build_id} not found")
+
     # Update only provided fields
     if allocation_update.inventory_item_id is not None:
         db_allocation.inventory_item_id = allocation_update.inventory_item_id
     if allocation_update.flip_id is not None:
         db_allocation.flip_id = allocation_update.flip_id
+        db_allocation.build_id = None  # Clear build_id when setting flip_id
+    if allocation_update.build_id is not None:
+        db_allocation.build_id = allocation_update.build_id
+        db_allocation.flip_id = None  # Clear flip_id when setting build_id
     if allocation_update.quantity_allocated is not None:
         # Revalidate quantity if changed - use current inventory_item_id (may have been updated above)
         inventory_item = await db.execute(
@@ -181,6 +201,60 @@ async def delete_allocation(
 
     await db.delete(db_allocation)
     await db.commit()
+
+
+@router.get("/builds/{build_id}/unallocated-by-type")
+async def get_unallocated_inventory_for_build(
+    build_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get unallocated inventory items grouped by component type for a build.
+
+    Returns a dict: { component_type: [item, ...] }
+    """
+    # Verify build exists
+    result = await db.execute(select(Build).where(Build.id == build_id))
+    if not result.scalar_one_or_none():
+        raise HTTPException(404, f"Build {build_id} not found")
+
+    # Get all inventory items
+    result = await db.execute(select(InventoryItem))
+    all_items = result.scalars().all()
+
+    # Get allocations for this build
+    result = await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.build_id == build_id)
+    )
+    build_allocations = result.scalars().all()
+    allocated_item_ids = {a.inventory_item_id: a.quantity_allocated for a in build_allocations}
+
+    # Group unallocated items by component type
+    unallocated_by_type = {}
+    for item in all_items:
+        allocated_qty = allocated_item_ids.get(item.id, 0)
+        unallocated_qty = item.quantity - allocated_qty
+
+        # Only include items with unallocated quantity
+        if unallocated_qty > 0:
+            if item.component_type not in unallocated_by_type:
+                unallocated_by_type[item.component_type] = []
+
+            unallocated_by_type[item.component_type].append({
+                "id": item.id,
+                "component_name": item.component_name,
+                "component_type": item.component_type,
+                "quantity": item.quantity,
+                "allocated_quantity": allocated_qty,
+                "unallocated_quantity": unallocated_qty,
+                "actual_cost": item.actual_cost,
+                "base_price": item.base_price,
+                "shipping_cost": item.shipping_cost,
+                "discount_amount": item.discount_amount,
+                "source": item.source,
+                "marketplace": item.marketplace,
+            })
+
+    return unallocated_by_type
 
 
 @router.get("/flips/{flip_id}/profit-breakdown", response_model=ProfitBreakdownOut)

@@ -423,7 +423,8 @@ async def manually_poll_sales(db: AsyncSession = Depends(get_db)):
     """
     Manually trigger a sales poll (useful for testing).
 
-    In production, this runs automatically every 5 minutes.
+    In production, this runs automatically on the schedule configured by
+    settings.ebay_sales_poll_interval_seconds (see app/workers/scheduler.py).
 
     Returns:
     - Number of sold listings found

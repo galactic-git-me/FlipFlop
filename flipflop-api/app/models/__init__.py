@@ -24,11 +24,23 @@ from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
-from app.models.order import Order
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.pricing_bias import PricingBias
+from app.models.draft_build import DraftBuild
+from app.models.gem_radar_observation import GemRadarListingObservation
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_seller_profile import GemRadarSellerProfile
+from app.models.gem_radar_sold_observation import GemRadarSoldObservation
+from app.models.gem_radar_amazon_observation import GemRadarAmazonObservation
+from app.models.gem_radar_scan_observation import GemRadarScanObservation
+from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+from app.models.gem_radar_cpk_listing_price import GemRadarCpkListingPrice
+from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
+from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
+from app.models.gem_radar_listing_demand_history import GemRadarListingDemandHistory
+from app.models.submission_queue import SubmissionQueue
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -67,9 +79,25 @@ __all__ = [
     "BuildCapacity",
     "BuildCapacityOverride",
     "InventoryAllocation",
+    "PricingBias",
+    "DraftBuild",
+    "GemRadarListingObservation",
+    "GemRadarScoredListing",
+    "GemRadarSellerProfile",
+    "GemRadarSoldObservation",
+    "GemRadarAmazonObservation",
+    "GemRadarScanObservation",
+    "GemRadarListingCpk",
+    "GemRadarCpkListingPrice",
+    "GemRadarCpkMarketPrice",
+    "GemRadarSweepSignal",
+    "GemRadarListingDemandHistory",
+    "SubmissionQueue",
 ]
 
 from .customer import Customer
+from .admin_user import AdminUser
+from .motherboard_spec import MotherboardSpec
 from .order import Order, OrderStatus
 from .order_checklist import OrderChecklist
 from .order_photo import OrderPhoto
@@ -109,12 +137,16 @@ from .cx_document import (
 )
 from .usb_manifest import USBTemplate, USBManifest, USBManifestStatus
 from .capture_3d import Capture3DAsset, Capture3DStatus
+from .component_3d_asset import Component3DAsset, Component3DAssetStatus, AssetSubjectType
 from .photo_requirement import PhotoRequirement, PhotoType
 from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequirement
 from .cx_cost_record import CXCostRecord
+from .social_proof_event import SocialProofEvent
 
 __all__ = [
     "Customer",
+    "AdminUser",
+    "MotherboardSpec",
     "Order", "OrderStatus",
     "OrderChecklist",
     "OrderPhoto",
@@ -143,7 +175,9 @@ __all__ = [
     "CXDocumentType", "CXDocumentStatus", "CXDocumentGeneratedBy",
     "USBTemplate", "USBManifest", "USBManifestStatus",
     "Capture3DAsset", "Capture3DStatus",
+    "Component3DAsset", "Component3DAssetStatus", "AssetSubjectType",
     "PhotoRequirement", "PhotoType",
     "QualityGateCheck", "QualityGateResult", "EvidenceRequirement",
     "CXCostRecord",
+    "SocialProofEvent",
 ]

@@ -3,7 +3,7 @@ import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { BackendStatus } from "@/components/backend-status";
-import { TraeBg } from "@/components/trae-bg";
+import { AnimatedGradientBackground } from "@/components/animated-gradient-bg";
 import { TopCommandBar } from "@/components/top-command-bar";
 import { FaviconAnimator } from "@/components/favicon-animator";
 import { HermesProvider } from "@/components/hermes-context";
@@ -38,7 +38,7 @@ export default function RootLayout({
     >
       <body className="h-full node-body" suppressHydrationWarning>
         <FaviconAnimator />
-        <TraeBg />
+        <AnimatedGradientBackground />
         <Sidebar />
 
         <div className="node-main-wrap">

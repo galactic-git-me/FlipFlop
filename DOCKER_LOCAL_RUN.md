@@ -21,7 +21,8 @@ docker compose up --build
 
 ## 3) URLs
 
-- Frontend: `http://localhost:4310`
+- Frontend (storefront): `http://localhost:4313`
+- Admin: `http://localhost:4312`
 - Backend: `http://localhost:4311`
 - API base: `http://localhost:4311/api`
 

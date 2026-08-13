@@ -19,6 +19,8 @@ from app.schemas.payment import (
 )
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
+from app.services.social_proof import record_order_event
+from app.services.playbook_pricing import InvalidBuildError, price_playbook_build
 
 log = structlog.get_logger(__name__)
 
@@ -76,19 +78,58 @@ async def create_payment_intent(
             detail="Customer not found",
         )
 
+    # A build_config always wins on price — never trust a client-supplied
+    # amount for a real catalogue build.
+    quote_data: dict = {}
+    if request.build_config is not None:
+        try:
+            priced = await price_playbook_build(
+                db,
+                playbook_id=request.build_config.playbook_id,
+                slot_selections=request.build_config.slot_selections,
+                case_id=request.build_config.case_id,
+            )
+        except InvalidBuildError as e:
+            log.warning("payment.invalid_build_config", error=str(e))
+            raise HTTPException(status_code=400, detail=str(e))
+        amount = priced.total
+        quote_data = {
+            "playbook_id": priced.playbook_id,
+            "playbook_name": priced.playbook_name,
+            "slots": [
+                {
+                    "slot_id": s.slot_id,
+                    "slot_type": s.slot_type,
+                    "variant_id": s.variant_id,
+                    "title": s.title,
+                    "price": s.price,
+                }
+                for s in priced.slots
+            ],
+            "case_id": priced.case_id,
+            "case_name": priced.case_name,
+            "case_price": priced.case_price,
+            "chosen_week": request.build_config.chosen_week,
+            "parts_total": priced.parts_total,
+            "labour": priced.labour,
+            "overhead": priced.overhead,
+        }
+    else:
+        amount = request.budget
+
     # Create payment intent using service
     try:
         payment_service = PaymentService()
         intent_data = await payment_service.create_payment_intent(
             customer_id=request.customer_id,
-            budget=request.budget,
-            quote_data={},
+            budget=amount,
+            quote_data=quote_data,
         )
 
         log.info(
             "payment.intent_created",
             customer_id=request.customer_id,
-            amount_gbp=request.budget,
+            amount_gbp=amount,
         )
 
         return PaymentIntentResponse(**intent_data)
@@ -166,16 +207,56 @@ async def confirm_payment(
             quote_data={},
         )
 
+        # Populate real specs + playbook link from the build config the
+        # customer actually configured (re-validated against the catalogue,
+        # not trusted as-is) instead of the old hardcoded specs={}.
+        specs: dict = {}
+        component_costs = 0.0
+        overhead_amount = 0.0
+        playbook_id = None
+        if request.build_config is not None:
+            try:
+                priced = await price_playbook_build(
+                    db,
+                    playbook_id=request.build_config.playbook_id,
+                    slot_selections=request.build_config.slot_selections,
+                    case_id=request.build_config.case_id,
+                )
+            except InvalidBuildError as e:
+                log.error("payment.confirm_invalid_build_config", error=str(e))
+                raise HTTPException(status_code=400, detail=str(e))
+            playbook_id = priced.playbook_id
+            component_costs = priced.parts_total
+            overhead_amount = priced.overhead
+            specs = {
+                "slots": [
+                    {
+                        "slot_id": s.slot_id,
+                        "slot_type": s.slot_type,
+                        "variant_id": s.variant_id,
+                        "title": s.title,
+                        "price": s.price,
+                    }
+                    for s in priced.slots
+                ],
+                "case_id": priced.case_id,
+                "case_name": priced.case_name,
+                "case_price": priced.case_price,
+                "chosen_week": request.build_config.chosen_week,
+            }
+
         # Create order
         order = Order(
             order_id=f"ORD-{payment_data['intent_id'][-12:]}",  # Use last 12 chars of intent ID
             customer_id=request.customer_id,
             status=OrderStatus.AWAITING_SOURCING,
-            specs={},
+            specs=specs,
             customer_price=payment_data["amount"],
-            component_costs=0.0,
-            overhead_amount=0.0,
-            promised_delivery_date=None,  # Will be set by order processing
+            component_costs=component_costs,
+            overhead_amount=overhead_amount,
+            playbook_id=playbook_id,
+            promised_delivery_date=None,  # No delivery estimation computed yet
+            stripe_payment_intent_id=request.intent_id,
             notes=f"Payment processed via Stripe. Intent: {request.intent_id}",
         )
 
@@ -191,6 +272,16 @@ async def confirm_payment(
             customer_id=request.customer_id,
             amount_gbp=payment_data["amount"],
         )
+
+        try:
+            await record_order_event(
+                db,
+                customer_name=customer.name,
+                address=customer.address,
+                product_name="a custom PC build",
+            )
+        except Exception as e:
+            log.warning("social_proof.order_event_failed", error=str(e), order_id=order_id)
 
         # Send confirmation email
         try:

@@ -1,0 +1,35 @@
+{
+  "buildId": "FF-001",
+  "buildName": "Prometheus",
+  "headline": "Some PCs are assembled. This one was interrogated.",
+  "story": "We didn't just build Prometheus &mdash; we benchmarked it, tuned it, and benchmarked it again, until every number told the same story. This is a Ryzen&nbsp;7&nbsp;7800X3D and RTX&nbsp;3070 build that scores higher than <b style=\"color:#eef2f7;\">92 out of every 100 systems</b> ever tested on Novabench's own global platform. Not a marketing number &mdash; a measured one.",
+  "feelStory": "Load into Valorant and watch <b style=\"color:#eef2f7;\">587fps</b> go by without a stutter. Drop into Cyberpunk 2077 and get a locked, smooth frame rate at Ultra. Then close the game, open Premiere Pro, and cut 4K footage without waiting on a spinning wheel. Prometheus isn't a machine that does one thing well &mdash; it's one that stops noticing what you throw at it.",
+  "hero": {
+    "novabenchOverall": 4068,
+    "percentile": 92
+  },
+  "toolsUsed": ["Novabench", "Cinebench 2026", "Unigine Valley", "CrystalDiskInfo"],
+  "assets": {
+    "logo": "https://theflipflop.shop/media/builds/prometheus/logo.png",
+    "heroImage": "https://theflipflop.shop/media/builds/prometheus/hero.jpg",
+    "heroVideo": "https://theflipflop.shop/media/builds/prometheus/hero-video.mp4",
+    "specCard": "https://theflipflop.shop/media/builds/prometheus/spec-card.jpg",
+    "performanceReportUrl": "https://theflipflop.shop/builds/prometheus/performance"
+  },
+  "games": [
+    { "name": "Valorant", "cover": "https://theflipflop.shop/media/builds/prometheus/covers/valorant.jpg", "fps": 587, "stars": 5 },
+    { "name": "Fortnite", "cover": "https://theflipflop.shop/media/builds/prometheus/covers/fortnite.jpg", "fps": 368, "stars": 5 },
+    { "name": "Cyberpunk 2077", "cover": "https://theflipflop.shop/media/builds/prometheus/covers/cyberpunk-2077.jpg", "fps": 113, "stars": 4.5 }
+  ],
+  "gamesFootnote": "Full 7-game breakdown (Warzone, Baldur's Gate 3, Elden Ring, RDR2) in the linked performance report.",
+  "everyday": [
+    { "name": "4K video editing", "note": "8 cores and a fast NVMe scratch disk keep Premiere/DaVinci timelines smooth" },
+    { "name": "Photo editing", "note": "class-leading single-core speed accelerates Lightroom &amp; Photoshop exports" },
+    { "name": "3D rendering &amp; CAD", "note": "real GPU render headroom for Blender, Redshift, SolidWorks" },
+    { "name": "Heavy multitasking", "note": "32GB DDR5-6000 keeps 30+ tabs, Discord and Office responsive at once" }
+  ],
+  "driveHealth": "Good",
+  "closingHeadline": "Prometheus doesn't just perform.<br>It commands.",
+  "closingSub": "Beautiful machines, built to be admired.",
+  "brandUrl": "theflipflop.shop"
+}

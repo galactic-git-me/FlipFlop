@@ -1,36 +1,48 @@
 @import "tailwindcss";
 
-/* Claude Design System - Admin Dashboard */
+/* Branded-card display font (registration plate / spec card build-name titles) */
+@font-face {
+  font-family: "FlipFlopNASA";
+  src: url("/fonts/Nasa.ttf") format("truetype");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+/* FlipFlop Design System - Neon Aesthetic */
 :root {
-  /* Primary Colors - Deep Luxury (matching storefront) */
-  --color-surface: #0f1419;
-  --color-surface-alt: #1a1f2b;
-  --color-surface-raised: #242a39;
+  /* Primary Colors - Deep Black with Neon */
+  --color-surface: #000000;
+  --color-surface-alt: #0a0a0a;
+  --color-surface-raised: #151515;
 
   /* Text Colors */
-  --color-text: #e8eaf0;
-  --color-text-secondary: #a0a8c0;
-  --color-text-tertiary: #7a8299;
+  --color-text: #ffffff;
+  --color-text-secondary: #cccccc;
+  --color-text-tertiary: #999999;
 
-  /* Accent Colors - Premium Gold */
-  --color-accent: #d4af37;
-  --color-accent-hover: #e8c547;
-  --color-accent-dark: #c99f2e;
+  /* Accent Colors - Neon Orange & Blue */
+  --color-accent: #ff6600;
+  --color-accent-hover: #ff8800;
+  --color-accent-dark: #ff5500;
 
-  /* Status Colors */
-  --color-success: #10b981;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  /* Secondary Accent - Neon Blue */
+  --color-secondary: #0099ff;
+  --color-secondary-hover: #00ccff;
 
-  /* Borders & Dividers */
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  /* Status Colors - Updated for neon theme */
+  --color-success: #00ff00;
+  --color-error: #ff0000;
+  --color-warning: #ff8800;
+  --color-info: #00ccff;
 
-  /* Typography */
-  --font-serif: 'Georgia', 'Garamond', serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'Monaco', 'Courier New', monospace;
+  /* Borders & Dividers - Neon style */
+  --color-border: rgba(255, 102, 0, 0.25);
+  --color-border-subtle: rgba(0, 204, 255, 0.15);
+
+  /* Typography - Futuristic tech-forward stack */
+  --font-serif: 'Courier New', 'Monaco', monospace;
+  --font-sans: 'Menlo', 'Monaco', 'Courier New', monospace;
+  --font-mono: 'Courier New', monospace;
 
   /* Animation */
   --duration-fast: 150ms;
@@ -72,9 +84,9 @@ body {
 }
 
 body {
-  background: var(--nf-bg);
+  background: #000000;
   color: var(--nf-text);
-  font-family: var(--font-rajdhani), sans-serif;
+  font-family: 'Audiowide', var(--font-rajdhani), sans-serif;
   letter-spacing: 0.02em;
 }
 
@@ -100,13 +112,25 @@ body {
   position: relative;
 }
 
+/* Glassmorphism -- semi-transparent panels that let AnimatedGradientBackground
+   show through, with a blur so content underneath doesn't distract. Applied
+   as a utility class alongside a component's existing border/rounding
+   classes, not a full replacement for them. */
+.glass-panel {
+  background: rgba(30, 41, 59, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .node-sidebar {
   position: relative;
   z-index: 10;
   width: 260px;
   min-width: 260px;
-  border-right: 1px solid var(--nf-border);
-  background: linear-gradient(180deg, rgba(11, 13, 18, 0.94), rgba(11, 13, 18, 0.85));
+  border-right: 1px solid rgba(255, 102, 0, 0.3);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.98), rgba(10, 10, 10, 0.95));
+  box-shadow: inset 0 0 20px rgba(255, 102, 0, 0.05);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   padding: 1.5rem 1rem;
@@ -177,25 +201,28 @@ body {
   align-items: center;
   gap: 0.8rem;
   height: 2.7rem;
-  color: #c9d3d9;
+  color: #cccccc;
   text-decoration: none;
   border-radius: 0.1rem;
   padding: 0 0.8rem;
   font-family: var(--font-jetbrains), monospace;
   font-size: 1rem;
   border: 1px solid transparent;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .node-nav-item:hover {
-  color: var(--nf-primary);
-  background: rgba(164, 230, 255, 0.06);
+  color: #ff6600;
+  background: rgba(255, 102, 0, 0.1);
+  border-color: rgba(255, 102, 0, 0.3);
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
 }
 
 .node-nav-item-active {
-  color: var(--nf-primary);
-  background: rgba(164, 230, 255, 0.09);
-  border-color: rgba(164, 230, 255, 0.2);
+  color: #ff6600;
+  background: rgba(255, 102, 0, 0.15);
+  border-color: rgba(255, 102, 0, 0.4);
+  box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
 }
 
 .node-profile-wrap {
@@ -315,6 +342,9 @@ body {
   min-height: 0;
   overflow-y: auto;
   position: relative;
+  background: rgba(30, 41, 59, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* Landing page typography bump */

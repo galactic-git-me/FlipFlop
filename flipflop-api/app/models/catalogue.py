@@ -82,6 +82,23 @@ class CaseCatalogue(Base):
     status: Mapped[str] = mapped_column(String(10), default="active", index=True)
     # active | hidden
     notes: Mapped[Optional[str]] = mapped_column(Text)
+
+    # Physical dimensions/clearance — nullable until backfilled per case. Needed
+    # by the compatibility engine (GPU/cooler clearance, radiator mounting) and
+    # by Auto Build's case-selection scoring (PC_BUILDER_DISCOVERY_AND_IMPLEMENTATION_PLAN.md §9-10).
+    # A null value must be treated as "unknown, don't hard-block" — never as zero.
+    height_mm: Mapped[Optional[float]] = mapped_column(Float)
+    width_mm: Mapped[Optional[float]] = mapped_column(Float)
+    depth_mm: Mapped[Optional[float]] = mapped_column(Float)
+    max_gpu_length_mm: Mapped[Optional[float]] = mapped_column(Float)
+    max_cooler_height_mm: Mapped[Optional[float]] = mapped_column(Float)
+    # e.g. {"front": [240, 280, 360], "top": [240, 280], "rear": [120]} — mm sizes
+    # of radiators each mounting position accepts; empty/absent position = no support.
+    radiator_support: Mapped[Optional[dict]] = mapped_column(JSON)
+    # Free-form style tags for Auto Build scoring, e.g. ["minimalist", "rgb", "compact"]
+    style_tags: Mapped[list] = mapped_column(JSON, default=list)
+    colour: Mapped[Optional[str]] = mapped_column(String(50))
+    rgb_zones: Mapped[Optional[int]] = mapped_column(Integer)
     created_at: Mapped[str] = mapped_column(
         String(50), default=lambda: datetime.utcnow().isoformat()
     )

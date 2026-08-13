@@ -11,6 +11,18 @@ import sys
 import asyncio
 
 if sys.platform == "win32":
+    # Windows consoles default stdout/stderr to the system codepage (cp1252),
+    # not UTF-8. eBay listing titles routinely contain emoji (sellers add
+    # fire/star icons etc.) — the moment any log line prints one of those
+    # characters, cp1252 can't encode it and raises UnicodeEncodeError,
+    # which crashes whatever request triggered that log line (e.g. an entire
+    # /api/gem-radar/scans submission, discarding every listing in it).
+    # Reconfiguring to UTF-8 here, before anything else can log, fixes this
+    # for the whole process instead of needing every log call site to guard
+    # against it individually.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
     # Suppress the spurious [WinError 10054] "connection forcibly closed"

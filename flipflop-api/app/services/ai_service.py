@@ -4,9 +4,20 @@ Primary: Ollama (local gemma4:e4b) → OpenRouter free models → Anthropic Clau
 """
 import httpx
 import urllib.parse
+from pathlib import Path
 from app.config import get_settings
 
 settings = get_settings()
+
+_SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
+
+
+def _load_selling_principles() -> str:
+    """Read fresh on every call so edits to the file take effect immediately."""
+    try:
+        return _SELLING_PRINCIPLES_PATH.read_text(encoding="utf-8")
+    except OSError:
+        return ""
 
 SYSTEM_PROMPT = """You are Hermes, an AI assistant embedded in a PC flipping intelligence platform.
 
@@ -132,8 +143,12 @@ async def generate_listing_content(
     except Exception:
         pass  # Keyword sourcing is a nice-to-have; never block listing generation on it.
 
+    selling_principles = _load_selling_principles()
+    principles_block = f"\n\nFollow these selling principles when writing the title and description:\n\n{selling_principles}\n" if selling_principles else ""
+
     prompt = f"""Generate eBay listing content for this PC:
 {spec_summary}{keyword_line}
+{principles_block}
 
 Title rules (Algorithm Playbook row 4 — title keyword match is Cassini's
 strongest ranking signal, so follow this exactly):

@@ -37,5 +37,10 @@ class SearchConfig(Base):
         "no gpu", "spares", "no hard drive", "poor condition",
     ])
     intent: Mapped[str] = mapped_column(String(50), default="flip_gaming")
+    # Vendors to include in scans for this search (e.g., ["ebay", "amazon", "vinted", "overclockers"])
+    # If empty/null, all available vendors are used. This allows per-search-term vendor flexibility.
+    vendors: Mapped[list] = mapped_column(JSON, default=lambda: [
+        "ebay", "amazon", "vinted", "overclockers", "temu", "cex", "aliexpress"
+    ])
 
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

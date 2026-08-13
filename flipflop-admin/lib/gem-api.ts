@@ -9,7 +9,7 @@
  * - Dismissing recommendations
  */
 
-import { API_BASE_URL } from "./config";
+import { API_BASE_URL } from "./api";
 
 export interface Gem {
   id: number;

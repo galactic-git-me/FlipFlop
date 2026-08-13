@@ -34,7 +34,7 @@ A web application that automatically discovers undervalued PCs ("gems") across m
 | Database | PostgreSQL |
 | Cache / queues | Redis, in-process asyncio queues |
 | Containerisation | Docker Compose |
-| Ports | Frontend: 4310, Backend: 4311 |
+| Ports | Backend: 4311, Admin: 4312, Storefront: 4313 |
 
 ### Backend structure
 

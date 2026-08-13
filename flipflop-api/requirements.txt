@@ -29,11 +29,17 @@ apscheduler==3.10.4
 redis==5.2.1
 
 # Auth
+# bcrypt>=4.1 broke passlib 1.7.4's backend self-test (ValueError: password
+# cannot be longer than 72 bytes) on the very first hash/verify call — this
+# silently broke ALL password auth (customer + admin), not just new code.
+# Pin until passlib ships a real fix (tracked upstream, no ETA as of 2026-08).
 passlib[bcrypt]>=1.7.4
+bcrypt<4.1
 python-jose[cryptography]>=3.3.0
 email-validator>=2.0.0
 
 # Utils
+rapidfuzz>=3.9.0
 pydantic[email]>=2.10.3
 pydantic-settings>=2.6.1
 python-multipart==0.0.20

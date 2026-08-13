@@ -7,9 +7,9 @@ from app.database import AsyncSessionLocal
 from app.models.alert_event import AlertEvent
 
 
-async def emit_alert(code: str, source: str, message: str, severity: str = "warning") -> dict:
+async def emit_alert(code: str, source: str, message: str, severity: str = "warning", link_url: str | None = None) -> dict:
     async with AsyncSessionLocal() as db:
-        row = AlertEvent(code=code, source=source, message=message, severity=severity)
+        row = AlertEvent(code=code, source=source, message=message, severity=severity, link_url=link_url)
         db.add(row)
         await db.commit()
         await db.refresh(row)
@@ -19,6 +19,7 @@ async def emit_alert(code: str, source: str, message: str, severity: str = "warn
             "severity": row.severity,
             "source": row.source,
             "message": row.message,
+            "link_url": row.link_url,
             "acked": row.acked,
             "created_at": row.created_at.isoformat() if row.created_at else None,
         }
@@ -37,6 +38,7 @@ async def list_alerts(limit: int = 100, include_acked: bool = False) -> list[dic
             "severity": r.severity,
             "source": r.source,
             "message": r.message,
+            "link_url": r.link_url,
             "acked": r.acked,
             "acked_at": r.acked_at.isoformat() if r.acked_at else None,
             "created_at": r.created_at.isoformat() if r.created_at else None,

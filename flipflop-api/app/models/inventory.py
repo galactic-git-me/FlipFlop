@@ -20,6 +20,18 @@ class InventoryItem(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Gem Radar "Bought It" provenance (PRD §26). listing_id/marketplace form a
+    # partial unique index (migration 20260706_0014) for duplicate-purchase
+    # protection. Full delivery/dispatch tracking stays out of the extension
+    # per PRD §27.1 — reconciliation_status is updated by the FlipFlopOS email
+    # monitor when/if it exists, not by the extension itself.
+    marketplace: Mapped[str | None] = mapped_column(String(50))
+    listing_id: Mapped[str | None] = mapped_column(String(255), index=True)
+    listing_url: Mapped[str | None] = mapped_column(String(1000))
+    seller_name: Mapped[str | None] = mapped_column(String(200))
+    purchase_status: Mapped[str] = mapped_column(String(32), default="MANUAL")
+    reconciliation_status: Mapped[str] = mapped_column(String(32), default="NOT_APPLICABLE")
+
     @property
     def actual_cost(self) -> float:
         """Calculate actual cost: base_price + shipping_cost - discount_amount"""
