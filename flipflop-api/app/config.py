@@ -32,6 +32,13 @@ class Settings(BaseSettings):
     # Public HTTPS callback URL that eBay is configured to call for deletion notifications.
     # Example: https://your-domain.tld/api/ebay/marketplace-account-deletion
     ebay_notification_endpoint: str = ""
+    # Single-seller store: unlike ebay_app_id/client_secret (app-level client
+    # credentials, used for read-only Browse/search calls), listing writes
+    # (create/end/republish) need a seller-authorized OAuth token, which eBay
+    # only issues via a one-time 3-legged OAuth consent flow. No consent UI
+    # exists yet — set this manually (and refresh it periodically) until one
+    # is built. Background jobs that need it degrade gracefully when it's blank.
+    ebay_seller_access_token: str = ""
     ebay_reselling_enabled: bool = True
     ebay_message_poll_interval_seconds: int = 300
     ebay_sales_poll_interval_seconds: int = 1800
