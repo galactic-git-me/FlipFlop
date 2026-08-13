@@ -21,6 +21,12 @@ class SettingsUpdate(BaseModel):
     ebay_app_id: str | None = None
     image_gen_enabled: bool | None = None
     image_gen_provider: str | None = None
+    handling_time_days: int | None = None
+    returns_accepted: bool | None = None
+    returns_window_days: int | None = None
+    free_shipping_enabled: bool | None = None
+    local_pickup_enabled: bool | None = None
+    listing_type_default: str | None = None
 
 
 @router.get("/")
@@ -76,4 +82,10 @@ def _to_dict(s: AppSettings) -> dict:
         "ebay_app_id": "***" if s.ebay_app_id else "",
         "image_gen_enabled": s.image_gen_enabled,
         "image_gen_provider": s.image_gen_provider,
+        "handling_time_days": s.handling_time_days,
+        "returns_accepted": s.returns_accepted,
+        "returns_window_days": s.returns_window_days,
+        "free_shipping_enabled": s.free_shipping_enabled,
+        "local_pickup_enabled": s.local_pickup_enabled,
+        "listing_type_default": s.listing_type_default,
     }

@@ -18,6 +18,14 @@ interface AppSettings {
   image_gen_provider: string;
   default_sell_platform: string;
   ebay_app_id: string;
+  // Seller Policies (playbook rows 11-15, 43, 44) — configured once, applied
+  // to every listing, not re-entered per build (see build details Dispatch tab).
+  handling_time_days: number;
+  returns_accepted: boolean;
+  returns_window_days: number;
+  free_shipping_enabled: boolean;
+  local_pickup_enabled: boolean;
+  listing_type_default: string;
 }
 
 interface DataSource {
@@ -41,6 +49,12 @@ const DEFAULTS: AppSettings = {
   image_gen_provider: "pollinations",
   default_sell_platform: "ebay",
   ebay_app_id: "",
+  handling_time_days: 2,
+  returns_accepted: true,
+  returns_window_days: 30,
+  free_shipping_enabled: true,
+  local_pickup_enabled: true,
+  listing_type_default: "FixedPrice",
 };
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -56,7 +70,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "sources" | "terms";
+type TabKey = "general" | "seller-policies" | "sources" | "terms";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -154,15 +168,21 @@ export default function SettingsPage() {
           </h1>
           <p className="text-sm text-slate-500 mt-0.5">General controls, dynamic data sources, and source-linked search terms.</p>
         </div>
-        <Button variant="primary" size="sm" onClick={saveSettings} disabled={saving || tab !== "general"}>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={saveSettings}
+          disabled={saving || (tab !== "general" && tab !== "seller-policies")}
+        >
           <Save className="w-3.5 h-3.5" />
-          {saving ? "Saving…" : saved ? "Saved ✓" : "Save General"}
+          {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
         </Button>
       </div>
 
       <div className="flex gap-2">
         {[
           { key: "general", label: "General" },
+          { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
           { key: "terms", label: "Search Terms" },
         ].map(t => (
@@ -212,6 +232,73 @@ export default function SettingsPage() {
               <input value={settings.ollama_base_url} onChange={e => setSettings(p => ({ ...p, ollama_base_url: e.target.value }))} placeholder="Ollama URL" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
               <input value={settings.ollama_model} onChange={e => setSettings(p => ({ ...p, ollama_model: e.target.value }))} placeholder="Ollama model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
               <input value={settings.ebay_app_id} onChange={e => setSettings(p => ({ ...p, ebay_app_id: e.target.value }))} placeholder="eBay App ID" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {tab === "seller-policies" && (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader><CardTitle>Handling &amp; Returns</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <label className="text-xs text-slate-500 block">
+                Handling time (business days) — default proposed, confirm once
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={settings.handling_time_days}
+                onChange={e => setSettings(p => ({ ...p, handling_time_days: Number(e.target.value) }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              />
+              <p className="text-xs text-slate-600">
+                Row 11/12: fastest you can realistically hit, factoring in burn-in/QA — never
+                padded "just in case", since eBay's Money Back Guarantee already covers late orders.
+              </p>
+
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Returns accepted (row 13/14)</span>
+                <Toggle checked={settings.returns_accepted} onChange={() => setSettings(p => ({ ...p, returns_accepted: !p.returns_accepted }))} />
+              </div>
+              <label className="text-xs text-slate-500 block">Returns window (days)</label>
+              <input
+                type="number"
+                min={14}
+                max={60}
+                value={settings.returns_window_days}
+                onChange={e => setSettings(p => ({ ...p, returns_window_days: Number(e.target.value) }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Shipping &amp; Listing Type</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Free shipping, absorbed into price (row 15/35)</span>
+                <Toggle checked={settings.free_shipping_enabled} onChange={() => setSettings(p => ({ ...p, free_shipping_enabled: !p.free_shipping_enabled }))} />
+              </div>
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Local pickup offered (row 43)</span>
+                <Toggle checked={settings.local_pickup_enabled} onChange={() => setSettings(p => ({ ...p, local_pickup_enabled: !p.local_pickup_enabled }))} />
+              </div>
+              <label className="text-xs text-slate-500 block">Default listing type (row 44)</label>
+              <select
+                value={settings.listing_type_default}
+                onChange={e => setSettings(p => ({ ...p, listing_type_default: e.target.value }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              >
+                <option value="FixedPrice">Fixed Price</option>
+                <option value="Auction">Auction (not recommended — see row 44)</option>
+              </select>
+              <p className="text-xs text-slate-600">
+                Applied once here via the eBay Business Policies API to every listing — not
+                re-entered per build. Per-build overrides live on the Dispatch &amp; Delivery
+                tab, only for builds that genuinely can&apos;t hit the global default.
+              </p>
             </CardContent>
           </Card>
         </div>
