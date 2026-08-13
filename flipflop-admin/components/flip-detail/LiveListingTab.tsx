@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, Loader2, CalendarClock, RotateCcw } from "lucide-react";
+import { ExternalLink, Loader2, CalendarClock, RotateCcw, Rocket, AlertTriangle } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Flip, TabProps } from "./types";
 
@@ -31,6 +31,8 @@ export function LiveListingTab({ flip, onFlipUpdated }: TabProps) {
   const [trafficBand, setTrafficBand] = useState(flip.traffic_band ?? "sunday_evening");
   const [markdownOptIn, setMarkdownOptIn] = useState(flip.markdown_event_opt_in);
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   async function saveScheduler() {
     setSaving(true);
@@ -43,6 +45,22 @@ export function LiveListingTab({ flip, onFlipUpdated }: TabProps) {
       onFlipUpdated(updated as Flip);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function publishNow() {
+    setPublishing(true);
+    setPublishError(null);
+    try {
+      const result = await api.flips.publishNow(flip.id);
+      if (!result.published) {
+        setPublishError(result.reason ?? "Publish failed.");
+        return;
+      }
+      const updated = await api.flips.get(flip.id);
+      onFlipUpdated(updated as Flip);
+    } finally {
+      setPublishing(false);
     }
   }
 
@@ -61,7 +79,22 @@ export function LiveListingTab({ flip, onFlipUpdated }: TabProps) {
             View live listing <ExternalLink className="w-3.5 h-3.5" />
           </a>
         ) : (
-          <p className="text-sm text-slate-500 italic">Not posted to eBay yet.</p>
+          <>
+            <p className="text-sm text-slate-500 italic">Not posted to eBay yet.</p>
+            <button
+              onClick={publishNow}
+              disabled={publishing}
+              className="self-start flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[#00dc82] text-[#04120d] rounded-md font-semibold hover:bg-[#00b86d] transition-colors disabled:opacity-40"
+            >
+              {publishing ? <><Loader2 className="w-3 h-3 animate-spin" /> Publishing…</> : <><Rocket className="w-3 h-3" /> Publish now</>}
+            </button>
+            {publishError && (
+              <div className="flex items-start gap-1.5 text-xs text-amber-400 bg-amber-500/5 border border-amber-500/30 rounded-lg px-3 py-2">
+                <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                {publishError}
+              </div>
+            )}
+          </>
         )}
         <p className="text-xs text-slate-600">Listed at: {fmt(flip.listed_at)}</p>
       </div>
@@ -84,7 +117,7 @@ export function LiveListingTab({ flip, onFlipUpdated }: TabProps) {
           </select>
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-xs text-slate-500">Publish at (optional — leave blank to list immediately)</label>
+          <label className="text-xs text-slate-500">Publish at (optional — leave blank and use &quot;Publish now&quot; above instead)</label>
           <input
             type="datetime-local"
             value={deferredAt}

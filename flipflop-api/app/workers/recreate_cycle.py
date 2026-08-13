@@ -60,13 +60,8 @@ async def run_deferred_publish_job() -> dict:
 
         for flip in due:
             try:
-                ok = await _publish_flip(flip, db)
+                ok = await publish_flip_now(flip, db)
                 if ok:
-                    flip.listed_at = now
-                    flip.next_recreate_at = jittered_recreate_slot(
-                        flip.traffic_band or DEFAULT_BAND, now,
-                        interval_days=RECREATE_INTERVAL_DAYS, jitter_days=RECREATE_JITTER_DAYS,
-                    )
                     published += 1
                 else:
                     skipped_no_token += 1
@@ -112,8 +107,26 @@ async def run_recreate_cycle_job() -> dict:
     return {"recreated": recreated, "floor_hit_review_needed": floor_hit, "errors": errors}
 
 
+async def publish_flip_now(flip, db) -> bool:
+    """
+    Shared by the deferred-publish job (when its chosen time arrives) and the
+    manual "Publish now" endpoint (POST /flips/{id}/publish-now) — actually
+    posts to eBay via _publish_flip, then starts the flip's recreate-cycle
+    clock. Returns True only if the listing genuinely went live.
+    """
+    ok = await _publish_flip(flip, db)
+    if ok:
+        now = datetime.utcnow()
+        flip.listed_at = now
+        flip.next_recreate_at = jittered_recreate_slot(
+            flip.traffic_band or DEFAULT_BAND, now,
+            interval_days=RECREATE_INTERVAL_DAYS, jitter_days=RECREATE_JITTER_DAYS,
+        )
+    return ok
+
+
 async def _publish_flip(flip, db) -> bool:
-    """Row 3 firing job: publish a deferred listing. Returns True if actually posted to eBay."""
+    """Posts a flip's listing to eBay right now. Returns True if actually posted."""
     from app.services import ebay_oauth
 
     settings = get_settings()

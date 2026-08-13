@@ -334,6 +334,11 @@ export const api = {
         `/flips/${id}/counter-offer`,
         { method: "POST", body: JSON.stringify({ buyer_offer }) }
       ),
+    publishNow: (id: number) =>
+      request<{ published: boolean; reason?: string; ebay_listing_url?: string }>(
+        `/flips/${id}/publish-now`,
+        { method: "POST" }
+      ),
     pricingSuggestions: (id: number) =>
       request<{
         shipping: { estimated_weight_kg: number; estimated_shipping_cost: number; shipping_inclusive_price: number };

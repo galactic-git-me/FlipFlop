@@ -597,6 +597,35 @@ async def counter_offer_endpoint(flip_id: int, body: BuyerOfferBody, db: AsyncSe
     }
 
 
+@router.post("/{flip_id}/publish-now")
+async def publish_now_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Manually publish a ready-for-sale build to eBay immediately, bypassing
+    the deferred-listing scheduler. Requires eBay to be connected (Settings
+    > Seller Policies > Connect eBay) — returns published: false with a
+    clear reason otherwise, rather than silently doing nothing.
+    """
+    from app.workers.recreate_cycle import publish_flip_now
+
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    if flip.stage != FlipStage.ready_for_sale:
+        raise HTTPException(409, f"Flip must be in ready_for_sale stage to publish (currently {flip.stage.value}).")
+    if flip.listed_at is not None:
+        raise HTTPException(409, "Flip is already listed on eBay.")
+
+    ok = await publish_flip_now(flip, db)
+    await db.flush()
+
+    if not ok:
+        return {
+            "published": False,
+            "reason": "No eBay seller account connected — go to Settings > Seller Policies > Connect eBay first.",
+        }
+    return {"published": True, "ebay_listing_url": flip.ebay_listing_url}
+
+
 @router.get("/{flip_id}/pricing-suggestions")
 async def pricing_suggestions_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
     """Rows 35/40: shipping-inclusive price + Promoted Listings ad-rate suggestion."""

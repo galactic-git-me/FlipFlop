@@ -188,6 +188,47 @@ def test_upload_video_rejects_empty_file(client, listing_id):
     assert resp.status_code == 422
 
 
+def test_publish_now_fails_without_connected_ebay(client, listing_id):
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    client.patch(f"/api/flips/{flip_id}", json={"stage": "building"})
+    client.patch(f"/api/flips/{flip_id}", json={"stage": "ready_for_sale"})
+
+    resp = client.post(f"/api/flips/{flip_id}/publish-now")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["published"] is False
+    assert "Connect eBay" in body["reason"]
+
+
+def test_publish_now_rejects_wrong_stage(client, listing_id):
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    resp = client.post(f"/api/flips/{flip_id}/publish-now")
+    assert resp.status_code == 409
+
+
+def test_publish_now_succeeds_when_connected(client, listing_id):
+    from unittest.mock import AsyncMock, patch
+
+    flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
+    client.patch(f"/api/flips/{flip_id}", json={"stage": "building"})
+    client.patch(f"/api/flips/{flip_id}", json={"stage": "ready_for_sale"})
+
+    with patch("app.services.ebay_oauth.get_valid_access_token", new=AsyncMock(return_value="AT-1")), \
+         patch("app.services.ebay_listing_poster.post_flip_to_ebay",
+               new=AsyncMock(return_value={"success": True, "listing_id": "item-1", "url": "https://ebay.co.uk/itm/item-1"})):
+        resp = client.post(f"/api/flips/{flip_id}/publish-now")
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["published"] is True
+    assert body["ebay_listing_url"] == "https://ebay.co.uk/itm/item-1"
+
+    refreshed = client.get(f"/api/flips/{flip_id}").json()
+    assert refreshed["ebay_listing_id"] == "item-1"
+    assert refreshed["listed_at"] is not None
+    assert refreshed["next_recreate_at"] is not None
+
+
 def test_watcher_offer_plan_not_due_before_listing(client, listing_id):
     flip_id = client.post("/api/flips/", json={"listing_id": listing_id}).json()["id"]
     resp = client.get(f"/api/flips/{flip_id}/watcher-offer-plan")
