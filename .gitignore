@@ -48,6 +48,10 @@ pc-flipper-backend/data/scheduler_state.json
 # vercel
 .vercel
 
+# Third-party benchmarking tool distribution (Cinebench2026, ~2.7GB) - not
+# source code, never belongs in git. Keep locally if needed, just untracked.
+Benchmarking/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
