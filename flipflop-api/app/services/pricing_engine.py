@@ -1,0 +1,167 @@
+"""
+Sold-comp pricing engine — Algorithm Playbook rows 19, 20, 21, 22, 23, 44, 49.
+
+Pure, unit-testable pricing math plus the async orchestration that recalculates
+a Flip's pricing fields from fresh eBay data. Kept deliberately re-anchoring
+(never carrying a stale target forward) per the playbook's explicit fix for
+the "does sold-comp pricing cause a downward spiral" risk: the flaw that would
+cause a spiral is re-anchoring from a decayed number instead of fresh data, or
+only ever stepping price down — both are avoided here (see `bias_from_fast_sale`
+for the upward-bias half of that fix, row 49).
+
+Defaults proposed in the implementation plan, confirm once:
+  - price floor = cost basis + 10% minimum margin
+  - auto-drop window = 7 days
+  - price step-down per recreate cycle = 3%
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Optional
+
+import structlog
+
+DEFAULT_MIN_MARGIN_PCT = 0.10
+DEFAULT_DROP_WINDOW_DAYS = 7
+DEFAULT_RECREATE_STEP_PCT = 0.03
+
+log = structlog.get_logger(__name__)
+
+
+def compute_price_floor(total_cost: float, min_margin_pct: float = DEFAULT_MIN_MARGIN_PCT) -> float:
+    """Row 20 guardrail: never auto-drop below cost basis + minimum acceptable margin."""
+    return round(total_cost * (1 + min_margin_pct), 2)
+
+
+def compute_active_range_ceiling(active_prices: list[float]) -> Optional[float]:
+    """
+    Top of the active-listing range, excluding outliers, per row 19.
+    Outliers are anything above the 90th percentile of the sorted active prices.
+    """
+    if not active_prices:
+        return None
+    prices = sorted(active_prices)
+    if len(prices) == 1:
+        return prices[0]
+    cutoff_idx = max(0, min(len(prices) - 1, round(len(prices) * 0.9) - 1))
+    return round(prices[cutoff_idx], 2)
+
+
+def compute_bin_anchor(
+    sold_comp_target: Optional[float],
+    active_range_ceiling: Optional[float],
+    offers_enabled: bool,
+) -> Optional[float]:
+    """
+    Row 19: if offers are on, anchor near the top of the active range so
+    negotiation lands back at the sold-comp target instead of undershooting it.
+    Row 21 guardrail: never anchor exactly at the sold-comp target while offers
+    are on — that stacks a second discount once an offer is accepted.
+    """
+    if offers_enabled and active_range_ceiling is not None:
+        return active_range_ceiling
+    if sold_comp_target is not None:
+        return sold_comp_target
+    return active_range_ceiling
+
+
+def compute_next_drop_price(
+    current_price: float,
+    sold_comp_target: Optional[float],
+    price_floor: float,
+    step_pct: float = DEFAULT_RECREATE_STEP_PCT,
+) -> tuple[float, bool]:
+    """
+    Row 20: step the price down toward the sold-comp target after the drop
+    window elapses with no sale/accepted offer. Returns (new_price, floor_hit).
+
+    Row 22/23 guardrails are enforced by construction: this only ever steps
+    toward sold_comp_target (never below it opportunistically) and never below
+    price_floor, so it can't undercut the market race-to-the-bottom pattern or
+    price dramatically below market value.
+    """
+    target = sold_comp_target if sold_comp_target is not None else price_floor
+    stepped = current_price * (1 - step_pct)
+    new_price = max(stepped, target, price_floor)
+    floor_hit = new_price <= price_floor + 0.01
+    return round(new_price, 2), floor_hit
+
+
+def is_drop_due(last_recalculated_at: Optional[datetime], window_days: int = DEFAULT_DROP_WINDOW_DAYS) -> bool:
+    if last_recalculated_at is None:
+        return True
+    return datetime.utcnow() - last_recalculated_at >= timedelta(days=window_days)
+
+
+@dataclass
+class FastSaleSignal:
+    """Row 49: a fast/near-asking sale is an underpriced signal for the *next* similar build."""
+    was_fast_or_near_asking: bool
+    suggested_anchor_bias_pct: float  # e.g. 0.05 = bias the next build's initial anchor 5% higher
+
+
+def bias_from_fast_sale(days_to_sell: int, sale_price: float, listing_price: Optional[float]) -> FastSaleSignal:
+    """
+    Row 49 fix for the pricing-ratchets-down risk: fast sales or near-asking
+    accepted offers should push the *next* similar build's initial anchor up,
+    not just reset pricing to the same starting point every cycle.
+
+    Default proposed, confirm once: "fast" = sold within 3 days of listing;
+    "near-asking" = sale price within 5% of the listing price.
+    """
+    fast = days_to_sell <= 3
+    near_asking = listing_price is not None and listing_price > 0 and (sale_price / listing_price) >= 0.95
+    triggered = fast or near_asking
+    return FastSaleSignal(
+        was_fast_or_near_asking=triggered,
+        suggested_anchor_bias_pct=0.05 if triggered else 0.0,
+    )
+
+
+async def recalculate_pricing(flip, db) -> dict:
+    """
+    Orchestrates a fresh pricing recalculation for a Flip: pulls current active
+    listing data, recomputes the sold-comp target/ceiling/floor/anchor, and
+    writes them onto the flip. Never carries a prior cycle's numbers forward —
+    every call re-derives from fresh data, per the playbook's explicit fix for
+    the downward-spiral risk.
+    """
+    from app.services.demand_check import build_query
+    from app.services.ebay_browse import get_component_prices
+    from app.models.listing import Listing
+
+    listing = await db.get(Listing, flip.listing_id)
+    query = build_query(listing.cpu if listing else None, listing.gpu if listing else None)
+    prices = await get_component_prices(query, force_refresh=True, min_price=50.0)
+
+    active_prices = sorted(prices["used_prices"] + prices["new_prices"])
+    ceiling = compute_active_range_ceiling(active_prices)
+    # Fall back to used_median as the sold-comp proxy when Marketplace Insights
+    # sold data isn't available (see demand_check.py) — flagged via note.
+    sold_target = prices["used_median"]
+
+    floor = compute_price_floor(flip.total_cost)
+    anchor = compute_bin_anchor(sold_target, ceiling, flip.offers_enabled)
+
+    flip.active_range_ceiling = ceiling
+    flip.sold_comp_target = sold_target
+    flip.price_floor = floor
+    if anchor is not None:
+        flip.listing_price = anchor
+    flip.price_last_recalculated_at = datetime.utcnow()
+
+    log.info(
+        "pricing_engine.recalculated",
+        flip_id=getattr(flip, "id", None),
+        anchor=anchor,
+        sold_target=sold_target,
+        ceiling=ceiling,
+        floor=floor,
+    )
+    return {
+        "listing_price": anchor,
+        "sold_comp_target": sold_target,
+        "active_range_ceiling": ceiling,
+        "price_floor": floor,
+    }

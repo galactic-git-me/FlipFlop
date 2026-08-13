@@ -13,6 +13,9 @@ from app.schemas.flip import FlipOut, FlipCreate, FlipUpdate
 from app.services.selling_toolkit import generate_titles, generate_description
 from app.services import ai_service
 from app.services.alerts import emit_alert
+from app.services import demand_check as demand_check_service
+from app.services import pricing_engine
+from app.services import offer_engine
 from app.config import get_settings
 import structlog
 
@@ -60,6 +63,23 @@ async def create_flip(body: FlipCreate, db: AsyncSession = Depends(get_db)):
     )
     db.add(flip)
     await db.flush()
+
+    # Row 10/33: demand check fires automatically on build creation, no click needed.
+    try:
+        signal = await demand_check_service.check_demand(listing.cpu, listing.gpu)
+        flip.demand_sold_count_90d = signal.sold_count_90d
+        flip.demand_active_count = signal.active_count
+        flip.demand_checked_at = signal.checked_at
+    except Exception as exc:
+        log.warning("flips.demand_check.failed", flip_id=flip.id, error=str(exc))
+
+    # Rows 19/20: initial pricing anchor/floor computed alongside demand, so
+    # margin and demand are judged together before parts are committed.
+    try:
+        await pricing_engine.recalculate_pricing(flip, db)
+    except Exception as exc:
+        log.warning("flips.pricing_recalc.failed", flip_id=flip.id, error=str(exc))
+
     await db.commit()
     result = await db.execute(
         select(Flip).where(Flip.id == flip.id).options(selectinload(Flip.listing))
@@ -103,8 +123,26 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
         flip.selected_upgrade_ids = body.selected_upgrade_ids
         await _recalculate_costs(flip, db)
 
+    if body.min_offer_price is not None:
+        flip.min_offer_price = body.min_offer_price
+    if body.offers_enabled is not None:
+        flip.offers_enabled = body.offers_enabled
+    if body.listing_price is not None:
+        flip.listing_price = body.listing_price
+    if body.deferred_publish_at is not None:
+        flip.deferred_publish_at = body.deferred_publish_at
+    if body.traffic_band is not None:
+        flip.traffic_band = body.traffic_band
+    if body.promoted_enabled is not None:
+        flip.promoted_enabled = body.promoted_enabled
+    if body.promoted_ad_rate_pct is not None:
+        flip.promoted_ad_rate_pct = body.promoted_ad_rate_pct
+    if body.markdown_event_opt_in is not None:
+        flip.markdown_event_opt_in = body.markdown_event_opt_in
+    if body.recreate_price_step_pct is not None:
+        flip.recreate_price_step_pct = body.recreate_price_step_pct
+
     await db.flush()
-    await db.refresh(flip)
 
     if flip.stage == FlipStage.sold and flip.actual_profit is not None:
         try:
@@ -119,7 +157,14 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
             )
         except Exception as exc:
             log.warning("flips.alert.emit_failed", code="flip_resale_detected", error=str(exc))
-    return flip
+
+    # Response model includes `listing`, which is lazy-loaded — must be
+    # eager-loaded before returning or Pydantic serialization crashes trying
+    # to lazy-load outside an await context (MissingGreenlet).
+    result = await db.execute(
+        select(Flip).where(Flip.id == flip.id).options(selectinload(Flip.listing))
+    )
+    return result.scalar_one()
 
 
 class SoldPayload(BaseModel):
@@ -375,6 +420,92 @@ async def generate_images(
         listing_images=listing.image_urls if listing else [],
     )
     return {"images": images, "reference_images": listing.image_urls if listing else []}
+
+
+@router.post("/{flip_id}/demand-check")
+async def rerun_demand_check(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Row 10/33: re-run the sold-vs-active demand check on demand."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+    signal = await demand_check_service.check_demand(listing.cpu if listing else None, listing.gpu if listing else None)
+    flip.demand_sold_count_90d = signal.sold_count_90d
+    flip.demand_active_count = signal.active_count
+    flip.demand_checked_at = signal.checked_at
+    await db.flush()
+    return {
+        "query": signal.query,
+        "active_count": signal.active_count,
+        "sold_count_90d": signal.sold_count_90d,
+        "sold_data_available": signal.sold_data_available,
+        "ratio_ok": signal.ratio_ok,
+        "note": signal.note,
+    }
+
+
+@router.post("/{flip_id}/recalculate-pricing")
+async def recalculate_pricing_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Rows 19/20/49: force a fresh sold-comp pricing recalculation."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    result = await pricing_engine.recalculate_pricing(flip, db)
+    await db.flush()
+    return result
+
+
+class BuyerOfferBody(BaseModel):
+    buyer_offer: float
+
+
+@router.post("/{flip_id}/counter-offer")
+async def counter_offer_endpoint(flip_id: int, body: BuyerOfferBody, db: AsyncSession = Depends(get_db)):
+    """
+    Rows 8/21: evaluate a buyer's Best Offer against the fixed two-round
+    counter-offer rules and advance the flip's counter state. Posting the
+    counter to eBay itself is a separate integration step (Trading API) —
+    see docs/build-details-automation-plan.md for the flagged API split.
+    """
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+
+    listing_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    result = offer_engine.evaluate_buyer_offer(
+        buyer_offer=body.buyer_offer,
+        listing_price=listing_price,
+        min_offer_price=flip.min_offer_price,
+        offers_enabled=flip.offers_enabled,
+        counter_offer_round=flip.counter_offer_round,
+        last_counter_offer_price=flip.last_counter_offer_price,
+    )
+    if result.action == "counter" and result.counter_price is not None:
+        flip.last_counter_offer_price = result.counter_price
+        flip.counter_offer_round += 1
+        await db.flush()
+    return {"action": result.action, "counter_price": result.counter_price, "reason": result.reason}
+
+
+@router.get("/{flip_id}/watcher-offer-plan")
+async def watcher_offer_plan_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Row 45: whether a watcher offer is due right now, and what it should be."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    plan = offer_engine.evaluate_send_to_watchers(
+        listing_price=listing_price,
+        min_offer_price=flip.min_offer_price,
+        listed_at=flip.listed_at,
+        last_watcher_offer_sent_at=flip.last_watcher_offer_sent_at,
+    )
+    return {
+        "should_send": plan.should_send,
+        "discount_pct": plan.discount_pct,
+        "offer_price": plan.offer_price,
+        "reason": plan.reason,
+    }
 
 
 async def _recalculate_costs(flip: Flip, db: AsyncSession):

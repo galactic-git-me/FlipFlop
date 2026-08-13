@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, Text, Enum, JSON, ForeignKey
+from sqlalchemy import String, Integer, Float, DateTime, Text, Enum, JSON, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -61,6 +61,40 @@ class Flip(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     sold_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    # ── Pricing & Offers engine (playbook rows 8, 19, 20, 21, 45, 49) ──
+    min_offer_price: Mapped[float | None] = mapped_column(Float)
+    offers_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    listing_price: Mapped[float | None] = mapped_column(Float)  # current BIN anchor
+    sold_comp_target: Mapped[float | None] = mapped_column(Float)
+    active_range_ceiling: Mapped[float | None] = mapped_column(Float)
+    price_floor: Mapped[float | None] = mapped_column(Float)  # cost basis + min margin
+    price_last_recalculated_at: Mapped[datetime | None] = mapped_column(DateTime)
+    price_floor_hit_review_needed: Mapped[bool] = mapped_column(Boolean, default=False)
+    last_counter_offer_price: Mapped[float | None] = mapped_column(Float)
+    counter_offer_round: Mapped[int] = mapped_column(Integer, default=0)
+    last_watcher_offer_sent_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    # ── Demand check (row 10, 33) ──
+    demand_sold_count_90d: Mapped[int | None] = mapped_column(Integer)
+    demand_active_count: Mapped[int | None] = mapped_column(Integer)
+    demand_checked_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    # ── Freshness / recreate cycle (rows 1, 2, 3, 5, 6, 9, 36) ──
+    recreate_cycle_count: Mapped[int] = mapped_column(Integer, default=0)
+    next_recreate_at: Mapped[datetime | None] = mapped_column(DateTime)
+    last_recreate_at: Mapped[datetime | None] = mapped_column(DateTime)
+    recreate_price_step_pct: Mapped[float] = mapped_column(Float, default=0.03)
+
+    # ── Deferred-listing scheduler (row 3) ──
+    deferred_publish_at: Mapped[datetime | None] = mapped_column(DateTime)
+    traffic_band: Mapped[str | None] = mapped_column(String(50))
+    listed_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    # ── Paid visibility (rows 40, 46) ──
+    promoted_ad_rate_pct: Mapped[float | None] = mapped_column(Float)
+    promoted_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    markdown_event_opt_in: Mapped[bool] = mapped_column(Boolean, default=False)
 
     listing = relationship("Listing", foreign_keys=[listing_id])
 
