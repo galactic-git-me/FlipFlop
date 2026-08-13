@@ -26,4 +26,27 @@ class AppSettings(Base):
     image_gen_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     image_gen_provider: Mapped[str] = mapped_column(String(50), default="pollinations")
 
+    # ── Seller Policies (playbook rows 11-15, 43, 44) — configured once here,
+    # applied to every listing via the eBay Business Policies API, not
+    # re-entered per build. Defaults proposed in the implementation plan.
+    handling_time_days: Mapped[int] = mapped_column(Integer, default=2)
+    returns_accepted: Mapped[bool] = mapped_column(Boolean, default=True)
+    returns_window_days: Mapped[int] = mapped_column(Integer, default=30)
+    free_shipping_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    local_pickup_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    listing_type_default: Mapped[str] = mapped_column(String(20), default="FixedPrice")
+
+    # ── eBay seller OAuth (3-legged) — unblocks every live eBay write
+    # (posting, end/republish, Business Policies push, Promoted Listings).
+    # access token is short-lived (~2h) and cached here; refresh_token is
+    # long-lived (~18mo) and is what actually re-derives a valid access
+    # token without the user re-consenting. Both blank until "Connect eBay"
+    # is completed once in Settings.
+    ebay_seller_refresh_token: Mapped[str] = mapped_column(Text, default="")
+    ebay_seller_refresh_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_access_token: Mapped[str] = mapped_column(Text, default="")
+    ebay_seller_access_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_connected_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_seller_scopes: Mapped[str] = mapped_column(Text, default="")
+
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

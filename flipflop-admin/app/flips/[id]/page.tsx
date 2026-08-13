@@ -12,18 +12,34 @@ import {
   MemoryStick,
   HardDrive,
   Monitor,
-  Zap,
   Search,
   X,
   PackagePlus,
+  FileText,
+  Camera,
+  ListChecks,
+  Banknote,
+  Truck,
+  CalendarClock,
+  MoreHorizontal,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import type { Flip, Listing } from "@/components/flip-detail/types";
+import { ListingContentTab } from "@/components/flip-detail/ListingContentTab";
+import { ItemSpecificsTab } from "@/components/flip-detail/ItemSpecificsTab";
+import { PhotosTab } from "@/components/flip-detail/PhotosTab";
+import { PricingTab } from "@/components/flip-detail/PricingTab";
+import { DispatchTab } from "@/components/flip-detail/DispatchTab";
+import { LiveListingTab } from "@/components/flip-detail/LiveListingTab";
+import { OtherTab } from "@/components/flip-detail/OtherTab";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 type FlipStage = "selected" | "building" | "ready_for_sale" | "sold";
 
-// ── Playbook + Upgrade Section ─────────────────────────────────────────────
+// ── Playbook + Upgrade Section (Build Overview — pre-listing build process,
+// stays above the eBay-listing tabs; see docs/build-details-automation-plan.md) ──
 
 interface Playbook {
   id: number;
@@ -297,47 +313,6 @@ function UpgradeSection({
   );
 }
 
-interface Listing {
-  id: number;
-  title: string;
-  price: number;
-  url: string;
-  source_name: string;
-  cpu?: string;
-  gpu?: string;
-  ram_gb?: number;
-  ram_type?: string;
-  storage_gb?: number;
-  storage_type?: string;
-  image_urls: string[];
-  gem_score: number;
-  estimated_resale?: number;
-  estimated_profit?: number;
-}
-
-interface Flip {
-  id: number;
-  listing_id: number;
-  listing?: Listing;
-  stage: FlipStage;
-  base_cost: number;
-  upgrade_cost: number;
-  total_cost: number;
-  platform_fee_pct: number;
-  initial_estimated_resale?: number;
-  current_estimated_resale?: number;
-  initial_estimated_profit?: number;
-  current_estimated_profit?: number;
-  actual_sale_price?: number;
-  actual_profit?: number;
-  sale_platform?: string;
-  generated_title?: string;
-  notes?: string;
-  created_at: string;
-  sold_at?: string;
-  selected_upgrade_ids?: Record<string, number>;
-}
-
 const STAGES: { key: FlipStage; label: string }[] = [
   { key: "selected", label: "Selected" },
   { key: "building", label: "Building" },
@@ -369,16 +344,22 @@ function SpecPill({ icon, value }: { icon: React.ReactNode; value?: string | num
   );
 }
 
+const TABS = [
+  { key: "listing-content", label: "Listing Content", icon: FileText },
+  { key: "photos", label: "Photos", icon: Camera },
+  { key: "item-specifics", label: "Item Specifics", icon: ListChecks },
+  { key: "pricing", label: "Pricing", icon: Banknote },
+  { key: "dispatch", label: "Dispatch & Delivery", icon: Truck },
+  { key: "live-listing", label: "Live Listing Management", icon: CalendarClock },
+  { key: "other", label: "Other", icon: MoreHorizontal },
+] as const;
+
 export default function FlipDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const [flip, setFlip] = useState<Flip | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [notes, setNotes] = useState("");
-  const [generatingListing, setGeneratingListing] = useState(false);
-  const [generatedTitle, setGeneratedTitle] = useState<string | null>(null);
-  const [generatedDescription, setGeneratedDescription] = useState<string | null>(null);
 
   // Purchase plan
   type PurchaseItem = {
@@ -419,10 +400,7 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
     api.flips
       .get(Number(id))
       .then((raw) => {
-        const f = raw as Flip;
-        setFlip(f);
-        setNotes(f.notes ?? "");
-        setGeneratedTitle(f.generated_title ?? null);
+        setFlip(raw as Flip);
       })
       .catch(() => router.push("/flips"))
       .finally(() => setLoading(false));
@@ -494,16 +472,6 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
     }
   }
 
-  async function saveNotes() {
-    if (!flip) return;
-    setSaving(true);
-    try {
-      await api.flips.patch(flip.id, { notes });
-    } finally {
-      setSaving(false);
-    }
-  }
-
   async function handleMarkSold() {
     if (!flip || !salePrice) return;
     setMarkingSold(true);
@@ -520,20 +488,6 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
     }
   }
 
-  async function handleGenerateListing() {
-    if (!flip) return;
-    setGeneratingListing(true);
-    try {
-      const result = await api.flips.generateListing(flip.id);
-      setGeneratedTitle(result.titles[0] ?? null);
-      setGeneratedDescription(result.description ?? null);
-      const updated = await api.flips.get(flip.id);
-      setFlip(updated as Flip);
-    } finally {
-      setGeneratingListing(false);
-    }
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full text-slate-500">
@@ -544,15 +498,14 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
 
   if (!flip) return null;
 
-  const listing = flip.listing;
+  const listing: Listing | undefined = flip.listing;
   const stageIdx = STAGES.findIndex((s) => s.key === flip.stage);
   const nextStage = STAGE_NEXT[flip.stage];
-  const fees = flip.current_estimated_resale
-    ? flip.current_estimated_resale * flip.platform_fee_pct
-    : 0;
 
   return (
     <div className="flex flex-col h-full min-h-0 p-6 gap-5 max-w-3xl mx-auto w-full">
+      {/* ══════════════════ Build Overview (page-level, pre-listing build process) ══════════════════ */}
+
       {/* ── Header ── */}
       <div className="flex items-center gap-3">
         <button
@@ -605,108 +558,47 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
         })}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* ── Listing card ── */}
-        <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-semibold text-slate-200 leading-snug line-clamp-2">
-              {listing?.title ?? `Listing #${flip.listing_id}`}
-            </p>
-            {listing?.url && (
-              <a
-                href={listing.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 text-slate-600 hover:text-slate-400 transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
-          </div>
-
-          {listing && (
-            <div className="flex flex-wrap gap-1.5">
-              <SpecPill icon={<Cpu className="w-3 h-3" />} value={listing.cpu} />
-              <SpecPill icon={<Monitor className="w-3 h-3" />} value={listing.gpu} />
-              <SpecPill
-                icon={<MemoryStick className="w-3 h-3" />}
-                value={listing.ram_gb ? `${listing.ram_gb}GB ${listing.ram_type ?? ""}`.trim() : null}
-              />
-              <SpecPill
-                icon={<HardDrive className="w-3 h-3" />}
-                value={
-                  listing.storage_gb
-                    ? `${listing.storage_gb}GB ${listing.storage_type ?? ""}`.trim()
-                    : null
-                }
-              />
-            </div>
+      {/* ── Listing card ── */}
+      <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-semibold text-slate-200 leading-snug line-clamp-2">
+            {listing?.title ?? `Listing #${flip.listing_id}`}
+          </p>
+          {listing?.url && (
+            <a
+              href={listing.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 text-slate-600 hover:text-slate-400 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           )}
-
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <span className="capitalize">{listing?.source_name}</span>
-            <span>·</span>
-            <span className="text-slate-400 font-mono">Paid £{flip.base_cost.toFixed(0)}</span>
-          </div>
         </div>
 
-        {/* ── Financials ── */}
-        <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Financials</p>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-slate-500">Base cost</span>
-              <span className="font-mono text-slate-300">£{flip.base_cost.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Upgrade cost</span>
-              <span className="font-mono text-slate-300">£{flip.upgrade_cost.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between border-t border-slate-800 pt-2">
-              <span className="text-slate-400 font-medium">Total in</span>
-              <span className="font-mono text-slate-200 font-semibold">£{flip.total_cost.toFixed(2)}</span>
-            </div>
-
-            {flip.stage !== "sold" && flip.current_estimated_resale && (
-              <>
-                <div className="flex justify-between text-xs text-slate-600 pt-1">
-                  <span>Est. resale</span>
-                  <span className="font-mono">£{flip.current_estimated_resale.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-xs text-slate-600">
-                  <span>eBay fees (~{(flip.platform_fee_pct * 100).toFixed(1)}%)</span>
-                  <span className="font-mono">−£{fees.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between border-t border-slate-800 pt-2">
-                  <span className="text-[#00dc82] font-medium">Est. profit</span>
-                  <span className="font-mono text-[#00dc82] font-bold">
-                    £{(flip.current_estimated_profit ?? 0).toFixed(2)}
-                  </span>
-                </div>
-              </>
-            )}
-
-            {flip.stage === "sold" && (
-              <>
-                <div className="flex justify-between border-t border-slate-800 pt-2">
-                  <span className="text-slate-400">Sold for</span>
-                  <span className="font-mono text-slate-200">£{flip.actual_sale_price?.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-emerald-400 font-medium">Actual profit</span>
-                  <span
-                    className={`font-mono font-bold ${
-                      (flip.actual_profit ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"
-                    }`}
-                  >
-                    £{flip.actual_profit?.toFixed(2)}
-                  </span>
-                </div>
-                <div className="text-xs text-slate-600">via {flip.sale_platform}</div>
-              </>
-            )}
+        {listing && (
+          <div className="flex flex-wrap gap-1.5">
+            <SpecPill icon={<Cpu className="w-3 h-3" />} value={listing.cpu} />
+            <SpecPill icon={<Monitor className="w-3 h-3" />} value={listing.gpu} />
+            <SpecPill
+              icon={<MemoryStick className="w-3 h-3" />}
+              value={listing.ram_gb ? `${listing.ram_gb}GB ${listing.ram_type ?? ""}`.trim() : null}
+            />
+            <SpecPill
+              icon={<HardDrive className="w-3 h-3" />}
+              value={
+                listing.storage_gb
+                  ? `${listing.storage_gb}GB ${listing.storage_type ?? ""}`.trim()
+                  : null
+              }
+            />
           </div>
+        )}
+
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <span className="capitalize">{listing?.source_name}</span>
+          <span>·</span>
+          <span className="text-slate-400 font-mono">Paid £{flip.base_cost.toFixed(0)}</span>
         </div>
       </div>
 
@@ -714,59 +606,6 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
       {flip.stage !== "sold" && (
         <UpgradeSection flip={flip} listing={listing} onFlipUpdated={setFlip} />
       )}
-
-      {/* ── Listing generator (shown when ready_for_sale) ── */}
-      {(flip.stage === "ready_for_sale" || flip.stage === "building") && (
-        <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">eBay Listing</p>
-            <button
-              onClick={handleGenerateListing}
-              disabled={generatingListing}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[#00dc82] text-[#04120d] rounded-md font-semibold hover:bg-[#00b86d] transition-colors disabled:opacity-40"
-            >
-              {generatingListing ? (
-                <><Loader2 className="w-3 h-3 animate-spin" /> Generating…</>
-              ) : (
-                <><Zap className="w-3 h-3" /> {generatedTitle ? "Regenerate" : "Generate Listing"}</>
-              )}
-            </button>
-          </div>
-
-          {generatedTitle && (
-            <div className="space-y-2">
-              <div>
-                <p className="text-[10px] text-slate-600 uppercase tracking-wider mb-1">Title</p>
-                <p className="text-sm text-slate-200 font-medium bg-slate-800/50 rounded p-2">
-                  {generatedTitle}
-                </p>
-              </div>
-              {generatedDescription && (
-                <div>
-                  <p className="text-[10px] text-slate-600 uppercase tracking-wider mb-1">Description preview</p>
-                  <div
-                    className="text-xs text-slate-400 bg-slate-800/50 rounded p-2 max-h-32 overflow-y-auto leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: generatedDescription }}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── Notes ── */}
-      <div className="bg-[#0b1220] border border-slate-800 rounded-xl p-4 flex flex-col gap-2">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Notes</p>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          onBlur={saveNotes}
-          placeholder="Add notes about this flip…"
-          rows={3}
-          className="w-full bg-transparent text-sm text-slate-300 placeholder-slate-700 resize-none outline-none focus:text-slate-200 transition-colors"
-        />
-      </div>
 
       {/* ── Sold form modal ── */}
       {showSoldForm && (
@@ -1054,6 +893,42 @@ export default function FlipDetailPage({ params }: { params: Promise<{ id: strin
           </button>
         </div>
       )}
+
+      {/* ══════════════════ eBay-listing tabs ══════════════════ */}
+      <Tabs defaultValue="listing-content" className="flex flex-col gap-0">
+        <TabsList>
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            return (
+              <TabsTrigger key={t.key} value={t.key}>
+                <Icon className="w-3.5 h-3.5" /> {t.label}
+              </TabsTrigger>
+            );
+          })}
+        </TabsList>
+
+        <TabsContent value="listing-content">
+          <ListingContentTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="photos">
+          <PhotosTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="item-specifics">
+          <ItemSpecificsTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="pricing">
+          <PricingTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="dispatch">
+          <DispatchTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="live-listing">
+          <LiveListingTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+        <TabsContent value="other">
+          <OtherTab flip={flip} onFlipUpdated={setFlip} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

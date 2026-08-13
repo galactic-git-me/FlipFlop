@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2 } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2, Link2, Unlink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, SourceSearchTerm } from "@/lib/api";
@@ -18,6 +18,14 @@ interface AppSettings {
   image_gen_provider: string;
   default_sell_platform: string;
   ebay_app_id: string;
+  // Seller Policies (playbook rows 11-15, 43, 44) — configured once, applied
+  // to every listing, not re-entered per build (see build details Dispatch tab).
+  handling_time_days: number;
+  returns_accepted: boolean;
+  returns_window_days: number;
+  free_shipping_enabled: boolean;
+  local_pickup_enabled: boolean;
+  listing_type_default: string;
 }
 
 interface DataSource {
@@ -41,6 +49,12 @@ const DEFAULTS: AppSettings = {
   image_gen_provider: "pollinations",
   default_sell_platform: "ebay",
   ebay_app_id: "",
+  handling_time_days: 2,
+  returns_accepted: true,
+  returns_window_days: 30,
+  free_shipping_enabled: true,
+  local_pickup_enabled: true,
+  listing_type_default: "FixedPrice",
 };
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -56,7 +70,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "sources" | "terms";
+type TabKey = "general" | "seller-policies" | "sources" | "terms";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -75,6 +89,39 @@ export default function SettingsPage() {
   const [newGroup, setNewGroup] = useState("Fish Tank / Panoramic Cases");
   const [newTerm, setNewTerm] = useState("");
   const [newTermSources, setNewTermSources] = useState<string[]>([]);
+
+  const [ebayStatus, setEbayStatus] = useState<{
+    connected: boolean;
+    connected_at: string | null;
+    scopes: string[];
+    refresh_token_expires_at: string | null;
+  } | null>(null);
+  const [connectingEbay, setConnectingEbay] = useState(false);
+
+  async function loadEbayStatus() {
+    try {
+      setEbayStatus(await api.ebayOAuth.status());
+    } catch {
+      setEbayStatus(null);
+    }
+  }
+
+  async function connectEbay() {
+    setConnectingEbay(true);
+    try {
+      const { url } = await api.ebayOAuth.authorizeUrl();
+      window.location.href = url;
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Could not start eBay connection.");
+    } finally {
+      setConnectingEbay(false);
+    }
+  }
+
+  async function disconnectEbay() {
+    await api.ebayOAuth.disconnect();
+    await loadEbayStatus();
+  }
 
   async function withTimeout<T>(p: Promise<T>, ms = 8000): Promise<T> {
     return await Promise.race([
@@ -113,6 +160,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const t = setTimeout(() => {
       void loadAll();
+      void loadEbayStatus();
     }, 0);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,15 +202,21 @@ export default function SettingsPage() {
           </h1>
           <p className="text-sm text-slate-500 mt-0.5">General controls, dynamic data sources, and source-linked search terms.</p>
         </div>
-        <Button variant="primary" size="sm" onClick={saveSettings} disabled={saving || tab !== "general"}>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={saveSettings}
+          disabled={saving || (tab !== "general" && tab !== "seller-policies")}
+        >
           <Save className="w-3.5 h-3.5" />
-          {saving ? "Saving…" : saved ? "Saved ✓" : "Save General"}
+          {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
         </Button>
       </div>
 
       <div className="flex gap-2">
         {[
           { key: "general", label: "General" },
+          { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
           { key: "terms", label: "Search Terms" },
         ].map(t => (
@@ -214,6 +268,112 @@ export default function SettingsPage() {
               <input value={settings.ebay_app_id} onChange={e => setSettings(p => ({ ...p, ebay_app_id: e.target.value }))} placeholder="eBay App ID" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {tab === "seller-policies" && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Link2 className="w-4 h-4" /> eBay Connection</CardTitle></CardHeader>
+            <CardContent className="pt-0 space-y-3">
+              <p className="text-xs text-slate-500">
+                Every live eBay write this app makes — posting/ending/republishing listings,
+                pushing these Seller Policies, creating Promoted Listings campaigns — needs a
+                one-time eBay seller consent. Without it, everything below still runs
+                internally (pricing, scheduling, rules) but doesn&apos;t reach eBay itself.
+              </p>
+              {ebayStatus?.connected ? (
+                <div className="flex items-center justify-between p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
+                  <div>
+                    <p className="text-sm text-emerald-400 font-semibold">Connected</p>
+                    <p className="text-xs text-slate-500">
+                      Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "—"}
+                      {ebayStatus.refresh_token_expires_at && (
+                        <> · re-consent needed by {new Date(ebayStatus.refresh_token_expires_at).toLocaleDateString()}</>
+                      )}
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={disconnectEbay}>
+                    <Unlink className="w-3.5 h-3.5" /> Disconnect
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="primary" size="sm" onClick={connectEbay} disabled={connectingEbay}>
+                  <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirecting…" : "Connect eBay"}
+                </Button>
+              )}
+              <p className="text-[11px] text-slate-600">
+                Requires <code>ebay_app_id</code> and a registered redirect URL (RuName) in the
+                eBay Developer Portal to be configured first — this is a one-time external setup
+                step, not something this app can do for you.
+              </p>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader><CardTitle>Handling &amp; Returns</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <label className="text-xs text-slate-500 block">
+                Handling time (business days) — default proposed, confirm once
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={settings.handling_time_days}
+                onChange={e => setSettings(p => ({ ...p, handling_time_days: Number(e.target.value) }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              />
+              <p className="text-xs text-slate-600">
+                Row 11/12: fastest you can realistically hit, factoring in burn-in/QA — never
+                padded "just in case", since eBay's Money Back Guarantee already covers late orders.
+              </p>
+
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Returns accepted (row 13/14)</span>
+                <Toggle checked={settings.returns_accepted} onChange={() => setSettings(p => ({ ...p, returns_accepted: !p.returns_accepted }))} />
+              </div>
+              <label className="text-xs text-slate-500 block">Returns window (days)</label>
+              <input
+                type="number"
+                min={14}
+                max={60}
+                value={settings.returns_window_days}
+                onChange={e => setSettings(p => ({ ...p, returns_window_days: Number(e.target.value) }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Shipping &amp; Listing Type</CardTitle></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Free shipping, absorbed into price (row 15/35)</span>
+                <Toggle checked={settings.free_shipping_enabled} onChange={() => setSettings(p => ({ ...p, free_shipping_enabled: !p.free_shipping_enabled }))} />
+              </div>
+              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
+                <span className="text-sm text-slate-300">Local pickup offered (row 43)</span>
+                <Toggle checked={settings.local_pickup_enabled} onChange={() => setSettings(p => ({ ...p, local_pickup_enabled: !p.local_pickup_enabled }))} />
+              </div>
+              <label className="text-xs text-slate-500 block">Default listing type (row 44)</label>
+              <select
+                value={settings.listing_type_default}
+                onChange={e => setSettings(p => ({ ...p, listing_type_default: e.target.value }))}
+                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
+              >
+                <option value="FixedPrice">Fixed Price</option>
+                <option value="Auction">Auction (not recommended — see row 44)</option>
+              </select>
+              <p className="text-xs text-slate-600">
+                Applied once here via the eBay Business Policies API to every listing — not
+                re-entered per build. Per-build overrides live on the Dispatch &amp; Delivery
+                tab, only for builds that genuinely can&apos;t hit the global default.
+              </p>
+            </CardContent>
+          </Card>
+          </div>
         </div>
       )}
 

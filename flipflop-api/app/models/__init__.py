@@ -28,6 +28,7 @@ from app.models.order import Order
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
 from app.models.inventory_allocation import InventoryAllocation
+from app.models.pricing_bias import PricingBias
 
 __all__ = [
     "Listing", "ListingStatus",

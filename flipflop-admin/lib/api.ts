@@ -306,6 +306,48 @@ export const api = {
       request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
     generateImages: (id: number) =>
       request<{ images: string[] }>(`/flips/${id}/generate-images`, { method: "POST" }),
+    uploadVideo: async (id: number, file: File) => {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch(`${API_BASE_URL}/flips/${id}/upload-video`, { method: "POST", body: form });
+      if (!res.ok) throw new Error(`Video upload failed: ${res.status}`);
+      return res.json() as Promise<{ video_url: string; video_ebay_status: string }>;
+    },
+    demandCheck: (id: number) =>
+      request<{
+        query: string;
+        active_count: number | null;
+        sold_count_90d: number | null;
+        sold_data_available: boolean;
+        ratio_ok: boolean | null;
+        note: string | null;
+      }>(`/flips/${id}/demand-check`, { method: "POST" }),
+    recalculatePricing: (id: number) =>
+      request<{
+        listing_price: number | null;
+        sold_comp_target: number | null;
+        active_range_ceiling: number | null;
+        price_floor: number | null;
+      }>(`/flips/${id}/recalculate-pricing`, { method: "POST" }),
+    counterOffer: (id: number, buyer_offer: number) =>
+      request<{ action: string; counter_price: number | null; reason: string }>(
+        `/flips/${id}/counter-offer`,
+        { method: "POST", body: JSON.stringify({ buyer_offer }) }
+      ),
+    publishNow: (id: number) =>
+      request<{ published: boolean; reason?: string; ebay_listing_url?: string }>(
+        `/flips/${id}/publish-now`,
+        { method: "POST" }
+      ),
+    pricingSuggestions: (id: number) =>
+      request<{
+        shipping: { estimated_weight_kg: number; estimated_shipping_cost: number; shipping_inclusive_price: number };
+        promoted_listings: { suggested_ad_rate_pct: number; too_thin_to_promote: boolean; max_ad_spend: number; reason: string };
+      }>(`/flips/${id}/pricing-suggestions`),
+    watcherOfferPlan: (id: number) =>
+      request<{ should_send: boolean; discount_pct: number; offer_price: number | null; reason: string }>(
+        `/flips/${id}/watcher-offer-plan`
+      ),
     profitBreakdown: (id: number) =>
       request<{
         flip_id: number;
@@ -754,6 +796,43 @@ export const api = {
   flipProfitBreakdown: {
     get: (flipId: number) =>
       request<unknown>(`/flips/${flipId}/profit-breakdown`),
+  },
+
+  ebayOAuth: {
+    authorizeUrl: () => request<{ url: string }>("/ebay/oauth/authorize-url"),
+    status: () =>
+      request<{
+        connected: boolean;
+        connected_at: string | null;
+        scopes: string[];
+        refresh_token_expires_at: string | null;
+      }>("/ebay/oauth/status"),
+    disconnect: () => request<{ connected: boolean }>("/ebay/oauth/disconnect", { method: "POST" }),
+  },
+
+  adminPerformance: {
+    summary: (days = 90) =>
+      request<{
+        window_days: number;
+        sold_count: number;
+        active_count: number;
+        total_revenue: number;
+        total_profit: number;
+        avg_margin_pct: number;
+        avg_days_to_sell: number;
+        sell_through_rate: number | null;
+      }>(`/admin/performance/summary?days=${days}`),
+    sellerStandards: () =>
+      request<{ available: boolean; note: string | null; metrics: unknown }>(
+        "/admin/performance/seller-standards"
+      ),
+    keywordResearch: (query: string) =>
+      request<{
+        query: string;
+        sample_titles: string[];
+        frequent_tokens: [string, number][];
+        note: string;
+      }>(`/admin/performance/keyword-research?query=${encodeURIComponent(query)}`),
   },
 };
 

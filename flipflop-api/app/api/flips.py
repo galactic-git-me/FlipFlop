@@ -1,5 +1,7 @@
+import uuid
 from datetime import datetime, date
-from fastapi import APIRouter, Depends, HTTPException
+from pathlib import Path
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, UploadFile, File
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -9,10 +11,15 @@ from app.models.flip import Flip, FlipStage
 from app.models.listing import Listing, ListingStatus, Classification
 from app.models.part import Part
 from app.models.flip_intelligence import FlipIntelligence
+from app.models.pricing_bias import PricingBias
 from app.schemas.flip import FlipOut, FlipCreate, FlipUpdate
 from app.services.selling_toolkit import generate_titles, generate_description
 from app.services import ai_service
 from app.services.alerts import emit_alert
+from app.services import demand_check as demand_check_service
+from app.services import pricing_engine
+from app.services import offer_engine
+from app.services.cpu_tier import extract_cpu_tier
 from app.config import get_settings
 import structlog
 
@@ -60,6 +67,23 @@ async def create_flip(body: FlipCreate, db: AsyncSession = Depends(get_db)):
     )
     db.add(flip)
     await db.flush()
+
+    # Row 10/33: demand check fires automatically on build creation, no click needed.
+    try:
+        signal = await demand_check_service.check_demand(listing.cpu, listing.gpu)
+        flip.demand_sold_count_90d = signal.sold_count_90d
+        flip.demand_active_count = signal.active_count
+        flip.demand_checked_at = signal.checked_at
+    except Exception as exc:
+        log.warning("flips.demand_check.failed", flip_id=flip.id, error=str(exc))
+
+    # Rows 19/20: initial pricing anchor/floor computed alongside demand, so
+    # margin and demand are judged together before parts are committed.
+    try:
+        await pricing_engine.recalculate_pricing(flip, db)
+    except Exception as exc:
+        log.warning("flips.pricing_recalc.failed", flip_id=flip.id, error=str(exc))
+
     await db.commit()
     result = await db.execute(
         select(Flip).where(Flip.id == flip.id).options(selectinload(Flip.listing))
@@ -103,8 +127,26 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
         flip.selected_upgrade_ids = body.selected_upgrade_ids
         await _recalculate_costs(flip, db)
 
+    if body.min_offer_price is not None:
+        flip.min_offer_price = body.min_offer_price
+    if body.offers_enabled is not None:
+        flip.offers_enabled = body.offers_enabled
+    if body.listing_price is not None:
+        flip.listing_price = body.listing_price
+    if body.deferred_publish_at is not None:
+        flip.deferred_publish_at = body.deferred_publish_at
+    if body.traffic_band is not None:
+        flip.traffic_band = body.traffic_band
+    if body.promoted_enabled is not None:
+        flip.promoted_enabled = body.promoted_enabled
+    if body.promoted_ad_rate_pct is not None:
+        flip.promoted_ad_rate_pct = body.promoted_ad_rate_pct
+    if body.markdown_event_opt_in is not None:
+        flip.markdown_event_opt_in = body.markdown_event_opt_in
+    if body.recreate_price_step_pct is not None:
+        flip.recreate_price_step_pct = body.recreate_price_step_pct
+
     await db.flush()
-    await db.refresh(flip)
 
     if flip.stage == FlipStage.sold and flip.actual_profit is not None:
         try:
@@ -119,7 +161,14 @@ async def update_flip(flip_id: int, body: FlipUpdate, db: AsyncSession = Depends
             )
         except Exception as exc:
             log.warning("flips.alert.emit_failed", code="flip_resale_detected", error=str(exc))
-    return flip
+
+    # Response model includes `listing`, which is lazy-loaded — must be
+    # eager-loaded before returning or Pydantic serialization crashes trying
+    # to lazy-load outside an await context (MissingGreenlet).
+    result = await db.execute(
+        select(Flip).where(Flip.id == flip.id).options(selectinload(Flip.listing))
+    )
+    return result.scalar_one()
 
 
 class SoldPayload(BaseModel):
@@ -149,7 +198,7 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     # Write intelligence record
     days = (sold_at - flip.created_at).days if flip.created_at else 0
     roi = (flip.actual_profit / flip.total_cost * 100) if flip.total_cost else 0
-    cpu_tier = _extract_cpu_tier(listing.cpu if listing else None)
+    cpu_tier = extract_cpu_tier(listing.cpu if listing else None)
 
     case_theme = await _derive_case_theme(flip, db)
     intel = FlipIntelligence(
@@ -172,6 +221,24 @@ async def mark_sold(flip_id: int, body: SoldPayload, db: AsyncSession = Depends(
     )
     db.add(intel)
     await db.flush()
+
+    # Row 49: a fast/near-asking sale is an underpriced signal — bias the
+    # *next* similar build's (same cpu_tier) initial pricing anchor up,
+    # rather than resetting to the same starting point every cycle.
+    try:
+        signal = pricing_engine.bias_from_fast_sale(
+            days_to_sell=days, sale_price=body.actual_sale_price, listing_price=flip.listing_price,
+        )
+        if signal.was_fast_or_near_asking and cpu_tier:
+            bias_row = await db.get(PricingBias, cpu_tier)
+            if not bias_row:
+                bias_row = PricingBias(cpu_tier=cpu_tier)
+                db.add(bias_row)
+            bias_row.anchor_bias_pct = signal.suggested_anchor_bias_pct
+            bias_row.triggered_by_flip_id = flip.id
+            await db.flush()
+    except Exception as exc:
+        log.warning("flips.pricing_bias.update_failed", flip_id=flip.id, error=str(exc))
 
     try:
         await emit_alert(
@@ -377,6 +444,226 @@ async def generate_images(
     return {"images": images, "reference_images": listing.image_urls if listing else []}
 
 
+_VIDEO_TYPES = {"video/mp4", "video/quicktime"}
+_MAX_VIDEO_BYTES = 100 * 1024 * 1024  # 100MB — eBay caps videos at 1 minute, this is generous headroom
+_VIDEO_UPLOAD_DIR = Path(__file__).resolve().parents[2] / "data" / "uploads" / "videos"
+
+
+@router.post("/{flip_id}/upload-video")
+async def upload_video(
+    flip_id: int,
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Row 41: attach a boot-up/benchmark video. Saves locally immediately (so
+    it's visible in the Photos tab right away) and, if a seller eBay OAuth
+    token is connected, kicks off the eBay Media API push in the background
+    — see ebay_media.py for the flagged "unverified schema" caveat.
+    """
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+
+    content_type = file.content_type or "video/mp4"
+    if content_type not in _VIDEO_TYPES:
+        raise HTTPException(415, f"Unsupported video type: {content_type}. Use MP4 or MOV.")
+
+    video_bytes = await file.read()
+    if len(video_bytes) > _MAX_VIDEO_BYTES:
+        raise HTTPException(413, "Video too large (max 100MB)")
+    if len(video_bytes) < 100:
+        raise HTTPException(422, "Video file appears to be empty")
+
+    _VIDEO_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    ext = "mp4" if content_type == "video/mp4" else "mov"
+    filename = f"flip-{flip_id}-{uuid.uuid4().hex[:8]}.{ext}"
+    (_VIDEO_UPLOAD_DIR / filename).write_bytes(video_bytes)
+
+    flip.generated_video_url = f"/uploads/videos/{filename}"
+    flip.video_ebay_status = "uploaded_local"
+    await db.flush()
+
+    background_tasks.add_task(_push_video_to_ebay_background, flip_id, video_bytes, content_type)
+
+    return {"video_url": flip.generated_video_url, "video_ebay_status": flip.video_ebay_status}
+
+
+async def _push_video_to_ebay_background(flip_id: int, video_bytes: bytes, content_type: str) -> None:
+    from app.database import AsyncSessionLocal
+    from app.services import ebay_oauth, ebay_media
+
+    async with AsyncSessionLocal() as db:
+        token = await ebay_oauth.get_valid_access_token(db)
+        flip = await db.get(Flip, flip_id)
+        if not flip:
+            return
+        if not token:
+            log.info("flips.upload_video.ebay_push_skipped_no_token", flip_id=flip_id)
+            return
+        try:
+            result = await ebay_media.upload_video_to_ebay(video_bytes, content_type, token)
+            flip.video_ebay_status = "pushed_to_ebay" if result["success"] else "error"
+        except Exception as exc:
+            flip.video_ebay_status = "error"
+            log.warning("flips.upload_video.ebay_push_failed", flip_id=flip_id, error=str(exc))
+        await db.commit()
+
+
+@router.post("/{flip_id}/demand-check")
+async def rerun_demand_check(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Row 10/33: re-run the sold-vs-active demand check on demand."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+    signal = await demand_check_service.check_demand(listing.cpu if listing else None, listing.gpu if listing else None)
+    flip.demand_sold_count_90d = signal.sold_count_90d
+    flip.demand_active_count = signal.active_count
+    flip.demand_checked_at = signal.checked_at
+    await db.flush()
+    return {
+        "query": signal.query,
+        "active_count": signal.active_count,
+        "sold_count_90d": signal.sold_count_90d,
+        "sold_data_available": signal.sold_data_available,
+        "ratio_ok": signal.ratio_ok,
+        "note": signal.note,
+    }
+
+
+@router.post("/{flip_id}/recalculate-pricing")
+async def recalculate_pricing_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Rows 19/20/49: force a fresh sold-comp pricing recalculation."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    result = await pricing_engine.recalculate_pricing(flip, db)
+    await db.flush()
+    return result
+
+
+class BuyerOfferBody(BaseModel):
+    buyer_offer: float
+    ebay_best_offer_id: str | None = None
+
+
+@router.post("/{flip_id}/counter-offer")
+async def counter_offer_endpoint(flip_id: int, body: BuyerOfferBody, db: AsyncSession = Depends(get_db)):
+    """
+    Rows 8/21: evaluate a buyer's Best Offer against the fixed two-round
+    counter-offer rules, advance the flip's counter state, and — if
+    ebay_best_offer_id is supplied and a seller token is available — post
+    the decision back to eBay via the Trading API (RespondToBestOffer).
+    Also called automatically by the offer_poll background job.
+    """
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+
+    listing_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    result = offer_engine.evaluate_buyer_offer(
+        buyer_offer=body.buyer_offer,
+        listing_price=listing_price,
+        min_offer_price=flip.min_offer_price,
+        offers_enabled=flip.offers_enabled,
+        counter_offer_round=flip.counter_offer_round,
+        last_counter_offer_price=flip.last_counter_offer_price,
+    )
+    posted_to_ebay = False
+    if result.action == "counter" and result.counter_price is not None:
+        flip.last_counter_offer_price = result.counter_price
+        flip.counter_offer_round += 1
+        await db.flush()
+
+        if body.ebay_best_offer_id and flip.ebay_listing_id:
+            from app.services import ebay_oauth, ebay_trading_api
+            token = await ebay_oauth.get_valid_access_token(db)
+            if token:
+                try:
+                    await ebay_trading_api.respond_to_best_offer(
+                        flip.ebay_listing_id, body.ebay_best_offer_id, "Counter", result.counter_price, token,
+                    )
+                    posted_to_ebay = True
+                except Exception as exc:
+                    log.warning("flips.counter_offer.ebay_post_failed", flip_id=flip.id, error=str(exc))
+
+    return {
+        "action": result.action,
+        "counter_price": result.counter_price,
+        "reason": result.reason,
+        "posted_to_ebay": posted_to_ebay,
+    }
+
+
+@router.post("/{flip_id}/publish-now")
+async def publish_now_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Manually publish a ready-for-sale build to eBay immediately, bypassing
+    the deferred-listing scheduler. Requires eBay to be connected (Settings
+    > Seller Policies > Connect eBay) — returns published: false with a
+    clear reason otherwise, rather than silently doing nothing.
+    """
+    from app.workers.recreate_cycle import publish_flip_now
+
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    if flip.stage != FlipStage.ready_for_sale:
+        raise HTTPException(409, f"Flip must be in ready_for_sale stage to publish (currently {flip.stage.value}).")
+    if flip.listed_at is not None:
+        raise HTTPException(409, "Flip is already listed on eBay.")
+
+    ok = await publish_flip_now(flip, db)
+    await db.flush()
+
+    if not ok:
+        return {
+            "published": False,
+            "reason": "No eBay seller account connected — go to Settings > Seller Policies > Connect eBay first.",
+        }
+    return {"published": True, "ebay_listing_url": flip.ebay_listing_url}
+
+
+@router.get("/{flip_id}/pricing-suggestions")
+async def pricing_suggestions_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Rows 35/40: shipping-inclusive price + Promoted Listings ad-rate suggestion."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing = await db.get(Listing, flip.listing_id)
+
+    base_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    shipping = pricing_engine.shipping_inclusive_price(base_price, has_gpu=bool(listing.gpu) if listing else False)
+    ad_rate = pricing_engine.suggest_promoted_ad_rate(
+        estimated_profit=flip.current_estimated_profit or 0.0,
+        total_cost=flip.total_cost,
+    )
+    return {"shipping": shipping, "promoted_listings": ad_rate}
+
+
+@router.get("/{flip_id}/watcher-offer-plan")
+async def watcher_offer_plan_endpoint(flip_id: int, db: AsyncSession = Depends(get_db)):
+    """Row 45: whether a watcher offer is due right now, and what it should be."""
+    flip = await db.get(Flip, flip_id)
+    if not flip:
+        raise HTTPException(404, "Flip not found")
+    listing_price = flip.listing_price or flip.current_estimated_resale or flip.total_cost
+    plan = offer_engine.evaluate_send_to_watchers(
+        listing_price=listing_price,
+        min_offer_price=flip.min_offer_price,
+        listed_at=flip.listed_at,
+        last_watcher_offer_sent_at=flip.last_watcher_offer_sent_at,
+    )
+    return {
+        "should_send": plan.should_send,
+        "discount_pct": plan.discount_pct,
+        "offer_price": plan.offer_price,
+        "reason": plan.reason,
+    }
+
+
 async def _recalculate_costs(flip: Flip, db: AsyncSession):
     listing = await db.get(Listing, flip.listing_id)
     upgrade_cost = 0.0
@@ -389,31 +676,6 @@ async def _recalculate_costs(flip: Flip, db: AsyncSession):
     if listing and listing.estimated_resale:
         fees = listing.estimated_resale * flip.platform_fee_pct
         flip.current_estimated_profit = listing.estimated_resale - flip.total_cost - fees
-
-
-def _extract_cpu_tier(cpu: str | None) -> str | None:
-    if not cpu:
-        return None
-    cpu_lower = cpu.lower()
-    if "xeon" in cpu_lower:
-        return "Xeon"
-    if "i9" in cpu_lower:
-        return "i9"
-    if "i7" in cpu_lower:
-        return "i7"
-    if "i5" in cpu_lower:
-        return "i5"
-    if "i3" in cpu_lower:
-        return "i3"
-    if "ryzen 9" in cpu_lower:
-        return "Ryzen 9"
-    if "ryzen 7" in cpu_lower:
-        return "Ryzen 7"
-    if "ryzen 5" in cpu_lower:
-        return "Ryzen 5"
-    if "ryzen 3" in cpu_lower:
-        return "Ryzen 3"
-    return cpu.split()[0] if cpu else None
 
 
 async def _derive_case_theme(flip: Flip, db: AsyncSession) -> str | None:
