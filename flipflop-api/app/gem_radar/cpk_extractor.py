@@ -57,6 +57,11 @@ def _is_placeholder_echo(value: str) -> bool:
     lowered = value.lower()
     return any(marker in lowered for marker in _PLACEHOLDER_ECHO_MARKERS)
 
+
+def _safe_title(title: str, limit: int = 50) -> str:
+    """Encode title to be safe for logging (handles non-ASCII characters)."""
+    return title[:limit].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+
 @dataclass
 class ExtractedProductData:
     """Structured product info extracted from title."""
@@ -179,7 +184,8 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                     import re
                     match = re.search(r'\{.*\}', output, re.DOTALL)
                     if not match:
-                        log.warning("cpk_extractor.json_parse_failed", output=output[:100])
+                        safe_output = output[:100].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+                        log.warning("cpk_extractor.json_parse_failed", output=safe_output)
                         return None
                     data = json.loads(match.group())
 
@@ -187,7 +193,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 # Threshold lowered to 0.2 to accept more partial/ambiguous extractions
                 # Phase 2 will filter based on market-price settlement instead
                 if data.get("confidence", 0) < 0.2:
-                    log.debug("cpk_extractor.low_confidence", title=title[:50], confidence=data.get("confidence"))
+                    log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
                     return None
 
                 # Skip if no category/brand/model
@@ -202,7 +208,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 # mode for the same category collapsed into one shared,
                 # nonsense CPK.
                 if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
-                    log.warning("cpk_extractor.placeholder_echo", title=title[:50], category=category)
+                    log.warning("cpk_extractor.placeholder_echo", title=_safe_title(title), category=category)
                     return None
 
                 # Skip multi-category answers ("cpu|gpu") — a real standalone
@@ -211,7 +217,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 # DETECTED_CATEGORY), and accepting it collapses every such
                 # bundle into one shared CPK regardless of its actual parts.
                 if category not in _VALID_CATEGORIES:
-                    log.debug("cpk_extractor.invalid_category", title=title[:50], category=category)
+                    log.debug("cpk_extractor.invalid_category", title=_safe_title(title), category=category)
                     return None
 
                 # Generate Canonical Product Key from category|brand|model ONLY.
@@ -242,7 +248,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
             if attempt < max_attempts - 1:
                 await asyncio.sleep(2 ** attempt)  # 1s, 2s, 4s
                 continue
-            log.warning("cpk_extractor.exception", error=str(exc), title=title[:50])
+            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
             return None
 
 

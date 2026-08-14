@@ -379,6 +379,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
   const token = getAdminToken();
   const res = await fetch(url, {
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
