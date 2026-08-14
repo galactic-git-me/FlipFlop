@@ -309,17 +309,34 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
 
     aspect_names = ", ".join(_EBAY_CATEGORY_179_ASPECTS)
 
-    prompt = f"""Generate eBay listing content for this second-hand PC build for the UK market. Here are its components:
+    prompt = f"""Generate PROFESSIONAL, PREMIUM eBay listing content for this second-hand PC build for the UK market. Here are its components:
 
 {component_text}
 {principles_block}
-The description must be **HTML**, not plain text — eBay renders HTML in the
-description field. Use inline styles (not a <style> block, eBay strips
-those): a clean structure with an <h2> heading per section, a <ul>/<li> spec
-list, a short colour accent (e.g. style="color:#2563eb" for headings,
-style="color:#16a34a" for positives like "EXCELLENT"), and a bold
-call-to-action paragraph at the end. No inline JavaScript, no external
-stylesheets, no <script> tags.
+The description must be **CLEAN, PROFESSIONAL HTML** — eBay renders HTML in the description field.
+
+CRITICAL FORMATTING REQUIREMENTS:
+1. Use semantic HTML: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <em>
+2. Use inline styles ONLY (no <style> block — eBay strips it)
+3. Color accents for visual hierarchy:
+   - Headings: style="color:#0066cc" (professional blue)
+   - Positive highlights: style="color:#16a34a" (green for EXCELLENT, TESTED, etc.)
+   - Section dividers: style="color:#999" (gray for less critical)
+4. Include placeholder tags for product images (user will add URLs):
+   - After the opening hook, include: <p>[IMAGES WILL BE INSERTED HERE]</p>
+5. Professional structure:
+   - Opening hook (compelling, 2-3 sentences)
+   - Key highlights (3-4 compelling benefits)
+   - Detailed specifications (organized by component type, easy to scan)
+   - Build quality & testing statement
+   - Shipping & returns policy
+   - Why this machine excels for its target buyer
+   - Strong call-to-action
+6. Use <strong> tags for emphasis, NOT asterisks
+7. Use <ul>/<li> for specs lists - easy scanning
+8. No markdown, no casual language, no emojis
+9. Write for premium market positioning
+10. No inline JavaScript, no external stylesheets, no <script> tags
 
 Also generate eBay Item Specifics ("aspects") for category 179 (PC Desktops
 & All-in-Ones). Fill in every aspect below that genuinely applies to a
@@ -336,11 +353,11 @@ Available aspects: {aspect_names}
 Respond with ONLY valid JSON (no markdown, no code fences) in this exact format:
 {{
   "titles": [
-    "Title option 1 (max 80 chars, keyword-rich)",
-    "Title option 2 (max 80 chars, different angle)",
-    "Title option 3 (max 80 chars, budget/value focus)"
+    "Title option 1 (max 80 chars, keyword-rich, professional)",
+    "Title option 2 (max 80 chars, different positioning)",
+    "Title option 3 (max 80 chars, alternative focus)"
   ],
-  "description": "<h2 style=\\"color:#2563eb\\">...</h2> full HTML description with specs, condition, use cases, and call to action",
+  "description": "<p>Opening hook about performance and quality.</p><p>[IMAGES WILL BE INSERTED HERE]</p><h2 style=\\"color:#0066cc\\">Premium Specifications</h2><ul><li><strong>CPU:</strong> [Component]</li><li><strong>GPU:</strong> [Component]</li></ul><h2 style=\\"color:#0066cc\\">Condition & Testing</h2><p><strong style=\\"color:#16a34a\\">FULLY TESTED</strong> and ready for immediate use.</p><p>Backed by FlipFlop's quality guarantee. Ships within 1-2 business days.</p><p style=\\"color:#0066cc\\"><strong>Ready to experience premium PC performance? Bid now!</strong></p>",
   "aspects": {{
     "Brand": "FlipFlop",
     "Type": "Desktop",
