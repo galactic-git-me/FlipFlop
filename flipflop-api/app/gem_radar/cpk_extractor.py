@@ -27,6 +27,36 @@ log = structlog.get_logger(__name__)
 # Tested 5 but hit VRAM exhaustion — 4 is the sweet spot
 _CPK_EXTRACTOR_SEMAPHORE = asyncio.Semaphore(4)
 
+# The only categories the prompt's own schema comment offers the model — a
+# multi-category answer like "cpu|gpu" (seen on full-PC-bundle listings) or
+# any other value means the model is guessing/hedging rather than naming one
+# real standalone part, and must not be accepted as a CPK-hash input.
+_VALID_CATEGORIES = {"cpu", "gpu", "motherboard", "ram", "ssd", "psu", "cooler", "case", "fan"}
+
+# Substrings that only ever appear in the PROMPT's own field-description text
+# ("brand": "lowercase brand name", "model": "normalized-model-id
+# (lowercase, dash-separated, no spaces)") — never in a real extracted value.
+# Confirmed via production data: Qwen2:7b periodically echoes these template
+# strings back verbatim instead of filling them in, and since validation
+# previously only checked "is this non-empty" (not "is this real"), every
+# listing that triggered it got hashed into the exact same CPK as every
+# *other* listing that triggered it for that category — a £5 accessory,
+# a £600 GPU, and a full gaming PC all landing in one "market price" bucket
+# together purely because the model gave up on the same three listings'
+# worth of prompt text. See gem_radar audit 2026-08-14: one such bucket
+# (category="unknown") collapsed 703 unrelated listings into a single CPK.
+_PLACEHOLDER_ECHO_MARKERS = (
+    "brand name",
+    "model-id",
+    "dash-separated",
+    "no spaces",
+)
+
+
+def _is_placeholder_echo(value: str) -> bool:
+    lowered = value.lower()
+    return any(marker in lowered for marker in _PLACEHOLDER_ECHO_MARKERS)
+
 @dataclass
 class ExtractedProductData:
     """Structured product info extracted from title."""
@@ -161,7 +191,27 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                     return None
 
                 # Skip if no category/brand/model
-                if not (data.get("category") and data.get("brand") and data.get("model")):
+                category, brand, model = data.get("category"), data.get("brand"), data.get("model")
+                if not (category and brand and model):
+                    return None
+
+                # Skip if the model echoed its own prompt's field-description
+                # text back as the value instead of extracting real data —
+                # see _PLACEHOLDER_ECHO_MARKERS above. Accepting this as
+                # valid previously meant every listing hitting this failure
+                # mode for the same category collapsed into one shared,
+                # nonsense CPK.
+                if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
+                    log.warning("cpk_extractor.placeholder_echo", title=title[:50], category=category)
+                    return None
+
+                # Skip multi-category answers ("cpu|gpu") — a real standalone
+                # part is exactly one category; a hedge/join means the model
+                # couldn't tell (typically a full-PC bundle slipping past
+                # DETECTED_CATEGORY), and accepting it collapses every such
+                # bundle into one shared CPK regardless of its actual parts.
+                if category not in _VALID_CATEGORIES:
+                    log.debug("cpk_extractor.invalid_category", title=title[:50], category=category)
                     return None
 
                 # Generate Canonical Product Key from category|brand|model ONLY.
