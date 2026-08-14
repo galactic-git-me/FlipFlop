@@ -46,10 +46,23 @@ class Listing(Base):
 
     # Parsed specs
     cpu: Mapped[str | None] = mapped_column(String(200))
-    ram_gb: Mapped[int | None] = mapped_column(Integer)
-    ram_type: Mapped[str | None] = mapped_column(String(20))
-    storage_gb: Mapped[int | None] = mapped_column(Integer)
-    storage_type: Mapped[str | None] = mapped_column(String(20))
+
+    # RAM fields — comprehensive tracking
+    ram_gb: Mapped[int | None] = mapped_column(Integer)  # Capacity in GB
+    ram_type: Mapped[str | None] = mapped_column(String(20))  # DDR3/DDR4/DDR5
+    ram_brand: Mapped[str | None] = mapped_column(String(100))  # Corsair, Kingston, G.Skill, etc.
+    ram_model: Mapped[str | None] = mapped_column(String(200))  # Vengeance Pro RGB, Fury Beast, etc.
+    ram_speed: Mapped[int | None] = mapped_column(Integer)  # MHz (6000, 5600, 3600, etc.)
+    ram_cl: Mapped[int | None] = mapped_column(Integer)  # CAS Latency (16, 18, 20, etc.)
+    ram_sticks: Mapped[int | None] = mapped_column(Integer)  # Number of modules (1, 2, 4, etc.)
+
+    # Storage fields — comprehensive tracking
+    storage_gb: Mapped[int | None] = mapped_column(Integer)  # Capacity in GB
+    storage_type: Mapped[str | None] = mapped_column(String(20))  # M.2, SATA, NVMe, PCIE3, PCIE4, etc.
+    storage_brand: Mapped[str | None] = mapped_column(String(100))  # Samsung, Western Digital, SK Hynix, etc.
+    storage_model: Mapped[str | None] = mapped_column(String(200))  # 970 EVO, Red, 860 Evo, etc.
+    storage_form_factor: Mapped[str | None] = mapped_column(String(20))  # 2.5", 3.5", M.2, etc.
+
     gpu: Mapped[str | None] = mapped_column(String(200))
     has_psu: Mapped[bool] = mapped_column(Boolean, default=True)
     raw_specs: Mapped[dict] = mapped_column(JSON, default=dict)
