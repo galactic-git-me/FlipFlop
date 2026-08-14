@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-08-14T14:56:40.096639+00:00",
+  "generated_at": "2026-08-14T15:56:27.139377+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6391375,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -32,7 +32,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6296750,
+          "id": 6390449,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -46,7 +46,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6296755,
+          "id": 6390454,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -74,7 +74,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -88,7 +88,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -102,7 +102,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -129,35 +129,35 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 405.78
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 405.78,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 386.2,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6391375,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -171,7 +171,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6285164,
+          "id": 6378634,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -185,7 +185,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6296755,
+          "id": 6390456,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -199,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -213,7 +213,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -227,7 +227,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -241,7 +241,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -257,9 +257,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -268,35 +268,35 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 405.22
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 405.22,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 385.64,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6379558,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -310,7 +310,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6296750,
+          "id": 6390449,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -324,7 +324,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6296757,
+          "id": 6390454,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -338,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -352,7 +352,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -366,7 +366,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -380,7 +380,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -396,9 +396,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -407,35 +407,35 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 403.78
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 403.78,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 384.2,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6391375,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -449,7 +449,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6285164,
+          "id": 6390449,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -463,7 +463,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6296757,
+          "id": 6378638,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -477,7 +477,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -491,7 +491,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -505,7 +505,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -519,7 +519,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -535,9 +535,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -546,35 +546,35 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 402.08
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 402.08,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 382.5,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6391375,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -588,7 +588,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6296750,
+          "id": 6378634,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -602,7 +602,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6285167,
+          "id": 6390454,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -616,7 +616,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -630,7 +630,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -644,7 +644,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -658,7 +658,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -674,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -685,35 +685,35 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 401.42
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 401.42,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 381.84,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 6297649,
-          "listing_id": "8483787725",
+          "id": 6391845,
+          "listing_id": "9565309194",
           "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
+          "title": "Intel Core i3 2120 Processor - CPU",
           "seller": null,
           "image_url": null,
-          "delivered_price": 3.54,
+          "delivered_price": 1.75,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 6297662,
+          "id": 6391375,
           "listing_id": "8552605560",
           "category": "motherboard",
           "title": "Gigabyte AMD FM2+/FM2 Series Motherboard Utilities Cd",
@@ -727,7 +727,7 @@
           "url": "https://www.ebay.co.uk/itm/8552605560"
         },
         {
-          "id": 6285164,
+          "id": 6390449,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -741,7 +741,7 @@
           "url": "https://www.ebay.co.uk/itm/606489527838713"
         },
         {
-          "id": 6285167,
+          "id": 6390456,
           "listing_id": "606539440090518",
           "category": "ram",
           "title": "TISHRIC DDR5 DDR4 DDR3 DDR2 Radiator Desktop Memory Cooling RAM Aluminum Alloy Heatsink Heat Dissipation Vest Thermal PadOpen in new tab.",
@@ -755,7 +755,7 @@
           "url": "https://www.ebay.co.uk/itm/606539440090518"
         },
         {
-          "id": 6300763,
+          "id": 6394643,
           "listing_id": "PC150FIG8UKBCEXB",
           "category": "psu",
           "title": "CeX basics - Figure 8 Power Cable 1.5m",
@@ -769,7 +769,7 @@
           "url": "https://www.ebay.co.uk/itm/PC150FIG8UKBCEXB"
         },
         {
-          "id": 6296764,
+          "id": 6390464,
           "listing_id": "606630758434928",
           "category": "ssd",
           "title": "Top pickIn- M.2 SSD Heatsink Kit Compatible for NVMe/SATA SSD Cooling System with Thermal Conductive Pads, Silicone Straps, Screwdriver & Screws - for M.2 PCIe NVMe/SATA SSD Upgrade for PC Laptop Desktop Thermal SolutionOpen in new tab.",
@@ -783,7 +783,7 @@
           "url": "https://www.ebay.co.uk/itm/606630758434928"
         },
         {
-          "id": 6296783,
+          "id": 6390483,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -797,7 +797,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 6296205,
+          "id": 6389902,
           "listing_id": "601101124290308",
           "category": "case",
           "title": "Top pickPC Case PVC Dustproof Net Ventilation And Heat Dissipation Multi-Specification Optional Dustproof And Insect-Proof Net CoverOpen in new tab.",
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 21.37,
+      "build_cost": 19.58,
       "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick3D Printed Creative Ad",
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
         "sold": {
           "available": false,
           "count": 0,
@@ -824,18 +824,18 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 154.87
+          "count": 45,
+          "min_price": 73.14,
+          "max_price": 949.0,
+          "average_price": 401.42
         }
       },
-      "resale_estimate": 154.87,
+      "resale_estimate": 401.42,
       "resale_source": "bin_average",
-      "estimated_profit": 133.5,
+      "estimated_profit": 381.84,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2160
+  "total_compatible_combinations": 2250
 }
