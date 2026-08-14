@@ -154,6 +154,7 @@ export interface ManualBuild {
   package_length_cm?: number | null;
   package_width_cm?: number | null;
   package_height_cm?: number | null;
+  deferred_publish_at?: string | null;
   // Real post-sale order/shipment data (see /manual-builds/{id}/sync-ebay-order
   // and /manual-builds/{id}/book-shipment) — null until the build actually sells.
   ebay_order_id?: string | null;
@@ -584,7 +585,7 @@ export const api = {
       | "auction_start_price" | "return_days" | "shipping_method" | "shipping_cost"
       | "handling_time_days" | "ships_to_countries" | "domestic_only"
       | "fulfillment_policy_id" | "package_weight_kg" | "package_length_cm"
-      | "package_width_cm" | "package_height_cm"
+      | "package_width_cm" | "package_height_cm" | "deferred_publish_at"
     >>) =>
       request<ManualBuild>(`/manual-builds/${id}/ebay-config`, {
         method: "PATCH",

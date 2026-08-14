@@ -1,0 +1,143 @@
+"""Deferred-listing scheduler for Manual Builds ("Your Builds" -> "List on
+eBay") — mirrors app/workers/recreate_cycle.py's run_deferred_publish_job()
+for Flips, but targets ManualBuild instead. Registered on the APScheduler
+instance in app/workers/scheduler.py.
+
+Builds that are due but not actually ready to publish (missing listing
+content, item specifics, photos, or a set price) are skipped and logged
+rather than erroring the whole job — deferred_publish_at is only cleared on
+a real publish, so a build that becomes ready later still fires on the next
+tick instead of silently never publishing.
+"""
+from __future__ import annotations
+
+from datetime import datetime
+
+import structlog
+from sqlalchemy import select
+
+from app.config import get_settings
+from app.services.ebay_listing_poster import post_flip_to_ebay
+from app.services.ebay_specifics_generator import validate_aspects_for_ebay
+
+log = structlog.get_logger(__name__)
+
+
+async def run_deferred_manual_build_publish_job() -> dict:
+    from app.database import AsyncSessionLocal
+    from app.models.manual_build import ManualBuild
+
+    published, skipped_not_ready, skipped_no_token, errors = 0, 0, 0, 0
+    now = datetime.utcnow()
+
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            select(ManualBuild).where(
+                ManualBuild.deferred_publish_at.isnot(None),
+                ManualBuild.deferred_publish_at <= now,
+                ManualBuild.status != "listed",
+                ManualBuild.ebay_listing_id.is_(None),
+            )
+        )
+        due = result.scalars().all()
+
+        for build in due:
+            try:
+                outcome = await _publish_due_build(build)
+                if outcome == "published":
+                    published += 1
+                elif outcome == "no_token":
+                    skipped_no_token += 1
+                else:
+                    skipped_not_ready += 1
+            except Exception as exc:
+                errors += 1
+                log.warning("manual_build_scheduler.publish_failed", build_id=build.id, error=str(exc))
+
+        await db.commit()
+
+    return {
+        "published": published,
+        "skipped_not_ready": skipped_not_ready,
+        "skipped_no_token": skipped_no_token,
+        "errors": errors,
+    }
+
+
+async def _publish_due_build(build) -> str:
+    """Returns 'published', 'not_ready', or 'no_token'. Mutates `build`
+    in place on success — caller commits."""
+    if not build.generated_title or not build.generated_description:
+        log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="no_listing_content")
+        return "not_ready"
+
+    missing_required = [a for a in ("Brand", "Type") if not (build.generated_aspects or {}).get(a)]
+    if missing_required:
+        log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="missing_aspects", missing=missing_required)
+        return "not_ready"
+
+    if validate_aspects_for_ebay(build.generated_aspects or {}):
+        log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="invalid_aspects")
+        return "not_ready"
+
+    image_urls = [
+        url for url in (
+            (p.get("url") if isinstance(p, dict) else p) for p in (build.photos or [])
+        ) if url
+    ]
+    if not image_urls:
+        log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="no_photos")
+        return "not_ready"
+
+    if not build.ebay_price:
+        log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="no_price_set")
+        return "not_ready"
+
+    from app.services.ebay_token_manager import get_valid_ebay_access_token
+
+    settings = get_settings()
+    listing_environment = settings.ebay_listing_environment
+
+    try:
+        oauth_token = await get_valid_ebay_access_token(listing_environment)
+    except ValueError:
+        log.info("manual_build_scheduler.skip_no_token", build_id=build.id)
+        return "no_token"
+
+    if listing_environment == "production":
+        payment_policy_id = settings.ebay_production_payment_policy_id
+        return_policy_id = settings.ebay_production_return_policy_id
+        fulfillment_policy_id = settings.ebay_production_fulfillment_policy_id
+    else:
+        payment_policy_id = settings.ebay_sandbox_payment_policy_id
+        return_policy_id = settings.ebay_sandbox_return_policy_id
+        fulfillment_policy_id = settings.ebay_sandbox_fulfillment_policy_id
+
+    if build.fulfillment_policy_id:
+        fulfillment_policy_id = build.fulfillment_policy_id
+
+    result = await post_flip_to_ebay(
+        title=build.generated_title,
+        description=build.generated_description,
+        price=build.ebay_price,
+        image_urls=image_urls,
+        access_token=oauth_token,
+        environment=listing_environment,
+        condition=build.ebay_condition or "USED_EXCELLENT",
+        payment_policy_id=payment_policy_id,
+        return_policy_id=return_policy_id,
+        fulfillment_policy_id=fulfillment_policy_id,
+        aspects=build.generated_aspects or {},
+    )
+
+    if result.get("success"):
+        build.ebay_listing_id = result["listing_id"]
+        build.ebay_listing_url = result["url"]
+        build.ebay_sku = result.get("sku")
+        build.status = "listed"
+        build.deferred_publish_at = None
+        build.updated_at = datetime.utcnow()
+        return "published"
+
+    log.warning("manual_build_scheduler.ebay_rejected", build_id=build.id, error=result.get("error"))
+    return "not_ready"

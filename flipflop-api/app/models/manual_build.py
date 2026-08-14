@@ -49,6 +49,11 @@ class ManualBuild(Base):
     # see app/services/ebay_fulfillment_policies.py for how the choices are
     # fetched and app/api/manual_builds.py's post_to_ebay for the fallback.
     fulfillment_policy_id: Mapped[str | None] = mapped_column(String(60))
+    # Deferred-listing scheduler — mirrors Flip.deferred_publish_at (see
+    # app/models/flip.py and app/workers/manual_build_scheduler.py). NULL
+    # means "no scheduled time set"; publishing via the "List on eBay"
+    # button clears it (see manual_builds.py's post_to_ebay).
+    deferred_publish_at: Mapped[datetime | None] = mapped_column(DateTime)
     # Real physical package dimensions for this build, entered once per
     # build (never guessed/inferred from components — see
     # app/services/parcel2go_courier.py's docstring for why) so courier

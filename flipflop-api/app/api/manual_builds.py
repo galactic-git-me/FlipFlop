@@ -716,6 +716,11 @@ async def update_ebay_config(
         build.package_width_cm = body.package_width_cm
     if body.package_height_cm is not None:
         build.package_height_cm = body.package_height_cm
+    # Unlike the fields above, deferred_publish_at must be explicitly
+    # clearable (the user cancels a scheduled time), so this checks whether
+    # the field was sent at all rather than whether it's non-null.
+    if "deferred_publish_at" in body.model_fields_set:
+        build.deferred_publish_at = body.deferred_publish_at
 
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -812,6 +817,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             build.ebay_listing_url = result["url"]
             build.ebay_sku = result.get("sku")
             build.status = "listed"
+            build.deferred_publish_at = None
             build.updated_at = datetime.utcnow()
             await db.flush()
             return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"])

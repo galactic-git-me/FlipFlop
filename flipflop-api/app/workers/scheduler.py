@@ -29,6 +29,7 @@ from app.services.ram_watcher import run_ram_watcher
 from app.services.price_refresh import run_price_refresh
 from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
+from app.workers.manual_build_scheduler import run_deferred_manual_build_publish_job
 from app.workers.markdown_event import run_markdown_event_scan_job
 from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
 from app.workers.message_poll import run_message_poll_job
@@ -462,6 +463,16 @@ def start_scheduler():
         id="deferred_publish",
         name="Deferred Listing Publish",
         kwargs={"job_id": "deferred_publish", "fn": run_deferred_publish_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=15),
+        id="manual_build_deferred_publish",
+        name="Manual Build Deferred Listing Publish",
+        kwargs={"job_id": "manual_build_deferred_publish", "fn": run_deferred_manual_build_publish_job},
         replace_existing=True,
         max_instances=1,
         next_run_time=now,

@@ -791,6 +791,8 @@ async def _migrate_add_columns():
         # phase2_runner's raw UPDATE, read by scripts/batch_extract_cpk.py
         # etc.) but never listed here; added so a fresh DB gets it too.
         ("gem_radar_scored_listings", "cpk", "VARCHAR(64)"),
+        # Manual builds' own deferred-listing scheduler (mirrors flips.deferred_publish_at).
+        ("manual_builds", "deferred_publish_at", "TIMESTAMP"),
     ]
     async with engine.begin() as conn:
         log.info("migration.start", total_columns=len(new_cols))

@@ -91,6 +91,7 @@ class ManualBuildOut(BaseModel):
     # the channel badges render); None elsewhere rather than a stale guess.
     ebay_live: Optional[bool] = None
     storefront_live: Optional[bool] = None
+    deferred_publish_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
 
@@ -177,6 +178,7 @@ class UpdateEbayListingConfigRequest(BaseModel):
     package_length_cm: Optional[float] = None
     package_width_cm: Optional[float] = None
     package_height_cm: Optional[float] = None
+    deferred_publish_at: Optional[datetime] = None
 
 
 class CourierQuoteOut(BaseModel):
