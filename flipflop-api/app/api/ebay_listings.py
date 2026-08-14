@@ -25,7 +25,7 @@ class PostListingRequest(BaseModel):
     title: str
     description: str
     price: float
-    marketplace: str = "EBAY_US"  # Marketplace to list on
+    access_token: str  # User's eBay OAuth token
 
 
 class PostListingResponse(BaseModel):
@@ -62,24 +62,16 @@ async def post_flip_to_ebay_endpoint(
             detail="No images found for this flip. Generate images before listing on eBay.",
         )
 
-    # Get valid access token from backend's token manager (auto-refreshes if needed)
-    from app.services.ebay_token_manager import get_valid_ebay_access_token
-
-    access_token = await get_valid_ebay_access_token(
-        environment=settings.ebay_listing_environment
-    )
-
-    # Post to eBay
+    # Post to eBay (uses Application Token with server credentials)
     result = await post_flip_to_ebay(
         title=body.title,
         description=body.description,
         price=body.price,
         image_urls=image_urls,
-        access_token=access_token,
-        environment=settings.ebay_listing_environment,
+        access_token=body.access_token,
+        environment=settings.ebay_environment,
         app_id=settings.ebay_app_id,
         client_secret=settings.ebay_client_secret,
-        marketplace=body.marketplace,
     )
 
     if result["success"]:
