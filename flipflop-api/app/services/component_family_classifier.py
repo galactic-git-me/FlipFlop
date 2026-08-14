@@ -4,12 +4,13 @@ family ONCE (e.g. "ASUS ATX motherboard", "large triple-fan GPU") and reuse
 that model across every catalogue variant in that bucket, instead of
 generating one model per SKU or even one model per whole category.
 
-Conservative by design: this catalogue mixes bare components with whole
-used-PC listings (the core business is flipping complete machines, not just
-parts — see e.g. "HP EliteDesk 800 G2 SFF – i5-6500 / 32GB RAM – No Storage"
-showing up as a "cpu" slot candidate). A wrong bucket guess would show the
-customer a materially wrong-looking part, which is worse than falling back
-to the existing plain category-generic placeholder. Every classify_* function
+Conservative by design: candidate listings for a slot can include complete
+desktop listings alongside bare components — a scraped listing with
+populated cpu/ram_gb fields matches the seeding query either way (see e.g.
+"HP EliteDesk 800 G2 SFF – i5-6500 / 32GB RAM – No Storage" showing up as a
+"cpu" slot candidate). A wrong bucket guess would show the customer a
+materially wrong-looking part, which is worse than falling back to the
+existing plain category-generic placeholder. Every classify_* function
 returns None rather than a low-confidence guess — same principle as
 _infer_cpu_socket etc. in compatibility_engine.py.
 

@@ -82,6 +82,12 @@ class Settings(BaseSettings):
     stability_api_key: str = ""
     image_gen_provider: str = "pollinations"
 
+    # Meshy text-to-3D (component_3d_asset family-bucket generation pipeline —
+    # see app/services/meshy_generation.py). Empty by default; the service
+    # no-ops with a clear error until this is set, same convention as
+    # anthropic_api_key etc.
+    meshy_api_key: str = ""
+
     # Parcel2Go courier quotes (app/services/parcel2go_courier.py) — used by
     # the build sell page to quote real tracked-delivery cost from a build's
     # package weight/dimensions, so the asking price can bake in accurate

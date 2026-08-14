@@ -21,6 +21,8 @@ from app.models.component_3d_asset import (
 from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
+from app.services.component_family_classifier import KNOWN_FAMILY_BUCKETS
+from app.services.meshy_generation import build_prompt, generate_family_asset
 
 router = APIRouter(prefix="/assets-3d", tags=["assets-3d"], dependencies=[Depends(get_current_admin)])
 
@@ -31,6 +33,7 @@ def _serialize(a: Component3DAsset) -> dict:
         "subject_type": a.subject_type.value,
         "subject_id": a.subject_id,
         "category": a.category,
+        "family_key": a.family_key,
         "status": a.status.value,
         "version": a.version,
         "is_active": a.is_active,
@@ -88,6 +91,7 @@ class AssetCreate(BaseModel):
     subject_type: str = Field(pattern="^(case|variant|category_generic)$")
     subject_id: int | None = None
     category: str | None = None
+    family_key: str | None = None
     status: str = "meshy_draft"
     glb_ref: str | None = None
     preview_image_ref: str | None = None
@@ -127,6 +131,7 @@ async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
                 Component3DAsset.subject_type == stype,
                 Component3DAsset.subject_id == body.subject_id,
                 Component3DAsset.category == body.category,
+                Component3DAsset.family_key == body.family_key,
             )
             .order_by(Component3DAsset.version.desc())
             .limit(1)
@@ -137,6 +142,7 @@ async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
         subject_type=stype,
         subject_id=body.subject_id,
         category=body.category,
+        family_key=body.family_key,
         status=status,
         version=(prior or 0) + 1,
         glb_ref=body.glb_ref,
@@ -265,6 +271,104 @@ async def activate_asset(asset_id: int, db: AsyncSession = Depends(get_db)):
     )
     asset.is_active = True
     asset.updated_at = datetime.utcnow()
+    await db.commit()
+    await db.refresh(asset)
+    return _serialize(asset)
+
+
+@router.get("/family-buckets")
+async def list_family_buckets(db: AsyncSession = Depends(get_db)):
+    """Every bucket in the family taxonomy (component_family_classifier.py),
+    joined against whatever Component3DAsset row currently exists for it —
+    the admin generation queue reads this to see what's missing vs done."""
+    rows = (
+        await db.execute(
+            select(Component3DAsset).where(
+                Component3DAsset.subject_type == AssetSubjectType.CATEGORY_GENERIC,
+                Component3DAsset.family_key.isnot(None),
+            )
+        )
+    ).scalars().all()
+    # Latest version per (category, family_key)
+    latest_by_bucket: dict[tuple[str, str], Component3DAsset] = {}
+    for row in rows:
+        key = (row.category, row.family_key)
+        if key not in latest_by_bucket or row.version > latest_by_bucket[key].version:
+            latest_by_bucket[key] = row
+
+    return [
+        {
+            "category": category,
+            "family_key": family_key,
+            "prompt": build_prompt(category, family_key),
+            "asset": _serialize(latest_by_bucket[(category, family_key)])
+            if (category, family_key) in latest_by_bucket
+            else None,
+        }
+        for category, family_key in KNOWN_FAMILY_BUCKETS
+    ]
+
+
+@router.post("/family-buckets/{category}/{family_key}/generate")
+async def generate_family_bucket_asset(
+    category: str,
+    family_key: str,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Kicks off a Meshy generation for one bucket and saves the result as a
+    new MESHY_DRAFT version. Synchronous end-to-end (the request blocks until
+    Meshy finishes, typically a few minutes) — acceptable for an admin-
+    triggered, occasional, one-bucket-at-a-time action; not something a
+    customer-facing endpoint would ever do."""
+    if (category, family_key) not in KNOWN_FAMILY_BUCKETS:
+        raise HTTPException(status_code=404, detail=f"Unknown bucket {category}/{family_key}")
+
+    prompt = build_prompt(category, family_key)
+    result = await generate_family_asset(prompt)
+    if result is None:
+        raise HTTPException(
+            status_code=502,
+            detail="Meshy generation failed — check MESHY_API_KEY is set and try again",
+        )
+    if result.status != "SUCCEEDED" or not result.glb_url:
+        raise HTTPException(status_code=502, detail=f"Meshy generation did not succeed (status: {result.status})")
+
+    prior_version = (
+        await db.execute(
+            select(Component3DAsset.version)
+            .where(
+                Component3DAsset.subject_type == AssetSubjectType.CATEGORY_GENERIC,
+                Component3DAsset.category == category,
+                Component3DAsset.family_key == family_key,
+            )
+            .order_by(Component3DAsset.version.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+
+    asset = Component3DAsset(
+        subject_type=AssetSubjectType.CATEGORY_GENERIC,
+        subject_id=None,
+        category=category,
+        family_key=family_key,
+        status=Component3DAssetStatus.MESHY_DRAFT,
+        version=(prior_version or 0) + 1,
+        glb_ref=result.glb_url,
+        preview_image_ref=result.thumbnail_url,
+        source_image_refs=[],
+        notes=f"Meshy task {result.task_id}, prompt: {prompt}",
+        created_by=getattr(admin, "email", None),
+        # Original AI-generated recreation from a generic text prompt — never
+        # a copy of a specific product. Still starts unapproved: a human
+        # reviews the actual output before it can be promoted (patch_asset's
+        # provenance gate below still requires explicit approval either way).
+        provenance_status="original-recreation",
+        source_name=f"Meshy AI text-to-3D generation (task {result.task_id})",
+        commercial_use_approved=False,
+        redistribution_approved=False,
+    )
+    db.add(asset)
     await db.commit()
     await db.refresh(asset)
     return _serialize(asset)
