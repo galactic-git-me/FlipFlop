@@ -1011,7 +1011,8 @@ export default function BuildDetailPage() {
         </>
       )}
 
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -1086,7 +1087,6 @@ function BrandedCardTile({
             <Download className="w-3.5 h-3.5" />
           </a>
         )}
-      </div>
       </div>
     </>
   );

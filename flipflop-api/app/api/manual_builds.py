@@ -309,34 +309,113 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
 
     aspect_names = ", ".join(_EBAY_CATEGORY_179_ASPECTS)
 
-    prompt = f"""Generate PROFESSIONAL, PREMIUM eBay listing content for this second-hand PC build for the UK market. Here are its components:
+    prompt = f"""Generate STUNNING, PREMIUM eBay listing content for this second-hand PC build for the UK market. This description must STAND OUT and DAZZLE buyers. Here are its components:
 
 {component_text}
 {principles_block}
-The description must be **CLEAN, PROFESSIONAL HTML** — eBay renders HTML in the description field.
 
-CRITICAL FORMATTING REQUIREMENTS:
-1. Use semantic HTML: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <em>
-2. Use inline styles ONLY (no <style> block — eBay strips it)
-3. Color accents for visual hierarchy:
-   - Headings: style="color:#0066cc" (professional blue)
-   - Positive highlights: style="color:#16a34a" (green for EXCELLENT, TESTED, etc.)
-   - Section dividers: style="color:#999" (gray for less critical)
-4. Include placeholder tags for product images (user will add URLs):
-   - After the opening hook, include: <p>[IMAGES WILL BE INSERTED HERE]</p>
-5. Professional structure:
-   - Opening hook (compelling, 2-3 sentences)
-   - Key highlights (3-4 compelling benefits)
-   - Detailed specifications (organized by component type, easy to scan)
-   - Build quality & testing statement
-   - Shipping & returns policy
-   - Why this machine excels for its target buyer
-   - Strong call-to-action
-6. Use <strong> tags for emphasis, NOT asterisks
-7. Use <ul>/<li> for specs lists - easy scanning
-8. No markdown, no casual language, no emojis
-9. Write for premium market positioning
-10. No inline JavaScript, no external stylesheets, no <script> tags
+DESIGN BRIEF: Create a LUXURY listing that makes buyers say "WOW" — premium feel, flawless execution, professional excellence.
+
+TECHNICAL REQUIREMENTS:
+1. Pure HTML + inline styles ONLY (no <style> blocks — eBay strips them)
+2. Semantic tags: <h1>, <h2>, <h3>, <p>, <div>, <ul>, <li>, <strong>, <em>, <hr>
+3. NO markdown, NO asterisks, NO casual language
+
+STUNNING DESIGN SYSTEM:
+Color Palette (professional luxury):
+- PRIMARY: #0052CC (vibrant, premium blue)
+- ACCENT: #FFB81C (warm gold — high-end feel)
+- SUCCESS: #28A745 (confident green for "TESTED")
+- DARK: #1a1a1a (rich black for contrast)
+- LIGHT: #F5F5F5 (clean white)
+
+Visual Hierarchy & Effects:
+1. HERO SECTION (top):
+   <div style="background-color:#0052CC;color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;">
+   - Main headline: Large, bold, white text
+   - Tagline: Professional positioning statement
+   - Use padding and centered alignment for impact
+
+2. FEATURED IMAGE AREA:
+   <p style="text-align:center;margin:30px 0;">[IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
+
+3. KEY HIGHLIGHTS SECTION:
+   - 3-4 major selling points in a visually distinct box
+   - Use background-color:#F5F5F5 with padding for visual separation
+   - Use <strong> with color:#0052CC for key stats
+   - Format: "🔸 Benefit statement with specs"
+
+4. SPECIFICATIONS SECTION:
+   - Organize by component category (CPU, GPU, RAM, Storage, Motherboard, Power, Cooling)
+   - Each spec in a clean, scannable list format
+   - Use <strong> tags with strategic color changes
+   - Highlight premium/high-end components with color:#FFB81C
+   - Use borders to separate premium specs from standard ones
+
+5. CONDITION & TESTING SECTION:
+   - Bold, centered statement with color:#28A745
+   - "✓ FULLY TESTED & VERIFIED" in large, confident text
+   - Add details about testing process
+
+6. FLIPFLOP PREMIUM BADGE:
+   - Create a visual "badge" effect:
+   <div style="background-color:#FFB81C;color:#0052CC;padding:15px;margin:20px 0;border-left:4px solid #0052CC;font-weight:bold;text-align:center;">
+   - Trust messaging
+   - Quality guarantee
+   - Support statement
+
+7. BENEFITS FOR BUYER TYPE:
+   - Section explaining why this machine is PERFECT for their needs
+   - Use color accents for different buyer personas (Gamer, Creator, Professional)
+
+8. SHIPPING & LOGISTICS:
+   - Clean, professional formatting
+   - Highlight speed and reliability
+
+9. FINAL CALL-TO-ACTION:
+   - Bold, centered, memorable
+   - Use color:#FFB81C background with #0052CC text
+   - Make it impossible to miss
+   - Example: Large bold text in colored box
+
+STYLING TECHNIQUES TO MAXIMIZE IMPACT:
+- Use padding/margin generously (20-30px) for breathing room
+- Center-align headlines and important statements
+- Use left borders (4px) in accent color to highlight premium specs
+- Use background colors to create visual "cards" or sections
+- Vary font sizes significantly for hierarchy (use inline style="font-size:18px" for emphasis)
+- Use line-height:1.8 for body text (easier to read, more premium feel)
+- Bold premium/high-end components with gold accent
+- Create visual separation between sections with <hr style="border-color:#0052CC;margin:20px 0;">
+
+TONE:
+- Confident, not pushy
+- Premium positioning throughout
+- Professional, sophisticated language
+- Every section must feel intentional and valuable
+- Make the reader FEEL the quality
+
+STRUCTURE:
+1. Hero section with striking headline
+2. Origin story / About FlipFlop (NEW):
+   - Brief paragraph explaining: "I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality and performance. Now I'm turning that passion into FlipFlop — a startup dedicated to crafting and delivering premium custom-built PCs to discerning buyers who demand the very best."
+   - This builds credibility and differentiates from typical resellers
+   - Keep it authentic but professional
+3. [IMAGES PLACEHOLDER]
+4. Key highlights (visually distinct)
+5. Detailed specifications (well-organized)
+6. Condition & testing assurance
+7. FlipFlop premium badge & trust messaging
+8. Why this machine is perfect for the buyer
+9. Shipping details
+10. Bold, memorable call-to-action
+
+Respond with ONLY valid JSON (no markdown, no code fences):
+{{
+  "titles": ["Premium title 1", "Premium title 2", "Premium title 3"],
+  "description": "<div style=\\"background-color:#0052CC;color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;\\"><h1 style=\\"margin:0;font-size:28px;\\">Premium Gaming PC - Expertly Built</h1><p style=\\"margin:10px 0 0 0;font-size:14px;\\">Handcrafted by an experienced software engineer</p></div><p style=\\"background-color:#F5F5F5;padding:20px;border-left:4px solid #0052CC;margin:20px 0;line-height:1.8;\\"><strong>About FlipFlop:</strong> I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality, reliability, and raw performance. Now I'm turning that passion into FlipFlop — a startup dedicated to crafting and delivering premium custom-built systems to discerning buyers who demand excellence.</p><p style=\\"text-align:center;margin:30px 0;\\\">[IMAGES WILL BE INSERTED HERE]</p><div style=\\"background-color:#F5F5F5;padding:20px;margin:20px 0;border-radius:8px;\\\">[REST OF DESCRIPTION CONTINUES WITH SPECS, HIGHLIGHTS, CTA...]</div>",
+  "aspects": {{...}}
+}}
 
 Also generate eBay Item Specifics ("aspects") for category 179 (PC Desktops
 & All-in-Ones). Fill in every aspect below that genuinely applies to a
