@@ -19,7 +19,9 @@ from typing import Optional
 
 import structlog
 
-from app.services import ebay_oauth, ebay_trading_api
+from app.config import get_settings
+from app.services import ebay_trading_api
+from app.services.ebay_token_manager import get_valid_ebay_access_token
 from app.services.alerts import emit_alert
 
 log = structlog.get_logger(__name__)
@@ -40,12 +42,11 @@ def _parse_ebay_datetime(value: Optional[str]) -> Optional[datetime]:
 
 
 async def run_message_poll_job() -> dict:
-    from app.database import AsyncSessionLocal
-
-    async with AsyncSessionLocal() as db:
-        token = await ebay_oauth.get_valid_access_token(db)
-        if not token:
-            return {"checked": 0, "flagged": 0, "note": "No connected eBay seller account."}
+    settings = get_settings()
+    try:
+        token = await get_valid_ebay_access_token(settings.ebay_listing_environment)
+    except ValueError:
+        return {"checked": 0, "flagged": 0, "note": "No eBay refresh token configured."}
 
     try:
         messages = await ebay_trading_api.get_member_messages(token)
