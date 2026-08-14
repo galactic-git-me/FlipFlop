@@ -18,6 +18,7 @@ import { EbayShippingSection } from "@/components/builds/EbayShippingSection";
 import { EbayShipmentBookingSection } from "@/components/builds/EbayShipmentBookingSection";
 import { EbaySpecificsSection } from "@/components/builds/EbaySpecificsSection";
 import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
+import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingBreakdown } from "@/components/builds/PricingBreakdown";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
@@ -73,6 +74,7 @@ export default function BuildDetailPage() {
   const [listingOnStorefront, setListingOnStorefront] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
+  const [showEbayPreview, setShowEbayPreview] = useState(false);
 
   const [price, setPrice] = useState("");
   const [condition, setCondition] = useState("USED_EXCELLENT");
@@ -579,13 +581,21 @@ export default function BuildDetailPage() {
                   <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
                   <DescriptionPreview html={build.generated_description} />
                 </div>
-                <button
-                  onClick={generateListing}
-                  disabled={generating}
-                  className="self-start text-xs text-slate-500 hover:text-slate-300 underline decoration-dotted"
-                >
-                  {generating ? "Regenerating…" : "Regenerate"}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowEbayPreview(true)}
+                    className="self-start text-xs px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                  >
+                    Preview on eBay
+                  </button>
+                  <button
+                    onClick={generateListing}
+                    disabled={generating}
+                    className="self-start text-xs text-slate-500 hover:text-slate-300 underline decoration-dotted"
+                  >
+                    {generating ? "Regenerating…" : "Regenerate"}
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1012,6 +1022,18 @@ export default function BuildDetailPage() {
       )}
 
       </div>
+
+      {/* eBay Listing Preview Modal */}
+      {showEbayPreview && build.generated_title && build.generated_description && (
+        <EbayListingHTMLPreview
+          title={build.generated_title}
+          description={build.generated_description}
+          images={build.photos?.filter((p) => p.kind === "photo").map((p) => p.url) || []}
+          price={price ? Number(price) : undefined}
+          onClose={() => setShowEbayPreview(false)}
+          isModal={true}
+        />
+      )}
     </>
   );
 }
