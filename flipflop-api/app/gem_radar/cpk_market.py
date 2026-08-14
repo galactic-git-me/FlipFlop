@@ -29,7 +29,7 @@ log = structlog.get_logger(__name__)
 
 # Below this many contributing listings, a CPK's aggregate price is not
 # considered "settled" — see get_market_price.
-MIN_LISTINGS_FOR_SETTLED_PRICE = 1
+MIN_LISTINGS_FOR_SETTLED_PRICE = 2
 
 # Rolling window for market-price aggregation. A listing's row in
 # gem_radar_cpk_listing_price is upserted on every re-sighting (its

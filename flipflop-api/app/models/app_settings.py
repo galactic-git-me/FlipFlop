@@ -77,9 +77,9 @@ class AppSettings(Base):
     # (negative = listing priced below market = a better deal); a listing
     # worse than deal_average_deal_threshold_pct falls through to POOR_DEAL.
     deal_market_price_source: Mapped[str] = mapped_column(String(10), default="median")  # lower|median|upper
-    deal_super_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-20.0)
-    deal_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-15.0)
-    deal_ok_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=-5.0)
-    deal_average_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=10.0)
+    deal_super_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-30.0)
+    deal_gem_threshold_pct: Mapped[float] = mapped_column(Float, default=-20.0)
+    deal_ok_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=-10.0)
+    deal_average_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=5.0)
 
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
