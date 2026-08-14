@@ -49,6 +49,13 @@ class GemRadarScoredListing(Base):
     # title text) or the raw regex model string. Only populated for listings
     # sourced via the eBay Browse API path. See pipeline.build_batch_price_index.
     epid: Mapped[str | None] = mapped_column(String(50), index=True, nullable=True)
+    # Canonical Product Key (see gem_radar/cpk_market.py) — the market-price
+    # grouping key used by phase2_runner's classification pass. Column has
+    # existed since the CPK market-price system shipped (see scripts/
+    # batch_extract_cpk.py, rescore_with_cpk.py) but was never declared here;
+    # reads went through raw SQL only until favourites needed ORM access to
+    # match listings to a saved product (see app/api/favourites.py).
+    cpk: Mapped[str | None] = mapped_column(String(64), index=True, nullable=True)
 
     # eBay Browse API seller.feedbackPercentage/feedbackScore — free, carried
     # through from gem_radar_listing_observations (see observations.record_observation).

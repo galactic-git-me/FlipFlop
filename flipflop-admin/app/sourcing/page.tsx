@@ -42,6 +42,8 @@ interface Listing {
   market_median_price?: number | null;
   market_upper_price?: number | null;
   pct_offset?: number | null;
+  watch_count?: number | null;
+  bid_count?: number | null;
   classification: string;
   deal_score: number;
   confidence: string;
@@ -86,6 +88,10 @@ interface ScanProgress {
   // Demand signals (average across active search's listings)
   avgWatchCount?: number;
   avgBidCount?: number;
+  // Vendors this search term is configured to query, from source_search_terms
+  // (see app/api/gem_radar.py's pipeline-status endpoint) — falls back to
+  // VENDOR_ORDER (all vendors) when a search has no specific configuration.
+  configuredVendors?: string[];
 }
 
 interface PipelineStatusResponse {

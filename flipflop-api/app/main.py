@@ -787,6 +787,10 @@ async def _migrate_add_columns():
         # Deep-link target for a toast/notification (e.g. a favourite's
         # gem-match alert linking straight to the listing).
         ("alert_events", "link_url", "VARCHAR(500)"),
+        # Canonical Product Key — already live on deployed DBs (written by
+        # phase2_runner's raw UPDATE, read by scripts/batch_extract_cpk.py
+        # etc.) but never listed here; added so a fresh DB gets it too.
+        ("gem_radar_scored_listings", "cpk", "VARCHAR(64)"),
     ]
     async with engine.begin() as conn:
         log.info("migration.start", total_columns=len(new_cols))
