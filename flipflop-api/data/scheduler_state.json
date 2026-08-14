@@ -1,6 +1,6 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-14T07:51:00.818315+00:00"
+    "last_success_at": "2026-08-14T08:06:01.032975+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-14T01:11:02.059496+00:00"
@@ -9,22 +9,22 @@
     "last_success_at": "2026-07-23T14:57:29.735084+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-08-14T07:06:26.952688+00:00"
+    "last_success_at": "2026-08-14T08:07:14.079542+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-08-14T07:06:01.348250+00:00"
+    "last_success_at": "2026-08-14T08:06:01.600961+00:00"
   },
   "accessories": {
     "last_success_at": "2026-07-23T14:55:52.961761+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-08-14T07:06:00.602199+00:00"
+    "last_success_at": "2026-08-14T08:06:00.600255+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-08-14T07:06:00.962915+00:00"
+    "last_success_at": "2026-08-14T08:06:01.044678+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-08-14T07:06:01.293436+00:00"
+    "last_success_at": "2026-08-14T08:06:01.060473+00:00"
   },
   "autonomous": {
     "last_success_at": "2026-08-14T07:16:58.693880+00:00"
@@ -42,7 +42,7 @@
     "last_success_at": "2026-07-23T12:59:42.710669+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-08-14T07:06:01.403632+00:00"
+    "last_success_at": "2026-08-14T08:06:01.688192+00:00"
   },
   "catalogue_digest": {
     "last_success_at": "2026-08-14T07:00:00.008542+00:00"
@@ -51,22 +51,22 @@
     "last_success_at": "2026-08-14T07:20:06.432603+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-14T08:02:01.127500+00:00"
+    "last_success_at": "2026-08-14T08:07:01.172426+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-08-14T07:38:00.615203+00:00"
+    "last_success_at": "2026-08-14T08:08:00.617701+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-14T07:51:00.827932+00:00"
+    "last_success_at": "2026-08-14T08:06:01.055856+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-08-14T07:36:00.772097+00:00"
+    "last_success_at": "2026-08-14T08:06:01.042265+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-08-14T07:36:00.772578+00:00"
+    "last_success_at": "2026-08-14T08:06:01.043346+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-08-14T07:06:01.292837+00:00"
+    "last_success_at": "2026-08-14T08:06:01.056745+00:00"
   },
   "markdown_event_scan": {
     "last_success_at": "2026-08-14T05:06:00.967225+00:00"
