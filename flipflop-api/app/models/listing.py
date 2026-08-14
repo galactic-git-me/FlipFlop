@@ -64,7 +64,21 @@ class Listing(Base):
     storage_form_factor: Mapped[str | None] = mapped_column(String(20))  # 2.5", 3.5", M.2, etc.
 
     gpu: Mapped[str | None] = mapped_column(String(200))
-    has_psu: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # PSU fields — comprehensive tracking (replaces has_psu boolean)
+    psu_included: Mapped[bool] = mapped_column(Boolean, default=False)  # Whether PSU is in build
+    psu_brand: Mapped[str | None] = mapped_column(String(100))  # Corsair, EVGA, Seasonic, etc.
+    psu_wattage: Mapped[int | None] = mapped_column(Integer)  # Watts (750, 1000, 1200, etc.)
+    psu_rating: Mapped[str | None] = mapped_column(String(20))  # 80+ Gold/Silver/Bronze/None
+
+    # Case fields — comprehensive tracking
+    case_brand: Mapped[str | None] = mapped_column(String(100))  # Lian Li, NZXT, Corsair, etc.
+    case_model: Mapped[str | None] = mapped_column(String(200))  # O11 Vision Compact, H510, etc.
+    case_form_factor: Mapped[str | None] = mapped_column(String(20))  # ATX, MATX, ITX, SFF, etc.
+    case_color: Mapped[str | None] = mapped_column(String(50))  # Black, White, Transparent, etc.
+    # Reference to case_catalogue if we know the exact case (links to full specs/dimensions)
+    case_catalogue_id: Mapped[int | None] = mapped_column(Integer)
+
     raw_specs: Mapped[dict] = mapped_column(JSON, default=dict)
 
     # Gem scoring
