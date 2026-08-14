@@ -17,7 +17,10 @@ from app.models.component_3d_asset import (
     Component3DAssetStatus,
     AssetSubjectType,
 )
+from app.models.catalogue import CatalogueVariant
+from app.models.listing import Listing
 from app.services.configurator_compatibility import evaluate_configuration
+from app.services.component_family_classifier import classify_family
 
 router = APIRouter(prefix="/public", tags=["public-configurator"])
 
@@ -84,22 +87,62 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
             continue
 
         generic = None
+        fallback_level = "category_generic"
         if subject.category:
-            generic = (
-                await db.execute(
-                    select(Component3DAsset).where(
-                        Component3DAsset.subject_type == AssetSubjectType.CATEGORY_GENERIC,
-                        Component3DAsset.category == subject.category,
-                        Component3DAsset.is_active == True,  # noqa: E712
-                        Component3DAsset.status.in_(_SERVABLE),
+            # Bucket-level generic first (e.g. "gpu_large_triple_fan") — a
+            # closer visual match than the whole-category placeholder. Only
+            # applies to VARIANT subjects, since a family bucket is derived
+            # from the variant's own listing title.
+            family_key = None
+            if stype == AssetSubjectType.VARIANT:
+                variant_row = (
+                    await db.execute(
+                        select(CatalogueVariant, Listing)
+                        .join(Listing, CatalogueVariant.listing_id == Listing.id)
+                        .where(CatalogueVariant.id == subject.subject_id)
                     )
-                )
-            ).scalar_one_or_none()
+                ).first()
+                if variant_row:
+                    _, listing = variant_row
+                    family_key = classify_family(subject.category, listing.title or "")
+
+            if family_key:
+                generic = (
+                    await db.execute(
+                        select(Component3DAsset).where(
+                            Component3DAsset.subject_type == AssetSubjectType.CATEGORY_GENERIC,
+                            Component3DAsset.category == subject.category,
+                            Component3DAsset.family_key == family_key,
+                            Component3DAsset.is_active == True,  # noqa: E712
+                            Component3DAsset.status.in_(_SERVABLE),
+                        )
+                    )
+                ).scalar_one_or_none()
+                if generic and generic.glb_ref:
+                    fallback_level = "family_generic"
+
+            if not (generic and generic.glb_ref):
+                # Plain whole-category generic — the original, coarser
+                # fallback, used when no family-specific asset exists yet
+                # (library still being built out) or the title didn't
+                # classify confidently.
+                generic = (
+                    await db.execute(
+                        select(Component3DAsset).where(
+                            Component3DAsset.subject_type == AssetSubjectType.CATEGORY_GENERIC,
+                            Component3DAsset.category == subject.category,
+                            Component3DAsset.family_key.is_(None),
+                            Component3DAsset.is_active == True,  # noqa: E712
+                            Component3DAsset.status.in_(_SERVABLE),
+                        )
+                    )
+                ).scalar_one_or_none()
+                fallback_level = "category_generic"
 
         results.append(
             {
                 "query": subject.model_dump(),
-                "asset": _asset_payload(generic, "category_generic")
+                "asset": _asset_payload(generic, fallback_level)
                 if generic and generic.glb_ref
                 else None,
             }

@@ -1,0 +1,178 @@
+"""Classifies a component listing title into a reusable 3D-asset "family"
+bucket — the strategy agreed 2026-08-13: model each visually-distinct
+family ONCE (e.g. "ASUS ATX motherboard", "large triple-fan GPU") and reuse
+that model across every catalogue variant in that bucket, instead of
+generating one model per SKU or even one model per whole category.
+
+Conservative by design: this catalogue mixes bare components with whole
+used-PC listings (the core business is flipping complete machines, not just
+parts — see e.g. "HP EliteDesk 800 G2 SFF – i5-6500 / 32GB RAM – No Storage"
+showing up as a "cpu" slot candidate). A wrong bucket guess would show the
+customer a materially wrong-looking part, which is worse than falling back
+to the existing plain category-generic placeholder. Every classify_* function
+returns None rather than a low-confidence guess — same principle as
+_infer_cpu_socket etc. in compatibility_engine.py.
+
+Where a category doesn't need bucketing at all (PSU, storage, OS — mostly
+concealed / low visual variance), there's no classify_* function; callers
+just get None and use the plain per-category generic.
+"""
+from __future__ import annotations
+
+import re
+
+
+def _norm(text: str) -> str:
+    return (text or "").lower()
+
+
+# ---- CPU: brand only — concealed under the cooler in practice -------------
+def _classify_cpu(title: str) -> str | None:
+    t = _norm(title)
+    if re.search(r"\bryzen\b|\bamd\b", t):
+        return "cpu_amd"
+    if re.search(r"\bintel\b|\bcore i[3579]\b|\bcore ultra\b", t):
+        return "cpu_intel"
+    return None
+
+
+# ---- RAM: brand + colourway — heatspreader shape barely varies otherwise --
+_RAM_BRANDS = ("corsair", "kingston", "crucial", "g.skill", "gskill", "teamgroup", "adata", "hyperx")
+
+
+def _classify_ram(title: str) -> str | None:
+    t = _norm(title)
+    if not re.search(r"\bddr[345]\b|\bram\b|\bdimm\b|\bso-?dimm\b", t):
+        return None
+    brand = next((b for b in _RAM_BRANDS if b.replace(".", "") in t.replace(".", "")), None)
+    if not brand:
+        return None
+    colour = "black"
+    if "white" in t:
+        colour = "white"
+    elif "rgb" in t or "argb" in t:
+        colour = "rgb"
+    return f"ram_{brand.replace('.', '')}_{colour}"
+
+
+# ---- Motherboard: brand + form factor — mostly hidden, form factor matters
+# more visually than exact model line at typical camera angles -------------
+_MOBO_BRANDS = ("asus", "msi", "gigabyte", "asrock")
+
+
+def _classify_motherboard(title: str) -> str | None:
+    t = _norm(title)
+    brand = next((b for b in _MOBO_BRANDS if b in t), None)
+    if not brand:
+        return None
+    if re.search(r"\bitx\b|\bmini-itx\b", t):
+        form = "itx"
+    elif re.search(r"\bm-?atx\b|\bmicro-?atx\b|\bmatx\b", t):
+        form = "matx"
+    elif re.search(r"\batx\b", t):
+        form = "atx"
+    else:
+        return None  # form factor is the load-bearing part of this bucket — no guess
+    return f"mobo_{brand}_{form}"
+
+
+# ---- GPU: shape-tier, NOT brand — cooler-shroud size is what customers
+# actually see; a blower reference card and a triple-fan flagship look
+# nothing alike even from the same manufacturer ------------------------------
+_GPU_BLOWER_HINTS = ("blower", "reference", "founders edition", "fe ")
+_GPU_LARGE_HINTS = (
+    "4090", "4080", "3090", "3080", "7900 xtx", "7900 xt", "6900 xt", "6950",
+    "triple fan", "3-fan", "3 fan",
+)
+_GPU_COMPACT_HINTS = ("1650", "1660", "3050", "4060", "6400", "6500", "6600", "low profile", "sff")
+
+
+def _classify_gpu(title: str) -> str | None:
+    t = _norm(title)
+    if not re.search(r"\brtx\b|\bgtx\b|\bradeon\b|\brx \d|\barc\b", t):
+        return None
+    if any(h in t for h in _GPU_BLOWER_HINTS):
+        return "gpu_blower"
+    if any(h in t for h in _GPU_LARGE_HINTS):
+        return "gpu_large_triple_fan"
+    if any(h in t for h in _GPU_COMPACT_HINTS):
+        return "gpu_compact_dual_fan"
+    # A named, recognised GPU that doesn't match a known size hint — mid-size
+    # dual/triple-fan is the safest generic middle ground, not "no bucket".
+    return "gpu_mid_dual_fan"
+
+
+# ---- Cooling: type + size — an AIO's radiator size and an LCD pump are the
+# visually dominant features, not the brand -------------------------------
+def _classify_cooling(title: str) -> str | None:
+    t = _norm(title)
+    is_aio = bool(re.search(r"\baio\b|liquid|water cool|radiator|\d{3}\s?mm", t))
+    if is_aio:
+        has_lcd = "lcd" in t
+        if "360" in t:
+            size = "360"
+        elif "280" in t:
+            size = "280"
+        elif "240" in t:
+            size = "240"
+        elif "120" in t:
+            size = "120"
+        else:
+            return None  # radiator size is load-bearing for AIO shape — no guess
+        return f"cooling_aio_{size}_lcd" if has_lcd else f"cooling_aio_{size}"
+    if re.search(r"\btower cooler\b|\bair cooler\b|\bheatsink\b", t):
+        return "cooling_air_tower"
+    return None
+
+
+# ---- Fan: size + blade style ------------------------------------------------
+def _classify_fan(title: str) -> str | None:
+    t = _norm(title)
+    if not re.search(r"\bfan\b", t):
+        return None
+    size = "120" if "120" in t else ("140" if "140" in t else None)
+    if not size:
+        return None
+    style = "rgb" if re.search(r"\brgb\b|\bargb\b", t) else "plain"
+    return f"fan_{size}_{style}"
+
+
+_CLASSIFIERS = {
+    "cpu": _classify_cpu,
+    "ram": _classify_ram,
+    "motherboard": _classify_motherboard,
+    "gpu": _classify_gpu,
+    "cooling": _classify_cooling,
+    "fan": _classify_fan,
+}
+
+
+def classify_family(category: str, title: str) -> str | None:
+    """Returns a family bucket key, or None if this category isn't bucketed
+    (psu/storage/os — kept as plain per-category generics) or the title
+    doesn't confidently match a known bucket."""
+    classifier = _CLASSIFIERS.get(category)
+    if not classifier or not title:
+        return None
+    return classifier(title)
+
+
+# The full target bucket list this taxonomy can produce — used to drive the
+# admin generation UI (one "generate" action per bucket, not per listing).
+# Not exhaustive of every possible classify_family() output (brand lists can
+# grow), but enough to know what to generate first.
+KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
+    ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
+    ("motherboard", "mobo_asus_atx"), ("motherboard", "mobo_asus_matx"), ("motherboard", "mobo_asus_itx"),
+    ("motherboard", "mobo_msi_atx"), ("motherboard", "mobo_msi_matx"),
+    ("motherboard", "mobo_gigabyte_atx"), ("motherboard", "mobo_gigabyte_matx"),
+    ("motherboard", "mobo_asrock_atx"), ("motherboard", "mobo_asrock_matx"),
+    ("ram", "ram_corsair_black"), ("ram", "ram_corsair_rgb"), ("ram", "ram_corsair_white"),
+    ("ram", "ram_kingston_black"), ("ram", "ram_gskill_black"),
+    ("gpu", "gpu_blower"), ("gpu", "gpu_compact_dual_fan"),
+    ("gpu", "gpu_mid_dual_fan"), ("gpu", "gpu_large_triple_fan"),
+    ("cooling", "cooling_air_tower"),
+    ("cooling", "cooling_aio_240"), ("cooling", "cooling_aio_280"), ("cooling", "cooling_aio_360"),
+    ("cooling", "cooling_aio_360_lcd"),
+    ("fan", "fan_120_plain"), ("fan", "fan_120_rgb"), ("fan", "fan_140_plain"), ("fan", "fan_140_rgb"),
+]
