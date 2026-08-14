@@ -1,0 +1,22 @@
+category,manufacturer,model,variant,colour,part_number,source_location,currently_active,visible_in_3d_builder,notes
+COOLING,[Configurator],[cooling slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+CPU,[Configurator],[cpu slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+CPU,[component_catalogue],[Database table],,,,app/models/component_catalogue.py,unknown,unknown,"Schema: category, manufacturer, model, variant, market_price"
+CPU Cooler,[Playbook],[Cooling slot],,,,scripts/seed_catalogue_slots.py,yes,yes,PlaybookSlot defines visibility and tier names per playbook
+Case,Lian Li,O11 Vision Compact,Dynamic,Tempered Glass,,seed_o11_vision_compact.py,yes,yes,Seed file: configurator config with style_tags
+Case,[case_catalogue],[Database table],,[varies],,app/models/catalogue.py,unknown,unknown,"Separate case_catalogue: brand, form_factor (ATX/MATX/ITX), colour, style_tags"
+FAN,[Configurator],[fan slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+GPU,[Configurator],[gpu slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+GPU,[component_catalogue],[Database table],,,,app/models/component_catalogue.py,unknown,unknown,VendorPrice linked for vendor pricing data
+GPU Mount,[Vertical Mount],[RGB Accessory],,,,app/models/configurator.py,yes,yes,Accessory category for build customization
+MOTHERBOARD,[Configurator],[motherboard slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+Motherboard,[case_catalogue compat],[Compatibility data],,,,app/models/catalogue.py,unknown,unknown,Playbook compatibility tracked separately
+OS,[Configurator],[os slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+PSU,[Configurator],[psu slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+Power Supply,[Playbook],[PSU slot],,,,scripts/seed_configurator_slots.py,yes,yes,Component slots: budget/mid/high tiers
+RAM,[Configurator],[ram slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+RAM,[component_catalogue],[Database table],,,,app/models/component_catalogue.py,unknown,unknown,Component catalogue stores all PC components
+RGB Accessory,[Lighting],[Fan/Controller],,,,app/models/catalogue.py,yes,yes,Style tags include RGB support
+STORAGE,[Configurator],[storage slot],,,,scripts/seed_configurator_slots.py,yes,yes,Configurator slot tier: budget/mid/high
+Storage,[component_catalogue],[Database table],,,,app/models/component_catalogue.py,unknown,unknown,Tracks search_volume and market pricing
+WiFi Card,[Network],[Adapter],,,,scripts/seed_configurator_slots.py,yes,yes,Component category for networking
