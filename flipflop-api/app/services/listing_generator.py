@@ -66,58 +66,92 @@ Return ONLY the titles, one per line, no numbering or explanation."""
 async def generate_listing_description(
     flip: Flip,
     brand_name: str = "FlipFlop",
+    image_urls: Optional[List[str]] = None,
 ) -> str:
     """
-    Generate a compelling eBay listing description with FlipFlop branding.
+    Generate a professional, structured eBay listing description with FlipFlop branding.
 
     Args:
         flip: Flip object with build details
         brand_name: Brand name to include in messaging
+        image_urls: List of image URLs to embed in the description
 
     Returns:
-        eBay-formatted HTML description
+        eBay-formatted HTML description with professional styling
     """
     specs_summary = _build_specs_summary(flip)
 
-    prompt = f"""Generate a professional, persuasive eBay listing description for a gaming/workstation PC.
+    # Build image HTML if URLs are provided
+    image_html = ""
+    if image_urls:
+        image_html = "\n".join([
+            f'<p style="margin: 20px 0; text-align: center;"><img src="{url}" style="max-width: 100%; height: auto; border-radius: 8px;" alt="Product Image" /></p>'
+            for url in image_urls[:3]  # Limit to 3 images for performance
+        ])
+
+    prompt = f"""Generate a PROFESSIONAL, PREMIUM eBay listing description for a high-end gaming/workstation PC.
 
 Build Specifications:
 {specs_summary}
 
-Brand: {brand_name} (a trusted PC flipping specialist)
+Brand: {brand_name} - Premium PC Specialist
 
-Requirements:
-1. Start with a compelling hook (1-2 sentences) about performance/condition
-2. List key specifications organized by category (CPU, GPU, RAM, Storage)
-3. Emphasize any premium components or upgrades
-4. Condition & Testing: Include statement that unit has been tested and is ready to use
-5. {brand_name} Promise: Add brief statement about {brand_name}'s quality guarantee and support
-6. Include shipping information (e.g., "Ships within 1-2 business days")
-7. Warranty/Returns: Professional warranty/return policy statement
-8. Call-to-action: Encourage immediate purchase with competitive pricing positioning
-9. Format with clear sections and bullet points for readability
-10. Keep tone professional yet friendly and engaging
+CRITICAL REQUIREMENTS:
+1. Use proper HTML structure with semantic tags
+2. Organize into clear, professional sections with visual hierarchy
+3. Use <strong> tags for key specs, NOT asterisks or markdown
+4. Include line breaks for readability between sections
+5. Write in professional business tone - no emojis, no casual language
+6. Every specification should be highlighted and easy to scan
+7. Include compelling benefits for each component category
+8. Professional warranty and support messaging
+9. Shipping and returns section with clear policy
+10. Strong call-to-action that conveys premium quality
 
-Return ONLY the description text, formatted with HTML line breaks (<br/>) and paragraphs (<p>).
-NO markdown, NO asterisks for emphasis, NO headers with #."""
+SECTION STRUCTURE:
+- Opening: Compelling hook about the build's quality and performance
+- Key Highlights: 3-4 bullet points of major selling points
+- Detailed Specifications: CPU, GPU, RAM, Storage, Motherboard, Power Supply, Cooling
+- Condition & Testing: Professional statement about testing and readiness
+- {brand_name} Quality Promise: Trust and support messaging
+- Shipping & Logistics: Clear shipping timeline and details
+- Warranty & Returns: Professional policy statement
+- Why Choose This Build: Compelling positioning for buyer type
+- Call to Action: Encouraging purchase message
+
+Return ONLY clean HTML formatted as <p> tags and <strong> tags.
+NO markdown syntax, NO asterisks, NO emojis, NO casual language.
+Make it look like a premium product listing."""
 
     try:
         response, model = await ai_chat(prompt, [], None)
         description = response.strip()
 
         # Post-process to ensure proper HTML formatting
-        if not description.startswith("<p>"):
+        if not description.startswith("<"):
             description = f"<p>{description}</p>"
+
+        # Inject images after opening section if available
+        if image_html:
+            # Insert images after first paragraph
+            parts = description.split("</p>", 1)
+            if len(parts) == 2:
+                description = parts[0] + "</p>" + image_html + parts[1]
 
         log.info("listing_generator.description_generated", length=len(description), model=model)
         return description
 
     except Exception as e:
         log.error("listing_generator.description_generation_failed", error=str(e))
-        # Fallback description
-        return f"""<p>High-performance gaming/workstation PC build.</p>
-<p><strong>Specifications:</strong>{specs_summary}</p>
-<p>Tested and ready to ship. Ships within 1-2 business days.</p>"""
+        # Fallback description with professional formatting
+        return f"""<p><strong>Premium Gaming/Workstation PC - Professionally Built & Tested</strong></p>
+<p>This high-performance system is configured for demanding users who expect reliability and power. Every component has been carefully selected, tested, and optimized for peak performance.</p>
+<p><strong>Key Specifications:</strong></p>
+<p>{specs_summary}</p>
+<p><strong>Condition:</strong> Excellent. Fully tested and verified to be in perfect working order. Ships immediately ready to use.</p>
+<p><strong>{brand_name} Quality Promise:</strong> We stand behind every build with expert support and quality assurance. Your satisfaction is our priority.</p>
+<p><strong>Shipping:</strong> Ships within 1-2 business days via tracked courier service.</p>
+<p>Don't miss this opportunity to own a premium-built gaming or workstation PC. Bid with confidence!</p>"""
 
 
 def _build_specs_summary(flip: Flip) -> str:

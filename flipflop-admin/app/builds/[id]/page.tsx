@@ -7,6 +7,8 @@ import {
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
   CalendarClock,
 } from "lucide-react";
+import { Toaster, toast } from "sonner";
+import confetti from "canvas-confetti";
 import JSZip from "jszip";
 import { api, ManualBuild, BuildComponent } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
@@ -306,7 +308,7 @@ export default function BuildDetailPage() {
     if (!build?.generated_title || !build?.generated_description) return;
     const priceNum = parseFloat(price);
     if (!priceNum || priceNum <= 0) {
-      alert("Enter an asking price before listing.");
+      toast.error("Enter an asking price before listing.");
       return;
     }
 
@@ -314,14 +316,25 @@ export default function BuildDetailPage() {
     try {
       const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
       if (result.success) {
+        // 🎉 Confetti celebration
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+        // ✅ Success toast
+        toast.success("Listing posted to eBay!");
+
+        // 🔗 Open the listing in a new tab if URL is available
+        if (result.url) {
+          setTimeout(() => window.open(result.url, "_blank"), 300);
+        }
+
         const refreshed = await api.manualBuilds.get(buildId);
         setBuild(refreshed);
       } else {
-        alert(`eBay rejected the listing: ${result.error ?? "Unknown error"}`);
+        toast.error(`eBay rejected the listing: ${result.error ?? "Unknown error"}`);
       }
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";
-      alert(`Couldn't post to eBay: ${msg}`);
+      toast.error(`Couldn't post to eBay: ${msg}`);
     } finally {
       setPosting(false);
     }
@@ -396,9 +409,11 @@ export default function BuildDetailPage() {
   const registrationPlate = build.photos.find((p) => p.kind === "registration_plate");
 
   return (
-    <div className="min-h-screen bg-[#060d18] text-slate-100 px-4 py-6 md:px-8 max-w-3xl mx-auto">
-      {/* offscreen canvas used to render branded cards before uploading them */}
-      <canvas ref={hiddenCanvasRef} className="hidden" />
+    <>
+      <Toaster position="top-right" richColors />
+      <div className="min-h-screen bg-[#060d18] text-slate-100 px-4 py-6 md:px-8 max-w-3xl mx-auto">
+        {/* offscreen canvas used to render branded cards before uploading them */}
+        <canvas ref={hiddenCanvasRef} className="hidden" />
 
       <button
         onClick={() => router.push("/builds")}
@@ -1072,6 +1087,7 @@ function BrandedCardTile({
           </a>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }
