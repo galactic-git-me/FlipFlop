@@ -1088,6 +1088,6 @@ function BrandedCardTile({
           </a>
         )}
       </div>
-    </>
+    </div>
   );
 }
