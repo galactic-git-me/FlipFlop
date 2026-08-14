@@ -1,53 +1,53 @@
 component_type,manufacturer,model,variant,spec_detail,listing_count,notes
 CPU,[Parsed from title],Ryzen 5 5600,,,12,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-6500,,,11,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5 10400F,,,7,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 5500,,,7,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 3600,,,7,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 5 5600X,,,6,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5 10400F,,,7,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-8500,,,6,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-6700,,,5,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Ryzen 5 5600X,,,5,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-9500,,,5,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 5 5600X,,,6,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I7-10700,,,5,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-6700,,,5,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-9500,,,5,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-8500,,,5,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I7-4790,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-10500T,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I7-6700,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 3 2200G,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-7500,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-7500T,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 7 5700X3D,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 5 5600,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-9700,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Ryzen 5 5600G,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Ryzen 5 5600X,,,5,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-9500,,,4,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5 8400,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-4590T,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5 4590,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-9700K,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Ryzen 5 2600,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 5 5600G,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-8500T,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 9 7900X,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-10700,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I5-7500,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Xeon E5-2695V4,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-10500T,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 5 5600,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Ryzen 5 5600G,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I7-4790,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I7-6700,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-7500,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 7 5700X3D,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 3 2200G,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-7500T,,,4,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-9700,,,4,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I3-10100T,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 9 7900X,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-8500T,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Xeon E5-2695V4,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Ryzen 5 2600,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-4590T,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-12500,,,3,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Xeon E5-1650,,,3,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-9500,,,3,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-12500,,,3,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 10700,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-9700K,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5 4590,,,3,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-8700,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 5 5600G,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-10700,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5 8400,,,3,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I5-7500,,,3,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 7 3700X,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-14500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-8500T,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-10400F,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 3 4100,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I7-12700T,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5-9400F,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-8700K,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-7700K,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-8700K,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5-9400F,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-10500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-13500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-7500T,,,2,Stored as: Listing.cpu (String)
@@ -57,27 +57,27 @@ CPU,[Parsed from title],Intel Core I7 8700,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 7500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5 4570,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-10500,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I3-8100T,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-12500,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I7-9700,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-6600,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 5 3600,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I3-8100T,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I7-9700,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-9400,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-9500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 9400F,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I7-3770,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I7-6700,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7-12700Kf,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5-11400T,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 7 3700X,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-10500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-8500,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5 6500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-14500T,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5 6500,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-8100,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 7 3700X,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 3 2200G,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-7100,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 9500,,,2,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5-11400T,,,2,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7-12700Kf,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 2400G,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 7 7800X3D,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 3600X,,,2,Stored as: Listing.cpu (String)
@@ -87,21 +87,21 @@ CPU,[Parsed from title],I5-9400,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-4590S,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I7-6700,,,2,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I7-8700,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5 12400F,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I3-4130,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5 12400F,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 3600Xt,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 7 5700X,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7 2600,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 Pro 4650G,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7 2600,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-6700T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-9500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-14500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-6600,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I3-10100,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 3400G,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5 9400,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5-10500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 5 Pro 4650G,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5-10500T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5 9400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Xeon E5-1650,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I3-6100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 7 5700X,,,1,Stored as: Listing.cpu (String)
@@ -109,13 +109,13 @@ CPU,[Parsed from title],Intel Xeon E3-1226,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I7 10700,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-8300T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 7400,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Core I7-3770,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Core I5-2400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-3340,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Core I5-2400,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Core I7-3770,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-2400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-10400,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I5-11500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-6400,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I5-11500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-11400F,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-8700T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 8700,,,1,Stored as: Listing.cpu (String)
@@ -132,12 +132,12 @@ CPU,[Parsed from title],I5-9600K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I3-10100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 10500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Athlon 3000,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Xeon E5-2650,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3 6100,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Xeon E5-2650,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Xeon 2X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-3470,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I3-4150,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-13500T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I3-4150,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I7-12700,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-13100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Xeon E5-2620,,,1,Stored as: Listing.cpu (String)
@@ -150,8 +150,8 @@ CPU,[Parsed from title],I3-9100,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-4770K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 7 3800X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 5 3600X,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Ryzen 7 2700X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-11400F,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Ryzen 7 2700X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-10505,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-6400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 4790,,,1,Stored as: Listing.cpu (String)
@@ -162,14 +162,14 @@ CPU,[Parsed from title],I5-3470,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 9700K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-7700,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 7 Pro 5750G,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Fx 650,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 3 2300X,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Fx 650,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-3220,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Pentium G3258,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 5 5000,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-8500T,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Amd Ryzen 5 4500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 10700T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Amd Ryzen 5 4500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I7-8700T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Xeon E3-1240,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I7-10700,,,1,Stored as: Listing.cpu (String)
@@ -179,24 +179,24 @@ CPU,[Parsed from title],Celeron J3160,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5 3470,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I3-9100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-12700,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5 4460,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-3770,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5 4460,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-4790,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I3-6100,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 5 5600Gt,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I3-6100,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-9400F,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I3-4170,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 9 7900,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Core I5-7400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-9500T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Core I5-7400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5-10505,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Fx 8350,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I5 4590,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5 8500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I3-4150,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-4440,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I5-4430,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-12500T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I5-4430,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7-6700K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Xeon E5-2680,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core Ultra 5 235T,,,1,Stored as: Listing.cpu (String)
@@ -209,8 +209,8 @@ CPU,[Parsed from title],I7 8850H,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-12400,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 5 5600Gt,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-9600K,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel Pentium G3258,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-8400,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel Pentium G3258,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-6600K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Ryzen 7 5800X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Core I5-8600,,,1,Stored as: Listing.cpu (String)
@@ -227,8 +227,8 @@ CPU,[Parsed from title],Core I3-12100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I3-10105,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 9700,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-6500T,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Core I5-8500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Amd Ryzen 7 5800X3D,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Core I5-8500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I7-6700K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Core I5-10500T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I7-9700K,,,1,Stored as: Listing.cpu (String)
@@ -238,10 +238,10 @@ CPU,[Parsed from title],I7 7740X,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Xeon E3-1270,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I7 6700,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Xeon 2620,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],Intel I5-13500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I3 4130,,,1,Stored as: Listing.cpu (String)
-CPU,[Parsed from title],I7 4770K,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],Intel I5-13500,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-9500T,,,1,Stored as: Listing.cpu (String)
+CPU,[Parsed from title],I7 4770K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],I5-8600K,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel I3 7100T,,,1,Stored as: Listing.cpu (String)
 CPU,[Parsed from title],Intel Xeon E3-1225V3,,,1,Stored as: Listing.cpu (String)
@@ -258,36 +258,36 @@ GPU,[Parsed from title],RTX 2070 SUPER,,,6,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX 580 8GB,,,5,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1060,,,5,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1050 TI,,,4,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RTX 3050,,,4,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1070 8GB,,,4,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1070,,,4,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RTX 3050,,,4,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1050 TI 4GB,,,3,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RX 580,,,3,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 3050 8GB,,,3,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX 960,,,2,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RX 580,,,3,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RX580,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1050TI,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1080 8GB,,,2,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RTX 3050 16GB,,,2,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX 970,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GT 730,,,2,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX 970,,,2,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RTX 3050 16GB,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],QUADRO P4000,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX 570 8GB,,,2,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RX580,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GT710,,,2,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX 960,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX 6500 XT,,,2,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2060 SUPER 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],QUADRO P620,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX 560 16GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX1080 16GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2070 SUPER 8GB,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX 1080 TI 11GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RADEON TX750,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX1660,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX 750 TI 240GB,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX 1080 TI 11GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],QUADRO K5200,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX 750 TI 240GB,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX1660,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX2080TI,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],QUADRO P2000,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX570 240GB,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],QUADRO P2000,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2060 512GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX960,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 980,,,1,Stored as: Listing.gpu (String)
@@ -310,31 +310,31 @@ GPU,[Parsed from title],RTX 3050 6GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GT 730 2GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX5500,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1050 2GB,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RX 5600 XT,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RADEON R9,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RX 5600 XT,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],QUADRO K620,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX1060,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX550,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RX6650XT,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2070 SUPER 16GB,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RX6650XT,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2070 SUPER 32GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX580 8GB,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RADEON GRAPHICS 6,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX9602,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RADEON GRAPHICS 6,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1660 TI,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 980 4GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 3060TI,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 950,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1070 32GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1070 TI 256GB,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],RTX 2080 SUPER,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 3070 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RX6650XT 16GB,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],RTX 2080 SUPER,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX1080 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GEFORCE 1650,,,1,Stored as: Listing.gpu (String)
+GPU,[Parsed from title],GTX 1070 TI 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 580,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],QUADRO P400,,,1,Stored as: Listing.gpu (String)
-GPU,[Parsed from title],GTX 1070 TI 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],GTX 1650 8GB,,,1,Stored as: Listing.gpu (String)
 GPU,[Parsed from title],RTX 2060 SUPER 16GB,,,1,Stored as: Listing.gpu (String)
 RAM,[Not tracked in Listing],8GB,Unknown type,8GB ,223,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
@@ -351,21 +351,21 @@ RAM,[Not tracked in Listing],24GB,Unknown type,24GB ,7,NUMERIC only - no model n
 RAM,[Not tracked in Listing],16GB,DDR3,16GB DDR3,7,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],12GB,Unknown type,12GB ,6,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],48GB,Unknown type,48GB ,6,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],128GB,Unknown type,128GB ,5,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],128GB,DDR4,128GB DDR4,5,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],128GB,Unknown type,128GB ,5,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],250GB,Unknown type,250GB ,4,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],64GB,DDR4,64GB DDR4,3,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],14GB,Unknown type,14GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],160GB,Unknown type,160GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],10GB,Unknown type,10GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],14GB,Unknown type,14GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],32GB,DDR5,32GB DDR5,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],80GB,Unknown type,80GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],160GB,Unknown type,160GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],11GB,Unknown type,11GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],240GB,Unknown type,240GB ,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],32GB,DDR5,32GB DDR5,2,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],256GB,DDR4,256GB DDR4,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
-RAM,[Not tracked in Listing],8GB,DDR5,8GB DDR5,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],192GB,Unknown type,192GB ,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 RAM,[Not tracked in Listing],22GB,Unknown type,22GB ,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],256GB,DDR4,256GB DDR4,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
+RAM,[Not tracked in Listing],8GB,DDR5,8GB DDR5,1,NUMERIC only - no model names tracked. ram_type may be DDR3/DDR4/DDR5
 Storage,[Not tracked in Listing],32GB,hdd,32GB hdd,98,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],1024GB,hdd,1024GB hdd,77,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],256GB,ssd,256GB ssd,70,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
@@ -386,43 +386,53 @@ Storage,[Not tracked in Listing],250GB,ssd,250GB ssd,9,NUMERIC only - no model n
 Storage,[Not tracked in Listing],512GB,hdd,512GB hdd,8,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],250GB,hdd,250GB hdd,7,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],240GB,hdd,240GB hdd,7,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],128GB,hdd,128GB hdd,6,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],48GB,hdd,48GB hdd,6,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],128GB,hdd,128GB hdd,6,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],500GB,nvme,500GB nvme,6,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],3072GB,hdd,3072GB hdd,5,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],4096GB,hdd,4096GB hdd,5,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],480GB,ssd,480GB ssd,5,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],3072GB,hdd,3072GB hdd,5,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],6144GB,hdd,6144GB hdd,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],1000GB,hdd,1000GB hdd,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],228GB,ssd,228GB ssd,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],240GB,nvme,240GB nvme,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],6144GB,hdd,6144GB hdd,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],1000GB,hdd,1000GB hdd,3,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],80GB,hdd,80GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],160GB,hdd,160GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],4096GB,nvme,4096GB nvme,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],960GB,ssd,960GB ssd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],320GB,hdd,320GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],2048GB,nvme,2048GB nvme,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],128GB,nvme,128GB nvme,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],2048GB,nvme,2048GB nvme,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],160GB,hdd,160GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],120GB,hdd,120GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],320GB,hdd,320GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],960GB,ssd,960GB ssd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],14336GB,hdd,14336GB hdd,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],320GB,ssd,320GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],477GB,nvme,477GB nvme,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],750GB,ssd,750GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],460GB,ssd,460GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],112GB,ssd,112GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],246GB,ssd,246GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],250GB,nvme,250GB nvme,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],1792GB,ssd,1792GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],16384GB,hdd,16384GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],4096GB,nvme,4096GB nvme,2,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],9602GB,hdd,9602GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],40GB,hdd,40GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],1280GB,hdd,1280GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],192GB,hdd,192GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],40GB,hdd,40GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],1536GB,hdd,1536GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],954GB,ssd,954GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],2293GB,hdd,2293GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],18432GB,hdd,18432GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],9602GB,hdd,9602GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
-Storage,[Not tracked in Listing],620GB,hdd,620GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],112GB,ssd,112GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 Storage,[Not tracked in Listing],2048GB,ssd,2048GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],954GB,ssd,954GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],1536GB,hdd,1536GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],246GB,ssd,246GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],2293GB,hdd,2293GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],477GB,nvme,477GB nvme,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],750GB,ssd,750GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],320GB,ssd,320GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],460GB,ssd,460GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],620GB,hdd,620GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],16384GB,hdd,16384GB hdd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],1792GB,ssd,1792GB ssd,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
+Storage,[Not tracked in Listing],250GB,nvme,250GB nvme,1,NUMERIC only - no model names tracked. storage_type may be SSD/HDD/NVMe
 PC Case,[Not structured - in title only],[Various case models found in titles],,,278,NOT tracked as structured field. Case data is in title text only. Would need text parsing to extract distinct models.
-Power Supply,[Not tracked],[Included in build],,,3273,Stored as boolean flag only (has_psu) - no model/wattage information tracked
+Power Supply,Corsair,[Multiple models],,,87,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Asus,[Multiple models],,,55,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Msi,[Multiple models],,,35,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Gigabyte,[Multiple models],,,25,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Asrock,[Multiple models],,,11,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Cooler Master,[Multiple models],,,6,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Thermaltake,[Multiple models],,,4,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Seasonic,[Multiple models],,,3,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Evga,[Multiple models],,,2,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Lian Li,[Multiple models],,,2,"Now tracks brand, wattage, and 80+ rating"
+Power Supply,Noctua,[Multiple models],,,1,"Now tracks brand, wattage, and 80+ rating"

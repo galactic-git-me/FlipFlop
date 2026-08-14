@@ -143,24 +143,34 @@ async def extract_all_components():
         })
 
         # =====================================================================
-        # PSU COMPONENTS - AS BOOLEAN
+        # PSU COMPONENTS - NOW WITH BRAND/WATTAGE/RATING
         # =====================================================================
-        print("[INFO] PSU: Tracked as boolean only (has_psu: Boolean)")
+        print("[INFO] PSU: Now tracks brand, wattage, and rating")
         psu_listings = await db.execute(
             select(func.count(Listing.id)).select_from(Listing)
-            .where(Listing.has_psu == True)
+            .where(Listing.psu_included == True)
         )
         psu_count = psu_listings.scalar() or 0
 
-        rows.append({
-            'component_type': 'Power Supply',
-            'manufacturer': '[Not tracked]',
-            'model': '[Included in build]',
-            'variant': '',
-            'spec_detail': '',
-            'listing_count': psu_count,
-            'notes': 'Stored as boolean flag only (has_psu) - no model/wattage information tracked'
-        })
+        # PSU with brand extracted
+        psu_brand = await db.execute(
+            select(Listing.psu_brand, func.count(Listing.id).label('count'))
+            .where(Listing.psu_brand.isnot(None))
+            .group_by(Listing.psu_brand)
+            .order_by(func.count(Listing.id).desc())
+        )
+        psu_brands = psu_brand.fetchall()
+
+        for brand, count in psu_brands:
+            rows.append({
+                'component_type': 'Power Supply',
+                'manufacturer': brand or 'Unknown',
+                'model': '[Multiple models]',
+                'variant': '',
+                'spec_detail': '',
+                'listing_count': count or 0,
+                'notes': 'Now tracks brand, wattage, and 80+ rating'
+            })
 
         # =====================================================================
         # WRITE COMPREHENSIVE CSV
