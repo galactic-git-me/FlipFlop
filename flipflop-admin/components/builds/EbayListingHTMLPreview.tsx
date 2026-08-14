@@ -20,9 +20,9 @@ const sanitizeHtml = (html: string) =>
       "h1", "h2", "h3", "h4", "h5", "h6",
       "p", "ul", "ol", "li", "blockquote",
       "strong", "b", "em", "i", "u", "a",
-      "br", "hr", "span", "div", "img", "table", "tr", "td", "th", "tbody", "thead",
+      "br", "hr", "span", "div", "img", "table", "tr", "td", "th", "tbody", "thead", "section", "article",
     ],
-    ALLOWED_ATTR: ["style", "href", "target", "rel", "src", "alt", "class"],
+    ALLOWED_ATTR: ["style", "href", "target", "rel", "src", "alt", "class", "id"],
   });
 
 export function EbayListingHTMLPreview({
@@ -257,60 +257,34 @@ export function EbayListingHTMLPreview({
           </table>
         </div>
 
-        {/* FULL HTML DESCRIPTION SECTION - YOUR AI-GENERATED DESCRIPTION */}
-        <div style={{ borderTop: "1px solid #ddd", paddingTop: 20, marginBottom: 40 }}>
-          <h2 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 16 }}>Item description from the seller</h2>
-          {/* Render the AI-generated HTML exactly as it was created */}
+        {/* FULL WIDTH DESCRIPTION - YOUR AI-GENERATED HTML */}
+      </div>
+
+      {/* Full-width description container - no interference from parent styling */}
+      <div
+        style={{
+          width: "100%",
+          backgroundColor: "#fafafa",
+          padding: "40px 20px",
+          marginTop: 40,
+        }}
+      >
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <h2 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 20, color: "#000" }}>Item description from the seller</h2>
+          {/* Render ONLY your AI-generated HTML - no CSS interference */}
           <div
-            className="ebay-description-container"
             dangerouslySetInnerHTML={{
               __html: sanitizeHtml(description),
             }}
           />
         </div>
-
-        {/* Footer Info */}
-        <div style={{ borderTop: "1px solid #ddd", paddingTop: 20, fontSize: 12, color: "#666" }}>
-          <div>About this seller • Contact seller • Visit seller's store • See other items</div>
-          <div style={{ marginTop: 12 }}>This is a preview. Actual eBay purchase would happen on eBay.com</div>
-        </div>
       </div>
 
-      <style>{`
-        .ebay-description-container {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          line-height: 1.6;
-          color: #333;
-        }
-        .ebay-description-container img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 15px 0;
-          border-radius: 8px;
-        }
-        .ebay-description-container h1,
-        .ebay-description-container h2,
-        .ebay-description-container h3 {
-          margin: 20px 0 15px 0;
-        }
-        .ebay-description-container p {
-          margin: 10px 0;
-        }
-        .ebay-description-container ul,
-        .ebay-description-container ol {
-          margin: 15px 0;
-          padding-left: 20px;
-        }
-        .ebay-description-container strong {
-          font-weight: bold;
-        }
-        .ebay-description-container div[style*="background"] {
-          padding: 15px;
-          border-radius: 8px;
-          margin: 15px 0;
-        }
-      `}</style>
+      {/* Footer */}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 20px", borderTop: "1px solid #ddd", fontSize: 12, color: "#666" }}>
+        <div>About this seller • Contact seller • Visit seller's store • See other items</div>
+        <div style={{ marginTop: 12 }}>This is a preview. Actual eBay purchase would happen on eBay.com</div>
+      </div>
     </div>
   );
 
