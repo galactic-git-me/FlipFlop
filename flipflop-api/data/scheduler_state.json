@@ -1,6 +1,6 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-14T22:05:26.719443+00:00"
+    "last_success_at": "2026-08-14T22:20:26.917894+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-14T20:25:27.467677+00:00"
@@ -9,7 +9,7 @@
     "last_success_at": "2026-07-23T14:57:29.735084+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-08-14T21:20:52.463022+00:00"
+    "last_success_at": "2026-08-14T22:20:53.173061+00:00"
   },
   "playbook_evolution": {
     "last_success_at": "2026-08-14T21:20:27.670459+00:00"
@@ -18,19 +18,19 @@
     "last_success_at": "2026-07-23T14:55:52.961761+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-08-14T21:20:26.496535+00:00"
+    "last_success_at": "2026-08-14T22:20:26.485911+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-08-14T21:20:26.971351+00:00"
+    "last_success_at": "2026-08-14T22:20:26.934759+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-08-14T21:20:27.484423+00:00"
+    "last_success_at": "2026-08-14T22:20:27.622189+00:00"
   },
   "autonomous": {
     "last_success_at": "2026-08-14T20:05:30.067640+00:00"
   },
   "benchmark_refresh_daily": {
-    "last_success_at": "2026-08-14T18:18:29.308013+00:00"
+    "last_success_at": "2026-08-14T22:20:32.297629+00:00"
   },
   "benchmark_refresh_weekly": {
     "last_success_at": "2026-08-14T14:42:14.494093+00:00"
@@ -57,16 +57,16 @@
     "last_success_at": "2026-08-14T21:52:26.493489+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-14T22:05:26.727210+00:00"
+    "last_success_at": "2026-08-14T22:20:27.159646+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-08-14T21:50:26.919776+00:00"
+    "last_success_at": "2026-08-14T22:20:26.931116+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-08-14T21:50:26.920475+00:00"
+    "last_success_at": "2026-08-14T22:20:26.933309+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-08-14T21:20:27.030542+00:00"
+    "last_success_at": "2026-08-14T22:20:27.158887+00:00"
   },
   "markdown_event_scan": {
     "last_success_at": "2026-08-14T15:42:08.353303+00:00"
@@ -75,6 +75,6 @@
     "last_success_at": "2026-08-14T20:20:26.863129+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-14T22:05:26.723417+00:00"
+    "last_success_at": "2026-08-14T22:20:26.935878+00:00"
   }
 }

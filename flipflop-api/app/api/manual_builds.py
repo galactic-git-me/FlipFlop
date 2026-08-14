@@ -314,43 +314,46 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
 {component_text}
 {principles_block}
 
-DESIGN BRIEF: Create a LUXURY listing that makes buyers say "WOW" — premium feel, flawless execution, professional excellence.
+DESIGN BRIEF: Create a LUXURY listing that makes buyers say "WOW" — premium feel, flawless execution, professional excellence. USE FLIPFLOP BRAND COLORS THROUGHOUT.
 
 TECHNICAL REQUIREMENTS:
 1. Pure HTML + inline styles ONLY (no <style> blocks — eBay strips them)
 2. Semantic tags: <h1>, <h2>, <h3>, <p>, <div>, <ul>, <li>, <strong>, <em>, <hr>
 3. NO markdown, NO asterisks, NO casual language
+4. INCLUDE FlipFlop logo in hero section if available
 
 STUNNING DESIGN SYSTEM:
-Color Palette (professional luxury):
-- PRIMARY: #0052CC (vibrant, premium blue)
-- ACCENT: #FFB81C (warm gold — high-end feel)
-- SUCCESS: #28A745 (confident green for "TESTED")
+Color Palette (FlipFlop brand identity):
+- PRIMARY: #0066FF (vibrant FlipFlop blue — use for headings, borders, sections)
+- ACCENT: #FF6600 (warm FlipFlop orange — use for highlights, premium specs, CTAs)
+- SUCCESS: #28A745 (confident green for "TESTED" badges)
 - DARK: #1a1a1a (rich black for contrast)
 - LIGHT: #F5F5F5 (clean white)
 
 Visual Hierarchy & Effects:
-1. HERO SECTION (top):
-   <div style="background-color:#0052CC;color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;">
+1. HERO SECTION (top) — Use FlipFlop brand gradient:
+   <div style="background:linear-gradient(135deg, #0066FF 0%, #FF6600 100%);color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;">
+   - FlipFlop logo or brand name at top (if available)
    - Main headline: Large, bold, white text
    - Tagline: Professional positioning statement
    - Use padding and centered alignment for impact
 
 2. FEATURED IMAGE AREA:
-   <p style="text-align:center;margin:30px 0;">[IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
+   <p style="text-align:center;margin:30px 0;">[FLIPFLOP LOGO OR PRODUCT IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
 
 3. KEY HIGHLIGHTS SECTION:
    - 3-4 major selling points in a visually distinct box
    - Use background-color:#F5F5F5 with padding for visual separation
-   - Use <strong> with color:#0052CC for key stats
-   - Format: "🔸 Benefit statement with specs"
+   - Use <strong> with color:#0066FF for key stats
+   - Highlight premium points with color:#FF6600
+   - Format: "▸ Benefit statement with specs"
 
 4. SPECIFICATIONS SECTION:
    - Organize by component category (CPU, GPU, RAM, Storage, Motherboard, Power, Cooling)
    - Each spec in a clean, scannable list format
-   - Use <strong> tags with strategic color changes
-   - Highlight premium/high-end components with color:#FFB81C
-   - Use borders to separate premium specs from standard ones
+   - Use <strong> tags with strategic color changes (#0066FF for main, #FF6600 for premium)
+   - Highlight premium/high-end components with color:#FF6600 (FlipFlop orange)
+   - Use borders (color:#0066FF) to separate premium specs from standard ones
 
 5. CONDITION & TESTING SECTION:
    - Bold, centered statement with color:#28A745
@@ -358,35 +361,39 @@ Visual Hierarchy & Effects:
    - Add details about testing process
 
 6. FLIPFLOP PREMIUM BADGE:
-   - Create a visual "badge" effect:
-   <div style="background-color:#FFB81C;color:#0052CC;padding:15px;margin:20px 0;border-left:4px solid #0052CC;font-weight:bold;text-align:center;">
+   - Create a visual "badge" effect using FlipFlop brand colors:
+   <div style="background:linear-gradient(135deg, #FF6600 0%, #0066FF 100%);color:white;padding:15px;margin:20px 0;border-left:4px solid #FF6600;font-weight:bold;text-align:center;">
+   - FlipFlop branding
    - Trust messaging
    - Quality guarantee
    - Support statement
 
 7. BENEFITS FOR BUYER TYPE:
    - Section explaining why this machine is PERFECT for their needs
-   - Use color accents for different buyer personas (Gamer, Creator, Professional)
+   - Use #0066FF accents for section headers
+   - Use #FF6600 for highlighted benefits
 
 8. SHIPPING & LOGISTICS:
-   - Clean, professional formatting
-   - Highlight speed and reliability
+   - Clean, professional formatting with #0066FF accents
+   - Highlight speed and reliability in #FF6600
 
 9. FINAL CALL-TO-ACTION:
-   - Bold, centered, memorable
-   - Use color:#FFB81C background with #0052CC text
+   - Bold, centered, memorable using FlipFlop colors
+   - Use gradient: background linear-gradient(135deg, #FF6600 0%, #0066FF 100%)
    - Make it impossible to miss
-   - Example: Large bold text in colored box
+   - Example: Large bold white text in FlipFlop gradient box
 
 STYLING TECHNIQUES TO MAXIMIZE IMPACT:
 - Use padding/margin generously (20-30px) for breathing room
 - Center-align headlines and important statements
-- Use left borders (4px) in accent color to highlight premium specs
+- Use left borders (4px) in #0066FF to highlight premium specs, #FF6600 for ultra-premium
 - Use background colors to create visual "cards" or sections
 - Vary font sizes significantly for hierarchy (use inline style="font-size:18px" for emphasis)
 - Use line-height:1.8 for body text (easier to read, more premium feel)
-- Bold premium/high-end components with gold accent
-- Create visual separation between sections with <hr style="border-color:#0052CC;margin:20px 0;">
+- Bold premium/high-end components with #FF6600 (FlipFlop orange)
+- Create visual separation between sections with <hr style="border-color:#0066FF;margin:20px 0;">
+- Use FlipFlop brand gradient (linear-gradient(135deg, #0066FF 0%, #FF6600 100%)) for hero sections and CTAs
+- Every section should feel connected to the FlipFlop brand identity
 
 TONE:
 - Confident, not pushy
@@ -413,7 +420,7 @@ STRUCTURE:
 Respond with ONLY valid JSON (no markdown, no code fences):
 {{
   "titles": ["Premium title 1", "Premium title 2", "Premium title 3"],
-  "description": "<div style=\\"background-color:#0052CC;color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;\\"><h1 style=\\"margin:0;font-size:28px;\\">Premium Gaming PC - Expertly Built</h1><p style=\\"margin:10px 0 0 0;font-size:14px;\\">Handcrafted by an experienced software engineer</p></div><p style=\\"background-color:#F5F5F5;padding:20px;border-left:4px solid #0052CC;margin:20px 0;line-height:1.8;\\"><strong>About FlipFlop:</strong> I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality, reliability, and raw performance. Now I'm turning that passion into FlipFlop — a startup dedicated to crafting and delivering premium custom-built systems to discerning buyers who demand excellence.</p><p style=\\"text-align:center;margin:30px 0;\\\">[IMAGES WILL BE INSERTED HERE]</p><div style=\\"background-color:#F5F5F5;padding:20px;margin:20px 0;border-radius:8px;\\\">[REST OF DESCRIPTION CONTINUES WITH SPECS, HIGHLIGHTS, CTA...]</div>",
+  "description": "<div style=\\"background:linear-gradient(135deg, #0066FF 0%, #FF6600 100%);color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;\\"><p style=\\"margin:0 0 15px 0;font-size:12px;font-weight:bold;letter-spacing:2px;\\">FLIPFLOP PREMIUM BUILD</p><h1 style=\\"margin:0;font-size:28px;font-weight:900;\\">Premium Gaming PC - Expertly Built</h1><p style=\\"margin:10px 0 0 0;font-size:14px;\\">Handcrafted by an experienced software engineer</p></div><p style=\\"background-color:#F5F5F5;padding:20px;border-left:4px solid #FF6600;margin:20px 0;line-height:1.8;\\"><strong style=\\"color:#0066FF;\\">About FlipFlop:</strong> I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality, reliability, and raw performance. Now I'm turning that passion into <strong style=\\"color:#FF6600;\\">FlipFlop</strong> — a startup dedicated to crafting and delivering premium custom-built systems to discerning buyers who demand excellence.</p><p style=\\"text-align:center;margin:30px 0;\\\">[FLIPFLOP LOGO AND PRODUCT IMAGES WILL BE INSERTED HERE]</p><h2 style=\\"color:#0066FF;margin-top:30px;\\">Premium Specifications</h2><p style=\\"border-left:4px solid #0066FF;padding-left:15px;margin:15px 0;\\">Every component selected for performance and quality. <span style=\\"color:#FF6600;font-weight:bold;\\">Premium parts highlighted in orange.</span></p><div style=\\"background-color:#F5F5F5;padding:20px;margin:20px 0;border-radius:8px;border-left:4px solid #FF6600;\\\">[REST OF DESCRIPTION CONTINUES WITH SPECS, HIGHLIGHTS, FLIPFLOP BADGE, CTA...]</div>",
   "aspects": {{...}}
 }}
 
