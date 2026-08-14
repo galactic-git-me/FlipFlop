@@ -339,10 +339,11 @@ Visual Hierarchy & Effects:
    - Use padding and centered alignment for impact
 
 2. FLIPFLOP LOGO PLACEMENT (Hero):
-   Include the FlipFlop logo at the top-right or center of the hero section. Best logos:
-   - flipflop-glow-black-with-full-glow.png (premium glow effect - recommended)
-   - logo_simple.png (clean, minimal look)
-   Format: <img src="[FLIPFLOP_LOGO_URL]" style="max-height:60px;margin-bottom:15px;"/>
+   Include the FlipFlop logo at the top-right or center of the hero section. Use these logos:
+   - Recommended (glow effect): https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png
+   - Alternative (simple): https://theflipflop.shop/media/logo_simple.png
+   - Additional: https://theflipflop.shop/media/logo5.png
+   Format: <img src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" style="max-height:60px;margin-bottom:15px;"/>
 
 3. FEATURED IMAGE AREA:
    <p style="text-align:center;margin:30px 0;">[PRODUCT IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
