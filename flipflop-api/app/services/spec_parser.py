@@ -14,14 +14,34 @@ log = structlog.get_logger(__name__)
 @dataclass
 class ParsedSpecs:
     cpu: Optional[str] = None
+    gpu: Optional[str] = None
+    # RAM fields
     ram_gb: Optional[int] = None
     ram_type: Optional[str] = None
+    ram_brand: Optional[str] = None
+    ram_model: Optional[str] = None
+    ram_speed: Optional[int] = None
+    ram_cl: Optional[int] = None
+    ram_sticks: Optional[int] = None
+    # Storage fields
     storage_gb: Optional[int] = None
     storage_type: Optional[str] = None
-    gpu: Optional[str] = None
-    has_psu: bool = True
-    is_likely_valid_pc: bool = True  # Validation result
-    validation_reason: Optional[str] = None  # Why it's invalid, if applicable
+    storage_brand: Optional[str] = None
+    storage_model: Optional[str] = None
+    storage_form_factor: Optional[str] = None
+    # PSU fields
+    psu_included: bool = True
+    psu_brand: Optional[str] = None
+    psu_wattage: Optional[int] = None
+    psu_rating: Optional[str] = None
+    # Case fields
+    case_brand: Optional[str] = None
+    case_model: Optional[str] = None
+    case_form_factor: Optional[str] = None
+    case_color: Optional[str] = None
+    # Validation
+    is_likely_valid_pc: bool = True
+    validation_reason: Optional[str] = None
 
 
 CPU_PATTERNS = [
@@ -79,9 +99,169 @@ GPU_PATTERNS = [
 RAM_PATTERN = r"(\d+)\s*gb\s*(ddr[345]?(?:-?\d+)?|lpddr\d?)?\s*(ram|memory|dimm|ecc)?"
 STORAGE_PATTERN = r"(\d+\.?\d*)\s*(tb|gb)\s*(nvme|m\.?2|ssd|hdd|sata|hard drive)?"
 
+# Brand/model databases (for high-confidence extraction)
+RAM_BRANDS = {"corsair", "kingston", "g.skill", "crucial", "team", "mushkin", "patriot", "adata", "sk hynix", "samsung", "intel", "hp", "dell"}
+RAM_MODELS = {"vengeance", "fury", "dominator", "ripjaws", "trident", "value", "ballistix", "elite"}
+
+STORAGE_BRANDS = {"samsung", "western digital", "wd", "sk hynix", "crucial", "intel", "kingston", "sabrent", "mushkin", "adata", "toshiba", "seagate"}
+STORAGE_MODELS = {"970 evo", "860 evo", "red", "blue", "black", "sn850", "firecuda", "barracuda", "pro", "plus"}
+
+PSU_BRANDS = {"corsair", "evga", "seasonic", "thermaltake", "msi", "asus", "cooler master", "lian li", "noctua", "gigabyte", "asrock"}
+PSU_RATINGS = {"80+ platinum", "80+ gold", "80+ silver", "80+ bronze"}
+
+CASE_BRANDS = {"lian li", "nzxt", "corsair", "cooler master", "fractal design", "be quiet", "phanteks", "thermaltake", "in win", "antec", "corsair", "aerocool", "silverstone"}
+CASE_FORM_FACTORS = {"atx", "matx", "itx", "eatx", "mini-itx", "compact", "sff", "cube"}
+
 NO_STORAGE_SIGNALS = ["no hdd", "no hard drive", "no storage", "no ssd", "no drive"]
 NO_GPU_SIGNALS = ["no gpu", "no graphics", "no graphics card", "integrated only"]
 NO_PSU_SIGNALS = ["no psu", "no power supply", "no power", "no psu included"]
+
+
+def _extract_ram_details(text: str) -> tuple[Optional[str], Optional[str], Optional[int], Optional[int], Optional[int]]:
+    """Extract RAM brand, model, speed, CL, and stick count from text."""
+    brand = None
+    model = None
+    speed = None
+    cl = None
+    sticks = None
+
+    # Brand detection
+    for b in RAM_BRANDS:
+        if b in text:
+            brand = b.title()
+            break
+
+    # Model detection (look for brand-specific patterns after brand name)
+    for m in RAM_MODELS:
+        if m in text:
+            model = m.title()
+            break
+
+    # Speed pattern: "6000", "5600", "3200" followed by optional "MHz"
+    speed_match = re.search(r"(\d{3,5})\s*(?:mhz)?(?:\s+mhz)?", text)
+    if speed_match:
+        potential_speed = int(speed_match.group(1))
+        if 1600 <= potential_speed <= 7200:
+            speed = potential_speed
+
+    # CAS Latency pattern: "CL16", "CL18", "CAS 16", etc.
+    cl_match = re.search(r"cl\s*(\d+)|cas\s*(\d+)|cas\s+latency\s+(\d+)", text, re.IGNORECASE)
+    if cl_match:
+        cl = int(cl_match.group(1) or cl_match.group(2) or cl_match.group(3))
+
+    # Stick count: "2x8GB", "4x16GB", "2 sticks", "dual channel" etc.
+    sticks_match = re.search(r"(\d)x(\d+)gb|(\d)\s+(?:x\s+)?(\d+)\s*gb", text, re.IGNORECASE)
+    if sticks_match:
+        sticks = int(sticks_match.group(1) or sticks_match.group(3))
+
+    return brand, model, speed, cl, sticks
+
+
+def _extract_storage_details(text: str) -> tuple[Optional[str], Optional[str], Optional[str]]:
+    """Extract storage brand, model, and form factor from text."""
+    brand = None
+    model = None
+    form_factor = None
+
+    # Brand detection
+    for b in STORAGE_BRANDS:
+        if b in text:
+            brand = b.title()
+            break
+
+    # Model detection
+    for m in STORAGE_MODELS:
+        if m in text:
+            model = m.title()
+            break
+
+    # Form factor: M.2, SATA, 2.5", 3.5", NVMe
+    if "m.2" in text or "m2" in text:
+        form_factor = "M.2"
+    elif "2.5" in text or "2.5\"" in text:
+        form_factor = "2.5\""
+    elif "3.5" in text or "3.5\"" in text:
+        form_factor = "3.5\""
+    elif "u.2" in text:
+        form_factor = "U.2"
+
+    return brand, model, form_factor
+
+
+def _extract_psu_details(text: str) -> tuple[Optional[str], Optional[int], Optional[str]]:
+    """Extract PSU brand, wattage, and rating from text."""
+    brand = None
+    wattage = None
+    rating = None
+
+    # Brand detection
+    for b in PSU_BRANDS:
+        if b in text:
+            brand = b.title()
+            break
+
+    # Wattage: "750W", "1000W", "850 watts", etc.
+    wattage_match = re.search(r"(\d{3,4})\s*(?:w|watts?)", text, re.IGNORECASE)
+    if wattage_match:
+        wattage = int(wattage_match.group(1))
+
+    # Rating: "80+ Gold", "80+ Silver", "80+ Bronze", "Platinum"
+    if "platinum" in text:
+        rating = "80+ Platinum"
+    elif "80+ gold" in text or "80+gold" in text:
+        rating = "80+ Gold"
+    elif "80+ silver" in text or "80+silver" in text:
+        rating = "80+ Silver"
+    elif "80+ bronze" in text or "80+bronze" in text:
+        rating = "80+ Bronze"
+
+    return brand, wattage, rating
+
+
+def _extract_case_details(text: str) -> tuple[Optional[str], Optional[str], Optional[str], Optional[str]]:
+    """Extract case brand, model, form factor, and color from text."""
+    brand = None
+    model = None
+    form_factor = None
+    color = None
+
+    # Brand detection
+    for b in CASE_BRANDS:
+        if b in text:
+            brand = b.title()
+            break
+
+    # Common case models (after brand is detected or standalone)
+    case_models_patterns = {
+        "o11": "O11 Vision",
+        "o11 vision": "O11 Vision",
+        "h510": "H510",
+        "crystal": "Crystal Series",
+        "nr200": "NR200",
+        "meshify": "Meshify",
+        "evolv": "Evolv",
+        "torrent": "Torrent",
+        "noctua": "Noctua",
+    }
+    for pattern, readable in case_models_patterns.items():
+        if pattern in text:
+            model = readable
+            break
+
+    # Form factor detection
+    for ff in CASE_FORM_FACTORS:
+        if ff in text:
+            form_factor = ff.upper()
+            break
+
+    # Color detection
+    colors = ["black", "white", "red", "blue", "green", "grey", "gray", "silver", "gold", "transparent", "tempered glass"]
+    for c in colors:
+        if c in text:
+            color = c.title()
+            break
+
+    return brand, model, form_factor, color
 
 
 def parse_specs(title: str, description: str = "") -> ParsedSpecs:
@@ -114,6 +294,9 @@ def parse_specs(title: str, description: str = "") -> ParsedSpecs:
                 specs.ram_type = ram_type_raw.split("-")[0]  # DDR4 from DDR4-3200
             break
 
+    # RAM details: brand, model, speed, CL, sticks
+    specs.ram_brand, specs.ram_model, specs.ram_speed, specs.ram_cl, specs.ram_sticks = _extract_ram_details(text)
+
     # Storage — check negative signals first
     has_no_storage = any(sig in text for sig in NO_STORAGE_SIGNALS)
     if not has_no_storage:
@@ -132,9 +315,18 @@ def parse_specs(title: str, description: str = "") -> ParsedSpecs:
                     specs.storage_type = "hdd"
                 break
 
+    # Storage details: brand, model, form_factor
+    specs.storage_brand, specs.storage_model, specs.storage_form_factor = _extract_storage_details(text)
+
     # PSU
     if any(sig in text for sig in NO_PSU_SIGNALS):
-        specs.has_psu = False
+        specs.psu_included = False
+
+    # PSU details: brand, wattage, rating
+    specs.psu_brand, specs.psu_wattage, specs.psu_rating = _extract_psu_details(text)
+
+    # Case details: brand, model, form_factor, color
+    specs.case_brand, specs.case_model, specs.case_form_factor, specs.case_color = _extract_case_details(text)
 
     # ─ Validation: Check if likely a valid PC (filter false positives)
     specs.is_likely_valid_pc, specs.validation_reason = _validate_is_pc(title, text, specs)

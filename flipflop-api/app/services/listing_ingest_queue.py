@@ -240,7 +240,7 @@ async def _process(item: IngestItem) -> None:
     _title_lower = raw.title.lower()
     _is_am5 = any(h in _title_lower for h in ("am5", "b650", "x670", "a620"))
     upgrade_cost = estimate_upgrade_cost(
-        specs.storage_gb, specs.gpu, specs.has_psu, specs.ram_gb, is_am5=_is_am5
+        specs.storage_gb, specs.gpu, specs.psu_included, specs.ram_gb, is_am5=_is_am5
     )
     resale      = resale_range.median
     profit      = estimate_profit(raw.price, resale, upgrade_cost)
@@ -249,7 +249,7 @@ async def _process(item: IngestItem) -> None:
     score_result = score_listing(
         title=raw.title, price=raw.price, estimated_profit=profit,
         cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
-        storage_gb=specs.storage_gb, gpu=specs.gpu, has_psu=specs.has_psu,
+        storage_gb=specs.storage_gb, gpu=specs.gpu, has_psu=specs.psu_included,
         location=raw.location,
         profit_low=profit_low, profit_high=profit_high,
     )
@@ -291,9 +291,34 @@ async def _process(item: IngestItem) -> None:
                 image_urls=raw.image_urls,
                 location=raw.location,
                 condition=raw.condition,
-                cpu=specs.cpu, ram_gb=specs.ram_gb, ram_type=specs.ram_type,
-                storage_gb=specs.storage_gb, storage_type=specs.storage_type,
-                gpu=specs.gpu, has_psu=specs.has_psu,
+                # CPU/GPU
+                cpu=specs.cpu,
+                gpu=specs.gpu,
+                # RAM
+                ram_gb=specs.ram_gb,
+                ram_type=specs.ram_type,
+                ram_brand=specs.ram_brand,
+                ram_model=specs.ram_model,
+                ram_speed=specs.ram_speed,
+                ram_cl=specs.ram_cl,
+                ram_sticks=specs.ram_sticks,
+                # Storage
+                storage_gb=specs.storage_gb,
+                storage_type=specs.storage_type,
+                storage_brand=specs.storage_brand,
+                storage_model=specs.storage_model,
+                storage_form_factor=specs.storage_form_factor,
+                # PSU
+                psu_included=specs.psu_included,
+                psu_brand=specs.psu_brand,
+                psu_wattage=specs.psu_wattage,
+                psu_rating=specs.psu_rating,
+                # Case
+                case_brand=specs.case_brand,
+                case_model=specs.case_model,
+                case_form_factor=specs.case_form_factor,
+                case_color=specs.case_color,
+                # Scoring
                 gem_score=score_result.score,
                 classification=score_result.classification,
                 gem_signals=score_result.signals,
