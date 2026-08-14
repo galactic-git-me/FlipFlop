@@ -45,6 +45,11 @@ class Component3DAsset(Base):
     subject_type = Column(Enum(AssetSubjectType), nullable=False)
     subject_id = Column(Integer, nullable=True)  # NULL for CATEGORY_GENERIC
     category = Column(String(30), nullable=True)  # slot category for generics (gpu, cooling, ram…)
+    # Bucket within a category, e.g. "gpu_large_triple_fan", "mobo_asus_atx" —
+    # NULL means "plain whole-category generic" (the original, coarser
+    # fallback level). See app/services/component_family_classifier.py for the
+    # taxonomy and how a variant's listing title maps to a bucket.
+    family_key = Column(String(60), nullable=True)
 
     status = Column(
         Enum(Component3DAssetStatus),
