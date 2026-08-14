@@ -338,17 +338,23 @@ Visual Hierarchy & Effects:
    - Tagline: Professional positioning statement
    - Use padding and centered alignment for impact
 
-2. FEATURED IMAGE AREA:
-   <p style="text-align:center;margin:30px 0;">[FLIPFLOP LOGO OR PRODUCT IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
+2. FLIPFLOP LOGO PLACEMENT (Hero):
+   Include the FlipFlop logo at the top-right or center of the hero section. Best logos:
+   - flipflop-glow-black-with-full-glow.png (premium glow effect - recommended)
+   - logo_simple.png (clean, minimal look)
+   Format: <img src="[FLIPFLOP_LOGO_URL]" style="max-height:60px;margin-bottom:15px;"/>
 
-3. KEY HIGHLIGHTS SECTION:
+3. FEATURED IMAGE AREA:
+   <p style="text-align:center;margin:30px 0;">[PRODUCT IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
+
+4. KEY HIGHLIGHTS SECTION:
    - 3-4 major selling points in a visually distinct box
    - Use background-color:#F5F5F5 with padding for visual separation
    - Use <strong> with color:#0066FF for key stats
    - Highlight premium points with color:#FF6600
    - Format: "▸ Benefit statement with specs"
 
-4. SPECIFICATIONS SECTION:
+5. SPECIFICATIONS SECTION:
    - Organize by component category (CPU, GPU, RAM, Storage, Motherboard, Power, Cooling)
    - Each spec in a clean, scannable list format
    - Use <strong> tags with strategic color changes (#0066FF for main, #FF6600 for premium)
