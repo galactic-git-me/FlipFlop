@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
+  CalendarClock,
 } from "lucide-react";
 import JSZip from "jszip";
 import { api, ManualBuild, BuildComponent } from "@/lib/api";
@@ -73,6 +74,8 @@ export default function BuildDetailPage() {
 
   const [price, setPrice] = useState("");
   const [condition, setCondition] = useState("USED_EXCELLENT");
+  const [deferredAt, setDeferredAt] = useState("");
+  const [savingSchedule, setSavingSchedule] = useState(false);
   const [performanceCardGenerated, setPerformanceCardGenerated] = useState(false);
   const [performanceCardImageUrls, setPerformanceCardImageUrls] = useState<string[]>([]);
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
@@ -83,6 +86,7 @@ export default function BuildDetailPage() {
       .then((b) => {
         setBuild(b);
         if (b.last_evaluation?.mid) setPrice(String(Math.round(b.last_evaluation.mid)));
+        if (b.deferred_publish_at) setDeferredAt(b.deferred_publish_at.slice(0, 16));
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -320,6 +324,32 @@ export default function BuildDetailPage() {
       alert(`Couldn't post to eBay: ${msg}`);
     } finally {
       setPosting(false);
+    }
+  };
+
+  const saveDeferredSchedule = async () => {
+    // The scheduled job runs unattended, so it needs a price already saved
+    // on the build (there's no one there to type it in when the time
+    // arrives) — persist whatever's currently in the asking-price field
+    // alongside the schedule, same as a manual "List on eBay" click would use.
+    const priceNum = parseFloat(price);
+    if (deferredAt && (!priceNum || priceNum <= 0)) {
+      alert("Enter an asking price before scheduling a publish time.");
+      return;
+    }
+    setSavingSchedule(true);
+    try {
+      const saved = await api.manualBuilds.updateEbayConfig(buildId, {
+        deferred_publish_at: deferredAt ? new Date(deferredAt).toISOString() : null,
+        ebay_price: priceNum > 0 ? priceNum : undefined,
+        ebay_condition: condition,
+      });
+      setBuild(saved);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      alert(`Couldn't save the publish schedule: ${msg}`);
+    } finally {
+      setSavingSchedule(false);
     }
   };
 
@@ -809,6 +839,38 @@ export default function BuildDetailPage() {
                       ))}
                     </select>
                   </div>
+
+                  {/* Deferred-listing scheduler */}
+                  <div className="rounded-lg border border-white/[0.07] bg-black/20 p-3 flex flex-col gap-2">
+                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                      <CalendarClock className="w-3.5 h-3.5" /> Deferred-listing scheduler
+                    </p>
+                    <label className="text-xs text-slate-500">
+                      Publish at (optional — leave blank and use &quot;List on eBay&quot; below instead)
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="datetime-local"
+                        value={deferredAt}
+                        onChange={(e) => setDeferredAt(e.target.value)}
+                        className="flex-1 bg-black/30 border border-white/[0.1] rounded-lg px-3 py-2 text-sm text-slate-200"
+                      />
+                      <button
+                        onClick={saveDeferredSchedule}
+                        disabled={savingSchedule}
+                        className="px-3 py-2 text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-slate-200 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        {savingSchedule ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Save"}
+                      </button>
+                    </div>
+                    {build.deferred_publish_at && (
+                      <p className="text-[11px] text-slate-500">
+                        Scheduled to publish {new Date(build.deferred_publish_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}.
+                        Checked every 15 minutes — publishes automatically once the listing (photos, specifics, price) is ready.
+                      </p>
+                    )}
+                  </div>
+
                   <div className="flex gap-3">
                     <button
                       onClick={postToEbay}
