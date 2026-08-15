@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
+import { PriceSparkline } from "../../components/listings/PriceSparkline";
 import { api, MarketSnapshot } from "@/lib/api";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META } from "@/lib/vendors";
@@ -1373,6 +1374,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 </th>
                 <SortHeader label="Condition" sortKey="condition" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Listing Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <th className="p-3 text-left text-slate-200 font-semibold">Price History</th>
                 <SortHeader label="Market New" sortKey="market_new_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Market Used" sortKey="market_used_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Variance" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
@@ -1433,6 +1435,9 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       <ConditionBadge condition={listing.condition} />
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold">£{listing.delivered_price.toFixed(2)}</td>
+                    <td className="p-3">
+                      <PriceHistorySparkline listingId={listing.listing_id} />
+                    </td>
                     <td className="p-3 text-right text-slate-100">
                       {listing.market_new_price ? (
                         `£${listing.market_new_price.toFixed(2)}`

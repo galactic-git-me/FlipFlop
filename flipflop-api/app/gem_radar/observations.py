@@ -47,133 +47,35 @@ async def get_consecutive_misses_before_inactive(db: AsyncSession) -> int:
 
 
 async def get_active_listing_ids(db: AsyncSession) -> set[str]:
-    """Listing IDs that have appeared in scraping results within the last N
-    runs FOR THEIR OWN CATEGORY, where N = consecutive_misses_before_inactive
-    (default 2). Inactive = missing from its category's last N runs entirely,
-    regardless of time gaps between those runs.
+    """Listing IDs observed within the last 24 hours. Simple time-based approach:
+    if a listing was seen in the last 24 hours, it's active. If it hasn't been
+    seen for 24+ hours, it's inactive (but never deleted — retained for historical
+    price benchmarking).
 
     Based on GemRadarListingObservation.search_run_id, NOT
     GemRadarScoredListing — this is the critical distinction. A listing that
     keeps showing up in scrapes but hasn't changed price gets deduped out of
     re-scoring for 7 days (see submit_scan), so gem_radar_scored_listings
     only gets a new row when something is genuinely new or stale. If "active"
-    were based on that table, a listing would silently age out of "last N
-    runs" within hours of its first sighting even though it never stopped
-    appearing — it just wasn't novel enough to re-score. Observations are
-    different: every sighting touches its row (see touch_observation for the
-    deduped path, record_observation for the fresh path), so
-    observed_at/search_run_id genuinely means "still turning up in scrapes,"
-    which is what "active" is supposed to mean. A brand-new listing that
-    only just appeared is automatically active too — its one observation is
-    inherently in the latest run for its category, no special-casing needed.
-
-    Scoped per resolved category (cpu/gpu/ram/motherboard/ssd/psu/cooler/
-    case/...), NOT globally: the extension runs ~15 independently-scheduled
-    searches (e.g. "AMD CPU", "Intel CPU", "MSI Motherboard"), each producing
-    its own search_run_id on its own cadence, all interleaved. A single
-    global "last N runs" would mean whichever category happened to submit
-    most recently evicts every OTHER category's still-fresh listings from
-    "active" status the moment it lands. Uncategorized rows (category IS
-    NULL — accessories that resolved to no real component) are ranked as
-    their own group so they aren't silently dropped or lumped in with a real
-    category's cadence.
-
-    Ranked by MAX(observed_at) (a real timestamp), NOT the search_run_id
-    string itself — search_run_id is a random UUID with no chronological
-    ordering property, so sorting by it directly picks an effectively random
-    set of "recent" runs rather than the actually-most-recent ones.
+    were based on that table, a listing would silently age out within hours
+    even though it never stopped appearing — it just wasn't novel enough to
+    re-score. Observations are different: every sighting touches its row
+    (see touch_observation for the deduped path, record_observation for the
+    fresh path), so observed_at genuinely means "still turning up in scrapes,"
+    which is what "active" is supposed to mean.
 
     Everything in the app (dashboards, tables, charts) should filter through
     this — but historical/inactive rows are NEVER deleted and remain fully
     usable for market-price benchmarking (build_batch_price_index draws on
     ALL historical observations regardless of active status)."""
-    consecutive_misses = await get_consecutive_misses_before_inactive(db)
-
-    # Grouping key: the originating search line (search_query), falling back
-    # to resolved category only if search_query is somehow missing.
-    #
-    # This used to be the other way round — category when resolved, else
-    # search_query — on the assumption that a real category maps 1:1 to a
-    # single search line. That's false: the extension runs ~15
-    # independently-scheduled searches, and several of them commonly resolve
-    # to the SAME category (e.g. "AMD CPU" and "Intel CPU" both resolve to
-    # category "cpu"). Grouping those together meant the category's "last N
-    # runs" window filled up from whichever search line happened to submit
-    # most recently, evicting a DIFFERENT search line's still-fresh listings
-    # the moment a third distinct search under the same category landed —
-    # even though that first search line hadn't repeated at all yet, let
-    # alone gone stale. Grouping by search_query gives every search line its
-    # own independent, stable cadence regardless of what category (if any)
-    # its results resolve to.
-    group_key = func.coalesce(GemRadarListingObservation.search_query, GemRadarListingObservation.category)
-
-    # One row per (group_key, search_run_id), timestamped by when that run's
-    # sightings actually landed — this is what "recency" gets ranked against.
-    run_recency = (
-        select(
-            group_key.label("group_key"),
-            GemRadarListingObservation.search_run_id.label("search_run_id"),
-            func.max(GemRadarListingObservation.observed_at).label("run_at"),
-        )
-        .where(GemRadarListingObservation.search_run_id.is_not(None))
-        .group_by(group_key, GemRadarListingObservation.search_run_id)
-        .subquery()
-    )
-
-    # Rank each group's own runs by actual recency (ties broken by run id
-    # for determinism), independently of every other group's cadence.
-    ranked_runs = (
-        select(
-            run_recency.c.group_key,
-            run_recency.c.search_run_id,
-            func.row_number()
-            .over(
-                partition_by=run_recency.c.group_key,
-                order_by=(run_recency.c.run_at.desc(), run_recency.c.search_run_id.desc()),
-            )
-            .label("recency_rank"),
-        )
-    ).subquery()
-
-    recent_runs_result = await db.execute(
-        select(ranked_runs.c.group_key, ranked_runs.c.search_run_id).where(
-            ranked_runs.c.recency_rank <= consecutive_misses
-        )
-    )
-    recent_run_ids_by_group: dict[str | None, set[str]] = {}
-    for group, run_id in recent_runs_result.all():
-        recent_run_ids_by_group.setdefault(group, set()).add(run_id)
-
-    if not recent_run_ids_by_group:
-        return set()
-
-    # Each listing's own most recent sighting (by actual timestamp, not
-    # run-id string) tells us which group + run it should be checked
-    # against.
-    latest_row_per_listing = (
-        select(
-            GemRadarListingObservation.listing_id,
-            group_key.label("group_key"),
-            GemRadarListingObservation.search_run_id,
-            func.row_number()
-            .over(
-                partition_by=GemRadarListingObservation.listing_id,
-                order_by=GemRadarListingObservation.observed_at.desc(),
-            )
-            .label("recency_rank"),
-        )
-    ).subquery()
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
 
     result = await db.execute(
-        select(latest_row_per_listing.c.listing_id, latest_row_per_listing.c.group_key, latest_row_per_listing.c.search_run_id)
-        .where(latest_row_per_listing.c.recency_rank == 1)
+        select(GemRadarListingObservation.listing_id)
+        .where(GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None))
+        .distinct()
     )
-
-    active_ids: set[str] = set()
-    for listing_id, group, search_run_id in result.all():
-        if search_run_id in recent_run_ids_by_group.get(group, set()):
-            active_ids.add(listing_id)
-    return active_ids
+    return {row[0] for row in result.all()}
 
 # How similar two titles from the same seller must be (token-overlap ratio)
 # before a new listing_id is treated as a likely relisting of an old one.
