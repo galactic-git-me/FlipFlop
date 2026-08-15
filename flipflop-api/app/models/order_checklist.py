@@ -22,6 +22,4 @@ class OrderChecklist(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Composite index for efficient queries by order + section
-    __table_args__ = (
-        {"sqlite_autoincrement": False},  # Not needed for PostgreSQL but doesn't hurt
-    )
+    __table_args__ = ()

@@ -13,7 +13,6 @@ from typing import Any
 
 import httpx
 from sqlalchemy import delete, select
-from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from app.database import AsyncSessionLocal
 from app.models.demand_rich import (
