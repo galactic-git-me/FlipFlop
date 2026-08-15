@@ -389,7 +389,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...init?.headers,
     },
-    signal: AbortSignal.timeout(10_000),
+    signal: AbortSignal.timeout(120_000),
     redirect: "follow",
     ...init,
   });
