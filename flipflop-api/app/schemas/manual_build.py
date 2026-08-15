@@ -135,6 +135,7 @@ class PostToEbayResult(BaseModel):
     listing_id: Optional[str] = None
     url: Optional[str] = None
     error: Optional[str] = None
+    action: Optional[str] = None  # "posted" or "updated"
 
 
 class SetHeroPhotoRequest(BaseModel):

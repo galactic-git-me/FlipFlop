@@ -897,19 +897,40 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         fulfillment_policy_id = build.fulfillment_policy_id
 
     try:
-        result = await post_flip_to_ebay(
-            title=build.generated_title,
-            description=build.generated_description,
-            price=body.price,
-            image_urls=image_urls,
-            access_token=oauth_token,
-            environment=listing_environment,
-            condition=body.condition,
-            payment_policy_id=payment_policy_id,
-            return_policy_id=return_policy_id,
-            fulfillment_policy_id=fulfillment_policy_id,
-            aspects=build.generated_aspects or {},
-        )
+        # Check if already listed on eBay — if so, update instead of create
+        is_relisting = bool(build.ebay_listing_id)
+
+        if is_relisting:
+            # Update existing eBay listing
+            result = await post_flip_to_ebay(
+                title=build.generated_title,
+                description=build.generated_description,
+                price=body.price,
+                image_urls=image_urls,
+                access_token=oauth_token,
+                environment=listing_environment,
+                condition=body.condition,
+                payment_policy_id=payment_policy_id,
+                return_policy_id=return_policy_id,
+                fulfillment_policy_id=fulfillment_policy_id,
+                aspects=build.generated_aspects or {},
+                listing_id=build.ebay_listing_id,  # Pass existing ID to update
+            )
+        else:
+            # Create new eBay listing
+            result = await post_flip_to_ebay(
+                title=build.generated_title,
+                description=build.generated_description,
+                price=body.price,
+                image_urls=image_urls,
+                access_token=oauth_token,
+                environment=listing_environment,
+                condition=body.condition,
+                payment_policy_id=payment_policy_id,
+                return_policy_id=return_policy_id,
+                fulfillment_policy_id=fulfillment_policy_id,
+                aspects=build.generated_aspects or {},
+            )
 
         if result["success"]:
             build.ebay_listing_id = result["listing_id"]
@@ -919,12 +940,13 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             build.deferred_publish_at = None
             build.updated_at = datetime.utcnow()
             await db.flush()
-            return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"])
+            action = "updated" if is_relisting else "posted"
+            return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action)
 
-        return PostToEbayResult(success=False, error=result.get("error", "Failed to post listing"))
+        return PostToEbayResult(success=False, error=result.get("error", f"Failed to {'update' if is_relisting else 'post'} listing"))
     except Exception as e:
         error_msg = str(e)
-        return PostToEbayResult(success=False, error=f"Error posting to eBay: {error_msg}")
+        return PostToEbayResult(success=False, error=f"Error {'updating' if build.ebay_listing_id else 'posting'} to eBay: {error_msg}")
 
 
 @router.post("/{build_id}/photos", response_model=ManualBuildOut)

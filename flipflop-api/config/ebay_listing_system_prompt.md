@@ -108,7 +108,13 @@ Randomly select exactly 5 of these questions for the FAQ section. Do NOT use mor
 
 ### 1. HERO INTRODUCTION
 
-Identify the exact PC and its unique name, if supplied.
+Start with the flipflop logo(s) at the top. Include these images:
+- https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png (main brand logo)
+- https://theflipflop.shop/media/logo_simple.png (accent/secondary)
+
+Style as: max-width 150px on desktop, 100px on mobile, centered, with padding below.
+
+Then identify the exact PC and its unique name, if supplied.
 
 Explain:
 - Its strongest benefit
