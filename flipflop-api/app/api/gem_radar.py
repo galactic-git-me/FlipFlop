@@ -978,6 +978,24 @@ async def get_gem_of_week(
     return await _fetch_best_gem(db, week_start.replace(tzinfo=None), require_modern=True)
 
 
+def _is_reasonable_price(category: str, price: float) -> bool:
+    """Validate price is within reasonable bounds for the category.
+    Catches corrupted/truncated prices (e.g., £3.15 instead of £317).
+    """
+    # Minimum reasonable prices by category (covers most PC components)
+    min_prices = {
+        "cpu": 50,           # CPUs rarely under £50
+        "gpu": 80,           # GPUs rarely under £80
+        "motherboard": 40,   # Motherboards rarely under £40
+        "ram": 15,           # RAM can be cheaper, but rarely < £15/stick
+        "ssd": 20,           # SSDs rarely under £20
+        "psu": 30,           # PSUs rarely under £30
+    }
+
+    min_price = min_prices.get(category, 20)
+    return price >= min_price
+
+
 async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score."""
     from sqlalchemy import select
@@ -995,13 +1013,15 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         query = query.limit(1)
         result = await db.execute(query)
         best = result.scalar_one_or_none()
-        if best and _is_damaged(best.title):
+        if best and (_is_damaged(best.title) or not _is_reasonable_price(best.category, best.delivered_price)):
             best = None
     else:
         result = await db.execute(query.limit(200))
         best = None
         for candidate in result.scalars():
             if _is_damaged(candidate.title):
+                continue
+            if not _is_reasonable_price(candidate.category, candidate.delivered_price):
                 continue
             if not _is_desktop_appropriate(candidate.title, candidate.category):
                 continue
