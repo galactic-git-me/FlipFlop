@@ -22,7 +22,9 @@ const sanitizeHtml = (html: string) =>
       "strong", "b", "em", "i", "u", "a",
       "br", "hr", "span", "div", "img", "table", "tr", "td", "th", "tbody", "thead", "section", "article",
     ],
-    ALLOWED_ATTR: ["style", "href", "target", "rel", "src", "alt", "class", "id"],
+    ALLOWED_ATTR: ["style", "href", "target", "rel", "src", "alt", "class", "id", "width", "height"],
+    ALLOW_DATA_ATTR: false,
+    ALLOW_UNKNOWN_PROTOCOLS: false,
   });
 
 export function EbayListingHTMLPreview({
