@@ -703,6 +703,10 @@ function PipelineHealthPanel({ listings }: { listings: Listing[] }) {
 const GEM_SPOTLIGHT_ACCENTS = {
   amber: { label: "text-amber-300", price: "text-amber-200", ring: "ring-amber-400/30", glow: "from-amber-500/20" },
   blue: { label: "text-blue-300", price: "text-blue-200", ring: "ring-blue-400/30", glow: "from-blue-500/20" },
+  cyan: { label: "text-cyan-300", price: "text-cyan-200", ring: "ring-cyan-400/30", glow: "from-cyan-500/20" },
+  purple: { label: "text-purple-300", price: "text-purple-200", ring: "ring-purple-400/30", glow: "from-purple-500/20" },
+  emerald: { label: "text-emerald-300", price: "text-emerald-200", ring: "ring-emerald-400/30", glow: "from-emerald-500/20" },
+  orange: { label: "text-orange-300", price: "text-orange-200", ring: "ring-orange-400/30", glow: "from-orange-500/20" },
 } as const;
 
 function GemSpotlightCard({
