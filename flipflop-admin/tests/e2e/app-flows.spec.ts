@@ -23,7 +23,7 @@ async function installApiMocks(page: Page) {
     if (path === '/health' && method === 'GET') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'ok' }) });
     if (!path.includes('/api')) return route.continue();
 
-    if (path === '/api/settings' && method === 'GET') return json(route, 200, { max_concurrent_flips: 1, auto_buy_autonomous: false, auto_buy_daily_limit: 3, ollama_base_url: 'http://localhost:11434', ollama_model: 'gemma3:4b', openrouter_api_key: '', openrouter_primary_model: 'google/gemma-4-31b-it:free', image_gen_enabled: true, image_gen_provider: 'pollinations', default_sell_platform: 'ebay', ebay_app_id: '' });
+    if (path === '/api/settings' && method === 'GET') return json(route, 200, { max_concurrent_flips: 1, auto_buy_autonomous: false, auto_buy_daily_limit: 3, ollama_base_url: 'http://localhost:11434', ollama_model: process.env.NEXT_PUBLIC_OLLAMA_MODEL || '', openrouter_api_key: '', openrouter_primary_model: 'google/gemma-4-31b-it:free', image_gen_enabled: true, image_gen_provider: 'pollinations', default_sell_platform: 'ebay', ebay_app_id: '' });
     if (path === '/api/settings' && method === 'PUT') return json(route, 200, { ok: true });
     if (path === '/api/sources' && method === 'GET') return json(route, 200, []);
     if (path === '/api/sources/health' && method === 'GET') return json(route, 200, { avg_health_score: 100, items: [] });

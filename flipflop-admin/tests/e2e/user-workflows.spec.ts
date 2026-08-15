@@ -47,7 +47,7 @@ async function installWorkflowMocks(page: Page) {
     auto_buy_autonomous: false,
     auto_buy_daily_limit: 3,
     ollama_base_url: "http://localhost:11434",
-    ollama_model: "gemma3:4b",
+    ollama_model: process.env.NEXT_PUBLIC_OLLAMA_MODEL || "",
     openrouter_api_key: "",
     openrouter_primary_model: "google/gemma-4-31b-it:free",
     image_gen_enabled: true,

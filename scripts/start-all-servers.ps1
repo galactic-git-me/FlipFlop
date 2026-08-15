@@ -103,16 +103,22 @@ function Ensure-Ollama {
         $models = Invoke-WebRequest -Uri "http://localhost:11434/api/tags" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
         $modelList = ($models.Content | ConvertFrom-Json).models
 
-        if ($modelList.name -contains "qwen2:7b") {
-            Write-Host "[OK] qwen2:7b model already available" -ForegroundColor Green
+        # Clean up old qwen2.5:7b (non-instruct) if it exists
+        if ($modelList.name -contains "qwen2.5:7b") {
+            Write-Host "[!] Removing old qwen2.5:7b model..." -ForegroundColor Yellow
+            & ollama rm qwen2.5:7b 2>&1 | Out-Null
+        }
+
+        if ($modelList.name -contains "qwen2.5:7b-instruct") {
+            Write-Host "[OK] qwen2.5:7b-instruct model already available" -ForegroundColor Green
         } else {
-            Write-Host "[!] Pulling qwen2:7b model (one-time, takes a few minutes)..." -ForegroundColor Yellow
-            & ollama pull qwen2:7b | Out-Null
+            Write-Host "[!] Pulling qwen2.5:7b-instruct model (one-time, takes a few minutes)..." -ForegroundColor Yellow
+            & ollama pull qwen2.5:7b-instruct | Out-Null
             Write-Host "[OK] Model pulled and ready" -ForegroundColor Green
         }
     } catch {
         Write-Host "[!] Could not verify model, attempting to pull..." -ForegroundColor Yellow
-        & ollama pull qwen2:7b | Out-Null
+        & ollama pull qwen2.5:7b-instruct | Out-Null
     }
 }
 
@@ -325,28 +331,28 @@ if (-not $NoExtensionBuild) {
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend
     },
     @{
         name     = "gemradar-api"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000")
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000")
         port     = 18000
         color    = "Blue"
         skip     = $NoGemRadar
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
     },
     @{
         name     = "frontend"
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
