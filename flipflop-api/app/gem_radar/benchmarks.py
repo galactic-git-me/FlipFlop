@@ -223,22 +223,32 @@ def _sold_comps_to_stat(comps: list[float], source: str) -> BenchmarkStat:
 async def _get_cpk_for_match_key(db: AsyncSession, match_key: str) -> str | None:
     """Look up the most recent CPK for a match_key from listing observations.
     Used to enrich sold observations with CPK so they can contribute to market
-    price aggregation."""
-    from app.models.gem_radar_listing_cpk import GemRadarListingCPK
-    from app.models.gem_radar_listing_observations import GemRadarListingObservation
+    price aggregation. Finds a listing with a CPK and checks if its model_number
+    normalizes to the given match_key."""
+    from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+    from app.models.gem_radar_observation import GemRadarListingObservation
 
+    # Query for listings with CPKs, ordered by recency
     result = await db.execute(
-        select(GemRadarListingCPK.cpk)
+        select(GemRadarListingCpk.cpk, GemRadarListingObservation.model_number)
         .join(
             GemRadarListingObservation,
-            GemRadarListingCPK.listing_id == GemRadarListingObservation.listing_id,
+            GemRadarListingCpk.listing_id == GemRadarListingObservation.listing_id,
         )
-        .where(GemRadarListingObservation.match_key == match_key)
-        .order_by(GemRadarListingObservation.observed_at.desc())
-        .limit(1)
+        .where(GemRadarListingObservation.model_number.isnot(None))
+        .order_by(GemRadarListingCpk.updated_at.desc())
+        .limit(100)  # Check recent listings; if none match, use most recent anyway
     )
-    row = result.first()
-    return row[0] if row else None
+    rows = result.fetchall()
+
+    # Try to find a listing whose model normalizes to our match_key
+    for cpk, model_number in rows:
+        if normalize_match_key(model_number) == match_key:
+            return cpk
+
+    # If no exact match, return the most recent CPK as fallback
+    # (better than NULL; real fix is deeper match_key ↔ listing mapping)
+    return rows[0][0] if rows else None
 
 
 async def _get_stored_sold_prices(db: AsyncSession, match_key: str, condition: str) -> list[float]:

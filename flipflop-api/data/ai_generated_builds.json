@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T05:08:52.746228+00:00",
+  "generated_at": "2026-08-15T06:20:31.427685+00:00",
   "builds": [
     {
       "components": [
@@ -19,423 +19,6 @@
         },
         {
           "id": 6933478,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 6934178,
-          "listing_id": "606489527838713",
-          "category": "gpu",
-          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.18,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.18,
-          "url": "https://www.ebay.co.uk/itm/606489527838713"
-        },
-        {
-          "id": 6931763,
-          "listing_id": "3",
-          "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
-        },
-        {
-          "id": 6935181,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 6934139,
-          "listing_id": "605626558163618",
-          "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
-        },
-        {
-          "id": 6934187,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 6934388,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 69.5,
-      "market": {
-        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 45,
-          "min_price": 95.5,
-          "max_price": 949.0,
-          "average_price": 389.29
-        }
-      },
-      "resale_estimate": 389.29,
-      "resale_source": "bin_average",
-      "estimated_profit": 319.79,
-      "rank": 1
-    },
-    {
-      "components": [
-        {
-          "id": 6934789,
-          "listing_id": "9565309194",
-          "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
-        },
-        {
-          "id": 6925068,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 6934178,
-          "listing_id": "606489527838713",
-          "category": "gpu",
-          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.18,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.18,
-          "url": "https://www.ebay.co.uk/itm/606489527838713"
-        },
-        {
-          "id": 6923350,
-          "listing_id": "3",
-          "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
-        },
-        {
-          "id": 6935181,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 6934139,
-          "listing_id": "605626558163618",
-          "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
-        },
-        {
-          "id": 6934187,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 6934388,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 69.5,
-      "market": {
-        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 47,
-          "min_price": 131.38,
-          "max_price": 949.0,
-          "average_price": 387.68
-        }
-      },
-      "resale_estimate": 387.68,
-      "resale_source": "bin_average",
-      "estimated_profit": 318.18,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 6934789,
-          "listing_id": "9565309194",
-          "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
-        },
-        {
-          "id": 6933478,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 6934178,
-          "listing_id": "606489527838713",
-          "category": "gpu",
-          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.18,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.18,
-          "url": "https://www.ebay.co.uk/itm/606489527838713"
-        },
-        {
-          "id": 6923350,
-          "listing_id": "3",
-          "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
-        },
-        {
-          "id": 6935181,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 6934139,
-          "listing_id": "605626558163618",
-          "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
-        },
-        {
-          "id": 6934187,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 6934388,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 69.5,
-      "market": {
-        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 47,
-          "min_price": 131.38,
-          "max_price": 949.0,
-          "average_price": 387.47
-        }
-      },
-      "resale_estimate": 387.47,
-      "resale_source": "bin_average",
-      "estimated_profit": 317.97,
-      "rank": 3
-    },
-    {
-      "components": [
-        {
-          "id": 6934789,
-          "listing_id": "9565309194",
-          "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
-        },
-        {
-          "id": 6925068,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -546,21 +129,21 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 44,
           "min_price": 131.38,
           "max_price": 949.0,
-          "average_price": 387.47
+          "average_price": 403.92
         }
       },
-      "resale_estimate": 387.47,
+      "resale_estimate": 403.92,
       "resale_source": "bin_average",
-      "estimated_profit": 317.97,
-      "rank": 4
+      "estimated_profit": 334.42,
+      "rank": 1
     },
     {
       "components": [
         {
-          "id": 6926379,
+          "id": 6934789,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -575,6 +158,145 @@
         },
         {
           "id": 6933478,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 6925768,
+          "listing_id": "606489527838713",
+          "category": "gpu",
+          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.18,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.18,
+          "url": "https://www.ebay.co.uk/itm/606489527838713"
+        },
+        {
+          "id": 6923350,
+          "listing_id": "3",
+          "category": "ram",
+          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.46,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.46,
+          "url": "https://www.ebay.co.uk/itm/3"
+        },
+        {
+          "id": 6935181,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 6934139,
+          "listing_id": "605626558163618",
+          "category": "ssd",
+          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 9.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -9.79,
+          "url": "https://www.ebay.co.uk/itm/605626558163618"
+        },
+        {
+          "id": 6934187,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.83,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.83,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 6934388,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 69.5,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": true,
+          "count": 44,
+          "min_price": 131.38,
+          "max_price": 949.0,
+          "average_price": 403.68
+        }
+      },
+      "resale_estimate": 403.68,
+      "resale_source": "bin_average",
+      "estimated_profit": 334.18,
+      "rank": 2
+    },
+    {
+      "components": [
+        {
+          "id": 6934789,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 6925068,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -685,15 +407,293 @@
         },
         "bin": {
           "available": true,
-          "count": 46,
+          "count": 44,
           "min_price": 131.38,
           "max_price": 949.0,
-          "average_price": 387.07
+          "average_price": 403.68
         }
       },
-      "resale_estimate": 387.07,
+      "resale_estimate": 403.68,
       "resale_source": "bin_average",
-      "estimated_profit": 317.57,
+      "estimated_profit": 334.18,
+      "rank": 3
+    },
+    {
+      "components": [
+        {
+          "id": 6934789,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 6933478,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 6934178,
+          "listing_id": "606489527838713",
+          "category": "gpu",
+          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.18,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.18,
+          "url": "https://www.ebay.co.uk/itm/606489527838713"
+        },
+        {
+          "id": 6923350,
+          "listing_id": "3",
+          "category": "ram",
+          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.46,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.46,
+          "url": "https://www.ebay.co.uk/itm/3"
+        },
+        {
+          "id": 6935181,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 6934139,
+          "listing_id": "605626558163618",
+          "category": "ssd",
+          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 9.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -9.79,
+          "url": "https://www.ebay.co.uk/itm/605626558163618"
+        },
+        {
+          "id": 6934187,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.83,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.83,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 6934388,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 69.5,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": true,
+          "count": 44,
+          "min_price": 131.38,
+          "max_price": 949.0,
+          "average_price": 401.88
+        }
+      },
+      "resale_estimate": 401.88,
+      "resale_source": "bin_average",
+      "estimated_profit": 332.38,
+      "rank": 4
+    },
+    {
+      "components": [
+        {
+          "id": 6934789,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 6925068,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 6934178,
+          "listing_id": "606489527838713",
+          "category": "gpu",
+          "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.18,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.18,
+          "url": "https://www.ebay.co.uk/itm/606489527838713"
+        },
+        {
+          "id": 6923350,
+          "listing_id": "3",
+          "category": "ram",
+          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.46,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -2.46,
+          "url": "https://www.ebay.co.uk/itm/3"
+        },
+        {
+          "id": 6935181,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 6934139,
+          "listing_id": "605626558163618",
+          "category": "ssd",
+          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 9.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -9.79,
+          "url": "https://www.ebay.co.uk/itm/605626558163618"
+        },
+        {
+          "id": 6934187,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.83,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.83,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 6934388,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 69.5,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 Top pick3D Printed Creative Ad",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": true,
+          "count": 44,
+          "min_price": 131.38,
+          "max_price": 949.0,
+          "average_price": 401.88
+        }
+      },
+      "resale_estimate": 401.88,
+      "resale_source": "bin_average",
+      "estimated_profit": 332.38,
       "rank": 5
     },
     {
@@ -727,7 +727,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 6925768,
+          "id": 6934178,
           "listing_id": "606489527838713",
           "category": "gpu",
           "title": "Top pick3D Printed Creative Adjustable Height (6.7cm/2.64inch-11cm/4.33inch) GPU Support Stand, Anti-Drop Adjustable Graphics Card Holder, Suitable for NVIDIA and AMD Graphics, Computer Accessory, Unique Design, Durable Construction, Computer Case DecorationOpen in new tab.",
@@ -824,15 +824,15 @@
         },
         "bin": {
           "available": true,
-          "count": 46,
-          "min_price": 95.5,
+          "count": 44,
+          "min_price": 131.38,
           "max_price": 949.0,
-          "average_price": 385.19
+          "average_price": 401.65
         }
       },
-      "resale_estimate": 385.19,
+      "resale_estimate": 401.65,
       "resale_source": "bin_average",
-      "estimated_profit": 315.69,
+      "estimated_profit": 332.15,
       "rank": 6
     }
   ],
