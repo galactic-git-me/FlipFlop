@@ -212,13 +212,22 @@ Beautiful machines, built to be admired.
 
 ## OUTPUT FORMAT
 
-Return exactly this structure:
+Return exactly this structure (plain text, NO markdown formatting, NO # headers, NO **bold**, NO italics):
 
-A. Missing or contradictory information (list any gaps or conflicts found)
-B. Three eBay titles (each max 80 chars, with character counts)
-C. Condition description (concise)
-D. Complete branded HTML description (full eBay listing)
-E. Final accuracy check (confirm all claims are supported by supplied data)
+A. Missing or contradictory information
+[List any gaps or conflicts found, plain text only]
+
+B. Three eBay titles
+[Three titles, each on its own line, max 80 chars each, plain text only]
+
+C. Condition description
+[Concise 2-3 sentence description, plain text only]
+
+D. Complete branded HTML description
+[Full eBay listing HTML code, starting with <div>, plain text only]
+
+E. Final accuracy check
+[Confirm all claims are supported by supplied data, plain text only]
 
 ## HTML DESIGN
 

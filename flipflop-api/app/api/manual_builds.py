@@ -94,51 +94,48 @@ def _extract_section(text: str, start_marker: str, end_markers: list[str]) -> st
 
 
 def _extract_recommended_title(text: str) -> str | None:
-    # Try new format first: "B. Three eBay titles"
-    section = _extract_section(text, "B.", ["C.", "D."])
-    if not section:
-        # Fallback to old format: "B. RECOMMENDED EBAY TITLE"
-        section = _extract_section(text, "B. RECOMMENDED EBAY TITLE", ["C. CONDITION DESCRIPTION"])
-    if not section:
+    # Find section B
+    b_idx = text.upper().find("B.")
+    if b_idx < 0:
         return None
-    # Extract first title-like line (skip headers, take first actual title)
-    for line in section.splitlines():
-        stripped = line.strip(" -*#`\"'()")
-        # Skip empty lines, headers, and metadata
-        if (stripped and
-            len(stripped) < 85 and
-            not stripped.startswith(("**", "*", "#")) and
-            not "characters" in stripped.lower() and
-            not stripped.isupper()):
+    # Find where section B ends (at C. or end of text)
+    c_idx = text.upper().find("\nC.", b_idx)
+    if c_idx < 0:
+        c_idx = len(text)
+    section = text[b_idx:c_idx]
+
+    # Extract title-like lines (skip the header "B. Three eBay titles")
+    for line in section.splitlines()[1:]:  # Skip first line (the header)
+        stripped = line.strip()
+        if stripped and len(stripped) < 85 and not stripped.startswith(("-", "*", "#")):
             return stripped
     return None
 
 
 def _extract_html_section(text: str) -> str | None:
-    # Try new format first: "D. Complete branded HTML description"
-    section = _extract_section(text, "D.", ["E."])
-    if not section:
-        # Fallback to old format: "F. COMPLETE BRANDED EBAY HTML DESCRIPTION"
-        section = _extract_section(
-            text,
-            "F. COMPLETE BRANDED EBAY HTML DESCRIPTION",
-            ["G. INFORMATION REQUIRED", "H. FINAL PUBLICATION CHECK"],
-        )
-    if not section:
+    # Find section D
+    d_idx = text.upper().find("\nD.")
+    if d_idx < 0:
+        # Try without newline (if D. is at start)
+        d_idx = text.upper().find("D.")
+    if d_idx < 0:
         return None
-    # Remove markdown code fences if present
-    fenced = re.search(r"```(?:html)?\s*(.*?)```", section, re.DOTALL | re.IGNORECASE)
-    if fenced:
-        return fenced.group(1).strip()
-    # If output is markdown with HTML embedded, try to extract HTML
-    tag_match = re.search(r"<(div|html|!doctype)", section, re.IGNORECASE)
-    if tag_match:
-        return section[tag_match.start():].strip()
-    # If section is mostly HTML, return as-is (convert markdown to HTML if needed)
-    if "<" in section and ">" in section:
-        return section.strip()
-    # If it's markdown formatted HTML preview, convert to minimal HTML
-    # For now, return None if no HTML detected
+
+    # Find where section D ends (at E. or end of text)
+    e_idx = text.upper().find("\nE.", d_idx)
+    if e_idx < 0:
+        e_idx = len(text)
+    section = text[d_idx:e_idx].strip()
+
+    # Skip the header line "D. Complete branded HTML description"
+    lines = section.splitlines()
+    section = "\n".join(lines[1:]) if len(lines) > 1 else ""
+
+    # Look for the start of HTML
+    html_match = re.search(r"<(div|html|!doctype)", section, re.IGNORECASE)
+    if html_match:
+        return section[html_match.start():].strip()
+
     return None
 
 
