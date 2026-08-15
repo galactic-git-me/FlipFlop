@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
-import { PriceSparkline } from "../../components/listings/PriceSparkline";
+import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META } from "@/lib/vendors";

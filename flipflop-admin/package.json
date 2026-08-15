@@ -32,7 +32,7 @@
     "jszip": "^3.10.1",
     "lucide-react": "^1.11.0",
     "motion": "^12.38.0",
-    "next": "^16.3.0",
+    "next": "^16.3.1",
     "playwright": "^1.54.2",
     "postprocessing": "^6.39.1",
     "react": "19.2.4",
