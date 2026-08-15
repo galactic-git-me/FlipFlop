@@ -143,8 +143,11 @@ class Settings(BaseSettings):
     ram_watch_mobo_threshold_gbp: float = 70.0
     ram_watch_gpu_threshold_gbp: float = 200.0
 
-    frontend_url: str = "http://localhost:3000"
+    frontend_url: str = "http://localhost:4313"
     admin_api_key: str = ""
+
+    # Comma-separated list of origins allowed to call this API in dev/CORS.
+    cors_allowed_origins: str = "http://localhost:4312,http://localhost:4313"
 
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
