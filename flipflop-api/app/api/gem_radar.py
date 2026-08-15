@@ -956,6 +956,71 @@ async def get_gem_of_week(
     return await _fetch_best_gem(db, week_start.replace(tzinfo=None), require_modern=True)
 
 
+async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
+    """Best gem for a specific component category, sorted by deal_score."""
+    from sqlalchemy import select
+
+    query = (
+        select(GemRadarScoredListing)
+        .where(
+            GemRadarScoredListing.scored_at >= since,
+            GemRadarScoredListing.category == category,
+            GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
+        )
+        .order_by(GemRadarScoredListing.deal_score.desc())
+    )
+    if not require_modern:
+        query = query.limit(1)
+        result = await db.execute(query)
+        best = result.scalar_one_or_none()
+    else:
+        result = await db.execute(query.limit(200))
+        best = None
+        for candidate in result.scalars():
+            if not _is_desktop_appropriate(candidate.title, candidate.category):
+                continue
+            if candidate.category == "ram" and not _is_current_gen_ram(candidate.title):
+                continue
+            if candidate.category != "ram" and not _is_current_gen(candidate.title, candidate.category):
+                continue
+            best = candidate
+            break
+    if best is None:
+        return None
+    return {
+        "title": best.title,
+        "price": best.delivered_price,
+        "seller": best.seller_name,
+        "condition": best.condition,
+        "url": best.url or fallback_listing_url(best.listing_id, best.source, best.title),
+        "image_url": best.image_url,
+        "deal_score": best.deal_score,
+        "classification": best.classification,
+        "category": best.category,
+    }
+
+
+@router.get("/gem-by-component")
+async def get_gem_by_component(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Best gem for each major component category (CPU, GPU, Motherboard, SSD, PSU).
+    Each is the highest deal_score item in its category from today."""
+    from datetime import datetime, timezone
+
+    today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    categories = ["cpu", "gpu", "motherboard", "ssd", "psu"]
+
+    gems = {}
+    for category in categories:
+        gem = await _fetch_best_gem_for_category(db, category, today_start.replace(tzinfo=None), require_modern=True)
+        if gem:
+            gems[category] = gem
+
+    return gems
+
+
 @router.get("/market-snapshot")
 async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
     """Whole-DB view of the current market — same categories as the Current

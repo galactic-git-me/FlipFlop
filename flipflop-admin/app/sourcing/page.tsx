@@ -750,12 +750,26 @@ function GemSpotlightCard({
   );
 }
 
-function StatsTab({ listings, gemOfDay, gemOfWeek }: { listings: Listing[]; gemOfDay?: GemData; gemOfWeek?: GemData }) {
+function StatsTab({ listings, gemOfDay, componentGems }: { listings: Listing[]; gemOfDay?: GemData; componentGems?: Record<string, GemData> }) {
+  const componentLabels: Record<string, { label: string; emoji: string }> = {
+    cpu: { label: "Gem CPU", emoji: "⚡" },
+    gpu: { label: "Gem GPU", emoji: "🎮" },
+    motherboard: { label: "Gem Motherboard", emoji: "🔧" },
+    ssd: { label: "Gem SSD", emoji: "💿" },
+    psu: { label: "Gem PSU", emoji: "🔌" },
+  };
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-6">
-      {gemOfDay && <GemSpotlightCard gem={gemOfDay} label="Gem of Day" accent="amber" />}
-      {gemOfWeek && <GemSpotlightCard gem={gemOfWeek} label="Gem of Week" accent="blue" />}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
+        {componentGems && Object.entries(componentGems).map(([category, gem]) => (
+          <GemSpotlightCard
+            key={category}
+            gem={gem}
+            label={componentLabels[category]?.label || category}
+            accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
+          />
+        ))}
       </div>
     </>
   );
@@ -1908,7 +1922,7 @@ function SourcingPageInner() {
   const [mainTab, setMainTab] = useState<MainTab>("stats");
   const [listings, setListings] = useState<Listing[]>([]);
   const [gemOfDay, setGemOfDay] = useState<GemData | null>(null);
-  const [gemOfWeek, setGemOfWeek] = useState<GemData | null>(null);
+  const [componentGems, setComponentGems] = useState<Record<string, GemData> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -1951,10 +1965,10 @@ function SourcingPageInner() {
 
   const fetchData = async () => {
     try {
-      const [listingsRes, dayRes, weekRes, queueRes] = await Promise.all([
+      const [listingsRes, dayRes, componentRes, queueRes] = await Promise.all([
         fetch(`/api/gem-radar/scored-listings-latest-run`),
         fetch(`/api/gem-radar/gem-of-day`),
-        fetch(`/api/gem-radar/gem-of-week`),
+        fetch(`/api/gem-radar/gem-by-component`),
         fetch(`/api/gem-radar/queue-status`),
       ]);
 
@@ -1975,9 +1989,9 @@ function SourcingPageInner() {
         const data = await dayRes.json();
         setGemOfDay(data);
       }
-      if (weekRes.ok) {
-        const data = await weekRes.json();
-        setGemOfWeek(data);
+      if (componentRes.ok) {
+        const data = await componentRes.json();
+        setComponentGems(data);
       }
       if (queueRes.ok) {
         const data = await queueRes.json();
@@ -2109,7 +2123,7 @@ function SourcingPageInner() {
           <>
             <MarketSnapshotPanel snapshot={marketSnapshot} />
             <PipelineDashboard queueStatus={queueStatus} />
-            <StatsTab listings={listings} gemOfDay={gemOfDay || undefined} gemOfWeek={gemOfWeek || undefined} />
+            <StatsTab listings={listings} gemOfDay={gemOfDay || undefined} componentGems={componentGems || undefined} />
           </>
         )}
         {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} />}
