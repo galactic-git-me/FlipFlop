@@ -400,11 +400,39 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
     }
     delivery_method = shipping_labels.get(build.shipping_method, build.shipping_method or "Not set")
 
+    # Extract photo URLs from build.photos (list of {url, kind} objects)
+    photos = build.photos or []
+    photo_urls = {}
+    for photo in photos:
+        if isinstance(photo, dict) and "url" in photo:
+            kind = photo.get("kind", "photo")
+            if kind not in photo_urls:  # Use first photo of each kind
+                photo_urls[kind] = photo["url"]
+
+    # Map photo kinds to template variable names
+    image_urls = {
+        "hero": photo_urls.get("photo", ""),  # Default photos are hero shots
+        "interior": photo_urls.get("interior", ""),
+        "component": photo_urls.get("component", ""),
+        "case": photo_urls.get("case", ""),
+        "connectivity": photo_urls.get("connectivity", ""),
+        "portal": photo_urls.get("portal", ""),
+    }
+
     materials = f"""ITEM TYPE: Desktop PC
 BRAND: flipflop
 PRODUCT NAME: {build.name}
 EBAY CATEGORY: PC Desktops & All-in-Ones
 CONDITION SELECTION: {build.ebay_condition or "Not set"}
+
+BUILD PHOTO URLs (fill {{{{PLACEHOLDER}}}} variables with these):
+- HERO_IMAGE_URL: {image_urls['hero']}
+- INTERIOR_IMAGE_URL: {image_urls['interior']}
+- COMPONENT_CALLOUT_IMAGE_URL: {image_urls['component']}
+- CASE_DETAIL_IMAGE_URL: {image_urls['case']}
+- REAR_CONNECTIVITY_IMAGE_URL: {image_urls['connectivity']}
+- OWNER_PORTAL_IMAGE_URL: {image_urls['portal']}
+- FLIPFLOP_LOGO_URL: https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png
 
 FULL SPECIFICATIONS:
 {component_text}
