@@ -446,7 +446,7 @@ async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str
             client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
             resp = await client.messages.create(
                 model="claude-haiku-4-5-20251001",
-                max_tokens=4000,
+                max_tokens=8192,
                 system=[
                     {
                         "type": "text",
