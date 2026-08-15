@@ -1072,7 +1072,7 @@ async def submit_sold_comps(
     data source feeding the existing pipeline. Auctions and listings with no
     resolvable identity/model or unreliable condition are skipped rather
     than stored as noise."""
-    from app.gem_radar.benchmarks import normalize_match_key
+    from app.gem_radar.benchmarks import normalize_match_key, _get_cpk_for_match_key
     from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 
     inserted = 0
@@ -1093,9 +1093,12 @@ async def submit_sold_comps(
             # parts_only / untested / unknown -- not a reliable market-price signal
             skipped += 1
             continue
+        match_key = normalize_match_key(identity.model)
+        cpk = await _get_cpk_for_match_key(db, match_key)
         db.add(
             GemRadarSoldObservation(
-                match_key=normalize_match_key(identity.model),
+                match_key=match_key,
+                cpk=cpk,
                 condition=condition,
                 price=comp.item_price,
                 postage=comp.postage_price,
