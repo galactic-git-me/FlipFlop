@@ -22,16 +22,23 @@ export function PriceHistorySparkline({ listingId }: PriceHistorySparklineProps)
   useEffect(() => {
     const fetchPriceHistory = async () => {
       try {
-        const response = await fetch(
-          `/api/listings/${encodeURIComponent(listingId)}/price-history`
-        );
+        const url = `/api/listings/${encodeURIComponent(listingId)}/price-history`;
+        console.log("Fetching price history:", url);
+
+        const response = await fetch(url);
+        console.log("Response status:", response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log("Price history data:", data);
           setListingPrices(data.listingPrices || []);
           setCpkPrices(data.cpkPrices || []);
+        } else {
+          const errorText = await response.text();
+          console.error(`Failed to fetch (${response.status}):`, errorText);
         }
       } catch (error) {
-        console.error(`Failed to fetch price history for ${listingId}:`, error);
+        console.error(`Error fetching price history for ${listingId}:`, error);
       } finally {
         setIsLoading(false);
       }

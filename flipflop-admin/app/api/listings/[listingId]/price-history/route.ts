@@ -47,7 +47,7 @@ export async function GET(
   } catch (error) {
     console.error(`Error fetching price history for ${listingId}:`, error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: String(error) },
       { status: 500 }
     );
   }
