@@ -148,39 +148,38 @@ Extract ONLY what is shown on the spec card. Do not guess or fill in blanks.
 
 ## HTML DESIGN REQUIREMENTS
 
-Use the flipflop premium template (ebay_listing_template.html) and fill in these template variables with build-specific content:
+Use the flipflop premium template (ebay_listing_template.html) — it contains all 11 sections pre-structured with inline CSS, responsive breakpoints, and brand styling. Fill in only these template variables:
 
-**Image URLs:**
+**Image URLs to replace:**
 - {{HERO_IMAGE_URL}} — Full-width PC photo at top
+- {{FLIPFLOP_LOGO_URL}} — FlipFlop brand logo (hero intro section)
 - {{INTERIOR_IMAGE_URL}} — Interior or detail shot
 - {{COMPONENT_CALLOUT_IMAGE_URL}} — Key components overview
 - {{CASE_DETAIL_IMAGE_URL}} — Case/chassis showcase
 - {{REAR_CONNECTIVITY_IMAGE_URL}} — Rear ports and I/O
 - {{OWNER_PORTAL_IMAGE_URL}} — Owner portal screenshot
 
-**Text Content:**
+**Text Content to replace:**
 - {{PC_NAME}} — The unique name (e.g., PROMETHEUS)
-- {{TAGLINE}} — Short 2–4 word strapline (e.g., "1440p power. Built to be admired.")
-- {{HERO_DESCRIPTION}} — 2–3 sentence overview of the PC
-- {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} — Top 4 specs
-- {{FLIPFLOP_BENEFITS}} — HTML list of 6–7 flipflop benefits (see template structure)
-- {{WHY_STANDS_OUT}} — 3–4 benefit-led paragraphs
-- {{CASE_NAME}} — Full case model/name
-- {{CASE_DESCRIPTION}} — 1–2 sentence description of case design
-- {{SPECIFICATION_TABLE}} — Full 2-column spec table (see template format)
-- {{CONNECTIVITY_DESCRIPTION}} — 1–2 sentence description of connectivity options
-- {{BEST_SUITED_FOR}} — 2×3 grid of use-case scenarios
-- {{CTA_DESCRIPTION}} — Final call-to-action copy (2–3 sentences)
+- {{TAGLINE}} — Short strapline (e.g., "1440p power. Built to be admired.")
+- {{HERO_DESCRIPTION}} — 2–3 sentence overview of the PC and its capabilities
 
-**Template Structure:**
-The template includes:
-- Responsive CSS with mobile breakpoints
-- Proper spacing and typography
-- Orange (#FF6700) and blue (#008CFF) brand accents
-- All sections pre-formatted and styled
-- Inline styles only (no external sheets)
+**Key Spec Grid (4 cards):**
+- {{PROCESSOR}} — CPU name/model
+- {{GRAPHICS}} — GPU name/VRAM
+- {{MEMORY}} — RAM capacity
+- {{STORAGE}} — Storage type/capacity
 
-Simply replace each {{VARIABLE}} with the exact, build-specific content. Do NOT add or remove sections — use the template structure as-is.
+**Section-specific text (do NOT modify HTML structure):**
+All other text content (spec table rows, use-case grid, benefit descriptions, etc.) is already in the template—update only the values, never the HTML structure.
+
+**Critical rules:**
+- Do NOT add or remove any HTML sections — the template is the complete structure
+- Do NOT modify CSS or responsive classes — use inline styles already present
+- Do NOT add markdown, special characters, or external scripts
+- All image URLs must be real (not placeholder text)
+- Use only flipflop brand images: https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png and https://theflipflop.shop/media/logo_simple.png
+- For PC photos, use the exact URLs from the build data—do NOT invent URLs
 
 ## OUTPUT FORMAT
 
