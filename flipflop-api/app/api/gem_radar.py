@@ -920,21 +920,27 @@ async def get_runs_summary(
     if not active_ids:
         return []
 
+    from app.models.gem_radar_listing_observation import GemRadarListingObservation
+
     rows = (
         await db.execute(
             select(
-                GemRadarScoredListing.search_run_id,
-                func.min(GemRadarScoredListing.scored_at).label("run_at"),
-                func.count().label("total"),
+                GemRadarListingObservation.search_run_id,
+                func.min(GemRadarListingObservation.observed_at).label("run_at"),
+                func.count(GemRadarListingObservation.listing_id).label("total"),
                 func.sum(case((GemRadarScoredListing.classification == "GEM", 1), else_=0)).label("gem_count"),
                 func.sum(case((GemRadarScoredListing.classification == "SUPER_GEM", 1), else_=0)).label("super_gem_count"),
             )
-            .where(
-                GemRadarScoredListing.search_run_id.is_not(None),
-                GemRadarScoredListing.listing_id.in_(active_ids),
+            .outerjoin(
+                GemRadarScoredListing,
+                GemRadarListingObservation.listing_id == GemRadarScoredListing.listing_id,
             )
-            .group_by(GemRadarScoredListing.search_run_id)
-            .order_by(func.min(GemRadarScoredListing.scored_at).desc())
+            .where(
+                GemRadarListingObservation.search_run_id.is_not(None),
+                GemRadarListingObservation.listing_id.in_(active_ids),
+            )
+            .group_by(GemRadarListingObservation.search_run_id)
+            .order_by(func.min(GemRadarListingObservation.observed_at).desc())
             .limit(limit)
         )
     ).all()
