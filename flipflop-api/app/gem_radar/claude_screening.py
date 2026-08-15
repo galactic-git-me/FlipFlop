@@ -231,7 +231,7 @@ async def _openrouter_tool_call(
                     "https://openrouter.ai/api/v1/chat/completions",
                     headers={
                         "Authorization": f"Bearer {settings.openrouter_api_key}",
-                        "HTTP-Referer": "http://localhost:3000",
+                        "HTTP-Referer": settings.frontend_url,
                         "X-Title": "FlipFlop Gem Radar",
                     },
                     json={

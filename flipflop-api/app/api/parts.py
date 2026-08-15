@@ -331,7 +331,7 @@ If no PC components are found in the text, return an empty array: []"""
                     "https://openrouter.ai/api/v1/chat/completions",
                     headers={
                         "Authorization": f"Bearer {_s.openrouter_api_key}",
-                        "HTTP-Referer": "http://localhost:3000",
+                        "HTTP-Referer": _s.frontend_url,
                         "X-Title": "PC Flipper Paste Scanner",
                     },
                     json={

@@ -124,7 +124,7 @@ async def evaluate_part(part_data: dict) -> PartGemResult | None:
                         "https://openrouter.ai/api/v1/chat/completions",
                         headers={
                             "Authorization": f"Bearer {_s.openrouter_api_key}",
-                            "HTTP-Referer": "http://localhost:3000",
+                            "HTTP-Referer": _s.frontend_url,
                             "X-Title": "PC Flipper Parts Gem Evaluator",
                         },
                         json={

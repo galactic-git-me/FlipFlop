@@ -72,6 +72,64 @@ def _load_selling_principles() -> str:
         return ""
 
 
+def _load_ebay_listing_system_prompt() -> str:
+    """Read fresh on every call so edits to the file take effect immediately."""
+    return _EBAY_LISTING_SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
+
+
+def _extract_section(text: str, start_marker: str, end_markers: list[str]) -> str:
+    """Extract text between a section header and whichever of the given
+    next-section headers appears first — tolerant of the model reformatting
+    the exact separator characters around each header."""
+    m = re.search(re.escape(start_marker), text, re.IGNORECASE)
+    if not m:
+        return ""
+    start = m.end()
+    end = len(text)
+    for marker in end_markers:
+        m2 = re.search(re.escape(marker), text[start:], re.IGNORECASE)
+        if m2:
+            end = min(end, start + m2.start())
+    return text[start:end].strip()
+
+
+def _extract_recommended_title(text: str) -> str | None:
+    section = _extract_section(text, "B. RECOMMENDED EBAY TITLE", ["C. CONDITION DESCRIPTION"])
+    if not section:
+        return None
+    for line in section.splitlines():
+        if "RECOMMENDED" in line.upper():
+            cleaned = re.sub(r"RECOMMENDED", "", line, flags=re.IGNORECASE)
+            cleaned = re.sub(r"^[\s\-\*\d\.\)\"']+", "", cleaned)
+            cleaned = re.sub(r"[\"']?\s*\(?\d+\s*characters?\)?\s*$", "", cleaned, flags=re.IGNORECASE)
+            cleaned = cleaned.strip(" -\"'\t")
+            if cleaned:
+                return cleaned
+    # Fallback: first plausible title-looking line in the section.
+    for line in section.splitlines():
+        stripped = line.strip(" -*\"'\t")
+        if stripped and len(stripped) < 90 and not stripped.isupper():
+            return stripped
+    return None
+
+
+def _extract_html_section(text: str) -> str | None:
+    section = _extract_section(
+        text,
+        "F. COMPLETE BRANDED EBAY HTML DESCRIPTION",
+        ["G. INFORMATION REQUIRED", "H. FINAL PUBLICATION CHECK"],
+    )
+    if not section:
+        return None
+    fenced = re.search(r"```(?:html)?\s*(.*?)```", section, re.DOTALL | re.IGNORECASE)
+    if fenced:
+        return fenced.group(1).strip()
+    tag_match = re.search(r"<(div|html|!doctype)", section, re.IGNORECASE)
+    if tag_match:
+        return section[tag_match.start():].strip()
+    return section.strip() or None
+
+
 @router.post("/", response_model=ManualBuildOut, status_code=201)
 async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_db)):
     build = ManualBuild(name=body.name, components=[], total_cost=None)
@@ -305,197 +363,78 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
         lines.append(f"  - {slot}: {name}")
     component_text = "\n".join(lines)
 
+    system_prompt = _load_ebay_listing_system_prompt()
     selling_principles = _load_selling_principles()
-    principles_block = f"\n\nFollow these selling principles when writing the title and description:\n\n{selling_principles}\n" if selling_principles else ""
 
-    aspect_names = ", ".join(_EBAY_CATEGORY_179_ASPECTS)
+    # This build's own evidence images — spec card, registration plate and
+    # performance card renders are tagged with dedicated `kind` values on
+    # upload (see /photos and /photos/branded) specifically so they can be
+    # found per-build rather than relying on any shared/global file.
+    photos = build.photos or []
+    spec_card_urls = [p["url"] for p in photos if p.get("kind") == "spec_card"]
+    registration_plate_urls = [p["url"] for p in photos if p.get("kind") == "registration_plate"]
+    performance_card_urls = [p["url"] for p in photos if p.get("kind") == "performance_card"]
+    image_urls = spec_card_urls + registration_plate_urls + performance_card_urls
 
-    prompt = f"""Generate STUNNING, PREMIUM eBay listing content for this second-hand PC build for the UK market. This description must STAND OUT and DAZZLE buyers. Here are its components:
-
-{component_text}
-{principles_block}
-
-DESIGN BRIEF: Create a LUXURY listing that makes buyers say "WOW" — premium feel, flawless execution, professional excellence. USE FLIPFLOP BRAND COLORS THROUGHOUT.
-
-TECHNICAL REQUIREMENTS:
-1. Pure HTML + inline styles ONLY (no <style> blocks — eBay strips them)
-2. Semantic tags: <h1>, <h2>, <h3>, <p>, <div>, <ul>, <li>, <strong>, <em>, <hr>
-3. NO markdown, NO asterisks, NO casual language
-4. INCLUDE FlipFlop logo in hero section if available
-
-STUNNING DESIGN SYSTEM:
-Color Palette (FlipFlop brand identity):
-- PRIMARY: #0066FF (vibrant FlipFlop blue — use for headings, borders, sections)
-- ACCENT: #FF6600 (warm FlipFlop orange — use for highlights, premium specs, CTAs)
-- SUCCESS: #28A745 (confident green for "TESTED" badges)
-- DARK: #1a1a1a (rich black for contrast)
-- LIGHT: #F5F5F5 (clean white)
-
-Visual Hierarchy & Effects:
-1. HERO SECTION (top) — Use FlipFlop brand gradient:
-   <div style="background:linear-gradient(135deg, #0066FF 0%, #FF6600 100%);color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;">
-   - FlipFlop logo or brand name at top (if available)
-   - Main headline: Large, bold, white text
-   - Tagline: Professional positioning statement
-   - Use padding and centered alignment for impact
-
-2. FLIPFLOP LOGO PLACEMENT (Hero):
-   Include the FlipFlop logo at the top-right or center of the hero section. Use these logos:
-   - Recommended (glow effect): https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png
-   - Alternative (simple): https://theflipflop.shop/media/logo_simple.png
-   - Additional: https://theflipflop.shop/media/logo5.png
-   Format: <img src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" style="max-height:60px;margin-bottom:15px;"/>
-
-3. FEATURED IMAGE AREA:
-   <p style="text-align:center;margin:30px 0;">[PRODUCT IMAGES WILL BE INSERTED HERE - CENTER ALIGNED]</p>
-
-4. KEY HIGHLIGHTS SECTION:
-   - 3-4 major selling points in a visually distinct box
-   - Use background-color:#F5F5F5 with padding for visual separation
-   - Use <strong> with color:#0066FF for key stats
-   - Highlight premium points with color:#FF6600
-   - Format: "▸ Benefit statement with specs"
-
-5. SPECIFICATIONS SECTION:
-   - Organize by component category (CPU, GPU, RAM, Storage, Motherboard, Power, Cooling)
-   - Each spec in a clean, scannable list format
-   - Use <strong> tags with strategic color changes (#0066FF for main, #FF6600 for premium)
-   - Highlight premium/high-end components with color:#FF6600 (FlipFlop orange)
-   - Use borders (color:#0066FF) to separate premium specs from standard ones
-
-5. CONDITION & TESTING SECTION:
-   - Bold, centered statement with color:#28A745
-   - "✓ FULLY TESTED & VERIFIED" in large, confident text
-   - Add details about testing process
-
-6. FLIPFLOP PREMIUM BADGE:
-   - Create a visual "badge" effect using FlipFlop brand colors:
-   <div style="background:linear-gradient(135deg, #FF6600 0%, #0066FF 100%);color:white;padding:15px;margin:20px 0;border-left:4px solid #FF6600;font-weight:bold;text-align:center;">
-   - FlipFlop branding
-   - Trust messaging
-   - Quality guarantee
-   - Support statement
-
-7. BENEFITS FOR BUYER TYPE:
-   - Section explaining why this machine is PERFECT for their needs
-   - Use #0066FF accents for section headers
-   - Use #FF6600 for highlighted benefits
-
-8. SHIPPING & LOGISTICS:
-   - Clean, professional formatting with #0066FF accents
-   - Highlight speed and reliability in #FF6600
-
-9. FINAL CALL-TO-ACTION:
-   - Bold, centered, memorable using FlipFlop colors
-   - Use gradient: background linear-gradient(135deg, #FF6600 0%, #0066FF 100%)
-   - Make it impossible to miss
-   - Example: Large bold white text in FlipFlop gradient box
-
-STYLING TECHNIQUES TO MAXIMIZE IMPACT:
-- Use padding/margin generously (20-30px) for breathing room
-- Center-align headlines and important statements
-- Use left borders (4px) in #0066FF to highlight premium specs, #FF6600 for ultra-premium
-- Use background colors to create visual "cards" or sections
-- Vary font sizes significantly for hierarchy (use inline style="font-size:18px" for emphasis)
-- Use line-height:1.8 for body text (easier to read, more premium feel)
-- Bold premium/high-end components with #FF6600 (FlipFlop orange)
-- Create visual separation between sections with <hr style="border-color:#0066FF;margin:20px 0;">
-- Use FlipFlop brand gradient (linear-gradient(135deg, #0066FF 0%, #FF6600 100%)) for hero sections and CTAs
-- Every section should feel connected to the FlipFlop brand identity
-
-TONE:
-- Confident, not pushy
-- Premium positioning throughout
-- Professional, sophisticated language
-- Every section must feel intentional and valuable
-- Make the reader FEEL the quality
-
-STRUCTURE:
-1. Hero section with striking headline
-2. Origin story / About FlipFlop (NEW):
-   - Brief paragraph explaining: "I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality and performance. Now I'm turning that passion into FlipFlop — a startup dedicated to crafting and delivering premium custom-built PCs to discerning buyers who demand the very best."
-   - This builds credibility and differentiates from typical resellers
-   - Keep it authentic but professional
-3. [IMAGES PLACEHOLDER]
-4. Key highlights (visually distinct)
-5. Detailed specifications (well-organized)
-6. Condition & testing assurance
-7. FlipFlop premium badge & trust messaging
-8. Why this machine is perfect for the buyer
-9. Shipping details
-10. Bold, memorable call-to-action
-
-Respond with ONLY valid JSON (no markdown, no code fences):
-{{
-  "titles": ["Premium title 1", "Premium title 2", "Premium title 3"],
-  "description": "<div style=\\"background:linear-gradient(135deg, #0066FF 0%, #FF6600 100%);color:white;padding:30px;border-radius:8px;text-align:center;margin-bottom:20px;\\"><p style=\\"margin:0 0 15px 0;font-size:12px;font-weight:bold;letter-spacing:2px;\\">FLIPFLOP PREMIUM BUILD</p><h1 style=\\"margin:0;font-size:28px;font-weight:900;\\">Premium Gaming PC - Expertly Built</h1><p style=\\"margin:10px 0 0 0;font-size:14px;\\">Handcrafted by an experienced software engineer</p></div><p style=\\"background-color:#F5F5F5;padding:20px;border-left:4px solid #FF6600;margin:20px 0;line-height:1.8;\\"><strong style=\\"color:#0066FF;\\">About FlipFlop:</strong> I'm an experienced software engineer who has built countless high-performance PCs for friends and family over the years. Those builds became legendary for quality, reliability, and raw performance. Now I'm turning that passion into <strong style=\\"color:#FF6600;\\">FlipFlop</strong> — a startup dedicated to crafting and delivering premium custom-built systems to discerning buyers who demand excellence.</p><p style=\\"text-align:center;margin:30px 0;\\\">[FLIPFLOP LOGO AND PRODUCT IMAGES WILL BE INSERTED HERE]</p><h2 style=\\"color:#0066FF;margin-top:30px;\\">Premium Specifications</h2><p style=\\"border-left:4px solid #0066FF;padding-left:15px;margin:15px 0;\\">Every component selected for performance and quality. <span style=\\"color:#FF6600;font-weight:bold;\\">Premium parts highlighted in orange.</span></p><div style=\\"background-color:#F5F5F5;padding:20px;margin:20px 0;border-radius:8px;border-left:4px solid #FF6600;\\\">[REST OF DESCRIPTION CONTINUES WITH SPECS, HIGHLIGHTS, FLIPFLOP BADGE, CTA...]</div>",
-  "aspects": {{...}}
-}}
-
-Also generate eBay Item Specifics ("aspects") for category 179 (PC Desktops
-& All-in-Ones). Fill in every aspect below that genuinely applies to a
-desktop tower, inferring values from the components listed above (e.g.
-"Processor" from the CPU component, "GPU" from the graphics card, "RAM
-Size" from the memory component, "Storage Type"/"SSD Capacity" from the
-storage component, "Form Factor" from the case). Use "Not Included" or a
-reasonable default only when a field is genuinely unknown — never leave an
-applicable field blank. Omit only aspects that don't apply to a desktop
-tower at all (e.g. "Screen Size", "Unit Quantity", "Unit Type").
-
-Available aspects: {aspect_names}
-
-Respond with ONLY valid JSON (no markdown, no code fences) in this exact format:
-{{
-  "titles": [
-    "Title option 1 (max 80 chars, keyword-rich, professional)",
-    "Title option 2 (max 80 chars, different positioning)",
-    "Title option 3 (max 80 chars, alternative focus)"
-  ],
-  "description": "<p>Opening hook about performance and quality.</p><p>[IMAGES WILL BE INSERTED HERE]</p><h2 style=\\"color:#0066cc\\">Premium Specifications</h2><ul><li><strong>CPU:</strong> [Component]</li><li><strong>GPU:</strong> [Component]</li></ul><h2 style=\\"color:#0066cc\\">Condition & Testing</h2><p><strong style=\\"color:#16a34a\\">FULLY TESTED</strong> and ready for immediate use.</p><p>Backed by FlipFlop's quality guarantee. Ships within 1-2 business days.</p><p style=\\"color:#0066cc\\"><strong>Ready to experience premium PC performance? Bid now!</strong></p>",
-  "aspects": {{
-    "Brand": "FlipFlop",
-    "Type": "Desktop",
-    "Processor": "...",
-    "GPU": "...",
-    "RAM Size": "...",
-    "...": "one value per applicable aspect from the list above"
-  }}
-}}"""
-
-    response_text, _model = await ai_service.chat(prompt, history=[])
-    if _model == "none":
-        raise HTTPException(503, response_text)
-
-    raw = response_text.strip()
-    raw = re.sub(r"^```(?:json)?\s*", "", raw)
-    raw = re.sub(r"\s*```$", "", raw)
-
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", raw, re.DOTALL)
-        if not match:
-            raise HTTPException(502, f"LLM returned unparseable response: {raw[:200]}")
-        data = json.loads(match.group())
-
-    titles = data.get("titles", [])
-    description = data.get("description", "")
-    aspects = data.get("aspects", {})
-    # eBay's aspects format is {name: [values]} — normalize single strings to lists.
-    normalized_aspects = {
-        k: (v if isinstance(v, list) else [str(v)])
-        for k, v in aspects.items()
-        if v not in (None, "", [])
+    shipping_labels = {
+        "tracked": "Tracked courier delivery",
+        "untracked": "Untracked delivery",
+        "local_pickup": "Local pickup",
     }
-    build.generated_aspects = normalized_aspects
+    delivery_method = shipping_labels.get(build.shipping_method, build.shipping_method or "Not set")
 
-    if titles:
-        build.generated_title = titles[0][:80]
-    build.generated_description = description
+    materials = f"""ITEM TYPE: Desktop PC
+BRAND: flipflop
+PRODUCT NAME: {build.name}
+EBAY CATEGORY: PC Desktops & All-in-Ones
+CONDITION SELECTION: {build.ebay_condition or "Not set"}
+
+FULL SPECIFICATIONS:
+{component_text}
+
+SPECIFICATION CARD INCLUDED: {"Yes — attached as an image" if spec_card_urls else "No"}
+REGISTRATION PLATE INCLUDED: {"Yes — attached as an image" if registration_plate_urls else "No"}
+
+TESTS COMPLETED: {"Performance card attached as image(s) below — extract benchmark, temperature and stability results directly from it" if performance_card_urls else "None supplied"}
+
+RETURNS POLICY: {f"{build.return_days} day returns" if build.return_days else "No returns"}
+
+DELIVERY METHOD: {delivery_method}
+DISPATCH TIME: {build.handling_time_days} business day(s)
+COLLECTION AVAILABLE: No — delivery only, collection is never offered on any listing
+COLLECTION TESTING AVAILABLE: Not applicable — no collection offered
+
+PRICE: {f"£{build.ebay_price}" if build.ebay_price else "Not yet set"}
+BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
+"""
+
+    if selling_principles:
+        materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style — follow alongside the system instructions above):\n{selling_principles}\n"
+
+    raw_response, _model = await ai_service.chat_with_images(system_prompt, materials, image_urls)
+    if _model == "none":
+        raise HTTPException(503, raw_response)
+
+    title = _extract_recommended_title(raw_response)
+    description_html = _extract_html_section(raw_response)
+
+    if not title or not description_html:
+        raise HTTPException(
+            502,
+            "The AI response didn't include a parseable title or HTML section — "
+            f"raw response (first 800 chars): {raw_response[:800]}",
+        )
+
+    build.generated_title = title[:80]
+    build.generated_description = description_html
     build.updated_at = datetime.utcnow()
     await db.flush()
 
-    return GenerateListingResult(titles=titles, description=description, aspects=normalized_aspects)
+    return GenerateListingResult(
+        titles=[title],
+        description=description_html,
+        aspects=build.generated_aspects or {},
+    )
 
 
 @router.post("/{build_id}/generate-specifics", response_model=GenerateListingResult)
