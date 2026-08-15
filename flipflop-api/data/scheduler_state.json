@@ -45,13 +45,13 @@
     "last_success_at": "2026-08-15T05:54:21.209036+00:00"
   },
   "catalogue_digest": {
-    "last_success_at": "2026-08-14T07:00:00.008542+00:00"
+    "last_success_at": "2026-08-15T07:00:00.018838+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-08-15T06:20:31.438723+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-15T06:52:41.264651+00:00"
+    "last_success_at": "2026-08-15T06:57:41.260096+00:00"
   },
   "ebay_sales_tracker": {
     "last_success_at": "2026-08-15T06:38:40.807463+00:00"
