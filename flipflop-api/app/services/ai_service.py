@@ -310,7 +310,7 @@ async def _openrouter_chat(messages: list[dict], model: str, api_key: str | None
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
                 "Authorization": f"Bearer {key}",
-                "HTTP-Referer": "http://localhost:3000",
+                "HTTP-Referer": settings.frontend_url,
                 "X-Title": "PC Flipper Hermes",
             },
             json={

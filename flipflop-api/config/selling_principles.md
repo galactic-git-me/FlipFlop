@@ -74,5 +74,6 @@ Edit this file any time; changes take effect on the next listing generated
 ## Shipping (heavy/fragile item)
 
 - A PC tower is heavy and easy to damage in transit — budget realistic
-  packaging (foam/padding around the GPU especially) and be upfront
-  about local-pickup vs courier options in the listing.
+  packaging (foam/padding around the GPU especially).
+- Delivery only — courier/tracked shipping. Never mention local pickup
+  or collection as an option anywhere in the listing; it is not offered.
