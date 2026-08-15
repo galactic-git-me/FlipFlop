@@ -998,7 +998,7 @@ def _is_reasonable_price(category: str, price: float) -> bool:
 
 def _is_server_hardware(title: str, category: str) -> bool:
     """Detect professional/server hardware that won't flip in consumer markets.
-    These are excluded from gem consideration.
+    These are excluded from gem consideration. Priority 2 expansion.
     """
     server_keywords = [
         "tesla",           # NVIDIA Tesla accelerators
@@ -1007,6 +1007,8 @@ def _is_server_hardware(title: str, category: str) -> bool:
         "xeon",            # Intel Xeon server CPUs
         "epyc",            # AMD EPYC server CPUs
         "supermicro",      # Supermicro server hardware
+        "prohliant",       # HP ProLiant servers
+        "proliant",        # HP ProLiant (alt spelling)
         "ecc",             # ECC server RAM
         "udimm for",       # Server-specific RAM
         "rtx ada",         # RTX Ada professional (not consumer gaming)
@@ -1014,6 +1016,18 @@ def _is_server_hardware(title: str, category: str) -> bool:
         "data center",
         "server gpu",
         "accelerator",
+        "x13scq",          # Supermicro model numbers
+        "x13sae",
+        "x13scb",
+        "x13sca",
+        "x13scc",
+        "x13sch",
+        "thinkstation",    # Lenovo ThinkStation workstations
+        "k40",             # NVIDIA K40 server GPU
+        "k80",             # NVIDIA K80 server GPU
+        "p5000",           # NVIDIA P5000 professional GPU
+        "p6000",           # NVIDIA P6000 professional GPU
+        "a100",            # NVIDIA A100 accelerator (already covered by tesla but be explicit)
     ]
     title_lower = title.lower()
     return any(keyword in title_lower for keyword in server_keywords)
@@ -1048,24 +1062,80 @@ def _is_complete_system(title: str) -> bool:
         "pc bundle",
         "system bundle",
         "optiplex",  # Dell prebuilts
-        "proliant",  # HP prebuilts
     ]
     title_lower = title.lower()
     return any(keyword in title_lower for keyword in system_keywords)
 
 
-def _is_obsolete_socket(title: str) -> bool:
-    """Detect obsolete CPU sockets (>6 years old) with no upgrade path."""
-    obsolete_sockets = [
-        "lga1155",  # 2012
-        "lga1150",  # 2014
-        "am3+",     # 2012
-        "am2",      # 2006
-        "fm1",      # 2011
-        "lga775",   # 2004
-    ]
+def _is_bundled_components(title: str) -> bool:
+    """Detect bundled component packs (CPU+Cooler, Mobo+CPU) — not for resale as individual parts.
+    Priority 2 filter.
+    """
+    # Look for bundle indicators
+    bundle_indicators = [" + ", " with ", "combo", "bundle", "package", "kit"]
     title_lower = title.lower()
-    return any(socket in title_lower for socket in obsolete_sockets)
+    has_indicator = any(indicator in title_lower for indicator in bundle_indicators)
+
+    if not has_indicator:
+        return False
+
+    # Must have at least 2 component types to be a real bundle
+    component_types = {
+        "cpu": ["cpu", "processor", "ryzen", "core i", "xeon", "epyc"],
+        "cooler": ["cooler", "cpu fan", "aio", "liquid cooling", "heatsink"],
+        "gpu": ["gpu", "graphics", "video card"],
+        "motherboard": ["motherboard", "mobo", "mainboard"],
+        "ram": ["ram", "memory", "ddr"],
+        "ssd": ["ssd", "nvme", "m.2"],
+        "psu": ["psu", "power supply", "pcie"],
+    }
+
+    found_types = 0
+    for comp_type, keywords in component_types.items():
+        if any(kw in title_lower for kw in keywords):
+            found_types += 1
+
+    return found_types >= 2  # Bundle if has 2+ component types
+
+
+def _is_obsolete_socket(title: str) -> bool:
+    """Detect obsolete CPU sockets (>6 years old) with no upgrade path. Priority 2 expansion."""
+    # Sockets (old)
+    obsolete_sockets = [
+        "lga1155",  # 2012 (Sandy/Ivy Bridge)
+        "lga1150",  # 2014 (Haswell)
+        "lga1156",  # 2010 (Nehalem)
+        "am3+",     # 2012 (FX/Bulldozer)
+        "am2",      # 2006 (Athlon64)
+        "am2+",     # 2007
+        "fm1",      # 2011 (APU)
+        "fm2",      # 2012 (APU)
+        "lga775",   # 2004 (Pentium4)
+        "lga1366",  # 2008 (X58)
+    ]
+
+    # CPU models that are dead-end
+    obsolete_cpus = [
+        "i5-6",     # Skylake (2015)
+        "i7-6",     # Skylake (2015)
+        "fx-8",     # Bulldozer (2012)
+        "fx-9",     # Piledriver (2013)
+        "a10-",     # Old APUs
+        "a8-",      # Old APUs
+        "ryzen 1",  # Ryzen Gen 1 (2017)
+    ]
+
+    title_lower = title.lower()
+
+    # Check sockets
+    if any(socket in title_lower for socket in obsolete_sockets):
+        return True
+
+    # Check CPU models
+    if any(cpu in title_lower for cpu in obsolete_cpus):
+        return True
+
+    return False
 
 
 async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
@@ -1091,7 +1161,8 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
             or not _has_valid_category(best.category)  # BLOCKING: invalid category
             or _is_server_hardware(best.title, best.category)  # BLOCKING: server hardware
             or _is_complete_system(best.title)  # BLOCKING: prebuilt systems
-            or _is_obsolete_socket(best.title)  # BLOCKING: obsolete sockets
+            or _is_bundled_components(best.title)  # BLOCKING: bundled components (P2)
+            or _is_obsolete_socket(best.title)  # BLOCKING: obsolete sockets (P2)
         ):
             best = None
     else:
@@ -1105,7 +1176,9 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
                 continue
             if _is_complete_system(candidate.title):  # Prebuilt systems
                 continue
-            if _is_obsolete_socket(candidate.title):  # Obsolete sockets
+            if _is_bundled_components(candidate.title):  # Bundled component packs (P2)
+                continue
+            if _is_obsolete_socket(candidate.title):  # Obsolete sockets (P2 expanded)
                 continue
 
             # Existing filters
