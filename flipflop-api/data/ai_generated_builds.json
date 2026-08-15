@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-15T14:22:28.809788+00:00",
+  "generated_at": "2026-08-15T15:22:36.417691+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -18,7 +18,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7169939,
+          "id": 7187658,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -32,7 +32,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7169617,
+          "id": 7187334,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -46,7 +46,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7171135,
+          "id": 7188452,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -74,7 +74,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -88,7 +88,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -102,7 +102,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -132,18 +132,18 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -157,7 +157,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7169939,
+          "id": 7187658,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -171,7 +171,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7160386,
+          "id": 7178623,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -185,7 +185,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7171135,
+          "id": 7188452,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -199,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -213,7 +213,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -227,7 +227,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -241,7 +241,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -271,18 +271,18 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -296,7 +296,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7169939,
+          "id": 7187658,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -310,7 +310,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7169617,
+          "id": 7187334,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -324,7 +324,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7161904,
+          "id": 7179741,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -338,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -352,7 +352,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -366,7 +366,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -380,7 +380,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -410,18 +410,18 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -435,7 +435,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7169939,
+          "id": 7187658,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -449,7 +449,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7160386,
+          "id": 7178623,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -463,7 +463,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7161904,
+          "id": 7179741,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -477,7 +477,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -491,7 +491,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -505,7 +505,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -519,7 +519,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -549,18 +549,18 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -574,7 +574,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7160708,
+          "id": 7178947,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -588,7 +588,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7169617,
+          "id": 7187334,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -602,7 +602,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7171135,
+          "id": 7188452,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -616,7 +616,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -630,7 +630,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -644,7 +644,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -658,7 +658,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -688,18 +688,18 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 7171317,
+          "id": 7188634,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -713,7 +713,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7160708,
+          "id": 7178947,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -727,7 +727,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7160386,
+          "id": 7178623,
           "listing_id": "375322117883",
           "category": "gpu",
           "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
@@ -741,7 +741,7 @@
           "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7171135,
+          "id": 7188452,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -755,7 +755,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7171752,
+          "id": 7189072,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -769,7 +769,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7167703,
+          "id": 7185420,
           "listing_id": "287507070096",
           "category": "ssd",
           "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
@@ -783,7 +783,7 @@
           "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7168994,
+          "id": 7186709,
           "listing_id": "358875801802",
           "category": "cooler",
           "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
@@ -797,7 +797,7 @@
           "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
-          "id": 7170891,
+          "id": 7188202,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -827,12 +827,12 @@
           "count": 44,
           "min_price": 75.21,
           "max_price": 621.25,
-          "average_price": 299.79
+          "average_price": 292.18
         }
       },
-      "resale_estimate": 299.79,
+      "resale_estimate": 292.18,
       "resale_source": "bin_average",
-      "estimated_profit": 215.17,
+      "estimated_profit": 207.56,
       "rank": 6
     }
   ],
