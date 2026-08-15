@@ -148,38 +148,113 @@ Extract ONLY what is shown on the spec card. Do not guess or fill in blanks.
 
 ## HTML DESIGN REQUIREMENTS
 
-Use the flipflop premium template (ebay_listing_template.html) — it contains all 11 sections pre-structured with inline CSS, responsive breakpoints, and brand styling. Fill in only these template variables:
+Use this exact flipflop premium template. Copy it verbatim, then replace ONLY the {{PLACEHOLDER}} variables with build-specific content. Do NOT modify the HTML structure, CSS, or any tags.
 
-**Image URLs to replace:**
-- {{HERO_IMAGE_URL}} — Full-width PC photo at top
-- {{FLIPFLOP_LOGO_URL}} — FlipFlop brand logo (hero intro section)
-- {{INTERIOR_IMAGE_URL}} — Interior or detail shot
-- {{COMPONENT_CALLOUT_IMAGE_URL}} — Key components overview
-- {{CASE_DETAIL_IMAGE_URL}} — Case/chassis showcase
-- {{REAR_CONNECTIVITY_IMAGE_URL}} — Rear ports and I/O
-- {{OWNER_PORTAL_IMAGE_URL}} — Owner portal screenshot
+```html
+<style>
+.ff-page,.ff-page *{box-sizing:border-box}.ff-page{margin:0;padding:0;background:#0d1015;color:#f5f7fa;font-family:Arial,Helvetica,sans-serif;line-height:1.55}.ff-wrap{width:100%;max-width:1000px;margin:0 auto;background:#0d1015;overflow:hidden}.ff-image{display:block;width:100%;height:auto;border:0}.ff-heading{display:block;width:100%;height:auto;margin:0 0 22px 0;border:0}.ff-section{margin:0 22px 38px;padding:28px 26px}.ff-image-section{padding:0 22px 38px}.ff-card-row{padding:28px 12px;text-align:center;font-size:0}.ff-card{display:inline-block;width:22.5%;min-height:136px;margin:6px 1%;padding:18px 8px;vertical-align:top;background:#171c24;border-top:3px solid #ff6700;font-size:15px}.ff-card:nth-child(even){border-top-color:#008cff}.ff-card-value{margin-top:5px;color:#fff;font-size:17px;font-weight:bold}.ff-benefit{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid #2a3039}.ff-benefit:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}.ff-benefit strong{color:#fff;font-size:16px}.ff-benefit div{margin-top:4px;color:#cbd5e1}.ff-spec-table{width:100%;border-collapse:collapse;color:#fff;font-size:15px}.ff-spec-table td{padding:13px 8px;border-bottom:1px solid #2a3039;vertical-align:top}.ff-spec-table tr:last-child td{border-bottom:0}.ff-spec-label{width:36%;color:#b9c8da}.ff-use-grid{width:100%;border-collapse:collapse;color:#fff;font-size:16px}.ff-use-grid td{width:50%;padding:10px;vertical-align:top}
+@media only screen and (max-width:700px){.ff-section{margin-left:12px!important;margin-right:12px!important;padding-left:17px!important;padding-right:17px!important}.ff-image-section{padding-left:12px!important;padding-right:12px!important}.ff-card{width:46%;margin:6px 2%}.ff-spec-table,.ff-spec-table tbody,.ff-spec-table tr,.ff-spec-table td{display:block;width:100%!important}.ff-spec-table tr{padding:11px 0;border-bottom:1px solid #2a3039}.ff-spec-table td{padding:3px 8px!important;border:0!important}.ff-spec-table td:first-child{color:#159cff!important}.ff-use-grid,.ff-use-grid tbody,.ff-use-grid tr,.ff-use-grid td{display:block;width:100%!important}.ff-use-grid td{padding:8px 0!important}}
+@media only screen and (max-width:420px){.ff-card{display:block;width:100%;min-height:0;margin:9px 0}}
+</style>
 
-**Text Content to replace:**
-- {{PC_NAME}} — The unique name (e.g., PROMETHEUS)
-- {{TAGLINE}} — Short strapline (e.g., "1440p power. Built to be admired.")
-- {{HERO_DESCRIPTION}} — 2–3 sentence overview of the PC and its capabilities
+<div class="ff-page"><div class="ff-wrap">
 
-**Key Spec Grid (4 cards):**
-- {{PROCESSOR}} — CPU name/model
-- {{GRAPHICS}} — GPU name/VRAM
-- {{MEMORY}} — RAM capacity
-- {{STORAGE}} — Storage type/capacity
+<img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}} custom gaming and creative PC">
 
-**Section-specific text (do NOT modify HTML structure):**
-All other text content (spec table rows, use-case grid, benefit descriptions, etc.) is already in the template—update only the values, never the HTML structure.
+<div style="padding:38px 24px;text-align:left;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
+  <img src="{{FLIPFLOP_LOGO_URL}}" alt="flipflop" style="display:block;width:150px;max-width:45%;height:auto;margin:0 0 22px;border:0">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="{{PC_NAME}}">
+  <p style="margin:0 0 12px;color:#ff761a;font-size:22px;font-weight:bold">{{TAGLINE}}</p>
+  <p style="max-width:760px;margin:0;color:#cbd5e1;font-size:17px">{{HERO_DESCRIPTION}}</p>
+</div>
 
-**Critical rules:**
-- Do NOT add or remove any HTML sections — the template is the complete structure
-- Do NOT modify CSS or responsive classes — use inline styles already present
-- Do NOT add markdown, special characters, or external scripts
-- All image URLs must be real (not placeholder text)
-- Use only flipflop brand images: https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png and https://theflipflop.shop/media/logo_simple.png
-- For PC photos, use the exact URLs from the build data—do NOT invent URLs
+<div class="ff-card-row">
+  <div class="ff-card"><div style="font-size:26px">⚙️</div><div style="color:#ff761a;font-size:13px;font-weight:bold">PROCESSOR</div><div class="ff-card-value">{{PROCESSOR}}</div></div>
+  <div class="ff-card"><div style="font-size:26px">🎮</div><div style="color:#159cff;font-size:13px;font-weight:bold">GRAPHICS</div><div class="ff-card-value">{{GRAPHICS}}</div></div>
+  <div class="ff-card"><div style="font-size:26px">🧠</div><div style="color:#ff761a;font-size:13px;font-weight:bold">MEMORY</div><div class="ff-card-value">{{MEMORY}}</div></div>
+  <div class="ff-card"><div style="font-size:26px">💾</div><div style="color:#159cff;font-size:13px;font-weight:bold">STORAGE</div><div class="ff-card-value">{{STORAGE}}</div></div>
+</div>
+
+<div class="ff-section" style="background:#171c24;border-left:4px solid #ff6700">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/what-to-expect.png" alt="What You Can Expect from flipflop">
+  <div class="ff-benefit"><strong>🖥️ Premium, carefully curated build</strong><div>Every component is selected for compatibility, performance, cooling and visual balance.</div></div>
+  <div class="ff-benefit"><strong>🛠️ Individually assembled and tested</strong><div>Built by hand, configured and stability-checked before dispatch.</div></div>
+  <div class="ff-benefit"><strong>🌐 Personalised online owner portal</strong><div>Your complete specification, getting-started guide, useful downloads, support and warranty information in one place.</div></div>
+  <div class="ff-benefit"><strong>🪪 Unique PC name and registration plate</strong><div>{{PC_NAME}} has its own identity and digital registration plate, connected to its personalised owner portal.</div></div>
+  <div class="ff-benefit"><strong>⬆️ Build-specific upgrade path</strong><div>Clear guidance on compatible future upgrades for the processor, graphics card, memory, storage and cooling.</div></div>
+  <div class="ff-benefit"><strong>💬 Personal support</strong><div>Direct help with setup, troubleshooting and future upgrades.</div></div>
+  <div class="ff-benefit"><strong>🏷️ Relevant future offers</strong><div>Access to relevant discounts, upgrade opportunities and selected future technology offers.</div></div>
+</div>
+
+<div class="ff-image-section"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Illuminated interior of the {{PC_NAME}} PC"></div>
+
+<div class="ff-section" style="border-left:4px solid #008cff">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/why-prometheus-stands-out.png" alt="Why {{PC_NAME}} Stands Out">
+  {{WHY_STANDS_OUT}}
+</div>
+
+<div class="ff-image-section"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="{{PC_NAME}} component overview"></div>
+
+<div class="ff-image-section">
+  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="{{CASE_NAME}} Mid Tower case">
+  <div style="padding:24px;background:#171c24;border-bottom:3px solid #ff6700">
+    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="{{CASE_NAME}}">
+    <p style="margin:0;color:#cbd5e1;font-size:16px">{{CASE_DESCRIPTION}}</p>
+  </div>
+</div>
+
+<div class="ff-section" style="padding-left:18px;padding-right:18px;background:#171c24">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/exact-specification.png" alt="Exact Specification">
+  {{SPECIFICATION_TABLE}}
+</div>
+
+<div class="ff-image-section">
+  <img class="ff-image" src="{{REAR_CONNECTIVITY_IMAGE_URL}}" alt="{{PC_NAME}} rear ports and connectivity">
+  <div style="padding:20px;background:#171c24">
+    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/ready-to-connect.png" alt="Ready to Connect">
+    <p style="margin:0;color:#cbd5e1">{{CONNECTIVITY_DESCRIPTION}}</p>
+  </div>
+</div>
+
+<div class="ff-section" style="border-left:4px solid #ff6700">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/best-suited-for.png" alt="Best Suited For">
+  {{BEST_SUITED_FOR}}
+  <p style="margin:20px 0 0;color:#cbd5e1">{{USE_CASE_SUMMARY}}</p>
+</div>
+
+<div class="ff-image-section">
+  <img class="ff-image" src="{{OWNER_PORTAL_IMAGE_URL}}" alt="Personalised flipflop PC owner portal">
+  <div style="padding:26px;background:#171c24;border-bottom:3px solid #008cff">
+    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/personalised-portal.png" alt="Your PC. Your Personalised Portal.">
+    <p style="margin:0 0 20px;color:#cbd5e1">Everything you need to enjoy {{PC_NAME}} and get the most from your new PC—all organised in one convenient place.</p>
+    <div style="max-width:600px;text-align:left;color:#fff">
+      <div style="margin-bottom:10px">🖥️ Complete build specification</div><div style="margin-bottom:10px">🪪 {{PC_NAME}} digital registration plate</div><div style="margin-bottom:10px">🚀 Getting-started guide</div><div style="margin-bottom:10px">🛡️ Warranty information</div><div style="margin-bottom:10px">💬 Support details</div><div style="margin-bottom:10px">📚 Downloads and user guides</div><div style="margin-bottom:10px">⬆️ Build-specific upgrade path</div><div>🏷️ Relevant future offers and discounts</div>
+    </div>
+  </div>
+</div>
+
+<div style="padding:40px 24px;text-align:left;background:#171c24;border-top:3px solid #ff6700">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/own-prometheus.png" alt="Own {{PC_NAME}}">
+  <p style="max-width:700px;margin:0 0 22px;color:#cbd5e1;font-size:16px">{{FINAL_CTA}}</p>
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/strapline.png" alt="Beautiful machines, built to be admired.">
+</div>
+
+</div></div>
+```
+
+**Template Variables (MUST fill in):**
+- {{HERO_IMAGE_URL}}, {{FLIPFLOP_LOGO_URL}}, {{INTERIOR_IMAGE_URL}}, {{COMPONENT_CALLOUT_IMAGE_URL}}, {{CASE_DETAIL_IMAGE_URL}}, {{REAR_CONNECTIVITY_IMAGE_URL}}, {{OWNER_PORTAL_IMAGE_URL}} — image URLs
+- {{PC_NAME}}, {{TAGLINE}}, {{HERO_DESCRIPTION}} — hero section
+- {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} — spec cards
+- {{WHY_STANDS_OUT}} — 3–4 paragraphs with `<p>` tags and emojis
+- {{SPECIFICATION_TABLE}} — full spec table with `<table class="ff-spec-table">` structure
+- {{CASE_NAME}}, {{CASE_DESCRIPTION}} — case showcase
+- {{BEST_SUITED_FOR}} — use-case grid with `<table class="ff-use-grid">` structure
+- {{CONNECTIVITY_DESCRIPTION}} — 1–2 sentences about connectivity
+- {{USE_CASE_SUMMARY}} — summary sentence
+- {{FINAL_CTA}} — 2–3 sentence closing
+
+**Critical:** Copy the template HTML exactly. Replace only the {{VARIABLE}} placeholders. Never modify CSS, tags, or structure.
 
 ## OUTPUT FORMAT
 
