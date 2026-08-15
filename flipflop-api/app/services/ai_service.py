@@ -302,6 +302,62 @@ async def _ollama_chat(messages: list[dict], cfg=None) -> str | None:
         return resp.json().get("message", {}).get("content")
 
 
+async def _fetch_image_as_base64(url: str) -> str | None:
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.get(url)
+            resp.raise_for_status()
+            import base64
+            return base64.b64encode(resp.content).decode("ascii")
+    except Exception as e:
+        print(f"[hermes] Failed to fetch image {url}: {e}")
+        return None
+
+
+async def chat_with_images(system_prompt: str, user_text: str, image_urls: list[str]) -> tuple[str, str]:
+    """Multimodal chat via local Ollama — for tasks that need to read
+    factual content out of supplied images (spec card, registration plate,
+    performance card renders) alongside a large structured-output prompt.
+
+    Uses whatever model is configured in settings.ollama_model — this MUST
+    be a vision-capable model (e.g. qwen2.5vl:7b). A text-only model like
+    plain qwen2:7b silently ignores the images field, so if this starts
+    reliably describing images incorrectly, check what model is actually
+    configured via GET /api/settings.
+    """
+    _s = get_settings()
+    if not _s.ollama_base_url:
+        return ("Ollama is not configured (ollama_base_url is empty).", "none")
+
+    images_b64 = [b64 for url in image_urls if (b64 := await _fetch_image_as_base64(url))]
+
+    user_message: dict = {"role": "user", "content": user_text}
+    if images_b64:
+        user_message["images"] = images_b64
+
+    try:
+        # Long timeout: this prompt is huge and the output (multi-section
+        # report + a full branded HTML page) is long — a local 7B model
+        # needs real time to work through both.
+        async with httpx.AsyncClient(timeout=600) as client:
+            resp = await client.post(
+                f"{_s.ollama_base_url}/api/chat",
+                json={
+                    "model": _s.ollama_model,
+                    "messages": [{"role": "system", "content": system_prompt}, user_message],
+                    "stream": False,
+                },
+            )
+            resp.raise_for_status()
+            content = resp.json().get("message", {}).get("content")
+            if content:
+                return content, _s.ollama_model
+    except Exception as e:
+        print(f"[hermes] Ollama (vision) failed: {e}")
+
+    return ("Ollama request failed — check backend logs for details.", "none")
+
+
 async def _openrouter_chat(messages: list[dict], model: str, api_key: str | None = None) -> tuple[str, str] | None:
     """Returns (content, actual_model_used) or None on failure."""
     key = api_key or settings.openrouter_api_key

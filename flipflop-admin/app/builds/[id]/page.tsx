@@ -785,7 +785,7 @@ export default function BuildDetailPage() {
                               return new File([blob], `performance-card-part-${i + 1}.png`, { type: "image/png" });
                             })
                           );
-                          const saved = await api.manualBuilds.uploadPhotos(buildId, files);
+                          const saved = await api.manualBuilds.uploadPhotos(buildId, files, "performance_card");
                           setBuild(saved);
                         } catch (error) {
                           const msg = error instanceof Error ? error.message : "Unknown error";

@@ -619,9 +619,10 @@ export const api = {
         `/manual-builds/${id}/post-to-ebay`,
         { method: "POST", body: JSON.stringify(data) },
       ),
-    uploadPhotos: async (id: number, files: File[]): Promise<ManualBuild> => {
+    uploadPhotos: async (id: number, files: File[], kind: "photo" | "performance_card" = "photo"): Promise<ManualBuild> => {
       const formData = new FormData();
       for (const f of files) formData.append("files", f);
+      formData.append("kind", kind);
       const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos`, { method: "POST", body: formData });
       if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
       return res.json();

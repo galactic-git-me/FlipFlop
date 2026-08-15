@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 import shutil
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
@@ -48,6 +48,7 @@ _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "FlipFlop.shop" / "public" / "media"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
+_EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
 # eBay Item Specifics for category 179 (PC Desktops & All-in-Ones), fetched
 # from the Taxonomy API's get_item_aspects_for_category. "Brand" and "Type"
@@ -942,8 +943,17 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
 async def upload_photos(
     build_id: int,
     files: list[UploadFile] = File(...),
+    kind: str = Form("photo"),
     db: AsyncSession = Depends(get_db),
 ):
+    """kind defaults to "photo" (regular listing photos) but also accepts
+    "performance_card" — the build-specific benchmark/performance renders
+    uploaded from the build detail page's Performance Card section. Tagging
+    them lets generate-listing find exactly this build's performance
+    evidence rather than relying on any shared/global file."""
+    if kind not in ("photo", "performance_card"):
+        raise HTTPException(400, "kind must be 'photo' or 'performance_card'")
+
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
@@ -955,6 +965,7 @@ async def upload_photos(
     photos = list(build.photos or [])
     _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
+    uploaded_urls = []
     for file in files:
         content_type = file.content_type or "image/jpeg"
         if content_type not in _IMAGE_TYPES:
@@ -978,11 +989,12 @@ async def upload_photos(
 
         # Use public URL for eBay listings
         public_url = f"https://theflipflop.shop/media/{filename}"
-        photos.append({"url": public_url, "kind": "photo"})
+        photos.append({"url": public_url, "kind": kind})
+        uploaded_urls.append(public_url)
 
     build.photos = photos
-    if not build.hero_photo_url and photos:
-        build.hero_photo_url = photos[0]["url"]
+    if kind == "photo" and not build.hero_photo_url and uploaded_urls:
+        build.hero_photo_url = uploaded_urls[0]
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)
