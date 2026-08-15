@@ -62,24 +62,15 @@ async def chat(
     message: str,
     history: list[dict],
     listing_context: dict | None = None,
-    require_capable_model: bool = False,
 ) -> tuple[str, str]:
-    """Returns (response_text, model_used).
-
-    require_capable_model skips the small local Ollama model entirely — it
-    reliably ignores complex formatting instructions (HTML-only, brand
-    colors, no-markdown) and just returns plain markdown text instead. Use
-    this for anything that needs precise structured output, like eBay
-    listing HTML generation.
-    """
+    """Returns (response_text, model_used)."""
     messages = _build_messages(message, history, listing_context)
 
     # Re-read settings so in-process changes (via /settings PUT) take effect without restart
     _s = get_settings()
 
-    # 1. Try Ollama (local gemma4:e4b) — primary, unless the caller needs
-    # reliable instruction-following that this small model can't provide.
-    if _s.ollama_base_url and not require_capable_model:
+    # 1. Try Ollama (local gemma4:e4b) — primary
+    if _s.ollama_base_url:
         try:
             response = await _ollama_chat(messages, _s)
             if response:
