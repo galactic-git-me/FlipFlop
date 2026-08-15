@@ -1,109 +1,100 @@
 <style>
-.ff-page,.ff-page *{box-sizing:border-box}.ff-page{margin:0;padding:0;background:#0d1015;color:#f5f7fa;font-family:Arial,Helvetica,sans-serif;line-height:1.55}.ff-wrap{width:100%;max-width:1000px;margin:0 auto;background:#0d1015;overflow:hidden}.ff-image{display:block;width:100%;height:auto;border:0}.ff-heading{display:block;width:100%;height:auto;margin:0 0 22px 0;border:0}.ff-section{margin:0 22px 38px;padding:28px 26px}.ff-image-section{padding:0 22px 38px}.ff-card-row{padding:28px 12px;text-align:center;font-size:0}.ff-card{display:inline-block;width:22.5%;min-height:136px;margin:6px 1%;padding:18px 8px;vertical-align:top;background:#171c24;border-top:3px solid #ff6700;font-size:15px}.ff-card:nth-child(even){border-top-color:#008cff}.ff-card-value{margin-top:5px;color:#fff;font-size:17px;font-weight:bold}.ff-benefit{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid #2a3039}.ff-benefit:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}.ff-benefit strong{color:#fff;font-size:16px}.ff-benefit div{margin-top:4px;color:#cbd5e1}.ff-spec-table{width:100%;border-collapse:collapse;color:#fff;font-size:15px}.ff-spec-table td{padding:13px 8px;border-bottom:1px solid #2a3039;vertical-align:top}.ff-spec-table tr:last-child td{border-bottom:0}.ff-spec-label{width:36%;color:#b9c8da}.ff-use-grid{width:100%;border-collapse:collapse;color:#fff;font-size:16px}.ff-use-grid td{width:50%;padding:10px;vertical-align:top}
-@media only screen and (max-width:700px){.ff-section{margin-left:12px!important;margin-right:12px!important;padding-left:17px!important;padding-right:17px!important}.ff-image-section{padding-left:12px!important;padding-right:12px!important}.ff-card{width:46%;margin:6px 2%}.ff-spec-table,.ff-spec-table tbody,.ff-spec-table tr,.ff-spec-table td{display:block;width:100%!important}.ff-spec-table tr{padding:11px 0;border-bottom:1px solid #2a3039}.ff-spec-table td{padding:3px 8px!important;border:0!important}.ff-spec-table td:first-child{color:#159cff!important}.ff-use-grid,.ff-use-grid tbody,.ff-use-grid tr,.ff-use-grid td{display:block;width:100%!important}.ff-use-grid td{padding:8px 0!important}}
-@media only screen and (max-width:420px){.ff-card{display:block;width:100%;min-height:0;margin:9px 0}}
+.ff-page,.ff-page *{box-sizing:border-box}.ff-page{margin:0;padding:0;background:#0d1015;color:#f5f7fa;font-family:Arial,Helvetica,sans-serif;line-height:1.55}.ff-wrap{width:100%;max-width:1000px;margin:0 auto;background:#0d1015;overflow:hidden}.ff-image{display:block;width:100%;height:auto;border:0}.ff-heading{display:block;width:100%;height:auto;margin:0 0 22px 0;border:0}.ff-section{margin:0 22px 38px;padding:28px 26px}.ff-image-section{padding:0 22px 38px}
+
+.ff-card-row{padding:28px 12px;text-align:center;font-size:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.ff-card{background:linear-gradient(135deg,#ff6700,#008cff);padding:2px;border-radius:8px}.ff-card-inner{background:#171c24;padding:24px 12px;text-align:center}.ff-card-emoji{font-size:48px;margin-bottom:12px}.ff-card-label{color:#fff;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.ff-card-value{color:#fff;font-size:24px;font-weight:bold}
+
+.ff-benefit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0}.ff-benefit-item{background:linear-gradient(135deg,#ff6700,#008cff);padding:2px;border-radius:8px}.ff-benefit-inner{background:#171c24;padding:18px;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:center}.ff-benefit-emoji{font-size:40px;margin-bottom:10px}.ff-benefit-title{color:#fff;font-size:14px;font-weight:bold;margin-bottom:8px;line-height:1.3}.ff-benefit-text{color:#a0aec0;font-size:12px;line-height:1.4}
+
+.ff-spec-table{width:100%;border-collapse:collapse;color:#fff;font-size:15px}.ff-spec-table td{padding:13px 8px;border-bottom:1px solid #2a3039;vertical-align:top}.ff-spec-table tr:last-child td{border-bottom:0}.ff-spec-label{width:36%;color:#b9c8da}
+
+.ff-use-grid{width:100%;border-collapse:collapse;color:#fff;font-size:16px}.ff-use-grid td{width:50%;padding:10px;vertical-align:top}
+
+@media only screen and (max-width:700px){.ff-section{margin-left:12px!important;margin-right:12px!important;padding-left:17px!important;padding-right:17px!important}.ff-image-section{padding-left:12px!important;padding-right:12px!important}.ff-card-row{grid-template-columns:repeat(2,1fr)}.ff-benefit-grid{grid-template-columns:repeat(2,1fr)}}
+
+@media only screen and (max-width:420px){.ff-card-row{grid-template-columns:1fr}.ff-card-emoji{font-size:36px}.ff-card-label{font-size:12px}.ff-card-value{font-size:18px}.ff-benefit-grid{grid-template-columns:1fr}.ff-benefit-emoji{font-size:32px}.ff-benefit-title{font-size:12px}.ff-benefit-text{font-size:11px}}
 </style>
 
 <div class="ff-page"><div class="ff-wrap">
 
-<!-- Replace these product-image placeholders with permanent HTTPS URLs. -->
-<img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="PROMETHEUS custom gaming and creative PC">
+<img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}} custom gaming and creative PC">
 
-<div style="padding:38px 24px;text-align:left;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
+<div style="padding:38px 24px;text-align:left;background:linear-gradient(90deg,#ff6700 0%,#008cff 100%);background-clip:padding-box;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
   <img src="{{FLIPFLOP_LOGO_URL}}" alt="flipflop" style="display:block;width:150px;max-width:45%;height:auto;margin:0 0 22px;border:0">
-  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="PROMETHEUS">
-  <p style="margin:0 0 12px;color:#ff761a;font-size:22px;font-weight:bold">1440p power. Built to be admired.</p>
-  <p style="max-width:760px;margin:0;color:#cbd5e1;font-size:17px">A distinctive high-performance gaming and creative PC powered by the AMD Ryzen 7 7800X3D and NVIDIA GeForce RTX 3070. Professionally assembled, fully tested and ready to enjoy.</p>
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/strapline.png" alt="{{PC_NAME}}">
+  <p style="margin:0 0 12px;background:linear-gradient(90deg,#ff6700,#008cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:24px;font-weight:bold">{{TAGLINE}}</p>
+  <p style="max-width:760px;margin:0;color:#cbd5e1;font-size:17px">{{HERO_DESCRIPTION}}</p>
 </div>
 
 <div class="ff-card-row">
-  <div class="ff-card"><div style="font-size:26px">⚙️</div><div style="color:#ff761a;font-size:13px;font-weight:bold">PROCESSOR</div><div class="ff-card-value">Ryzen 7 7800X3D</div></div>
-  <div class="ff-card"><div style="font-size:26px">🎮</div><div style="color:#159cff;font-size:13px;font-weight:bold">GRAPHICS</div><div class="ff-card-value">RTX 3070 8GB</div></div>
-  <div class="ff-card"><div style="font-size:26px">🧠</div><div style="color:#ff761a;font-size:13px;font-weight:bold">MEMORY</div><div class="ff-card-value">32GB DDR5</div></div>
-  <div class="ff-card"><div style="font-size:26px">💾</div><div style="color:#159cff;font-size:13px;font-weight:bold">STORAGE</div><div class="ff-card-value">1TB NVMe SSD</div></div>
+  <div class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">⚙️</div><div class="ff-card-label">Processor</div><div class="ff-card-value">{{PROCESSOR}}</div></div></div>
+  <div class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">🎮</div><div class="ff-card-label">Graphics</div><div class="ff-card-value">{{GRAPHICS}}</div></div></div>
+  <div class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">🧠</div><div class="ff-card-label">Memory</div><div class="ff-card-value">{{MEMORY}}</div></div></div>
+  <div class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">💾</div><div class="ff-card-label">Storage</div><div class="ff-card-value">{{STORAGE}}</div></div></div>
 </div>
 
 <div class="ff-section" style="background:#171c24;border-left:4px solid #ff6700">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/what-to-expect.png" alt="What You Can Expect from flipflop">
-  <div class="ff-benefit"><strong>🖥️ Premium, carefully curated build</strong><div>Every component is selected for compatibility, performance, cooling and visual balance.</div></div>
-  <div class="ff-benefit"><strong>🛠️ Individually assembled and tested</strong><div>Built by hand, configured and stability-checked before dispatch.</div></div>
-  <div class="ff-benefit"><strong>🌐 Personalised online owner portal</strong><div>Your complete specification, getting-started guide, useful downloads, support and warranty information in one place.</div></div>
-  <div class="ff-benefit"><strong>🪪 Unique PC name and registration plate</strong><div>PROMETHEUS has its own identity and digital registration plate, connected to its personalised owner portal.</div></div>
-  <div class="ff-benefit"><strong>⬆️ Build-specific upgrade path</strong><div>Clear guidance on compatible future upgrades for the processor, graphics card, memory, storage and cooling.</div></div>
-  <div class="ff-benefit"><strong>💬 Personal support</strong><div>Direct help with setup, troubleshooting and future upgrades.</div></div>
-  <div class="ff-benefit"><strong>🏷️ Relevant future offers</strong><div>Access to relevant discounts, upgrade opportunities and selected future technology offers.</div></div>
+  <div class="ff-benefit-grid">
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🖥️</div><div class="ff-benefit-title">Premium, carefully curated build</div><div class="ff-benefit-text">Every component is selected for compatibility, performance, cooling and visual balance.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🛠️</div><div class="ff-benefit-title">Individually assembled and tested</div><div class="ff-benefit-text">Built by hand, configured and stability-checked before dispatch.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🌐</div><div class="ff-benefit-title">Personalised online owner portal</div><div class="ff-benefit-text">Your complete specification, getting-started guide, useful downloads, support and warranty information in one place.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🪪</div><div class="ff-benefit-title">Unique PC name and registration plate</div><div class="ff-benefit-text">{{PC_NAME}} has its own identity and digital registration plate, connected to its personalised owner portal.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">⬆️</div><div class="ff-benefit-title">Build-specific upgrade path</div><div class="ff-benefit-text">Clear guidance on compatible future upgrades for the processor, graphics card, memory, storage and cooling.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">💬</div><div class="ff-benefit-title">Personal support</div><div class="ff-benefit-text">Direct help with setup, troubleshooting and future upgrades.</div></div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🏷️</div><div class="ff-benefit-title">Relevant future offers</div><div class="ff-benefit-text">Access to relevant discounts, upgrade opportunities and selected future technology offers.</div></div></div>
+  </div>
 </div>
 
-<div class="ff-image-section"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Illuminated interior of the PROMETHEUS PC"></div>
+<div class="ff-image-section"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Illuminated interior of the {{PC_NAME}} PC"></div>
 
 <div class="ff-section" style="border-left:4px solid #008cff">
-  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/why-prometheus-stands-out.png" alt="Why PROMETHEUS Stands Out">
-  <p style="margin:0 0 20px;color:#dce4ee"><strong style="color:#fff">⚙️ Exceptional gaming processor</strong><br>The Ryzen 7 7800X3D delivers excellent frame rates, responsive gameplay and powerful performance in processor-intensive games.</p>
-  <p style="margin:0 0 20px;color:#dce4ee"><strong style="color:#fff">🎮 Strong 1440p graphics performance</strong><br>The Palit GameRock RTX 3070 provides smooth, high-quality gaming and supports NVIDIA technologies including DLSS and ray tracing.</p>
-  <p style="margin:0 0 20px;color:#dce4ee"><strong style="color:#fff">⚡ Fast memory and storage</strong><br>32GB of DDR5 memory supports demanding multitasking, while the 1TB NVMe SSD provides fast boot, loading and application speeds.</p>
-  <p style="margin:0;color:#dce4ee"><strong style="color:#fff">⬆️ Modern AM5 foundation</strong><br>The ASUS PRIME X870-P gives the system a strong modern platform with useful options for compatible future upgrades.</p>
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/why-prometheus-stands-out.png" alt="Why {{PC_NAME}} Stands Out">
+  {{WHY_STANDS_OUT}}
 </div>
 
-<div class="ff-image-section"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="PROMETHEUS component overview"></div>
+<div class="ff-image-section"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="{{PC_NAME}} component overview"></div>
 
 <div class="ff-image-section">
-  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="APNX Creator C1 ChromaFlair Mid Tower case">
+  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="{{CASE_NAME}} Mid Tower case">
   <div style="padding:24px;background:#171c24;border-bottom:3px solid #ff6700">
-    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="APNX Creator C1 ChromaFlair">
-    <p style="margin:0;color:#cbd5e1;font-size:16px">A colour-shifting iridescent chassis with panoramic glass, coordinated ARGB lighting and an illuminated graphics-card support—designed to be displayed, not hidden away.</p>
+    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="{{CASE_NAME}}">
+    <p style="margin:0;color:#cbd5e1;font-size:16px">{{CASE_DESCRIPTION}}</p>
   </div>
 </div>
 
 <div class="ff-section" style="padding-left:18px;padding-right:18px;background:#171c24">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/exact-specification.png" alt="Exact Specification">
-  <table class="ff-spec-table" role="presentation"><tbody>
-    <tr><td class="ff-spec-label">⚙️ <strong>Processor</strong></td><td>AMD Ryzen 7 7800X3D</td></tr>
-    <tr><td class="ff-spec-label">🔧 <strong>Motherboard</strong></td><td>ASUS PRIME X870-P</td></tr>
-    <tr><td class="ff-spec-label">🧠 <strong>RAM</strong></td><td>Lexar 32GB (2×16GB) DDR5-6400 CL38</td></tr>
-    <tr><td class="ff-spec-label">🎮 <strong>Graphics</strong></td><td>Palit GameRock NVIDIA GeForce RTX 3070 8GB</td></tr>
-    <tr><td class="ff-spec-label">💾 <strong>Storage</strong></td><td>1TB M.2 NVMe SSD</td></tr>
-    <tr><td class="ff-spec-label">🔌 <strong>Power Supply</strong></td><td>Corsair RM750i 750W 80 Plus Gold Fully Modular</td></tr>
-    <tr><td class="ff-spec-label">❄️ <strong>Cooling</strong></td><td>Thermalright Aqua Elite 240 V3 White ARGB</td></tr>
-    <tr><td class="ff-spec-label">🌀 <strong>Case Fans</strong></td><td>6× Addressable RGB Fans</td></tr>
-    <tr><td class="ff-spec-label">✨ <strong>GPU Support</strong></td><td>Illuminated ARGB GPU Support Bracket</td></tr>
-    <tr><td class="ff-spec-label">🖥️ <strong>Case</strong></td><td>APNX Creator C1 ChromaFlair Mid Tower</td></tr>
-    <tr><td class="ff-spec-label">📶 <strong>Connectivity</strong></td><td>Wi-Fi 6E, Bluetooth and Ethernet</td></tr>
-    <tr><td class="ff-spec-label">🪟 <strong>Operating System</strong></td><td>Windows 11 Pro 64-bit</td></tr>
-  </tbody></table>
+  {{SPECIFICATION_TABLE}}
 </div>
 
 <div class="ff-image-section">
-  <img class="ff-image" src="{{REAR_CONNECTIVITY_IMAGE_URL}}" alt="PROMETHEUS rear ports and connectivity">
+  <img class="ff-image" src="{{REAR_CONNECTIVITY_IMAGE_URL}}" alt="{{PC_NAME}} rear ports and connectivity">
   <div style="padding:20px;background:#171c24">
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/ready-to-connect.png" alt="Ready to Connect">
-    <p style="margin:0;color:#cbd5e1">Wi-Fi 6E, Bluetooth and wired Ethernet provide flexible connectivity for gaming, work and everyday use.</p>
+    <p style="margin:0;color:#cbd5e1">{{CONNECTIVITY_DESCRIPTION}}</p>
   </div>
 </div>
 
 <div class="ff-section" style="border-left:4px solid #ff6700">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/best-suited-for.png" alt="Best Suited For">
-  <table class="ff-use-grid" role="presentation"><tbody>
-    <tr><td>🖥️ High-refresh-rate 1440p gaming</td><td>🖥️ Streaming and content creation</td></tr>
-    <tr><td>🖥️ 3D modelling and rendering</td><td>🖥️ Software development</td></tr>
-    <tr><td>🖥️ Local AI experimentation</td><td>🖥️ Demanding everyday multitasking</td></tr>
-  </tbody></table>
-  <p style="margin:20px 0 0;color:#cbd5e1">A particularly strong choice for buyers who want an exceptional gaming processor now, with a modern AM5 platform that supports sensible future upgrades.</p>
+  {{BEST_SUITED_FOR}}
+  <p style="margin:20px 0 0;color:#cbd5e1">{{USE_CASE_SUMMARY}}</p>
 </div>
 
 <div class="ff-image-section">
   <img class="ff-image" src="{{OWNER_PORTAL_IMAGE_URL}}" alt="Personalised flipflop PC owner portal">
   <div style="padding:26px;background:#171c24;border-bottom:3px solid #008cff">
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/personalised-portal.png" alt="Your PC. Your Personalised Portal.">
-    <p style="margin:0 0 20px;color:#cbd5e1">Everything you need to enjoy PROMETHEUS and get the most from your new PC—all organised in one convenient place.</p>
+    <p style="margin:0 0 20px;color:#cbd5e1">Everything you need to enjoy {{PC_NAME}} and get the most from your new PC—all organised in one convenient place.</p>
     <div style="max-width:600px;text-align:left;color:#fff">
-      <div style="margin-bottom:10px">🖥️ Complete build specification</div><div style="margin-bottom:10px">🪪 PROMETHEUS digital registration plate</div><div style="margin-bottom:10px">🚀 Getting-started guide</div><div style="margin-bottom:10px">🛡️ Warranty information</div><div style="margin-bottom:10px">💬 Support details</div><div style="margin-bottom:10px">📚 Downloads and user guides</div><div style="margin-bottom:10px">⬆️ Build-specific upgrade path</div><div>🏷️ Relevant future offers and discounts</div>
+      <div style="margin-bottom:10px">🖥️ Complete build specification</div><div style="margin-bottom:10px">🪪 {{PC_NAME}} digital registration plate</div><div style="margin-bottom:10px">🚀 Getting-started guide</div><div style="margin-bottom:10px">🛡️ Warranty information</div><div style="margin-bottom:10px">💬 Support details</div><div style="margin-bottom:10px">📚 Downloads and user guides</div><div style="margin-bottom:10px">⬆️ Build-specific upgrade path</div><div>🏷️ Relevant future offers and discounts</div>
     </div>
   </div>
 </div>
 
 <div style="padding:40px 24px;text-align:left;background:#171c24;border-top:3px solid #ff6700">
-  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/own-prometheus.png" alt="Own PROMETHEUS">
-  <p style="max-width:700px;margin:0 0 22px;color:#cbd5e1;font-size:16px">A powerful, distinctive PC for buyers who care about performance, presentation and long-term ownership support.</p>
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/own-prometheus.png" alt="Own {{PC_NAME}}">
+  <p style="max-width:700px;margin:0 0 22px;color:#cbd5e1;font-size:16px">{{FINAL_CTA}}</p>
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/strapline.png" alt="Beautiful machines, built to be admired.">
 </div>
 

@@ -256,10 +256,10 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 **Critical:** 
 - Copy the template HTML exactly as-is — never modify CSS, tags, or structure
 - Fill in all {{TEXT}} and {{DESCRIPTION}} placeholders with build-specific content
-- Replace all {{IMAGE_URL}} placeholders with the actual image URLs provided in the "BUILD PHOTO URLs" section above
-- If an image URL is empty/missing, leave the {{PLACEHOLDER}} unchanged
-- Never invent image URLs
-- Output ONLY the complete HTML template with URLs filled in, nothing else
+- Leave all {{IMAGE_URL}} placeholders unchanged — backend will fill them from build's stored photos
+- Never invent image URLs or replace them with placeholder text
+- Output ONLY the 5-section format below (A through E), nothing else
+- Use exact section markers: "A.", "B.", "C.", "D.", "E." at line start
 
 ## OUTPUT FORMAT
 
