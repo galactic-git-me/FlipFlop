@@ -102,7 +102,7 @@ Is this a viable flip?"""
 
     settings = get_settings()
     ollama_base_url = settings.ollama_base_url or "http://localhost:11434"
-    ollama_model = settings.ollama_model or "qwen2:7b"
+    ollama_model = settings.ollama_model
 
     try:
         # Shares claude_screening.py's semaphore — see the comment there.
@@ -256,7 +256,7 @@ async def _downgrade_unviable_listing(result: VerificationResult) -> None:
             return
 
         note = (
-            f"[Margin verification, qwen2:7b] NOT a viable flip: buy £{result.actual_buy_price_gbp:.2f} "
+            f"[Margin verification, qwen2.5:7b] NOT a viable flip: buy £{result.actual_buy_price_gbp:.2f} "
             f"vs realistic resale £{result.realistic_resale_price_gbp:.2f} "
             f"(margin £{result.profit_margin_gbp:.2f}). {result.reasoning}"
         )

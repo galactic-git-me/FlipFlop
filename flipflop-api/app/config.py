@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     openrouter_primary_model: str = "google/gemma-4-31b-it:free"
     ollama_base_url: str = ""  # Disabled by default (set to enable, e.g. http://localhost:11434 — the default local Ollama port)
-    ollama_model: str = "gemma4:e4b"
+    ollama_model: str  # Must be set via OLLAMA_MODEL env var
     scrapingbee_api_key: str = ""  # For eBay sold comps scraping
 
     ebay_app_id: str = ""

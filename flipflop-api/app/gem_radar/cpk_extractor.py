@@ -154,7 +154,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                     resp = await client.post(
                         f"{settings.ollama_base_url}/api/generate",
                         json={
-                            "model": "qwen2.5:7b",
+                            "model": settings.ollama_model,
                             "prompt": prompt,
                             "stream": False,
                             "temperature": 0.1,  # Low temp for deterministic output

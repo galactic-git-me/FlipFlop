@@ -73,7 +73,7 @@ Be realistic with estimates - add 5-10cm padding for packaging on each dimension
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "qwen2:7b",
+          model: process.env.NEXT_PUBLIC_OLLAMA_MODEL,
           prompt: prompt,
           stream: false,
           temperature: 0.3,

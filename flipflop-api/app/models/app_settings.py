@@ -18,7 +18,7 @@ class AppSettings(Base):
     auto_buy_daily_limit: Mapped[int] = mapped_column(Integer, default=3)
 
     ollama_base_url: Mapped[str] = mapped_column(Text, default="http://localhost:11434")
-    ollama_model: Mapped[str] = mapped_column(String(100), default="gemma3:4b")
+    ollama_model: Mapped[str] = mapped_column(String(100), default="")
     openrouter_api_key: Mapped[str] = mapped_column(Text, default="")
     openrouter_primary_model: Mapped[str] = mapped_column(String(100), default="google/gemma-4-31b-it:free")
     ebay_app_id: Mapped[str] = mapped_column(Text, default="")
