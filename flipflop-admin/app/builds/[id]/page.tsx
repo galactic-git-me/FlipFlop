@@ -20,6 +20,7 @@ import { EbaySpecificsSection } from "@/components/builds/EbaySpecificsSection";
 import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingBreakdown } from "@/components/builds/PricingBreakdown";
+import { CommandPanel } from "@/components/builds/CommandPanel";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
 // EbaySpecificsSection.tsx's own EBAY_ASPECT_FIELDS list (that component owns
@@ -411,12 +412,42 @@ export default function BuildDetailPage() {
   const specCard = build.photos.find((p) => p.kind === "spec_card");
   const registrationPlate = build.photos.find((p) => p.kind === "registration_plate");
 
+  // Calculate listing statuses for the command panel
+  const listingStatuses = build
+    ? [
+        {
+          platform: "ebay",
+          isListed: !!build.ebay_live,
+          listingId: build.ebay_live?.listing_id,
+          lastUpdated: build.updated_at,
+        },
+      ]
+    : [];
+
   return (
     <>
       <Toaster position="top-right" richColors />
       <div className="min-h-screen bg-[#060d18] text-slate-100 px-4 py-6 md:px-8 max-w-3xl mx-auto">
         {/* offscreen canvas used to render branded cards before uploading them */}
         <canvas ref={hiddenCanvasRef} className="hidden" />
+
+        {/* Command Panel — sticky controls on the right */}
+        {build && (
+          <CommandPanel
+            buildId={String(buildId)}
+            buildTitle={build.name}
+            listingStatuses={listingStatuses}
+            onGenerateDescription={() => generateListing(false)}
+            onGenerateTitle={() => generateListing(false)}
+            onPublishEbay={postToEbay}
+            onUpdateEbay={postToEbay}
+            onDeleteEbay={() => {
+              // TODO: implement delete listing
+              alert("Delete listing not yet implemented");
+            }}
+            isLoading={generating || posting || markingBuilt}
+          />
+        )}
 
       <button
         onClick={() => router.push("/builds")}
