@@ -996,6 +996,78 @@ def _is_reasonable_price(category: str, price: float) -> bool:
     return price >= min_price
 
 
+def _is_server_hardware(title: str, category: str) -> bool:
+    """Detect professional/server hardware that won't flip in consumer markets.
+    These are excluded from gem consideration.
+    """
+    server_keywords = [
+        "tesla",           # NVIDIA Tesla accelerators
+        "quadro",          # NVIDIA Quadro professional GPUs
+        "arc pro",         # Intel ARC Professional GPUs
+        "xeon",            # Intel Xeon server CPUs
+        "epyc",            # AMD EPYC server CPUs
+        "supermicro",      # Supermicro server hardware
+        "ecc",             # ECC server RAM
+        "udimm for",       # Server-specific RAM
+        "rtx ada",         # RTX Ada professional (not consumer gaming)
+        "mac pro",         # Apple Mac Pro server hardware
+        "data center",
+        "server gpu",
+        "accelerator",
+    ]
+    title_lower = title.lower()
+    return any(keyword in title_lower for keyword in server_keywords)
+
+
+def _has_valid_category(category: str | None) -> bool:
+    """Check if category is valid (not malformed or unknown).
+    Rejects pipe-separated categories and unknown categories.
+    """
+    if not category:
+        return False
+    if "|" in category:  # Malformed: pipe-separated categories
+        return False
+    if category == "unknown":  # Unclassified items
+        return False
+    return True
+
+
+def _is_complete_system(title: str) -> bool:
+    """Detect pre-built complete systems that shouldn't be in flipping inventory."""
+    system_keywords = [
+        "mini pc",
+        "mini-pc",
+        "complete system",
+        "complete pc",
+        "tower pc",
+        "desktop tower",
+        "all-in-one",
+        "prebuilt",
+        "pre-built",
+        "gaming pc",
+        "pc bundle",
+        "system bundle",
+        "optiplex",  # Dell prebuilts
+        "proliant",  # HP prebuilts
+    ]
+    title_lower = title.lower()
+    return any(keyword in title_lower for keyword in system_keywords)
+
+
+def _is_obsolete_socket(title: str) -> bool:
+    """Detect obsolete CPU sockets (>6 years old) with no upgrade path."""
+    obsolete_sockets = [
+        "lga1155",  # 2012
+        "lga1150",  # 2014
+        "am3+",     # 2012
+        "am2",      # 2006
+        "fm1",      # 2011
+        "lga775",   # 2004
+    ]
+    title_lower = title.lower()
+    return any(socket in title_lower for socket in obsolete_sockets)
+
+
 async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
     """Best gem for a specific component category, sorted by deal_score."""
     from sqlalchemy import select
@@ -1013,12 +1085,30 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         query = query.limit(1)
         result = await db.execute(query)
         best = result.scalar_one_or_none()
-        if best and (_is_damaged(best.title) or not _is_reasonable_price(best.category, best.delivered_price)):
+        if best and (
+            _is_damaged(best.title)
+            or not _is_reasonable_price(best.category, best.delivered_price)
+            or not _has_valid_category(best.category)  # BLOCKING: invalid category
+            or _is_server_hardware(best.title, best.category)  # BLOCKING: server hardware
+            or _is_complete_system(best.title)  # BLOCKING: prebuilt systems
+            or _is_obsolete_socket(best.title)  # BLOCKING: obsolete sockets
+        ):
             best = None
     else:
         result = await db.execute(query.limit(200))
         best = None
         for candidate in result.scalars():
+            # Priority 1: Blocking filters (reject immediately)
+            if not _has_valid_category(candidate.category):  # Malformed or unknown
+                continue
+            if _is_server_hardware(candidate.title, candidate.category):  # Server/professional
+                continue
+            if _is_complete_system(candidate.title):  # Prebuilt systems
+                continue
+            if _is_obsolete_socket(candidate.title):  # Obsolete sockets
+                continue
+
+            # Existing filters
             if _is_damaged(candidate.title):
                 continue
             if not _is_reasonable_price(candidate.category, candidate.delivered_price):

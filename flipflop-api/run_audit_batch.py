@@ -93,8 +93,8 @@ async def run_sample(sample_num):
     return sample_data
 
 async def main():
-    # Run 3 samples automatically
-    for i in range(1, 4):
+    # Run samples 4-5 to test fixes
+    for i in range(4, 6):
         data = await run_sample(i)
         if data:
             print(f"\n[OK] Sample {i} data saved")
