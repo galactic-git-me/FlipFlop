@@ -1728,6 +1728,100 @@ async def clear_listings(
     )
 
 
+@router.get("/listings/{listing_id}/price-history")
+async def get_listing_price_history(
+    listing_id: str,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Get price history for a specific eBay listing.
+
+    Returns all price observations for this listing_id ordered by timestamp.
+    """
+    from app.models.gem_radar_observation import GemRadarListingObservation
+    from sqlalchemy import select, desc
+
+    stmt = (
+        select(
+            GemRadarListingObservation.observed_at,
+            GemRadarListingObservation.delivered_price,
+        )
+        .where(GemRadarListingObservation.listing_id == listing_id)
+        .order_by(desc(GemRadarListingObservation.observed_at))
+        .limit(100)
+    )
+
+    result = await db.execute(stmt)
+    observations = result.fetchall()
+
+    return {
+        "prices": [
+            {
+                "observed_at": obs[0].isoformat() if obs[0] else None,
+                "delivered_price": float(obs[1]) if obs[1] else 0,
+            }
+            for obs in observations
+        ]
+    }
+
+
+@router.get("/listings/{listing_id}/cpk-price-history")
+async def get_cpk_price_history(
+    listing_id: str,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Get CPK (market average) price history for a listing's component.
+
+    Finds the listing, identifies its CPK, then returns price history for that
+    component across all listings (market-wide average).
+    """
+    from app.models.gem_radar_observation import GemRadarListingObservation
+    from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+    from sqlalchemy import select, desc, func
+
+    # Get the listing to find its CPK
+    listing_stmt = select(GemRadarListingCpk.cpk_code).where(
+        GemRadarListingCpk.listing_id == listing_id
+    ).limit(1)
+
+    result = await db.execute(listing_stmt)
+    row = result.first()
+
+    if not row or not row[0]:
+        return {"prices": []}
+
+    cpk_code = row[0]
+
+    # Get price history for this CPK (average prices across all listings with this CPK)
+    # This shows the market trend for this component type
+    obs_stmt = (
+        select(
+            GemRadarListingObservation.observed_at,
+            func.avg(GemRadarListingObservation.delivered_price).label("avg_price"),
+        )
+        .join(
+            GemRadarListingCpk,
+            GemRadarListingCpk.listing_id == GemRadarListingObservation.listing_id,
+        )
+        .where(GemRadarListingCpk.cpk_code == cpk_code)
+        .group_by(GemRadarListingObservation.observed_at)
+        .order_by(desc(GemRadarListingObservation.observed_at))
+        .limit(100)
+    )
+
+    result = await db.execute(obs_stmt)
+    observations = result.fetchall()
+
+    return {
+        "prices": [
+            {
+                "observed_at": obs[0].isoformat() if obs[0] else None,
+                "delivered_price": float(obs[1]) if obs[1] else 0,
+            }
+            for obs in observations
+        ]
+    }
+
+
 @router.get("/ebay-search")
 async def ebay_search(
     query: str = Query(..., description="eBay search query"),

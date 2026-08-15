@@ -1,6 +1,6 @@
 /**
  * PriceSparkline - Tiny inline price chart for listing rows
- * Shows 7-14 days of price history as a minimal line chart
+ * Shows 7-14 days of price history as two-line comparison chart
  */
 
 interface PriceObservation {
@@ -9,54 +9,75 @@ interface PriceObservation {
 }
 
 interface PriceSparklineProps {
-  prices: PriceObservation[];
+  listingPrices: PriceObservation[];
+  cpkPrices?: PriceObservation[];
   width?: number;
   height?: number;
   className?: string;
 }
 
 export function PriceSparkline({
-  prices,
-  width = 60,
-  height = 24,
+  listingPrices,
+  cpkPrices,
+  width = 80,
+  height = 28,
   className = '',
 }: PriceSparklineProps) {
-  if (!prices || prices.length === 0) {
+  if (!listingPrices || listingPrices.length === 0) {
     return <span className="text-xs text-gray-400">—</span>;
   }
 
   // Sort by date (oldest first)
-  const sorted = [...prices].sort(
+  const sortedListing = [...listingPrices].sort(
     (a, b) => new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
   );
 
-  const values = sorted.map((p) => p.delivered_price);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1; // Prevent division by zero
+  const sortedCpk = cpkPrices
+    ? [...cpkPrices].sort(
+        (a, b) => new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
+      )
+    : [];
 
-  // Generate SVG path points
-  const points = values
-    .map((value, idx) => {
-      const x = (idx / (values.length - 1 || 1)) * width;
-      const y = height - ((value - min) / range) * (height - 4) - 2; // Small padding
+  // Calculate min/max across both datasets
+  const allValues = [
+    ...sortedListing.map((p) => p.delivered_price),
+    ...sortedCpk.map((p) => p.delivered_price),
+  ];
+  const min = Math.min(...allValues);
+  const max = Math.max(...allValues);
+  const range = max - min || 1;
+
+  // Generate SVG path points for listing prices (blue)
+  const listingPoints = sortedListing
+    .map((p, idx) => {
+      const x = (idx / (sortedListing.length - 1 || 1)) * width;
+      const y = height - ((p.delivered_price - min) / range) * (height - 4) - 2;
       return `${x},${y}`;
     })
     .join(' ');
 
-  // Determine color based on trend
-  const current = values[values.length - 1];
-  const previous = values[0];
-  const priceChange = current - previous;
-  const trendColor =
-    priceChange < -0.01 ? '#10b981' : // Green (price dropped = better deal)
-    priceChange > 0.01 ? '#ef4444' : // Red (price went up)
-    '#6b7280'; // Gray (stable)
+  // Generate SVG path points for CPK prices (orange)
+  const cpkPoints = sortedCpk
+    .map((p, idx) => {
+      const x = (idx / (sortedCpk.length - 1 || 1)) * width;
+      const y = height - ((p.delivered_price - min) / range) * (height - 4) - 2;
+      return `${x},${y}`;
+    })
+    .join(' ');
+
+  // Determine trend color for listing
+  const listingCurrent = sortedListing[sortedListing.length - 1].delivered_price;
+  const listingPrevious = sortedListing[0].delivered_price;
+  const listingChange = listingCurrent - listingPrevious;
+  const listingTrendColor =
+    listingChange < -0.01 ? '#3b82f6' : // Blue (price dropped)
+    listingChange > 0.01 ? '#3b82f6' : // Blue (stable or up, still this listing)
+    '#3b82f6'; // Blue (this listing)
 
   return (
     <div
       className={`flex items-center justify-center ${className}`}
-      title={`£${previous.toFixed(2)} → £${current.toFixed(2)} (${Math.abs(priceChange).toFixed(2)})`}
+      title="Blue: this listing | Orange: market average"
     >
       <svg
         width={width}
@@ -72,26 +93,50 @@ export function PriceSparkline({
           y2={height / 2}
           stroke="#e5e7eb"
           strokeWidth="0.5"
-          opacity="0.5"
+          opacity="0.3"
         />
 
-        {/* Price line */}
+        {/* CPK price line (orange, if available) */}
+        {cpkPoints && (
+          <>
+            <polyline
+              points={cpkPoints}
+              fill="none"
+              stroke="#f97316"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="0.6"
+            />
+            {sortedCpk.length > 0 && (
+              <circle
+                cx={width}
+                cy={height - ((sortedCpk[sortedCpk.length - 1].delivered_price - min) / range) * (height - 4) - 2}
+                r="1"
+                fill="#f97316"
+                opacity="0.6"
+              />
+            )}
+          </>
+        )}
+
+        {/* Listing price line (blue) */}
         <polyline
-          points={points}
+          points={listingPoints}
           fill="none"
-          stroke={trendColor}
+          stroke={listingTrendColor}
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
 
-        {/* Current price dot */}
-        {values.length > 0 && (
+        {/* Current listing price dot */}
+        {sortedListing.length > 0 && (
           <circle
             cx={width}
-            cy={height - ((current - min) / range) * (height - 4) - 2}
+            cy={height - ((listingCurrent - min) / range) * (height - 4) - 2}
             r="1.5"
-            fill={trendColor}
+            fill={listingTrendColor}
           />
         )}
       </svg>

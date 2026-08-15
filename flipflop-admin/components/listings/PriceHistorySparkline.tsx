@@ -14,7 +14,8 @@ interface PriceHistorySparklineProps {
 }
 
 export function PriceHistorySparkline({ listingId }: PriceHistorySparklineProps) {
-  const [prices, setPrices] = useState<PriceObservation[]>([]);
+  const [listingPrices, setListingPrices] = useState<PriceObservation[]>([]);
+  const [cpkPrices, setCpkPrices] = useState<PriceObservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
@@ -26,7 +27,8 @@ export function PriceHistorySparkline({ listingId }: PriceHistorySparklineProps)
         );
         if (response.ok) {
           const data = await response.json();
-          setPrices(data.prices || []);
+          setListingPrices(data.listingPrices || []);
+          setCpkPrices(data.cpkPrices || []);
         }
       } catch (error) {
         console.error(`Failed to fetch price history for ${listingId}:`, error);
@@ -50,12 +52,18 @@ export function PriceHistorySparkline({ listingId }: PriceHistorySparklineProps)
         className="hover:opacity-75 transition cursor-pointer"
         title="Click to view detailed price history"
       >
-        <PriceSparkline prices={prices} width={80} height={28} />
+        <PriceSparkline
+          listingPrices={listingPrices}
+          cpkPrices={cpkPrices}
+          width={80}
+          height={28}
+        />
       </button>
       {showModal && (
         <PriceHistoryModal
           listingId={listingId}
-          prices={prices}
+          listingPrices={listingPrices}
+          cpkPrices={cpkPrices}
           onClose={() => setShowModal(false)}
         />
       )}

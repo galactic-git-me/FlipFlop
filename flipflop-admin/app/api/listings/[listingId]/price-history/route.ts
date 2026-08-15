@@ -19,27 +19,30 @@ export async function GET(
   }
 
   try {
-    // Call the backend API to get price history
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-    const response = await fetch(
-      `${backendUrl}/api/gem_radar/listings/${encodeURIComponent(listingId)}/price-history`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch price history from backend" },
-        { status: response.status }
-      );
-    }
+    // Fetch both listing and CPK price histories in parallel
+    const [listingRes, cpkRes] = await Promise.all([
+      fetch(
+        `${backendUrl}/api/gem_radar/listings/${encodeURIComponent(listingId)}/price-history`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      ),
+      fetch(
+        `${backendUrl}/api/gem_radar/listings/${encodeURIComponent(listingId)}/cpk-price-history`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      ),
+    ]);
 
-    const data = await response.json();
+    const listingData = listingRes.ok ? await listingRes.json() : { prices: [] };
+    const cpkData = cpkRes.ok ? await cpkRes.json() : { prices: [] };
+
     return NextResponse.json({
-      prices: data.prices || [],
+      listingPrices: listingData.prices || [],
+      cpkPrices: cpkData.prices || [],
     });
   } catch (error) {
     console.error(`Error fetching price history for ${listingId}:`, error);
