@@ -24,12 +24,11 @@ async def get_random_sample(sample_size=50):
 
 def format_listing_for_review(listing, index):
     """Format a listing for human review"""
-    cpk_range = None
-    if listing.market_lower_price and listing.market_upper_price:
-        cpk_range = {
-            "lower": float(listing.market_lower_price),
-            "median": float(listing.market_median_price) if listing.market_median_price else None,
-            "upper": float(listing.market_upper_price),
+    market_prices = None
+    if listing.market_new_price or listing.market_used_price:
+        market_prices = {
+            "new": float(listing.market_new_price) if listing.market_new_price else None,
+            "used": float(listing.market_used_price) if listing.market_used_price else None,
         }
 
     return {
@@ -40,7 +39,7 @@ def format_listing_for_review(listing, index):
         "delivered_price": float(listing.delivered_price),
         "item_price": float(listing.actual_listing_price),
         "postage_price": float(listing.postage_price),
-        "cpk_price_range": cpk_range,
+        "market_prices": market_prices,  # eBay market new/used prices at scrape time
         "classification": listing.classification,
         "deal_score": float(listing.deal_score) if listing.deal_score else None,
         "url": listing.url,
