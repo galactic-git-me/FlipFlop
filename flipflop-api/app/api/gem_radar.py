@@ -390,6 +390,18 @@ def _is_current_gen_ram(title: str) -> bool:
     return "ddr5" in title.lower()
 
 
+def _is_damaged(title: str) -> bool:
+    """Check if item title indicates damage, defects, or non-working condition."""
+    damage_keywords = [
+        "damaged", "defective", "broken", "not working", "faulty", "non-functional",
+        "does not work", "parts only", "as-is", "no power", "dead", "failed",
+        "pins bent", "cracked", "scratched", "dent", "stripped", "shorted",
+        "cpu socket", "bent pins", "won't boot", "won't power", "no display",
+    ]
+    title_lower = title.lower()
+    return any(keyword in title_lower for keyword in damage_keywords)
+
+
 async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False) -> dict | None:
     """Best real deal — highest deal_score (i.e. biggest validated gap to
     real market price) — among CPU/Motherboard/RAM/GPU listings classified
@@ -423,6 +435,8 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
         query = query.limit(1)
         result = await db.execute(query)
         best = result.scalar_one_or_none()
+        if best and _is_damaged(best.title):
+            best = None
     else:
         # Bounded candidate scan rather than fetching the whole table —
         # 200 candidates in deal_score order is far more than enough to find
@@ -430,6 +444,8 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
         result = await db.execute(query.limit(200))
         best = None
         for candidate in result.scalars():
+            if _is_damaged(candidate.title):
+                continue
             if not _is_desktop_appropriate(candidate.title, candidate.category):
                 continue
             if candidate.category == "ram" and not _is_current_gen_ram(candidate.title):
@@ -973,10 +989,14 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         query = query.limit(1)
         result = await db.execute(query)
         best = result.scalar_one_or_none()
+        if best and _is_damaged(best.title):
+            best = None
     else:
         result = await db.execute(query.limit(200))
         best = None
         for candidate in result.scalars():
+            if _is_damaged(candidate.title):
+                continue
             if not _is_desktop_appropriate(candidate.title, candidate.category):
                 continue
             if candidate.category == "ram" and not _is_current_gen_ram(candidate.title):
