@@ -25,8 +25,14 @@ class ManualBuild(Base):
     # app/services/ebay_listing_withdraw.py), since eBay's publish response
     # only returns listingId, not offerId.
     ebay_sku: Mapped[str | None] = mapped_column(String(60))
-    # [{"url": "...", "kind": "photo" | "spec_card" | "registration_plate"}, ...]
+    # [{"url": "...", "kind": "photo" | "spec_card" | "registration_plate" | "performance_card"}, ...]
     photos: Mapped[list] = mapped_column(JSON, default=list)
+    # Structured factual data backing the rendered spec card / registration
+    # plate / performance card images, keyed by kind — e.g.
+    # {"spec_card": {...}, "registration_plate": {...}, "performance_card": {...}}.
+    # This is what actually gets sent to the LLM for listing generation (as
+    # plain text/JSON), not the images — the images are a rendering of it.
+    evidence_data: Mapped[dict] = mapped_column(JSON, default=dict)
     hero_photo_url: Mapped[str | None] = mapped_column(String(500))
     storefront_product_id: Mapped[int | None] = mapped_column(Integer)
     # eBay Listing Configuration

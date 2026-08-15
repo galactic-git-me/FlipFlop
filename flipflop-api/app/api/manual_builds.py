@@ -19,7 +19,7 @@ from app.schemas.manual_build import (
     ListOnStorefrontRequest, ListOnStorefrontResult, ReorderPhotosRequest,
     UpdateAspectsRequest, UpdateEbayListingConfigRequest, FulfillmentPolicyOut,
     CourierQuoteOut, SyncEbayOrderResult, BuyerAddressOut, BookShipmentRequest,
-    BookShipmentResult,
+    BookShipmentResult, UpdateEvidenceDataRequest,
 )
 from app.services import ai_service
 from app.services.ebay_listing_poster import post_flip_to_ebay
@@ -366,15 +366,23 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
     system_prompt = _load_ebay_listing_system_prompt()
     selling_principles = _load_selling_principles()
 
-    # This build's own evidence images — spec card, registration plate and
-    # performance card renders are tagged with dedicated `kind` values on
-    # upload (see /photos and /photos/branded) specifically so they can be
-    # found per-build rather than relying on any shared/global file.
-    photos = build.photos or []
-    spec_card_urls = [p["url"] for p in photos if p.get("kind") == "spec_card"]
-    registration_plate_urls = [p["url"] for p in photos if p.get("kind") == "registration_plate"]
-    performance_card_urls = [p["url"] for p in photos if p.get("kind") == "performance_card"]
-    image_urls = spec_card_urls + registration_plate_urls + performance_card_urls
+    # This build's own evidence — spec card and registration plate data are
+    # entirely derivable from fields already on the build (components,
+    # name), so they're auto-populated unless the seller has uploaded more
+    # specific JSON via PUT /{build_id}/evidence-data. Performance data has
+    # no such fallback — it only exists if uploaded for this exact build.
+    # All of it goes to the LLM as plain JSON text, never as an image —
+    # no vision model involved.
+    evidence = build.evidence_data or {}
+    spec_card_data = evidence.get("spec_card") or {
+        "pc_name": build.name,
+        "components": [
+            {"slot": (c["slot"] if isinstance(c, dict) else c.slot), "name": (c["name"] if isinstance(c, dict) else c.name)}
+            for c in build.components
+        ],
+    }
+    registration_plate_data = evidence.get("registration_plate") or {"pc_name": build.name}
+    performance_card_data = evidence.get("performance_card")
 
     shipping_labels = {
         "tracked": "Tracked courier delivery",
@@ -392,10 +400,14 @@ CONDITION SELECTION: {build.ebay_condition or "Not set"}
 FULL SPECIFICATIONS:
 {component_text}
 
-SPECIFICATION CARD INCLUDED: {"Yes — attached as an image" if spec_card_urls else "No"}
-REGISTRATION PLATE INCLUDED: {"Yes — attached as an image" if registration_plate_urls else "No"}
+SPECIFICATION CARD DATA (JSON):
+{json.dumps(spec_card_data, indent=2)}
 
-TESTS COMPLETED: {"Performance card attached as image(s) below — extract benchmark, temperature and stability results directly from it" if performance_card_urls else "None supplied"}
+REGISTRATION PLATE DATA (JSON):
+{json.dumps(registration_plate_data, indent=2)}
+
+MEASURED BENCHMARKS / TEMPERATURES / STABILITY RESULTS (JSON):
+{json.dumps(performance_card_data, indent=2) if performance_card_data else "None supplied — omit the PERFORMANCE YOU CAN COUNT ON section or place it under INFORMATION REQUIRED"}
 
 RETURNS POLICY: {f"{build.return_days} day returns" if build.return_days else "No returns"}
 
@@ -411,7 +423,7 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
     if selling_principles:
         materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style — follow alongside the system instructions above):\n{selling_principles}\n"
 
-    raw_response, _model = await ai_service.chat_with_images(system_prompt, materials, image_urls)
+    raw_response, _model = await ai_service.chat_with_images(system_prompt, materials, [])
     if _model == "none":
         raise HTTPException(503, raw_response)
 
@@ -718,6 +730,31 @@ async def update_aspects(build_id: int, body: UpdateAspectsRequest, db: AsyncSes
         raise HTTPException(400, "Invalid Item Specifics: " + "; ".join(problems))
 
     build.generated_aspects = body.aspects
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
+@router.put("/{build_id}/evidence-data", response_model=ManualBuildOut)
+async def update_evidence_data(build_id: int, body: UpdateEvidenceDataRequest, db: AsyncSession = Depends(get_db)):
+    """Stores the structured factual data (JSON) behind the spec card,
+    registration plate, or performance card for this build — this is what
+    actually gets sent to the LLM for listing generation, as plain text.
+    The rendered PNG images (uploaded separately via /photos and
+    /photos/branded) are just a visual rendering of this same data for the
+    seller's own reference and for the eBay listing photos themselves."""
+    if body.kind not in ("spec_card", "registration_plate", "performance_card"):
+        raise HTTPException(400, "kind must be 'spec_card', 'registration_plate' or 'performance_card'")
+
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+
+    evidence = dict(build.evidence_data or {})
+    evidence[body.kind] = body.data
+    build.evidence_data = evidence
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)

@@ -135,6 +135,10 @@ export interface ManualBuild {
   ebay_listing_id: string | null;
   ebay_listing_url: string | null;
   photos: BuildPhoto[];
+  // Structured factual data behind the rendered spec card / registration
+  // plate / performance card — this is what's actually sent to the LLM for
+  // listing generation (as JSON text), not the images themselves.
+  evidence_data?: Record<string, unknown>;
   hero_photo_url: string | null;
   storefront_product_id: number | null;
   // eBay Listing Configuration (optional until migration runs)
@@ -627,6 +631,8 @@ export const api = {
       if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
       return res.json();
     },
+    updateEvidenceData: (id: number, kind: "spec_card" | "registration_plate" | "performance_card", data: Record<string, unknown>) =>
+      request<ManualBuild>(`/manual-builds/${id}/evidence-data`, { method: "PUT", body: JSON.stringify({ kind, data }) }),
     uploadBrandedAsset: async (id: number, kind: "spec_card" | "registration_plate", blob: Blob): Promise<ManualBuild> => {
       const formData = new FormData();
       formData.append("file", blob, `${kind}.png`);

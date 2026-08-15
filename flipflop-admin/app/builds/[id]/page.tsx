@@ -697,6 +697,13 @@ export default function BuildDetailPage() {
 
                     setGenerating(true);
                     try {
+                      const jsonText = await file.text();
+                      const performanceData = JSON.parse(jsonText);
+                      // Save the raw data to this build — this is what generate-listing
+                      // actually sends to the AI. Save it even if the visual render below fails.
+                      const saved = await api.manualBuilds.updateEvidenceData(buildId, "performance_card", performanceData);
+                      setBuild(saved);
+
                       const formData = new FormData();
                       formData.append("file", file);
 

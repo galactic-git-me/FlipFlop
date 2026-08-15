@@ -56,6 +56,7 @@ class ManualBuildOut(BaseModel):
     ebay_listing_url: Optional[str]
     ebay_sku: Optional[str] = None
     photos: list[BuildPhoto]
+    evidence_data: dict = {}
     hero_photo_url: Optional[str]
     storefront_product_id: Optional[int]
     # eBay Listing Configuration
@@ -117,6 +118,11 @@ class GenerateListingResult(BaseModel):
 
 class UpdateAspectsRequest(BaseModel):
     aspects: dict[str, list[str]]
+
+
+class UpdateEvidenceDataRequest(BaseModel):
+    kind: str  # "spec_card" | "registration_plate" | "performance_card"
+    data: dict
 
 
 class PostToEbayRequest(BaseModel):
