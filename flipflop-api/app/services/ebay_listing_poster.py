@@ -404,9 +404,13 @@ async def post_flip_to_ebay(
     return_policy_id: Optional[str] = None,
     fulfillment_policy_id: Optional[str] = None,
     aspects: Optional[dict[str, list[str]]] = None,
+    listing_id: Optional[str] = None,  # If provided, update existing listing; else create new
 ) -> dict:
     """
-    Convenience function to post a flip's listing to eBay.
+    Convenience function to post or update a flip's listing on eBay.
+
+    If listing_id is provided, updates the existing listing.
+    If listing_id is None, creates a new listing.
 
     Uses Application Token (server-to-server) auth if app_id and client_secret are provided.
     Falls back to user token if not provided.
@@ -419,7 +423,8 @@ async def post_flip_to_ebay(
             image_urls=["https://example.com/image1.jpg"],
             access_token=user_token,
             app_id=settings.ebay_app_id,
-            client_secret=settings.ebay_client_secret
+            client_secret=settings.ebay_client_secret,
+            listing_id=None  # Pass existing listing_id to update, None to create
         )
         if result["success"]:
             flip.ebay_listing_id = result["listing_id"]

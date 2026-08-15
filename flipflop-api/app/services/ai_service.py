@@ -100,7 +100,7 @@ async def chat(
             except Exception as e:
                 print(f"[hermes] OpenRouter {model} failed: {e}")
 
-    # 3. Try Claude as last resort
+    # 3. Try Claude as last resort (with prompt caching for cost savings)
     if _s.anthropic_api_key:
         try:
             response = await _claude_chat(messages)
@@ -417,16 +417,25 @@ async def _claude_chat(messages: list[dict]) -> str | None:
     resp = await client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=1024,
-        system=SYSTEM_PROMPT,
+        system=[
+            {
+                "type": "text",
+                "text": SYSTEM_PROMPT,
+                "cache_control": {"type": "ephemeral"}
+            }
+        ],
         messages=messages,
     )
     return resp.content[0].text if resp.content else None
 
 
 async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str, str]:
-    """Generate eBay listing via Claude API (primary) or OpenRouter fallback.
+    """Generate eBay listing via Claude API with prompt caching (primary) or OpenRouter fallback.
 
     Returns (response_text, model_used) or raises if no backend available.
+
+    Uses prompt caching on the system prompt to reduce token usage and improve latency
+    on subsequent calls with the same prompt template.
     """
     _s = get_settings()
 
@@ -438,7 +447,13 @@ async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str
             resp = await client.messages.create(
                 model="claude-haiku-4-5-20251001",
                 max_tokens=4000,
-                system=system_prompt,
+                system=[
+                    {
+                        "type": "text",
+                        "text": system_prompt,
+                        "cache_control": {"type": "ephemeral"}
+                    }
+                ],
                 messages=[{"role": "user", "content": materials}],
             )
             content = resp.content[0].text if resp.content else ""
