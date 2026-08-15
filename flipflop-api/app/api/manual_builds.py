@@ -423,9 +423,12 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
     if selling_principles:
         materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style — follow alongside the system instructions above):\n{selling_principles}\n"
 
-    raw_response, _model = await ai_service.chat_with_images(system_prompt, materials, [])
-    if _model == "none":
-        raise HTTPException(503, raw_response)
+    try:
+        raw_response, _model = await ai_service.generate_ebay_listing_with_claude(system_prompt, materials)
+    except ValueError as e:
+        raise HTTPException(503, f"Claude API not configured: {str(e)}")
+    except Exception as e:
+        raise HTTPException(502, f"Claude API call failed: {str(e)}")
 
     title = _extract_recommended_title(raw_response)
     description_html = _extract_html_section(raw_response)

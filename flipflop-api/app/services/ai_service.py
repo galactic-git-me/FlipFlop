@@ -397,6 +397,29 @@ async def _claude_chat(messages: list[dict]) -> str | None:
     return resp.content[0].text if resp.content else None
 
 
+async def generate_ebay_listing_with_claude(system_prompt: str, materials: str) -> tuple[str, str]:
+    """Generate eBay listing HTML directly via Claude API.
+
+    Returns (response_text, model_used) or raises if Claude is not configured.
+    """
+    _s = get_settings()
+    if not _s.anthropic_api_key:
+        raise ValueError("Claude API key not configured (ANTHROPIC_API_KEY missing)")
+
+    import anthropic
+    client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
+
+    resp = await client.messages.create(
+        model="claude-sonnet-5-20250514",
+        max_tokens=4000,
+        system=system_prompt,
+        messages=[{"role": "user", "content": materials}],
+    )
+
+    content = resp.content[0].text if resp.content else ""
+    return content, "claude-sonnet-5"
+
+
 def _template_titles(cpu, ram_gb, storage_gb, gpu, case_theme) -> list[str]:
     # Row 4: item + key specs first, filler (theme, condition words) last.
     storage = f"{storage_gb}GB SSD" if storage_gb else "No Storage"
