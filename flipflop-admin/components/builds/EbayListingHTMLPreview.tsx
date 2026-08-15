@@ -1,9 +1,8 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element, react/no-danger-with-children */
 
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import DOMPurify from "dompurify";
 
 interface EbayListingHTMLPreviewProps {
   title: string;
@@ -13,19 +12,6 @@ interface EbayListingHTMLPreviewProps {
   onClose?: () => void;
   isModal?: boolean;
 }
-
-const sanitizeHtml = (html: string) =>
-  DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "h1", "h2", "h3", "h4", "h5", "h6",
-      "p", "ul", "ol", "li", "blockquote",
-      "strong", "b", "em", "i", "u", "a",
-      "br", "hr", "span", "div", "img", "table", "tr", "td", "th", "tbody", "thead", "section", "article",
-    ],
-    ALLOWED_ATTR: ["style", "href", "target", "rel", "src", "alt", "class", "id", "width", "height"],
-    ALLOW_DATA_ATTR: false,
-    ALLOW_UNKNOWN_PROTOCOLS: false,
-  });
 
 export function EbayListingHTMLPreview({
   title,
@@ -276,7 +262,7 @@ export function EbayListingHTMLPreview({
           {/* Render ONLY your AI-generated HTML - no CSS interference */}
           <div
             dangerouslySetInnerHTML={{
-              __html: sanitizeHtml(description),
+              __html: description,
             }}
           />
         </div>
