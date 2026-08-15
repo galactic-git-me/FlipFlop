@@ -20,8 +20,9 @@ Fill ONLY these template placeholders with the data provided:
 - {{WHY_STANDS_OUT}} → 3–4 paragraphs explaining what makes this build special (derived from specs + performance data)
 - {{CASE_NAME}}, {{CASE_DESCRIPTION}} → Case model and visual description (from spec card)
 - {{SPECIFICATION_TABLE}} → Full spec table (extract all components from spec card in the provided table format)
+- {{PERFORMANCE_DATA}} → Benchmark scores, game FPS by setting, percentile rankings, and stability metrics (from performance card JSON). Format as styled HTML rows with clear labels, numbers, and percentile badges. If no performance data supplied, omit this section entirely.
 - {{CONNECTIVITY_DESCRIPTION}} → Wi-Fi, Bluetooth, Ethernet details (from spec card)
-- {{BEST_SUITED_FOR}} → Use-case grid (tailor to the build's capabilities)
+- {{BEST_SUITED_FOR}} → Use-case grid with 2 columns. For each use case: bold emoji + title on first line, then indented description below (20px margin-left, smaller grey text). Tailor to the build's capabilities.
 - {{USE_CASE_SUMMARY}} → 1 sentence tying use cases together
 - {{FINAL_CTA}} → 2–3 sentence closing pitch
 
@@ -145,7 +146,28 @@ A clean two-column table with every component:
 
 Extract ONLY what is shown on the spec card. Do not guess or fill in blanks.
 
+## PERFORMANCE DATA (Section 9 - if supplied)
+
+If performance card JSON is provided, create an attractive performance metrics section with:
+
+**Benchmark scores:** Display major benchmarks (Cinebench, Geekbench, 3DMark, etc.) with scores and percentile rankings
+- Format: "Cinebench R23 Multi-Core: 28,450 points (87th percentile)"
+- Use percentile badges to show where this build ranks
+
+**Game performance:** For each game with FPS data, show results at different settings
+- Format: "Game Name: 60 FPS @ 1440p Ultra" or "165+ FPS @ 1080p High"
+- Organize by resolution/settings tier if multiple results exist
+
+**Thermal and stability:** Include CPU/GPU temperatures under load, power draw, noise levels if available
+- Format as clean metric rows with labels and values
+
+**HTML structure:** Use styled `<div>` rows with labels on left, values/badges on right, with clear spacing and contrast. Use brand colors (orange #FF6700, blue #008CFF) for accent elements and percentile badges.
+
+If no performance data is supplied, completely omit this section (do not include a placeholder or "data not available" message).
+
 ## HTML DESIGN REQUIREMENTS
+
+**Contrast principle:** Dark backgrounds (#171c24, #0d1015) ALWAYS use white (#fff) or very light text. Light backgrounds use dark text. Never use grey or dim text on dark backgrounds.
 
 Use this exact flipflop premium template. Copy it verbatim, then replace ONLY the {{PLACEHOLDER}} variables with build-specific content. Do NOT modify the HTML structure, CSS, or any tags.
 
