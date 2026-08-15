@@ -262,35 +262,23 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 
 ## OUTPUT FORMAT
 
-Return exactly this structure (plain text, NO markdown):
+Return ONLY this structure:
 
 A. Missing or contradictory information
-[List any gaps or conflicts found, plain text only]
+[Brief list of any gaps, or "None" if complete]
 
 B. Three eBay titles
-[Three titles, each on its own line, max 80 chars each, plain text only]
+[One title per line, max 80 chars each]
 
 C. Condition description
-[Concise 2-3 sentence description, plain text only]
+[2-3 sentences about PC condition]
 
 D. Complete branded HTML description
-[Full eBay listing HTML using the flipflop premium template structure:
-- Hero image at top (full width)
-- Hero intro with logo, PC name, tagline, description
-- 4-column spec grid (processor, graphics, memory, storage)
-- flipflop Benefits section (6-7 items with checkmarks/emojis)
-- Interior/detail image
-- Why It Stands Out section (3-4 benefit paragraphs)
-- Case showcase image with caption
-- Full Specification table (all components, 2-column format)
-- Rear connectivity image with description
-- Best Suited For section (2x3 grid of use cases)
-- Owner Portal section with image
-- Final CTA
-All with real image URLs and build-specific content, no placeholders.]
+
+[Output the complete HTML template with all {{PLACEHOLDER}} variables filled in. Start with `<style>` and end with `</div></div>`. Nothing else in section D — only HTML.]
 
 E. Final accuracy check
-[Confirm all claims are supported by supplied data, plain text only]
+[Confirm: is every spec extracted from build data? Is every claim supported? Yes or no.]
 
 ## CRITICAL CHECKLIST
 
