@@ -127,7 +127,7 @@ export default function BuildDetailPage() {
   };
 
 
-  const generateListing = async () => {
+  const generateListing = async (openPreviewAfter = false) => {
     setGenerating(true);
     try {
       const result = await api.manualBuilds.generateListing(buildId);
@@ -141,6 +141,7 @@ export default function BuildDetailPage() {
             }
           : prev
       );
+      if (openPreviewAfter) setShowEbayPreview(true);
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";
       alert(`Couldn't generate the listing: ${msg}`);
@@ -564,12 +565,12 @@ export default function BuildDetailPage() {
 
             {!build.generated_title ? (
               <button
-                onClick={generateListing}
+                onClick={() => generateListing(true)}
                 disabled={generating}
                 className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:opacity-60 text-black rounded-lg transition-colors"
               >
                 {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                Generate Title &amp; Description
+                {generating ? "Generating…" : "Generate eBay Listing"}
               </button>
             ) : (
               <div className="flex flex-col gap-3">
@@ -581,21 +582,14 @@ export default function BuildDetailPage() {
                   <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
                   <DescriptionPreview html={build.generated_description} />
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setShowEbayPreview(true)}
-                    className="self-start text-xs px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium"
-                  >
-                    Preview on eBay
-                  </button>
-                  <button
-                    onClick={generateListing}
-                    disabled={generating}
-                    className="self-start text-xs text-slate-500 hover:text-slate-300 underline decoration-dotted"
-                  >
-                    {generating ? "Regenerating…" : "Regenerate"}
-                  </button>
-                </div>
+                <button
+                  onClick={() => generateListing(true)}
+                  disabled={generating}
+                  className="self-start flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:opacity-60 text-black rounded-lg transition-colors"
+                >
+                  {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                  {generating ? "Generating…" : "Generate eBay Listing"}
+                </button>
               </div>
             )}
 
