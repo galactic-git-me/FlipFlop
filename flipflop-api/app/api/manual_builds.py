@@ -449,28 +449,6 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
             f"raw response (first 800 chars): {raw_response[:800]}",
         )
 
-    # Fill in photo URLs in the generated HTML
-    photos = build.photos or []
-    photo_urls = {}
-    for photo in photos:
-        if isinstance(photo, dict) and "url" in photo:
-            kind = photo.get("kind", "photo")
-            if kind not in photo_urls:  # Use first photo of each kind
-                photo_urls[kind] = photo["url"]
-
-    # Map photo kinds to template variable names and perform substitution
-    photo_replacements = {
-        "{{HERO_IMAGE_URL}}": photo_urls.get("photo", ""),  # Default photos are hero shots
-        "{{INTERIOR_IMAGE_URL}}": photo_urls.get("interior", ""),
-        "{{COMPONENT_CALLOUT_IMAGE_URL}}": photo_urls.get("component", ""),
-        "{{CASE_DETAIL_IMAGE_URL}}": photo_urls.get("case", ""),
-        "{{REAR_CONNECTIVITY_IMAGE_URL}}": photo_urls.get("connectivity", ""),
-        "{{OWNER_PORTAL_IMAGE_URL}}": photo_urls.get("portal", ""),
-    }
-    for placeholder, url in photo_replacements.items():
-        if url:
-            description_html = description_html.replace(placeholder, url)
-
     build.generated_title = title[:80]
     build.generated_description = description_html
     build.updated_at = datetime.utcnow()

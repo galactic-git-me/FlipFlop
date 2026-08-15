@@ -1,163 +1,168 @@
 <style>
 * { box-sizing: border-box; }
-body, .ff-page { margin: 0; padding: 0; }
-.ff-page { background: #0d1015; color: #fff; font-family: 'Courier New', Consolas, Monaco, monospace; line-height: 1.55; }
+html, body { margin: 0; padding: 0; }
+.ff-page { margin: 0; padding: 0; background: #0d1015; color: #e2e8f0; font-family: 'Courier New', Consolas, Monaco, monospace; line-height: 1.6; font-size: 15px; }
 .ff-wrap { width: 100%; max-width: 1000px; margin: 0 auto; background: #0d1015; }
-.ff-image { display: block; width: 100%; height: auto; border: 0; }
-.ff-heading { display: block; width: 100%; height: auto; margin: 0 0 22px 0; border: 0; text-align: left; }
-.ff-section { margin: 0 22px 38px; padding: 28px 26px; background: #0d1015; }
-.ff-section.dark { background: #171c24; color: #fff; }
-.ff-section.dark * { color: #fff; }
-.ff-image-section { padding: 0 22px 38px; }
 
-/* Spec cards: 2x2 grid */
-.ff-card-grid { display: table; width: 100%; border-spacing: 12px; padding: 20px 0; margin: 0; }
-.ff-card-row { display: table-row; }
-.ff-card { display: table-cell; width: 50%; background: linear-gradient(135deg, #ff6700, #008cff); padding: 2px; vertical-align: top; }
-.ff-card-inner { background: #171c24; padding: 24px 16px; text-align: center; }
-.ff-card-emoji { font-size: 48px; margin-bottom: 12px; display: block; }
-.ff-card-label { color: #fff; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.ff-card-value { color: #fff; font-size: 22px; font-weight: bold; }
+.ff-image { display: block; width: 100%; height: auto; }
+.ff-heading { display: block; width: 100%; height: auto; margin: 0 0 24px 0; text-align: left; }
 
-/* Benefits: 7 squares in 4+3 grid */
-.ff-benefit-grid { display: table; width: 100%; border-spacing: 12px; padding: 20px 0; margin: 0; }
-.ff-benefit-row { display: table-row; }
-.ff-benefit-item { display: table-cell; width: 25%; background: linear-gradient(135deg, #ff6700, #008cff); padding: 2px; vertical-align: top; }
-.ff-benefit-item.last-row { width: 33.333%; }
-.ff-benefit-inner { background: #171c24; padding: 16px 12px; text-align: center; min-height: 160px; display: flex; flex-direction: column; justify-content: center; }
-.ff-benefit-emoji { font-size: 40px; margin-bottom: 10px; }
+.ff-hero { padding: 40px 28px; background: linear-gradient(135deg, #1a1f2e 0%, #16212b 100%); border-top: 2px solid #ff6700; border-bottom: 2px solid #008cff; }
+.ff-hero-logo { width: 140px; height: auto; margin: 0 0 24px; display: block; }
+.ff-hero-tagline { color: #ff6700; font-size: 20px; font-weight: bold; margin: 12px 0; letter-spacing: 1px; }
+.ff-hero-desc { color: #cbd5e1; font-size: 15px; max-width: 720px; line-height: 1.6; margin: 0; }
+
+/* Specs: 2x2 grid */
+.ff-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 32px 28px 24px; margin: 0; }
+.ff-spec-card { background: linear-gradient(135deg, #171c24 0%, #1a1f2e 100%); border: 1px solid #2a3844; padding: 24px; border-radius: 4px; }
+.ff-spec-emoji { font-size: 44px; margin-bottom: 12px; }
+.ff-spec-label { color: #ff6700; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.ff-spec-value { color: #fff; font-size: 18px; font-weight: bold; }
+
+.ff-section { padding: 32px 28px; margin: 0; }
+.ff-section.dark { background: #0f1419; border-top: 1px solid #1a1f2e; border-bottom: 1px solid #1a1f2e; }
+
+/* Benefits: 7 squares */
+.ff-benefits { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0; margin: 0; }
+.ff-benefits-row-2 { grid-template-columns: repeat(3, 1fr); }
+.ff-benefit-item { background: linear-gradient(135deg, #171c24 0%, #1a1f2e 100%); border: 1px solid #2a3844; padding: 20px; border-radius: 4px; text-align: center; }
+.ff-benefit-emoji { font-size: 36px; margin-bottom: 10px; }
 .ff-benefit-title { color: #fff; font-size: 13px; font-weight: bold; margin-bottom: 8px; line-height: 1.3; }
-.ff-benefit-text { color: #a0aec0; font-size: 11px; line-height: 1.4; }
+.ff-benefit-text { color: #a0aec0; font-size: 12px; line-height: 1.4; }
 
-/* Spec table */
-.ff-spec-table { width: 100%; border-collapse: collapse; color: #fff; font-size: 14px; }
-.ff-spec-table td { padding: 12px 8px; border-bottom: 1px solid #2a3039; vertical-align: top; }
-.ff-spec-table tr:last-child td { border-bottom: 0; }
-.ff-spec-label { width: 35%; color: #b9c8da; }
+/* Tables */
+.ff-spec-table { width: 100%; border-collapse: collapse; margin: 0; }
+.ff-spec-table tr { border-bottom: 1px solid #2a3844; }
+.ff-spec-table tr:last-child { border-bottom: none; }
+.ff-spec-table td { padding: 14px 0; vertical-align: top; color: #e2e8f0; }
+.ff-spec-table .label { width: 30%; color: #cbd5e1; font-weight: bold; }
 
-/* Use case grid */
-.ff-use-grid { width: 100%; border-collapse: collapse; color: #fff; font-size: 14px; }
-.ff-use-grid td { padding: 14px 0; vertical-align: top; border-bottom: 1px solid #2a3039; }
-.ff-use-grid tr:last-child td { border-bottom: 0; }
+.ff-use-grid { width: 100%; border-collapse: collapse; margin: 0; }
+.ff-use-grid tr { border-bottom: 1px solid #2a3844; }
+.ff-use-grid tr:last-child { border-bottom: none; }
+.ff-use-grid td { padding: 16px 0; vertical-align: top; }
 .ff-use-title { color: #fff; font-weight: bold; margin-bottom: 6px; }
-.ff-use-desc { color: #a0aec0; font-size: 13px; margin-left: 20px; }
+.ff-use-desc { color: #a0aec0; font-size: 14px; margin-left: 16px; }
 
-/* Mobile responsive */
-@media only screen and (max-width: 700px) {
-  .ff-section { margin: 0 12px 28px; padding: 20px 16px; }
-  .ff-image-section { padding: 0 12px 28px; }
-  .ff-card-grid { border-spacing: 8px; }
-  .ff-card { width: 100%; }
-  .ff-benefit-grid { border-spacing: 8px; }
-  .ff-benefit-item, .ff-benefit-item.last-row { width: 50%; }
-  .ff-card-emoji { font-size: 36px; }
-  .ff-benefit-emoji { font-size: 32px; }
+.ff-section-title { color: #fff; font-size: 16px; font-weight: bold; margin: 0 0 20px; }
+.ff-paragraph { margin: 0 0 16px; color: #cbd5e1; line-height: 1.6; }
+.ff-paragraph strong { color: #fff; }
+
+.ff-list { margin: 0; padding: 0; list-style: none; }
+.ff-list li { padding: 8px 0; color: #cbd5e1; }
+.ff-list li strong { color: #fff; }
+
+/* Mobile */
+@media (max-width: 700px) {
+  .ff-hero, .ff-section { padding: 24px 16px; }
+  .ff-specs { grid-template-columns: 1fr; gap: 12px; padding: 24px 16px; }
+  .ff-benefits { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ff-benefits-row-2 { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media only screen and (max-width: 420px) {
-  .ff-card { width: 100%; }
-  .ff-benefit-item, .ff-benefit-item.last-row { width: 100%; }
-  .ff-card-emoji { font-size: 32px; }
+@media (max-width: 420px) {
+  .ff-specs { grid-template-columns: 1fr; }
+  .ff-benefits, .ff-benefits-row-2 { grid-template-columns: 1fr; }
+  .ff-spec-emoji { font-size: 32px; }
   .ff-benefit-emoji { font-size: 28px; }
-  .ff-benefit-title { font-size: 12px; }
-  .ff-benefit-text { font-size: 10px; }
 }
 </style>
 
 <div class="ff-page"><div class="ff-wrap">
 
-<img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}} custom gaming and creative PC">
+<img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}}">
 
-<div style="padding: 38px 24px; text-align: left; background: linear-gradient(90deg, #ff6700, #008cff); border-top: 3px solid #ff6700; border-bottom: 3px solid #008cff;">
-  <img src="{{FLIPFLOP_LOGO_URL}}" alt="flipflop" style="display: block; width: 150px; max-width: 45%; height: auto; margin: 0 0 22px; border: 0;">
+<div class="ff-hero">
+  <img class="ff-hero-logo" src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" alt="flipflop">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/strapline.png" alt="{{PC_NAME}}">
-  <p style="margin: 0 0 12px; background: linear-gradient(90deg, #fff, #f0f0f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 24px; font-weight: bold;">{{TAGLINE}}</p>
-  <p style="max-width: 760px; margin: 0; color: #fff; font-size: 16px;">{{HERO_DESCRIPTION}}</p>
+  <p class="ff-hero-tagline">{{TAGLINE}}</p>
+  <p class="ff-hero-desc">{{HERO_DESCRIPTION}}</p>
 </div>
 
-<table class="ff-card-grid">
-  <tr class="ff-card-row">
-    <td class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">⚙️</div><div class="ff-card-label">Processor</div><div class="ff-card-value">{{PROCESSOR}}</div></div></td>
-    <td class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">🎮</div><div class="ff-card-label">Graphics</div><div class="ff-card-value">{{GRAPHICS}}</div></div></td>
-  </tr>
-  <tr class="ff-card-row">
-    <td class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">🧠</div><div class="ff-card-label">Memory</div><div class="ff-card-value">{{MEMORY}}</div></div></td>
-    <td class="ff-card"><div class="ff-card-inner"><div class="ff-card-emoji">💾</div><div class="ff-card-label">Storage</div><div class="ff-card-value">{{STORAGE}}</div></div></td>
-  </tr>
-</table>
+<div class="ff-specs">
+  <div class="ff-spec-card"><div class="ff-spec-emoji">⚙️</div><div class="ff-spec-label">Processor</div><div class="ff-spec-value">{{PROCESSOR}}</div></div>
+  <div class="ff-spec-card"><div class="ff-spec-emoji">🎮</div><div class="ff-spec-label">Graphics</div><div class="ff-spec-value">{{GRAPHICS}}</div></div>
+  <div class="ff-spec-card"><div class="ff-spec-emoji">🧠</div><div class="ff-spec-label">Memory</div><div class="ff-spec-value">{{MEMORY}}</div></div>
+  <div class="ff-spec-card"><div class="ff-spec-emoji">💾</div><div class="ff-spec-label">Storage</div><div class="ff-spec-value">{{STORAGE}}</div></div>
+</div>
 
 <div class="ff-section dark">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/what-to-expect.png" alt="What You Can Expect from flipflop">
-  <table class="ff-benefit-grid">
-    <tr class="ff-benefit-row">
-      <td class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🖥️</div><div class="ff-benefit-title">Premium, carefully curated build</div><div class="ff-benefit-text">Every component is selected for compatibility, performance, cooling and visual balance.</div></div></td>
-      <td class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🛠️</div><div class="ff-benefit-title">Individually assembled and tested</div><div class="ff-benefit-text">Built by hand, configured and stability-checked before dispatch.</div></div></td>
-      <td class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🌐</div><div class="ff-benefit-title">Personalised online owner portal</div><div class="ff-benefit-text">Your complete specification, getting-started guide, useful downloads, support and warranty information in one place.</div></div></td>
-      <td class="ff-benefit-item"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🪪</div><div class="ff-benefit-title">Unique PC name and registration plate</div><div class="ff-benefit-text">{{PC_NAME}} has its own identity and digital registration plate, connected to its personalised owner portal.</div></div></td>
-    </tr>
-    <tr class="ff-benefit-row">
-      <td class="ff-benefit-item last-row"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">⬆️</div><div class="ff-benefit-title">Build-specific upgrade path</div><div class="ff-benefit-text">Clear guidance on compatible future upgrades for the processor, graphics card, memory, storage and cooling.</div></div></td>
-      <td class="ff-benefit-item last-row"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">💬</div><div class="ff-benefit-title">Personal support</div><div class="ff-benefit-text">Direct help with setup, troubleshooting and future upgrades.</div></div></td>
-      <td class="ff-benefit-item last-row"><div class="ff-benefit-inner"><div class="ff-benefit-emoji">🏷️</div><div class="ff-benefit-title">Relevant future offers</div><div class="ff-benefit-text">Access to relevant discounts, upgrade opportunities and selected future technology offers.</div></div></td>
-    </tr>
-  </table>
+  <div class="ff-benefits">
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">🖥️</div><div class="ff-benefit-title">Premium, carefully curated build</div><div class="ff-benefit-text">Every component selected for compatibility, performance, cooling and visual balance.</div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">🛠️</div><div class="ff-benefit-title">Individually assembled and tested</div><div class="ff-benefit-text">Built by hand, configured and stability-checked before dispatch.</div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">🌐</div><div class="ff-benefit-title">Personalised online owner portal</div><div class="ff-benefit-text">Your specification, getting-started guide, downloads, support and warranty in one place.</div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">🪪</div><div class="ff-benefit-title">Unique PC name and registration plate</div><div class="ff-benefit-text">{{PC_NAME}} has its own identity and digital registration plate.</div></div>
+  </div>
+  <div style="margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">⬆️</div><div class="ff-benefit-title">Build-specific upgrade path</div><div class="ff-benefit-text">Clear guidance on compatible future upgrades.</div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">💬</div><div class="ff-benefit-title">Personal support</div><div class="ff-benefit-text">Direct help with setup, troubleshooting and upgrades.</div></div>
+    <div class="ff-benefit-item"><div class="ff-benefit-emoji">🏷️</div><div class="ff-benefit-title">Relevant future offers</div><div class="ff-benefit-text">Access to discounts, upgrade opportunities and tech offers.</div></div>
+  </div>
 </div>
 
-<div class="ff-image-section"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Illuminated interior of the {{PC_NAME}} PC"></div>
+<div class="ff-image-section" style="padding: 0 0 32px;"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Interior of {{PC_NAME}}"></div>
 
-<div class="ff-section" style="border-left: 4px solid #008cff;">
+<div class="ff-section">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/why-prometheus-stands-out.png" alt="Why {{PC_NAME}} Stands Out">
   {{WHY_STANDS_OUT}}
 </div>
 
-<div class="ff-image-section"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="{{PC_NAME}} component overview"></div>
+<div class="ff-image-section" style="padding: 0 0 32px;"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="Components"></div>
 
-<div class="ff-image-section">
-  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="{{CASE_NAME}} Mid Tower case">
-  <div style="padding: 24px; background: #171c24; border-bottom: 3px solid #ff6700; color: #fff;">
+<div class="ff-image-section" style="padding: 0;">
+  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="{{CASE_NAME}}">
+  <div style="padding: 28px; background: #0f1419; border-bottom: 2px solid #ff6700;">
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="{{CASE_NAME}}">
-    <p style="margin: 0; color: #fff; font-size: 15px;">{{CASE_DESCRIPTION}}</p>
+    <p class="ff-paragraph">{{CASE_DESCRIPTION}}</p>
   </div>
 </div>
 
 <div class="ff-section dark">
-  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/exact-specification.png" alt="Exact Specification">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/exact-specification.png" alt="Full Specification">
   {{SPECIFICATION_TABLE}}
 </div>
 
 <div class="ff-section dark">
-  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="Performance You Can Count On">
+  <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="Performance">
   {{PERFORMANCE_DATA}}
 </div>
 
-<div class="ff-image-section">
-  <img class="ff-image" src="{{REAR_CONNECTIVITY_IMAGE_URL}}" alt="{{PC_NAME}} rear ports and connectivity">
-  <div style="padding: 20px; background: #171c24; color: #fff;">
+<div class="ff-image-section" style="padding: 0;">
+  <img class="ff-image" src="{{REAR_CONNECTIVITY_IMAGE_URL}}" alt="Connectivity">
+  <div style="padding: 28px; background: #0f1419;">
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/ready-to-connect.png" alt="Ready to Connect">
-    <p style="margin: 0; color: #fff; font-size: 15px;">{{CONNECTIVITY_DESCRIPTION}}</p>
+    <p class="ff-paragraph">{{CONNECTIVITY_DESCRIPTION}}</p>
   </div>
 </div>
 
-<div class="ff-section" style="border-left: 4px solid #ff6700;">
+<div class="ff-section">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/best-suited-for.png" alt="Best Suited For">
   {{BEST_SUITED_FOR}}
-  <p style="margin: 20px 0 0; color: #cbd5e1;">{{USE_CASE_SUMMARY}}</p>
+  <p class="ff-paragraph" style="margin-top: 20px;">{{USE_CASE_SUMMARY}}</p>
 </div>
 
-<div class="ff-image-section">
-  <img class="ff-image" src="{{OWNER_PORTAL_IMAGE_URL}}" alt="Personalised flipflop PC owner portal">
-  <div style="padding: 26px; background: #171c24; border-bottom: 3px solid #008cff; color: #fff;">
+<div class="ff-image-section" style="padding: 0;">
+  <img class="ff-image" src="{{OWNER_PORTAL_IMAGE_URL}}" alt="Owner Portal">
+  <div style="padding: 28px; background: #0f1419; border-bottom: 2px solid #008cff;">
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/personalised-portal.png" alt="Your PC. Your Personalised Portal.">
-    <p style="margin: 0 0 20px; color: #fff; font-size: 15px;">Everything you need to enjoy {{PC_NAME}} and get the most from your new PC—all organised in one convenient place.</p>
-    <div style="max-width: 600px; text-align: left; color: #fff; font-size: 14px;">
-      <div style="margin-bottom: 10px;">🖥️ Complete build specification</div><div style="margin-bottom: 10px;">🪪 {{PC_NAME}} digital registration plate</div><div style="margin-bottom: 10px;">🚀 Getting-started guide</div><div style="margin-bottom: 10px;">🛡️ Warranty information</div><div style="margin-bottom: 10px;">💬 Support details</div><div style="margin-bottom: 10px;">📚 Downloads and user guides</div><div style="margin-bottom: 10px;">⬆️ Build-specific upgrade path</div><div>🏷️ Relevant future offers and discounts</div>
+    <p class="ff-paragraph">Everything you need to enjoy {{PC_NAME}} and get the most from your new PC—all organised in one convenient place.</p>
+    <div style="margin-top: 16px;">
+      <div style="padding: 6px 0;">🖥️ Complete build specification</div>
+      <div style="padding: 6px 0;">🪪 {{PC_NAME}} digital registration plate</div>
+      <div style="padding: 6px 0;">🚀 Getting-started guide</div>
+      <div style="padding: 6px 0;">🛡️ Warranty information</div>
+      <div style="padding: 6px 0;">💬 Support details</div>
+      <div style="padding: 6px 0;">📚 Downloads and user guides</div>
+      <div style="padding: 6px 0;">⬆️ Build-specific upgrade path</div>
+      <div style="padding: 6px 0;">🏷️ Relevant future offers and discounts</div>
     </div>
   </div>
 </div>
 
-<div style="padding: 40px 24px; text-align: left; background: #171c24; border-top: 3px solid #ff6700; color: #fff;">
+<div class="ff-section dark">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/own-prometheus.png" alt="Own {{PC_NAME}}">
-  <p style="max-width: 700px; margin: 0 0 22px; color: #fff; font-size: 15px;">{{FINAL_CTA}}</p>
+  <p class="ff-paragraph">{{FINAL_CTA}}</p>
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/strapline.png" alt="Beautiful machines, built to be admired.">
 </div>
 
