@@ -83,6 +83,27 @@ The brand stands for:
 
 flipflop also designs tailored PCs around the customer's budget, preferred appearance and use case. Buyers can enquire through eBay Messages about a custom configuration offered through eBay.
 
+## FAQ BANK
+
+Randomly select exactly 5 of these questions for the FAQ section. Do NOT use more or fewer than 5. Answer only from supplied information; omit any question where you cannot provide a factual answer from the data.
+
+- Is this the exact PC I will receive?
+- Are all its components new?
+- Is it ready to use?
+- Is Windows installed and activated?
+- What measured performance did it achieve?
+- Has it been stability and temperature tested?
+- What is it best suited to?
+- Does it include Wi-Fi and Bluetooth?
+- Which monitor connections are available?
+- Can it be upgraded?
+- What is included with it?
+- What is included in the personalised owner portal?
+- What warranty and support are provided?
+- How will it be protected during delivery?
+- Can I collect and test it?
+- Can flipflop design a different PC for my requirements?
+
 ## REQUIRED LISTING STRUCTURE
 
 ### 1. HERO INTRODUCTION
@@ -204,7 +225,20 @@ Write a warm, honest paragraph of approximately 100 words using the brand inform
 
 Do not pretend the new business has a long commercial history. Distinguish the founder's personal experience from previous commercial sales.
 
-### 13. CLOSING
+### 13. FREQUENTLY ASKED QUESTIONS
+
+Include exactly 5 randomly-selected questions from the FAQ BANK above.
+
+For each question:
+- Format as a list item with 💻 bullet icon
+- State the question in bold
+- Provide a concise, factual answer
+- Keep answers 1-2 sentences max
+- Use mobile-friendly line breaks (max 70 chars per line)
+
+Answer ONLY from supplied information. Omit any question you cannot answer.
+
+### 14. CLOSING
 
 Finish with a calm invitation to ask questions through eBay Messages and include:
 
@@ -231,7 +265,7 @@ E. Final accuracy check
 
 ## HTML DESIGN
 
-Make the listing look like a premium flipflop technology page.
+Make the listing look like a premium flipflop technology page, fully responsive on mobile/tablet.
 
 Use:
 - Maximum-width container of about 900px
@@ -240,10 +274,19 @@ Use:
 - Orange (#F97316) and blue (#168BFF) accent borders
 - Strong section headings
 - Specification and performance cards
-- Clearly separated FAQ blocks
+- FAQ blocks with 💻 icon and mobile padding
 - Generous spacing (margins and padding)
 - Inline CSS only
 - Mobile-friendly single-column layout
+- `max-width: 100%` on all containers
+- Responsive padding that scales for mobile (e.g., `padding: clamp(12px, 3vw, 20px)`)
+
+FAQ styling:
+- List items with 💻 emoji bullet
+- Mobile line-break friendly (break long titles across lines)
+- Padding: `padding: 12px 15px;` minimum on mobile
+- Question in bold, answer in regular text
+- Subtle background color (#181C24) for each item
 
 Safe fonts:
 - Headings: Impact, "Arial Black", Arial, sans-serif
