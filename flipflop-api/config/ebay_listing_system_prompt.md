@@ -148,31 +148,39 @@ Extract ONLY what is shown on the spec card. Do not guess or fill in blanks.
 
 ## HTML DESIGN REQUIREMENTS
 
-Structure:
-- Full-width hero image at very top (no padding, full bleed)
-- Main container: max-width 1000px, margin: 0 auto
-- Background: #0D1015 throughout
-- Inline CSS only; no external stylesheets
+Use the flipflop premium template (ebay_listing_template.html) and fill in these template variables with build-specific content:
 
-Styling:
-- Headings: Arial Black or Impact, white (#FFFFFF)
-- Body text: Arial/Helvetica, #CBD5E1 or #FFFFFF
-- Section backgrounds: #171C24 where needed
-- Borders: orange (#FF6700) and blue (#008CFF), 3–4px top/left borders
-- Spacing: generous padding (20–40px) for premium feel
-- Images: full-width, `display:block`, `height:auto`
+**Image URLs:**
+- {{HERO_IMAGE_URL}} — Full-width PC photo at top
+- {{INTERIOR_IMAGE_URL}} — Interior or detail shot
+- {{COMPONENT_CALLOUT_IMAGE_URL}} — Key components overview
+- {{CASE_DETAIL_IMAGE_URL}} — Case/chassis showcase
+- {{REAR_CONNECTIVITY_IMAGE_URL}} — Rear ports and I/O
+- {{OWNER_PORTAL_IMAGE_URL}} — Owner portal screenshot
 
-Responsive:
-- All text must reflow on mobile without breaking
-- Images scale to 100% width
-- Tables should stack to single column on mobile
-- Grid cards should be 1 column on mobile, 2 on tablet+
+**Text Content:**
+- {{PC_NAME}} — The unique name (e.g., PROMETHEUS)
+- {{TAGLINE}} — Short 2–4 word strapline (e.g., "1440p power. Built to be admired.")
+- {{HERO_DESCRIPTION}} — 2–3 sentence overview of the PC
+- {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} — Top 4 specs
+- {{FLIPFLOP_BENEFITS}} — HTML list of 6–7 flipflop benefits (see template structure)
+- {{WHY_STANDS_OUT}} — 3–4 benefit-led paragraphs
+- {{CASE_NAME}} — Full case model/name
+- {{CASE_DESCRIPTION}} — 1–2 sentence description of case design
+- {{SPECIFICATION_TABLE}} — Full 2-column spec table (see template format)
+- {{CONNECTIVITY_DESCRIPTION}} — 1–2 sentence description of connectivity options
+- {{BEST_SUITED_FOR}} — 2×3 grid of use-case scenarios
+- {{CTA_DESCRIPTION}} — Final call-to-action copy (2–3 sentences)
 
-Security:
-- No external scripts or forms
-- Static HTML only
-- All images via URL (no embedded data URIs)
-- No JavaScript or interactive elements
+**Template Structure:**
+The template includes:
+- Responsive CSS with mobile breakpoints
+- Proper spacing and typography
+- Orange (#FF6700) and blue (#008CFF) brand accents
+- All sections pre-formatted and styled
+- Inline styles only (no external sheets)
+
+Simply replace each {{VARIABLE}} with the exact, build-specific content. Do NOT add or remove sections — use the template structure as-is.
 
 ## OUTPUT FORMAT
 
@@ -188,7 +196,20 @@ C. Condition description
 [Concise 2-3 sentence description, plain text only]
 
 D. Complete branded HTML description
-[Full eBay listing HTML code, starting with <div>, ending with </div>, plain text only. Include all 11 sections above with real image URLs and accurate build details.]
+[Full eBay listing HTML using the flipflop premium template structure:
+- Hero image at top (full width)
+- Hero intro with logo, PC name, tagline, description
+- 4-column spec grid (processor, graphics, memory, storage)
+- flipflop Benefits section (6-7 items with checkmarks/emojis)
+- Interior/detail image
+- Why It Stands Out section (3-4 benefit paragraphs)
+- Case showcase image with caption
+- Full Specification table (all components, 2-column format)
+- Rear connectivity image with description
+- Best Suited For section (2x3 grid of use cases)
+- Owner Portal section with image
+- Final CTA
+All with real image URLs and build-specific content, no placeholders.]
 
 E. Final accuracy check
 [Confirm all claims are supported by supplied data, plain text only]
