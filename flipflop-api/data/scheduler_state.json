@@ -1,6 +1,6 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-15T13:54:31.398708+00:00"
+    "last_success_at": "2026-08-15T14:08:23.941219+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-15T13:59:32.917537+00:00"
@@ -57,24 +57,24 @@
     "last_success_at": "2026-08-15T13:56:31.207562+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-15T13:54:31.725912+00:00"
+    "last_success_at": "2026-08-15T14:08:24.126366+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-08-15T13:54:31.762755+00:00"
+    "last_success_at": "2026-08-15T14:08:24.109020+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-08-15T13:54:31.761762+00:00"
+    "last_success_at": "2026-08-15T14:08:24.115042+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-08-15T13:54:31.770187+00:00"
+    "last_success_at": "2026-08-15T14:08:24.129873+00:00"
   },
   "markdown_event_scan": {
     "last_success_at": "2026-08-15T02:43:50.340339+00:00"
   },
   "send_to_watchers": {
-    "last_success_at": "2026-08-15T13:54:31.765112+00:00"
+    "last_success_at": "2026-08-15T14:08:24.116515+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-15T13:54:31.557240+00:00"
+    "last_success_at": "2026-08-15T14:08:24.112216+00:00"
   }
 }
