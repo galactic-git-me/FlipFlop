@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T13:43:53.795067+00:00",
+  "generated_at": "2026-08-15T14:22:28.809788+00:00",
   "builds": [
     {
       "components": [
@@ -32,32 +32,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7170473,
-          "listing_id": "601099538010865",
+          "id": 7169617,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7168011,
-          "listing_id": "3",
+          "id": 7171135,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -74,32 +74,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -128,16 +128,16 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 1
     },
     {
@@ -171,32 +171,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7161242,
-          "listing_id": "601099538010865",
+          "id": 7160386,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7168011,
-          "listing_id": "3",
+          "id": 7171135,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -213,32 +213,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -257,9 +257,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -267,16 +267,16 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 2
     },
     {
@@ -310,32 +310,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7170473,
-          "listing_id": "601099538010865",
+          "id": 7169617,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7158789,
-          "listing_id": "3",
+          "id": 7161904,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -352,32 +352,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -396,9 +396,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -406,16 +406,16 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 3
     },
     {
@@ -449,32 +449,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7161242,
-          "listing_id": "601099538010865",
+          "id": 7160386,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7158789,
-          "listing_id": "3",
+          "id": 7161904,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -491,32 +491,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -535,9 +535,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -545,16 +545,16 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 4
     },
     {
@@ -588,32 +588,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7170473,
-          "listing_id": "601099538010865",
+          "id": 7169617,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7168011,
-          "listing_id": "3",
+          "id": 7171135,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -630,32 +630,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -674,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -684,16 +684,16 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 5
     },
     {
@@ -727,32 +727,32 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7161242,
-          "listing_id": "601099538010865",
+          "id": 7160386,
+          "listing_id": "375322117883",
           "category": "gpu",
-          "title": "Graphics Card GPU Holder Support Telescopic Rotary Video Card Sag BracketOpen in new tab.",
+          "title": "Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVIDIA AMD INTEL GPU's",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.46,
+          "image_url": "https://i.ebayimg.com/images/g/etUAAOSwiOFl-q8p/s-l225.jpg",
+          "delivered_price": 4.31,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.46,
-          "url": "https://www.ebay.co.uk/itm/601099538010865"
+          "estimated_profit": -4.31,
+          "url": "https://www.ebay.co.uk/itm/375322117883"
         },
         {
-          "id": 7168011,
-          "listing_id": "3",
+          "id": 7171135,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Shadow Magic Joy Sage Game Keycap, 3D Stereoscopic Character Keycap, Single Esc Keycap Gaming Gift Mechanical Keyboard, Cross-Axis Universal, Birthday GiftOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.46,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -2.46,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
           "id": 7171752,
@@ -769,32 +769,32 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7170634,
-          "listing_id": "605626558163618",
+          "id": 7167703,
+          "listing_id": "287507070096",
           "category": "ssd",
-          "title": "Top pickEAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2242/2260/2280 (SSD NotOpen in new tab.",
+          "title": "SSSTC CL1 256GB M.2 2230 NVMe PCIe Gen3 SSD CL1-3D256-Q11 Steam Deck Dell OEM",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 9.79,
+          "image_url": "https://i.ebayimg.com/images/g/C~kAAeSwVhJqdGBy/s-l500.webp",
+          "delivered_price": 16.15,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -9.79,
-          "url": "https://www.ebay.co.uk/itm/605626558163618"
+          "classification": "GEM",
+          "estimated_profit": -16.15,
+          "url": "https://www.ebay.co.uk/itm/287507070096"
         },
         {
-          "id": 7170687,
-          "listing_id": "607122532211230",
+          "id": 7168994,
+          "listing_id": "358875801802",
           "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "title": "AMD Wraith Stealth Socket AM4 4-Pin CPU Fan with Heatsink (712000052)",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.83,
+          "image_url": "https://i.ebayimg.com/images/g/m-8AAeSw1Klqb7aU/s-l500.webp",
+          "delivered_price": 3.97,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.83,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "estimated_profit": -3.97,
+          "url": "https://www.ebay.co.uk/itm/358875801802"
         },
         {
           "id": 7170891,
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 68.78,
+      "build_cost": 84.62,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 Graphics Card GPU Holder Suppo",
+        "query": "gaming pc Intel Core i3 2120 Graphic Card GPU /DP/PCI-E/HDM 4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -823,19 +823,19 @@
           "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
-          "available": false,
-          "count": 0,
-          "min_price": null,
-          "max_price": null,
-          "average_price": null
+          "available": true,
+          "count": 44,
+          "min_price": 75.21,
+          "max_price": 621.25,
+          "average_price": 299.79
         }
       },
-      "resale_estimate": 0.0,
-      "resale_source": "component_estimate",
-      "estimated_profit": -68.78,
+      "resale_estimate": 299.79,
+      "resale_source": "bin_average",
+      "estimated_profit": 215.17,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2061
+  "total_compatible_combinations": 1281
 }
