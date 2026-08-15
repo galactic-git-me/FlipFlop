@@ -424,11 +424,11 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
         materials += f"\n\nADDITIONAL SELLER GUIDANCE (house style — follow alongside the system instructions above):\n{selling_principles}\n"
 
     try:
-        raw_response, _model = await ai_service.generate_ebay_listing_with_claude(system_prompt, materials)
+        raw_response, _model = await ai_service.generate_ebay_listing(system_prompt, materials)
     except ValueError as e:
-        raise HTTPException(503, f"Claude API not configured: {str(e)}")
+        raise HTTPException(503, f"OpenRouter API not configured: {str(e)}")
     except Exception as e:
-        raise HTTPException(502, f"Claude API call failed: {str(e)}")
+        raise HTTPException(502, f"Listing generation failed: {str(e)}")
 
     title = _extract_recommended_title(raw_response)
     description_html = _extract_html_section(raw_response)

@@ -385,6 +385,32 @@ async def _openrouter_chat(messages: list[dict], model: str, api_key: str | None
         return content, label
 
 
+async def _openrouter_chat_with_system(
+    messages: list[dict], model: str, api_key: str, system_prompt: str, max_tokens: int = 1024
+) -> tuple[str, str] | None:
+    """Call OpenRouter with custom system prompt and max_tokens. Returns (content, model_label) or None."""
+    async with httpx.AsyncClient(timeout=120) as client:
+        resp = await client.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "HTTP-Referer": settings.frontend_url,
+                "X-Title": "FlipFlop Listing Generator",
+            },
+            json={
+                "model": model,
+                "messages": [{"role": "system", "content": system_prompt}] + messages,
+                "max_tokens": max_tokens,
+            },
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        content = data["choices"][0]["message"]["content"]
+        actual_model = data.get("model", model)
+        label = actual_model.split("/")[-1].replace(":free", "") if "/" in actual_model else actual_model
+        return content, label
+
+
 async def _claude_chat(messages: list[dict]) -> str | None:
     import anthropic
     client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
@@ -397,27 +423,34 @@ async def _claude_chat(messages: list[dict]) -> str | None:
     return resp.content[0].text if resp.content else None
 
 
-async def generate_ebay_listing_with_claude(system_prompt: str, materials: str) -> tuple[str, str]:
-    """Generate eBay listing HTML directly via Claude API.
+async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str, str]:
+    """Generate eBay listing HTML via OpenRouter using proven model chain.
 
-    Returns (response_text, model_used) or raises if Claude is not configured.
+    Returns (response_text, model_used) or raises if OpenRouter is not configured.
     """
     _s = get_settings()
-    if not _s.anthropic_api_key:
-        raise ValueError("Claude API key not configured (ANTHROPIC_API_KEY missing)")
+    if not _s.openrouter_api_key:
+        raise ValueError("OpenRouter API key not configured (OPENROUTER_API_KEY missing)")
 
-    import anthropic
-    client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
+    messages = [{"role": "user", "content": materials}]
 
-    resp = await client.messages.create(
-        model="claude-sonnet-5-20250514",
-        max_tokens=4000,
-        system=system_prompt,
-        messages=[{"role": "user", "content": materials}],
-    )
+    # Try Gemma 4 (free, capable for structured output)
+    for model in [
+        "google/gemma-4-31b-it:free",
+        "google/gemma-3-4b-it:free",
+        "mistralai/mistral-7b-instruct:free",
+    ]:
+        try:
+            result = await _openrouter_chat_with_system(
+                messages, model, _s.openrouter_api_key, system_prompt, max_tokens=4000
+            )
+            if result:
+                return result
+        except Exception as e:
+            print(f"[listing] Model {model} failed: {e}")
+            continue
 
-    content = resp.content[0].text if resp.content else ""
-    return content, "claude-sonnet-5"
+    raise RuntimeError("All OpenRouter models failed for listing generation")
 
 
 def _template_titles(cpu, ram_gb, storage_gb, gpu, case_theme) -> list[str]:
