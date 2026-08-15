@@ -94,40 +94,52 @@ def _extract_section(text: str, start_marker: str, end_markers: list[str]) -> st
 
 
 def _extract_recommended_title(text: str) -> str | None:
-    section = _extract_section(text, "B. RECOMMENDED EBAY TITLE", ["C. CONDITION DESCRIPTION"])
+    # Try new format first: "B. Three eBay titles"
+    section = _extract_section(text, "B.", ["C.", "D."])
+    if not section:
+        # Fallback to old format: "B. RECOMMENDED EBAY TITLE"
+        section = _extract_section(text, "B. RECOMMENDED EBAY TITLE", ["C. CONDITION DESCRIPTION"])
     if not section:
         return None
+    # Extract first title-like line (skip headers, take first actual title)
     for line in section.splitlines():
-        if "RECOMMENDED" in line.upper():
-            cleaned = re.sub(r"RECOMMENDED", "", line, flags=re.IGNORECASE)
-            cleaned = re.sub(r"^[\s\-\*\d\.\)\"']+", "", cleaned)
-            cleaned = re.sub(r"[\"']?\s*\(?\d+\s*characters?\)?\s*$", "", cleaned, flags=re.IGNORECASE)
-            cleaned = cleaned.strip(" -\"'\t")
-            if cleaned:
-                return cleaned
-    # Fallback: first plausible title-looking line in the section.
-    for line in section.splitlines():
-        stripped = line.strip(" -*\"'\t")
-        if stripped and len(stripped) < 90 and not stripped.isupper():
+        stripped = line.strip(" -*#`\"'()")
+        # Skip empty lines, headers, and metadata
+        if (stripped and
+            len(stripped) < 85 and
+            not stripped.startswith(("**", "*", "#")) and
+            not "characters" in stripped.lower() and
+            not stripped.isupper()):
             return stripped
     return None
 
 
 def _extract_html_section(text: str) -> str | None:
-    section = _extract_section(
-        text,
-        "F. COMPLETE BRANDED EBAY HTML DESCRIPTION",
-        ["G. INFORMATION REQUIRED", "H. FINAL PUBLICATION CHECK"],
-    )
+    # Try new format first: "D. Complete branded HTML description"
+    section = _extract_section(text, "D.", ["E."])
+    if not section:
+        # Fallback to old format: "F. COMPLETE BRANDED EBAY HTML DESCRIPTION"
+        section = _extract_section(
+            text,
+            "F. COMPLETE BRANDED EBAY HTML DESCRIPTION",
+            ["G. INFORMATION REQUIRED", "H. FINAL PUBLICATION CHECK"],
+        )
     if not section:
         return None
+    # Remove markdown code fences if present
     fenced = re.search(r"```(?:html)?\s*(.*?)```", section, re.DOTALL | re.IGNORECASE)
     if fenced:
         return fenced.group(1).strip()
+    # If output is markdown with HTML embedded, try to extract HTML
     tag_match = re.search(r"<(div|html|!doctype)", section, re.IGNORECASE)
     if tag_match:
         return section[tag_match.start():].strip()
-    return section.strip() or None
+    # If section is mostly HTML, return as-is (convert markdown to HTML if needed)
+    if "<" in section and ">" in section:
+        return section.strip()
+    # If it's markdown formatted HTML preview, convert to minimal HTML
+    # For now, return None if no HTML detected
+    return None
 
 
 @router.post("/", response_model=ManualBuildOut, status_code=201)

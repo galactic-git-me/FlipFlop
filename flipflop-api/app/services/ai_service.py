@@ -424,33 +424,44 @@ async def _claude_chat(messages: list[dict]) -> str | None:
 
 
 async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str, str]:
-    """Generate eBay listing HTML via OpenRouter using proven model chain.
+    """Generate eBay listing via Claude API (primary) or OpenRouter fallback.
 
-    Returns (response_text, model_used) or raises if OpenRouter is not configured.
+    Returns (response_text, model_used) or raises if no backend available.
     """
     _s = get_settings()
-    if not _s.openrouter_api_key:
-        raise ValueError("OpenRouter API key not configured (OPENROUTER_API_KEY missing)")
 
-    messages = [{"role": "user", "content": materials}]
-
-    # Try Gemma 4 (free, capable for structured output)
-    for model in [
-        "google/gemma-4-31b-it:free",
-        "google/gemma-3-4b-it:free",
-        "mistralai/mistral-7b-instruct:free",
-    ]:
+    # Try Claude first (now that account is fixed)
+    if _s.anthropic_api_key:
         try:
-            result = await _openrouter_chat_with_system(
-                messages, model, _s.openrouter_api_key, system_prompt, max_tokens=4000
+            import anthropic
+            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
+            resp = await client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=4000,
+                system=system_prompt,
+                messages=[{"role": "user", "content": materials}],
             )
-            if result:
-                return result
+            content = resp.content[0].text if resp.content else ""
+            if content:
+                return content, "claude-haiku"
         except Exception as e:
-            print(f"[listing] Model {model} failed: {e}")
-            continue
+            print(f"[listing] Claude failed: {e}")
 
-    raise RuntimeError("All OpenRouter models failed for listing generation")
+    # Fallback: OpenRouter
+    if _s.openrouter_api_key:
+        messages = [{"role": "user", "content": materials}]
+        for model in ["google/gemma-4-31b-it:free", "mistralai/mistral-7b-instruct:free"]:
+            try:
+                result = await _openrouter_chat_with_system(
+                    messages, model, _s.openrouter_api_key, system_prompt, max_tokens=4000
+                )
+                if result:
+                    return result
+            except Exception as e:
+                print(f"[listing] {model} failed: {e}")
+                continue
+
+    raise RuntimeError("No AI backend available for listing generation")
 
 
 def _template_titles(cpu, ram_gb, storage_gb, gpu, case_theme) -> list[str]:
