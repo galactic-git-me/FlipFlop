@@ -1264,6 +1264,25 @@ def _is_statistical_outlier(
     return False
 
 
+def _is_price_misaligned_to_market(
+    listing_price: float,
+    market_new_price: float | None,
+    market_used_price: float | None,
+) -> bool:
+    """Opportunity #1 Step 2: Market price alignment validation.
+    Flags listings with actual price dramatically out of line with current market."""
+    if not market_new_price and not market_used_price:
+        return False
+
+    if market_new_price and listing_price > market_new_price * 1.5:
+        return True
+
+    if market_used_price and listing_price < market_used_price * 0.3:
+        return True
+
+    return False
+
+
 def _is_suspicious_price_jump(
     listing_id: str,
     current_price: float,
@@ -1424,6 +1443,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
             or _is_obsolete_socket(best.title, best.delivered_price)  # P2: obsolete sockets
             or (best.category == "ram" and _is_server_ram_price(best.title, best.delivered_price))  # P3: server RAM
             or _is_component_price_anomaly(best.category, best.title, best.delivered_price)  # OPP#3: component bounds
+            or _is_price_misaligned_to_market(best.delivered_price, best.market_new_price, best.market_used_price)  # OPP#1 Step 2: market alignment
         ):
             best = None
     else:
@@ -1452,6 +1472,10 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
 
             # Opportunity #4: Statistical outliers (MEDIUM impact, LOW effort)
             if _is_statistical_outlier(candidate.category, candidate.delivered_price, _category_stats):
+                continue
+
+            # Opportunity #1 Step 2: Market price alignment (HIGH impact, HIGH precision)
+            if _is_price_misaligned_to_market(candidate.delivered_price, candidate.market_new_price, candidate.market_used_price):
                 continue
 
             # Existing filters
