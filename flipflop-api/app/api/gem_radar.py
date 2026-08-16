@@ -350,7 +350,7 @@ _MOBILE_CPU_SUFFIX_RE = re.compile(r"\b(?:i[3579]|ryzen\s*[3579])-?\s*\d{3,5}[a-
 #     Excludes GTX 10-series and older, RX 500-series and older.
 _MODERN_MOBO_SOCKET_RE = re.compile(r"\b(?:am4|am5|lga\s*1200|lga\s*1700|lga\s*1851)\b", re.IGNORECASE)
 _MODERN_CPU_RE = re.compile(
-    r"\bryzen\s*[3579]\s*[3-9]\d{3}\b|\bi[3579]-1[0-9]{3}\b", re.IGNORECASE
+    r"\bryzen\s*[3579]\s*[1-9]\d{2,3}[x]?\b|i[357](?:\s+Core)?[\s-]*[8-9][0-9]{3}|i9(?:\s+Core)?[\s-]*[89][0-9]{3}|i[3579](?:\s+Core)?[\s-]*1[0-9]{3}", re.IGNORECASE
 )
 _MODERN_GPU_RE = re.compile(
     r"\brtx\s*[2-5]0\d0\b|\bgtx\s*16\d0\b|\brx\s*[5-9]\d00\b", re.IGNORECASE
@@ -460,6 +460,13 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
             break
     if best is None:
         return None
+
+    cpu = None
+    if best.category == "cpu" and best.title:
+        cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', best.title, re.IGNORECASE)
+        if cpu_match:
+            cpu = cpu_match.group(0)
+
     return {
         "title": best.title,
         "price": best.delivered_price,
@@ -469,6 +476,7 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
         "image_url": best.image_url,
         "deal_score": best.deal_score,
         "classification": best.classification,
+        "cpu": cpu,
     }
 
 
@@ -1493,6 +1501,13 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
             break
     if best is None:
         return None
+
+    cpu = None
+    if best.category == "cpu" and best.title:
+        cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', best.title, re.IGNORECASE)
+        if cpu_match:
+            cpu = cpu_match.group(0)
+
     return {
         "title": best.title,
         "price": best.delivered_price,
@@ -1503,6 +1518,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         "deal_score": best.deal_score,
         "classification": best.classification,
         "category": best.category,
+        "cpu": cpu,
     }
 
 
