@@ -1047,7 +1047,8 @@ def _has_valid_category(category: str | None) -> bool:
 
 
 def _is_complete_system(title: str) -> bool:
-    """Detect pre-built complete systems that shouldn't be in flipping inventory."""
+    """Detect pre-built complete systems that shouldn't be in flipping inventory.
+    Priority 3: Expanded to include towers, complete PCs, and vintage systems."""
     system_keywords = [
         "mini pc",
         "mini-pc",
@@ -1055,16 +1056,51 @@ def _is_complete_system(title: str) -> bool:
         "complete pc",
         "tower pc",
         "desktop tower",
+        "gaming tower",
         "all-in-one",
         "prebuilt",
         "pre-built",
         "gaming pc",
         "pc bundle",
         "system bundle",
-        "optiplex",  # Dell prebuilts
+        "optiplex",   # Dell prebuilts
+        "elitebook",  # HP EliteBook laptops/small systems
+        "thinkcentre", # Lenovo ThinkCentre prebuilts
+        "hp 800",      # HP pre-built systems
+        "dell tower",
+        "tower case",
+        "vintage ",    # Vintage systems/motherboards (with space to avoid false matches)
+        "retro pc",
     ]
     title_lower = title.lower()
     return any(keyword in title_lower for keyword in system_keywords)
+
+
+def _is_server_ram_price(title: str, price: float) -> bool:
+    """Detect server/enterprise RAM at corrupted prices. Priority 3 filter.
+    Excludes ONLY actual server platforms and extreme prices (> £5000).
+    Correctly allows consumer ECC UDIMM RAM (legitimate for workstations/NAS)."""
+    # Server platform indicators (NOT consumer UDIMM)
+    server_platforms = [
+        "supermicro",      # Supermicro server hardware
+        "proliant",        # HP ProLiant servers
+        "prohliant",       # HP ProLiant (alt spelling)
+        "thinkstation",    # Lenovo ThinkStation workstations
+        "rdimm",           # Registered DIMM = server RAM only
+        "registered dimm",
+    ]
+
+    title_lower = title.lower()
+
+    # Rule 1: If price > £5000, likely bulk order or corrupted data
+    if price > 5000:
+        return True
+
+    # Rule 2: If title mentions server platforms, exclude regardless of price
+    if any(platform in title_lower for platform in server_platforms):
+        return True
+
+    return False
 
 
 def _is_bundled_components(title: str) -> bool:
@@ -1098,18 +1134,22 @@ def _is_bundled_components(title: str) -> bool:
     return found_types >= 2  # Bundle if has 2+ component types
 
 
-def _is_obsolete_socket(title: str) -> bool:
-    """Detect obsolete CPU sockets (>6 years old) with no upgrade path. Priority 2 expansion."""
+def _is_obsolete_socket(title: str, price: float | None = None) -> bool:
+    """Detect obsolete CPU sockets (>6 years old) with no upgrade path. Priority 2 expansion.
+    Priority 3: Also exclude ultra-cheap obsolete CPUs (< £15) that are e-waste."""
     # Sockets (old)
     obsolete_sockets = [
         "lga1155",  # 2012 (Sandy/Ivy Bridge)
         "lga1150",  # 2014 (Haswell)
+        "lga1151",  # 2015 (Skylake) — includes 6th/7th gen Intel
         "lga1156",  # 2010 (Nehalem)
+        "am3",      # 2009 (Phenom)
         "am3+",     # 2012 (FX/Bulldozer)
         "am2",      # 2006 (Athlon64)
         "am2+",     # 2007
         "fm1",      # 2011 (APU)
         "fm2",      # 2012 (APU)
+        "fm2+",     # 2013 (APU refresh)
         "lga775",   # 2004 (Pentium4)
         "lga1366",  # 2008 (X58)
     ]
@@ -1118,10 +1158,16 @@ def _is_obsolete_socket(title: str) -> bool:
     obsolete_cpus = [
         "i5-6",     # Skylake (2015)
         "i7-6",     # Skylake (2015)
+        "i3-4",     # Haswell (2014)
+        "i5-4",     # Haswell (2014)
+        "i7-4",     # Haswell (2014)
+        "i7-3",     # Ivy Bridge (2013)
         "fx-8",     # Bulldozer (2012)
         "fx-9",     # Piledriver (2013)
         "a10-",     # Old APUs
         "a8-",      # Old APUs
+        "athlon x4", # Pre-Ryzen consumer
+        "phenom",   # Pre-Ryzen consumer
         "ryzen 1",  # Ryzen Gen 1 (2017)
     ]
 
@@ -1129,6 +1175,10 @@ def _is_obsolete_socket(title: str) -> bool:
 
     # Check sockets
     if any(socket in title_lower for socket in obsolete_sockets):
+        # P3: Ultra-cheap obsolete CPUs are e-waste, reject always
+        if price is not None and price < 15:
+            return True
+        # Socket match alone suggests obsolete; still exclude
         return True
 
     # Check CPU models
@@ -1158,11 +1208,12 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         if best and (
             _is_damaged(best.title)
             or not _is_reasonable_price(best.category, best.delivered_price)
-            or not _has_valid_category(best.category)  # BLOCKING: invalid category
-            or _is_server_hardware(best.title, best.category)  # BLOCKING: server hardware
-            or _is_complete_system(best.title)  # BLOCKING: prebuilt systems
-            or _is_bundled_components(best.title)  # BLOCKING: bundled components (P2)
-            or _is_obsolete_socket(best.title)  # BLOCKING: obsolete sockets (P2)
+            or not _has_valid_category(best.category)  # P1: invalid category
+            or _is_server_hardware(best.title, best.category)  # P1: server hardware
+            or _is_complete_system(best.title)  # P1: prebuilt systems
+            or _is_bundled_components(best.title)  # P2: bundled components
+            or _is_obsolete_socket(best.title, best.delivered_price)  # P2: obsolete sockets
+            or (best.category == "ram" and _is_server_ram_price(best.title, best.delivered_price))  # P3: server RAM
         ):
             best = None
     else:
@@ -1178,7 +1229,11 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
                 continue
             if _is_bundled_components(candidate.title):  # Bundled component packs (P2)
                 continue
-            if _is_obsolete_socket(candidate.title):  # Obsolete sockets (P2 expanded)
+            if _is_obsolete_socket(candidate.title, candidate.delivered_price):  # Obsolete sockets (P2/P3)
+                continue
+
+            # Priority 3: Server RAM filtering
+            if candidate.category == "ram" and _is_server_ram_price(candidate.title, candidate.delivered_price):
                 continue
 
             # Existing filters
