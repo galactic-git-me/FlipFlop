@@ -1103,6 +1103,169 @@ def _is_server_ram_price(title: str, price: float) -> bool:
     return False
 
 
+def _is_price_misaligned_to_market(
+    listing_price: float,
+    market_used_price: float | None,
+    market_new_price: float | None,
+) -> bool:
+    """Opportunity #1: Validate listing price against eBay market data.
+    Flags listings priced way outside normal market range."""
+    if not market_used_price and not market_new_price:
+        return False
+
+    # If listing < 50% of used market price = likely damaged/mislabeled
+    if market_used_price and listing_price < market_used_price * 0.5:
+        return True
+
+    # If listing > 150% of new market price = pricing error
+    if market_new_price and listing_price > market_new_price * 1.5:
+        return True
+
+    return False
+
+
+def _is_price_vs_sold_suspicious(
+    listing_price: float,
+    sold_prices_recent: list[float] | None,
+) -> bool:
+    """Opportunity #2: Compare listing price vs actual sold prices.
+    Uses real market signals (what actually sold) vs estimates."""
+    if not sold_prices_recent or len(sold_prices_recent) < 2:
+        return False
+
+    import statistics
+
+    median_sold = statistics.median(sold_prices_recent)
+
+    # Listing > 200% of median sold = overpriced
+    if listing_price > median_sold * 2.0:
+        return True
+
+    # Listing < 30% of median sold = undercut (possible damage/mislabel)
+    if listing_price < median_sold * 0.3:
+        return True
+
+    return False
+
+
+def _is_component_price_anomaly(
+    category: str,
+    title: str,
+    price: float,
+) -> bool:
+    """Opportunity #3: Component-specific price bounds based on specs.
+    Tighter ranges than generic category bounds."""
+    title_lower = title.lower()
+
+    # RAM: Distinguish DDR4 vs DDR5, and by speed
+    if category == "ram":
+        is_ddr5 = "ddr5" in title_lower or "pc5" in title_lower
+        is_ddr4 = "ddr4" in title_lower or "pc4" in title_lower
+
+        # DDR5 typically £300-900 for 32GB
+        if is_ddr5 and price > 1200:
+            return True
+        # DDR4 typically £80-300 for 32GB
+        if is_ddr4 and price > 500:
+            return True
+
+    # CPU: Distinguish by generation (old vs new)
+    if category == "cpu":
+        # Ryzen 9000/8000/7000 (current gen): £150-600
+        if any(gen in title_lower for gen in ["ryzen 9", "ryzen 7", "core i9", "core i7"]):
+            if price > 800:
+                return True
+        # Older gens (i5-6, Ryzen 1000): should be cheap
+        if any(old in title_lower for old in ["i5-6", "i3-4", "ryzen 1"]):
+            if price > 200:
+                return True
+
+    # GPU: Distinguish by tier (entry vs flagship)
+    if category == "gpu":
+        # GT 610, GT 710 (entry): typically < £30
+        if any(entry in title_lower for entry in ["gt610", "gt710", "gt730"]):
+            if price > 80:
+                return True
+        # RTX 4090, 5090 (flagship): typically > £1000
+        if any(flag in title_lower for flag in ["rtx 4090", "rtx 5090"]):
+            if price < 500:
+                return True
+
+    return False
+
+
+def _is_statistical_outlier(
+    category: str,
+    price: float,
+    category_stats: dict[str, tuple[float, float]] | None,
+) -> bool:
+    """Opportunity #4: Statistical outlier detection.
+    Flags prices > 2.5σ from category mean (99% confidence)."""
+    if not category_stats or category not in category_stats:
+        return False
+
+    mean, std_dev = category_stats[category]
+
+    if std_dev == 0:
+        return False
+
+    z_score = abs((price - mean) / std_dev)
+
+    # 2.5σ = ~98% confidence interval
+    if z_score > 2.5:
+        return True
+
+    return False
+
+
+def _is_suspicious_price_jump(
+    listing_id: str,
+    current_price: float,
+    price_history: list[float] | None,
+) -> bool:
+    """Opportunity #5: Price history patterns.
+    Detects sudden jumps that suggest scraping errors or listing manipulation."""
+    if not price_history or len(price_history) < 3:
+        return False
+
+    import statistics
+
+    recent_prices = price_history[-5:]
+    mean_recent = statistics.mean(recent_prices)
+    std_dev_recent = statistics.stdev(recent_prices) if len(recent_prices) > 1 else 0
+
+    # High volatility (std dev > 25% of mean) suggests data errors
+    if std_dev_recent > mean_recent * 0.25:
+        return True
+
+    # Sudden drop > 40% from previous = relisting at loss or data corruption
+    if len(price_history) > 1:
+        prev_price = price_history[-2]
+        if prev_price > 0 and current_price < prev_price * 0.6:
+            return True
+
+    return False
+
+
+def _has_seller_pricing_anomalies(
+    seller_name: str | None,
+    seller_pricing_variance: dict[str, float] | None,
+) -> bool:
+    """Opportunity #6: Seller intelligence patterns.
+    Sellers with consistently anomalous pricing deserve extra scrutiny."""
+    if not seller_name or not seller_pricing_variance:
+        return False
+
+    # If seller's avg price variance > 2σ above peers, they're erratic
+    variance = seller_pricing_variance.get(seller_name, 0)
+
+    # Arbitrary threshold: > 40% price variance = problematic seller
+    if variance > 0.4:
+        return True
+
+    return False
+
+
 def _is_bundled_components(title: str) -> bool:
     """Detect bundled component packs (CPU+Cooler, Mobo+CPU) — not for resale as individual parts.
     Priority 2 filter.
@@ -1214,6 +1377,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
             or _is_bundled_components(best.title)  # P2: bundled components
             or _is_obsolete_socket(best.title, best.delivered_price)  # P2: obsolete sockets
             or (best.category == "ram" and _is_server_ram_price(best.title, best.delivered_price))  # P3: server RAM
+            or _is_component_price_anomaly(best.category, best.title, best.delivered_price)  # OPP#3: component bounds
         ):
             best = None
     else:
@@ -1234,6 +1398,10 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
 
             # Priority 3: Server RAM filtering
             if candidate.category == "ram" and _is_server_ram_price(candidate.title, candidate.delivered_price):
+                continue
+
+            # Opportunity #3: Component-specific bounds (HIGH impact, LOW effort)
+            if _is_component_price_anomaly(candidate.category, candidate.title, candidate.delivered_price):
                 continue
 
             # Existing filters
