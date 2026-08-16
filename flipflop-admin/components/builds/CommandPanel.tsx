@@ -1,7 +1,6 @@
 "use client";
 
-import { Send, Trash2, Plus, RotateCcw, Loader2 } from "lucide-react";
-import { Dock, DockItem, DockLabel, DockIcon } from "@/components/ui/dock";
+import { Send, Trash2, Plus, RotateCcw, Loader2, type LucideIcon } from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -23,8 +22,61 @@ interface CommandPanelProps {
   isLoading?: boolean;
 }
 
+type ActionAccent = "blue" | "amber" | "red" | "green";
+
+const ACCENT_HOVER_CLASSES: Record<ActionAccent, string> = {
+  blue: "hover:text-blue-300 hover:border-blue-500/50",
+  amber: "hover:text-amber-300 hover:border-amber-500/50",
+  red: "hover:text-red-300 hover:border-red-500/50",
+  green: "hover:text-green-300 hover:border-green-500/50",
+};
+
+// One icon button in the vertical rail, with its label as a tooltip that
+// pops out to the left (the rail itself is pinned to the right edge, so a
+// label appearing on the right would run off-screen).
+function RailButton({
+  label,
+  icon: Icon,
+  onClick,
+  disabled,
+  isLoading,
+  accent,
+}: {
+  label: string;
+  icon: LucideIcon;
+  onClick?: () => void;
+  disabled?: boolean;
+  isLoading?: boolean;
+  accent: ActionAccent;
+}) {
+  return (
+    <div className="group relative">
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        title={label}
+        className={`flex h-11 w-11 items-center justify-center rounded-xl border border-slate-600/50 bg-slate-800/60 backdrop-blur-sm text-slate-300 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${ACCENT_HOVER_CLASSES[accent]}`}
+      >
+        {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Icon size={18} />}
+      </button>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute right-full top-1/2 mr-2 -translate-y-1/2 whitespace-nowrap rounded-md border border-slate-600/50 bg-slate-800 px-2 py-1 text-xs text-slate-200 opacity-0 shadow-lg transition group-hover:opacity-100"
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+// Floating side menu of build actions — fixed to the viewport (not the page
+// content), positioned near the top-right and vertically centered from
+// there, so it stays visible at a glance regardless of how far down the
+// build detail page the user has scrolled. Replaces the previous bottom
+// dock: same actions, vertical rail instead of a horizontal magnifying dock,
+// since a dock's hover-magnification effect is a horizontal-mouse-x
+// interaction that doesn't translate to a slim side rail.
 export function CommandPanel({
-  buildId,
   buildTitle,
   listingStatuses,
   onGenerateDescription,
@@ -32,118 +84,38 @@ export function CommandPanel({
   onPublishEbay,
   onUpdateEbay,
   onDeleteEbay,
-  onCreateNew,
   isLoading = false,
 }: CommandPanelProps) {
   const ebayStatus = listingStatuses.find((s) => s.platform === "ebay");
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4">
-      <Dock
-        panelHeight={48}
-        magnification={90}
-        distance={150}
-        className="bg-slate-800/60 border border-slate-600/50 backdrop-blur-sm"
+    <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
+      <div
+        title={buildTitle}
+        className="mb-1 flex w-11 flex-col items-center gap-1 rounded-xl border border-slate-600/50 bg-slate-800/60 backdrop-blur-sm px-1 py-2"
       >
-        {/* Title Generation */}
-        <DockItem>
-          <DockLabel>Title</DockLabel>
-          <DockIcon>
-            <button
-              onClick={onGenerateTitle}
-              disabled={isLoading}
-              title="Generate eBay title with AI"
-              className="w-full h-full flex items-center justify-center hover:text-blue-300 disabled:opacity-50 transition cursor-pointer"
-            >
-              {isLoading ? <Loader2 size={16} className="animate-spin" /> : <RotateCcw size={16} />}
-            </button>
-          </DockIcon>
-        </DockItem>
-
-        {/* Description Generation */}
-        <DockItem>
-          <DockLabel>Description</DockLabel>
-          <DockIcon>
-            <button
-              onClick={onGenerateDescription}
-              disabled={isLoading}
-              title="Generate eBay description with AI"
-              className="w-full h-full flex items-center justify-center hover:text-blue-300 disabled:opacity-50 transition cursor-pointer"
-            >
-              {isLoading ? <Loader2 size={16} className="animate-spin" /> : <RotateCcw size={16} />}
-            </button>
-          </DockIcon>
-        </DockItem>
-
-        {/* eBay Buttons */}
-        {ebayStatus?.isListed ? (
-          <>
-            {/* Update eBay */}
-            <DockItem>
-              <DockLabel>Update</DockLabel>
-              <DockIcon>
-                <button
-                  onClick={onUpdateEbay}
-                  disabled={isLoading}
-                  title="Update eBay listing with changes"
-                  className="w-full h-full flex items-center justify-center hover:text-amber-300 disabled:opacity-50 transition cursor-pointer"
-                >
-                  {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-                </button>
-              </DockIcon>
-            </DockItem>
-
-            {/* Delete */}
-            <DockItem>
-              <DockLabel>Delete</DockLabel>
-              <DockIcon>
-                <button
-                  onClick={onDeleteEbay}
-                  disabled={isLoading}
-                  title="Delete eBay listing"
-                  className="w-full h-full flex items-center justify-center hover:text-red-300 disabled:opacity-50 transition cursor-pointer"
-                >
-                  {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-                </button>
-              </DockIcon>
-            </DockItem>
-          </>
-        ) : (
-          /* Create eBay */
-          <DockItem>
-            <DockLabel>Create</DockLabel>
-            <DockIcon>
-              <button
-                onClick={onPublishEbay}
-                disabled={isLoading}
-                title="Create new eBay listing"
-                className="w-full h-full flex items-center justify-center hover:text-green-300 disabled:opacity-50 transition cursor-pointer"
-              >
-                {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-              </button>
-            </DockIcon>
-          </DockItem>
+        <span className="max-h-16 [writing-mode:vertical-rl] truncate text-[10px] font-mono text-slate-400">
+          {buildTitle.slice(0, 20)}
+        </span>
+        {ebayStatus && (
+          <span
+            className={`h-2 w-2 rounded-full ${ebayStatus.isListed ? "bg-green-400" : "bg-slate-500"}`}
+            title={ebayStatus.isListed ? "Listed on eBay" : "Not listed"}
+          />
         )}
+      </div>
 
-        {/* Status */}
-        <DockItem>
-          <DockLabel>Status</DockLabel>
-          <DockIcon>
-            <div className="flex items-center gap-2 px-3 h-full text-xs text-slate-400">
-              <span className="font-mono text-slate-300 whitespace-nowrap">{buildTitle.slice(0, 15)}</span>
-              {ebayStatus && (
-                <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold ${
-                  ebayStatus.isListed
-                    ? "bg-green-900/30 text-green-300"
-                    : "bg-slate-700 text-slate-400"
-                }`}>
-                  {ebayStatus.isListed ? "✓ Listed" : "Not Listed"}
-                </span>
-              )}
-            </div>
-          </DockIcon>
-        </DockItem>
-      </Dock>
+      <RailButton label="Generate title" icon={RotateCcw} onClick={onGenerateTitle} disabled={isLoading} isLoading={isLoading} accent="blue" />
+      <RailButton label="Generate description" icon={RotateCcw} onClick={onGenerateDescription} disabled={isLoading} isLoading={isLoading} accent="blue" />
+
+      {ebayStatus?.isListed ? (
+        <>
+          <RailButton label="Update eBay listing" icon={Send} onClick={onUpdateEbay} disabled={isLoading} isLoading={isLoading} accent="amber" />
+          <RailButton label="Delete eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading} isLoading={isLoading} accent="red" />
+        </>
+      ) : (
+        <RailButton label="Create eBay listing" icon={Plus} onClick={onPublishEbay} disabled={isLoading} isLoading={isLoading} accent="green" />
+      )}
     </div>
   );
 }
