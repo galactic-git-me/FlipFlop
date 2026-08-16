@@ -82,6 +82,8 @@ async def assign_cpk_and_accumulate_price(
         model = extracted.model
         extracted_category = extracted.category
 
+    match_key = normalize_match_key(title)
+
     if price is not None:
         await upsert_listing_price(
             db,
@@ -94,7 +96,6 @@ async def assign_cpk_and_accumulate_price(
         )
 
     if scan_price is not None:
-        match_key = normalize_match_key(title)
         await upsert_scan_price(
             db,
             cpk=cpk,
@@ -104,5 +105,20 @@ async def assign_cpk_and_accumulate_price(
             brand=brand,
             model=model,
         )
+
+    # After CPK assignment, update any sold observations with the same
+    # match_key to reference this CPK so they contribute to market price
+    # aggregation. This handles the case where sold observations were
+    # recorded before a CPK existed for this match_key.
+    await db.execute(
+        text(
+            """
+            UPDATE gem_radar_sold_observations
+            SET cpk = :cpk
+            WHERE match_key = :match_key AND cpk IS NULL
+            """
+        ),
+        {"cpk": cpk, "match_key": match_key},
+    )
 
     return cpk

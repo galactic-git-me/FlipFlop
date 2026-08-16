@@ -148,7 +148,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             listing_id=listing_id,
             search_run_id=SEARCH_RUN_ID,
             source=source,
-            url=f"https://www.ebay.co.uk/itm/{listing_id}",
+            url=fallback_listing_url(listing_id, source, title),
             title=title,
             seller_name=seller_name,
             image_url=image_url,
