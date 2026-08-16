@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-16T01:53:05.258086+00:00",
+  "generated_at": "2026-08-16T02:52:49.084804+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 7385548,
+          "id": 7436618,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -18,7 +18,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7384324,
+          "id": 7435390,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -32,563 +32,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7385011,
-          "listing_id": "605535759922197",
-          "category": "gpu",
-          "title": "Top pick1pc Aluminum Alloy Graphics Card Bracket, 2.6cm/1.024in-12cm/4.724in Adjustable Jack, Desktop Graphics Card Anti-Bending Support ProtectorOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.32,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.32,
-          "url": "https://www.ebay.co.uk/itm/605535759922197"
-        },
-        {
-          "id": 7382378,
-          "listing_id": "3",
-          "category": "ram",
-          "title": "Top pick[Premium Performance] ARCTIC TP-3 Premium Performance | 100X100Mm Thermal Pad | Soft Gap FillerOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 6.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.0,
-          "url": "https://www.ebay.co.uk/itm/3"
-        },
-        {
-          "id": 7386007,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 7385016,
-          "listing_id": "606451191896207",
-          "category": "ssd",
-          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 10.11,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
-        },
-        {
-          "id": 7385020,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 7385104,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 72.46,
-      "market": {
-        "query": "gaming pc Intel Core i3 2120 Top pick1pc Aluminum Alloy Gra",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 48,
-          "min_price": 131.38,
-          "max_price": 900.0,
-          "average_price": 436.63
-        }
-      },
-      "resale_estimate": 436.63,
-      "resale_source": "bin_average",
-      "estimated_profit": 364.17,
-      "rank": 1
-    },
-    {
-      "components": [
-        {
-          "id": 7385548,
-          "listing_id": "9565309194",
-          "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
-        },
-        {
-          "id": 7384324,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 7385011,
-          "listing_id": "605535759922197",
-          "category": "gpu",
-          "title": "Top pick1pc Aluminum Alloy Graphics Card Bracket, 2.6cm/1.024in-12cm/4.724in Adjustable Jack, Desktop Graphics Card Anti-Bending Support ProtectorOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.32,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.32,
-          "url": "https://www.ebay.co.uk/itm/605535759922197"
-        },
-        {
-          "id": 7385364,
-          "listing_id": "8304587229",
-          "category": "ram",
-          "title": "Samsung 4gb ddr3 desktop memory",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 5.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
-        },
-        {
-          "id": 7386007,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 7385016,
-          "listing_id": "606451191896207",
-          "category": "ssd",
-          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 10.11,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
-        },
-        {
-          "id": 7385020,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 7385104,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 72.41,
-      "market": {
-        "query": "gaming pc Intel Core i3 2120 Top pick1pc Aluminum Alloy Gra 4gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 48,
-          "min_price": 131.38,
-          "max_price": 1423.99,
-          "average_price": 427.3
-        }
-      },
-      "resale_estimate": 427.3,
-      "resale_source": "bin_average",
-      "estimated_profit": 354.89,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 7385376,
-          "listing_id": "8483787725",
-          "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 3.54,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
-        },
-        {
-          "id": 7384324,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 7385011,
-          "listing_id": "605535759922197",
-          "category": "gpu",
-          "title": "Top pick1pc Aluminum Alloy Graphics Card Bracket, 2.6cm/1.024in-12cm/4.724in Adjustable Jack, Desktop Graphics Card Anti-Bending Support ProtectorOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.32,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.32,
-          "url": "https://www.ebay.co.uk/itm/605535759922197"
-        },
-        {
-          "id": 7382378,
-          "listing_id": "3",
-          "category": "ram",
-          "title": "Top pick[Premium Performance] ARCTIC TP-3 Premium Performance | 100X100Mm Thermal Pad | Soft Gap FillerOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 6.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.0,
-          "url": "https://www.ebay.co.uk/itm/3"
-        },
-        {
-          "id": 7386007,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 7385016,
-          "listing_id": "606451191896207",
-          "category": "ssd",
-          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 10.11,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
-        },
-        {
-          "id": 7385020,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 7385104,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 74.25,
-      "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick1pc Aluminum Alloy Gra",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 3,
-          "min_price": 96.28,
-          "max_price": 213.45,
-          "average_price": 141.57
-        }
-      },
-      "resale_estimate": 141.57,
-      "resale_source": "bin_average",
-      "estimated_profit": 67.32,
-      "rank": 3
-    },
-    {
-      "components": [
-        {
-          "id": 7385376,
-          "listing_id": "8483787725",
-          "category": "cpu",
-          "title": "Intel core 2 duo E7500 | 2.93ghz great condition",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 3.54,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -3.54,
-          "url": "https://www.ebay.co.uk/itm/8483787725"
-        },
-        {
-          "id": 7384324,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 7385011,
-          "listing_id": "605535759922197",
-          "category": "gpu",
-          "title": "Top pick1pc Aluminum Alloy Graphics Card Bracket, 2.6cm/1.024in-12cm/4.724in Adjustable Jack, Desktop Graphics Card Anti-Bending Support ProtectorOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.32,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.32,
-          "url": "https://www.ebay.co.uk/itm/605535759922197"
-        },
-        {
-          "id": 7385364,
-          "listing_id": "8304587229",
-          "category": "ram",
-          "title": "Samsung 4gb ddr3 desktop memory",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 5.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
-        },
-        {
-          "id": 7386007,
-          "listing_id": "B09DCM363S",
-          "category": "psu",
-          "title": "MSI MAG A550BN 550W Power Supply",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
-          "delivered_price": 37.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
-        },
-        {
-          "id": 7385016,
-          "listing_id": "606451191896207",
-          "category": "ssd",
-          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 10.11,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "AVERAGE_DEAL",
-          "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
-        },
-        {
-          "id": 7385020,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
-        },
-        {
-          "id": 7385104,
-          "listing_id": "6445439726",
-          "category": "case",
-          "title": "Iphone 16 case",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 74.2,
-      "market": {
-        "query": "gaming pc Intel core 2 duo E7500 | 2.93g Top pick1pc Aluminum Alloy Gra 4gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 4,
-          "min_price": 39.95,
-          "max_price": 213.45,
-          "average_price": 116.16
-        }
-      },
-      "resale_estimate": 116.16,
-      "resale_source": "bin_average",
-      "estimated_profit": 41.96,
-      "rank": 4
-    },
-    {
-      "components": [
-        {
-          "id": 7385548,
-          "listing_id": "9565309194",
-          "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
-        },
-        {
-          "id": 7384324,
-          "listing_id": "377405670302",
-          "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
-        },
-        {
-          "id": 7384883,
+          "id": 7435951,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -602,7 +46,7 @@
           "url": "https://www.ebay.co.uk/itm/601099544322902"
         },
         {
-          "id": 7385364,
+          "id": 7436434,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -616,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7386007,
+          "id": 7437078,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -630,7 +74,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7385016,
+          "id": 7436084,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -644,7 +88,7 @@
           "url": "https://www.ebay.co.uk/itm/606451191896207"
         },
         {
-          "id": 7385020,
+          "id": 7436088,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -658,7 +102,563 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 7385104,
+          "id": 7436172,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 72.3,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -72.3,
+      "rank": 1
+    },
+    {
+      "components": [
+        {
+          "id": 7436618,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 7435390,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 7446248,
+          "listing_id": "601099544322902",
+          "category": "gpu",
+          "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.21,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.21,
+          "url": "https://www.ebay.co.uk/itm/601099544322902"
+        },
+        {
+          "id": 7436434,
+          "listing_id": "8304587229",
+          "category": "ram",
+          "title": "Samsung 4gb ddr3 desktop memory",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 5.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
+        },
+        {
+          "id": 7437078,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 7436084,
+          "listing_id": "606451191896207",
+          "category": "ssd",
+          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 10.11,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -10.11,
+          "url": "https://www.ebay.co.uk/itm/606451191896207"
+        },
+        {
+          "id": 7436088,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.79,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 7436172,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 72.3,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -72.3,
+      "rank": 2
+    },
+    {
+      "components": [
+        {
+          "id": 7436618,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 7435390,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 7435951,
+          "listing_id": "601099544322902",
+          "category": "gpu",
+          "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.21,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.21,
+          "url": "https://www.ebay.co.uk/itm/601099544322902"
+        },
+        {
+          "id": 7446731,
+          "listing_id": "8304587229",
+          "category": "ram",
+          "title": "Samsung 4gb ddr3 desktop memory",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 5.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
+        },
+        {
+          "id": 7437078,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 7436084,
+          "listing_id": "606451191896207",
+          "category": "ssd",
+          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 10.11,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -10.11,
+          "url": "https://www.ebay.co.uk/itm/606451191896207"
+        },
+        {
+          "id": 7436088,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.79,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 7436172,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 72.3,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -72.3,
+      "rank": 3
+    },
+    {
+      "components": [
+        {
+          "id": 7436618,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 7435390,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 7446248,
+          "listing_id": "601099544322902",
+          "category": "gpu",
+          "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.21,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.21,
+          "url": "https://www.ebay.co.uk/itm/601099544322902"
+        },
+        {
+          "id": 7446731,
+          "listing_id": "8304587229",
+          "category": "ram",
+          "title": "Samsung 4gb ddr3 desktop memory",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 5.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
+        },
+        {
+          "id": 7437078,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 7436084,
+          "listing_id": "606451191896207",
+          "category": "ssd",
+          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 10.11,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -10.11,
+          "url": "https://www.ebay.co.uk/itm/606451191896207"
+        },
+        {
+          "id": 7436088,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.79,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 7436172,
+          "listing_id": "6445439726",
+          "category": "case",
+          "title": "Iphone 16 case",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/6445439726"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 72.3,
+      "market": {
+        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": false,
+          "count": 0,
+          "min_price": null,
+          "max_price": null,
+          "average_price": null
+        }
+      },
+      "resale_estimate": 0.0,
+      "resale_source": "component_estimate",
+      "estimated_profit": -72.3,
+      "rank": 4
+    },
+    {
+      "components": [
+        {
+          "id": 7436618,
+          "listing_id": "9565309194",
+          "category": "cpu",
+          "title": "Intel Core i3 2120 Processor - CPU",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 1.75,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.75,
+          "url": "https://www.ebay.co.uk/itm/9565309194"
+        },
+        {
+          "id": 7445687,
+          "listing_id": "377405670302",
+          "category": "motherboard",
+          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
+          "delivered_price": 13.74,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.74,
+          "url": "https://www.ebay.co.uk/itm/377405670302"
+        },
+        {
+          "id": 7435951,
+          "listing_id": "601099544322902",
+          "category": "gpu",
+          "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.21,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.21,
+          "url": "https://www.ebay.co.uk/itm/601099544322902"
+        },
+        {
+          "id": 7436434,
+          "listing_id": "8304587229",
+          "category": "ram",
+          "title": "Samsung 4gb ddr3 desktop memory",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 5.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
+        },
+        {
+          "id": 7437078,
+          "listing_id": "B09DCM363S",
+          "category": "psu",
+          "title": "MSI MAG A550BN 550W Power Supply",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/81mdSNJB3BL._AC_UY218_.jpg",
+          "delivered_price": 37.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -37.0,
+          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+        },
+        {
+          "id": 7436084,
+          "listing_id": "606451191896207",
+          "category": "ssd",
+          "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 10.11,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "AVERAGE_DEAL",
+          "estimated_profit": -10.11,
+          "url": "https://www.ebay.co.uk/itm/606451191896207"
+        },
+        {
+          "id": 7436088,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.79,
+          "url": "https://www.ebay.co.uk/itm/607122532211230"
+        },
+        {
+          "id": 7436172,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -699,7 +699,7 @@
     {
       "components": [
         {
-          "id": 7385548,
+          "id": 7436618,
           "listing_id": "9565309194",
           "category": "cpu",
           "title": "Intel Core i3 2120 Processor - CPU",
@@ -713,7 +713,7 @@
           "url": "https://www.ebay.co.uk/itm/9565309194"
         },
         {
-          "id": 7384324,
+          "id": 7445687,
           "listing_id": "377405670302",
           "category": "motherboard",
           "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
@@ -727,7 +727,7 @@
           "url": "https://www.ebay.co.uk/itm/377405670302"
         },
         {
-          "id": 7384883,
+          "id": 7446248,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -741,21 +741,21 @@
           "url": "https://www.ebay.co.uk/itm/601099544322902"
         },
         {
-          "id": 7382378,
-          "listing_id": "3",
+          "id": 7436434,
+          "listing_id": "8304587229",
           "category": "ram",
-          "title": "Top pick[Premium Performance] ARCTIC TP-3 Premium Performance | 100X100Mm Thermal Pad | Soft Gap FillerOpen in new tab.",
+          "title": "Samsung 4gb ddr3 desktop memory",
           "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 6.0,
+          "image_url": null,
+          "delivered_price": 5.95,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -6.0,
-          "url": "https://www.ebay.co.uk/itm/3"
+          "estimated_profit": -5.95,
+          "url": "https://www.ebay.co.uk/itm/8304587229"
         },
         {
-          "id": 7386007,
+          "id": 7437078,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -769,7 +769,7 @@
           "url": "https://www.ebay.co.uk/itm/B09DCM363S"
         },
         {
-          "id": 7385016,
+          "id": 7436084,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -783,7 +783,7 @@
           "url": "https://www.ebay.co.uk/itm/606451191896207"
         },
         {
-          "id": 7385020,
+          "id": 7436088,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -797,7 +797,7 @@
           "url": "https://www.ebay.co.uk/itm/607122532211230"
         },
         {
-          "id": 7385104,
+          "id": 7436172,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.35,
+      "build_cost": 72.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,",
+        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -832,10 +832,10 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.35,
+      "estimated_profit": -72.3,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2339
+  "total_compatible_combinations": 1401
 }
