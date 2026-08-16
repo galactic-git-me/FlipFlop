@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-08-16T06:00:05.284075+00:00",
+  "generated_at": "2026-08-16T23:00:53.999430+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7466489,
-          "listing_id": "377405670302",
+          "id": 8282200,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7467052,
+          "id": 8296811,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -43,10 +43,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7457030,
+          "id": 8297405,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -57,10 +57,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -71,10 +71,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -85,10 +85,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -99,10 +99,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -113,14 +113,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -137,41 +137,41 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7466489,
-          "listing_id": "377405670302",
+          "id": 8282200,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7456547,
+          "id": 8285059,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -182,10 +182,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7457030,
+          "id": 8297405,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -196,10 +196,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -210,10 +210,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -224,10 +224,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -238,10 +238,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -252,14 +252,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -276,41 +276,41 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7466489,
-          "listing_id": "377405670302",
+          "id": 8282200,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7467052,
+          "id": 8296811,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -321,10 +321,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7467535,
+          "id": 8286092,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -335,10 +335,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -349,10 +349,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -363,10 +363,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -377,10 +377,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -391,14 +391,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -415,41 +415,41 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7466489,
-          "listing_id": "377405670302",
+          "id": 8282200,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7456547,
+          "id": 8285059,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -460,10 +460,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7467535,
+          "id": 8286092,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -474,10 +474,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -488,10 +488,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -502,10 +502,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -516,10 +516,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -530,14 +530,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -554,41 +554,41 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7455984,
-          "listing_id": "377405670302",
+          "id": 8295076,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7467052,
+          "id": 8296811,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -599,10 +599,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7457030,
+          "id": 8297405,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -613,10 +613,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -627,10 +627,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -641,10 +641,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -655,10 +655,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -669,14 +669,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -693,41 +693,41 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 7467719,
-          "listing_id": "9565309194",
+          "id": 8279599,
+          "listing_id": "1005004439965344",
           "category": "cpu",
-          "title": "Intel Core i3 2120 Processor - CPU",
+          "title": "Xeon E5 2650 V4 E5-2650V4 Processor SR2N3 2.2GHz 12-Cores 30M LGA 2011-3 E5-2650 V4 CPU",
           "seller": null,
-          "image_url": null,
-          "delivered_price": 1.75,
+          "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S1887a285b60743859ac7bdbfca5e0896Z/154x64.png",
+          "delivered_price": 0.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/9565309194"
+          "estimated_profit": -0.99,
+          "url": "https://www.aliexpress.com/wholesale?SearchText=Xeon+E5+2650+V4+E5-2650V4+Processor+SR2N3+2.2GHz+12-Cores+30M+LGA+2011-3+E5-2650+V4+CPU"
         },
         {
-          "id": 7455984,
-          "listing_id": "377405670302",
+          "id": 8295076,
+          "listing_id": "358891092076",
           "category": "motherboard",
-          "title": "ASUS H81M-PLUS LGA1150, Intel Motherboard",
+          "title": "ASUS ROG Strix B550-F Gaming Motherboard Manual Driver DVD Stickers",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/n7kAAeSwQ0FqeI3y/s-l225.jpg",
-          "delivered_price": 13.74,
+          "image_url": "https://i.ebayimg.com/images/g/j~YAAeSw~bxqdGEu/s-l500.webp",
+          "delivered_price": 8.5,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -13.74,
-          "url": "https://www.ebay.co.uk/itm/377405670302"
+          "estimated_profit": -8.5,
+          "url": "https://www.ebay.co.uk/itm/358891092076"
         },
         {
-          "id": 7456547,
+          "id": 8285059,
           "listing_id": "601099544322902",
           "category": "gpu",
           "title": "VGA Connector Male to Female, Female to Female, Male to Male Adapter, Mini Gender Changer 15 Pin Convert M/F Serial Cable Gender Changer Coupler AdapterOpen in new tab.",
@@ -738,10 +738,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.21,
-          "url": "https://www.ebay.co.uk/itm/601099544322902"
+          "url": "https://www.temu.com/search_result.html?search_key=VGA+Connector+Male+to+Female%2C+Female+to+Female%2C+Male+to+Male+Adapter%2C+Mini+Gender+Changer+15+Pin+Convert+M%2FF+Serial+Cable+Gender+Changer+Coupler+AdapterOpen+in+new+tab."
         },
         {
-          "id": 7457030,
+          "id": 8297405,
           "listing_id": "8304587229",
           "category": "ram",
           "title": "Samsung 4gb ddr3 desktop memory",
@@ -752,10 +752,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -5.95,
-          "url": "https://www.ebay.co.uk/itm/8304587229"
+          "url": "https://www.vinted.co.uk/items/8304587229"
         },
         {
-          "id": 7468180,
+          "id": 8298283,
           "listing_id": "B09DCM363S",
           "category": "psu",
           "title": "MSI MAG A550BN 550W Power Supply",
@@ -766,10 +766,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -37.0,
-          "url": "https://www.ebay.co.uk/itm/B09DCM363S"
+          "url": "https://www.amazon.co.uk/dp/B09DCM363S"
         },
         {
-          "id": 7467185,
+          "id": 8296948,
           "listing_id": "606451191896207",
           "category": "ssd",
           "title": "EAGTE SE302N SSD Enclosure, Tool-free USB-C External M.2 NVMe SSD Enclosure, Improved RTL9210B Chip USB 3.2 Gen 2 10Gbps to PCIe Adapter, M-Key/B+M Key External SSD Enclosure, Aluminum Alloy Casing, UASP Support, Model 2230/2242/2260/2280 (SSD NotOpen in new tab.",
@@ -780,10 +780,10 @@
           "market_used_price": null,
           "classification": "AVERAGE_DEAL",
           "estimated_profit": -10.11,
-          "url": "https://www.ebay.co.uk/itm/606451191896207"
+          "url": "https://www.temu.com/search_result.html?search_key=EAGTE+SE302N+SSD+Enclosure%2C+Tool-free+USB-C+External+M.2+NVMe+SSD+Enclosure%2C+Improved+RTL9210B+Chip+USB+3.2+Gen+2+10Gbps+to+PCIe+Adapter%2C+M-Key%2FB%2BM+Key+External+SSD+Enclosure%2C+Aluminum+Alloy+Casing%2C+UASP+Support%2C+Model+2230%2F2242%2F2260%2F2280+%28SSD+NotOpen+in+new+tab."
         },
         {
-          "id": 7467189,
+          "id": 8296952,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -794,10 +794,10 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -0.79,
-          "url": "https://www.ebay.co.uk/itm/607122532211230"
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 7467273,
+          "id": 8297045,
           "listing_id": "6445439726",
           "category": "case",
           "title": "Iphone 16 case",
@@ -808,14 +808,14 @@
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.75,
-          "url": "https://www.ebay.co.uk/itm/6445439726"
+          "url": "https://www.vinted.co.uk/items/6445439726"
         }
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 72.3,
+      "build_cost": 66.3,
       "market": {
-        "query": "gaming pc Intel Core i3 2120 VGA Connector Male to Female,  4gb",
+        "query": "gaming pc Xeon E5 2650 VGA Connector Male to Female,  4gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -832,10 +832,10 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -72.3,
+      "estimated_profit": -66.3,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 1401
+  "total_compatible_combinations": 1359
 }

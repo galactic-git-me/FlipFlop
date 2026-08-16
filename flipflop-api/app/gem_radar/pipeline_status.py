@@ -60,6 +60,9 @@ class SearchRunState:
     # dashboard card, not itself a progress metric.
     active_submissions: int = 0
     total_listings: int = 0
+    # Track search_run_ids that belong to THIS run so we can filter by them
+    # in the database queries (avoid mixing in observations from previous runs).
+    search_run_ids: set[str] = field(default_factory=set)
     # Listings actually recorded as a new observation (a still-live,
     # price-unchanged repeat sighting is touched but doesn't count here —
     # see _submit_scan_body's price_unchanged branch).
@@ -111,7 +114,7 @@ _MAX_HISTORY = 20
 _history: deque[dict] = deque(maxlen=_MAX_HISTORY)
 
 
-def start_submission(search_id: str, query: str, total_listings: int) -> None:
+def start_submission(search_id: str, query: str, total_listings: int, search_run_id: str | None = None) -> None:
     """Called once per submission, when it begins ingesting. Adds this
     submission's listing count onto the search's running total rather than
     overwriting it — a search_id normally receives many submissions (one
@@ -123,6 +126,8 @@ def start_submission(search_id: str, query: str, total_listings: int) -> None:
     state.query = query
     state.total_listings += total_listings
     state.active_submissions += 1
+    if search_run_id:
+        state.search_run_ids.add(search_run_id)
 
 
 def increment(search_id: str, **deltas: int) -> None:
@@ -187,37 +192,37 @@ def reset_run() -> None:
     _active.clear()
 
 
-async def _vendor_breakdown_from_db(db, search_ids: list[str]) -> dict[str, dict[str, int]]:
+async def _vendor_breakdown_from_db(db, search_id_run_ids: list[tuple[str, set[str]]]) -> dict[str, dict[str, int]]:
     """Live vendor-contribution counts per search_id, read from the DB
     rather than the in-memory by_vendor counter. by_vendor only reflects
     submissions this process has itself handled since it started — restart
     the backend mid-run (this session had several) and its memory of
     already-completed vendor contributions is gone, even though the actual
-    observations are safely sitting in the DB. submission_queue links
-    search_run_id -> search_id directly; gem_radar_listing_observations has
-    the per-listing source but not search_id, so this joins the two rather
-    than needing a schema change."""
+    observations are safely sitting in the DB.
+
+    Only counts observations from search_run_ids that belong to THIS run
+    (tracked in the search_run_ids set per SearchRunState) to avoid mixing
+    in observations from previous runs that haven't been cleared yet."""
     from sqlalchemy import text
 
-    if not search_ids:
+    if not search_id_run_ids:
         return {}
 
-    run_id_rows = await db.execute(
-        text(
-            """
-            SELECT DISTINCT search_id, search_run_id
-            FROM submission_queue
-            WHERE search_id = ANY(:ids) AND status = 'completed'
-            """
-        ),
-        {"ids": search_ids},
-    )
+    # Flatten all run_ids from all active searches
+    all_run_ids = []
     run_id_to_search_id: dict[str, str] = {}
-    for search_id, run_id in run_id_rows.fetchall():
-        run_id_to_search_id[run_id] = search_id
+    search_ids_needing_fallback = []
 
-    if not run_id_to_search_id:
-        return {}
+    for search_id, run_ids in search_id_run_ids:
+        if run_ids:
+            all_run_ids.extend(run_ids)
+            for run_id in run_ids:
+                run_id_to_search_id[run_id] = search_id
+        else:
+            # No run_ids tracked yet for this search, will need fallback query
+            search_ids_needing_fallback.append(search_id)
+
+    breakdown: dict[str, dict[str, int]] = {search_id: {} for search_id, _ in search_id_run_ids}
 
     obs_rows = await db.execute(
         text(
@@ -228,10 +233,10 @@ async def _vendor_breakdown_from_db(db, search_ids: list[str]) -> dict[str, dict
             GROUP BY search_run_id, source
             """
         ),
-        {"run_ids": list(run_id_to_search_id.keys())},
+        {"run_ids": all_run_ids},
     )
 
-    breakdown: dict[str, dict[str, int]] = {sid: {} for sid in search_ids}
+    breakdown: dict[str, dict[str, int]] = {search_id: {} for search_id, _ in search_id_run_ids}
     for run_id, source, count in obs_rows.fetchall():
         search_id = run_id_to_search_id.get(run_id)
         if search_id is None:
@@ -260,8 +265,6 @@ async def snapshot(db) -> dict:
     from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
 
     states = sorted(_active.values(), key=lambda s: s.started_at)
-
-    vendor_breakdown = await _vendor_breakdown_from_db(db, [s.search_id for s in states])
 
     configured_vendors_by_search: dict[str, list[str]] = {}
 
@@ -346,15 +349,33 @@ async def snapshot(db) -> dict:
         priced_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids)
         classified_count = sum(1 for lid in s.listing_ids if lid in classified_listing_ids)
 
-        # Use DB-derived vendor counts as source of truth (persistent, accurate).
-        # In-memory by_vendor is unreliable: it only reflects submissions since
-        # this process started, and is lost on API restart mid-run.
-        by_vendor = dict(vendor_breakdown.get(s.search_id, {}))
+        # Total listings for THIS run = count of unique listing_ids we've tracked
+        # (listings that got CPK assigned). This is the ground truth for what we've
+        # actually processed in THIS run, scoped to only the listing_ids we know about.
+        # Avoids the problem of s.total_listings or DB queries mixing in old run data.
+        actual_total_listings = len(s.listing_ids) if s.listing_ids else (s.total_listings or 1)
 
-        # Total listings submitted (includes new + cross-run duplicates).
-        # Duplicates are already ingested in previous runs, so they don't
-        # contribute to THIS run's ingested_count, but they ARE counted here.
-        actual_total_listings = sum(by_vendor.values())
+        # By_vendor: aggregate vendor counts from the listing_ids we've tracked,
+        # counting observations per source. This gives us the true vendor breakdown
+        # for only the listings THIS run has processed.
+        if all_listing_ids and s.listing_ids:
+            # Count observations per vendor for only THIS search's listing_ids
+            vendor_obs_result = await db.execute(
+                text(
+                    """
+                    SELECT source, COUNT(DISTINCT listing_id) as cnt
+                    FROM gem_radar_listing_observations
+                    WHERE listing_id = ANY(:ids)
+                    GROUP BY source
+                    """
+                ),
+                {"ids": s.listing_ids},
+            )
+            by_vendor = {}
+            for source, cnt in vendor_obs_result.fetchall():
+                by_vendor[source or "unknown"] = cnt
+        else:
+            by_vendor = dict(s.by_vendor)
 
         # Processed: listings that completed full pipeline (ingested → CPK → market/classified)
         processed_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids or lid in classified_listing_ids)

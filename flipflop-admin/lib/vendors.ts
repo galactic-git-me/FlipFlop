@@ -17,5 +17,6 @@ export const VENDOR_META: Record<string, VendorMeta> = {
   temu: { label: "Temu", mark: "T", color: "#fb7701", domain: "temu.com" },
   cex: { label: "CeX", mark: "CX", color: "#2e7d32", domain: "uk.webuy.com" },
   aliexpress: { label: "AliExpress", mark: "AE", color: "#e60012", domain: "aliexpress.com" },
+  scan: { label: "Scan.co.uk", mark: "SC", color: "#0057b8", domain: "scan.co.uk" },
   unknown: { label: "Other", mark: "?", color: "#64748b", domain: "" },
 };

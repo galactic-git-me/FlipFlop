@@ -37,6 +37,10 @@ _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "uk.webuy.com": "cex",
     "webuy.com": "cex",
     "aliexpress.com": "aliexpress",
+    # Scanned by the extension (scan-orchestrator.ts's SLOW_SPA_MARKETPLACES)
+    # but missing here entirely -- every Scan.co.uk observation fell through
+    # to source=None and got misbucketed as "unknown" on the dashboard.
+    "scan.co.uk": "scan",
 }
 
 # Marketplaces excluded from contributing to price benchmarks. Temu: "new"

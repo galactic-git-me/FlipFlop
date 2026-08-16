@@ -62,6 +62,8 @@ interface GemData {
   condition: string;
   url: string;
   image_url?: string | null;
+  cpu?: string | null;
+  category?: string;
 }
 
 interface QueueStatus {
@@ -390,11 +392,22 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // Fall back to all vendors if the search has no specific configuration.
             // This allows per-search-term flexibility: each search defines its own vendor set.
             const searchConfiguredVendors = scan.configuredVendors || VENDOR_ORDER;
-            const vendorEntries = VENDOR_ORDER
+            // Render every vendor byVendor actually reports, not just the ones
+            // in the hardcoded VENDOR_ORDER list -- a source key that isn't in
+            // that list (e.g. "unknown", or a newly-scraped marketplace not
+            // yet added here) used to be silently dropped from the tile row
+            // while still counting toward the gauges' denominator above,
+            // making the displayed vendor sum quietly undercount the total.
+            const knownVendorEntries = VENDOR_ORDER
               .filter((v) => searchConfiguredVendors.includes(v))
               .map((v): [string, number] => [v, scan.byVendor?.[v] ?? 0])
               .filter(([, count]) => count > 0);
+            const extraVendorEntries = Object.entries(scan.byVendor || {})
+              .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
+              .sort((a, b) => b[1] - a[1]);
+            const vendorEntries = [...knownVendorEntries, ...extraVendorEntries];
             const maxVendorCount = Math.max(...vendorEntries.map(([, c]) => c), 1);
+            const searchTermTotal = Object.values(scan.byVendor || {}).reduce((sum, count) => sum + count, 0) || 1;
             const { isComplete } = scan;
 
             return (
@@ -434,10 +447,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                   </div>
 
                   <div className="flex justify-center gap-3">
-                    <Gauge value={scan.ingestedCount} max={scan.totalListings} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={scan.totalListings} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={scan.totalListings} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={scan.totalListings} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.ingestedCount} max={searchTermTotal} label="Ingested" color="#8b5cf6" />
+                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={searchTermTotal} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (
@@ -749,6 +762,7 @@ function GemSpotlightCard({
 
       <div className="absolute inset-x-0 bottom-0 bg-black/35 backdrop-blur-md border-t border-white/10 p-4">
         <div className="text-sm text-white truncate group-hover:underline">{gem.title.substring(0, 40)}...</div>
+        {gem.cpu && <div className="text-xs text-white/70 mt-0.5 truncate">⚡ {gem.cpu}</div>}
         <div className={`text-xl font-bold mt-1 ${colors.price}`}>£{gem.price.toFixed(2)}</div>
       </div>
     </a>
@@ -1185,6 +1199,59 @@ function SortHeader({
 // "good stuff" columns land next to each other on the right.
 const VENDOR_TABLE_TIERS: string[] = [...CLASSIFICATION_BADGE_ORDER].reverse();
 
+// Hex equivalents of CLASSIFICATION_BADGE_COLORS' Tailwind classes — recharts
+// fills need real colour values, not class names, but these are picked to
+// match the badges/table exactly so the chart and table read as one system.
+const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
+  SUPER_GEM: "#d97706",
+  GEM: "#2563eb",
+  OK_DEAL: "#047857",
+  AVERAGE_DEAL: "#475569",
+  POOR_DEAL: "#991b1b",
+};
+
+function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
+  const sources = [...new Set(listings.map((l) => l.source))].sort(
+    (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
+  );
+
+  if (sources.length === 0) return null;
+
+  const chartData = sources.map((source) => {
+    const vendorListings = listings.filter((l) => l.source === source);
+    const row: Record<string, string | number> = { vendor: SOURCE_LABELS[source] || source };
+    for (const tier of VENDOR_TABLE_TIERS) {
+      row[tier] = vendorListings.filter((l) => l.classification === tier).length;
+    }
+    return row;
+  });
+
+  return (
+    <div className="mb-4 bg-slate-800 rounded-lg border border-slate-700 p-3 lg:w-[420px] lg:shrink-0">
+      <ResponsiveContainer width="100%" height={280}>
+        <BarChart data={chartData} margin={{ top: 10, right: 10, bottom: 10, left: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis dataKey="vendor" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={50} />
+          <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} allowDecimals={false} />
+          <Tooltip
+            contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
+            labelStyle={{ color: "#e2e8f0" }}
+          />
+          {VENDOR_TABLE_TIERS.map((tier) => (
+            <Bar
+              key={tier}
+              dataKey={tier}
+              name={tier.replace(/_/g, " ")}
+              stackId="classification"
+              fill={CLASSIFICATION_CHART_COLORS[tier]}
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   const sources = [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
@@ -1193,7 +1260,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   if (sources.length === 0) return null;
 
   return (
-    <div className="mb-4 overflow-x-auto bg-slate-800 rounded-lg border border-slate-700">
+    <div className="mb-4 overflow-x-auto bg-slate-800 rounded-lg border border-slate-700 flex-1">
       <table className="min-w-full text-sm">
         <thead className="bg-slate-700 border-b border-slate-600">
           <tr>
@@ -1292,7 +1359,10 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
 
   return (
     <>
-      <VendorSummaryTable listings={listings} />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <VendorSummaryTable listings={listings} />
+        <VendorStackedBarChart listings={listings} />
+      </div>
 
       <div className="flex gap-2 overflow-x-auto pb-2 border-b border-slate-700 mb-4">
         {tabCounts.map(({ tab, count }) => (

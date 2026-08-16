@@ -1750,7 +1750,7 @@ async def _submit_scan_body(
     touched_price_updated_count = 0
     vendor = infer_marketplace(payload.source_url) or "unknown"
 
-    pipeline_status.start_submission(payload.search_id, payload.query, len(payload.listings))
+    pipeline_status.start_submission(payload.search_id, payload.query, len(payload.listings), payload.search_run_id)
 
     # Separate listings into buckets:
     # 1. Excluded (auctions)
