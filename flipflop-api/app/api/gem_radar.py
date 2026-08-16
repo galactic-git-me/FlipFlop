@@ -60,6 +60,10 @@ from app.services.submission_queue_service import SubmissionQueueService
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 log = structlog.get_logger(__name__)
 
+# Opportunity #4: Statistical outlier detection
+# Precomputed category pricing stats (mean, stdev) for outlier detection
+_category_stats: dict[str, tuple[float, float]] = {}
+
 # Sold comps: uses a real logged-in eBay Playwright session (see
 # PlaywrightSoldCompsAdapter) — unauthenticated HTTP/ScrapingBee scrapes of
 # LH_Sold=1&LH_Complete=1 get 403'd by eBay's anti-bot, but a session with
@@ -466,6 +470,19 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
         "deal_score": best.deal_score,
         "classification": best.classification,
     }
+
+
+@router.on_event("startup")
+async def startup_compute_category_stats():
+    """Opportunity #4: Precompute category stats at startup for outlier detection."""
+    global _category_stats
+    try:
+        async with AsyncSessionLocal() as db:
+            _category_stats = await _compute_category_stats(db)
+            log.info("opp4.startup", stats_count=len(_category_stats))
+    except Exception as e:
+        log.warning("opp4.startup.failed", error=str(e))
+        _category_stats = {}
 
 
 @router.get("/gem-of-day")
@@ -1194,6 +1211,35 @@ def _is_component_price_anomaly(
     return False
 
 
+async def _compute_category_stats(db: AsyncSession) -> dict[str, tuple[float, float]]:
+    """Opportunity #4: Precompute category pricing stats for outlier detection.
+    Call this once at startup to populate _category_stats."""
+    from sqlalchemy import select, func
+
+    # Get mean and stdev for each category from recent listings (past 7 days)
+    cutoff = datetime.utcnow() - timedelta(days=7)
+    result = await db.execute(
+        select(
+            GemRadarScoredListing.category,
+            func.avg(GemRadarScoredListing.delivered_price).label("mean_price"),
+            func.stddev_pop(GemRadarScoredListing.delivered_price).label("stddev_price"),
+        )
+        .where(
+            GemRadarScoredListing.scored_at >= cutoff,
+            ~GemRadarScoredListing.category.contains("|"),  # Exclude malformed categories
+            GemRadarScoredListing.category != "unknown",
+        )
+        .group_by(GemRadarScoredListing.category)
+    )
+
+    stats = {}
+    for row in result:
+        if row.mean_price and row.stddev_price:
+            stats[row.category] = (float(row.mean_price), float(row.stddev_price))
+
+    return stats
+
+
 def _is_statistical_outlier(
     category: str,
     price: float,
@@ -1402,6 +1448,10 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
 
             # Opportunity #3: Component-specific bounds (HIGH impact, LOW effort)
             if _is_component_price_anomaly(candidate.category, candidate.title, candidate.delivered_price):
+                continue
+
+            # Opportunity #4: Statistical outliers (MEDIUM impact, LOW effort)
+            if _is_statistical_outlier(candidate.category, candidate.delivered_price, _category_stats):
                 continue
 
             # Existing filters
