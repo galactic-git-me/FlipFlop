@@ -92,8 +92,7 @@ async def get_robust_active_market(
     penalty. This is the fallback classification anchor when sold coverage is
     unavailable, not a replacement for sold evidence.
     """
-    from dataclasses import replace
-    from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
+    from app.gem_radar.opportunity_scoring import SoldComparable
 
     normalised = "new" if (condition or "").lower() == "new" else "used"
     result = await db.execute(text("""
@@ -115,11 +114,21 @@ async def get_robust_active_market(
         SoldComparable(float(price), source_url=f"active://{listing_id}")
         for price, listing_id in result.fetchall()
     ]
+    return robust_active_market(
+        comps, subject_listing_id=subject_listing_id,
+        condition=normalised, policy=policy,
+    )
+
+
+def robust_active_market(comps, *, subject_listing_id: str, condition: str, policy):
+    from dataclasses import replace
+    from app.gem_radar.opportunity_scoring import robust_sold_market
+
     active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
     market = robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=active_policy)
     if market is None:
         return None
-    factor = 0.92 if normalised == "new" else 0.88
+    factor = 0.92 if condition == "new" else 0.88
     return replace(
         market,
         lower=round(market.lower * factor, 2),

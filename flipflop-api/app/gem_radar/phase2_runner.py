@@ -14,15 +14,16 @@ run_phase2_classification for manual/offline re-runs.
 """
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.gem_radar.cpk_market import get_robust_active_market, get_robust_sold_market
+from app.gem_radar.cpk_market import get_robust_sold_market, robust_active_market
 from app.gem_radar.demand_velocity import record_demand_snapshot, calculate_watch_velocity, calculate_bid_velocity
-from app.gem_radar.opportunity_scoring import load_opportunity_policy, score_opportunity
+from app.gem_radar.opportunity_scoring import SoldComparable, load_opportunity_policy, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
@@ -62,6 +63,26 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
     )
     listings = result.fetchall()
 
+    # One bulk read for all fresh active cohorts. Re-querying the observation
+    # join once per listing made a full rebuild O(listings × database roundtrip).
+    active_rows = (await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        )
+        SELECT p.cpk, p.listing_id, p.price,
+               CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END condition
+        FROM gem_radar_cpk_listing_price p
+        JOIN latest l ON l.listing_id = p.listing_id
+        WHERE p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days' AND p.price > 0
+    """))).all()
+    active_cohorts: dict[tuple[str, str], list[SoldComparable]] = defaultdict(list)
+    for active_cpk, active_listing_id, active_price, active_condition in active_rows:
+        active_cohorts[(active_cpk, active_condition)].append(
+            SoldComparable(float(active_price), source_url=f"active://{active_listing_id}")
+        )
+
     favourites = (await db.execute(select(Favourite))).scalars().all()
 
     await db.execute(text("DELETE FROM gem_radar_scored_listings WHERE search_run_id = :run_id"), {"run_id": SEARCH_RUN_ID})
@@ -89,9 +110,11 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             )
             preliminary_market = market is not None
             if market is None:
-                market = await get_robust_active_market(
-                    db, cpk=cpk, condition=condition,
-                    subject_listing_id=listing_id, policy=policy,
+                normalised_condition = "new" if (condition or "").lower() == "new" else "used"
+                market = robust_active_market(
+                    active_cohorts.get((cpk, normalised_condition), []),
+                    condition=normalised_condition, subject_listing_id=listing_id,
+                    policy=policy,
                 )
                 preliminary_market = False
                 if market is None:
