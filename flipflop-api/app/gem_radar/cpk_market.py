@@ -46,12 +46,14 @@ async def get_robust_sold_market(
     condition: str,
     subject_listing_id: str,
     policy,
+    minimum_comps: int | None = None,
 ):
     """Return a same-condition completed-sale cohort only.
 
     Active BIN, Amazon and scan prices remain available elsewhere as context,
     but are intentionally excluded from realised resale value.
     """
+    from dataclasses import replace
     from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
 
     normalised = "new" if (condition or "").lower() == "new" else "used"
@@ -71,7 +73,8 @@ async def get_robust_sold_market(
         {"cpk": cpk, "condition": normalised, "lookback": policy.sold_lookback_days},
     )
     comps = [SoldComparable(float(r[0]), float(r[1] or 0), r[2], float(r[3] or 0)) for r in result.fetchall()]
-    return robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=policy)
+    cohort_policy = replace(policy, minimum_sold_comps=minimum_comps) if minimum_comps is not None else policy
+    return robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=cohort_policy)
 
 
 @dataclass(frozen=True)

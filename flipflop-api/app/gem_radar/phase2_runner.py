@@ -81,8 +81,15 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         market = await get_robust_sold_market(
             db, cpk=cpk, condition=condition, subject_listing_id=listing_id, policy=policy
         )
+        preliminary_market = False
         if market is None:
-            unsettled_count += 1
+            market = await get_robust_sold_market(
+                db, cpk=cpk, condition=condition, subject_listing_id=listing_id,
+                policy=policy, minimum_comps=3,
+            )
+            preliminary_market = market is not None
+            if market is None:
+                unsettled_count += 1
         category = (cpk_data or {}).get("category")
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).
@@ -107,6 +114,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             watch_velocity=await calculate_watch_velocity(db, listing_id),
             bid_velocity=await calculate_bid_velocity(db, listing_id),
             policy=policy, preferred=preferred,
+            extra_risk_flags=("preliminary_sold_cohort",) if preliminary_market else (),
         )
         classification = opportunity.classification
         deal_score = opportunity.score / 10.0

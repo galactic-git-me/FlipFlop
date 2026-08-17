@@ -57,3 +57,21 @@ def test_good_price_cannot_hide_identity_failure():
     assert result.classification not in {"SUPER_GEM", "GEM"}
     assert result.decision != "BUY_NOW"
     assert "accessory_or_parts_listing" in result.risk_flags
+
+
+def test_preliminary_cohort_can_only_be_emerging():
+    policy = OpportunityPolicy(minimum_sold_comps=3)
+    market = robust_sold_market(
+        [SoldComparable(180, source_url=f"https://ebay.test/{i}") for i in range(3)],
+        subject_listing_id="subject", policy=policy,
+    )
+    result = score_opportunity(
+        listing_price=70, title="AMD Ryzen 7 7800X3D",
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 7 7800X3D"},
+        market=market, sold_count_90d=3, active_count=2,
+        watch_velocity=2, bid_velocity=1, policy=policy, delivery_cost=0,
+        extra_risk_flags=("preliminary_sold_cohort",),
+    )
+    assert result.classification == "EMERGING_OPPORTUNITY"
+    assert result.decision == "INVESTIGATE"
+    assert not result.eligible

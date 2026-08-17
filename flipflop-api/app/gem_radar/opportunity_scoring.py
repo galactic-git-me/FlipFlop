@@ -271,12 +271,17 @@ def score_opportunity(
     walk_away = max(0.0, market.conservative_resale / 1.25 - non_purchase_cost)
     economic_score = max(0.0, min(100.0, (roi / policy.super_roi_pct) * 55.0 + (profit / policy.super_profit) * 45.0))
     total_score = economic_score * .45 + liquidity * .20 + desirability * .15 + market.confidence * .15 + risk * .05
+    provisional_evidence = "preliminary_sold_cohort" in risk_flags
+    blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
     eligible = not risk_flags
     reasons = [
         f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition sold comparables.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
     ]
-    if eligible and profit >= policy.super_profit and roi >= policy.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
+    if provisional_evidence and not blocking_flags and profit >= policy.gem_profit and roi >= 12 and market.confidence >= 50 and liquidity >= 30:
+        classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
+        reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
+    elif eligible and profit >= policy.super_profit and roi >= policy.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
     elif eligible and profit >= policy.gem_profit and roi >= policy.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
         classification, decision = "GEM", "BUY_NOW"
