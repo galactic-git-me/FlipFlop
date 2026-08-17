@@ -7,9 +7,9 @@ interface PriceObservation {
 
 export async function GET(
   request: Request,
-  { params }: { params: { listingId: string } }
+  context: { params: Promise<{ listingId: string }> }
 ) {
-  const { listingId } = params;
+  const { listingId } = await context.params;
 
   if (!listingId) {
     return NextResponse.json(

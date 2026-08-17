@@ -418,7 +418,7 @@ export default function BuildDetailPage() {
         {
           platform: "ebay",
           isListed: !!build.ebay_live,
-          listingId: build.ebay_live?.listing_id,
+          listingId: build.ebay_listing_id || undefined,
           lastUpdated: build.updated_at,
         },
       ]
@@ -595,14 +595,9 @@ export default function BuildDetailPage() {
             </p>
 
             {!build.generated_title ? (
-              <button
-                onClick={() => generateListing(true)}
-                disabled={generating}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:opacity-60 text-black rounded-lg transition-colors"
-              >
-                {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                {generating ? "Generating…" : "Generate eBay Listing"}
-              </button>
+              <p className="text-sm text-slate-400 italic">
+                Use the actions in the side menu to generate your eBay listing details.
+              </p>
             ) : (
               <div className="flex flex-col gap-3">
                 <div>
@@ -613,14 +608,6 @@ export default function BuildDetailPage() {
                   <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
                   <DescriptionPreview html={build.generated_description} />
                 </div>
-                <button
-                  onClick={() => generateListing(true)}
-                  disabled={generating}
-                  className="self-start flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:opacity-60 text-black rounded-lg transition-colors"
-                >
-                  {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                  {generating ? "Generating…" : "Generate eBay Listing"}
-                </button>
               </div>
             )}
 
@@ -879,6 +866,9 @@ export default function BuildDetailPage() {
                 </a>
               ) : (
                 <div className="flex flex-col gap-3">
+                  <p className="text-xs text-slate-400 italic">
+                    Configure condition and scheduling below. Use the actions in the side menu to publish or update the listing on eBay.
+                  </p>
                   {!build.hero_photo_url && (
                     <p className="text-[11px] text-amber-400">Upload at least one photo and choose a hero image first.</p>
                   )}
@@ -929,15 +919,6 @@ export default function BuildDetailPage() {
                   </div>
 
                   <div className="flex gap-3">
-                    <button
-                      onClick={postToEbay}
-                      disabled={posting || !build.hero_photo_url || !hasRequiredAspects}
-                      title={!hasRequiredAspects ? "Generate or fill in Item Specifics (Brand, Type) before listing" : undefined}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[#00dc82] hover:bg-[#00dc82]/90 disabled:opacity-60 text-black rounded-lg transition-colors"
-                    >
-                      {posting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
-                      List on eBay
-                    </button>
                     {build.generated_title && build.generated_description && (
                       <button
                         onClick={() => {
