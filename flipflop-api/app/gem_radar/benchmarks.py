@@ -29,7 +29,7 @@ import time as _time
 from datetime import datetime, timedelta, timezone
 
 import structlog
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 _diag_log = structlog.get_logger(__name__)
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -221,34 +221,18 @@ def _sold_comps_to_stat(comps: list[float], source: str) -> BenchmarkStat:
 
 
 async def _get_cpk_for_match_key(db: AsyncSession, match_key: str) -> str | None:
-    """Look up the most recent CPK for a match_key from listing observations.
-    Used to enrich sold observations with CPK so they can contribute to market
-    price aggregation. Finds a listing with a CPK and checks if its model_number
-    normalizes to the given match_key."""
-    from app.models.gem_radar_listing_cpk import GemRadarListingCpk
-    from app.models.gem_radar_observation import GemRadarListingObservation
+    """Return a CPK only when the canonical model match is exact and unique."""
 
-    # Query for listings with CPKs, ordered by recency
-    result = await db.execute(
-        select(GemRadarListingCpk.cpk, GemRadarListingObservation.model_number)
-        .join(
-            GemRadarListingObservation,
-            GemRadarListingCpk.listing_id == GemRadarListingObservation.listing_id,
-        )
-        .where(GemRadarListingObservation.model_number.isnot(None))
-        .order_by(GemRadarListingCpk.updated_at.desc())
-        .limit(100)  # Check recent listings; if none match, use most recent anyway
-    )
-    rows = result.fetchall()
-
-    # Try to find a listing whose model normalizes to our match_key
-    for cpk, model_number in rows:
-        if normalize_match_key(model_number) == match_key:
-            return cpk
-
-    # If no exact match, return the most recent CPK as fallback
-    # (better than NULL; real fix is deeper match_key ↔ listing mapping)
-    return rows[0][0] if rows else None
+    # Resolve across canonical extracted identities, not a 100-row recent
+    # sample. More importantly, ambiguity or no match must return NULL: an
+    # unrelated CPK silently poisons every downstream comparable cohort.
+    result = await db.execute(text("""
+        SELECT DISTINCT cpk
+        FROM gem_radar_listing_cpk
+        WHERE regexp_replace(upper(coalesce(cpk_data->>'model', '')), '[^A-Z0-9]', '', 'g') = :match_key
+    """), {"match_key": match_key})
+    cpks = [row[0] for row in result.fetchall()]
+    return cpks[0] if len(cpks) == 1 else None
 
 
 async def _get_stored_sold_prices(db: AsyncSession, match_key: str, condition: str) -> list[float]:

@@ -22,7 +22,7 @@ from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.gem_radar.cpk_market import robust_active_market
-from app.gem_radar.demand_velocity import record_demand_snapshot, calculate_watch_velocity, calculate_bid_velocity
+from app.gem_radar.demand_velocity import record_demand_snapshot
 from app.gem_radar.opportunity_scoring import SoldComparable, load_opportunity_policy, robust_sold_market, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
@@ -97,7 +97,22 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             SoldComparable(float(active_price), source_url=f"{active_source or 'active'}://{active_listing_id}")
         )
 
+    velocity_rows = (await db.execute(text("""
+        SELECT listing_id,
+          CASE WHEN COUNT(watch_count) >= 2 AND EXTRACT(EPOCH FROM (MAX(observed_at)-MIN(observed_at))) > 0
+            THEN GREATEST(0, (MAX(watch_count)-MIN(watch_count)) /
+              (EXTRACT(EPOCH FROM (MAX(observed_at)-MIN(observed_at))) / 3600.0)) END watch_velocity,
+          CASE WHEN COUNT(bid_count) >= 2 AND EXTRACT(EPOCH FROM (MAX(observed_at)-MIN(observed_at))) > 0
+            THEN GREATEST(0, (MAX(bid_count)-MIN(bid_count)) /
+              (EXTRACT(EPOCH FROM (MAX(observed_at)-MIN(observed_at))) / 3600.0)) END bid_velocity
+        FROM gem_radar_listing_demand_history
+        WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+        GROUP BY listing_id
+    """))).all()
+    velocities = {row[0]: (float(row[1]) if row[1] is not None else None, float(row[2]) if row[2] is not None else None) for row in velocity_rows}
+
     favourites = (await db.execute(select(Favourite))).scalars().all()
+    preferred_keys = set((await db.execute(select(PreferredComponent.component_key))).scalars().all())
 
     await db.execute(text("DELETE FROM gem_radar_scored_listings WHERE search_run_id = :run_id"), {"run_id": SEARCH_RUN_ID})
 
@@ -140,21 +155,14 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             watch_count, bid_count, delivered_price
         )
 
-        cohort_counts = (await db.execute(text("""
-            SELECT
-              (SELECT COUNT(DISTINCT COALESCE(source_url, id::text)) FROM gem_radar_sold_observations
-               WHERE cpk = :cpk AND LOWER(condition) = :condition
-                 AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days') AS sold_count,
-              (SELECT COUNT(*) FROM gem_radar_cpk_listing_price
-               WHERE cpk = :cpk AND listing_id <> :listing_id
-                 AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days') AS active_count
-        """), {"cpk": cpk, "condition": "new" if (condition or "").lower() == "new" else "used", "listing_id": listing_id})).one()
-        preferred = (await db.execute(select(PreferredComponent).where(PreferredComponent.component_key == cpk))).scalar_one_or_none() is not None
+        sold_count = len({_source.source_url or f"price:{_source.delivered_price}" for _source in sold_comps})
+        active_count = max(0, len(active_cohorts.get((cpk, normalised_condition), [])) - 1)
+        preferred = cpk in preferred_keys
+        watch_velocity, bid_velocity = velocities.get(listing_id, (None, None))
         opportunity = score_opportunity(
             listing_price=delivered_price, title=title, cpk_data=cpk_data,
-            market=market, sold_count_90d=int(cohort_counts[0] or 0), active_count=int(cohort_counts[1] or 0),
-            watch_velocity=await calculate_watch_velocity(db, listing_id),
-            bid_velocity=await calculate_bid_velocity(db, listing_id),
+            market=market, sold_count_90d=sold_count, active_count=active_count,
+            watch_velocity=watch_velocity, bid_velocity=bid_velocity,
             policy=policy, preferred=preferred,
             extra_risk_flags=("preliminary_sold_cohort",) if preliminary_market else (),
             listing_condition=condition,
