@@ -11,8 +11,8 @@ async def record_demand_snapshot(
     db: AsyncSession,
     listing_id: str,
     search_run_id: str,
-    watch_count: int,
-    bid_count: int,
+    watch_count: int | None,
+    bid_count: int | None,
     delivered_price: float,
 ) -> None:
     """Record a point-in-time demand snapshot for velocity tracking."""
@@ -36,6 +36,7 @@ async def calculate_watch_velocity(db: AsyncSession, listing_id: str, hours: int
         .where(
             GemRadarListingDemandHistory.listing_id == listing_id,
             GemRadarListingDemandHistory.observed_at >= cutoff,
+            GemRadarListingDemandHistory.watch_count.is_not(None),
         )
         .order_by(GemRadarListingDemandHistory.observed_at.asc())
     )
@@ -62,6 +63,7 @@ async def calculate_bid_velocity(db: AsyncSession, listing_id: str, hours: int =
         .where(
             GemRadarListingDemandHistory.listing_id == listing_id,
             GemRadarListingDemandHistory.observed_at >= cutoff,
+            GemRadarListingDemandHistory.bid_count.is_not(None),
         )
         .order_by(GemRadarListingDemandHistory.observed_at.asc())
     )

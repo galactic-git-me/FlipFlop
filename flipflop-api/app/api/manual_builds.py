@@ -6,10 +6,12 @@ from pathlib import Path
 from datetime import datetime
 import shutil
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
 from app.models.manual_build import ManualBuild
+from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
 from app.schemas.manual_build import (
@@ -46,6 +48,22 @@ from app.config import get_settings
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/manual-builds", tags=["manual-builds"], dependencies=[Depends(get_current_admin)])
+
+
+class ComponentRatingInput(BaseModel):
+    component_slot: str
+    component_key: str
+    overall_rating: int = Field(ge=1, le=5)
+    reliability_rating: int | None = Field(default=None, ge=1, le=5)
+    installation_rating: int | None = Field(default=None, ge=1, le=5)
+    aesthetics_rating: int | None = Field(default=None, ge=1, le=5)
+    value_rating: int | None = Field(default=None, ge=1, le=5)
+    customer_appeal_rating: int | None = Field(default=None, ge=1, le=5)
+    notes: str | None = None
+
+
+class ComponentRatingsInput(BaseModel):
+    ratings: list[ComponentRatingInput]
 
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
@@ -378,6 +396,75 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
     await db.flush()
     await db.refresh(build)
     return build
+
+
+@router.get("/{build_id}/component-ratings")
+async def get_component_ratings(build_id: int, db: AsyncSession = Depends(get_db)):
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    ratings = (await db.execute(
+        select(ComponentRatingEvent).where(ComponentRatingEvent.build_id == build_id)
+    )).scalars().all()
+    return [{
+        "component_slot": rating.component_slot, "component_key": rating.component_key,
+        "overall_rating": rating.overall_rating, "reliability_rating": rating.reliability_rating,
+        "installation_rating": rating.installation_rating, "aesthetics_rating": rating.aesthetics_rating,
+        "value_rating": rating.value_rating, "customer_appeal_rating": rating.customer_appeal_rating,
+        "notes": rating.notes,
+    } for rating in ratings]
+
+
+@router.put("/{build_id}/component-ratings")
+async def save_component_ratings(build_id: int, body: ComponentRatingsInput, db: AsyncSession = Depends(get_db)):
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if build.status not in ("built", "listed", "sold"):
+        raise HTTPException(400, "Component ratings become available after the build is marked built")
+    valid_components = {
+        (str(component.get("slot", "")).lower(), str(component.get("name", "")).strip().lower())
+        for component in build.components if isinstance(component, dict)
+    }
+    for incoming in body.ratings:
+        identity = (incoming.component_slot.lower(), incoming.component_key.strip().lower())
+        if identity not in valid_components:
+            raise HTTPException(400, f"{incoming.component_slot}: component does not match this build")
+        rating = (await db.execute(select(ComponentRatingEvent).where(
+            ComponentRatingEvent.build_id == build_id,
+            ComponentRatingEvent.component_slot == incoming.component_slot,
+            ComponentRatingEvent.component_key == incoming.component_key,
+        ))).scalar_one_or_none()
+        values = incoming.model_dump()
+        was_five_star = rating is not None and rating.overall_rating == 5
+        if rating is None:
+            rating = ComponentRatingEvent(build_id=build_id, **values)
+            db.add(rating)
+        else:
+            for key, value in values.items():
+                setattr(rating, key, value)
+            rating.updated_at = datetime.utcnow()
+
+        preferred = (await db.execute(select(PreferredComponent).where(
+            PreferredComponent.component_key == incoming.component_key
+        ))).scalar_one_or_none()
+        if incoming.overall_rating == 5 and not was_five_star:
+            if preferred is None:
+                db.add(PreferredComponent(
+                    component_key=incoming.component_key, component_slot=incoming.component_slot,
+                    sample_count=1, average_rating=5.0, status="preferred",
+                    last_build_id=build_id, last_used_at=datetime.utcnow(),
+                ))
+            else:
+                preferred.average_rating = (
+                    preferred.average_rating * preferred.sample_count + incoming.overall_rating
+                ) / (preferred.sample_count + 1)
+                preferred.sample_count += 1
+                preferred.status = "preferred"
+                preferred.last_build_id = build_id
+                preferred.last_used_at = datetime.utcnow()
+    await db.flush()
+    return {"saved": len(body.ratings), "preferred_added": sum(r.overall_rating == 5 for r in body.ratings)}
 
 
 @router.post("/{build_id}/generate-listing", response_model=GenerateListingResult)

@@ -122,6 +122,18 @@ export interface BuildPhoto {
   kind: "photo" | "spec_card" | "registration_plate" | "performance_card";
 }
 
+export interface ComponentRating {
+  component_slot: string;
+  component_key: string;
+  overall_rating: number;
+  reliability_rating?: number | null;
+  installation_rating?: number | null;
+  aesthetics_rating?: number | null;
+  value_rating?: number | null;
+  customer_appeal_rating?: number | null;
+  notes?: string | null;
+}
+
 export interface ManualBuild {
   id: number;
   name: string;
@@ -569,6 +581,14 @@ export const api = {
       }),
     markBuilt: (id: number) =>
       request<ManualBuild>(`/manual-builds/${id}/mark-built`, { method: "POST" }),
+    getComponentRatings: (id: number) =>
+      request<ComponentRating[]>(`/manual-builds/${id}/component-ratings`),
+    saveComponentRatings: (id: number, ratings: ComponentRating[]) =>
+      request<{ saved: number; preferred_added: number }>(`/manual-builds/${id}/component-ratings`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ratings }),
+      }),
     generateListing: (id: number) =>
       request<{ titles: string[]; description: string; aspects: Record<string, string[]> }>(
         `/manual-builds/${id}/generate-listing`,

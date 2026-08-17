@@ -13,6 +13,8 @@ depends_on = None
 
 
 def upgrade():
+    op.alter_column("gem_radar_listing_demand_history", "watch_count", existing_type=sa.Integer(), nullable=True, server_default=None)
+    op.alter_column("gem_radar_listing_demand_history", "bid_count", existing_type=sa.Integer(), nullable=True, server_default=None)
     score_float_columns = (
         "expected_profit", "roi_pct", "walk_away_price", "conservative_resale_price",
         "market_confidence", "market_spread_pct", "liquidity_score", "desirability_score", "risk_score",
@@ -73,6 +75,10 @@ def upgrade():
 
 
 def downgrade():
+    op.execute("UPDATE gem_radar_listing_demand_history SET watch_count = 0 WHERE watch_count IS NULL")
+    op.execute("UPDATE gem_radar_listing_demand_history SET bid_count = 0 WHERE bid_count IS NULL")
+    op.alter_column("gem_radar_listing_demand_history", "watch_count", existing_type=sa.Integer(), nullable=False, server_default="0")
+    op.alter_column("gem_radar_listing_demand_history", "bid_count", existing_type=sa.Integer(), nullable=False, server_default="0")
     op.drop_table("preferred_components")
     op.drop_table("component_rating_events")
     op.drop_table("gem_radar_decision_events")

@@ -10,7 +10,7 @@ import {
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
 import JSZip from "jszip";
-import { api, ManualBuild, BuildComponent } from "@/lib/api";
+import { api, ManualBuild, BuildComponent, ComponentRating } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { drawRegistrationPlate, drawSpecCard, canvasToBlob, loadLogo } from "@/lib/build-cards";
 import { EbayOffersSection } from "@/components/builds/EbayOffersSection";
@@ -116,6 +116,8 @@ export default function BuildDetailPage() {
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
   const [showEbayPreview, setShowEbayPreview] = useState(false);
+  const [componentRatings, setComponentRatings] = useState<Record<string, number>>({});
+  const [savingRatings, setSavingRatings] = useState(false);
 
   const [price, setPrice] = useState("");
   const [condition, setCondition] = useState("USED_EXCELLENT");
@@ -147,6 +149,33 @@ export default function BuildDetailPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [buildId]);
+
+  useEffect(() => {
+    if (!build || build.status === "in_progress") return;
+    api.manualBuilds.getComponentRatings(buildId).then((ratings) => {
+      setComponentRatings(Object.fromEntries(ratings.map((rating) => [rating.component_slot, rating.overall_rating])));
+    }).catch(() => undefined);
+  }, [buildId, build?.status]);
+
+  const saveRatings = async () => {
+    if (!build) return;
+    setSavingRatings(true);
+    try {
+      const ratings: ComponentRating[] = build.components
+        .filter((component) => componentRatings[component.slot])
+        .map((component) => ({
+          component_slot: component.slot,
+          component_key: component.name,
+          overall_rating: componentRatings[component.slot],
+        }));
+      const result = await api.manualBuilds.saveComponentRatings(buildId, ratings);
+      toast.success(`Saved ${result.saved} ratings${result.preferred_added ? ` · ${result.preferred_added} added to preferred components` : ""}`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save component ratings");
+    } finally {
+      setSavingRatings(false);
+    }
+  };
 
   const togglePurchased = async (slot: string) => {
     if (!build) return;
@@ -615,6 +644,52 @@ export default function BuildDetailPage() {
               {markingBuilt ? <Loader2 className="w-4 h-4 animate-spin" /> : <Hammer className="w-4 h-4" />}
               {allPurchased ? "Mark as Built" : `Waiting on ${totalCount - purchasedCount} component${totalCount - purchasedCount === 1 ? "" : "s"}`}
             </button>
+          )}
+
+          {build.status !== "in_progress" && (
+            <div className="mt-5 border-t border-white/[0.07] pt-5">
+              <div className="mb-3">
+                <p className="text-sm font-semibold flex items-center gap-2">
+                  <Star className="h-4 w-4 text-amber-400" /> Rate this build&apos;s components
+                </p>
+                <p className="mt-1 text-xs text-slate-400">
+                  Five-star components are added to your preferred list and improve future build-fit ranking.
+                </p>
+              </div>
+              <div className="space-y-2">
+                {build.components.map((component) => (
+                  <div key={component.slot} className="flex flex-col gap-2 rounded-lg border border-white/[0.06] bg-black/20 p-3 sm:flex-row sm:items-center">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-mono uppercase text-slate-500">{component.slot}</p>
+                      <p className="truncate text-sm text-slate-200">{component.name}</p>
+                    </div>
+                    <div className="flex gap-1" role="radiogroup" aria-label={`Rate ${component.name}`}>
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <button
+                          key={rating}
+                          type="button"
+                          role="radio"
+                          aria-checked={(componentRatings[component.slot] ?? 0) === rating}
+                          aria-label={`${rating} star${rating === 1 ? "" : "s"}`}
+                          onClick={() => setComponentRatings((current) => ({ ...current, [component.slot]: rating }))}
+                          className="cursor-pointer rounded p-1 transition-colors duration-200 hover:bg-amber-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                        >
+                          <Star className={`h-5 w-5 ${(componentRatings[component.slot] ?? 0) >= rating ? "fill-amber-400 text-amber-400" : "text-slate-600"}`} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={saveRatings}
+                disabled={savingRatings || Object.keys(componentRatings).length === 0}
+                className="mt-3 w-full cursor-pointer rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-black transition-colors duration-200 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
+              >
+                {savingRatings ? "Saving ratings…" : "Save component ratings"}
+              </button>
+            </div>
           )}
         </div>
       )}

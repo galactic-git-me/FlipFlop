@@ -13,8 +13,10 @@ class GemRadarListingDemandHistory(Base):
     search_run_id: Mapped[str | None] = mapped_column(String(255), index=True, nullable=True)
 
     # Demand signals at observation time
-    watch_count: Mapped[int] = mapped_column(Integer, default=0)
-    bid_count: Mapped[int] = mapped_column(Integer, default=0)
+    # NULL means the marketplace did not expose the value; it must not be
+    # interpreted as an observed zero-demand signal.
+    watch_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    bid_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     # Calculated velocity metrics (populated once we have 2+ observations)
     watch_velocity_per_hour: Mapped[float | None] = mapped_column(Float, nullable=True)
