@@ -1,5 +1,6 @@
 from app.services.ebay_specifics_generator import (
     _enforce_aspect_cardinality,
+    repair_legacy_aspect_cardinality,
     validate_aspects_for_ebay,
 )
 
@@ -26,6 +27,20 @@ def test_generated_single_value_aspects_keep_only_best_choice():
     assert _enforce_aspect_cardinality("Brand", ["Custom Build", "AMD"]) == [
         "Custom Build"
     ]
+
+
+def test_repairs_legacy_brand_and_mixed_storage_values():
+    repaired = repair_legacy_aspect_cardinality(
+        {
+            "Brand": ["AMD", "NVIDIA", "Corsair"],
+            "Storage Type": ["SSD", "HDD"],
+            "Features": ["RGB Lighting", "Wireless"],
+        }
+    )
+
+    assert repaired["Brand"] == ["Custom Build"]
+    assert repaired["Storage Type"] == ["Hybrid (SSD + HDD)"]
+    assert repaired["Features"] == ["RGB Lighting", "Wireless"]
     assert _enforce_aspect_cardinality("Storage Type", ["SSD", "HDD"]) == ["SSD"]
     assert _enforce_aspect_cardinality("Features", ["RGB Lighting", "Wireless"]) == [
         "RGB Lighting",

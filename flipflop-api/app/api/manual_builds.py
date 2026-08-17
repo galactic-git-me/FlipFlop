@@ -23,7 +23,11 @@ from app.schemas.manual_build import (
 )
 from app.services import ai_service
 from app.services.ebay_listing_poster import post_flip_to_ebay
-from app.services.ebay_specifics_generator import generate_item_specifics, validate_aspects_for_ebay
+from app.services.ebay_specifics_generator import (
+    generate_item_specifics,
+    repair_legacy_aspect_cardinality,
+    validate_aspects_for_ebay,
+)
 from app.services.ebay_fulfillment_policies import (
     list_fulfillment_policies,
     EbayFulfillmentPoliciesError,
@@ -855,6 +859,17 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         raise HTTPException(404, "Build not found")
     if not build.generated_title or not build.generated_description:
         raise HTTPException(400, "Generate the listing content before posting to eBay")
+
+    # Builds generated before cardinality validation can still contain arrays
+    # such as Brand=[AMD, NVIDIA, Corsair] and Storage Type=[SSD, HDD]. Repair
+    # those deterministic legacy cases and persist them before validation and
+    # submission so the user does not have to re-enter otherwise valid data.
+    repaired_aspects = repair_legacy_aspect_cardinality(build.generated_aspects or {})
+    if repaired_aspects != (build.generated_aspects or {}):
+        build.generated_aspects = repaired_aspects
+        build.updated_at = datetime.utcnow()
+        await db.flush()
+
     missing_required = [a for a in ("Brand", "Type") if not (build.generated_aspects or {}).get(a)]
     if missing_required:
         raise HTTPException(

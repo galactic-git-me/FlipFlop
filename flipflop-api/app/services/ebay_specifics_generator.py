@@ -207,6 +207,29 @@ def _enforce_aspect_cardinality(aspect: str, values: List[str]) -> List[str]:
     return values
 
 
+def repair_legacy_aspect_cardinality(
+    aspects: Dict[str, List[str]],
+) -> Dict[str, List[str]]:
+    """Repair specifics saved before single-value validation existed.
+
+    Brand and Storage Type have deterministic eBay-safe combined meanings.
+    For any other legacy SINGLE aspect, retain the first (best-ranked) value.
+    The returned dictionary is new so SQLAlchemy detects JSON changes.
+    """
+    repaired: Dict[str, List[str]] = {}
+    for aspect, values in aspects.items():
+        cleaned = [str(value).strip() for value in values if str(value).strip()]
+        if aspect in EBAY_MULTI_VALUE_ASPECTS or len(cleaned) <= 1:
+            repaired[aspect] = cleaned
+        elif aspect == "Brand":
+            repaired[aspect] = ["Custom Build"]
+        elif aspect == "Storage Type" and {"SSD", "HDD"}.issubset(set(cleaned)):
+            repaired[aspect] = ["Hybrid (SSD + HDD)"]
+        else:
+            repaired[aspect] = cleaned[:1]
+    return repaired
+
+
 async def generate_item_specifics(
     build: ManualBuild,
     selling_principles_text: str = "",
